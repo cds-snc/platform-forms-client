@@ -121,6 +121,7 @@ export default async function Page(props: {
       isPublished:
         status === TAB_STATUS.PUBLISHED ? true : status === TAB_STATUS.DRAFT ? false : undefined,
       ttl: status === TAB_STATUS.ARCHIVED ? { not: null } : null,
+      closingDate: status === TAB_STATUS.CLOSED ? { not: null, lt: new Date() } : undefined,
     },
     sortByDateUpdated: "desc",
   };

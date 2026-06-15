@@ -55,6 +55,16 @@ export const Navigation = async ({ filter }: { filter: FormTabStatus; templateCo
           {t("nav.archived")}
         </>
       </NavLink>
+      <NavLink
+        href={`/${language}/forms?status=closed`}
+        id="tab-closed"
+        active={filter === TAB_STATUS.CLOSED}
+      >
+        <>
+          <ArchiveIcon className={cn(iconClassname)} />
+          {t("nav.closed")}
+        </>
+      </NavLink>
     </nav>
   );
 };

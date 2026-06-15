@@ -78,6 +78,7 @@ export const Cards = ({
     if (tabStatus === TAB_STATUS.DRAFT) return t("cards.noDraftsForms");
     if (tabStatus === TAB_STATUS.PUBLISHED) return t("cards.noPublishedForms");
     if (tabStatus === TAB_STATUS.ARCHIVED) return t("cards.noArchivedForms");
+    if (tabStatus === TAB_STATUS.CLOSED) return t("cards.noClosedForms");
     return t("cards.noForms");
   }, [tabStatus, t]);
 
@@ -99,7 +100,9 @@ export const Cards = ({
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
-              {(tabStatus !== TAB_STATUS.ARCHIVED || !tabStatus) && (
+              {(tabStatus == TAB_STATUS.ARCHIVED ||
+                tabStatus !== TAB_STATUS.CLOSED ||
+                !tabStatus) && (
                 <li className="flex h-full w-full max-w-[16em]" key={-1}>
                   <NewFormButton />
                 </li>

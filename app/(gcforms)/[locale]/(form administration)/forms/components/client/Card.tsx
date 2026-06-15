@@ -9,7 +9,7 @@ import { DraftEditLink } from "../client/DraftEditLink";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FormsTemplateWithLockInfo, FormTabStatus } from "../types";
+import { FormsTemplateWithLockInfo, FormTabStatus, TAB_STATUS } from "../types";
 import {
   getCardState,
   formatDateToYYYYMMDD,
@@ -19,33 +19,39 @@ import {
   getBannerColor,
 } from "../helpers";
 import { announce, Priority } from "@gcforms/announce";
+import { cn } from "@root/lib/utils";
 
-const CardBanner = memo(({ isPublished }: { isPublished: boolean }) => {
-  const { t } = useTranslation("my-forms");
-  const bulletColor = getBannerColor(isPublished);
+const CardBanner = memo(
+  ({ isPublished, isClosed }: { isPublished: boolean; isClosed: boolean }) => {
+    const { t } = useTranslation("my-forms");
+    const bulletColor = getBannerColor(isPublished, isClosed);
 
-  return (
-    <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
-      <span
-        className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor}`}
-      />
-      {isPublished ? t("card.states.published") : t("card.states.draft")}
-    </div>
-  );
-});
+    return (
+      <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
+        <span
+          className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor}`}
+        />
+        {isClosed
+          ? t("card.states.closed")
+          : isPublished
+            ? t("card.states.published")
+            : t("card.states.draft")}
+      </div>
+    );
+  }
+);
 CardBanner.displayName = "CardBanner";
 
 const CardLinks = memo(
   ({
-    isPublished,
     id,
+    isPublished,
     deliveryOption,
     overdue,
     ttl,
     language,
   }: {
     id: string;
-    url?: string;
     isPublished: boolean;
     deliveryOption?: { emailAddress?: string } | null;
     overdue: boolean;
@@ -120,29 +126,46 @@ const CardTitle = memo(
     name,
     isPublished,
     collaboratorCount,
+    isClosed,
   }: {
     id: string;
     name: string;
     isPublished: boolean;
     collaboratorCount: number;
+    isClosed: boolean;
   }) => {
     const {
       t,
       i18n: { language },
     } = useTranslation("my-forms");
     const classes =
-      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit hover:underline focus:underline active:underline cursor-pointer!";
-    const publishedLink = `/${language}/id/${id}`;
-    const draftLink = `/${language}/form-builder/${id}/edit/`;
-    return isPublished ? (
-      <Link className={classes} href={publishedLink} prefetch={false}>
-        {name ? name : t("card.unnamedForm")}
-      </Link>
-    ) : (
+      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 ";
+    const classesLink = cn(
+      classes,
+      " no-underline text-inherit hover:underline focus:underline active:underline cursor-pointer!"
+    );
+
+    if (isClosed) {
+      return (
+        <span className={classes} title={name}>
+          {name ? name : t("card.unnamedForm")}
+        </span>
+      );
+    }
+
+    if (isPublished) {
+      return (
+        <Link className={classesLink} href={`/${language}/id/${id}`} prefetch={false}>
+          {name ? name : t("card.unnamedForm")}
+        </Link>
+      );
+    }
+
+    return (
       <DraftEditLink
-        href={draftLink}
+        href={`/${language}/form-builder/${id}/edit/`}
         formId={id}
-        className={classes}
+        className={classesLink}
         collaboratorCount={collaboratorCount}
       >
         {name ? name : t("card.unnamedForm")}
@@ -302,13 +325,13 @@ const CardComponent = ({
           id={card.id}
           name={card.name}
           isPublished={card.isPublished}
+          isClosed={status === TAB_STATUS.CLOSED}
           collaboratorCount={collaboratorCount}
         />
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
         <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
           <CardLinks
             isPublished={card.isPublished}
-            url={card.url}
             id={card.id}
             deliveryOption={card.deliveryOption}
             overdue={card.overdue}
@@ -333,7 +356,7 @@ const CardComponent = ({
               collaboratorCount={collaboratorCount}
             />
           )}
-          <CardBanner isPublished={card.isPublished} />
+          <CardBanner isPublished={card.isPublished} isClosed={status === TAB_STATUS.CLOSED} />
           {cardState === "published" && <CardFooterPublished cardId={card.id} />}
         </div>
       </div>

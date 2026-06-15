@@ -76,7 +76,7 @@ export type FormsTemplateWithLockInfo = FormsTemplate & {
 /**
  * Possible tab statuses for filtering forms
  */
-export type FormTabStatus = "recentlyEdited" | "draft" | "published" | "archived";
+export type FormTabStatus = "recentlyEdited" | "draft" | "published" | "archived" | "closed";
 
 /**
  * Constants for form tab status values
@@ -86,4 +86,5 @@ export const TAB_STATUS = {
   DRAFT: "draft",
   PUBLISHED: "published",
   ARCHIVED: "archived",
+  CLOSED: "closed",
 } as const;

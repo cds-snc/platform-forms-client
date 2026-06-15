@@ -5,7 +5,8 @@
     "published": "Published",
     "all": "All",
     "archived": "Archived",
-    "recentlyEdited": "Recent"
+    "recentlyEdited": "Recent",
+    "closed": "Closed"
   },
   "account": {
     "viewAccount": "Your account"
@@ -22,6 +23,7 @@
     "noPublishedForms": "You have no published forms.",
     "noRecentlyEditedForms": "You have no recently edited forms.",
     "noArchivedForms": "You have no archived forms.",
+    "noClosedForms": "You have no closed forms.",
     "lastEditedBy": "By: {{lastEditedBy}}",
     "readOnly": "Open - ",
     "editing": "{{name}} is editing",
@@ -34,7 +36,8 @@
     "states": {
       "draft": "Draft",
       "published": "Published",
-      "archived": "Archived"
+      "archived": "Archived",
+      "closed": "Closed"
     },
     "title": {
       "notTranslatedEn": "No English translation",
