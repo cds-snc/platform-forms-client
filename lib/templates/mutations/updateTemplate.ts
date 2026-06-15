@@ -166,6 +166,11 @@ const buildUpdatePlan = (command: UpdateTemplateCommand): UpdatePlan => {
     },
     include: {
       deliveryOption: true,
+      lastEditedBy: {
+        select: {
+          name: true,
+        },
+      },
     },
   };
 
@@ -275,6 +280,7 @@ const executeTemplateUpdate = async (updatePlan: UpdatePlan) => {
     .catch((e) => {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2025") {
+          // @TODO ?
           throw new TemplateAlreadyPublishedError();
         }
       }
@@ -314,9 +320,9 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   const updatePlan = buildUpdatePlan(command);
   const updatedTemplate = await executeTemplateUpdate(updatePlan);
 
-  return updatedTemplate;
-
   if (formCache.cacheAvailable) formCache.invalidate(command.formID);
+
+  return updatedTemplate;
 
   // Log the audit events
   // command.name !== undefined &&

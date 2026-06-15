@@ -18,7 +18,6 @@ import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssig
 import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
 import { updateFormSaveAndResume } from "@lib/templates/mutations/updateFormSaveAndResume";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
-import { updateClosedData } from "@lib/templates/mutations/updateClosedData";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
@@ -399,7 +398,13 @@ export const closeForm = AuthenticatedAction(
         throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
       }
 
-      const response = await updateClosedData(formID, closingDate, closedDetails);
+      const response = await updateDbTemplate({
+        action: "closedData",
+        formID,
+        closingDate,
+        closedDetails,
+      });
+
       if (!response) {
         throw new Error(
           `Template API response was null. Request information: { ${formID}, ${closingDate} }`
