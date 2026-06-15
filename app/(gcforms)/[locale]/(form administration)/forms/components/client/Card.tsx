@@ -81,7 +81,7 @@ const CardLinks = memo(
                 href={responsesLink}
                 prefetch={false}
               >
-                <MessageIcon className="mr-2 ml-px inline-block fill-red-500" />
+                <MessageIcon className="mr-2 ml-px inline-block fill-red-700" />
                 {t("card.actionRequired")}
               </Link>
             ) : (
@@ -132,7 +132,7 @@ const CardTitle = memo(
     } = useTranslation("my-forms");
     const classes =
       "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit hover:underline focus:underline active:underline cursor-pointer!";
-    const publishedLink = `/${language}/form-builder/${id}/responses`;
+    const publishedLink = `/${language}/id/${id}`;
     const draftLink = `/${language}/form-builder/${id}/edit/`;
     return isPublished ? (
       <Link className={classes} href={publishedLink} prefetch={false}>
