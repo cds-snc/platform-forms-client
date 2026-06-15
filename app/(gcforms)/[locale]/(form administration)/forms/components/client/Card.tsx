@@ -81,7 +81,7 @@ const CardLinks = memo(
                 href={responsesLink}
                 prefetch={false}
               >
-                <MessageIcon className="mr-2 ml-px inline-block fill-red-500" />
+                <MessageIcon className="mr-2 ml-px inline-block fill-red-700" />
                 {t("card.actionRequired")}
               </Link>
             ) : (
