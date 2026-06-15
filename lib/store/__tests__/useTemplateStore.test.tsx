@@ -49,9 +49,9 @@ describe("TemplateStore", () => {
     await waitFor(() => {
       expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
         JSON.stringify({
-        isPublished: false,
-        currentPublishedVersionId: null,
-        currentDraftVersionId: null,
+          isPublished: false,
+          currentPublishedVersionId: null,
+          currentDraftVersionId: null,
         })
       );
     });
@@ -69,9 +69,9 @@ describe("TemplateStore", () => {
     await waitFor(() => {
       expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
         JSON.stringify({
-        isPublished: true,
-        currentPublishedVersionId: "published-version-1",
-        currentDraftVersionId: null,
+          isPublished: true,
+          currentPublishedVersionId: "published-version-1",
+          currentDraftVersionId: null,
         })
       );
     });
@@ -90,9 +90,9 @@ describe("TemplateStore", () => {
     await waitFor(() => {
       expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
         JSON.stringify({
-        isPublished: true,
-        currentPublishedVersionId: "published-version-1",
-        currentDraftVersionId: "draft-version-1",
+          isPublished: true,
+          currentPublishedVersionId: "published-version-1",
+          currentDraftVersionId: "draft-version-1",
         })
       );
     });
