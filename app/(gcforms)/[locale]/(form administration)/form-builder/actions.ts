@@ -146,57 +146,6 @@ export const createOrUpdateTemplate = AuthenticatedAction(
   }
 );
 
-export const updateTemplate = AuthenticatedAction(
-  async (
-    session,
-    {
-      id: formID,
-      formConfig,
-      name,
-      deliveryOption,
-      securityAttribute,
-      formPurpose,
-    }: {
-      id: string;
-      formConfig: FormProperties;
-      name?: string;
-      deliveryOption?: DeliveryOption;
-      securityAttribute?: SecurityAttribute;
-      formPurpose?: FormPurpose;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    try {
-      await assertTemplateEditLockIfEnabled({
-        templateId: formID,
-        userId: session.user.id,
-      });
-      const formRecord = await updateDbTemplate({
-        action: "full",
-        formID: formID,
-        formConfig: formConfig,
-        name: name,
-        deliveryOption: deliveryOption,
-        securityAttribute: securityAttribute,
-        formPurpose: formPurpose,
-      });
-
-      if (!formRecord) {
-        throw new Error("Failed to update template");
-      }
-
-      return { formRecord };
-    } catch (e) {
-      if (e instanceof TemplateEditLockedError) {
-        return { formRecord: null, error: "editLocked" };
-      }
-      return { formRecord: null, error: "error" };
-    }
-  }
-);
-
 export const updateTemplatePublishedStatus = AuthenticatedAction(
   async (
     session,
