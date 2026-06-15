@@ -46,6 +46,11 @@ export async function getAllTemplates(options?: {
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          lastEditedBy: {
+            select: {
+              name: true,
+            },
+          },
         },
         ...(sortByDateUpdated && {
           orderBy: {

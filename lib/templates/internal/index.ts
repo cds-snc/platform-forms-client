@@ -41,6 +41,9 @@ export const parseTemplate = (template: {
   saveAndResume: boolean;
   notificationsInterval?: number | null;
   ttl?: Date | null;
+  lastEditedBy?: {
+    name: string | null;
+  } | null;
   _count?: {
     users: number;
     invitations: number;
@@ -80,6 +83,7 @@ export const parseTemplate = (template: {
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
     ...(template.ttl && { ttl: template.ttl }),
+    ...(template.lastEditedBy?.name && { lastEditedBy: template.lastEditedBy.name }),
     ...(template._count && { _count: template._count }),
   };
 };
