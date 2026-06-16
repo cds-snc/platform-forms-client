@@ -9,16 +9,12 @@ import { Button, Alert } from "@clientComponents/globals";
 
 import { logMessage } from "@lib/logger";
 import { DownloadFileButton } from "@formBuilder/components/shared/DownloadFileButton";
-import { toast } from "@formBuilder/components/shared/Toast";
-
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
-import { updateTemplate, updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { updateTemplatePublishedStatus } from "@formBuilder/actions";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
-import { safeJSONParse } from "@lib/utils";
-import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
-import { FormServerErrorCodes, Language } from "@lib/types/form-builder-types";
+import { Language } from "@lib/types/form-builder-types";
 import { PrePublishDialog } from "../PrePublishDialog";
-import { FormProperties } from "@lib/types";
 import { ga } from "@lib/client/clientHelpers";
 import { CheckList } from "./CheckList";
 
@@ -26,19 +22,12 @@ export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
   const router = useRouter();
   const { userCanPublish, isPublishable } = useAllowPublish();
-
+  const { saveDraftIfNeeded } = useTemplateContext();
   const [error, setError] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [errorCode, setErrorCode] = useState<null | number>(null);
-  const {
-    id: storeId,
-    getSchema,
-    getName,
-    currentPublishedVersionId,
-  } = useTemplateStore((s) => ({
+  const { id: storeId, currentPublishedVersionId } = useTemplateStore((s) => ({
     id: s.id,
-    getSchema: s.getSchema,
-    getName: s.getName,
     currentPublishedVersionId: s.currentPublishedVersionId,
   }));
 
@@ -104,22 +93,8 @@ export const Publish = ({ id }: { id: string }) => {
     setError(false);
     setErrorCode(null);
 
-    const formConfig = safeJSONParse<FormProperties>(getSchema());
-    if (!formConfig) {
-      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
-      return;
-    }
-
     try {
-      const operationResult = await updateTemplate({
-        id,
-        name: getName(),
-        formConfig,
-      });
-
-      if (operationResult.formRecord === null) {
-        throw new Error("Failed to publish form");
-      }
+      saveDraftIfNeeded();
 
       router.push(`/${i18n.language}/unlock-publishing`);
     } catch (e) {
@@ -128,7 +103,7 @@ export const Publish = ({ id }: { id: string }) => {
       setErrorCode(500);
       return;
     }
-  }, [getSchema, getName, id, router, i18n.language]);
+  }, [saveDraftIfNeeded, router, i18n.language]);
 
   const hasHydrated = useRehydrate();
 
