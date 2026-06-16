@@ -5,8 +5,8 @@ import { ClosedDetails } from "@gcforms/types";
 import { authorization } from "@lib/privileges";
 import {
   AuditLogAccessDeniedDetails,
-  // AuditLogDetails,
-  // AuditLogEvent,
+  AuditLogDetails,
+  AuditLogEvent,
   logEvent,
 } from "@lib/auditLogs";
 import { checkForBetaComponentsAsync } from "@lib/validation/betaCheck";
@@ -16,6 +16,8 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../internal/errors";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { isValidISODate } from "@lib/utils/date/isValidISODate";
+import { getFullTemplateByID } from "../queries/getFullTemplateByID";
+import { deleteDraftFormResponses } from "@root/lib/vault";
 
 export const UpdateTemplateAction = {
   General: "general",
@@ -153,21 +155,12 @@ const authorizeForCommand = async (
 type UpdatePlan = {
   where: Prisma.TemplateWhereUniqueInput;
   data: Prisma.TemplateUpdateInput;
-  include: Prisma.TemplateInclude;
 };
 
 const buildUpdatePlan = (command: UpdateTemplateCommand): UpdatePlan => {
   const basePlan = {
     where: {
       id: command.formID,
-    },
-    include: {
-      deliveryOption: true,
-      lastEditedBy: {
-        select: {
-          name: true,
-        },
-      },
     },
   };
 
@@ -244,12 +237,19 @@ const buildUpdatePlan = (command: UpdateTemplateCommand): UpdatePlan => {
   }
 };
 
-const executeTemplateUpdate = async (updatePlan: UpdatePlan) => {
+const executeTemplateUpdate = async (updatePlan: UpdatePlan, lastEditedByUserId: string) => {
   const updatedTemplate = await prisma.template
     .update({
       where: updatePlan.where,
-      data: updatePlan.data,
-      include: updatePlan.include,
+      data: { ...updatePlan.data, lastEditedBy: { connect: { id: lastEditedByUserId } } },
+      include: {
+        deliveryOption: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
+      },
     })
     .catch((e) => {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -263,9 +263,107 @@ const executeTemplateUpdate = async (updatePlan: UpdatePlan) => {
 
   if (updatedTemplate === null) return null;
 
-  // if (formCache.cacheAvailable) formCache.invalidate(updatePlan.where.id);
-
   return parseTemplate(updatedTemplate);
+};
+
+type UpdateAuditEvent = {
+  action: UpdateTemplateAction;
+  command: UpdateTemplateCommand;
+  user: { id: string; email: string };
+  beforeContext?: {
+    name?: string;
+  };
+};
+
+const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
+  switch (event.action) {
+    case UpdateTemplateAction.General:
+      const command = event.command as GeneralUpdateTemplateCommand;
+      const { user, beforeContext } = event;
+
+      command.name !== undefined &&
+        (beforeContext?.name ?? "") !== command.name &&
+        logEvent(
+          user.id,
+          { type: "Form", id: command.formID },
+          AuditLogEvent.ChangeFormName,
+          AuditLogDetails.UpdatedFormName,
+          { newFormName: command.name ?? "" }
+        );
+
+      logEvent(
+        user.id,
+        { type: "Form", id: command.formID },
+        "UpdateForm",
+        AuditLogDetails.FormContentUpdated
+      );
+      break;
+    case UpdateTemplateAction.ClosedData:
+      const closedCommand = event.command as UpdateClosedDataCommand;
+
+      if (closedCommand.closingDate) {
+        const date = new Date(closedCommand.closingDate);
+        logEvent(
+          event.user.id,
+          { type: "Form", id: event.command.formID },
+          "UpdateForm",
+          AuditLogDetails.UpdateClosingDate,
+          { closingDate: date.toLocaleDateString("en-CA") }
+        );
+      } else {
+        logEvent(
+          event.user.id,
+          { type: "Form", id: event.command.formID },
+          "UpdateForm",
+          AuditLogDetails.RemoveClosingDate
+        );
+      }
+      break;
+    case UpdateTemplateAction.FormBranding:
+      const brandingCommand = event.command as UpdateFormBrandingCommand;
+      const brandName = brandingCommand.formConfig.brand?.name ?? "gc";
+      logEvent(
+        event.user.id,
+        { type: "Form", id: brandingCommand.formID },
+        AuditLogEvent.UpdateFormBranding,
+        AuditLogDetails.UpdateFormBranding,
+        { brand: brandName }
+      );
+      break;
+    case UpdateTemplateAction.FormPurpose:
+      const purposeCommand = event.command as UpdateFormPurposeCommand;
+      logEvent(
+        event.user.id,
+        { type: "Form", id: purposeCommand.formID },
+        AuditLogEvent.ChangeFormPurpose,
+        AuditLogDetails.SetFormPurpose,
+        { formPurpose: purposeCommand.formPurpose }
+      );
+      break;
+    case UpdateTemplateAction.FormSaveAndResume:
+      const saveAndResumeCommand = event.command as UpdateFormSaveAndResumeCommand;
+      logEvent(
+        event.user.id,
+        { type: "Form", id: saveAndResumeCommand.formID },
+        AuditLogEvent.ChangeFormSaveAndResume,
+        AuditLogDetails.SetSaveAndResume,
+        { saveAndResume: saveAndResumeCommand.saveAndResume ? "On" : "Off" }
+      );
+      break;
+    case UpdateTemplateAction.IsPublished:
+      const publishCommand = event.command as UpdateIsPublishedCommand;
+      logEvent(event.user.id, { type: "Form", id: publishCommand.formID }, "PublishForm");
+      break;
+    case UpdateTemplateAction.SecurityAttribute:
+      const securityCommand = event.command as UpdateSecurityAttributeCommand;
+      logEvent(
+        event.user.id,
+        { type: "Form", id: securityCommand.formID },
+        AuditLogEvent.ChangeSecurityAttribute,
+        AuditLogDetails.ChangeSecurityAttribute,
+        { securityAttribute: securityCommand.securityAttribute ?? "" }
+      );
+  }
 };
 
 /**
@@ -276,66 +374,46 @@ const executeTemplateUpdate = async (updatePlan: UpdatePlan) => {
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   const { user } = await authorizeForCommand(command);
 
-  // const currentTemplate = await prisma.template.findUnique({
-  //   where: {
-  //     id: command.formID,
-  //   },
-  //   select: {
-  //     name: true,
-  //     deliveryOption: true,
-  //     securityAttribute: true,
-  //   },
-  // });
+  const currentTemplate = await prisma.template.findUnique({
+    where: {
+      id: command.formID,
+    },
+    select: {
+      name: true,
+    },
+  });
 
   if ("formConfig" in command) {
     await validateFormConfig(command.formConfig, user);
   }
 
+  if (command.action === UpdateTemplateAction.IsPublished && command.isPublished) {
+    if (process.env.APP_ENV !== "test") {
+      try {
+        await deleteDraftFormResponses(command.formID);
+      } catch (e) {
+        if (e instanceof TemplateAlreadyPublishedError) {
+          // preserve old behavior if needed
+          return getFullTemplateByID(command.formID, false);
+        }
+        throw e;
+      }
+    }
+  }
+
   const updatePlan = buildUpdatePlan(command);
-  const updatedTemplate = await executeTemplateUpdate(updatePlan);
+  const updatedTemplate = await executeTemplateUpdate(updatePlan, user.id);
 
   if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
+  await logTemplateUpdateEvent({
+    action: command.action,
+    command,
+    user,
+    beforeContext: {
+      name: currentTemplate?.name,
+    },
+  });
+
   return updatedTemplate;
-
-  // Log the audit events
-  // command.name !== undefined &&
-  //   (currentTemplate?.name ?? "") !== command.name &&
-  //   logEvent(
-  //     user.id,
-  //     { type: "Form", id: command.formID },
-  //     AuditLogEvent.ChangeFormName,
-  //     AuditLogDetails.UpdatedFormName,
-  //     { newFormName: command.name ?? "" }
-  //   );
-  // command.deliveryOption &&
-  //   command.deliveryOption !== currentTemplate?.deliveryOption &&
-  //   logEvent(
-  //     user.id,
-  //     { type: "Form", id: command.formID },
-  //     "ChangeDeliveryOption",
-  //     AuditLogDetails.ChangeDeliveryOption,
-  //     {
-  //       deliveryOption: Object.keys(command.deliveryOption)
-  //         .map((key) => `${key}: ${command.deliveryOption && command.deliveryOption[key]}`)
-  //         .join(", "),
-  //     }
-  //   );
-  // command.securityAttribute &&
-  //   command.securityAttribute !== currentTemplate?.securityAttribute &&
-  //   logEvent(
-  //     user.id,
-  //     { type: "Form", id: command.formID },
-  //     AuditLogEvent.ChangeSecurityAttribute,
-  //     AuditLogDetails.ChangeSecurityAttribute,
-  //     { securityAttribute: command.securityAttribute ?? "" }
-  //   );
-  // logEvent(
-  //   user.id,
-  //   { type: "Form", id: command.formID },
-  //   "UpdateForm",
-  //   AuditLogDetails.FormContentUpdated
-  // );
-
-  // return parseTemplate(updatedTemplate);
 }
