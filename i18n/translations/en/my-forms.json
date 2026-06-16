@@ -25,7 +25,7 @@
     "noArchivedForms": "You have no archived forms.",
     "noClosedForms": "You have no closed forms.",
     "lastEditedBy": "By: {{lastEditedBy}}",
-    "readOnly": "Open - ",
+    "readOnly": "In progress - ",
     "editing": "{{name}} is editing",
     "announceLocked": "Form named {{formName}} is now being edited",
     "announceUnlockedLocked": "Form named {{formName}} is no longer being edited"
