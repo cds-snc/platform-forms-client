@@ -123,17 +123,62 @@ const authorizeForCommand = async (
 ): Promise<AuthorizationResult> => {
   switch (command.action) {
     case UpdateTemplateAction.General:
-    case UpdateTemplateAction.ClosedData:
-    case UpdateTemplateAction.FormBranding:
-    case UpdateTemplateAction.FormPurpose:
-    case UpdateTemplateAction.FormSaveAndResume:
-    case UpdateTemplateAction.SecurityAttribute:
       return authorization.canEditForm(command.formID).catch((e) => {
         logEvent(
           e.user.id,
           { type: "Form", id: command.formID },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateForm
+        );
+        throw e;
+      });
+    case UpdateTemplateAction.ClosedData:
+      return authorization.canEditForm(command.formID).catch((e) => {
+        logEvent(
+          e.user.id,
+          { type: "Form", id: command.formID },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateClosingDate
+        );
+        throw e;
+      });
+    case UpdateTemplateAction.FormBranding:
+      return authorization.canEditForm(command.formID).catch((e) => {
+        logEvent(
+          e.user.id,
+          { type: "Form", id: command.formID },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateFormJson
+        );
+        throw e;
+      });
+    case UpdateTemplateAction.FormPurpose:
+      return authorization.canEditForm(command.formID).catch((e) => {
+        logEvent(
+          e.user.id,
+          { type: "Form", id: command.formID },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetFormPurpose
+        );
+        throw e;
+      });
+    case UpdateTemplateAction.FormSaveAndResume:
+      return authorization.canEditForm(command.formID).catch((e) => {
+        logEvent(
+          e.user.id,
+          { type: "Form", id: command.formID },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetSaveAndResume
+        );
+        throw e;
+      });
+    case UpdateTemplateAction.SecurityAttribute:
+      return authorization.canEditForm(command.formID).catch((e) => {
+        logEvent(
+          e.user.id,
+          { type: "Form", id: command.formID },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateSecurityAttribute
         );
         throw e;
       });
@@ -157,7 +202,7 @@ type UpdatePlan = {
   data: Prisma.TemplateUpdateInput;
 };
 
-const buildUpdatePlan = (command: UpdateTemplateCommand): UpdatePlan => {
+const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
   const basePlan = {
     where: {
       id: command.formID,
@@ -291,6 +336,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
           { newFormName: command.name ?? "" }
         );
 
+      // @TODO: should we log formconfig change only if it changes as above?
       logEvent(
         user.id,
         { type: "Form", id: command.formID },
@@ -401,8 +447,8 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     }
   }
 
-  const updatePlan = buildUpdatePlan(command);
-  const updatedTemplate = await executeTemplateUpdate(updatePlan, user.id);
+  const updateQuery = buildUpdateQuery(command);
+  const updatedTemplate = await executeTemplateUpdate(updateQuery, user.id);
 
   if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
