@@ -1,5 +1,11 @@
 import { serverTranslation } from "@i18n";
-import { ArchiveIcon, FolderIcon, GlobeIcon, PageIcon } from "@serverComponents/icons";
+import {
+  ArchiveIcon,
+  ClosedStatusIcon,
+  FolderIcon,
+  GlobeIcon,
+  PageIcon,
+} from "@serverComponents/icons";
 import { NavLink } from "./NavLink";
 import { cn } from "@lib/utils";
 import { FormTabStatus, TAB_STATUS } from "../types";
@@ -51,7 +57,7 @@ export const Navigation = async ({ filter }: { filter: FormTabStatus }) => {
         active={filter === TAB_STATUS.CLOSED}
       >
         <>
-          <ArchiveIcon className={cn(iconClassname)} />
+          <ClosedStatusIcon className={cn(iconClassname, "h-5 w-5")} />
           {t("nav.closed")}
         </>
       </NavLink>
