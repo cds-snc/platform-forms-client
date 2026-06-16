@@ -117,12 +117,13 @@ export default async function Page(props: {
   const { t } = await serverTranslation("my-forms", { lang: locale });
 
   // Moved from Cards to Page to avoid component being cached when navigating back to this page
+  // Brace yourself, Prisma is a bit... hopefully the comments below help.
   const options: TemplateOptions = {
     requestedWhere: {
       // Published filter: use DB field isPublished since have it, this also indirectly defines Draft since draft=!published
       isPublished:
         status === TAB_STATUS.PUBLISHED ? true : status === TAB_STATUS.DRAFT ? false : undefined,
-      // Archived filter: ttl not null
+      // Archived filter: ttl: { not: null } for archived, null (must have no ttl) for all others except closed (no filter)
       ttl:
         status === TAB_STATUS.ARCHIVED
           ? { not: null }

@@ -16,7 +16,6 @@ import {
   daysUntilTTL,
   isTTLWarningPeriod,
   calculateCollaboratorCount,
-  getBannerColor,
 } from "../helpers";
 import { announce, Priority } from "@gcforms/announce";
 import { cn } from "@root/lib/utils";
@@ -24,12 +23,16 @@ import { cn } from "@root/lib/utils";
 const CardBanner = memo(
   ({ isPublished, isClosed }: { isPublished: boolean; isClosed: boolean }) => {
     const { t } = useTranslation("my-forms");
-    const bulletColor = getBannerColor(isPublished, isClosed);
+    const bulletColor = isClosed
+      ? "bg-indigo-500"
+      : isPublished
+        ? "bg-emerald-500"
+        : "bg-yellow-400";
 
     return (
       <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
         <span
-          className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor}`}
+          className={`inline-block h-3 w-3 rounded-full border-1 border-slate-50 ${bulletColor}`}
         />
         {isClosed
           ? t("card.states.closed")
