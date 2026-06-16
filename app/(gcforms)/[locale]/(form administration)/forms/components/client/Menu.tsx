@@ -2,8 +2,9 @@
 
 import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
-import { getForm, cloneForm } from "../../actions";
+import { getForm, cloneForm, restoreForm } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
+import { clearTemplateStorage } from "@lib/store/utils";
 import { useCallback, useState, useMemo } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
@@ -89,6 +90,24 @@ export const Menu = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, id]);
 
+  const restoreFormCallback = useCallback((): MenuDropdownItemCallback => {
+    (async () => {
+      try {
+        const { error } = (await restoreForm(id)) ?? {};
+        if (error) {
+          toast.error(t("errors.formUnarchiveFailed"));
+        } else {
+          clearTemplateStorage(id);
+          window.location.href = `/${language}/form-builder/${id}/edit`;
+        }
+      } catch (e) {
+        toast.error(t("errors.formUnarchiveFailed"));
+      }
+    })();
+    return { message: "" };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language, id]);
+
   const unfilteredMenuItemList = useMemo(
     () => [
       {
@@ -151,8 +170,25 @@ export const Menu = ({
           };
         },
       },
+      {
+        filtered: !ttl ? true : false,
+        title: t("actions.unarchiveForm"),
+        callback: restoreFormCallback,
+      },
     ],
-    [isPublished, ttl, t, copyLinkCallback, language, id, status, handleDelete, downloadForm, name]
+    [
+      isPublished,
+      ttl,
+      t,
+      copyLinkCallback,
+      restoreFormCallback,
+      language,
+      id,
+      status,
+      handleDelete,
+      downloadForm,
+      name,
+    ]
   );
 
   const menuItemsList: Array<MenuDropdownItemI> = useMemo(

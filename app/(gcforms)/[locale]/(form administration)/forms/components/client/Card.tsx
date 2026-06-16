@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, memo } from "react";
+import { Suspense, useMemo, memo, useEffect, useRef } from "react";
 import { EnvelopeIcon, MessageIcon, GearIcon } from "@serverComponents/icons";
 import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
@@ -18,6 +18,7 @@ import {
   calculateCollaboratorCount,
   getBannerColor,
 } from "../helpers";
+import { announce, Priority } from "@gcforms/announce";
 
 const CardBanner = memo(({ isPublished }: { isPublished: boolean }) => {
   const { t } = useTranslation("my-forms");
@@ -80,7 +81,7 @@ const CardLinks = memo(
                 href={responsesLink}
                 prefetch={false}
               >
-                <MessageIcon className="mr-2 ml-px inline-block fill-red-500" />
+                <MessageIcon className="mr-2 ml-px inline-block fill-red-700" />
                 {t("card.actionRequired")}
               </Link>
             ) : (
@@ -99,7 +100,7 @@ const CardLinks = memo(
         {/* Settings link - only for published non-archived forms */}
         {ttl == null && (
           <Link
-            className="mt-2 block text-sm focus:fill-slate-500 active:fill-slate-500"
+            className="mt-2 mb-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
             href={settingsLink}
             prefetch={false}
           >
@@ -131,7 +132,7 @@ const CardTitle = memo(
     } = useTranslation("my-forms");
     const classes =
       "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit hover:underline focus:underline active:underline cursor-pointer!";
-    const publishedLink = `/${language}/form-builder/${id}/responses`;
+    const publishedLink = `/${language}/id/${id}`;
     const draftLink = `/${language}/form-builder/${id}/edit/`;
     return isPublished ? (
       <Link className={classes} href={publishedLink} prefetch={false}>
@@ -159,17 +160,17 @@ const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date
   const daysRemaining = ttl ? daysUntilTTL(ttl) : 0;
 
   return (
-    <div id={`card-date-${id}`} className="mb-1 text-sm">
+    <div id={`card-date-${id}`} className="mb-1 overflow-hidden text-sm">
       {t("card.lastEdited")}: {formattedDate}
       {ttl && (
         <>
           <br />
-          <span>
+          <span className="block min-w-0 truncate">
             {t("card.deleteDate")}
             {formatDateToYYYYMMDD(ttl)}
           </span>
           {showTTLWarning && (
-            <span className="ml-4 text-red-500">
+            <span className="ml-4 block min-w-0 truncate text-red-500">
               {t("card.deletedIn")} {daysRemaining} {t("card.days")}
             </span>
           )}
@@ -226,10 +227,10 @@ const CardFooterDraftEditing = memo(
   }) => {
     const { t } = useTranslation("my-forms");
     return (
-      <div>
-        <div className="mb-2 text-sm">{lockedByName} editing</div>
-        <div className="flex items-center">
-          <div className="mr-2 text-sm">Read only -</div>
+      <div className="text-sm">
+        <div className="mb-2">{t("cards.editing", { name: lockedByName })}</div>
+        <div>
+          {t("cards.readOnly")}
           <DraftEditLink
             href={`/${language}/form-builder/${cardId}/edit/`}
             formId={cardId}
@@ -246,7 +247,11 @@ const CardFooterDraftEditing = memo(
 CardFooterDraftEditing.displayName = "CardFooterDraftEditing";
 
 const CardFooterPublished = memo(({ cardId }: { cardId: string }) => {
-  return <p className="mt-3 text-xs italic">{cardId}</p>;
+  return (
+    <p className="mt-3 w-full min-w-0 truncate text-xs italic" title={cardId}>
+      {cardId}
+    </p>
+  );
 });
 CardFooterPublished.displayName = "CardFooterPublished";
 
@@ -259,8 +264,22 @@ const CardComponent = ({
   status: FormTabStatus;
   onRemove?: (templateId: string) => void;
 }) => {
+  const { t } = useTranslation("my-forms");
   const params = useParams();
   const language = params?.locale as string;
+  const lockStateRef = useRef<{ hasLock: boolean }>({ hasLock: !!card.editLockInfo });
+
+  // Announce any lock state changes
+  const formLocked = t("cards.announceLocked", { formName: card.name });
+  const formUnlocked = t("cards.announceUnlockedLocked", { formName: card.name });
+  useEffect(() => {
+    const hasLock = !!card.editLockInfo;
+    if (lockStateRef.current.hasLock !== hasLock) {
+      lockStateRef.current = { hasLock };
+      const message = hasLock ? formLocked : formUnlocked;
+      announce(message, Priority.HIGH);
+    }
+  }, [card.editLockInfo, formLocked, formUnlocked]);
 
   // Calculate collaborator count (excluding the owner)
   const collaboratorCount = useMemo(
@@ -278,7 +297,7 @@ const CardComponent = ({
 
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
-      <div className="row-start-1 mt-1 flex flex-col">
+      <div className="row-start-1 mt-1 flex min-w-0 flex-col">
         <CardTitle
           id={card.id}
           name={card.name}
@@ -298,7 +317,7 @@ const CardComponent = ({
           />
         </Suspense>
         <div className="mt-auto">
-          {cardState === "draft-readonly" && (
+          {(cardState === "draft-readonly" || cardState == "published") && (
             <CardFooterDraftReadonly
               cardId={card.id}
               date={card.date}

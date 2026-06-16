@@ -32,6 +32,11 @@ export async function getFullTemplateByID(
         },
         include: {
           deliveryOption: true,
+          lastEditedBy: {
+            select: {
+              name: true,
+            },
+          },
         },
       })
       .catch((e) => prismaErrors(e, null));
