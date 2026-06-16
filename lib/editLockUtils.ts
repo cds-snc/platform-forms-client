@@ -87,7 +87,7 @@ export async function getEditLockInfoForTemplates(
 
     return lockInfoMap;
   } catch (error) {
-    // Probably not error worth since this just means edit-lock features won't work, but log to help debugging
+    // Probably not worth logging as an error since this just means edit-lock features won't work, but log at warn level to help debugging
     logMessage.warn(`Error fetching edit lock info from Redis: ${error}`);
     return lockInfoMap;
   }
