@@ -216,6 +216,10 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
     case UpdateTemplateAction.General:
       return {
         ...basePlan,
+        where: {
+          id: command.formID,
+          isPublished: false,
+        },
         data: {
           jsonConfig: command.formConfig as Prisma.JsonObject,
           name: command.name,
@@ -463,6 +467,10 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 
   const updateQuery = buildUpdateQuery(command);
   const updatedTemplate = await executeTemplateUpdate(updateQuery, user.id);
+
+  if (updatedTemplate === null && command.action === UpdateTemplateAction.General) {
+    throw new TemplateAlreadyPublishedError();
+  }
 
   if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
