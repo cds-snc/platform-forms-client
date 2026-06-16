@@ -24,7 +24,7 @@
     "noArchivedForms": "Vous n'avez aucun formulaire archivé.",
     "noClosedForms": "Vous n'avez aucun formulaire fermé.",
     "lastEditedBy": "par : {{lastEditedBy}}", 
-    "readOnly": "Ouvert - ",
+    "readOnly": "En cours - ",
     "editing": "{{name}} modifie",
     "announceLocked": "Le formulaire nommé {{formName}} est en cours de modification",
     "announceUnlockedLocked": "Le formulaire nommé {{formName}} n'est plus en cours de modification"
