@@ -14,6 +14,7 @@ import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
 import { MILLISECONDS_PER_DAY, TTL_WARNING_DAYS } from "../constants";
 import { announce, Priority } from "@gcforms/announce";
+import { formClosingDateEst } from "@root/lib/utils/date/utcToEst";
 
 const getCardState = (card: FormsTemplateWithLockInfo): CardState => {
   if (card.closingDate && new Date(card.closingDate) <= new Date()) return CARD_STATE.CLOSED;
@@ -365,11 +366,19 @@ const CardComponent = ({
           />
         </Suspense>
         <div className="mt-auto">
-          {cardState === CARD_STATE.CLOSED && card.closingDate && (
-            <div className="text-sm">
-              {t("card.closedOn")}: {formatDateToYYYYMMDD(card.closingDate)}
-            </div>
-          )}
+          {cardState === CARD_STATE.CLOSED &&
+            card.closingDate &&
+            (() => {
+              const { month, day, year } = formClosingDateEst(
+                card.closingDate.toISOString(),
+                language
+              );
+              return (
+                <div className="text-sm">
+                  {t("card.closedOn")}: {day} {month} {year}
+                </div>
+              );
+            })()}
           {(cardState === CARD_STATE.DRAFT_READONLY || cardState === CARD_STATE.PUBLISHED) && (
             <CardFooterDraftReadonly
               cardId={card.id}
