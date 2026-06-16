@@ -6,7 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { cn } from "@root/lib/utils";
+import { cn, dateHasPast } from "@root/lib/utils";
 
 import { CARD_STATE, CardState, FormsTemplateWithLockInfo, FormTabStatus } from "../types";
 import { DraftEditLink } from "../client/DraftEditLink";
@@ -17,7 +17,7 @@ import { announce, Priority } from "@gcforms/announce";
 import { formClosingDateEst } from "@root/lib/utils/date/utcToEst";
 
 const getCardState = (card: FormsTemplateWithLockInfo): CardState => {
-  if (card.closingDate && new Date(card.closingDate) <= new Date()) return CARD_STATE.CLOSED;
+  if (card.closingDate && dateHasPast(card.closingDate?.getTime())) return CARD_STATE.CLOSED;
   if (card.ttl) return CARD_STATE.ARCHIVED;
   if (card.isPublished) return CARD_STATE.PUBLISHED;
   if (card.editLockInfo) return CARD_STATE.DRAFT_EDITING;
