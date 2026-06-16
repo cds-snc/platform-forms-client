@@ -55,15 +55,14 @@ export type FormsTemplate = {
   isPublished: boolean;
   ttl: Date | null;
   date: string;
-  url: string;
   overdue: boolean;
   hasEditLock: boolean;
-  isShared: boolean;
   collaboratorCount: {
     userCount: number;
     pendingUserCount: number;
   };
   closingDate?: Date | null;
+  lastEditedBy?: string | null;
 };
 
 /**
@@ -71,8 +70,6 @@ export type FormsTemplate = {
  */
 export type FormsTemplateWithLockInfo = FormsTemplate & {
   editLockInfo?: EditLockInfoClient | null;
-  lastEditedBy?: string | null;
-  closingDate?: Date | null;
 };
 
 /**

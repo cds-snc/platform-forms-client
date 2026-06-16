@@ -20,7 +20,6 @@ import type { FormsTemplate, FormsTemplateWithLockInfo, FormTabStatus } from "./
 import { TAB_STATUS } from "./components/types";
 
 const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => string): string => {
-  const defaultStatus = t("nav.recentlyEdited");
   const statusTitleMap: Record<string, string> = {
     [TAB_STATUS.DRAFT]: t("nav.drafts"),
     [TAB_STATUS.PUBLISHED]: t("nav.published"),
@@ -28,7 +27,7 @@ const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => s
     [TAB_STATUS.CLOSED]: t("nav.closed"),
     [TAB_STATUS.RECENTLY_EDITED]: t("nav.recentlyEdited"),
   };
-  return status ? statusTitleMap[status] : defaultStatus;
+  return (status && statusTitleMap[status]) ?? t("nav.recentlyEdited");
 };
 
 export async function generateMetadata(props: {
@@ -95,11 +94,9 @@ export default async function Page(props: {
   params: Promise<{ locale: string }>;
   searchParams: Promise<{ status: FormTabStatus }>;
 }) {
-  const searchParams = await props.searchParams;
+  const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
 
   const { status = TAB_STATUS.RECENTLY_EDITED } = searchParams;
-
-  const params = await props.params;
 
   const { locale } = params;
 
@@ -172,10 +169,6 @@ export default async function Page(props: {
     const userCount = templateWithCounts._count?.users ?? 0;
     const pendingUserCount = templateWithCounts._count?.invitations ?? 0;
 
-    // Determine if template is shared (has 1 or more collaborators beyond owner)
-    // userCount includes the owner, so we need at least 2 total (owner + 1 collaborator)
-    const isShared = userCount + pendingUserCount >= 2;
-
     return {
       id,
       titleEn,
@@ -184,11 +177,9 @@ export default async function Page(props: {
       name,
       isPublished,
       date: updatedAt ?? FALLBACK_DATE,
-      url: `/${locale}/id/${id}`,
       overdue: false,
       ttl: ttl ? new Date(ttl) : null,
       hasEditLock: templateIdsWithEditLocks.has(id),
-      isShared,
       collaboratorCount: {
         userCount,
         pendingUserCount,
@@ -253,7 +244,7 @@ export default async function Page(props: {
         </div>
       </div>
       <div className="flex h-full min-h-0 flex-col">
-        <div className="">
+        <div>
           <Invitations invitations={invitations} />
           {status === TAB_STATUS.ARCHIVED && (
             <div className="mb-4">
