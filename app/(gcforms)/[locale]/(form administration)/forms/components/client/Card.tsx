@@ -342,6 +342,12 @@ const CardComponent = ({
 
   const cardState = useMemo(() => getCardState(card), [card]);
 
+  const closedOnText = useMemo(() => {
+    if (cardState !== CARD_STATE.CLOSED || !card.closingDate) return null;
+    const { month, day, year } = formClosingDateEst(card.closingDate.toISOString(), language);
+    return `${day} ${month} ${year}`;
+  }, [cardState, card.closingDate, language]);
+
   const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : card.overdue ? "bg-red-50" : ""}`;
 
   return (
@@ -366,19 +372,11 @@ const CardComponent = ({
           />
         </Suspense>
         <div className="mt-auto">
-          {cardState === CARD_STATE.CLOSED &&
-            card.closingDate &&
-            (() => {
-              const { month, day, year } = formClosingDateEst(
-                card.closingDate.toISOString(),
-                language
-              );
-              return (
-                <div className="text-sm">
-                  {t("card.closedOn")}: {day} {month} {year}
-                </div>
-              );
-            })()}
+          {closedOnText && (
+            <div className="text-sm">
+              {t("card.closedOn")}: {closedOnText}
+            </div>
+          )}
           {(cardState === CARD_STATE.DRAFT_READONLY || cardState === CARD_STATE.PUBLISHED) && (
             <CardFooterDraftReadonly
               cardId={card.id}
