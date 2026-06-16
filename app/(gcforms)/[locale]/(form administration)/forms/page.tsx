@@ -25,6 +25,7 @@ const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => s
     [TAB_STATUS.DRAFT]: t("nav.drafts"),
     [TAB_STATUS.PUBLISHED]: t("nav.published"),
     [TAB_STATUS.ARCHIVED]: t("nav.archived"),
+    [TAB_STATUS.CLOSED]: t("nav.closed"),
     [TAB_STATUS.RECENTLY_EDITED]: t("nav.recentlyEdited"),
   };
   return status ? statusTitleMap[status] : defaultStatus;
@@ -118,10 +119,26 @@ export default async function Page(props: {
   // Moved from Cards to Page to avoid component being cached when navigating back to this page
   const options: TemplateOptions = {
     requestedWhere: {
+      // Published filter: use DB field isPublished since have it, this also indirectly defines Draft since draft=!published
       isPublished:
         status === TAB_STATUS.PUBLISHED ? true : status === TAB_STATUS.DRAFT ? false : undefined,
-      ttl: status === TAB_STATUS.ARCHIVED ? { not: null } : null,
-      closingDate: status === TAB_STATUS.CLOSED ? { not: null, lt: new Date() } : undefined,
+      // Archived filter: ttl not null
+      ttl:
+        status === TAB_STATUS.ARCHIVED
+          ? { not: null }
+          : status === TAB_STATUS.CLOSED
+            ? undefined
+            : null,
+      // Closed filter: closingDate in the past
+      ...(status === TAB_STATUS.CLOSED && {
+        closingDate: { not: null, lt: new Date() },
+      }),
+      // Published and Archived further filtering: remove templates that have a closing date in the past (closed forms)
+      ...((status === TAB_STATUS.PUBLISHED || status === TAB_STATUS.ARCHIVED) && {
+        NOT: {
+          AND: [{ closingDate: { not: null } }, { closingDate: { lt: new Date() } }],
+        },
+      }),
     },
     sortByDateUpdated: "desc",
   };
@@ -146,6 +163,7 @@ export default async function Page(props: {
       updatedAt,
       ttl,
       lastEditedBy,
+      closingDate: closingDateRaw,
     } = template;
 
     // Calculate collaborator count from DB data
@@ -175,6 +193,7 @@ export default async function Page(props: {
         pendingUserCount,
       },
       lastEditedBy,
+      closingDate: closingDateRaw ? new Date(closingDateRaw) : null,
     };
   });
 
@@ -228,14 +247,14 @@ export default async function Page(props: {
           <Navigation filter={status} />
         </div>
         <div className="mt-6 ml-2">
-          {status == TAB_STATUS.DRAFT && <ResumeEditingForm />}
+          {status === TAB_STATUS.DRAFT && <ResumeEditingForm />}
           <CoEditingHelp />
         </div>
       </div>
       <div className="flex h-full min-h-0 flex-col">
         <div className="">
           <Invitations invitations={invitations} />
-          {status == TAB_STATUS.ARCHIVED && (
+          {status === TAB_STATUS.ARCHIVED && (
             <div className="mb-4">
               <div>
                 {t("archivedNotice")}&nbsp;

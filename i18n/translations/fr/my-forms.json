@@ -37,7 +37,7 @@
       "draft": "Ébauche",
       "published": "Publié",
       "archived": "Archivé",
-      "closed": "Closed"
+      "closed": "[FR]Closed"
     },
     "title": {
       "notTranslatedEn": "Untitled form",
@@ -47,6 +47,7 @@
     "deleteDate": " Date de suppression : ",
     "deletedIn": "Sera supprimé dans ",
     "days": " jours",
+    "closedOn": "[FR]Closed on",
     "deliveryOption": {
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"

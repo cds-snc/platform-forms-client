@@ -4,7 +4,7 @@ import { EditLockPresenceStatus, EditLockVisibilityState } from "@root/lib/editL
 /**
  * Possible states a form card can be in
  */
-export type CardState = "draft-editing" | "draft-readonly" | "published" | "archived";
+export type CardState = "draft-editing" | "draft-readonly" | "published" | "archived" | "closed";
 
 /**
  * Edit-lock info as returned by the /api/forms/edit-locks endpoint (dates as ISO strings).
@@ -63,6 +63,7 @@ export type FormsTemplate = {
     userCount: number;
     pendingUserCount: number;
   };
+  closingDate?: Date | null;
 };
 
 /**
@@ -71,6 +72,7 @@ export type FormsTemplate = {
 export type FormsTemplateWithLockInfo = FormsTemplate & {
   editLockInfo?: EditLockInfoClient | null;
   lastEditedBy?: string | null;
+  closingDate?: Date | null;
 };
 
 /**

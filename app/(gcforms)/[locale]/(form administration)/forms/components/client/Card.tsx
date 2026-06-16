@@ -9,7 +9,7 @@ import { DraftEditLink } from "../client/DraftEditLink";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FormsTemplateWithLockInfo, FormTabStatus, TAB_STATUS } from "../types";
+import { FormsTemplateWithLockInfo, FormTabStatus } from "../types";
 import {
   getCardState,
   formatDateToYYYYMMDD,
@@ -325,7 +325,7 @@ const CardComponent = ({
           id={card.id}
           name={card.name}
           isPublished={card.isPublished}
-          isClosed={status === TAB_STATUS.CLOSED}
+          isClosed={cardState === "closed"}
           collaboratorCount={collaboratorCount}
         />
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
@@ -340,7 +340,12 @@ const CardComponent = ({
           />
         </Suspense>
         <div className="mt-auto">
-          {(cardState === "draft-readonly" || cardState == "published") && (
+          {cardState === "closed" && card.closingDate && (
+            <div className="text-sm">
+              {t("card.closedOn")}: {formatDateToYYYYMMDD(card.closingDate)}
+            </div>
+          )}
+          {(cardState === "draft-readonly" || cardState === "published") && (
             <CardFooterDraftReadonly
               cardId={card.id}
               date={card.date}
@@ -356,7 +361,7 @@ const CardComponent = ({
               collaboratorCount={collaboratorCount}
             />
           )}
-          <CardBanner isPublished={card.isPublished} isClosed={status === TAB_STATUS.CLOSED} />
+          <CardBanner isPublished={card.isPublished} isClosed={cardState === "closed"} />
           {cardState === "published" && <CardFooterPublished cardId={card.id} />}
         </div>
       </div>

@@ -66,6 +66,7 @@ export async function getAllTemplatesForUser(
               },
             },
           },
+          closingDate: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {

@@ -148,7 +148,7 @@ export const Menu = ({
         },
       },
       {
-        filterd: ttl ? true : false,
+        filtered: ttl ? true : false,
         title: t("card.menu.save"),
         callback: () => {
           downloadForm(name, id, ttl);

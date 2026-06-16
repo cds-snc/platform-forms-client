@@ -5,6 +5,7 @@ import { TTL_WARNING_DAYS, MILLISECONDS_PER_DAY } from "./constants";
  * Determines the current state of a card based on its properties
  */
 export function getCardState(card: FormsTemplateWithLockInfo): CardState {
+  if (card.closingDate && new Date(card.closingDate) <= new Date()) return "closed";
   if (card.ttl) return "archived";
   if (card.isPublished) return "published";
   if (card.editLockInfo) return "draft-editing";
@@ -46,7 +47,7 @@ export function calculateCollaboratorCount(userCount: number, pendingUserCount: 
  * Gets the appropriate bullet color for a card banner based on its state
  */
 export function getBannerColor(isPublished: boolean, isClosed: boolean): string {
-  if (isClosed) return "bg-gray-500";
+  if (isClosed) return "bg-indigo-50";
   if (isPublished) return "bg-emerald-500";
   return "bg-yellow-400";
 }

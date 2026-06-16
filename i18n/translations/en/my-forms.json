@@ -47,6 +47,7 @@
     "deleteDate": " Delete date: ",
     "deletedIn": "Will be deleted in ",
     "days": " days",
+    "closedOn": "Closed on",
     "deliveryOption": {
       "email": "Responses get sent to:",
       "vault": "Responses page"
