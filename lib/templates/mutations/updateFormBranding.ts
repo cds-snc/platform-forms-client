@@ -58,7 +58,10 @@ export const updateFormBranding = async (formId: string, jsonConfig: FormPropert
       where: {
         id: formId,
       },
-      data: { jsonConfig: jsonConfig as Prisma.JsonObject },
+      data: {
+        jsonConfig: jsonConfig as Prisma.JsonObject,
+        lastEditedByUserId: user.id,
+      },
       select: {
         id: true,
         created_at: true,
@@ -74,6 +77,11 @@ export const updateFormBranding = async (formId: string, jsonConfig: FormPropert
         publishDesc: true,
         saveAndResume: true,
         notificationsInterval: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => prismaErrors(e, null));

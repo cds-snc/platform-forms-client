@@ -1,7 +1,7 @@
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
 import { getAbility } from "@lib/privileges";
-import { AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
 import { parseTemplate } from "../internal";
 
@@ -47,6 +47,11 @@ export async function getAllTemplatesForUser(
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          lastEditedBy: {
+            select: {
+              name: true,
+            },
+          },
           // only count and not entire user info for privacy etc.
           _count: {
             select: {
@@ -71,10 +76,19 @@ export async function getAllTemplatesForUser(
       .catch((e) => prismaErrors(e, []));
 
     // Only log the event if templates are found
-    if (templates.length > 0)
-      logEvent(ability.user.id, { type: "Form" }, "ReadForm", AuditLogDetails.AccessedForms, {
-        formList: templates.map((template) => template.id).toString(),
-      });
+    if (templates.length > 0) {
+      for (const template of templates) {
+        logEvent(
+          ability.user.id,
+          { type: "Form", id: template.id },
+          AuditLogEvent.ReadForm,
+          AuditLogDetails.AccessedForm,
+          {
+            formId: template.id,
+          }
+        );
+      }
+    }
 
     return templates.map((template) => parseTemplate(template));
   } catch (e) {

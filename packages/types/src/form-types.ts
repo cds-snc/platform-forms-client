@@ -241,6 +241,7 @@ export type FormRecord = {
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
   notificationsInterval?: NotificationsInterval;
+  lastEditedBy?: string | null;
   _count?: {
     users: number;
     invitations: number;

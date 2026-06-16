@@ -1,8 +1,12 @@
 # Changelog
 
-## [2.2.13] - 2026-06-04
+## [2.2.14] - 2026-06-15
 
-- Fixes self referring package import
+- Replaced the self-import from @gcforms/core with a local import
+
+## [2.2.13] - 2026-05-25
+
+- Update the non-logged in header so that the FIP and language toggle link are vertically aligned within the same row.
 
 ## [2.2.12] - 2026-05-25
 
