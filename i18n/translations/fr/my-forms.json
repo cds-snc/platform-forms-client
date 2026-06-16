@@ -7,6 +7,7 @@
     "archived": "Archivés",
     "recentlyEdited": "Récents",
     "closed": "Fermés"
+  },
   "account": {
     "viewAccount": "Votre compte"
   },
@@ -23,7 +24,7 @@
     "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié.",
     "noArchivedForms": "Vous n'avez aucun formulaire archivé.",
     "noClosedForms": "Vous n'avez aucun formulaire fermé.",
-    "lastEditedBy": "par : {{lastEditedBy}}", 
+    "lastEditedBy": "par : {{lastEditedBy}}",
     "readOnly": "En cours - ",
     "editing": "{{name}} modifie",
     "announceLocked": "Le formulaire nommé {{formName}} est en cours de modification",
@@ -47,7 +48,7 @@
     "deletedIn": "Sera supprimé dans ",
     "days": " jours",
     "closedOn": "Date de fermeture :",
-    "deliveryOption": { 
+    "deliveryOption": {
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"
     },
