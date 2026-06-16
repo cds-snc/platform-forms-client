@@ -17,6 +17,18 @@ import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../intern
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { isValidISODate } from "@lib/utils/date/isValidISODate";
 
+export const UpdateTemplateAction = {
+  Full: "full",
+  ClosedData: "closedData",
+  FormBranding: "formBranding",
+  FormPurpose: "formPurpose",
+  FormSaveAndResume: "formSaveAndResume",
+  IsPublished: "isPublished",
+  SecurityAttribute: "securityAttribute",
+} as const;
+
+export type UpdateTemplateAction = (typeof UpdateTemplateAction)[keyof typeof UpdateTemplateAction];
+
 type UpdateTemplateCommand =
   | GeneralUpdateTemplateCommand
   | UpdateClosedDataCommand
@@ -28,14 +40,7 @@ type UpdateTemplateCommand =
 
 type BaseUpdateCommand = {
   formID: string;
-  action:
-    | "full"
-    | "closedData"
-    | "formBranding"
-    | "formPurpose"
-    | "formSaveAndResume"
-    | "isPublished"
-    | "securityAttribute";
+  action: UpdateTemplateAction;
 };
 
 // @TODO: revisit required attributes

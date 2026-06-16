@@ -12,7 +12,10 @@ import {
 } from "@lib/types";
 import { updateFormBranding } from "@lib/templates/mutations/updateFormBranding";
 import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
-import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
+import {
+  updateTemplate as updateDbTemplate,
+  UpdateTemplateAction,
+} from "@lib/templates/mutations/updateTemplate";
 import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
@@ -119,7 +122,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
             userId: session.user.id,
           });
           const formRecord = await updateDbTemplate({
-            action: "full",
+            action: UpdateTemplateAction.Full,
             formID: id,
             formConfig: formConfig,
             name: name,
@@ -362,7 +365,7 @@ export const closeForm = AuthenticatedAction(
       }
 
       const response = await updateDbTemplate({
-        action: "closedData",
+        action: UpdateTemplateAction.ClosedData,
         formID,
         closingDate,
         closedDetails,
