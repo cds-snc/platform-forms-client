@@ -67,7 +67,7 @@ export type FormsTemplate = {
 };
 
 /**
- * Template enriched with edit-lock info for client rendering.
+ * Template merged with edit-lock info for client rendering.
  */
 export type FormsTemplateWithLockInfo = FormsTemplate & {
   editLockInfo?: EditLockInfoClient | null;
@@ -86,6 +86,17 @@ export type FormTabStatus = "recentlyEdited" | "draft" | "published" | "archived
 export const TAB_STATUS = {
   RECENTLY_EDITED: "recentlyEdited",
   DRAFT: "draft",
+  PUBLISHED: "published",
+  ARCHIVED: "archived",
+  CLOSED: "closed",
+} as const;
+
+/**
+ * Constants for card state values
+ */
+export const CARD_STATE = {
+  DRAFT_EDITING: "draft-editing",
+  DRAFT_READONLY: "draft-readonly",
   PUBLISHED: "published",
   ARCHIVED: "archived",
   CLOSED: "closed",

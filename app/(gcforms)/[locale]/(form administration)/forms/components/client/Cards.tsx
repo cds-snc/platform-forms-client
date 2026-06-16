@@ -53,12 +53,10 @@ export const Cards = ({
   // Setup edit lock polling - only poll for draft forms in the recentlyEdited and draft tabs
   const shouldPoll =
     !tabStatus || tabStatus === TAB_STATUS.RECENTLY_EDITED || tabStatus === TAB_STATUS.DRAFT;
-
   const draftTemplates = useMemo(
     () => templates.filter((t) => t.isPublished === false && t.ttl === null),
     [templates]
   );
-
   useEditLockPolling({
     templates: draftTemplates,
     displayedCount,

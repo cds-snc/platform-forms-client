@@ -2,23 +2,45 @@
 
 import { Suspense, useMemo, memo, useEffect, useRef } from "react";
 import { EnvelopeIcon, MessageIcon, GearIcon } from "@serverComponents/icons";
-import { Menu } from "../client/Menu";
-import { Unarchive } from "../client/Unarchive";
 import Skeleton from "react-loading-skeleton";
-import { DraftEditLink } from "../client/DraftEditLink";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FormsTemplateWithLockInfo, FormTabStatus } from "../types";
-import {
-  getCardState,
-  formatDateToYYYYMMDD,
-  daysUntilTTL,
-  isTTLWarningPeriod,
-  calculateCollaboratorCount,
-} from "../helpers";
-import { announce, Priority } from "@gcforms/announce";
 import { cn } from "@root/lib/utils";
+
+import { CARD_STATE, CardState, FormsTemplateWithLockInfo, FormTabStatus } from "../types";
+import { DraftEditLink } from "../client/DraftEditLink";
+import { Menu } from "../client/Menu";
+import { Unarchive } from "../client/Unarchive";
+import { MILLISECONDS_PER_DAY, TTL_WARNING_DAYS } from "../constants";
+import { announce, Priority } from "@gcforms/announce";
+
+const getCardState = (card: FormsTemplateWithLockInfo): CardState => {
+  if (card.closingDate && new Date(card.closingDate) <= new Date()) return CARD_STATE.CLOSED;
+  if (card.ttl) return CARD_STATE.ARCHIVED;
+  if (card.isPublished) return CARD_STATE.PUBLISHED;
+  if (card.editLockInfo) return CARD_STATE.DRAFT_EDITING;
+  return CARD_STATE.DRAFT_READONLY;
+};
+
+const formatDateToYYYYMMDD = (date: string | Date): string => {
+  const jsDate = typeof date === "string" ? new Date(date) : date;
+  return jsDate.toISOString().split("T")[0];
+};
+
+const daysUntilTTL = (ttl: Date): number => {
+  return Math.ceil((ttl.getTime() - new Date().getTime()) / MILLISECONDS_PER_DAY);
+};
+
+const isTTLWarningPeriod = (ttl: Date): boolean => {
+  const daysRemaining = daysUntilTTL(ttl);
+  return daysRemaining > 0 && daysRemaining <= TTL_WARNING_DAYS;
+};
+
+const calculateCollaboratorCount = (userCount: number, pendingUserCount: number): number => {
+  // userCount includes the owner, so we subtract 1
+  return userCount - 1 + pendingUserCount;
+};
 
 const CardBanner = memo(
   ({ isPublished, isClosed }: { isPublished: boolean; isClosed: boolean }) => {
@@ -328,7 +350,7 @@ const CardComponent = ({
           id={card.id}
           name={card.name}
           isPublished={card.isPublished}
-          isClosed={cardState === "closed"}
+          isClosed={cardState === CARD_STATE.CLOSED}
           collaboratorCount={collaboratorCount}
         />
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
@@ -343,12 +365,12 @@ const CardComponent = ({
           />
         </Suspense>
         <div className="mt-auto">
-          {cardState === "closed" && card.closingDate && (
+          {cardState === CARD_STATE.CLOSED && card.closingDate && (
             <div className="text-sm">
               {t("card.closedOn")}: {formatDateToYYYYMMDD(card.closingDate)}
             </div>
           )}
-          {(cardState === "draft-readonly" || cardState === "published") && (
+          {(cardState === CARD_STATE.DRAFT_READONLY || cardState === CARD_STATE.PUBLISHED) && (
             <CardFooterDraftReadonly
               cardId={card.id}
               date={card.date}
@@ -356,7 +378,7 @@ const CardComponent = ({
               lastEditedBy={card.lastEditedBy}
             />
           )}
-          {cardState === "draft-editing" && (
+          {cardState === CARD_STATE.DRAFT_EDITING && (
             <CardFooterDraftEditing
               lockedByName={card.editLockInfo?.lockedByName ?? null}
               language={language}
@@ -364,8 +386,8 @@ const CardComponent = ({
               collaboratorCount={collaboratorCount}
             />
           )}
-          <CardBanner isPublished={card.isPublished} isClosed={cardState === "closed"} />
-          {cardState === "published" && <CardFooterPublished cardId={card.id} />}
+          <CardBanner isPublished={card.isPublished} isClosed={cardState === CARD_STATE.CLOSED} />
+          {cardState === CARD_STATE.PUBLISHED && <CardFooterPublished cardId={card.id} />}
         </div>
       </div>
       <div className="flex items-start">
