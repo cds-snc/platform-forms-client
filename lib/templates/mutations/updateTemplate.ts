@@ -75,9 +75,9 @@ type UpdateFormSaveAndResumeCommand = BaseUpdateCommand & {
 type UpdateIsPublishedCommand = BaseUpdateCommand & {
   action: typeof UpdateTemplateAction.IsPublished;
   isPublished: boolean;
-  publishReason?: string;
-  publishFormType?: string;
-  publishDescription?: string;
+  publishReason: string;
+  publishFormType: string;
+  publishDescription: string;
 };
 
 type UpdateSecurityAttributeCommand = BaseUpdateCommand & {
