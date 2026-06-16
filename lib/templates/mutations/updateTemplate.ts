@@ -75,6 +75,9 @@ type UpdateFormSaveAndResumeCommand = BaseUpdateCommand & {
 type UpdateIsPublishedCommand = BaseUpdateCommand & {
   action: typeof UpdateTemplateAction.IsPublished;
   isPublished: boolean;
+  publishReason?: string;
+  publishFormType?: string;
+  publishDescription?: string;
 };
 
 type UpdateSecurityAttributeCommand = BaseUpdateCommand & {
@@ -222,16 +225,22 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
       if (command.closingDate !== null && !isValidISODate(String(command.closingDate))) {
         throw new Error(`Invalid ISO date ${command.closingDate}`);
       }
+
+      let detailsData: ClosedDetails | null = null;
+
+      if (command.closedDetails) {
+        detailsData = {
+          messageEn: command.closedDetails.messageEn || "",
+          messageFr: command.closedDetails.messageFr || "",
+        };
+      }
+
       return {
         ...basePlan,
         data: {
           closingDate: command.closingDate,
-          ...(command.closedDetails && {
-            closedDetails:
-              command.closedDetails !== null
-                ? (command.closedDetails as Prisma.JsonObject)
-                : Prisma.JsonNull,
-          }),
+          closedDetails:
+            detailsData !== null ? (detailsData as Prisma.JsonObject) : Prisma.JsonNull,
         },
       };
     case UpdateTemplateAction.FormBranding:
@@ -260,10 +269,15 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
         ...basePlan,
         where: {
           id: command.formID,
-          isPublished: false,
+          isPublished: {
+            not: command.isPublished,
+          },
         },
         data: {
           isPublished: command.isPublished,
+          publishReason: command.publishReason,
+          publishFormType: command.publishFormType,
+          publishDesc: command.publishDescription,
         },
       };
     case UpdateTemplateAction.SecurityAttribute:
