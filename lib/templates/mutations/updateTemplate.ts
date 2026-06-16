@@ -1,7 +1,7 @@
 import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
-import { FormRecord, FormProperties, DeliveryOption, SecurityAttribute } from "@lib/types";
-import { ClosedDetails, NotificationsInterval } from "@gcforms/types";
+import { FormRecord, FormProperties, SecurityAttribute } from "@lib/types";
+import { ClosedDetails } from "@gcforms/types";
 import { authorization } from "@lib/privileges";
 import {
   AuditLogAccessDeniedDetails,
@@ -18,7 +18,7 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { isValidISODate } from "@lib/utils/date/isValidISODate";
 
 export const UpdateTemplateAction = {
-  Full: "full",
+  General: "general",
   ClosedData: "closedData",
   FormBranding: "formBranding",
   FormPurpose: "formPurpose",
@@ -43,48 +43,40 @@ type BaseUpdateCommand = {
   action: UpdateTemplateAction;
 };
 
-// @TODO: revisit required attributes
 type GeneralUpdateTemplateCommand = BaseUpdateCommand & {
-  action: "full";
+  action: typeof UpdateTemplateAction.General;
   formConfig: FormProperties;
   name?: string;
-  deliveryOption?: DeliveryOption;
-  securityAttribute?: SecurityAttribute;
-  formPurpose?: string;
-  publishReason?: string;
-  publishFormType?: string;
-  publishDesc?: string;
-  notificationsInterval?: NotificationsInterval;
 };
 
 type UpdateClosedDataCommand = BaseUpdateCommand & {
-  action: "closedData";
+  action: typeof UpdateTemplateAction.ClosedData;
   closingDate: string | null;
   closedDetails?: ClosedDetails;
 };
 
 type UpdateFormBrandingCommand = BaseUpdateCommand & {
-  action: "formBranding";
+  action: typeof UpdateTemplateAction.FormBranding;
   formConfig: FormProperties;
 };
 
 type UpdateFormPurposeCommand = BaseUpdateCommand & {
-  action: "formPurpose";
+  action: typeof UpdateTemplateAction.FormPurpose;
   formPurpose: string;
 };
 
 type UpdateFormSaveAndResumeCommand = BaseUpdateCommand & {
-  action: "formSaveAndResume";
+  action: typeof UpdateTemplateAction.FormSaveAndResume;
   saveAndResume: boolean;
 };
 
 type UpdateIsPublishedCommand = BaseUpdateCommand & {
-  action: "isPublished";
+  action: typeof UpdateTemplateAction.IsPublished;
   isPublished: boolean;
 };
 
 type UpdateSecurityAttributeCommand = BaseUpdateCommand & {
-  action: "securityAttribute";
+  action: typeof UpdateTemplateAction.SecurityAttribute;
   securityAttribute: SecurityAttribute;
 };
 
@@ -128,12 +120,12 @@ const authorizeForCommand = async (
   command: UpdateTemplateCommand
 ): Promise<AuthorizationResult> => {
   switch (command.action) {
-    case "full":
-    case "closedData":
-    case "formBranding":
-    case "formPurpose":
-    case "formSaveAndResume":
-    case "securityAttribute":
+    case UpdateTemplateAction.General:
+    case UpdateTemplateAction.ClosedData:
+    case UpdateTemplateAction.FormBranding:
+    case UpdateTemplateAction.FormPurpose:
+    case UpdateTemplateAction.FormSaveAndResume:
+    case UpdateTemplateAction.SecurityAttribute:
       return authorization.canEditForm(command.formID).catch((e) => {
         logEvent(
           e.user.id,
@@ -143,7 +135,7 @@ const authorizeForCommand = async (
         );
         throw e;
       });
-    case "isPublished":
+    case UpdateTemplateAction.IsPublished:
       return authorization.canPublishForm(command.formID).catch((e) => {
         logEvent(
           e.user.id,
@@ -180,38 +172,15 @@ const buildUpdatePlan = (command: UpdateTemplateCommand): UpdatePlan => {
   };
 
   switch (command.action) {
-    case "full":
+    case UpdateTemplateAction.General:
       return {
         ...basePlan,
         data: {
           jsonConfig: command.formConfig as Prisma.JsonObject,
           name: command.name,
-          ...(command.deliveryOption && {
-            deliveryOption: {
-              upsert: {
-                create: {
-                  emailAddress: command.deliveryOption.emailAddress,
-                  emailSubjectEn: command.deliveryOption.emailSubjectEn,
-                  emailSubjectFr: command.deliveryOption.emailSubjectFr,
-                },
-                update: {
-                  emailAddress: command.deliveryOption.emailAddress,
-                  emailSubjectEn: command.deliveryOption.emailSubjectEn,
-                  emailSubjectFr: command.deliveryOption.emailSubjectFr,
-                },
-              },
-            },
-          }),
-          ...(command.securityAttribute && {
-            securityAttribute: command.securityAttribute as string,
-          }),
-          ...(command.formPurpose && { formPurpose: command.formPurpose }),
-          ...(command.notificationsInterval !== undefined && {
-            notificationsInterval: command.notificationsInterval as NotificationsInterval,
-          }),
         },
       };
-    case "closedData":
+    case UpdateTemplateAction.ClosedData:
       if (command.closingDate !== null && !isValidISODate(String(command.closingDate))) {
         throw new Error(`Invalid ISO date ${command.closingDate}`);
       }
@@ -227,28 +196,28 @@ const buildUpdatePlan = (command: UpdateTemplateCommand): UpdatePlan => {
           }),
         },
       };
-    case "formBranding":
+    case UpdateTemplateAction.FormBranding:
       return {
         ...basePlan,
         data: {
           jsonConfig: command.formConfig as Prisma.JsonObject,
         },
       };
-    case "formPurpose":
+    case UpdateTemplateAction.FormPurpose:
       return {
         ...basePlan,
         data: {
           formPurpose: command.formPurpose,
         },
       };
-    case "formSaveAndResume":
+    case UpdateTemplateAction.FormSaveAndResume:
       return {
         ...basePlan,
         data: {
           saveAndResume: command.saveAndResume,
         },
       };
-    case "isPublished":
+    case UpdateTemplateAction.IsPublished:
       return {
         ...basePlan,
         where: {
@@ -259,7 +228,7 @@ const buildUpdatePlan = (command: UpdateTemplateCommand): UpdatePlan => {
           isPublished: command.isPublished,
         },
       };
-    case "securityAttribute":
+    case UpdateTemplateAction.SecurityAttribute:
       return {
         ...basePlan,
         where: {
