@@ -10,23 +10,18 @@ import {
   FormPurpose,
   ClosedDetails,
 } from "@lib/types";
-import { updateFormBranding } from "@lib/templates/mutations/updateFormBranding";
 import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
 import {
   updateTemplate as updateDbTemplate,
   UpdateTemplateAction,
 } from "@lib/templates/mutations/updateTemplate";
-import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
-import { updateFormPurpose } from "@lib/templates/mutations/updateFormPurpose";
-import { updateFormSaveAndResume } from "@lib/templates/mutations/updateFormSaveAndResume";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
-import { updateSecurityAttribute } from "@lib/templates/mutations/updateSecurityAttribute";
 import { getFormJSONConfig } from "@lib/templates/queries/getFormJSONConfig";
 import { isValidEmail } from "@gcforms/core";
 import { slugify } from "@lib/client/clientHelpers";
@@ -193,13 +188,14 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
         templateId: formID,
         userId: session.user.id,
       });
-      response = await updateIsPublishedForTemplate(
+      response = await updateDbTemplate({
+        action: UpdateTemplateAction.IsPublished,
         formID,
         isPublished,
         publishReason,
         publishFormType,
-        publishDescription
-      );
+        publishDescription,
+      });
       if (!response) {
         throw new Error(
           `Template API response was null. Request information: { ${formID}, ${isPublished} }`
@@ -252,7 +248,11 @@ export const updateTemplateFormPurpose = AuthenticatedAction(
         templateId: formID,
         userId: session.user.id,
       });
-      const response = await updateFormPurpose(formID, formPurpose);
+      const response = await updateDbTemplate({
+        action: UpdateTemplateAction.FormPurpose,
+        formID,
+        formPurpose,
+      });
       if (!response) {
         throw new Error(
           `Template API response was null. Request information: { ${formID}, ${formPurpose} }`
@@ -288,7 +288,11 @@ export const updateTemplateFormSaveAndResume = AuthenticatedAction(
         templateId: formID,
         userId: session.user.id,
       });
-      const response = await updateFormSaveAndResume(formID, saveAndResume);
+      const response = await updateDbTemplate({
+        action: UpdateTemplateAction.FormSaveAndResume,
+        formID,
+        saveAndResume,
+      });
       if (!response) {
         throw new Error(
           `Template API response was null. Request information: { ${formID}, ${saveAndResume} }`
@@ -324,7 +328,11 @@ export const updateTemplateSecurityAttribute = AuthenticatedAction(
         templateId: formID,
         userId: session.user.id,
       });
-      const response = await updateSecurityAttribute(formID, securityAttribute);
+      const response = await updateDbTemplate({
+        action: UpdateTemplateAction.SecurityAttribute,
+        formID,
+        securityAttribute,
+      });
       if (!response) {
         throw new Error(
           `Template API response was null. Request information: { ${formID}, ${securityAttribute} }`
@@ -633,7 +641,11 @@ export const updateBranding = AuthenticatedAction(
         ...formConfig,
         brand: branding,
       };
-      const formRecord = await updateFormBranding(formId, updatedFormConfig);
+      const formRecord = await updateDbTemplate({
+        action: UpdateTemplateAction.FormBranding,
+        formID: formId,
+        formConfig: updatedFormConfig,
+      });
 
       if (!formRecord) {
         throw new Error(`Failed to update template for branding update with formId ${formId}`);
