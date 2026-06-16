@@ -170,33 +170,35 @@ const CardTitle = memo(
       classes,
       " no-underline text-inherit hover:underline focus:underline active:underline cursor-pointer!"
     );
+    const content = name ? name : t("card.unnamedForm");
+    let titleElement: React.ReactNode;
 
     if (isClosed) {
-      return (
+      titleElement = (
         <span className={classes} title={name}>
-          {name ? name : t("card.unnamedForm")}
+          {content}
         </span>
       );
-    }
-
-    if (isPublished) {
-      return (
+    } else if (isPublished) {
+      titleElement = (
         <Link className={classesLink} href={`/${language}/id/${id}`} prefetch={false}>
-          {name ? name : t("card.unnamedForm")}
+          {content}
         </Link>
+      );
+    } else {
+      titleElement = (
+        <DraftEditLink
+          href={`/${language}/form-builder/${id}/edit/`}
+          formId={id}
+          className={classesLink}
+          collaboratorCount={collaboratorCount}
+        >
+          {content}
+        </DraftEditLink>
       );
     }
 
-    return (
-      <DraftEditLink
-        href={`/${language}/form-builder/${id}/edit/`}
-        formId={id}
-        className={classesLink}
-        collaboratorCount={collaboratorCount}
-      >
-        {name ? name : t("card.unnamedForm")}
-      </DraftEditLink>
-    );
+    return <h3>{titleElement}</h3>;
   }
 );
 CardTitle.displayName = "CardTitle";
