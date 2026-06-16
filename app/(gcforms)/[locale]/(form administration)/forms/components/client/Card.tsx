@@ -376,7 +376,8 @@ const CardComponent = ({
         <div className="mt-auto">
           {closedOnText && (
             <div className="text-sm">
-              {t("card.closedOn")}: {closedOnText}
+              {t("card.closedOn")}
+              {closedOnText}
             </div>
           )}
           {(cardState === CARD_STATE.DRAFT_READONLY || cardState === CARD_STATE.PUBLISHED) && (
