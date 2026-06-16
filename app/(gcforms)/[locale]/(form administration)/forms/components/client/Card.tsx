@@ -47,7 +47,7 @@ const CardBanner = memo(
   ({ isPublished, isClosed }: { isPublished: boolean; isClosed: boolean }) => {
     const { t } = useTranslation("my-forms");
     const bulletColor = isClosed
-      ? "bg-indigo-500"
+      ? "bg-indigo-50"
       : isPublished
         ? "bg-emerald-500"
         : "bg-yellow-400";
