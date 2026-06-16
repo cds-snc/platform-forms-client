@@ -87,8 +87,8 @@ export async function getEditLockInfoForTemplates(
 
     return lockInfoMap;
   } catch (error) {
-    // TODO may want to be INFO instead since not serious if Redis is unavailable - just means edit-lock features won't work
-    logMessage.error(`Error fetching edit lock info from Redis: ${error}`);
+    // Probably not error worth since this just means edit-lock features won't work, but log to help debugging
+    logMessage.warn(`Error fetching edit lock info from Redis: ${error}`);
     return lockInfoMap;
   }
 }
