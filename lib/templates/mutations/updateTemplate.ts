@@ -262,7 +262,6 @@ const executeTemplateUpdate = async (updatePlan: UpdatePlan, lastEditedByUserId:
     .catch((e) => {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === "P2025") {
-          // @TODO ?
           throw new TemplateAlreadyPublishedError();
         }
       }
@@ -299,7 +298,6 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
           { newFormName: command.name ?? "" }
         );
 
-      // @TODO: should we log formconfig change only if it changes as above?
       logEvent(
         user.id,
         { type: "Form", id: command.formID },
