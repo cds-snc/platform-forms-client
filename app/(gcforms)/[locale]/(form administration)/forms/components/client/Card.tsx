@@ -26,7 +26,7 @@ const getCardState = (card: FormsTemplateWithLockInfo): CardState => {
 
 const formatDateToYYYYMMDD = (date: string | Date): string => {
   const jsDate = typeof date === "string" ? new Date(date) : date;
-  return jsDate.toISOString().split("T")[0];
+  return jsDate.toISOString().split("T")[0].replace(/-/g, "/");
 };
 
 const daysUntilTTL = (ttl: Date): number => {
