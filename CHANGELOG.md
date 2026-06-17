@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.17.1](https://github.com/cds-snc/platform-forms-client/compare/v4.17.0...v4.17.1) (2026-06-17)
+
+
+### Bug Fixes
+
+* patch for download dialog ([#7392](https://github.com/cds-snc/platform-forms-client/issues/7392)) ([4e07cdf](https://github.com/cds-snc/platform-forms-client/commit/4e07cdfa9f459688aefaeb8d937a7306c319693b))
+
 ## [4.17.0](https://github.com/cds-snc/platform-forms-client/compare/v4.16.0...v4.17.0) (2026-06-17)
 
 
