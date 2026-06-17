@@ -16,7 +16,7 @@ import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormProperties } from "@lib/types";
 import { updateTemplate } from "../../../../actions";
-import { UpdateTemplateAction } from "@root/lib/templates/types";
+import { UpdateTemplateAction } from "@lib/templates/types";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
