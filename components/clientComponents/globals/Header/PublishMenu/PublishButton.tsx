@@ -19,7 +19,7 @@ import { PopoverChecklistView } from "./PopoverChecklistView";
 import { PopoverUnauthenticatedView } from "./PopoverUnauthenticatedView";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
-import { UpdateTemplateAction } from "@root/lib/templates/types";
+import { UpdateTemplateAction } from "@lib/templates/types";
 
 const ChevronDownIcon = () => (
   <svg
