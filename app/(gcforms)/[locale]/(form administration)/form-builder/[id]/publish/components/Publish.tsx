@@ -75,6 +75,7 @@ export const Publish = ({ id }: { id: string }) => {
         publishFormType: formType,
         publishDescription: description,
         publishReason: reasonForPublish,
+        redirectAfter: `/${i18n.language}/form-builder/${id}/published`,
       });
       if (error || !formRecord) {
         throw new Error(error);
