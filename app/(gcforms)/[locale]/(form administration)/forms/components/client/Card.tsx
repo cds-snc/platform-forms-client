@@ -319,7 +319,10 @@ const ClosedOnText = memo(
     if (cardState !== CARD_STATE.CLOSED || !closingDate) return null;
     return (
       <div className="text-sm">
-        {t("card.closedOn", { date: formatDateToEstYYYYMMDD(closingDate, language) })}
+        {t("card.closedOn", {
+          date: formatDateToEstYYYYMMDD(closingDate, language),
+          interpolation: { escapeValue: false },
+        })}
       </div>
     );
   }
