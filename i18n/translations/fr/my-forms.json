@@ -47,7 +47,7 @@
     "deleteDate": " Date de suppression : ",
     "deletedIn": "Sera supprimé dans ",
     "days": " jours",
-    "closedOn": "Date de fermeture : ",
+    "closedOn": "Date de fermeture : {{date}}",
     "deliveryOption": {
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"

@@ -14,7 +14,7 @@ import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
 import { MILLISECONDS_PER_DAY, TTL_WARNING_DAYS } from "../constants";
 import { announce, Priority } from "@gcforms/announce";
-import { formClosingDateEst } from "@root/lib/utils/date/utcToEst";
+import { formatDateToEstYYYYMMDD } from "@root/lib/utils/date/utcToEst";
 
 const getCardState = (card: FormsTemplateWithLockInfo): CardState => {
   if (card.closingDate && dateHasPast(card.closingDate?.getTime())) return CARD_STATE.CLOSED;
@@ -22,11 +22,6 @@ const getCardState = (card: FormsTemplateWithLockInfo): CardState => {
   if (card.isPublished) return CARD_STATE.PUBLISHED;
   if (card.editLockInfo) return CARD_STATE.DRAFT_EDITING;
   return CARD_STATE.DRAFT_READONLY;
-};
-
-const formatDateToYYYYMMDD = (date: string | Date): string => {
-  const jsDate = typeof date === "string" ? new Date(date) : date;
-  return jsDate.toISOString().split("T")[0].replace(/-/g, "/");
 };
 
 const daysUntilTTL = (ttl: Date): number => {
@@ -204,9 +199,12 @@ const CardTitle = memo(
 CardTitle.displayName = "CardTitle";
 
 const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
-  const { t } = useTranslation("my-forms");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("my-forms");
 
-  const formattedDate = formatDateToYYYYMMDD(date);
+  const formattedDate = formatDateToEstYYYYMMDD(date, language);
   const showTTLWarning = ttl ? isTTLWarningPeriod(ttl) : false;
   const daysRemaining = ttl ? daysUntilTTL(ttl) : 0;
 
@@ -218,7 +216,7 @@ const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date
           <br />
           <span className="block min-w-0 truncate">
             {t("card.deleteDate")}
-            {formatDateToYYYYMMDD(ttl)}
+            {formatDateToEstYYYYMMDD(ttl, language)}
           </span>
           {showTTLWarning && (
             <span className="ml-4 block min-w-0 truncate text-red-500">
@@ -306,6 +304,28 @@ const CardFooterPublished = memo(({ cardId }: { cardId: string }) => {
 });
 CardFooterPublished.displayName = "CardFooterPublished";
 
+const ClosedOnText = memo(
+  ({
+    cardState,
+    closingDate,
+  }: {
+    cardState: CardState;
+    closingDate: string | Date | null | undefined;
+  }) => {
+    const {
+      t,
+      i18n: { language },
+    } = useTranslation("my-forms");
+    if (cardState !== CARD_STATE.CLOSED || !closingDate) return null;
+    return (
+      <div className="text-sm">
+        {t("card.closedOn", { date: formatDateToEstYYYYMMDD(closingDate, language) })}
+      </div>
+    );
+  }
+);
+ClosedOnText.displayName = "ClosedOnText";
+
 const CardComponent = ({
   card,
   status,
@@ -319,6 +339,7 @@ const CardComponent = ({
   const params = useParams();
   const language = params?.locale as string;
   const lockStateRef = useRef<{ hasLock: boolean }>({ hasLock: !!card.editLockInfo });
+  const cardState = useMemo(() => getCardState(card), [card]);
 
   // Announce any lock state changes
   const formLocked = t("cards.announceLocked", { formName: card.name });
@@ -341,14 +362,6 @@ const CardComponent = ({
       ),
     [card.collaboratorCount.userCount, card.collaboratorCount.pendingUserCount]
   );
-
-  const cardState = useMemo(() => getCardState(card), [card]);
-
-  const closedOnText = useMemo(() => {
-    if (cardState !== CARD_STATE.CLOSED || !card.closingDate) return null;
-    const { month, day, year } = formClosingDateEst(card.closingDate.toISOString(), language);
-    return `${day} ${month} ${year}`;
-  }, [cardState, card.closingDate, language]);
 
   const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : card.overdue ? "bg-red-50" : ""}`;
 
@@ -374,12 +387,7 @@ const CardComponent = ({
           />
         </Suspense>
         <div className="mt-auto">
-          {closedOnText && (
-            <div className="text-sm">
-              {t("card.closedOn")}
-              {closedOnText}
-            </div>
-          )}
+          <ClosedOnText cardState={cardState} closingDate={card.closingDate} />
           {(cardState === CARD_STATE.DRAFT_READONLY || cardState === CARD_STATE.PUBLISHED) && (
             <CardFooterDraftReadonly
               cardId={card.id}
