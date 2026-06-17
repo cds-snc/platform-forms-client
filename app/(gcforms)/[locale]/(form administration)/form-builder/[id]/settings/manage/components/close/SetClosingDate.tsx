@@ -12,12 +12,13 @@ import { ClosedMessage } from "./ClosedMessage";
 import { ClosedSuccess } from "./ClosedSuccess";
 import { ClosedDateBanner } from "./ClosedDateBanner";
 
-import { closeForm } from "@formBuilder/actions";
+import { updateTemplate } from "@formBuilder/actions";
 import { ClosingDateDialog } from "./ClosingDateDialog";
 
 import { ScheduledClosingDate } from "./ScheduledClosingDate";
 import { dateHasPast } from "@lib/utils";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
+import { UpdateTemplateAction } from "@lib/templates/types";
 
 export const SetClosingDate = ({
   formId,
@@ -72,8 +73,9 @@ export const SetClosingDate = ({
     // If closed, set date to now. If open, clear the closing date.
     const closeDate = newStatus === "closed" ? new Date().toISOString() : null;
 
-    const result = await closeForm({
-      id: formId,
+    const result = await updateTemplate({
+      action: UpdateTemplateAction.ClosedData,
+      formID: formId,
       closingDate: closeDate,
       closedDetails: closedMessage,
     });
@@ -126,8 +128,9 @@ export const SetClosingDate = ({
 
       const isoClosingDate = closingDate ? new Date(closingDate).toISOString() : null;
 
-      const result = await closeForm({
-        id: formId,
+      const result = await updateTemplate({
+        action: UpdateTemplateAction.ClosedData,
+        formID: formId,
         closingDate: isoClosingDate,
         closedDetails: messageToSave,
       });
@@ -143,8 +146,9 @@ export const SetClosingDate = ({
   );
 
   const clearClosingDate = () => {
-    closeForm({
-      id: formId,
+    updateTemplate({
+      action: UpdateTemplateAction.ClosedData,
+      formID: formId,
       closingDate: null,
     });
     setClosingDate(null);
@@ -164,8 +168,9 @@ export const SetClosingDate = ({
         return;
       }
 
-      const result = await closeForm({
-        id: formId,
+      const result = await updateTemplate({
+        action: UpdateTemplateAction.ClosedData,
+        formID: formId,
         closingDate,
         closedDetails: closedMessage,
       });

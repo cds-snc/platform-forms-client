@@ -6,7 +6,7 @@ import { useTranslation } from "@root/i18n/client";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { closeForm, updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { updateTemplate } from "@formBuilder/actions";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
@@ -19,6 +19,7 @@ import { PopoverChecklistView } from "./PopoverChecklistView";
 import { PopoverUnauthenticatedView } from "./PopoverUnauthenticatedView";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+import { UpdateTemplateAction } from "@root/lib/templates/types";
 
 const ChevronDownIcon = () => (
   <svg
@@ -214,8 +215,9 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     try {
       ga("publish_form");
 
-      const { formRecord, error: publishError } = await updateTemplatePublishedStatus({
-        id: formId,
+      const { formRecord, error: publishError } = await updateTemplate({
+        action: UpdateTemplateAction.IsPublished,
+        formID: formId,
         isPublished: true,
         publishFormType: formType,
         publishDescription: description,
@@ -264,8 +266,9 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     setUpdatingStatus(true);
 
     const nextClosingDate = pendingToggleValue ? null : new Date().toISOString();
-    const result = await closeForm({
-      id: formId,
+    const result = await updateTemplate({
+      action: UpdateTemplateAction.ClosedData,
+      formID: formId,
       closingDate: nextClosingDate,
     });
 

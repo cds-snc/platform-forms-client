@@ -11,7 +11,8 @@ import { logMessage } from "@lib/logger";
 import { DownloadFileButton } from "@formBuilder/components/shared/DownloadFileButton";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
-import { updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { updateTemplate } from "@formBuilder/actions";
+import { UpdateTemplateAction } from "@lib/templates/types";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { Language } from "@lib/types/form-builder-types";
 import { PrePublishDialog } from "../PrePublishDialog";
@@ -67,13 +68,13 @@ export const Publish = ({ id }: { id: string }) => {
     try {
       ga("publish_form");
 
-      const { formRecord, error } = await updateTemplatePublishedStatus({
-        id,
+      const { formRecord, error } = await updateTemplate({
+        action: UpdateTemplateAction.IsPublished,
+        formID: id,
         isPublished: true,
         publishFormType: formType,
         publishDescription: description,
         publishReason: reasonForPublish,
-        redirectAfter: `/${i18n.language}/form-builder/${id}/published`,
       });
       if (error || !formRecord) {
         throw new Error(error);
