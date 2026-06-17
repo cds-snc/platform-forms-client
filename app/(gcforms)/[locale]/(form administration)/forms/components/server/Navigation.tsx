@@ -1,10 +1,16 @@
 import { serverTranslation } from "@i18n";
-import { ArchiveIcon, FolderIcon, GlobeIcon, PageIcon } from "@serverComponents/icons";
+import {
+  ArchiveIcon,
+  ClosedStatusIcon,
+  FolderIcon,
+  GlobeIcon,
+  PageIcon,
+} from "@serverComponents/icons";
 import { NavLink } from "./NavLink";
 import { cn } from "@lib/utils";
 import { FormTabStatus, TAB_STATUS } from "../types";
 
-export const Navigation = async ({ filter }: { filter: FormTabStatus; templateCount?: number }) => {
+export const Navigation = async ({ filter }: { filter: FormTabStatus }) => {
   const {
     t,
     i18n: { language },
@@ -43,6 +49,16 @@ export const Navigation = async ({ filter }: { filter: FormTabStatus; templateCo
         <>
           <GlobeIcon className={cn(iconClassname, "h-5 w-5")} />
           {t("nav.published")}
+        </>
+      </NavLink>
+      <NavLink
+        href={`/${language}/forms?status=closed`}
+        id="tab-closed"
+        active={filter === TAB_STATUS.CLOSED}
+      >
+        <>
+          <ClosedStatusIcon className={cn(iconClassname, "h-5 w-5")} />
+          {t("nav.closed")}
         </>
       </NavLink>
       <NavLink
