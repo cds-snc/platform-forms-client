@@ -50,7 +50,7 @@ export const DownloadDialog = ({
     null
   );
 
-  const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
+  const { dialogVersions } = useTemplateVersioning(checkedItems, checkedMeta);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -114,6 +114,8 @@ export const DownloadDialog = ({
       return;
     }
 
+    const ids = Array.from(checkedItems.keys());
+
     // Validate that CSV/HTML downloads only include responses with a matched version
     // Note: DownloadDialog doesn't receive full submission metadata by default; validation
     // will be performed by the caller when available. If not available, the server may return an error.
@@ -121,6 +123,7 @@ export const DownloadDialog = ({
     const filePrefix = slugify(`${formName}-${getDate()}`) + "-";
 
     // Exclude items without a version; only download responses that have a matched version
+    /*
     const filteredIdsWithVersion = getFilteredIds();
     if (
       filteredIdsWithVersion.length === 0 &&
@@ -130,9 +133,12 @@ export const DownloadDialog = ({
       setIsDownloading(false);
       return;
     }
+    */
 
     // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
-    const filteredIds = getFilteredIds(selectedVersionForDialog);
+    const filteredIds = ids;
+
+    // getFilteredIds(selectedVersionForDialog);
 
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
