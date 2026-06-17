@@ -259,14 +259,7 @@ const executeTemplateUpdate = async (updatePlan: UpdatePlan, lastEditedByUserId:
         },
       },
     })
-    .catch((e) => {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === "P2025") {
-          throw new TemplateAlreadyPublishedError();
-        }
-      }
-      return prismaErrors(e, null);
-    });
+    .catch((e) => prismaErrors(e, null));
 
   if (updatedTemplate === null) return null;
 
