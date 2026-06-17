@@ -202,6 +202,10 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
     case UpdateTemplateAction.FormPurpose:
       return {
         ...basePlan,
+        where: {
+          id: command.formID,
+          isPublished: false,
+        },
         data: {
           formPurpose: command.formPurpose,
         },
