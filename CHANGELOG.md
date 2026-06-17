@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.17.0](https://github.com/cds-snc/platform-forms-client/compare/v4.16.0...v4.17.0) (2026-06-17)
+
+
+### Features
+
+* add closed status to my forms page ([#7385](https://github.com/cds-snc/platform-forms-client/issues/7385)) ([7c491f0](https://github.com/cds-snc/platform-forms-client/commit/7c491f03e9d796c01ad871d7bf9afa5c3589db16))
+
+
+### Bug Fixes
+
+* update myforms published link ([#7378](https://github.com/cds-snc/platform-forms-client/issues/7378)) ([b1b4afc](https://github.com/cds-snc/platform-forms-client/commit/b1b4afcad6c106c016b2fd6e00e8a595353cf59e))
+
+
+### Miscellaneous Chores
+
+* aws / otel / next ([#7377](https://github.com/cds-snc/platform-forms-client/issues/7377)) ([23b26ff](https://github.com/cds-snc/platform-forms-client/commit/23b26ff99a7dfc5c7b114df37f23ad3d6b738763))
+* bump i18n packages ([#7366](https://github.com/cds-snc/platform-forms-client/issues/7366)) ([e6ea2cc](https://github.com/cds-snc/platform-forms-client/commit/e6ea2cc739a53ac3c8b3a0357f39f08a7197cfc1))
+* french content for api settings not showing up ([#7374](https://github.com/cds-snc/platform-forms-client/issues/7374)) ([bb2d884](https://github.com/cds-snc/platform-forms-client/commit/bb2d884087c821f187ffec7478f266962c5c124c))
+* misc package bumps ([#7372](https://github.com/cds-snc/platform-forms-client/issues/7372)) ([5c95240](https://github.com/cds-snc/platform-forms-client/commit/5c95240a6e12c9cb97d152c306ec3803b0cbf712))
+* parse languages in deactivation email notification ([#7382](https://github.com/cds-snc/platform-forms-client/issues/7382)) ([8cb7519](https://github.com/cds-snc/platform-forms-client/commit/8cb751980e97fe3275df3ccaa02f4aa7f9fa4a79))
+* Refactor Publish and Request Access to use saveDraftIfNeeded ([#7384](https://github.com/cds-snc/platform-forms-client/issues/7384)) ([953bf6c](https://github.com/cds-snc/platform-forms-client/commit/953bf6c33423063c3049ed35b04b732ce33ecdc1))
+* style package bumps ([#7375](https://github.com/cds-snc/platform-forms-client/issues/7375)) ([1641015](https://github.com/cds-snc/platform-forms-client/commit/164101584e69067b5e6c2ef8aac678b545dbbd17))
+* styles cleanup ([#7387](https://github.com/cds-snc/platform-forms-client/issues/7387)) ([92e02a0](https://github.com/cds-snc/platform-forms-client/commit/92e02a0a0c91905f731cc41512c1ac12b053b97a))
+* update my forms responses icon ([#7380](https://github.com/cds-snc/platform-forms-client/issues/7380)) ([d822b5e](https://github.com/cds-snc/platform-forms-client/commit/d822b5ecdef68aa5c4f328ca63b781a59a4e55ab))
+* update test packages ([#7383](https://github.com/cds-snc/platform-forms-client/issues/7383)) ([109f980](https://github.com/cds-snc/platform-forms-client/commit/109f98065612f6ecec0abcc918988ac4ec830cc4))
+* upgrade to eslint 10 ([#7381](https://github.com/cds-snc/platform-forms-client/issues/7381)) ([49475bd](https://github.com/cds-snc/platform-forms-client/commit/49475bdc59184372c91e4a750aca963aebb32fe8))
+* versioned download dialog ([#7388](https://github.com/cds-snc/platform-forms-client/issues/7388)) ([d05deb6](https://github.com/cds-snc/platform-forms-client/commit/d05deb6fef21f2dd783154137e6ee2c44bb4cb63))
+
 ## [4.16.0](https://github.com/cds-snc/platform-forms-client/compare/v4.15.3...v4.16.0) (2026-06-12)
 
 
