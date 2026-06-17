@@ -1,6 +1,6 @@
 import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
-import { FormRecord, FormProperties, SecurityAttribute } from "@lib/types";
+import { FormRecord, FormProperties } from "@lib/types";
 import { ClosedDetails } from "@gcforms/types";
 import { authorization } from "@lib/privileges";
 import {
@@ -18,72 +18,17 @@ import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { isValidISODate } from "@lib/utils/date/isValidISODate";
 import { getFullTemplateByID } from "../queries/getFullTemplateByID";
 import { deleteDraftFormResponses } from "@root/lib/vault";
-
-export const UpdateTemplateAction = {
-  General: "general",
-  ClosedData: "closedData",
-  FormBranding: "formBranding",
-  FormPurpose: "formPurpose",
-  FormSaveAndResume: "formSaveAndResume",
-  IsPublished: "isPublished",
-  SecurityAttribute: "securityAttribute",
-} as const;
-
-export type UpdateTemplateAction = (typeof UpdateTemplateAction)[keyof typeof UpdateTemplateAction];
-
-type UpdateTemplateCommand =
-  | GeneralUpdateTemplateCommand
-  | UpdateClosedDataCommand
-  | UpdateFormBrandingCommand
-  | UpdateFormPurposeCommand
-  | UpdateFormSaveAndResumeCommand
-  | UpdateIsPublishedCommand
-  | UpdateSecurityAttributeCommand;
-
-type BaseUpdateCommand = {
-  formID: string;
-  action: UpdateTemplateAction;
-};
-
-type GeneralUpdateTemplateCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.General;
-  formConfig: FormProperties;
-  name?: string;
-};
-
-type UpdateClosedDataCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.ClosedData;
-  closingDate: string | null;
-  closedDetails?: ClosedDetails;
-};
-
-type UpdateFormBrandingCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.FormBranding;
-  formConfig: FormProperties;
-};
-
-type UpdateFormPurposeCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.FormPurpose;
-  formPurpose: string;
-};
-
-type UpdateFormSaveAndResumeCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.FormSaveAndResume;
-  saveAndResume: boolean;
-};
-
-type UpdateIsPublishedCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.IsPublished;
-  isPublished: boolean;
-  publishReason: string;
-  publishFormType: string;
-  publishDescription: string;
-};
-
-type UpdateSecurityAttributeCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.SecurityAttribute;
-  securityAttribute: SecurityAttribute;
-};
+import {
+  UpdateTemplateCommand,
+  UpdateFormPurposeCommand,
+  UpdateIsPublishedCommand,
+  UpdateTemplateAction,
+  GeneralUpdateTemplateCommand,
+  UpdateClosedDataCommand,
+  UpdateFormBrandingCommand,
+  UpdateSecurityAttributeCommand,
+  UpdateFormSaveAndResumeCommand,
+} from "../types";
 
 /**
  * Validate the form config for a template update command

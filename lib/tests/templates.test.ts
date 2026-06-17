@@ -7,7 +7,8 @@ import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesFo
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
-import { updateTemplate, UpdateTemplateAction } from "@lib/templates/mutations/updateTemplate";
+import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
+import { UpdateTemplateAction } from "@lib/templates/types";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
