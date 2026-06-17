@@ -158,7 +158,9 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 export const updateTemplate = AuthenticatedAction(
   async (
     session,
-    command: UpdateTemplateCommand & { redirectAfter?: string }
+    command: Exclude<UpdateTemplateCommand, { action: typeof UpdateTemplateAction.General }> & {
+      redirectAfter?: string;
+    }
   ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
