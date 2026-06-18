@@ -175,6 +175,19 @@ export const updateTemplate = AuthenticatedAction(
       });
 
       switch (command.action) {
+        case UpdateTemplateAction.Name:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.Name,
+            formId: command.formId,
+            name: command.name,
+          });
+          if (!response) {
+            throw new Error(
+              `Template response was null. Request information: { ${command.formId}, ${command.name} }`
+            );
+          }
+
+          return { formRecord: response };
         case UpdateTemplateAction.IsPublished:
           response = await updateDbTemplate({
             action: UpdateTemplateAction.IsPublished,
@@ -187,7 +200,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formId}, ${command.isPublished} }`
+              `Template response was null. Request information: { ${command.formId}, ${command.isPublished} }`
             );
           }
 
@@ -212,7 +225,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formId}, ${command.formPurpose} }`
+              `Template response was null. Request information: { ${command.formId}, ${command.formPurpose} }`
             );
           }
 
@@ -225,7 +238,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formId}, ${command.saveAndResume} }`
+              `Template response was null. Request information: { ${command.formId}, ${command.saveAndResume} }`
             );
           }
 
@@ -238,7 +251,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formId}, ${command.securityAttribute} }`
+              `Template response was null. Request information: { ${command.formId}, ${command.securityAttribute} }`
             );
           }
 
@@ -259,7 +272,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formId}, ${command.closingDate} }`
+              `Template response was null. Request information: { ${command.formId}, ${command.closingDate} }`
             );
           }
 
@@ -334,9 +347,7 @@ export const updateTemplateUsers = AuthenticatedAction(
       });
       const response = await syncAssignedUsersForTemplate(formID, users);
       if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${users} }`
-        );
+        throw new Error(`Template response was null. Request information: { ${formID}, ${users} }`);
       }
 
       return { success: true };

@@ -28,6 +28,7 @@ import {
   UpdateFormBrandingCommand,
   UpdateSecurityAttributeCommand,
   UpdateFormSaveAndResumeCommand,
+  UpdateNameCommand,
 } from "../types";
 
 /**
@@ -71,6 +72,7 @@ const authorizeForCommand = async (
 ): Promise<AuthorizationResult> => {
   switch (command.action) {
     case UpdateTemplateAction.General:
+    case UpdateTemplateAction.Name:
       return authorization.canEditForm(command.formId).catch((e) => {
         logEvent(
           e.user.id,
@@ -167,6 +169,13 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
         },
         data: {
           jsonConfig: command.formConfig as Prisma.JsonObject,
+          name: command.name,
+        },
+      };
+    case UpdateTemplateAction.Name:
+      return {
+        ...basePlan,
+        data: {
           name: command.name,
         },
       };
@@ -302,6 +311,20 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
         AuditLogDetails.FormContentUpdated
       );
       break;
+    case UpdateTemplateAction.Name:
+      const nameCommand = event.command as UpdateNameCommand;
+      const { user: nameUser, beforeContext: nameBeforeContext } = event;
+
+      nameCommand.name !== undefined &&
+        (nameBeforeContext?.name ?? "") !== nameCommand.name &&
+        logEvent(
+          nameUser.id,
+          { type: "Form", id: nameCommand.formId },
+          AuditLogEvent.ChangeFormName,
+          AuditLogDetails.UpdatedFormName,
+          { newFormName: nameCommand.name ?? "" }
+        );
+      break;
     case UpdateTemplateAction.ClosedData:
       const closedCommand = event.command as UpdateClosedDataCommand;
 
@@ -309,7 +332,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
         const date = new Date(closedCommand.closingDate);
         logEvent(
           event.user.id,
-          { type: "Form", id: event.command.formId },
+          { type: "Form", id: closedCommand.formId },
           "UpdateForm",
           AuditLogDetails.UpdateClosingDate,
           { closingDate: date.toLocaleDateString("en-CA") }
