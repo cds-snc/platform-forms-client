@@ -404,6 +404,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     },
     select: {
       name: true,
+      jsonConfig: true,
     },
   });
 
@@ -436,6 +437,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     user,
     beforeContext: {
       name: currentTemplate?.name,
+      jsonConfig: currentTemplate?.jsonConfig as FormProperties,
     },
   });
 
