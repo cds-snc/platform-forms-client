@@ -4,10 +4,15 @@ import isEqual from "lodash.isequal";
 import { useSession } from "next-auth/react";
 import { logMessage } from "@lib/logger";
 import { safeJSONParse } from "@lib/utils";
-import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
+import {
+  CreateOrUpdateTemplateType,
+  createOrUpdateTemplate,
+  updateTemplate,
+} from "@formBuilder/actions";
 import { FormProperties, FormRecord } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
+import { UpdateTemplateAction } from "@root/lib/templates/types";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -207,7 +212,11 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       }
 
       if (current[0] !== previous[0]) {
-        // @todo add code to save to DB here
+        updateTemplate({
+          action: UpdateTemplateAction.Name,
+          formId: getId(),
+          name: current[0],
+        });
       }
     }
   );
