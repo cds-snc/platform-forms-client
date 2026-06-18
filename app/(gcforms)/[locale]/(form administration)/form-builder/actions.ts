@@ -113,14 +113,13 @@ export const createOrUpdateTemplate = AuthenticatedAction(
             templateId: id,
             userId: session.user.id,
           });
-          // Note: we only update formConfig and name in the update flow since other
-          // properties (deliveryOption, securityAttribute, formPurpose) have their
-          // own dedicated update functions called from the settings page.
+          // Note: we only update formConfig in the update flow since other
+          // properties (name, deliveryOption, securityAttribute, formPurpose)
+          // have their own dedicated update functions called from the settings page.
           const formRecord = await updateDbTemplate({
-            action: UpdateTemplateAction.General,
+            action: UpdateTemplateAction.FormConfig,
             formId: id,
             formConfig: formConfig,
-            name: name,
           });
 
           return { formRecord };

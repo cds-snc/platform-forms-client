@@ -29,7 +29,9 @@ import {
   UpdateSecurityAttributeCommand,
   UpdateFormSaveAndResumeCommand,
   UpdateNameCommand,
+  UpdateFormConfigCommand,
 } from "../types";
+import isEqual from "lodash.isequal";
 
 /**
  * Validate the form config for a template update command
@@ -79,6 +81,16 @@ const authorizeForCommand = async (
           { type: "Form", id: command.formId },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateForm
+        );
+        throw e;
+      });
+    case UpdateTemplateAction.FormConfig:
+      return authorization.canEditForm(command.formId).catch((e) => {
+        logEvent(
+          e.user.id,
+          { type: "Form", id: command.formId },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateFormJson
         );
         throw e;
       });
@@ -177,6 +189,17 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
         ...basePlan,
         data: {
           name: command.name,
+        },
+      };
+    case UpdateTemplateAction.FormConfig:
+      return {
+        ...basePlan,
+        where: {
+          id: command.formId,
+          isPublished: false,
+        },
+        data: {
+          jsonConfig: command.formConfig as Prisma.JsonObject,
         },
       };
     case UpdateTemplateAction.ClosedData:
@@ -285,6 +308,7 @@ type UpdateAuditEvent = {
   user: { id: string; email: string };
   beforeContext?: {
     name?: string;
+    jsonConfig?: FormProperties;
   };
 };
 
@@ -323,6 +347,16 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
           AuditLogEvent.ChangeFormName,
           AuditLogDetails.UpdatedFormName,
           { newFormName: nameCommand.name ?? "" }
+        );
+      break;
+    case UpdateTemplateAction.FormConfig:
+      const formConfigCommand = event.command as UpdateFormConfigCommand;
+      !isEqual(beforeContext?.jsonConfig ?? {}, formConfigCommand.formConfig) &&
+        logEvent(
+          event.user.id,
+          { type: "Form", id: formConfigCommand.formId },
+          "UpdateForm",
+          AuditLogDetails.FormContentUpdated
         );
       break;
     case UpdateTemplateAction.ClosedData:
