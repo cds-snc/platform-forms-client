@@ -429,6 +429,10 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   const updateQuery = buildUpdateQuery(command);
   const updatedTemplate = await executeTemplateUpdate(updateQuery, user.id);
 
+  if (updatedTemplate === null && command.action === UpdateTemplateAction.FormConfig) {
+    throw new TemplateAlreadyPublishedError();
+  }
+
   if (formCache.cacheAvailable) formCache.invalidate(command.formId);
 
   await logTemplateUpdateEvent({
