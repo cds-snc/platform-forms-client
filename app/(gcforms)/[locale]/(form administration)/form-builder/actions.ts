@@ -182,7 +182,20 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.name} }`
+              `Template update failed for Name. Request information: { ${command.formId}, ${command.name} }`
+            );
+          }
+
+          return { formRecord: response };
+        case UpdateTemplateAction.FormConfig:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.FormConfig,
+            formId: command.formId,
+            formConfig: command.formConfig,
+          });
+          if (!response) {
+            throw new Error(
+              `Template update failed for FormConfig. Request information: { ${command.formId} }`
             );
           }
 
@@ -199,7 +212,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.isPublished} }`
+              `Template update failed for IsPublished. Request information: { ${command.formId}, ${command.isPublished} }`
             );
           }
 
@@ -224,7 +237,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.formPurpose} }`
+              `Template update failed for FormPurpose. Request information: { ${command.formId}, ${command.formPurpose} }`
             );
           }
 
@@ -237,7 +250,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.saveAndResume} }`
+              `Template update failed for FormSaveAndResume. Request information: { ${command.formId}, ${command.saveAndResume} }`
             );
           }
 
@@ -250,7 +263,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.securityAttribute} }`
+              `Template update failed for SecurityAttribute. Request information: { ${command.formId}, ${command.securityAttribute} }`
             );
           }
 
@@ -271,7 +284,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.closingDate} }`
+              `Template update failed for ClosedData. Request information: { ${command.formId}, ${command.closingDate} }`
             );
           }
 
@@ -281,7 +294,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!formConfig) {
             throw new Error(
-              `Failed to get template for branding update with formId ${command.formId}`
+              `Template update failed for FormBranding. Request information: { ${command.formId} }`
             );
           }
 
@@ -298,7 +311,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Failed to update template for branding update with formId ${command.formId}`
+              `Template update failed for FormBranding. Request information: { ${command.formId} }`
             );
           }
 
