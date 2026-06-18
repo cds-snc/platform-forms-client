@@ -89,6 +89,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         users: {
           connect: { id: command.userID },
         },
+        lastEditedByUserId: command.userID,
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
         ...(command.notificationsInterval !== undefined && {
           notificationsInterval: command.notificationsInterval,
@@ -109,6 +110,11 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishDesc: true,
         saveAndResume: true,
         notificationsInterval: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => prismaErrors(e, null));

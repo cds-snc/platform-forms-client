@@ -30,6 +30,7 @@ export async function updateFormSaveAndResume(
       },
       data: {
         saveAndResume: saveAndResume ?? false,
+        lastEditedByUserId: user.id,
       },
       select: {
         id: true,
@@ -46,6 +47,11 @@ export async function updateFormSaveAndResume(
         publishReason: true,
         saveAndResume: true,
         notificationsInterval: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => {

@@ -80,7 +80,8 @@ const buildPrismaResponse = (
   isPublished = false,
   deliveryOption?: DeliveryOption,
   formPurpose?: PurposeOption,
-  securityAttribute = "Unclassified"
+  securityAttribute = "Unclassified",
+  lastEditedBy?: { name: string | null } | null
 ) => {
   return {
     id,
@@ -89,6 +90,7 @@ const buildPrismaResponse = (
     formPurpose,
     isPublished,
     securityAttribute,
+    ...(lastEditedBy !== undefined && { lastEditedBy }),
     users: [
       {
         id: "1",
@@ -117,11 +119,11 @@ describe("Template CRUD functions", () => {
 
     it("Create a Template", async () => {
       (prismaMock.template.create as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration)
+        buildPrismaResponse("formtestID", formConfiguration, false, undefined, undefined, undefined, { name: "Test User" })
       );
 
       (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration, false)
+        buildPrismaResponse("formtestID", formConfiguration, false, undefined, undefined, undefined, { name: "Test User" })
       );
 
       const newTemplate = await createTemplate({
@@ -131,12 +133,13 @@ describe("Template CRUD functions", () => {
 
       expect(prismaMock.template.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          data: {
+          data: expect.objectContaining({
             jsonConfig: formConfiguration,
             users: {
               connect: { id: "1" },
             },
-          },
+            lastEditedByUserId: "1",
+          }),
         })
       );
 
@@ -146,6 +149,7 @@ describe("Template CRUD functions", () => {
           form: formConfiguration,
           isPublished: false,
           securityAttribute: "Unclassified",
+          lastEditedBy: "Test User",
         })
       );
 
@@ -212,13 +216,13 @@ describe("Template CRUD functions", () => {
           },
         })
       );
-      expect(mockedLogEvent).toHaveBeenCalledWith(
+            expect(mockedLogEvent).toHaveBeenCalledWith(
         userID,
-        { type: "Form" },
+        { type: "Form", id: "formtestID" },
         "ReadForm",
-        "Accessed Forms: ${formList}",
-        { formList: "formtestID" }
-      );
+        "Accessed Form: ${formId}",
+        { formId: "formtestID" }
+            );
     });
 
     it("Get a public template", async () => {
@@ -326,11 +330,11 @@ describe("Template CRUD functions", () => {
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
         userID,
-        { type: "Form", id: "formTestID" },
-        "ReadForm"
+        { type: "Form", id: "formtestID" },
+        "ReadForm",
+        "Accessed Form: ${formId}",
+        { formId: "formtestID" }
       );
-    });
-
     it("Null returned when Template does not Exist", async () => {
       (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(null);
 
@@ -376,7 +380,7 @@ describe("Template CRUD functions", () => {
       const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
 
       (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("test1", updatedFormConfig, true)
+        buildPrismaResponse("test1", updatedFormConfig, true, undefined, undefined, undefined, { name: "Test User" })
       );
 
       const updatedTemplate = await updateTemplate({
@@ -390,9 +394,10 @@ describe("Template CRUD functions", () => {
             id: "test1",
             isPublished: false,
           },
-          data: {
+          data: expect.objectContaining({
             jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
-          },
+            lastEditedByUserId: userID,
+          }),
         })
       );
 
@@ -402,6 +407,7 @@ describe("Template CRUD functions", () => {
           form: updatedFormConfig,
           isPublished: true,
           securityAttribute: "Unclassified",
+          lastEditedBy: "Test User",
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -419,7 +425,7 @@ describe("Template CRUD functions", () => {
       });
 
       (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration, true)
+        buildPrismaResponse("formtestID", formConfiguration, true, undefined, undefined, undefined, { name: "Test User" })
       );
 
       const updatedTemplate = await updateIsPublishedForTemplate("formtestID", true, "", "", "");
@@ -432,12 +438,13 @@ describe("Template CRUD functions", () => {
               not: true,
             },
           },
-          data: {
+          data: expect.objectContaining({
             isPublished: true,
             publishReason: "",
             publishFormType: "",
             publishDesc: "",
-          },
+            lastEditedByUserId: userID,
+          }),
         })
       );
 
@@ -447,6 +454,7 @@ describe("Template CRUD functions", () => {
           form: formConfiguration,
           isPublished: true,
           securityAttribute: "Unclassified",
+          lastEditedBy: "Test User",
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -642,9 +650,10 @@ describe("Template CRUD functions", () => {
           where: {
             id: "formtestID",
           },
-          data: {
+          data: expect.objectContaining({
             ttl: expect.any(Date),
-          },
+            lastEditedByUserId: userID,
+          }),
           select: {
             id: true,
             created_at: true,
@@ -660,6 +669,11 @@ describe("Template CRUD functions", () => {
             securityAttribute: true,
             saveAndResume: true,
             notificationsInterval: true,
+            lastEditedBy: {
+              select: {
+                name: true,
+              },
+            },
           },
         })
       );
@@ -748,9 +762,84 @@ describe("Template CRUD functions", () => {
       expect(prismaMock.template.update).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { id: "formtestID" },
-          data: { ttl: expect.any(Date) },
+          data: expect.objectContaining({
+            ttl: expect.any(Date),
+            lastEditedByUserId: userID,
+          }),
+          select: {
+            id: true,
+            created_at: true,
+            updated_at: true,
+            name: true,
+            jsonConfig: true,
+            isPublished: true,
+            deliveryOption: true,
+            securityAttribute: true,
+            formPurpose: true,
+            publishReason: true,
+            publishFormType: true,
+            publishDesc: true,
+            saveAndResume: true,
+            notificationsInterval: true,
+            lastEditedBy: {
+              select: {
+                name: true,
+              },
+            },
+          },
         })
       );
+    });
+
+    it("parseTemplate should handle lastEditedBy correctly", async () => {
+      const { parseTemplate } = await import("@lib/templates/internal");
+
+      // Test with valid lastEditedBy
+      const templateWithEditor = {
+        id: "test1",
+        name: "Test Form",
+        jsonConfig: formConfiguration,
+        isPublished: false,
+        deliveryOption: null,
+        securityAttribute: "Unclassified",
+        formPurpose: "",
+        publishReason: "",
+        publishFormType: "",
+        publishDesc: "",
+        saveAndResume: true,
+        notificationsInterval: null,
+        lastEditedBy: { name: "John Doe" },
+      };
+
+      const result1 = parseTemplate(templateWithEditor);
+      expect(result1.lastEditedBy).toBe("John Doe");
+
+      // Test with null name
+      const templateWithNullName = {
+        ...templateWithEditor,
+        lastEditedBy: { name: null },
+      };
+
+      const result2 = parseTemplate(templateWithNullName);
+      expect(result2.lastEditedBy).toBeUndefined();
+
+      // Test with null lastEditedBy
+      const templateWithNoEditor = {
+        ...templateWithEditor,
+        lastEditedBy: null,
+      };
+
+      const result3 = parseTemplate(templateWithNoEditor);
+      expect(result3.lastEditedBy).toBeUndefined();
+
+      // Test with undefined lastEditedBy
+      const templateWithUndefinedEditor = {
+        ...templateWithEditor,
+        lastEditedBy: undefined,
+      };
+
+      const result4 = parseTemplate(templateWithUndefinedEditor);
+      expect(result4.lastEditedBy).toBeUndefined();
     });
 
     it("Only include public properties", async () => {

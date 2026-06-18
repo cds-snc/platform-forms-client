@@ -32,7 +32,10 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
         id: formID,
         isPublished: false,
       },
-      data: { securityAttribute },
+      data: {
+        securityAttribute,
+        lastEditedByUserId: user.id,
+      },
       select: {
         id: true,
         created_at: true,
@@ -48,6 +51,11 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
         publishDesc: true,
         saveAndResume: true,
         notificationsInterval: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => prismaErrors(e, null));

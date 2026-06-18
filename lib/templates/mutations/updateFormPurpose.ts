@@ -38,6 +38,7 @@ export async function updateFormPurpose(
       },
       data: {
         formPurpose: formPurpose,
+        lastEditedByUserId: user.id,
       },
       select: {
         id: true,
@@ -54,6 +55,11 @@ export async function updateFormPurpose(
         publishReason: true,
         saveAndResume: true,
         notificationsInterval: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => {

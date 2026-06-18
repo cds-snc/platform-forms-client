@@ -70,9 +70,15 @@ export async function updateIsPublishedForTemplate(
         publishReason: publishReason,
         publishFormType: publishFormType,
         publishDesc: publishDescription,
+        lastEditedByUserId: user.id,
       },
       include: {
         deliveryOption: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => prismaErrors(e, null));

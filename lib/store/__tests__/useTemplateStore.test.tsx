@@ -3,9 +3,8 @@
  */
 import { describe, it, expect } from "vitest";
 import React, { useContext, useEffect } from "react";
-import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
-import { TemplateStoreContext } from "../useTemplateStore";
-import { render, renderHook, act, waitFor } from "@testing-library/react";
+import { useTemplateStore, TemplateStoreProvider, TemplateStoreContext } from "../useTemplateStore";
+import { render, renderHook, act, waitFor, screen } from "@testing-library/react";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 import { FormRecord } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";

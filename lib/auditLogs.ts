@@ -157,7 +157,7 @@ export const AuditLogDetails = {
   FormContentUpdated: "UpdatedFormContent",
   UpdatedFormName: "UpdatedFormName",
   GrantFormAccess: "Access granted to ${userID}",
-  AccessedForms: "Accessed Forms: ${formList}",
+  AccessedForm: "Accessed Form: ${formId}",
   ChangeDeliveryOption: "Changed delivery option to ${deliveryOption}",
   ChangeSecurityAttribute: "ChangeSecurityAttribute",
   AccessGrantedTo: "GrantAccess",
@@ -241,7 +241,7 @@ type AuditDetailsParams = {
   [AuditLogDetails.FormContentUpdated]: never;
   [AuditLogDetails.UpdatedFormName]: { newFormName: string };
   [AuditLogDetails.GrantFormAccess]: { userID: string };
-  [AuditLogDetails.AccessedForms]: { formList: string };
+  [AuditLogDetails.AccessedForm]: { formId: string };
   [AuditLogDetails.ChangeDeliveryOption]: { deliveryOption: string };
   [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
   [AuditLogDetails.AccessGrantedTo]: { userList: string };

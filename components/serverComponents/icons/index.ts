@@ -85,3 +85,4 @@ export { CheckNoBorderIcon } from "./CheckNoBorderIcon";
 export { XIcon } from "./XIcon";
 export { ArchiveIcon } from "./ArchiveIcon";
 export { PersonIcon } from "./PersonIcon";
+export { ClosedStatusIcon } from "./ClosedStatusIcon";

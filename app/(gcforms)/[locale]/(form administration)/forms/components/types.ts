@@ -4,7 +4,7 @@ import { EditLockPresenceStatus, EditLockVisibilityState } from "@root/lib/editL
 /**
  * Possible states a form card can be in
  */
-export type CardState = "draft-editing" | "draft-readonly" | "published" | "archived";
+export type CardState = "draft-editing" | "draft-readonly" | "published" | "archived" | "closed";
 
 /**
  * Edit-lock info as returned by the /api/forms/edit-locks endpoint (dates as ISO strings).
@@ -58,28 +58,27 @@ export type FormsTemplate = {
   versionNumber?: number | null;
   ttl: Date | null;
   date: string;
-  url: string;
   overdue: boolean;
   hasEditLock: boolean;
-  isShared: boolean;
   collaboratorCount: {
     userCount: number;
     pendingUserCount: number;
   };
+  closingDate?: Date | null;
+  lastEditedBy?: string | null;
 };
 
 /**
- * Template enriched with edit-lock info for client rendering.
+ * Template merged with edit-lock info for client rendering.
  */
 export type FormsTemplateWithLockInfo = FormsTemplate & {
   editLockInfo?: EditLockInfoClient | null;
-  lastEditedBy?: string | null;
 };
 
 /**
  * Possible tab statuses for filtering forms
  */
-export type FormTabStatus = "recentlyEdited" | "draft" | "published" | "archived";
+export type FormTabStatus = "recentlyEdited" | "draft" | "published" | "archived" | "closed";
 
 /**
  * Constants for form tab status values
@@ -89,4 +88,16 @@ export const TAB_STATUS = {
   DRAFT: "draft",
   PUBLISHED: "published",
   ARCHIVED: "archived",
+  CLOSED: "closed",
+} as const;
+
+/**
+ * Constants for card state values
+ */
+export const CARD_STATE = {
+  DRAFT_EDITING: "draft-editing",
+  DRAFT_READONLY: "draft-readonly",
+  PUBLISHED: "published",
+  ARCHIVED: "archived",
+  CLOSED: "closed",
 } as const;

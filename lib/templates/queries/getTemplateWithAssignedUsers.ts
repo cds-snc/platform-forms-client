@@ -32,6 +32,11 @@ export async function getTemplateWithAssignedUsers(formID: string): Promise<{
       },
       include: {
         deliveryOption: true,
+        lastEditedBy: {
+          select: {
+            name: true,
+          },
+        },
         users: {
           select: {
             id: true,

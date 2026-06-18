@@ -53,12 +53,10 @@ export const Cards = ({
   // Setup edit lock polling - only poll for draft forms in the recentlyEdited and draft tabs
   const shouldPoll =
     !tabStatus || tabStatus === TAB_STATUS.RECENTLY_EDITED || tabStatus === TAB_STATUS.DRAFT;
-
   const draftTemplates = useMemo(
     () => templates.filter((t) => t.isPublished === false && t.ttl === null),
     [templates]
   );
-
   useEditLockPolling({
     templates: draftTemplates,
     displayedCount,
@@ -78,6 +76,7 @@ export const Cards = ({
     if (tabStatus === TAB_STATUS.DRAFT) return t("cards.noDraftsForms");
     if (tabStatus === TAB_STATUS.PUBLISHED) return t("cards.noPublishedForms");
     if (tabStatus === TAB_STATUS.ARCHIVED) return t("cards.noArchivedForms");
+    if (tabStatus === TAB_STATUS.CLOSED) return t("cards.noClosedForms");
     return t("cards.noForms");
   }, [tabStatus, t]);
 
@@ -99,9 +98,10 @@ export const Cards = ({
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
-              {(tabStatus === TAB_STATUS.DRAFT ||
-                tabStatus === TAB_STATUS.PUBLISHED ||
-                !tabStatus) && (
+              {(!tabStatus ||
+                tabStatus === TAB_STATUS.RECENTLY_EDITED ||
+                tabStatus === TAB_STATUS.DRAFT ||
+                tabStatus === TAB_STATUS.PUBLISHED) && (
                 <li className="flex h-full w-full max-w-[16em]" key={-1}>
                   <NewFormButton />
                 </li>
@@ -118,7 +118,16 @@ export const Cards = ({
             )}
           </>
         ) : (
-          emptyStateMessage
+          <div>
+            {emptyStateMessage}
+            {tabStatus !== TAB_STATUS.ARCHIVED && (
+              <ol className="mt-4 grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
+                <li className="mt-4 flex h-full w-full max-w-[16em]" key={-1}>
+                  <NewFormButton />
+                </li>
+              </ol>
+            )}
+          </div>
         )}
       </div>
     </ViewTransition>
