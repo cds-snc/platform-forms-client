@@ -120,7 +120,7 @@ export const Cards = ({
         ) : (
           <div>
             {emptyStateMessage}
-            {(tabStatus === TAB_STATUS.DRAFT || tabStatus === TAB_STATUS.RECENTLY_EDITED) && (
+            {tabStatus !== TAB_STATUS.ARCHIVED && (
               <ol className="mt-4 grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
                 <li className="mt-4 flex h-full w-full max-w-[16em]" key={-1}>
                   <NewFormButton />
