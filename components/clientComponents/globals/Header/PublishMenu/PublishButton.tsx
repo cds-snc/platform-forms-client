@@ -217,7 +217,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
 
       const { formRecord, error: publishError } = await updateTemplate({
         action: UpdateTemplateAction.IsPublished,
-        formID: formId,
+        formId: formId,
         isPublished: true,
         publishFormType: formType,
         publishDescription: description,
@@ -268,7 +268,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     const nextClosingDate = pendingToggleValue ? null : new Date().toISOString();
     const result = await updateTemplate({
       action: UpdateTemplateAction.ClosedData,
-      formID: formId,
+      formId: formId,
       closingDate: nextClosingDate,
     });
 

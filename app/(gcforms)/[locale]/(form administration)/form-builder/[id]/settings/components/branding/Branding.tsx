@@ -69,7 +69,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
 
     const operationResult = await updateTemplate({
       action: UpdateTemplateAction.FormBranding,
-      formID: id,
+      formId: id,
       formConfig: formConfig,
     });
 

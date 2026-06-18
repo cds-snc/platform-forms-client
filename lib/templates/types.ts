@@ -22,7 +22,7 @@ export type UpdateTemplateCommand =
   | UpdateSecurityAttributeCommand;
 
 type BaseUpdateCommand = {
-  formID: string;
+  formId: string;
   action: UpdateTemplateAction;
 };
 

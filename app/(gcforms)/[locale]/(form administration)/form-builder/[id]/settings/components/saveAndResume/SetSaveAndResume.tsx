@@ -27,7 +27,7 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
 
     const result = await updateTemplate({
       action: UpdateTemplateAction.FormSaveAndResume,
-      formID: formId,
+      formId: formId,
       saveAndResume,
     });
 

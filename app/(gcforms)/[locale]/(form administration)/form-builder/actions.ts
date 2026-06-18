@@ -118,7 +118,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
           // own dedicated update functions called from the settings page.
           const formRecord = await updateDbTemplate({
             action: UpdateTemplateAction.General,
-            formID: id,
+            formId: id,
             formConfig: formConfig,
             name: name,
           });
@@ -170,7 +170,7 @@ export const updateTemplate = AuthenticatedAction(
 
     try {
       await assertTemplateEditLockIfEnabled({
-        templateId: command.formID,
+        templateId: command.formId,
         userId: session.user.id,
       });
 
@@ -178,7 +178,7 @@ export const updateTemplate = AuthenticatedAction(
         case UpdateTemplateAction.IsPublished:
           response = await updateDbTemplate({
             action: UpdateTemplateAction.IsPublished,
-            formID: command.formID,
+            formId: command.formId,
             isPublished: command.isPublished,
             publishReason: command.publishReason,
             publishFormType: command.publishFormType,
@@ -187,32 +187,32 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formID}, ${command.isPublished} }`
+              `Template API response was null. Request information: { ${command.formId}, ${command.isPublished} }`
             );
           }
 
           if (command.isPublished) {
             try {
-              await publishEditLockPublishedEvent(command.formID);
+              await publishEditLockPublishedEvent(command.formId);
             } catch (error) {
               logMessage.warn(
-                `Failed to publish edit-lock published event for ${command.formID}: ${(error as Error).message}`
+                `Failed to publish edit-lock published event for ${command.formId}: ${(error as Error).message}`
               );
             }
           }
 
-          revalidatePath(`/form-builder/${command.formID}`, "layout");
-          revalidatePath(`/form-builder/${command.formID}/published`, "page");
+          revalidatePath(`/form-builder/${command.formId}`, "layout");
+          revalidatePath(`/form-builder/${command.formId}/published`, "page");
           break;
         case UpdateTemplateAction.FormPurpose:
           response = await updateDbTemplate({
             action: UpdateTemplateAction.FormPurpose,
-            formID: command.formID,
+            formId: command.formId,
             formPurpose: command.formPurpose,
           });
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formID}, ${command.formPurpose} }`
+              `Template API response was null. Request information: { ${command.formId}, ${command.formPurpose} }`
             );
           }
 
@@ -220,12 +220,12 @@ export const updateTemplate = AuthenticatedAction(
         case UpdateTemplateAction.FormSaveAndResume:
           response = await updateDbTemplate({
             action: UpdateTemplateAction.FormSaveAndResume,
-            formID: command.formID,
+            formId: command.formId,
             saveAndResume: command.saveAndResume,
           });
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formID}, ${command.saveAndResume} }`
+              `Template API response was null. Request information: { ${command.formId}, ${command.saveAndResume} }`
             );
           }
 
@@ -233,12 +233,12 @@ export const updateTemplate = AuthenticatedAction(
         case UpdateTemplateAction.SecurityAttribute:
           response = await updateDbTemplate({
             action: UpdateTemplateAction.SecurityAttribute,
-            formID: command.formID,
+            formId: command.formId,
             securityAttribute: command.securityAttribute,
           });
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formID}, ${command.securityAttribute} }`
+              `Template API response was null. Request information: { ${command.formId}, ${command.securityAttribute} }`
             );
           }
 
@@ -246,30 +246,30 @@ export const updateTemplate = AuthenticatedAction(
         case UpdateTemplateAction.ClosedData:
           if (command.closingDate && !isValidDateString(command.closingDate)) {
             throw new Error(
-              `Invalid closing date. Request information: { ${command.formID}, ${command.closingDate} }`
+              `Invalid closing date. Request information: { ${command.formId}, ${command.closingDate} }`
             );
           }
 
           response = await updateDbTemplate({
             action: UpdateTemplateAction.ClosedData,
-            formID: command.formID,
+            formId: command.formId,
             closingDate: command.closingDate,
             closedDetails: command.closedDetails,
           });
 
           if (!response) {
             throw new Error(
-              `Template API response was null. Request information: { ${command.formID}, ${command.closingDate} }`
+              `Template API response was null. Request information: { ${command.formId}, ${command.closingDate} }`
             );
           }
 
           return { formRecord: response };
         case UpdateTemplateAction.FormBranding:
-          const formConfig = await getFormJSONConfig(command.formID);
+          const formConfig = await getFormJSONConfig(command.formId);
 
           if (!formConfig) {
             throw new Error(
-              `Failed to get template for branding update with formId ${command.formID}`
+              `Failed to get template for branding update with formId ${command.formId}`
             );
           }
 
@@ -280,13 +280,13 @@ export const updateTemplate = AuthenticatedAction(
 
           response = await updateDbTemplate({
             action: UpdateTemplateAction.FormBranding,
-            formID: command.formID,
+            formId: command.formId,
             formConfig: updatedFormConfig,
           });
 
           if (!response) {
             throw new Error(
-              `Failed to update template for branding update with formId ${command.formID}`
+              `Failed to update template for branding update with formId ${command.formId}`
             );
           }
 

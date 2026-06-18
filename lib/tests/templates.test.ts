@@ -349,7 +349,7 @@ describe("Template CRUD functions", () => {
 
       const updatedTemplate = await updateTemplate({
         action: UpdateTemplateAction.General,
-        formID: "test1",
+        formId: "test1",
         formConfig: updatedFormConfig,
       });
 
@@ -407,7 +407,7 @@ describe("Template CRUD functions", () => {
 
       const updatedTemplate = await updateTemplate({
         action: UpdateTemplateAction.IsPublished,
-        formID: "formtestID",
+        formId: "formtestID",
         isPublished: true,
         publishReason: "",
         publishFormType: "",
@@ -581,7 +581,7 @@ describe("Template CRUD functions", () => {
       await expect(async () => {
         await updateTemplate({
           action: UpdateTemplateAction.General,
-          formID: "test1",
+          formId: "test1",
           formConfig: updatedFormConfig,
         });
       }).rejects.toThrow(TemplateAlreadyPublishedError);
@@ -903,7 +903,7 @@ describe("Template CRUD functions", () => {
       await expect(
         updateTemplate({
           action: UpdateTemplateAction.General,
-          formID: "test1",
+          formId: "test1",
           formConfig: structuredClone(formConfiguration as FormProperties),
         })
       ).rejects.toThrow(AccessControlError);
@@ -919,7 +919,7 @@ describe("Template CRUD functions", () => {
       await expect(
         updateTemplate({
           action: UpdateTemplateAction.IsPublished,
-          formID: "formtestID",
+          formId: "formtestID",
           isPublished: true,
           publishReason: "",
           publishFormType: "",

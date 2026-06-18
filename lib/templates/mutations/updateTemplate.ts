@@ -71,70 +71,70 @@ const authorizeForCommand = async (
 ): Promise<AuthorizationResult> => {
   switch (command.action) {
     case UpdateTemplateAction.General:
-      return authorization.canEditForm(command.formID).catch((e) => {
+      return authorization.canEditForm(command.formId).catch((e) => {
         logEvent(
           e.user.id,
-          { type: "Form", id: command.formID },
+          { type: "Form", id: command.formId },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateForm
         );
         throw e;
       });
     case UpdateTemplateAction.ClosedData:
-      return authorization.canEditForm(command.formID).catch((e) => {
+      return authorization.canEditForm(command.formId).catch((e) => {
         logEvent(
           e.user.id,
-          { type: "Form", id: command.formID },
+          { type: "Form", id: command.formId },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateClosingDate
         );
         throw e;
       });
     case UpdateTemplateAction.FormBranding:
-      return authorization.canEditForm(command.formID).catch((e) => {
+      return authorization.canEditForm(command.formId).catch((e) => {
         logEvent(
           e.user.id,
-          { type: "Form", id: command.formID },
+          { type: "Form", id: command.formId },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateFormJson
         );
         throw e;
       });
     case UpdateTemplateAction.FormPurpose:
-      return authorization.canEditForm(command.formID).catch((e) => {
+      return authorization.canEditForm(command.formId).catch((e) => {
         logEvent(
           e.user.id,
-          { type: "Form", id: command.formID },
+          { type: "Form", id: command.formId },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetFormPurpose
         );
         throw e;
       });
     case UpdateTemplateAction.FormSaveAndResume:
-      return authorization.canEditForm(command.formID).catch((e) => {
+      return authorization.canEditForm(command.formId).catch((e) => {
         logEvent(
           e.user.id,
-          { type: "Form", id: command.formID },
+          { type: "Form", id: command.formId },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetSaveAndResume
         );
         throw e;
       });
     case UpdateTemplateAction.SecurityAttribute:
-      return authorization.canEditForm(command.formID).catch((e) => {
+      return authorization.canEditForm(command.formId).catch((e) => {
         logEvent(
           e.user.id,
-          { type: "Form", id: command.formID },
+          { type: "Form", id: command.formId },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateSecurityAttribute
         );
         throw e;
       });
     case UpdateTemplateAction.IsPublished:
-      return authorization.canPublishForm(command.formID).catch((e) => {
+      return authorization.canPublishForm(command.formId).catch((e) => {
         logEvent(
           e.user.id,
-          { type: "Form", id: command.formID },
+          { type: "Form", id: command.formId },
           "AccessDenied",
           AuditLogAccessDeniedDetails.AccessDenied_AttemptToPublishForm
         );
@@ -153,7 +153,7 @@ type UpdatePlan = {
 const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
   const basePlan = {
     where: {
-      id: command.formID,
+      id: command.formId,
     },
   };
 
@@ -162,7 +162,7 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
       return {
         ...basePlan,
         where: {
-          id: command.formID,
+          id: command.formId,
           isPublished: false,
         },
         data: {
@@ -203,7 +203,7 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
       return {
         ...basePlan,
         where: {
-          id: command.formID,
+          id: command.formId,
           isPublished: false,
         },
         data: {
@@ -221,7 +221,7 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
       return {
         ...basePlan,
         where: {
-          id: command.formID,
+          id: command.formId,
           isPublished: {
             not: command.isPublished,
           },
@@ -237,7 +237,7 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
       return {
         ...basePlan,
         where: {
-          id: command.formID,
+          id: command.formId,
           isPublished: false,
         },
         data: {
@@ -289,7 +289,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
         (beforeContext?.name ?? "") !== command.name &&
         logEvent(
           user.id,
-          { type: "Form", id: command.formID },
+          { type: "Form", id: command.formId },
           AuditLogEvent.ChangeFormName,
           AuditLogDetails.UpdatedFormName,
           { newFormName: command.name ?? "" }
@@ -297,7 +297,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
 
       logEvent(
         user.id,
-        { type: "Form", id: command.formID },
+        { type: "Form", id: command.formId },
         "UpdateForm",
         AuditLogDetails.FormContentUpdated
       );
@@ -309,7 +309,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
         const date = new Date(closedCommand.closingDate);
         logEvent(
           event.user.id,
-          { type: "Form", id: event.command.formID },
+          { type: "Form", id: event.command.formId },
           "UpdateForm",
           AuditLogDetails.UpdateClosingDate,
           { closingDate: date.toLocaleDateString("en-CA") }
@@ -317,7 +317,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
       } else {
         logEvent(
           event.user.id,
-          { type: "Form", id: event.command.formID },
+          { type: "Form", id: event.command.formId },
           "UpdateForm",
           AuditLogDetails.RemoveClosingDate
         );
@@ -328,7 +328,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
       const brandName = brandingCommand.formConfig.brand?.name ?? "gc";
       logEvent(
         event.user.id,
-        { type: "Form", id: brandingCommand.formID },
+        { type: "Form", id: brandingCommand.formId },
         AuditLogEvent.UpdateFormBranding,
         AuditLogDetails.UpdateFormBranding,
         { brand: brandName }
@@ -338,7 +338,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
       const purposeCommand = event.command as UpdateFormPurposeCommand;
       logEvent(
         event.user.id,
-        { type: "Form", id: purposeCommand.formID },
+        { type: "Form", id: purposeCommand.formId },
         AuditLogEvent.ChangeFormPurpose,
         AuditLogDetails.SetFormPurpose,
         { formPurpose: purposeCommand.formPurpose }
@@ -348,7 +348,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
       const saveAndResumeCommand = event.command as UpdateFormSaveAndResumeCommand;
       logEvent(
         event.user.id,
-        { type: "Form", id: saveAndResumeCommand.formID },
+        { type: "Form", id: saveAndResumeCommand.formId },
         AuditLogEvent.ChangeFormSaveAndResume,
         AuditLogDetails.SetSaveAndResume,
         { saveAndResume: saveAndResumeCommand.saveAndResume ? "On" : "Off" }
@@ -356,13 +356,13 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
       break;
     case UpdateTemplateAction.IsPublished:
       const publishCommand = event.command as UpdateIsPublishedCommand;
-      logEvent(event.user.id, { type: "Form", id: publishCommand.formID }, "PublishForm");
+      logEvent(event.user.id, { type: "Form", id: publishCommand.formId }, "PublishForm");
       break;
     case UpdateTemplateAction.SecurityAttribute:
       const securityCommand = event.command as UpdateSecurityAttributeCommand;
       logEvent(
         event.user.id,
-        { type: "Form", id: securityCommand.formID },
+        { type: "Form", id: securityCommand.formId },
         AuditLogEvent.ChangeSecurityAttribute,
         AuditLogDetails.ChangeSecurityAttribute,
         { securityAttribute: securityCommand.securityAttribute ?? "" }
@@ -380,7 +380,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 
   const currentTemplate = await prisma.template.findUnique({
     where: {
-      id: command.formID,
+      id: command.formId,
     },
     select: {
       name: true,
@@ -394,11 +394,11 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   if (command.action === UpdateTemplateAction.IsPublished && command.isPublished) {
     if (process.env.APP_ENV !== "test") {
       try {
-        await deleteDraftFormResponses(command.formID);
+        await deleteDraftFormResponses(command.formId);
       } catch (e) {
         if (e instanceof TemplateAlreadyPublishedError) {
           // preserve old behavior if needed
-          return getFullTemplateByID(command.formID, false);
+          return getFullTemplateByID(command.formId, false);
         }
         throw e;
       }
@@ -412,7 +412,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     throw new TemplateAlreadyPublishedError();
   }
 
-  if (formCache.cacheAvailable) formCache.invalidate(command.formID);
+  if (formCache.cacheAvailable) formCache.invalidate(command.formId);
 
   await logTemplateUpdateEvent({
     action: command.action,

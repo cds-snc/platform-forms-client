@@ -64,7 +64,7 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
       try {
         const resultAttribute = (await updateTemplate({
           action: UpdateTemplateAction.SecurityAttribute,
-          formID: id,
+          formId: id,
           securityAttribute: classification,
         })) as FormServerError;
 
@@ -103,7 +103,7 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
         // Update the database
         const result = await updateTemplate({
           action: UpdateTemplateAction.FormPurpose,
-          formID: id,
+          formId: id,
           formPurpose: purposeOption,
         });
 

@@ -70,7 +70,7 @@ export const Publish = ({ id }: { id: string }) => {
 
       const { formRecord, error } = await updateTemplate({
         action: UpdateTemplateAction.IsPublished,
-        formID: id,
+        formId: id,
         isPublished: true,
         publishFormType: formType,
         publishDescription: description,

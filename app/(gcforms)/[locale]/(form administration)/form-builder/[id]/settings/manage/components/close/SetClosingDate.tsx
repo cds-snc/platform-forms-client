@@ -75,7 +75,7 @@ export const SetClosingDate = ({
 
     const result = await updateTemplate({
       action: UpdateTemplateAction.ClosedData,
-      formID: formId,
+      formId: formId,
       closingDate: closeDate,
       closedDetails: closedMessage,
     });
@@ -130,7 +130,7 @@ export const SetClosingDate = ({
 
       const result = await updateTemplate({
         action: UpdateTemplateAction.ClosedData,
-        formID: formId,
+        formId: formId,
         closingDate: isoClosingDate,
         closedDetails: messageToSave,
       });
@@ -148,7 +148,7 @@ export const SetClosingDate = ({
   const clearClosingDate = () => {
     updateTemplate({
       action: UpdateTemplateAction.ClosedData,
-      formID: formId,
+      formId: formId,
       closingDate: null,
     });
     setClosingDate(null);
@@ -170,7 +170,7 @@ export const SetClosingDate = ({
 
       const result = await updateTemplate({
         action: UpdateTemplateAction.ClosedData,
-        formID: formId,
+        formId: formId,
         closingDate,
         closedDetails: closedMessage,
       });
