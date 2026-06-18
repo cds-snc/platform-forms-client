@@ -1,7 +1,6 @@
 import { ClosedDetails, FormProperties, SecurityAttribute } from "../types";
 
 export const UpdateTemplateAction = {
-  General: "general",
   Name: "name",
   FormConfig: "formConfig",
   ClosedData: "closedData",
@@ -15,7 +14,6 @@ export const UpdateTemplateAction = {
 export type UpdateTemplateAction = (typeof UpdateTemplateAction)[keyof typeof UpdateTemplateAction];
 
 export type UpdateTemplateCommand =
-  | GeneralUpdateTemplateCommand
   | UpdateFormConfigCommand
   | UpdateNameCommand
   | UpdateClosedDataCommand
@@ -30,10 +28,14 @@ type BaseUpdateCommand = {
   action: UpdateTemplateAction;
 };
 
-export type GeneralUpdateTemplateCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.General;
+export type UpdateNameCommand = BaseUpdateCommand & {
+  action: typeof UpdateTemplateAction.Name;
+  name: string;
+};
+
+export type UpdateFormConfigCommand = BaseUpdateCommand & {
+  action: typeof UpdateTemplateAction.FormConfig;
   formConfig: FormProperties;
-  name?: string;
 };
 
 export type UpdateClosedDataCommand = BaseUpdateCommand & {
@@ -68,14 +70,4 @@ export type UpdateIsPublishedCommand = BaseUpdateCommand & {
 export type UpdateSecurityAttributeCommand = BaseUpdateCommand & {
   action: typeof UpdateTemplateAction.SecurityAttribute;
   securityAttribute: SecurityAttribute;
-};
-
-export type UpdateNameCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.Name;
-  name: string;
-};
-
-export type UpdateFormConfigCommand = BaseUpdateCommand & {
-  action: typeof UpdateTemplateAction.FormConfig;
-  formConfig: FormProperties;
 };

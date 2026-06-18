@@ -157,7 +157,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 export const updateTemplate = AuthenticatedAction(
   async (
     session,
-    command: Exclude<UpdateTemplateCommand, { action: typeof UpdateTemplateAction.General }> & {
+    command: UpdateTemplateCommand & {
       redirectAfter?: string;
     }
   ): Promise<{

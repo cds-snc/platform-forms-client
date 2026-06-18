@@ -23,7 +23,6 @@ import {
   UpdateFormPurposeCommand,
   UpdateIsPublishedCommand,
   UpdateTemplateAction,
-  GeneralUpdateTemplateCommand,
   UpdateClosedDataCommand,
   UpdateFormBrandingCommand,
   UpdateSecurityAttributeCommand,
@@ -73,7 +72,6 @@ const authorizeForCommand = async (
   command: UpdateTemplateCommand
 ): Promise<AuthorizationResult> => {
   switch (command.action) {
-    case UpdateTemplateAction.General:
     case UpdateTemplateAction.Name:
       return authorization.canEditForm(command.formId).catch((e) => {
         logEvent(
@@ -172,18 +170,6 @@ const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
   };
 
   switch (command.action) {
-    case UpdateTemplateAction.General:
-      return {
-        ...basePlan,
-        where: {
-          id: command.formId,
-          isPublished: false,
-        },
-        data: {
-          jsonConfig: command.formConfig as Prisma.JsonObject,
-          name: command.name,
-        },
-      };
     case UpdateTemplateAction.Name:
       return {
         ...basePlan,
@@ -314,35 +300,12 @@ type UpdateAuditEvent = {
 
 const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
   switch (event.action) {
-    case UpdateTemplateAction.General:
-      const command = event.command as GeneralUpdateTemplateCommand;
-      const { user, beforeContext } = event;
-
-      command.name !== undefined &&
-        (beforeContext?.name ?? "") !== command.name &&
-        logEvent(
-          user.id,
-          { type: "Form", id: command.formId },
-          AuditLogEvent.ChangeFormName,
-          AuditLogDetails.UpdatedFormName,
-          { newFormName: command.name ?? "" }
-        );
-
-      logEvent(
-        user.id,
-        { type: "Form", id: command.formId },
-        "UpdateForm",
-        AuditLogDetails.FormContentUpdated
-      );
-      break;
     case UpdateTemplateAction.Name:
       const nameCommand = event.command as UpdateNameCommand;
-      const { user: nameUser, beforeContext: nameBeforeContext } = event;
-
       nameCommand.name !== undefined &&
-        (nameBeforeContext?.name ?? "") !== nameCommand.name &&
+        (event.beforeContext?.name ?? "") !== nameCommand.name &&
         logEvent(
-          nameUser.id,
+          event.user.id,
           { type: "Form", id: nameCommand.formId },
           AuditLogEvent.ChangeFormName,
           AuditLogDetails.UpdatedFormName,
@@ -351,7 +314,7 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
       break;
     case UpdateTemplateAction.FormConfig:
       const formConfigCommand = event.command as UpdateFormConfigCommand;
-      !isEqual(beforeContext?.jsonConfig ?? {}, formConfigCommand.formConfig) &&
+      !isEqual(event.beforeContext?.jsonConfig ?? {}, formConfigCommand.formConfig) &&
         logEvent(
           event.user.id,
           { type: "Form", id: formConfigCommand.formId },
@@ -464,10 +427,6 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 
   const updateQuery = buildUpdateQuery(command);
   const updatedTemplate = await executeTemplateUpdate(updateQuery, user.id);
-
-  if (updatedTemplate === null && command.action === UpdateTemplateAction.General) {
-    throw new TemplateAlreadyPublishedError();
-  }
 
   if (formCache.cacheAvailable) formCache.invalidate(command.formId);
 
