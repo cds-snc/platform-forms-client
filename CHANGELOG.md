@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.17.2](https://github.com/cds-snc/platform-forms-client/compare/v4.17.1...v4.17.2) (2026-06-18)
+
+
+### Miscellaneous Chores
+
+* ensure new form button ([#7396](https://github.com/cds-snc/platform-forms-client/issues/7396)) ([a9f7278](https://github.com/cds-snc/platform-forms-client/commit/a9f727822f3d69620dfcc960e5e1da1bf6106b94))
+
 ## [4.17.1](https://github.com/cds-snc/platform-forms-client/compare/v4.17.0...v4.17.1) (2026-06-17)
 
 
