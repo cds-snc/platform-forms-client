@@ -49,13 +49,7 @@ const defaultTemplateApi: TemplateApiType = {
   resetState: () => {},
 };
 
-type TrackedTemplateState = [
-  form: unknown,
-  isPublished: boolean,
-  name: string,
-  deliveryOption: unknown,
-  securityAttribute: unknown,
-];
+type TrackedTemplateState = [form: FormProperties];
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
@@ -116,7 +110,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       const operationResult = await createOrUpdateTemplate({
         id: getId(),
         formConfig,
-        name: getName(),
+        name: getName(true),
         deliveryOption: getDeliveryOption(),
         securityAttribute,
         notificationsInterval,
@@ -206,14 +200,20 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   }, [queueSaveDraft, getId]);
 
   useSubscibeToTemplateStore(
-    (s) =>
-      [
-        s.form,
-        s.isPublished,
-        s.name,
-        s.deliveryOption,
-        s.securityAttribute,
-      ] as TrackedTemplateState,
+    (s) => [s.name],
+    (current, previous) => {
+      if (!hasHydrated) {
+        return;
+      }
+
+      if (current[0] !== previous[0]) {
+        // @todo add code to save to DB here
+      }
+    }
+  );
+
+  useSubscibeToTemplateStore(
+    (s) => [s.form] as TrackedTemplateState,
     (current, previous) => {
       if (!hasHydrated) {
         return;

@@ -179,6 +179,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
                     try {
                       const currentName = getName();
                       if (!currentName || currentName === prevTitleRef.current) {
+                        // Only update the name if it hasn't been manually changed by the user to something different than the title.
                         updateField(`name`, cleaned);
                       }
                     } catch (e) {
