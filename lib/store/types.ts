@@ -105,7 +105,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getFormElementById: (id: number) => FormElement | undefined;
   getFormElementWithIndexById: (id: number) => FormElementWithIndex | undefined;
   getFormElementIndexes: (id: number) => Indexes;
-  getName: () => string;
+  getName: (allowFallback?: boolean) => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;

@@ -20,14 +20,14 @@ import type { FormsTemplate, FormsTemplateWithLockInfo, FormTabStatus } from "./
 import { TAB_STATUS } from "./components/types";
 
 const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => string): string => {
-  const defaultStatus = t("nav.recentlyEdited");
   const statusTitleMap: Record<string, string> = {
     [TAB_STATUS.DRAFT]: t("nav.drafts"),
     [TAB_STATUS.PUBLISHED]: t("nav.published"),
     [TAB_STATUS.ARCHIVED]: t("nav.archived"),
+    [TAB_STATUS.CLOSED]: t("nav.closed"),
     [TAB_STATUS.RECENTLY_EDITED]: t("nav.recentlyEdited"),
   };
-  return status ? statusTitleMap[status] : defaultStatus;
+  return (status && statusTitleMap[status]) ?? t("nav.recentlyEdited");
 };
 
 export async function generateMetadata(props: {
@@ -94,11 +94,9 @@ export default async function Page(props: {
   params: Promise<{ locale: string }>;
   searchParams: Promise<{ status: FormTabStatus }>;
 }) {
-  const searchParams = await props.searchParams;
+  const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
 
   const { status = TAB_STATUS.RECENTLY_EDITED } = searchParams;
-
-  const params = await props.params;
 
   const { locale } = params;
 
@@ -116,11 +114,29 @@ export default async function Page(props: {
   const { t } = await serverTranslation("my-forms", { lang: locale });
 
   // Moved from Cards to Page to avoid component being cached when navigating back to this page
+  // Brace yourself, Prisma is a bit... hopefully the comments below help.
   const options: TemplateOptions = {
     requestedWhere: {
+      // Published filter: use DB field isPublished since have it, this also indirectly defines Draft since draft=!published
       isPublished:
         status === TAB_STATUS.PUBLISHED ? true : status === TAB_STATUS.DRAFT ? false : undefined,
-      ttl: status === TAB_STATUS.ARCHIVED ? { not: null } : null,
+      // Archived filter: ttl: { not: null } for archived, null (must have no ttl) for all others except closed (no filter)
+      ttl:
+        status === TAB_STATUS.ARCHIVED
+          ? { not: null }
+          : status === TAB_STATUS.CLOSED
+            ? undefined
+            : null,
+      // Closed filter: closingDate in the past
+      ...(status === TAB_STATUS.CLOSED && {
+        closingDate: { not: null, lt: new Date() },
+      }),
+      // Published and Archived further filtering: remove templates that have a closing date in the past (closed forms)
+      ...((status === TAB_STATUS.PUBLISHED || status === TAB_STATUS.ARCHIVED) && {
+        NOT: {
+          AND: [{ closingDate: { not: null } }, { closingDate: { lt: new Date() } }],
+        },
+      }),
     },
     sortByDateUpdated: "desc",
   };
@@ -145,16 +161,13 @@ export default async function Page(props: {
       updatedAt,
       ttl,
       lastEditedBy,
+      closingDate: closingDateRaw,
     } = template;
 
     // Calculate collaborator count from DB data
     const templateWithCounts = template as TemplateWithCounts;
     const userCount = templateWithCounts._count?.users ?? 0;
     const pendingUserCount = templateWithCounts._count?.invitations ?? 0;
-
-    // Determine if template is shared (has 1 or more collaborators beyond owner)
-    // userCount includes the owner, so we need at least 2 total (owner + 1 collaborator)
-    const isShared = userCount + pendingUserCount >= 2;
 
     return {
       id,
@@ -164,16 +177,15 @@ export default async function Page(props: {
       name,
       isPublished,
       date: updatedAt ?? FALLBACK_DATE,
-      url: `/${locale}/id/${id}`,
       overdue: false,
       ttl: ttl ? new Date(ttl) : null,
       hasEditLock: templateIdsWithEditLocks.has(id),
-      isShared,
       collaboratorCount: {
         userCount,
         pendingUserCount,
       },
       lastEditedBy,
+      closingDate: closingDateRaw ? new Date(closingDateRaw) : null,
     };
   });
 
@@ -227,14 +239,14 @@ export default async function Page(props: {
           <Navigation filter={status} />
         </div>
         <div className="mt-6 ml-2">
-          {status == TAB_STATUS.DRAFT && <ResumeEditingForm />}
+          {status === TAB_STATUS.DRAFT && <ResumeEditingForm />}
           <CoEditingHelp />
         </div>
       </div>
       <div className="flex h-full min-h-0 flex-col">
-        <div className="">
+        <div>
           <Invitations invitations={invitations} />
-          {status == TAB_STATUS.ARCHIVED && (
+          {status === TAB_STATUS.ARCHIVED && (
             <div className="mb-4">
               <div>
                 {t("archivedNotice")}&nbsp;
