@@ -113,14 +113,13 @@ export const createOrUpdateTemplate = AuthenticatedAction(
             templateId: id,
             userId: session.user.id,
           });
-          // Note: we only update formConfig and name in the update flow since other
-          // properties (deliveryOption, securityAttribute, formPurpose) have their
-          // own dedicated update functions called from the settings page.
+          // Note: we only update formConfig in the update flow since other
+          // properties (name, deliveryOption, securityAttribute, formPurpose)
+          // have their own dedicated update functions called from the settings page.
           const formRecord = await updateDbTemplate({
-            action: UpdateTemplateAction.General,
+            action: UpdateTemplateAction.FormConfig,
             formId: id,
             formConfig: formConfig,
-            name: name,
           });
 
           return { formRecord };
@@ -158,7 +157,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 export const updateTemplate = AuthenticatedAction(
   async (
     session,
-    command: Exclude<UpdateTemplateCommand, { action: typeof UpdateTemplateAction.General }> & {
+    command: UpdateTemplateCommand & {
       redirectAfter?: string;
     }
   ): Promise<{
@@ -183,7 +182,20 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.name} }`
+              `Template update failed for Name. Request information: { ${command.formId}, ${command.name} }`
+            );
+          }
+
+          return { formRecord: response };
+        case UpdateTemplateAction.FormConfig:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.FormConfig,
+            formId: command.formId,
+            formConfig: command.formConfig,
+          });
+          if (!response) {
+            throw new Error(
+              `Template update failed for FormConfig. Request information: { ${command.formId} }`
             );
           }
 
@@ -200,7 +212,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.isPublished} }`
+              `Template update failed for IsPublished. Request information: { ${command.formId}, ${command.isPublished} }`
             );
           }
 
@@ -225,7 +237,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.formPurpose} }`
+              `Template update failed for FormPurpose. Request information: { ${command.formId}, ${command.formPurpose} }`
             );
           }
 
@@ -238,7 +250,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.saveAndResume} }`
+              `Template update failed for FormSaveAndResume. Request information: { ${command.formId}, ${command.saveAndResume} }`
             );
           }
 
@@ -251,7 +263,7 @@ export const updateTemplate = AuthenticatedAction(
           });
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.securityAttribute} }`
+              `Template update failed for SecurityAttribute. Request information: { ${command.formId}, ${command.securityAttribute} }`
             );
           }
 
@@ -272,7 +284,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Template response was null. Request information: { ${command.formId}, ${command.closingDate} }`
+              `Template update failed for ClosedData. Request information: { ${command.formId}, ${command.closingDate} }`
             );
           }
 
@@ -282,7 +294,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!formConfig) {
             throw new Error(
-              `Failed to get template for branding update with formId ${command.formId}`
+              `Template update failed for FormBranding. Request information: { ${command.formId} }`
             );
           }
 
@@ -299,7 +311,7 @@ export const updateTemplate = AuthenticatedAction(
 
           if (!response) {
             throw new Error(
-              `Failed to update template for branding update with formId ${command.formId}`
+              `Template update failed for FormBranding. Request information: { ${command.formId} }`
             );
           }
 
