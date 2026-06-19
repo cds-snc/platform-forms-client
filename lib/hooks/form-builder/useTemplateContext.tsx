@@ -4,10 +4,15 @@ import isEqual from "lodash.isequal";
 import { useSession } from "next-auth/react";
 import { logMessage } from "@lib/logger";
 import { safeJSONParse } from "@lib/utils";
-import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
+import {
+  CreateOrUpdateTemplateType,
+  createOrUpdateTemplate,
+  updateTemplate,
+} from "@formBuilder/actions";
 import { FormProperties, FormRecord } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
+import { UpdateTemplateAction } from "@root/lib/templates/types";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -49,13 +54,7 @@ const defaultTemplateApi: TemplateApiType = {
   resetState: () => {},
 };
 
-type TrackedTemplateState = [
-  form: unknown,
-  isPublished: boolean,
-  name: string,
-  deliveryOption: unknown,
-  securityAttribute: unknown,
-];
+type TrackedTemplateState = [form: FormProperties];
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
@@ -116,7 +115,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       const operationResult = await createOrUpdateTemplate({
         id: getId(),
         formConfig,
-        name: getName(),
+        name: getName(true),
         deliveryOption: getDeliveryOption(),
         securityAttribute,
         notificationsInterval,
@@ -206,14 +205,24 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   }, [queueSaveDraft, getId]);
 
   useSubscibeToTemplateStore(
-    (s) =>
-      [
-        s.form,
-        s.isPublished,
-        s.name,
-        s.deliveryOption,
-        s.securityAttribute,
-      ] as TrackedTemplateState,
+    (s) => [s.name],
+    (current, previous) => {
+      if (!hasHydrated) {
+        return;
+      }
+
+      if (current[0] !== previous[0]) {
+        updateTemplate({
+          action: UpdateTemplateAction.Name,
+          formId: getId(),
+          name: current[0],
+        });
+      }
+    }
+  );
+
+  useSubscibeToTemplateStore(
+    (s) => [s.form] as TrackedTemplateState,
     (current, previous) => {
       if (!hasHydrated) {
         return;

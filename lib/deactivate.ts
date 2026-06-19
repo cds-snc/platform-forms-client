@@ -15,6 +15,8 @@ To find out more or request account reactivation, [contact us](${HOST}/en/contac
 Thanks,
 The GC Forms team
 
+---
+
 Bonjour,
 
 Le compte Formulaires GC de ${email} a été désactivé.
@@ -40,6 +42,8 @@ If you have any questions, [contact us](${HOST}/en/contact).
 
 Thanks,
 The GC Forms team
+
+---
 
 Bonjour,
 

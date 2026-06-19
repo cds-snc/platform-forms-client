@@ -2,50 +2,77 @@
 
 import { Suspense, useMemo, memo, useEffect, useRef } from "react";
 import { EnvelopeIcon, MessageIcon, GearIcon } from "@serverComponents/icons";
-import { Menu } from "../client/Menu";
-import { Unarchive } from "../client/Unarchive";
 import Skeleton from "react-loading-skeleton";
-import { DraftEditLink } from "../client/DraftEditLink";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FormsTemplateWithLockInfo, FormTabStatus } from "../types";
-import {
-  getCardState,
-  formatDateToYYYYMMDD,
-  daysUntilTTL,
-  isTTLWarningPeriod,
-  calculateCollaboratorCount,
-  getBannerColor,
-} from "../helpers";
+import { cn, dateHasPast } from "@root/lib/utils";
+
+import { CARD_STATE, CardState, FormsTemplateWithLockInfo, FormTabStatus } from "../types";
+import { DraftEditLink } from "../client/DraftEditLink";
+import { Menu } from "../client/Menu";
+import { Unarchive } from "../client/Unarchive";
+import { MILLISECONDS_PER_DAY, TTL_WARNING_DAYS } from "../constants";
 import { announce, Priority } from "@gcforms/announce";
+import { formatDateToEstYYYYMMDD } from "@root/lib/utils/date/utcToEst";
 
-const CardBanner = memo(({ isPublished }: { isPublished: boolean }) => {
-  const { t } = useTranslation("my-forms");
-  const bulletColor = getBannerColor(isPublished);
+const getCardState = (card: FormsTemplateWithLockInfo): CardState => {
+  if (card.closingDate && dateHasPast(card.closingDate?.getTime())) return CARD_STATE.CLOSED;
+  if (card.ttl) return CARD_STATE.ARCHIVED;
+  if (card.isPublished) return CARD_STATE.PUBLISHED;
+  if (card.editLockInfo) return CARD_STATE.DRAFT_EDITING;
+  return CARD_STATE.DRAFT_READONLY;
+};
 
-  return (
-    <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
-      <span
-        className={`inline-block h-3 w-3 rounded-full border-1 border-slate-500 ${bulletColor}`}
-      />
-      {isPublished ? t("card.states.published") : t("card.states.draft")}
-    </div>
-  );
-});
+const daysUntilTTL = (ttl: Date): number => {
+  return Math.ceil((ttl.getTime() - new Date().getTime()) / MILLISECONDS_PER_DAY);
+};
+
+const isTTLWarningPeriod = (ttl: Date): boolean => {
+  const daysRemaining = daysUntilTTL(ttl);
+  return daysRemaining > 0 && daysRemaining <= TTL_WARNING_DAYS;
+};
+
+const calculateCollaboratorCount = (userCount: number, pendingUserCount: number): number => {
+  // userCount includes the owner, so we subtract 1
+  return userCount - 1 + pendingUserCount;
+};
+
+const CardBanner = memo(
+  ({ isPublished, isClosed }: { isPublished: boolean; isClosed: boolean }) => {
+    const { t } = useTranslation("my-forms");
+    const bulletColor = isClosed
+      ? "bg-slate-500"
+      : isPublished
+        ? "bg-emerald-500"
+        : "bg-yellow-400";
+
+    return (
+      <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
+        <span
+          className={`inline-block h-3 w-3 rounded-full border-1 border-slate-50 ${bulletColor}`}
+        />
+        {isClosed
+          ? t("card.states.closed")
+          : isPublished
+            ? t("card.states.published")
+            : t("card.states.draft")}
+      </div>
+    );
+  }
+);
 CardBanner.displayName = "CardBanner";
 
 const CardLinks = memo(
   ({
-    isPublished,
     id,
+    isPublished,
     deliveryOption,
     overdue,
     ttl,
     language,
   }: {
     id: string;
-    url?: string;
     isPublished: boolean;
     deliveryOption?: { emailAddress?: string } | null;
     overdue: boolean;
@@ -81,7 +108,7 @@ const CardLinks = memo(
                 href={responsesLink}
                 prefetch={false}
               >
-                <MessageIcon className="mr-2 ml-px inline-block fill-red-500" />
+                <MessageIcon className="mr-2 ml-px inline-block fill-red-700" />
                 {t("card.actionRequired")}
               </Link>
             ) : (
@@ -120,42 +147,64 @@ const CardTitle = memo(
     name,
     isPublished,
     collaboratorCount,
+    isClosed,
   }: {
     id: string;
     name: string;
     isPublished: boolean;
     collaboratorCount: number;
+    isClosed: boolean;
   }) => {
     const {
       t,
       i18n: { language },
     } = useTranslation("my-forms");
     const classes =
-      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 no-underline text-inherit hover:underline focus:underline active:underline cursor-pointer!";
-    const publishedLink = `/${language}/form-builder/${id}/responses`;
-    const draftLink = `/${language}/form-builder/${id}/edit/`;
-    return isPublished ? (
-      <Link className={classes} href={publishedLink} prefetch={false}>
-        {name ? name : t("card.unnamedForm")}
-      </Link>
-    ) : (
-      <DraftEditLink
-        href={draftLink}
-        formId={id}
-        className={classes}
-        collaboratorCount={collaboratorCount}
-      >
-        {name ? name : t("card.unnamedForm")}
-      </DraftEditLink>
+      "mb-0 mr-2 block w-full overflow-hidden pb-0 text-left text-base font-bold line-clamp-3 ";
+    const classesLink = cn(
+      classes,
+      " no-underline text-inherit hover:underline focus:underline active:underline cursor-pointer!"
     );
+    const content = name ? name : t("card.unnamedForm");
+    let titleElement: React.ReactNode;
+
+    if (isClosed) {
+      titleElement = (
+        <span className={classes} title={name}>
+          {content}
+        </span>
+      );
+    } else if (isPublished) {
+      titleElement = (
+        <Link className={classesLink} href={`/${language}/id/${id}`} prefetch={false}>
+          {content}
+        </Link>
+      );
+    } else {
+      titleElement = (
+        <DraftEditLink
+          href={`/${language}/form-builder/${id}/edit/`}
+          formId={id}
+          className={classesLink}
+          collaboratorCount={collaboratorCount}
+        >
+          {content}
+        </DraftEditLink>
+      );
+    }
+
+    return <h3>{titleElement}</h3>;
   }
 );
 CardTitle.displayName = "CardTitle";
 
 const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date | null }) => {
-  const { t } = useTranslation("my-forms");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("my-forms");
 
-  const formattedDate = formatDateToYYYYMMDD(date);
+  const formattedDate = formatDateToEstYYYYMMDD(date, language);
   const showTTLWarning = ttl ? isTTLWarningPeriod(ttl) : false;
   const daysRemaining = ttl ? daysUntilTTL(ttl) : 0;
 
@@ -167,7 +216,7 @@ const CardDate = memo(({ id, date, ttl }: { id: string; date: string; ttl?: Date
           <br />
           <span className="block min-w-0 truncate">
             {t("card.deleteDate")}
-            {formatDateToYYYYMMDD(ttl)}
+            {formatDateToEstYYYYMMDD(ttl, language)}
           </span>
           {showTTLWarning && (
             <span className="ml-4 block min-w-0 truncate text-red-500">
@@ -255,6 +304,31 @@ const CardFooterPublished = memo(({ cardId }: { cardId: string }) => {
 });
 CardFooterPublished.displayName = "CardFooterPublished";
 
+const ClosedOnText = memo(
+  ({
+    cardState,
+    closingDate,
+  }: {
+    cardState: CardState;
+    closingDate: string | Date | null | undefined;
+  }) => {
+    const {
+      t,
+      i18n: { language },
+    } = useTranslation("my-forms");
+    if (cardState !== CARD_STATE.CLOSED || !closingDate) return null;
+    return (
+      <div className="text-sm">
+        {t("card.closedOn", {
+          date: formatDateToEstYYYYMMDD(closingDate, language),
+          interpolation: { escapeValue: false },
+        })}
+      </div>
+    );
+  }
+);
+ClosedOnText.displayName = "ClosedOnText";
+
 const CardComponent = ({
   card,
   status,
@@ -268,6 +342,7 @@ const CardComponent = ({
   const params = useParams();
   const language = params?.locale as string;
   const lockStateRef = useRef<{ hasLock: boolean }>({ hasLock: !!card.editLockInfo });
+  const cardState = useMemo(() => getCardState(card), [card]);
 
   // Announce any lock state changes
   const formLocked = t("cards.announceLocked", { formName: card.name });
@@ -291,8 +366,6 @@ const CardComponent = ({
     [card.collaboratorCount.userCount, card.collaboratorCount.pendingUserCount]
   );
 
-  const cardState = useMemo(() => getCardState(card), [card]);
-
   const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : card.overdue ? "bg-red-50" : ""}`;
 
   return (
@@ -302,13 +375,13 @@ const CardComponent = ({
           id={card.id}
           name={card.name}
           isPublished={card.isPublished}
+          isClosed={cardState === CARD_STATE.CLOSED}
           collaboratorCount={collaboratorCount}
         />
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
         <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
           <CardLinks
             isPublished={card.isPublished}
-            url={card.url}
             id={card.id}
             deliveryOption={card.deliveryOption}
             overdue={card.overdue}
@@ -317,7 +390,8 @@ const CardComponent = ({
           />
         </Suspense>
         <div className="mt-auto">
-          {(cardState === "draft-readonly" || cardState == "published") && (
+          <ClosedOnText cardState={cardState} closingDate={card.closingDate} />
+          {(cardState === CARD_STATE.DRAFT_READONLY || cardState === CARD_STATE.PUBLISHED) && (
             <CardFooterDraftReadonly
               cardId={card.id}
               date={card.date}
@@ -325,7 +399,7 @@ const CardComponent = ({
               lastEditedBy={card.lastEditedBy}
             />
           )}
-          {cardState === "draft-editing" && (
+          {cardState === CARD_STATE.DRAFT_EDITING && (
             <CardFooterDraftEditing
               lockedByName={card.editLockInfo?.lockedByName ?? null}
               language={language}
@@ -333,8 +407,8 @@ const CardComponent = ({
               collaboratorCount={collaboratorCount}
             />
           )}
-          <CardBanner isPublished={card.isPublished} />
-          {cardState === "published" && <CardFooterPublished cardId={card.id} />}
+          <CardBanner isPublished={card.isPublished} isClosed={cardState === CARD_STATE.CLOSED} />
+          {cardState === CARD_STATE.PUBLISHED && <CardFooterPublished cardId={card.id} />}
         </div>
       </div>
       <div className="flex items-start">
