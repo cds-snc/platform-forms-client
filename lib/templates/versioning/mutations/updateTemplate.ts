@@ -31,51 +31,56 @@ export const executeTemplateUpdate = async (
   lastEditedByUserId: string,
   currentTemplate: CurrentTemplate
 ) => {
-  const updatedTemplate = currentTemplate?.currentDraftVersionId
-    ? await prisma
-        .$transaction(async (tx) => {
-          await tx.templateVersion.update({
-            where: {
-              id: currentTemplate.currentDraftVersionId!,
-            },
-            data: { ...updatePlan.data },
-          });
+  let updatedTemplate;
 
-          return tx.template.update({
-            where: {
-              id: updatePlan.where.id,
-            },
-            data: {
-              ...updatePlan.data,
-              lastEditedBy: { connect: { id: lastEditedByUserId } },
-            },
-            include: {
-              deliveryOption: true,
-              lastEditedBy: {
-                select: {
-                  name: true,
-                },
+  if (currentTemplate?.currentPublishedVersionId) {
+    if (currentTemplate.isPublished) {
+      return null; // throw?
+    }
+    updatedTemplate = await prisma
+      .$transaction(async (tx) => {
+        await tx.templateVersion.update({
+          where: {
+            id: currentTemplate.currentDraftVersionId!,
+          },
+          data: { ...updatePlan.data },
+        });
+
+        return tx.template.update({
+          where: {
+            id: updatePlan.where.id,
+          },
+          data: {
+            ...updatePlan.data,
+            lastEditedBy: { connect: { id: lastEditedByUserId } },
+          },
+          include: {
+            deliveryOption: true,
+            lastEditedBy: {
+              select: {
+                name: true,
               },
             },
-          });
-        })
-        .catch((e) => prismaErrors(e, null))
-    : currentTemplate?.currentPublishedVersionId && currentTemplate.isPublished
-      ? null
-      : await prisma.template
-          .update({
-            where: updatePlan.where,
-            data: { ...updatePlan.data, lastEditedBy: { connect: { id: lastEditedByUserId } } },
-            include: {
-              deliveryOption: true,
-              lastEditedBy: {
-                select: {
-                  name: true,
-                },
-              },
+          },
+        });
+      })
+      .catch((e) => prismaErrors(e, null));
+  } else {
+    updatedTemplate = await prisma.template
+      .update({
+        where: updatePlan.where,
+        data: { ...updatePlan.data, lastEditedBy: { connect: { id: lastEditedByUserId } } },
+        include: {
+          deliveryOption: true,
+          lastEditedBy: {
+            select: {
+              name: true,
             },
-          })
-          .catch((e) => prismaErrors(e, null));
+          },
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+  }
 
   if (updatedTemplate === null) return null;
 
