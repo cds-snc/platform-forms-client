@@ -3,12 +3,12 @@ import {
   isTemplateVersioningEnabled,
   templateRecordInclude,
   templateVersionSelect,
-} from "../index";
+} from "../internal/index";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
-import { TEMPLATE_VERSION_STATUS } from "../types";
-import { parseTemplate } from "../index";
+import { TEMPLATE_VERSION_STATUS } from "../internal/types";
+import { parseTemplate } from "../internal/index";
 
 export async function createDraftVersionForTemplate(formID: string): Promise<FormRecord | null> {
   if (!(await isTemplateVersioningEnabled())) {
