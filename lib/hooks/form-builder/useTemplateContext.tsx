@@ -211,6 +211,10 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         return;
       }
 
+      if (status !== "authenticated") {
+        return;
+      }
+
       if (current[0] !== previous[0]) {
         updateTemplate({
           action: UpdateTemplateAction.Name,
