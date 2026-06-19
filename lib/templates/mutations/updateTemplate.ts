@@ -17,7 +17,7 @@ import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../intern
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { isValidISODate } from "@lib/utils/date/isValidISODate";
 import { getFullTemplateByID } from "../queries/getFullTemplateByID";
-import { deleteDraftFormResponses } from "@root/lib/vault";
+import { deleteDraftFormResponses } from "@lib/vault";
 import {
   UpdateTemplateCommand,
   UpdateFormPurposeCommand,
@@ -31,13 +31,15 @@ import {
   UpdateFormConfigCommand,
 } from "../types";
 import isEqual from "lodash.isequal";
+import { updateTemplate as updateTemplateVersioningEnabled } from "../versioning/mutations/updateTemplate";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
 
 /**
  * Validate the form config for a template update command
  * @param formConfig
  * @param user
  */
-const validateFormConfig = async (formConfig: FormProperties, user: { email: string }) => {
+export const validateFormConfig = async (formConfig: FormProperties, user: { email: string }) => {
   await checkForBetaComponentsAsync(formConfig.elements, checkFlag).catch((e) => {
     logMessage.warn(`User ${user.email} tried to use beta form components without flags being set`);
     throw e;
@@ -68,7 +70,7 @@ const validateFormConfig = async (formConfig: FormProperties, user: { email: str
 
 type AuthorizationResult = Awaited<ReturnType<typeof authorization.canEditForm>>;
 
-const authorizeForCommand = async (
+export const authorizeForCommand = async (
   command: UpdateTemplateCommand
 ): Promise<AuthorizationResult> => {
   switch (command.action) {
@@ -157,12 +159,12 @@ const authorizeForCommand = async (
   }
 };
 
-type UpdatePlan = {
+export type UpdatePlan = {
   where: Prisma.TemplateWhereUniqueInput;
   data: Prisma.TemplateUpdateInput;
 };
 
-const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
+export const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => {
   const basePlan = {
     where: {
       id: command.formId,
@@ -298,7 +300,7 @@ type UpdateAuditEvent = {
   };
 };
 
-const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
+export const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
   switch (event.action) {
     case UpdateTemplateAction.Name:
       const nameCommand = event.command as UpdateNameCommand;
@@ -396,6 +398,11 @@ const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
  * @returns The updated form template or null if the record does not exist
  */
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
+  const templateVersioningEnabled = await isTemplateVersioningEnabled();
+  if (templateVersioningEnabled) {
+    return updateTemplateVersioningEnabled(command);
+  }
+
   const { user } = await authorizeForCommand(command);
 
   const currentTemplate = await prisma.template.findUnique({
