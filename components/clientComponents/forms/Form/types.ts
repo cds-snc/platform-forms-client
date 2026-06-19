@@ -2,7 +2,6 @@ import { type JSX } from "react";
 import type { TFunction } from "i18next";
 import { FormikProps } from "formik";
 
-import { Language } from "@lib/types/form-builder-types";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 
 export interface FormProps {
@@ -23,7 +22,6 @@ export interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
-  saveSessionProgress: (language?: Language) => void;
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;
   setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;

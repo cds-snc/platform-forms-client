@@ -36,7 +36,6 @@ export const AppUpdateProvider = ({ children }: { children: React.ReactNode }) =
 
   // After an update clean up and remove the update flag from session storage
   useEffect(() => {
-    logMessage.debug("Removing session storage update flag");
     sessionStorage.removeItem("gcFormsUpdate");
   }, []);
 

@@ -10,6 +10,7 @@ import { allowGrouping } from "@lib/groups/utils/allowGrouping";
 import { serverTranslation } from "@i18n";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
+import { Suspense } from "react";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -38,7 +39,6 @@ export async function generateMetadata(props0: {
 export default async function Page(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }) {
-  const nonce = (await headers()).get("x-nonce") ?? "";
   const pathname = (await headers()).get("x-path") ?? "";
   const params = await props0.params;
 
@@ -74,27 +74,29 @@ export default async function Page(props0: {
   );
 
   return (
-    <FormDisplayLayout
-      pathname={pathname}
-      language={language}
-      formRecord={formRecord}
-      isPastClosingDate={isPastClosingDate}
-      step={step}
-      saveAndResume={saveAndResume}
-      footer={footer}
-    >
-      <GCFormsProvider formRecord={formRecord} nonce={nonce}>
-        <PageContent
-          formRecord={formRecord}
-          language={language}
-          formTitle={formTitle}
-          isPastClosingDate={isPastClosingDate}
-          step={step}
-          formId={formId}
-          saveAndResume={saveAndResume}
-          isAllowGrouping={isAllowGrouping}
-        />
-      </GCFormsProvider>
-    </FormDisplayLayout>
+    <Suspense>
+      <FormDisplayLayout
+        pathname={pathname}
+        language={language}
+        formRecord={formRecord}
+        isPastClosingDate={isPastClosingDate}
+        step={step}
+        saveAndResume={saveAndResume}
+        footer={footer}
+      >
+        <GCFormsProvider formRecord={formRecord}>
+          <PageContent
+            formRecord={formRecord}
+            language={language}
+            formTitle={formTitle}
+            isPastClosingDate={isPastClosingDate}
+            step={step}
+            formId={formId}
+            saveAndResume={saveAndResume}
+            isAllowGrouping={isAllowGrouping}
+          />
+        </GCFormsProvider>
+      </FormDisplayLayout>
+    </Suspense>
   );
 }

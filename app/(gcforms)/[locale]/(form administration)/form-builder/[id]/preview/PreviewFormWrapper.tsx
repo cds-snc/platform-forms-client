@@ -27,7 +27,7 @@ export const PreviewFormWrapper = ({
   setSent: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }) => {
   const { status } = useSession();
-  const { saveSessionProgress, currentGroup } = useGCFormsContext();
+  const { currentGroup } = useGCFormsContext();
 
   const { translationLanguagePriority, getLocalizationAttribute } = useTemplateStore((s) => ({
     translationLanguagePriority: s.translationLanguagePriority,
@@ -43,7 +43,6 @@ export const PreviewFormWrapper = ({
   return (
     <Form
       formRecord={formRecord}
-      saveSessionProgress={saveSessionProgress}
       isPreview={true}
       language={translationLanguagePriority}
       t={translatedT}
