@@ -151,11 +151,12 @@ describe("submitForm", () => {
       fileChecksums: undefined,
       notificationId: undefined,
     });
-    expect(isFormEligibleForNotifications).toHaveBeenCalledWith(mockFormId);
+    expect(isFormEligibleForNotifications).not.toHaveBeenCalled();
     expect(sendDeferredFormSubmissionNotification).not.toHaveBeenCalled();
   });
 
   it("should send a first submission notification when form is eligible and no prior marker exists", async () => {
+    (checkOne as Mock).mockResolvedValue(true);
     (isFormEligibleForNotifications as Mock).mockResolvedValue(true);
     (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
 
@@ -185,6 +186,7 @@ describe("submitForm", () => {
   });
 
   it("should send a second submission notification when form is eligible and first marker already set", async () => {
+    (checkOne as Mock).mockResolvedValue(true);
     (isFormEligibleForNotifications as Mock).mockResolvedValue(true);
     (updateNotificationMarker as Mock).mockResolvedValue("SECOND_EMAIL");
 
@@ -214,6 +216,7 @@ describe("submitForm", () => {
   });
 
   it("should not send a notification when form is eligible but marker limit is reached", async () => {
+    (checkOne as Mock).mockResolvedValue(true);
     (isFormEligibleForNotifications as Mock).mockResolvedValue(true);
     (updateNotificationMarker as Mock).mockResolvedValue(null);
 

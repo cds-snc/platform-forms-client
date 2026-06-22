@@ -120,7 +120,9 @@ export async function submitForm(
 
       let notificationId: string | undefined;
 
-      const shouldSendNotification = await isFormEligibleForNotifications(formId);
+      const notificationsEnabled = await checkOne(FeatureFlags.submissionNotifications);
+      const shouldSendNotification =
+        notificationsEnabled && (await isFormEligibleForNotifications(formId));
 
       if (shouldSendNotification) {
         const notificationEmailType = await updateNotificationMarker(formId);
@@ -128,6 +130,11 @@ export async function submitForm(
         // Only send a notification for Single email or Multiple email status
         if (notificationEmailType) {
           notificationId = randomUUID();
+
+          logMessage.debug(
+            `Sending a deferred notification: formId=${formId}, notificationId=${notificationId}, notificationEmailType=${notificationEmailType}`
+          );
+
           // Fire-and-forget: create the deferred notification record in DynamoDB
           // The Reliability lambda will enqueue it once the submission is confirmed
           sendDeferredFormSubmissionNotification(
