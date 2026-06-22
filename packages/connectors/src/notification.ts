@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
@@ -41,6 +42,7 @@ const sendImmediate = async ({
 }): Promise<void> => {
   const notificationId = randomUUID();
   try {
+    console.debug(`Creating immediate notification record with id ${notificationId}`);
     await _createRecord({ notificationId, emails, subject, body });
     await enqueueDeferred(notificationId);
   } catch (error) {
@@ -73,6 +75,7 @@ const sendDeferred = async ({
   body: string;
 }): Promise<void> => {
   try {
+    console.debug(`Creating deferred notification record with id ${notificationId}`);
     await _createRecord({ notificationId, emails, subject, body });
   } catch (error) {
     throw new ErrorWithCause(`Error creating deferred notification id ${notificationId}`, {
@@ -105,6 +108,7 @@ const _createRecord = async ({
       },
     });
     await dynamoDBDocumentClient.send(command);
+    console.debug(`Created notification record with id ${notificationId} in DynamoDB`);
   } catch (error) {
     throw new ErrorWithCause(`Could not create record`, { cause: error });
   }
@@ -125,6 +129,9 @@ const enqueueDeferred = async (notificationId: string): Promise<void> => {
     if (!sendMessageCommandOutput.MessageId) {
       throw new Error("Received null SQS message identifier");
     }
+    console.debug(
+      `Enqueued notification record with id ${notificationId} in SQS queue ${queueUrl}`
+    );
   } catch (error) {
     throw new ErrorWithCause(`Could not enqueue`, { cause: error });
   }
