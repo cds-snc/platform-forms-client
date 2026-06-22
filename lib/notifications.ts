@@ -15,46 +15,81 @@ const Status = {
 } as const;
 type Status = (typeof Status)[keyof typeof Status];
 
-// Public facing function to send notifications to all related users on a form submission
-export const sendNotifications = async (formId: string, titleEn: string, titleFr: string) => {
-  // Avoid sending additional notifications to legacy forms that receive delivery by email.
+export type NotificationEmailType = "FIRST_EMAIL" | "SECOND_EMAIL";
+
+export const isFormEligibleForNotifications = async (formId: string): Promise<boolean> => {
+  // Avoid legacy forms that receive delivery by email
   const deliveryOption = await _getDeliveryOption(formId);
   if (deliveryOption) {
-    return;
+    return false;
   }
 
   const users = await getNotificationsUsersForForm(formId);
 
-  // Some older forms may not have users, do nothing
+  // Avoid some older forms may not have users
+  if (!Array.isArray(users) || users.length === 0) {
+    return false;
+  }
+
+  // Avoid forms that have no users have notifications enabled
+  const atLeastOneUserEnabled = users.some((user) => user.enabled);
+  if (!atLeastOneUserEnabled) {
+    return false;
+  }
+
+  return true;
+};
+
+export const updateNotificationMarker = async (
+  formId: string
+): Promise<NotificationEmailType | null> => {
+  const marker = await getMarker(formId);
+  switch (marker ?? "") {
+    case Status.SINGLE_EMAIL_SENT:
+      // First email already sent — advance marker and signal second email
+      await setMarker(formId, Status.MULTIPLE_EMAIL_SENT);
+      return "SECOND_EMAIL";
+    case Status.MULTIPLE_EMAIL_SENT:
+      // Both emails already sent for this interval, do nothing
+      return null;
+    default:
+      // No email sent yet — advance marker and signal first email
+      await setMarker(formId);
+      return "FIRST_EMAIL";
+  }
+};
+
+/**
+ * Creates a deferred notification record in DynamoDB that will be picked up
+ * and enqueued by the Reliability lambda once the submission is confirmed.
+ *
+ * Note: should be called as fire-and-forget (no await) so that a failure
+ * does not block the submission response returned to the user.
+ */
+export const sendDeferredFormSubmissionNotification = async (
+  notificationId: string,
+  formId: string,
+  formTitleEn: string,
+  formTitleFr: string,
+  emailType: NotificationEmailType
+): Promise<void> => {
+  const users = await getNotificationsUsersForForm(formId);
   if (!Array.isArray(users) || users.length === 0) {
     return;
   }
 
-  // No users have notifications enabled, do nothing
-  const atLeastOneUserEnabled = users.some((user) => user.enabled);
-  if (!atLeastOneUserEnabled) {
+  const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
+  if (emails.length === 0) {
     return;
   }
 
-  const marker = await getMarker(formId);
-  switch (marker) {
-    case Status.SINGLE_EMAIL_SENT:
-      // Single submissions email sent but not multiple submissions email, send multiple email
-      Promise.all([
-        sendEmailAfterSubmissionProcessed(users, formId, titleEn, titleFr, true),
-        setMarker(formId, Status.MULTIPLE_EMAIL_SENT),
-      ]);
-      break;
-    case Status.MULTIPLE_EMAIL_SENT:
-      // Multiple submissions email has been sent, do nothing
-      break;
-    default:
-      // No email has been sent, send single submission email
-      Promise.all([
-        sendEmailAfterSubmissionProcessed(users, formId, titleEn, titleFr, false),
-        setMarker(formId),
-      ]);
-  }
+  await sendEmailAfterSubmissionProcessed(
+    notificationId,
+    emails,
+    formTitleEn,
+    formTitleFr,
+    emailType === "SECOND_EMAIL"
+  );
 };
 
 /**
@@ -172,11 +207,8 @@ const getMarker = async (formId: string) => {
 };
 
 const sendEmailAfterSubmissionProcessed = async (
-  users: {
-    email: string;
-    enabled: boolean;
-  }[],
-  formId: string,
+  notificationId: string,
+  emails: string[],
   formTitleEn: string,
   formTitleFr: string,
   multipleSubmissions: boolean = false
@@ -185,14 +217,8 @@ const sendEmailAfterSubmissionProcessed = async (
     const { t } = await serverTranslation("form-builder");
     const HOST = await getOrigin();
 
-    if (!Array.isArray(users) || users.length === 0) {
-      logMessage.debug("Deferred notification skipped since missing users");
-      return;
-    }
-    const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
-
     await notification.sendDeferred({
-      notificationId: formId,
+      notificationId,
       emails,
       subject: multipleSubmissions
         ? t("settings.notifications.email.multipleSubmissions.subject")
@@ -203,7 +229,7 @@ const sendEmailAfterSubmissionProcessed = async (
     });
   } catch (error) {
     logMessage.warn(
-      `Deferred notification failed for formId ${formId} with error: ${(error as Error).message}`
+      `Deferred notification failed for notificationId ${notificationId} with error: ${(error as Error).message}`
     );
   }
 };

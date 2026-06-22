@@ -13,12 +13,17 @@ import { FeatureFlags } from "@lib/cache/types";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
-import { sendNotifications } from "@lib/notifications";
+import {
+  isFormEligibleForNotifications,
+  sendDeferredFormSubmissionNotification,
+  updateNotificationMarker,
+} from "@lib/notifications";
 import { traceFunction } from "@lib/otel";
 
 import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+import { randomUUID } from "crypto";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -113,15 +118,40 @@ export async function submitForm(
 
       const formData = normalizeFormResponses(template, values);
 
+      let notificationId: string | undefined;
+
+      const shouldSendNotification = await isFormEligibleForNotifications(formId);
+
+      if (shouldSendNotification) {
+        const notificationEmailType = await updateNotificationMarker(formId);
+
+        // Only send a notification for Single email or Multiple email status
+        if (notificationEmailType) {
+          notificationId = randomUUID();
+          // Fire-and-forget: create the deferred notification record in DynamoDB
+          // The Reliability lambda will enqueue it once the submission is confirmed
+          sendDeferredFormSubmissionNotification(
+            notificationId,
+            formId,
+            template.form.titleEn,
+            template.form.titleFr,
+            notificationEmailType
+          ).catch((error) =>
+            logMessage.warn(
+              `sendDeferredFormSubmissionNotification failed for form ${formId}: ${(error as Error).message}`
+            )
+          );
+        }
+      }
+
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,
         securityAttribute: template.securityAttribute,
         formId,
         language,
         fileChecksums,
+        notificationId,
       });
-
-      sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
       return { id: formId, submissionId, fileURLMap };
     } catch (e) {

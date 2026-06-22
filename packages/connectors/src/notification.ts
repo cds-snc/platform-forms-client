@@ -57,6 +57,9 @@ const sendImmediate = async ({
  *
  * @param notificationId - Unique identifier for the notification to enqueue and
  *   used by the notification lambda to look up the record in DynamoDB.
+ * @param emails - Array of email addresses to send the notification to
+ * @param subject - Email subject line
+ * @param body - Email body content
  */
 const sendDeferred = async ({
   notificationId,
