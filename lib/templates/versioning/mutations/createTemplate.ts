@@ -7,10 +7,11 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { checkForBetaComponentsAsync } from "@lib/validation/betaCheck";
 import { NotificationsInterval } from "@gcforms/types";
-import { checkFlag, parseTemplate } from "../internal";
-import { InvalidFormConfigError } from "../internal/errors";
-import { createTemplate as createTemplateVersioningEnabled } from "../versioning/mutations/createTemplate";
-import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { InvalidFormConfigError } from "../../internal/errors";
+import { TEMPLATE_VERSION_STATUS } from "../internal/types";
+import { templateRecordInclude } from "../internal";
+import { checkFlag } from "../../internal";
+import { parseTemplate } from "../internal";
 
 // ******************************************
 // Exportable Module Functions
@@ -29,17 +30,17 @@ type CreateTemplateCommand = {
   notificationsInterval?: NotificationsInterval;
 };
 
+const getTemplateJsonConfigCreateData = (jsonConfig: Prisma.JsonObject) => {
+  // Creates still seed Template.jsonConfig until the schema contract step removes the column.
+  return { jsonConfig };
+};
+
 /**
  * Creates a Form Template record
  * @param config Form Template configuration
  * @returns Form Record or null if creation was not sucessfull.
  */
 export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
-  const templateVersioningEnabled = await isTemplateVersioningEnabled();
-  if (templateVersioningEnabled) {
-    return createTemplateVersioningEnabled(command);
-  }
-
   const { user } = await authorization.canCreateForm().catch((e) => {
     logEvent(
       e.user.id,
@@ -74,55 +75,61 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     throw new InvalidFormConfigError();
   }
 
-  const createdTemplate = await prisma.template
-    .create({
-      data: {
-        jsonConfig: command.formConfig as Prisma.JsonObject,
-        ...(command.name && {
-          name: command.name,
-        }),
-        ...(command.deliveryOption && {
-          deliveryOption: {
-            create: {
-              emailAddress: command.deliveryOption.emailAddress,
-              emailSubjectEn: command.deliveryOption.emailSubjectEn,
-              emailSubjectFr: command.deliveryOption.emailSubjectFr,
+  const createdTemplate = await prisma
+    .$transaction(async (tx) => {
+      const template = await tx.template.create({
+        data: {
+          ...getTemplateJsonConfigCreateData(command.formConfig as Prisma.JsonObject),
+          ...(command.name && {
+            name: command.name,
+          }),
+          ...(command.deliveryOption && {
+            deliveryOption: {
+              create: {
+                emailAddress: command.deliveryOption.emailAddress,
+                emailSubjectEn: command.deliveryOption.emailSubjectEn,
+                emailSubjectFr: command.deliveryOption.emailSubjectFr,
+              },
             },
+          }),
+          ...(command.securityAttribute && {
+            securityAttribute: command.securityAttribute as string,
+          }),
+          users: {
+            connect: { id: command.userID },
           },
-        }),
-        ...(command.securityAttribute && {
-          securityAttribute: command.securityAttribute as string,
-        }),
-        users: {
-          connect: { id: command.userID },
+          ...(command.formPurpose && { formPurpose: command.formPurpose }),
+          ...(command.notificationsInterval !== undefined && {
+            notificationsInterval: command.notificationsInterval,
+          }),
         },
-        lastEditedByUserId: command.userID,
-        ...(command.formPurpose && { formPurpose: command.formPurpose }),
-        ...(command.notificationsInterval !== undefined && {
-          notificationsInterval: command.notificationsInterval,
-        }),
-      },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        saveAndResume: true,
-        notificationsInterval: true,
-        lastEditedBy: {
-          select: {
-            name: true,
-          },
+        select: {
+          id: true,
         },
-      },
+      });
+
+      const draftVersion = await tx.templateVersion.create({
+        data: {
+          templateId: template.id,
+          versionNumber: 1,
+          status: TEMPLATE_VERSION_STATUS.DRAFT,
+          jsonConfig: command.formConfig as Prisma.JsonObject,
+          createdByUserId: user.id,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      return tx.template.update({
+        where: {
+          id: template.id,
+        },
+        data: {
+          currentDraftVersionId: draftVersion.id,
+        },
+        include: templateRecordInclude,
+      });
     })
     .catch((e) => prismaErrors(e, null));
 
@@ -130,5 +137,8 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 
   logEvent(user.id, { type: "Form", id: createdTemplate?.id }, "CreateForm");
 
-  return parseTemplate(createdTemplate);
+  return parseTemplate(createdTemplate, {
+    version: createdTemplate.currentDraftVersion,
+    isPublished: false,
+  });
 }
