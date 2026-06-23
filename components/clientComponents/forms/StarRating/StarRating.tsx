@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
@@ -112,7 +112,18 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const { t } = useTranslation("common", { lng: lang });
 
-  const currentValue = field.value ? Number(field.value) : 0;
+  // Defer to client-side value after mount to avoid hydration mismatch.
+  // The save-progress feature restores values from localStorage on the client
+  // but the server renders without them causing a mismatch if used immediately.
+  // useSyncExternalStore returns the server snapshot (false) on SSR and the
+  // client snapshot (true) after hydration — a React two-pass pattern.
+  const isClient = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
+
+  const currentValue = isClient && field.value ? Number(field.value) : 0;
   const activeValue = hovered !== null ? hovered : currentValue;
 
   // numberOfStars is a static prop — only recompute if it changes
@@ -174,7 +185,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
             inputId={`${id}.${starValue - 1}`}
             name={name}
             required={required}
-            checked={field.value === String(starValue)}
+            checked={isClient && field.value === String(starValue)}
             tabIndex={getTabIndex(starValue)}
             ariaLabel={t("starRating.starLabel", { count: starValue })}
             active={activeValue >= starValue}
