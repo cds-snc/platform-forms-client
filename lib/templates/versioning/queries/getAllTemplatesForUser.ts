@@ -3,7 +3,7 @@ import { FormRecord } from "@lib/types";
 import { getAbility } from "@lib/privileges";
 import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
-import { parseTemplate } from "../internal";
+import { parseTemplate, templateVersionSelect } from "../internal";
 
 export type TemplateOptions = {
   sortByDateUpdated?: "asc" | "desc";
@@ -49,6 +49,12 @@ export async function getAllTemplatesForUser(
           notificationsInterval: true,
           currentPublishedVersionId: true,
           currentDraftVersionId: true,
+          currentDraftVersion: {
+            select: templateVersionSelect,
+          },
+          currentPublishedVersion: {
+            select: templateVersionSelect,
+          },
           lastEditedBy: {
             select: {
               name: true,
