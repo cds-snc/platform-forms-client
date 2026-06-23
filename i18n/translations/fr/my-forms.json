@@ -5,7 +5,8 @@
     "published": "Publiés",
     "all": "Tous",
     "archived": "Archivés",
-    "recentlyEdited": "Récents"
+    "recentlyEdited": "Récents",
+    "closed": "Fermés"
   },
   "account": {
     "viewAccount": "Votre compte"
@@ -22,10 +23,11 @@
     "noPublishedForms": "Vous n'avez aucun formulaire publié.",
     "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié.",
     "noArchivedForms": "Vous n'avez aucun formulaire archivé.",
+    "noClosedForms": "Vous n'avez aucun formulaire fermé.",
     "lastEditedBy": "par : {{lastEditedBy}}",
-    "readOnly": "Ouvert - ",
+    "readOnly": "En cours - ",
     "editing": "{{name}} modifie",
-        "announceLocked": "Le formulaire nommé {{formName}} est en cours de modification",
+    "announceLocked": "Le formulaire nommé {{formName}} est en cours de modification",
     "announceUnlockedLocked": "Le formulaire nommé {{formName}} n'est plus en cours de modification"
   },
   "card": {
@@ -35,7 +37,7 @@
       "draft": "Ébauche",
       "published": "Publié",
       "archived": "Archivé",
-      "lastEditedBy": "par : {{lastEditedBy}}"
+      "closed": "Fermé"
     },
     "title": {
       "notTranslatedEn": "Untitled form",
@@ -45,6 +47,7 @@
     "deleteDate": " Date de suppression : ",
     "deletedIn": "Sera supprimé dans ",
     "days": " jours",
+    "closedOn": "Date de fermeture : {{date}}",
     "deliveryOption": {
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"

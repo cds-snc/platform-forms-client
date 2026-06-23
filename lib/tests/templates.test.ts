@@ -8,12 +8,15 @@ import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateB
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
-import { updateIsPublishedForTemplate } from "@lib/templates/mutations/updateIsPublishedForTemplate";
+import { UpdateTemplateAction } from "@lib/templates/types";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
 import { mapTemplateToPublicFormRecord } from "@lib/templates/internal";
-import { TemplateAlreadyPublishedError, TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/errors";
+import {
+  TemplateAlreadyPublishedError,
+  TemplateHasUnprocessedSubmissions,
+} from "@lib/templates/internal/errors";
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 
@@ -35,11 +38,12 @@ import {
 vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<any>("@lib/auditLogs");
   return {
-  __esModule: true,
-  logEvent: vi.fn(),
-  AuditLogDetails: __actual0.AuditLogDetails,
-  AuditLogEvent: __actual0.AuditLogEvent,
-  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+    __esModule: true,
+    logEvent: vi.fn(),
+    AuditLogDetails: __actual0.AuditLogDetails,
+    AuditLogEvent: __actual0.AuditLogEvent,
+    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
+  };
 });
 
 vi.mock("@lib/serviceAccount");
@@ -113,11 +117,27 @@ describe("Template CRUD functions", () => {
 
     it("Create a Template", async () => {
       (prismaMock.template.create as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration, false, undefined, undefined, undefined, { name: "Test User" })
+        buildPrismaResponse(
+          "formtestID",
+          formConfiguration,
+          false,
+          undefined,
+          undefined,
+          undefined,
+          { name: "Test User" }
+        )
       );
 
       (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration, false, undefined, undefined, undefined, { name: "Test User" })
+        buildPrismaResponse(
+          "formtestID",
+          formConfiguration,
+          false,
+          undefined,
+          undefined,
+          undefined,
+          { name: "Test User" }
+        )
       );
 
       const newTemplate = await createTemplate({
@@ -215,7 +235,7 @@ describe("Template CRUD functions", () => {
         { type: "Form", id: "formtestID" },
         "ReadForm",
         "Accessed Form: ${formId}",
-        { "formId": "formtestID" }
+        { formId: "formtestID" }
       );
     });
 
@@ -322,11 +342,14 @@ describe("Template CRUD functions", () => {
       const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
 
       (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("test1", updatedFormConfig, true, undefined, undefined, undefined, { name: "Test User" })
+        buildPrismaResponse("test1", updatedFormConfig, true, undefined, undefined, undefined, {
+          name: "Test User",
+        })
       );
 
       const updatedTemplate = await updateTemplate({
-        formID: "test1",
+        action: UpdateTemplateAction.FormConfig,
+        formId: "test1",
         formConfig: updatedFormConfig,
       });
 
@@ -334,11 +357,15 @@ describe("Template CRUD functions", () => {
         expect.objectContaining({
           where: {
             id: "test1",
-            isPublished: false
+            isPublished: false,
           },
           data: expect.objectContaining({
             jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
-            lastEditedByUserId: userID,
+            lastEditedBy: {
+              connect: {
+                id: userID,
+              },
+            },
           }),
         })
       );
@@ -367,10 +394,25 @@ describe("Template CRUD functions", () => {
       });
 
       (prismaMock.template.update as MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration, true, undefined, undefined, undefined, { name: "Test User" })
+        buildPrismaResponse(
+          "formtestID",
+          formConfiguration,
+          true,
+          undefined,
+          undefined,
+          undefined,
+          { name: "Test User" }
+        )
       );
 
-      const updatedTemplate = await updateIsPublishedForTemplate("formtestID", true, "", "", "");
+      const updatedTemplate = await updateTemplate({
+        action: UpdateTemplateAction.IsPublished,
+        formId: "formtestID",
+        isPublished: true,
+        publishReason: "",
+        publishFormType: "",
+        publishDescription: "",
+      });
 
       expect(prismaMock.template.update).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -385,7 +427,11 @@ describe("Template CRUD functions", () => {
             publishReason: "",
             publishFormType: "",
             publishDesc: "",
-            lastEditedByUserId: userID,
+            lastEditedBy: {
+              connect: {
+                id: userID,
+              },
+            },
           }),
         })
       );
@@ -446,7 +492,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { "userList": "user2@test.ca" }
+        { userList: "user2@test.ca" }
       );
 
       // Template has three users assigned to it to start
@@ -514,7 +560,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "GrantAccess",
-        { "userList": "user1@test.ca" }
+        { userList: "user1@test.ca" }
       );
 
       // Log two removed
@@ -524,7 +570,7 @@ describe("Template CRUD functions", () => {
         { id: "formTestID", type: "Form" },
         "RevokeFormAccess",
         "RevokeAccess",
-        { "userList": "user2@test.ca,user4@test.ca" }
+        { userList: "user2@test.ca,user4@test.ca" }
       );
     });
     it("Updates to published forms are not allowed", async () => {
@@ -534,7 +580,8 @@ describe("Template CRUD functions", () => {
 
       await expect(async () => {
         await updateTemplate({
-          formID: "test1",
+          action: UpdateTemplateAction.FormConfig,
+          formId: "test1",
           formConfig: updatedFormConfig,
         });
       }).rejects.toThrow(TemplateAlreadyPublishedError);
@@ -704,7 +751,7 @@ describe("Template CRUD functions", () => {
       expect(prismaMock.template.update).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { id: "formtestID" },
-          data: expect.objectContaining({ 
+          data: expect.objectContaining({
             ttl: expect.any(Date),
             lastEditedByUserId: userID,
           }),
@@ -735,7 +782,7 @@ describe("Template CRUD functions", () => {
 
     it("parseTemplate should handle lastEditedBy correctly", async () => {
       const { parseTemplate } = await import("@lib/templates/internal");
-      
+
       // Test with valid lastEditedBy
       const templateWithEditor = {
         id: "test1",
@@ -855,7 +902,8 @@ describe("Template CRUD functions", () => {
     it("Update a template", async () => {
       await expect(
         updateTemplate({
-          formID: "test1",
+          action: UpdateTemplateAction.FormConfig,
+          formId: "test1",
           formConfig: structuredClone(formConfiguration as FormProperties),
         })
       ).rejects.toThrow(AccessControlError);
@@ -864,13 +912,20 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "test1", type: "Form" },
         "AccessDenied",
-        "Attempted to update Form"
+        "Attempted to update form jsonConfig"
       );
     });
     it("Update `isPublished` on a specific form", async () => {
-      await expect(updateIsPublishedForTemplate("formtestID", true, "", "", "")).rejects.toThrow(
-        AccessControlError
-      );
+      await expect(
+        updateTemplate({
+          action: UpdateTemplateAction.IsPublished,
+          formId: "formtestID",
+          isPublished: true,
+          publishReason: "",
+          publishFormType: "",
+          publishDescription: "",
+        })
+      ).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
         userID,

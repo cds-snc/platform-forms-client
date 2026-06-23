@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 
 import { toast } from "@formBuilder/components/shared/Toast";
-import { updateTemplateSecurityAttribute, updateTemplateFormPurpose } from "@formBuilder/actions";
+import { updateTemplate } from "@formBuilder/actions";
 import { FormServerError, FormServerErrorCodes } from "@lib/types/form-builder-types";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -23,6 +23,7 @@ import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
 import { AuditForm } from "./AuditForm";
 
 import { IntendedUse, PurposeOption } from "./intendedUse/IntendedUse";
+import { UpdateTemplateAction } from "@lib/templates/types";
 
 export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -61,8 +62,9 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
       setClassification(classification);
 
       try {
-        const resultAttribute = (await updateTemplateSecurityAttribute({
-          id,
+        const resultAttribute = (await updateTemplate({
+          action: UpdateTemplateAction.SecurityAttribute,
+          formId: id,
           securityAttribute: classification,
         })) as FormServerError;
 
@@ -99,8 +101,9 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
 
       try {
         // Update the database
-        const result = await updateTemplateFormPurpose({
-          id,
+        const result = await updateTemplate({
+          action: UpdateTemplateAction.FormPurpose,
+          formId: id,
           formPurpose: purposeOption,
         });
 
