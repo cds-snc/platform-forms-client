@@ -496,12 +496,12 @@ describe("<ElementDialog />", () => {
     await expect.element(richText).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const starRating = listbox.getByTestId("starRating");
-    await expect.element(starRating).toHaveAttribute("aria-selected", "true");
-
-    await userEvent.keyboard("{ArrowDown}");
     const fileInput = listbox.getByTestId("fileInput");
     await expect.element(fileInput).toHaveAttribute("aria-selected", "true");
+
+    await userEvent.keyboard("{ArrowDown}");
+    const starRating = listbox.getByTestId("starRating");
+    await expect.element(starRating).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
     const dynamicRow = listbox.getByTestId("dynamicRow");
