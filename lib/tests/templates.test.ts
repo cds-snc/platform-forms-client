@@ -348,7 +348,7 @@ describe("Template CRUD functions", () => {
       );
 
       const updatedTemplate = await updateTemplate({
-        action: UpdateTemplateAction.General,
+        action: UpdateTemplateAction.FormConfig,
         formId: "test1",
         formConfig: updatedFormConfig,
       });
@@ -580,7 +580,7 @@ describe("Template CRUD functions", () => {
 
       await expect(async () => {
         await updateTemplate({
-          action: UpdateTemplateAction.General,
+          action: UpdateTemplateAction.FormConfig,
           formId: "test1",
           formConfig: updatedFormConfig,
         });
@@ -902,7 +902,7 @@ describe("Template CRUD functions", () => {
     it("Update a template", async () => {
       await expect(
         updateTemplate({
-          action: UpdateTemplateAction.General,
+          action: UpdateTemplateAction.FormConfig,
           formId: "test1",
           formConfig: structuredClone(formConfiguration as FormProperties),
         })
@@ -912,7 +912,7 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "test1", type: "Form" },
         "AccessDenied",
-        "Attempted to update Form"
+        "Attempted to update form jsonConfig"
       );
     });
     it("Update `isPublished` on a specific form", async () => {
