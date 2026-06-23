@@ -4,7 +4,7 @@
 import { describe, it, expect } from "vitest";
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
-import { renderHook, act, waitFor } from "@testing-library/react";
+import { render, renderHook, act, waitFor, screen } from "@testing-library/react";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 import { FormRecord } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
@@ -30,6 +30,74 @@ const createStore = async () => {
 const promise = Promise.resolve();
 
 describe("TemplateStore", () => {
+  it("Syncs published state and template version IDs from provider props", async () => {
+    const Probe = () => {
+      const observed = useTemplateStore((s) => ({
+        isPublished: s.isPublished,
+        currentPublishedVersionId: s.currentPublishedVersionId,
+        currentDraftVersionId: s.currentDraftVersionId,
+      }));
+      return <pre data-testid="template-store-probe">{JSON.stringify(observed)}</pre>;
+    };
+
+    const { rerender } = render(
+      <TemplateStoreProvider id="form-1" isPublished={false}>
+        <Probe />
+      </TemplateStoreProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
+        JSON.stringify({
+          isPublished: false,
+          currentPublishedVersionId: null,
+          currentDraftVersionId: null,
+        })
+      );
+    });
+
+    rerender(
+      <TemplateStoreProvider
+        id="form-1"
+        isPublished={true}
+        currentPublishedVersionId="published-version-1"
+      >
+        <Probe />
+      </TemplateStoreProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
+        JSON.stringify({
+          isPublished: true,
+          currentPublishedVersionId: "published-version-1",
+          currentDraftVersionId: null,
+        })
+      );
+    });
+
+    rerender(
+      <TemplateStoreProvider
+        id="form-1"
+        isPublished={true}
+        currentPublishedVersionId="published-version-1"
+        currentDraftVersionId="draft-version-1"
+      >
+        <Probe />
+      </TemplateStoreProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
+        JSON.stringify({
+          isPublished: true,
+          currentPublishedVersionId: "published-version-1",
+          currentDraftVersionId: "draft-version-1",
+        })
+      );
+    });
+  });
+
   it("Updates the Element title", async () => {
     const result = await createStore();
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useCallback } from "react";
 
 import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -34,7 +34,6 @@ interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
   matchedIds: string[];
-  filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -85,15 +84,6 @@ export const GCFormsProvider = ({
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
 
-  // eslint-disable-next-line react-hooks/refs
-  const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
-  const filteredMatchedIds = matchedIds.filter((id) => {
-    const parentId = id.split(".")[0];
-    if (filteredResponses[parentId]) {
-      return id;
-    }
-  });
-
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
   };
@@ -115,6 +105,14 @@ export const GCFormsProvider = ({
 
   const handleNextAction = () => {
     if (!currentGroup) return;
+
+    const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
+    const filteredMatchedIds = matchedIds.filter((id) => {
+      const parentId = id.split(".")[0];
+      if (filteredResponses[parentId]) {
+        return id;
+      }
+    });
 
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
@@ -143,9 +141,9 @@ export const GCFormsProvider = ({
     setCurrentGroup(group);
   };
 
-  const getValues = () => {
-    return values.current as FormValues;
-  };
+  const getValues = useCallback(() => {
+    return values.current;
+  }, []);
 
   const getNonce = () => {
     return nonce || "";
@@ -175,6 +173,22 @@ export const GCFormsProvider = ({
       // For file inputs reset the values to null
       if (value && typeof value === "object" && "size" in value) {
         cleanedValue = { name: null, size: null, content: null } as FileInputResponse;
+      }
+
+      // For repeating sets (dynamicRow), reset any file inputs within rows
+      if (Array.isArray(value)) {
+        cleanedValue = value.map((row) => {
+          if (row && typeof row === "object" && !Array.isArray(row)) {
+            const cleanedRow = { ...(row as Record<string, unknown>) };
+            for (const [rowKey, rowValue] of Object.entries(cleanedRow)) {
+              if (rowValue && typeof rowValue === "object" && "size" in rowValue) {
+                cleanedRow[rowKey] = { name: null, size: null, content: null };
+              }
+            }
+            return cleanedRow;
+          }
+          return row;
+        });
       }
 
       // For all other inputs just return the value
@@ -237,7 +251,6 @@ export const GCFormsProvider = ({
         updateValues,
         getValues,
         matchedIds,
-        filteredMatchedIds,
         groups,
         currentGroup,
         getPreviousGroup,
@@ -277,7 +290,6 @@ export const useGCFormsContext = () => {
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
       matchedIds: [""],
-      filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",

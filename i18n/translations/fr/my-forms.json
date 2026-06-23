@@ -4,24 +4,40 @@
     "drafts": "Ébauches",
     "published": "Publiés",
     "all": "Tous",
-    "archived": "Archivés"
+    "archived": "Archivés",
+    "recentlyEdited": "Récents",
+    "closed": "Fermés"
+  },
+  "account": {
+    "viewAccount": "Votre compte"
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
-    "createNewForm": "Créer un nouveau formulaire",
+    "createNewForm": "Nouveau formulaire",
     "unarchiveForm": "Désarchiver le formulaire",
-    "duplicatePublishedForm": "Dupliquer pour modifier et republier"
+    "duplicatePublishedForm": "Modifier le formulaire publié"
   },
   "cards": {
     "noForms": "Vous n’avez aucun formulaire.",
     "noDraftsForms": "Vous n’avez aucune ébauche enregistrée.",
-    "noPublishedForms": "Vous n’avez aucun formulaire publié."
+    "noPublishedForms": "Vous n'avez aucun formulaire publié.",
+    "noRecentlyEditedForms": "Vous n'avez aucun formulaire récemment modifié.",
+    "noArchivedForms": "Vous n'avez aucun formulaire archivé.",
+    "noClosedForms": "Vous n'avez aucun formulaire fermé.",
+    "lastEditedBy": "par : {{lastEditedBy}}",
+    "readOnly": "En cours - ",
+    "editing": "{{name}} modifie",
+    "announceLocked": "Le formulaire nommé {{formName}} est en cours de modification",
+    "announceUnlockedLocked": "Le formulaire nommé {{formName}} n'est plus en cours de modification"
   },
   "card": {
+    "sharedWith_one": "Partagé avec {{count}} personne",
+    "sharedWith_other": "Partagé avec {{count}} personnes",
     "states": {
       "draft": "Ébauche",
       "published": "Publié",
-      "archived": "Archivé"
+      "archived": "Archivé",
+      "closed": "Fermé"
     },
     "title": {
       "notTranslatedEn": "Untitled form",
@@ -31,10 +47,12 @@
     "deleteDate": " Date de suppression : ",
     "deletedIn": "Sera supprimé dans ",
     "days": " jours",
+    "closedOn": "Date de fermeture : {{date}}",
     "deliveryOption": {
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"
     },
+    "draftVersion": "Ébauche - version {{versionNumber}}",
     "menu": {
       "more": "Plus",
       "save": "Télécharger une copie",
@@ -48,15 +66,13 @@
       "somethingWentWrong": "Quelque chose a mal tourné",
       "clone": "Dupliquer",
       "cloneSuccess": "Le formulaire a été dupliqué.",
-      "cloneFailed": "Le formulaire n'a pas pu être dupliqué."
+      "cloneFailed": "Le formulaire n'a pas pu être dupliqué.",
+      "ariaLabel": "Menu pour le formulaire {{name}}"
     },
-    "actionRequired": {
-      "description": "Action requise : ",
-      "linkText": "Approuver la suppression de réponses"
-    },
+    "actionRequired": "Réponses en retard",
     "editLock": {
       "title": "Ouvrir le formulaire en mode « lecture seule ».",
-      "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire s’ouvrira en mode « lecture seule » jusqu’à ce que vous preniez en charge la modification."
+      "description": "{{name}} modifie actuellement cette ébauche. Si vous continuez, le formulaire restera vérouillé jusqu’à ce que vous décidez de prendre en charge la modification. Seule une personne peut modifier un formulaire à la fois."
     },
     "unnamedForm": "Fichier sans nom"
   },
@@ -111,7 +127,16 @@
     "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
     "formUnarchiveFailed": "La désarchivage du formulaire a échoué."
   },
-  "continueReadOnly": "Continuer en mode lecture seule",
+  "continueReadOnly": "Continuer vers le formulaire",
   "archivedNotice": "Vous pouvez accéder à vos formulaires archivés pendant 30 jours.",
-  "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés."
+  "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés.",
+  "coEditingHelp": {
+    "title": "Collaborer à modifier des formulaires",
+    "step1": "Sélectionner le formulaire",
+    "step2": "Gérer l'accès",
+    "step3": "Ajoutez des collègues",
+    "descriptionStart": "Les formulaires en cours de rédaction seront accessibles à",
+    "descriptionBold": "une seule personne à la fois pour modification",
+    "descriptionEnd": "."
+  }
 }

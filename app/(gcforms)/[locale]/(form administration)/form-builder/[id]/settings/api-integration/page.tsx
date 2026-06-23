@@ -11,7 +11,7 @@ import { AuthenticatedPage } from "@lib/pages/auth";
 
 import { getCurrentThrottlingRate } from "./components/throttlingRate/actions";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
-import { getFullTemplateByID } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { unConfirmedResponsesExist } from "../actions";
 import { UnconfirmedApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/hasUnconfirmedApiKeyDialog";
 

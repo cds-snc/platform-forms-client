@@ -117,3 +117,8 @@ packages/database/src/generated
 
 tests/.auth/*.json
 eslint_report.html
+
+next-env.d.ts
+
+# Ignore generated styles
+packages/core/styles/

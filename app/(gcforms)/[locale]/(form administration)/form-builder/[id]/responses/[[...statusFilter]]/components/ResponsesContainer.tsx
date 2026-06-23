@@ -6,8 +6,6 @@ import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
 import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
-
-import { ManageFormAccessButton } from "../../../components/dialogs/ManageFormAccessDialog/ManageFormAccessButton";
 import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
 import { ResponseBetaLink } from "./ResponseBetaLink";
@@ -47,13 +45,6 @@ export const ResponsesContainer = ({
               <h1>{t("apiDashboard.title")}</h1>
               <ResponseBetaLink formId={id} className="mb-8 block" />
             </div>
-            {isPublished && (
-              <div>
-                <div className="mr-5">
-                  <ManageFormAccessButton />
-                </div>
-              </div>
-            )}
           </div>
 
           <Responses

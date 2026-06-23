@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { AuditLogDetails, logEvent, AuditLogEvent } from "@lib/auditLogs";
 import { authorization } from "@lib/privileges";
 import * as ZitadelConnector from "@lib/integration/zitadelConnector";
 import { logMessage } from "./logger";
@@ -33,25 +33,13 @@ export const deleteKey = async (templateId: string) => {
 
     logEvent(
       user.id,
-      { type: "ServiceAccount" },
-      "DeleteAPIKey",
-      AuditLogDetails.DeletedServiceAccount,
-      {
-        serviceAccountID: serviceAccountID ?? "",
-        templateId: templateId,
-        userId: user.id,
-      }
-    );
-
-    logEvent(
-      user.id,
       { type: "Form", id: templateId },
-      "DeleteAPIKey",
+      AuditLogEvent.DeleteAPIKey,
       AuditLogDetails.DeletedServiceAccount,
       {
         serviceAccountID: serviceAccountID ?? "",
         templateId: templateId,
-        userId: user.id,
+        userEmail: user.email,
       }
     );
   } catch (error) {
@@ -147,22 +135,12 @@ export const createKey = async (templateId: string) => {
 
     logEvent(
       user.id,
-      { type: "ServiceAccount" },
-      "CreateAPIKey",
-      AuditLogDetails.CreatedNewApiKey,
-      {
-        serviceAccountId: serviceAccountId,
-        userId: user.id,
-      }
-    );
-    logEvent(
-      user.id,
       { type: "Form", id: templateId },
-      "CreateAPIKey",
+      AuditLogEvent.CreateAPIKey,
       AuditLogDetails.CreatedNewApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userId: user.id,
+        userEmail: user.email,
       }
     );
 
@@ -216,11 +194,11 @@ export const refreshKey = async (templateId: string) => {
     logEvent(
       user.id,
       { type: "ServiceAccount" },
-      "RefreshAPIKey",
-      AuditLogDetails.GeneratedNewApiKey,
+      AuditLogEvent.RefreshAPIKey,
+      AuditLogDetails.RefreshedApiKey,
       {
         serviceAccountId: serviceAccountId,
-        userId: user.id,
+        userEmail: user.email,
       }
     );
 

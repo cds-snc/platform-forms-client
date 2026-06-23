@@ -10,7 +10,7 @@ import { ContentWrapper } from "./ContentWrapper";
 import { PilotBadge } from "@clientComponents/globals/PilotBadge";
 import { CompatibilityGuard } from "./guards/CompatibilityGuard";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
-import { getFullTemplateByID } from "@root/lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 
 export default async function ResponsesLayout(props: {
   children: React.ReactNode;

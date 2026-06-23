@@ -52,6 +52,7 @@ import {
   getChoice,
   localizeField,
   getFormElementIndexes,
+  getName,
 } from "./helpers/elements";
 import { transform } from "./helpers/elements/transformFormProperties";
 import { BetaComponentsError, checkForBetaComponents } from "../validation/betaCheck";
@@ -203,7 +204,7 @@ const createTemplateStore = (
             getFormElementById: getFormElementById(set, get),
             getFormElementWithIndexById: getFormElementWithIndexById(set, get),
             getFormElementIndexes: getFormElementIndexes(set, get),
-            getName: () => get().name,
+            getName: getName(set, get),
             getDeliveryOption: () => get().deliveryOption,
             getSecurityAttribute: () => get().securityAttribute,
             getGroupsEnabled: () => get().allowGroupsFlag,
@@ -215,6 +216,12 @@ const createTemplateStore = (
               set({ translationLanguagePriority: lang }),
             setFocusInput: (isSet) => set({ focusInput: isSet }),
             setIsPublished: (isPublished) => set({ isPublished }),
+            setTemplateVersionIds: (versionIds) =>
+              set({
+                currentPublishedVersionId: versionIds.currentPublishedVersionId ?? null,
+                currentDraftVersionId: versionIds.currentDraftVersionId ?? null,
+                versionNumber: versionIds.versionNumber ?? null,
+              }),
             setClosingDate: (value) => set({ closingDate: value }),
             setSaveAndResume: (value) => set({ saveAndResume: value }),
             setNotificationsInterval: (value) => set({ notificationsInterval: value }),
@@ -270,10 +277,29 @@ export const TemplateStoreProvider = ({
       state.setIsPublished(props.isPublished);
     }
 
+    if (
+      state.currentPublishedVersionId !== (props.currentPublishedVersionId ?? null) ||
+      state.currentDraftVersionId !== (props.currentDraftVersionId ?? null) ||
+      state.versionNumber !== (props.versionNumber ?? null)
+    ) {
+      state.setTemplateVersionIds({
+        currentPublishedVersionId: props.currentPublishedVersionId,
+        currentDraftVersionId: props.currentDraftVersionId,
+        versionNumber: props.versionNumber,
+      });
+    }
+
     if (props.closingDate !== undefined && state.closingDate !== props.closingDate) {
       state.setClosingDate(props.closingDate ?? null);
     }
-  }, [store, props.isPublished, props.closingDate]);
+  }, [
+    store,
+    props.isPublished,
+    props.currentPublishedVersionId,
+    props.currentDraftVersionId,
+    props.versionNumber,
+    props.closingDate,
+  ]);
 
   try {
     return (

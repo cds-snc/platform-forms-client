@@ -17,7 +17,7 @@ export const SaveAndResume = ({ formId, language }: { formId: string; language: 
 
   return (
     <div>
-      <span className="hidden tablet:block">
+      <span className="tablet:block hidden">
         <DownloadProgress
           className="group bg-white"
           type="button"
@@ -27,7 +27,7 @@ export const SaveAndResume = ({ formId, language }: { formId: string; language: 
         >
           <>
             {t("saveAndResume.saveBtn", { lng: language })}
-            <SaveProgressIcon className="ml-2 fill-gcds-blue-800 group-focus:fill-white group-active:fill-white" />
+            <SaveProgressIcon className="fill-gcds-blue-800 ml-2 group-focus:fill-white group-active:fill-white" />
           </>
         </DownloadProgress>
         <div className="group inline-block">
@@ -37,12 +37,12 @@ export const SaveAndResume = ({ formId, language }: { formId: string; language: 
           >
             <>
               {t("saveAndResume.loadAnswers", { lng: language })}
-              <UploadIcon className="ml-2 fill-gcds-blue-800 group-focus:fill-white group-active:fill-white" />
+              <UploadIcon className="fill-gcds-blue-800 ml-2 group-focus:fill-white group-active:fill-white" />
             </>
           </LinkButton.Secondary>
         </div>
       </span>
-      <span className="block tablet:hidden">
+      <span className="tablet:hidden block">
         <Button
           className="group bg-white"
           type="button"

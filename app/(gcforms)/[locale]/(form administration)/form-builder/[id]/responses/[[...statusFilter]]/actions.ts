@@ -2,7 +2,7 @@
 
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
-import { AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { ucfirst } from "@lib/client/clientHelpers";
 import {
   Answer,
@@ -14,7 +14,7 @@ import {
   HtmlZippedResponse,
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
-import { getFullTemplateByID } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import {
   AddressComponents,
   FormElement,
@@ -518,7 +518,7 @@ const logDownload = async (
     logEvent(
       userId,
       { type: "Response", id: item.id },
-      "DownloadResponse",
+      AuditLogEvent.DownloadResponse,
       AuditLogDetails.DownloadedFormResponses,
       { format: format, "item.id": item.id }
     );

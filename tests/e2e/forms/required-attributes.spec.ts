@@ -44,7 +44,7 @@ test.describe("Testing a basic frontend form", { tag: "@published-form" }, () =>
       await page.waitForTimeout(2000);
 
       await expect(
-        page.getByRole("heading", { name: "Please correct the errors on the page." })
+        page.getByRole("heading", { name: "Please correct the errors on the page" })
       ).toBeVisible();
       await expect(shortAnswerErrorLink).toBeVisible();
       await expect(

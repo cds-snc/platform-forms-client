@@ -13,10 +13,12 @@ export const ownerAddedEmailTemplate = (
 ): string => `
 (la version française suit)
 
-${formOwner} has been added to the form ${formTitleEn || formTitleFr}:
+${formOwner} has been added to the form: 
+${formTitleEn || formTitleFr}
 
 ======
 
-${formOwner} a été ajouté au formulaire ${formTitleFr || formTitleEn}:
+${formOwner} a été ajouté au formulaire : 
+${formTitleFr || formTitleEn}
 
 `;

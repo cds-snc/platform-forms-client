@@ -23,6 +23,7 @@ import { SectionName } from "./SectionName";
 import { Language } from "@lib/types/form-builder-types";
 import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
+import { filterNextActionRulesForItem } from "./filterNextActionRulesForItem";
 
 const GroupAndChoiceSelect = ({
   groupId,
@@ -137,7 +138,7 @@ const GroupAndChoiceSelect = ({
   );
 };
 
-export const MultiActionSelector = ({
+const MultiActionSelectorInner = ({
   item,
   sectionName,
   descriptionId,
@@ -150,7 +151,9 @@ export const MultiActionSelector = ({
   initialNextActionRules: NextActionRule[];
   lang: Language;
 }) => {
-  const [nextActions, setNextActions] = useState(initialNextActionRules);
+  const [nextActions, setNextActions] = useState(() =>
+    filterNextActionRulesForItem(item.id, initialNextActionRules)
+  );
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
   const setChangeKey = useTemplateStore((s) => s.setChangeKey);
@@ -224,7 +227,7 @@ export const MultiActionSelector = ({
             <span className="mr-2 pl-3 text-sm">{t("logic.addRule")}</span>
             <Button
               theme="secondary"
-              className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
+              className="p-0 hover:bg-indigo-500! hover:fill-white! focus:fill-white!"
               disabled={disableAdd}
               onClick={() => {
                 setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
@@ -252,7 +255,8 @@ export const MultiActionSelector = ({
             onClick={() => {
               const group = findParentGroup(String(item.id));
               const parent = group?.index;
-              parent && setGroupNextAction(parent as string, nextActions);
+              const filteredNextActions = filterNextActionRulesForItem(item.id, nextActions);
+              parent && setGroupNextAction(parent as string, filteredNextActions);
               setChangeKey(String(new Date().getTime()));
               flow.current?.redraw();
               saveDraftIfNeeded();
@@ -265,4 +269,16 @@ export const MultiActionSelector = ({
       </form>
     </>
   );
+};
+
+export const MultiActionSelector = (props: {
+  item: FormElement;
+  sectionName: string | null;
+  descriptionId?: string;
+  initialNextActionRules: NextActionRule[];
+  lang: Language;
+}) => {
+  const stateKey = `${props.item.id}:${JSON.stringify(props.initialNextActionRules)}`;
+
+  return <MultiActionSelectorInner key={stateKey} {...props} />;
 };

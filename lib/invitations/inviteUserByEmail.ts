@@ -7,14 +7,19 @@ import {
   UserAlreadyHasAccessError,
   UserNotFoundError,
 } from "./exceptions";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { prisma, Invitation } from "@gcforms/database";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";
 import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
 import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
+import {
+  AuditLogAccessDeniedDetails,
+  AuditLogDetails,
+  AuditLogEvent,
+  logEvent,
+} from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
@@ -44,7 +49,7 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
     throw new UserNotFoundError();
   });
 
-  const template = await getTemplateWithAssociatedUsers(formId);
+  const template = await getTemplateWithAssignedUsers(formId);
 
   if (!template) {
     throw new TemplateNotFoundError();
@@ -91,7 +96,7 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
   logEvent(
     user.id,
     { type: "Form", id: invitation.templateId },
-    "InvitationCreated",
+    AuditLogEvent.InvitationCreated,
     AuditLogDetails.UserInvited,
     { userEmail: user.email, invitationEmail: invitation.email }
   );

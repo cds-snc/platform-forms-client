@@ -5,7 +5,8 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 
 import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
-import { updateTemplateFormSaveAndResume } from "@formBuilder/actions";
+import { updateTemplate } from "@formBuilder/actions";
+import { UpdateTemplateAction } from "@lib/templates/types";
 
 export const SetSaveAndResume = ({ formId }: { formId: string }) => {
   "use memo";
@@ -24,8 +25,9 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
   const saveFormStatus = async (newStatus: string) => {
     const saveAndResume = newStatus === "off" ? false : true;
 
-    const result = await updateTemplateFormSaveAndResume({
-      id: formId,
+    const result = await updateTemplate({
+      action: UpdateTemplateAction.FormSaveAndResume,
+      formId: formId,
       saveAndResume,
     });
 

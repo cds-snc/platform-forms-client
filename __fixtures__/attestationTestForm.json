@@ -15,13 +15,36 @@
     "referrerUrlEn": "",
     "referrerUrlFr": ""
   },
-  "layout": [1],
+  "layout": [2, 1],
   "elements": [
+    {
+      "id": 2,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Full name",
+        "titleFr": "Nom complet",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "autoComplete": "name",
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
     {
       "id": 1,
       "type": "checkbox",
+      "uuid": "e70e3168-6ca8-4f2a-bd5e-049f33896f34",
       "properties": {
-        "subElements": [],
         "choices": [
           {
             "en": "Condition 1",
@@ -39,9 +62,10 @@
         "titleEn": "I agree to:",
         "titleFr": "J'accepte :",
         "validation": {
-          "required": true,
-          "all": true
+          "all": true,
+          "required": true
         },
+        "subElements": [],
         "descriptionEn": "",
         "descriptionFr": "",
         "placeholderEn": "",
@@ -50,11 +74,17 @@
     }
   ],
   "groups": {
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Confirmation page",
+      "elements": []
+    },
     "start": {
       "name": "Start",
       "titleEn": "Start page",
       "titleFr": "Start page",
-      "elements": ["1"],
+      "elements": ["2", "1"],
       "nextAction": "review"
     },
     "review": {
@@ -63,14 +93,8 @@
       "titleFr": "End (Review page and Confirmation)",
       "elements": [],
       "nextAction": "end"
-    },
-    "end": {
-      "name": "End",
-      "titleEn": "Confirmation page",
-      "titleFr": "Confirmation page",
-      "elements": []
     }
   },
   "groupsLayout": [],
-  "lastGeneratedElementId": 1
+  "lastGeneratedElementId": 2
 }

@@ -75,7 +75,7 @@ export const DateModified = ({
   if (isSubmitting) return null;
 
   const date = new Date(String(updatedAt));
-  const formattedDate = date.toISOString().slice(0, 10);
+  const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
   return (
     <div className="gc-date-modified mt-10" id="date-modified">

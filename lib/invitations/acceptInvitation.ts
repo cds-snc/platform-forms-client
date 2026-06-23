@@ -8,7 +8,7 @@ import {
 } from "./exceptions";
 import { getAbility } from "@lib/privileges";
 import { AuditLogDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
-import { notifyOwnersOwnerAdded } from "@lib/templates";
+import { notifyOwnerAdded } from "@lib/templates/internal/notifications";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
@@ -86,26 +86,17 @@ export const acceptInvitation = async (invitationId: string) => {
 
   await invalidateTemplateEditLockUserCountCache(invitation.templateId);
 
+  // some existing events may not yet have the 'invitedBy' attribute.
+  // fallback to previous behavior
   logEvent(
-    ability.user.id,
+    invitation.invitedBy ?? ability.user.id,
     { type: "Form", id: invitation.templateId },
     AuditLogEvent.InvitationAccepted,
     AuditLogDetails.AcceptedInvitation,
     { userEmail: user.email }
   );
 
-  // some existing events may not yet have the 'invitedBy' attribute.
-  // fallback to previous behavior
-
-  logEvent(
-    invitation.invitedBy ?? ability.user.id,
-    { type: "Form", id: invitation.templateId },
-    "GrantFormAccess",
-    AuditLogDetails.AcceptedInvitation,
-    { userEmail: user.email }
-  );
-
-  notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+  notifyOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
 
   _deleteInvitation(invitationId).catch((e) => {
     logMessage.error(`Error deleting invitation: ${e}`);

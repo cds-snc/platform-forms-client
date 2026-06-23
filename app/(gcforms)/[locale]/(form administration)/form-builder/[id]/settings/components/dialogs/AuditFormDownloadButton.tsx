@@ -138,7 +138,7 @@ const AuditFormDownloadButton = ({
           (key) => specificEvents[key as keyof typeof specificEvents]
         );
 
-    const events = await getFormEvents(formId, filter);
+    const events = await getFormEvents(formId, true, filter);
     if (Array.isArray(events)) {
       if (events.length === 0) {
         toast.error(t("auditDownload.noEvents"));
@@ -153,7 +153,7 @@ const AuditFormDownloadButton = ({
   const actions = (
     <>
       <Button
-        theme="primary"
+        theme="secondary"
         onClick={() => {
           dialog.current?.close();
           handleClose();
@@ -232,21 +232,6 @@ const AuditFormDownloadButton = ({
             <label htmlFor="specificEventsformCollaboration" className="gc-checkbox-label">
               <span className="checkbox-label-text">
                 {t("auditDownload.dialog.specific.formCollaboration")}
-              </span>
-            </label>
-          </div>
-          <div className="gc-input-checkbox">
-            <input
-              type="checkbox"
-              id="specificEventsresponseDownloads"
-              name="specificEventsresponseDownloads"
-              className="gc-input-checkbox__input"
-              checked={specificEvents.responseDownloads}
-              onChange={(e) => handleSpecificEventChange("responseDownloads", e.target.checked)}
-            />
-            <label htmlFor="specificEventsresponseDownloads" className="gc-checkbox-label">
-              <span className="checkbox-label-text">
-                {t("auditDownload.dialog.specific.responseDownloads")}
               </span>
             </label>
           </div>

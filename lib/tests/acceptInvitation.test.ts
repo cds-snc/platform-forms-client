@@ -30,8 +30,8 @@ vi.mock("@lib/auditLogs", () => ({
   logEvent: vi.fn(),
 }));
 
-vi.mock("@lib/templates", () => ({
-  notifyOwnersOwnerAdded: vi.fn(),
+vi.mock("@lib/templates/internal/notifications", () => ({
+  notifyOwnerAdded: vi.fn(),
 }));
 
 vi.mock("@lib/logger", () => ({
@@ -48,6 +48,9 @@ import { prisma } from "@gcforms/database";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 import { acceptInvitation } from "@lib/invitations/acceptInvitation";
 import { mockGetAbility } from "__utils__/authorization";
+
+type TemplateFindUniqueResult = Awaited<ReturnType<typeof prisma.template.findUnique>>;
+type TemplateUpdateResult = Awaited<ReturnType<typeof prisma.template.update>>;
 
 describe("acceptInvitation", () => {
   beforeEach(() => {
@@ -80,6 +83,9 @@ describe("acceptInvitation", () => {
       name: "Test Form",
       jsonConfig: {},
       isPublished: false,
+      currentPublishedVersionId: null,
+      currentDraftVersionId: null,
+      lastEditedByUserId: null,
       securityAttribute: "Unclassified",
       formPurpose: "test",
       publishReason: "",
@@ -91,27 +97,12 @@ describe("acceptInvitation", () => {
       ttl: null,
       closingDate: null,
       closedDetails: null,
-    });
+    } as TemplateFindUniqueResult);
 
     vi.mocked(prisma.template.update).mockResolvedValue({
-      id: "form-1",
-      created_at: new Date(),
-      updated_at: new Date(),
-      name: "Test Form",
       jsonConfig: {},
-      isPublished: false,
-      securityAttribute: "Unclassified",
-      formPurpose: "test",
-      publishReason: "",
-      publishFormType: "",
-      publishDesc: "",
-      saveAndResume: false,
-      notificationsInterval: null,
-      bearerToken: null,
-      ttl: null,
-      closingDate: null,
-      closedDetails: null,
-    });
+      users: [{ id: "user-2", email: "owner.two@example.com" }],
+    } as unknown as TemplateUpdateResult);
 
     vi.mocked(prisma.invitation.delete).mockResolvedValue({
       id: "invitation-1",

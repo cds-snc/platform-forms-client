@@ -35,47 +35,47 @@
   "lang-toggle": "Language selection",
   "submitButton": "Submit",
   "input-validation": {
-    "heading": "Please correct the errors on the page.",
+    "heading": "Please correct the errors on the page",
     "required": "Complete the required field to continue.",
-    "alphanumeric": "Enter letters and numbers only.",
-    "duplicateEmail": "This email address was already added.",
+    "alphanumeric": "Enter letters and numbers only",
+    "duplicateEmail": "This email address was already added",
     "text": "",
-    "number": "Enter a number.",
-    "email": "Enter a valid email address.",
-    "date": "Enter a valid date in mm/dd/yyyy format.",
-    "date-invalid": "Enter a valid date.",
-    "phone": "Enter a valid telephone number.",
-    "regex": "Enter the correct format.",
-    "invalidRegex": "There was a problem processing the form.",
-    "combobox-strict": "Select a value from the list.",
-    "too-few-digits": "The number entered does not have enough digits.",
-    "too-many-digits": "The number entered has too many digits.",
-    "too-small": "The number entered must be at least {{min}}.",
-    "too-large": "The number entered must be at most {{max}}.",
+    "number": "Enter a number",
+    "email": "Enter a valid email address",
+    "date": "Enter a valid date in mm/dd/yyyy format",
+    "date-invalid": "Enter a valid date",
+    "phone": "Enter a valid telephone number",
+    "regex": "Enter the correct format",
+    "invalidRegex": "There was a problem processing the form",
+    "combobox-strict": "Select a value from the list",
+    "too-few-digits": "The number entered does not have enough digits",
+    "too-many-digits": "The number entered has too many digits",
+    "too-small": "The number entered must be at least {{min}}",
+    "too-large": "The number entered must be at most {{max}}",
     "file-upload": {
       "default": {
         "heading": "There was a problem submitting your form",
-        "message": "The file {{fileName}} could not be uploaded."
+        "message": "The file {{fileName}} could not be uploaded"
       },
       "file-size-too-large": {
-        "message": "'{{fileName}}' is too big. Choose a file size that is less than {{maxSizeInMb}} MB."
+        "message": "'{{fileName}}' is too big. Choose a file size that is less than {{maxSizeInMb}} MB"
       },
       "mime": {
         "heading": "There was a problem submitting your form",
-        "message": "{{fileName}} could not be uploaded. Try saving the file in a different format and uploading it again."
+        "message": "{{fileName}} could not be uploaded. Try saving the file in a different format and uploading it again"
       },
       "network-error": {
         "heading": "There was a problem submitting your form",
-        "message": "Check your network connection and try to submit again later."
+        "message": "Check your network connection and try to submit again later"
       }
     },
-    "file-type-invalid": "Select a different file type.",
-    "too-many-characters": "Shorten the response.",
-    "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
-    "validGovEmail": "Enter a valid government email address.",
-    "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. If that's you, add a colleague.",
-    "min-length-4-characters": "Must be at least 4 characters.",
-    "mismatched-type": "The answer does not match the required type.",
+    "file-type-invalid": "Select a different file type",
+    "too-many-characters": "Shorten the response",
+    "all-checkboxes-required": "Read and check all boxes to confirm the items in this section",
+    "validGovEmail": "Enter a valid government email address",
+    "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. If that's you, add a colleague",
+    "min-length-4-characters": "Must be at least 4 characters",
+    "mismatched-type": "The answer does not match the required type",
     "MB": "MB",
     "KB": "KB",
     "bytes": "bytes",
@@ -273,6 +273,10 @@
     "more": "More",
     "cancel": "Cancel",
     "formRestored": "Your answers were loaded to the form.",
+    "formRestoredWarning": {
+      "title": "Check your answers carefully",
+      "message": "Your saved answers were based on a different original form. Review them carefully before submitting."
+    },
     "resumeUploadError": {
       "title": "Problem loading answers",
       "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",
@@ -287,6 +291,14 @@
       "upload": {
         "title": "Load your answers",
         "description": "Upload your saved form in progress"
+      },
+      "mismatchedForm": {
+        "title": "Continue the form with these answers?",
+        "description": "⚠️ This saved progress was from a different form or version than the one you're trying to continue filling out.",
+        "warning": "If you continue anyway, you will need to review all the answers that get loaded into this form to ensure they are correct.",
+        "matchingFormLink": "Go to the original form instead",
+        "cancel": "Cancel",
+        "continue": "Continue anyway"
       },
       "restart": {
         "title": "Start blank form",

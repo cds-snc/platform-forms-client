@@ -502,8 +502,13 @@
   "duplicate": "Dupliquer",
   "dyanamicRow": "Ensemble récurrent",
   "edit": "Modifier",
+  "editPublishedForm": "Créer une nouvelle version ébauche",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
+  "publishedEditDraftTitle": "Modifier ce formulaire publié",
+  "publishedEditDraftDescription": "Créez une nouvelle version ébauche pour apporter des changements sans toucher au formulaire en ligne. Vous pourrez publier l'ébauche lorsqu'elle sera prête.",
+  "createDraftVersionError": "Impossible de créer une nouvelle version ébauche pour le moment. Réessayez plus tard.",
+  "creatingDraftVersion": "Création de la version ébauche en cours...",
   "elementActions": "Actions des éléments",
   "email": "Courriel",
   "english": "anglais",
@@ -551,22 +556,22 @@
     "title": "Obtenir une copie du formulaire"
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec l'historique des dernières actions clés effectuées dans un formulaire. Celles-ci pourraient prendre quelques minutes pour apparaître dans le journal d'activité et seront disponibles jusqu'à 30 jours.",
+    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités de création, de collaboration et d’intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul. Vous obtiendrez les activités des 30 derniers jours, à partir du 15 juin 2026.",
     "downloadBtnText": "Télécharger l'activité récente",
-    "title": "Afficher l'activité du formulaire",
+    "title": "Afficher l’activité récente du formulaire",
     "dialog": {
-      "title": "Télécharger l'activité du formulaire",
+      "title": "Télécharger l’activité du formulaire",
       "downloadBtnText": "Télécharger",
-      "allEventsTitle": "Tous les événements disponibles",
-      "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire dans les derniers 30 jours.",
-      "allEventsCheckbox": "Tous les événements disponibles",
-      "specificEventsTitle": "Événements spécifiques",
-      "specificEventsDescription": "Choisissez les événements que vous souhaitez avoir dans le fichier CSV.",
+      "allEventsTitle": "Télécharger toute activité récente :",
+      "allEventsDescription": "Nous n’enregistrons que l’activité des 30 derniers jours.",
+      "allEventsCheckbox": "Toute activité disponible",
+      "specificEventsTitle": "Activités spécifiques",
+      "specificEventsDescription": "Choisissez les activités à inclure dans le tableau :",
       "specific": {
-        "formBuilding": "Création du formulaires",
-        "formCollaboration": "Collaborateurs sur le formulaire",
+        "formBuilding": "Création du formulaire",
+        "formCollaboration": "Collaboration sur le formulaire",
         "responseDownloads": "Récupération des réponses",
-        "apiIntegrations": "Intégration API"
+        "apiIntegrations": "Intégration avec l’API"
       }
     },
     "headers": {
@@ -592,40 +597,47 @@
       "DownloadResponse": "Réponses téléchargées",
       "ConfirmResponse": "Réponses confirmées",
       "IdentifyProblemResponse": "Réponses signalées avec probléme",
-      "DeleteDraftResponses": "Réponses tests effacées lors de la publication.",
+      "DeleteDraftResponses": "Réponses tests effacées lorsque de la publication du formulaire",
       "RetrieveResponses": "Réponses récupérées via l'API",
       "CreateAPIKey": "Clé API générée",
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
-      "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
-      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification"
+      "InvitationAccepted": "Invitation acceptée",
+      "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
+      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
+      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée",
+      "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
     },
     "eventDetails": {
       "CreatedForm": "Formulaire créé",
-      "UpdatedFormName": "Formulaire renommé {{newFormName}}",
+      "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
+      "UpdateFormBranding": "Image de marque du formulaire mise à jour : {{brand}}",
       "DuplicatedForm": "Formulaire dupliqué pour en créer un nouveau {{newFormID}}",
       "ArchivedForm": "Formulaire archivé",
       "RestoredForm": "Formulaire désarchivé",
       "DownloadedForm": "Une copie du formulaire a été téléchargée",
-      "ChangeSecurityAttribute": "Classification changée {{securityAttribute}}",
-      "SetFormPurpose": "Usage prévu défini {{formPurpose}}",
-      "SetSaveAndResume": "Changement de la sauvegarde des réponses {{saveAndResume}}",
-      "UpdateClosingDate": "Mise à jour de la date de fermeture {{closingDate}}",
+      "CreatedNewAPIKey": "Le compte utilisateur {{userEmail}} a généré une clé API : ID =  {{serviceAccountId}}",
+      "GeneratedAPIKey": "Clé API générée par {{userEmail}}: ID = {{APIkeyID}",
+      "RefreshedAPIKey": "Clé API re-générée par {{userEmail}}: ID = {{APIkeyID}}",
+      "DeletedAPIKey": "Clé API supprimée par {{userEmail}}: ID = {{serviceAccountID}}",
+      "ChangeSecurityAttribute": "Classification modifiée à : {{securityAttribute}}",
+      "SetFormPurpose": "Usage prévu défini comme :{{formPurpose}}",
+      "SetSaveAndResume": "Sauvegarde des réponses modifiée à :{{saveAndResume}}",
+      "UpdateClosingDate": "Date de fermeture modifiée à : {{closingDate}}",
+      "RemoveClosingDate": "Date de fermeture supprimée.",
       "UpdatedNotificationSettings": "Paramètre de notification {{enabled}} pour {{userEmail}}",
-      "GeneratedAPIKey": "Clé API {{APIkeyID}} générée par {{userEmail}}",
-      "DeletedAPIKey": "Clé API {{APIkeyID}} supprimée par {{userEmail}}",
-      "IncreasedThrottling": "Débit de l'API fixé à {{throttlingRate}} pour {{weeks}} semaines",
-      "GrantAccess": "Accès accordé à {{userEmail}}",
-      "RevokeAccess": "Accès révoqué pour {{userEmail}}",
+      "GrantAccess": "Accès accordé à {{userList}}",
+      "RevokeAccess": "Accès révoqué pour {{userList}}",
       "UserInvited": "{{userEmail}} a invité {{invitationEmail}}",
       "AcceptedInvitation": "Invitation acceptée par {{userEmail}}",
       "DeclinedInvitation": "Invitation refusée par {{userEmail}}",
       "CancelInvitation": "Invitation annulée pour {{invitationEmail}}",
       "ReceivedFormResponses": "Réponse {{submissionId}} reçue",
       "DownloadedFormResponses": "Réponse {{submissionId}} téléchargée en format {{format}}",
-      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée"
+      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée",
+      "DeletedDraftResponses": "Réponses de l'ébauche de formulaire supprimées"
     },
     "eventParams": {
       "Unclassified": "Non classifié",
@@ -659,7 +671,7 @@
     "statuses": {
       "active": "Session active",
       "idle": "Session ouverte",
-      "away": "Aucune activité récente",
+      "away": "Session en pause",
       "stale": "Session inactive"
     },
     "unknownUser": "Un autre utilisateur",
@@ -670,9 +682,9 @@
     "syncedLatest": "Vous modifiez maintenant la version enregistrée du formulaire la plus récente.",
     "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer.",
     "sessionExpiredTitle": "Votre session a expiré",
-    "sessionExpiredMessage": "La modification a été arrêtée parce que ce formulaire était inactif. Veuillez rouvrir le formulaire pour y apporter des changements.",
+    "sessionExpiredMessage": "Vos modifications ont été enregistrées. Vous pouvez reprendre le formulaire pour y apporter des changements en actualisant la page.",
     "returnToForms": "Retourner aux formulaires",
-    "reloadPage": "Recharger"
+    "reloadPage": "Actualiser le formulaire"
   },
   "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
@@ -773,6 +785,7 @@
   "privacyStatement": "Avis de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
+  "republish": "Publier de nouveau",
   "readyToPublish": "Prêt à publier",
   "published": "Publié",
   "publishedBack": "Retourner aux formulaires",
@@ -810,6 +823,7 @@
   },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
+    "republishTitle": "Publier le formulaire à nouveau",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
     "readyForPublicUse": "Formulaire prêt pour un usage par le public",
     "readyForInternalUse": "Formulaire prêt pour un usage interne",
@@ -886,8 +900,7 @@
         "title": "Configurer l’intégration API",
         "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données des soumissions au formulaire vers un système cible avec une intégration sur mesure. Une fois l’API configurée, les réponses pourront être récupérées à partir d'un point de terminaison programmatiquement. Consultez notre site de documentation pour en savoir plus.",
 
-        "text1": "This section is for developers who want to use the API to pull form submission data to a target system with a custom integration. Once set-up, responses can be retrieved from the API endpoint programmatically. Visit our documentation site for more information.",
-
+        "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données de soumission de formulaires vers un système cible avec une intégration personnalisée. Une fois la configuration effectuée, les réponses peuvent être récupérées programmatiquement à partir du point de terminaison de l'API. Consultez notre site de documentation pour plus d'informations.",
         "docsButton": {
           "text": "Accéder à la documentation API",
           "link": "https://cds-snc.github.io/forms-api/fr"
@@ -1010,7 +1023,7 @@
           "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
         },
         "archivedForm": {
-          "subject": "Un formulaire dont vous êtes propriétaire a été archivé | A form you are owner of has been archived",
+          "subject": "Your form has been archived | Votre formulaire a été archivé",
           "paragraph1": "Votre formulaire a été archivé :",
           "paragraph2": "Cette action a été effectuée par :",
           "paragraph3": "Le formulaire peut être désarchivé à partir du dossier d'archives, dans les 30 jours suivant l'archivage.",
@@ -1155,6 +1168,8 @@
     "stepTwoDetails": "Allez sur <a href=\"/\" target=\"_blank\">Formulaires GC</a>. Aucun compte n'est nécessaire.",
     "stepTwoDetailsNoHTML": "Allez sur Formulaires GC (https://forms-formulaires.alpha.canada.ca/). Aucun compte n'est nécessaire.",
     "title": "Partager",
+    "manageAccess": "Gérer l’accès",
+    "file": "Partager le fichier du formulaire",
     "toPreview": "Pour prévisualiser ce formulaire :",
     "unauthenticated": {
       "copyInstructions": "Copier les instructions",

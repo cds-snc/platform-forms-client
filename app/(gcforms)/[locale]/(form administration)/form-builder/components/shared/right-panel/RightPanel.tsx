@@ -147,7 +147,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   return (
-    <section className="z-10 border-l border-slate-200 bg-white" aria-labelledby="rightPanelTitle">
+    <section className="z-10" aria-labelledby="rightPanelTitle">
       <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
         <div className="mt-4 mr-4">
           <CircleButton
@@ -174,7 +174,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
-              <div className="pointer-events-auto w-screen max-w-md">
+              <div className="pointer-events-auto h-dvh w-screen max-w-md border-t border-l border-slate-200 bg-white">
                 {/* <-- Panel Header */}
                 <div className="flex h-full flex-col border-l border-slate-200 bg-white">
                   <div className="p-6">

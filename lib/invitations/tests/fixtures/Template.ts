@@ -11,6 +11,9 @@ interface Template {
   name: string;
   securityAttribute: string;
   users?: User[];
+  currentPublishedVersionId: string | null;
+  currentDraftVersionId: string | null;
+  lastEditedByUserId: string | null;
   closingDate: Date;
   created_at: Date;
   updated_at: Date;
@@ -33,6 +36,9 @@ export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
     users: [{ id: "user-id", email: "test@cds-snc.ca", name: "test user" }],
     name: "template-name",
     securityAttribute: "Unclassified",
+    currentPublishedVersionId: null,
+    currentDraftVersionId: null,
+    lastEditedByUserId: null,
     closingDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     created_at: new Date(),
     updated_at: new Date(),

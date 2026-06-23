@@ -1,6 +1,6 @@
 import { updateTemplateUsers } from "@formBuilder/actions";
 import { authorization } from "@root/lib/privileges";
-import { getTemplateWithAssociatedUsers } from "@root/lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { getUsers } from "@lib/users";
 import { FormOwnership } from "./FormOwnership";
 import { headers } from "next/headers";
@@ -15,7 +15,7 @@ export const ManageOwners = async ({ id }: { id: string }) => {
     return null;
   }
 
-  const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(id);
+  const templateWithAssociatedUsers = await getTemplateWithAssignedUsers(id);
 
   if (!templateWithAssociatedUsers) {
     throw new Error("Template not found");

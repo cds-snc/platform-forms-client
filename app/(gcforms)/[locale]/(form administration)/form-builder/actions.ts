@@ -8,31 +8,23 @@ import {
   FormRecord,
   SecurityAttribute,
   FormPurpose,
-  ClosedDetails,
 } from "@lib/types";
-import {
-  createTemplate as createDbTemplate,
-  removeDeliveryOption,
-  updateAssignedUsersForTemplate,
-  updateClosedData,
-  updateTemplate as updateDbTemplate,
-  updateIsPublishedForTemplate,
-  updateSecurityAttribute,
-  updateFormPurpose,
-  updateFormSaveAndResume,
-  getFormJSONConfig,
-  updateFormJsonConfig,
-} from "@lib/templates";
+import { createTemplate as createDbTemplate } from "@lib/templates/mutations/createTemplate";
+import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/updateTemplate";
+import { UpdateTemplateCommand, UpdateTemplateAction } from "@lib/templates/types";
+import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
+import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
-import { getFullTemplateByID } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { getFormJSONConfig } from "@lib/templates/queries/getFormJSONConfig";
 import { isValidEmail } from "@gcforms/core";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
-import { BrandProperties, NotificationsInterval } from "@gcforms/types";
+import { NotificationsInterval } from "@gcforms/types";
 import { redirect } from "next/navigation";
 import { logMessage } from "@lib/logger";
 import {
@@ -116,14 +108,27 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 
     try {
       if (id) {
-        return await updateTemplate({
-          id,
-          formConfig,
-          name,
-          deliveryOption,
-          securityAttribute,
-          formPurpose,
-        });
+        try {
+          await assertTemplateEditLockIfEnabled({
+            templateId: id,
+            userId: session.user.id,
+          });
+          // Note: we only update formConfig in the update flow since other
+          // properties (name, deliveryOption, securityAttribute, formPurpose)
+          // have their own dedicated update functions called from the settings page.
+          const formRecord = await updateDbTemplate({
+            action: UpdateTemplateAction.FormConfig,
+            formId: id,
+            formConfig: formConfig,
+          });
+
+          return { formRecord };
+        } catch (e) {
+          if (e instanceof TemplateEditLockedError) {
+            return { formRecord: null, error: "editLocked" };
+          }
+          return { formRecord: null, error: "error" };
+        }
       }
 
       const formRecord = await createDbTemplate({
@@ -152,69 +157,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 export const updateTemplate = AuthenticatedAction(
   async (
     session,
-    {
-      id: formID,
-      formConfig,
-      name,
-      deliveryOption,
-      securityAttribute,
-      formPurpose,
-    }: {
-      id: string;
-      formConfig: FormProperties;
-      name?: string;
-      deliveryOption?: DeliveryOption;
-      securityAttribute?: SecurityAttribute;
-      formPurpose?: FormPurpose;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    try {
-      await assertTemplateEditLockIfEnabled({
-        templateId: formID,
-        userId: session.user.id,
-      });
-      const formRecord = await updateDbTemplate({
-        formID: formID,
-        formConfig: formConfig,
-        name: name,
-        deliveryOption: deliveryOption,
-        securityAttribute: securityAttribute,
-        formPurpose: formPurpose,
-      });
-
-      if (!formRecord) {
-        throw new Error("Failed to update template");
-      }
-
-      return { formRecord };
-    } catch (e) {
-      if (e instanceof TemplateEditLockedError) {
-        return { formRecord: null, error: "editLocked" };
-      }
-      return { formRecord: null, error: "error" };
-    }
-  }
-);
-
-export const updateTemplatePublishedStatus = AuthenticatedAction(
-  async (
-    session,
-    {
-      id: formID,
-      isPublished,
-      publishReason,
-      publishFormType,
-      publishDescription,
-      redirectAfter,
-    }: {
-      id: string;
-      isPublished: boolean;
-      publishReason: string;
-      publishFormType: string;
-      publishDescription: string;
+    command: UpdateTemplateCommand & {
       redirectAfter?: string;
     }
   ): Promise<{
@@ -226,34 +169,156 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
 
     try {
       await assertTemplateEditLockIfEnabled({
-        templateId: formID,
+        templateId: command.formId,
         userId: session.user.id,
       });
-      response = await updateIsPublishedForTemplate(
-        formID,
-        isPublished,
-        publishReason,
-        publishFormType,
-        publishDescription
-      );
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${isPublished} }`
-        );
-      }
 
-      if (isPublished) {
-        try {
-          await publishEditLockPublishedEvent(formID);
-        } catch (error) {
-          logMessage.warn(
-            `Failed to publish edit-lock published event for ${formID}: ${(error as Error).message}`
-          );
-        }
-      }
+      switch (command.action) {
+        case UpdateTemplateAction.Name:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.Name,
+            formId: command.formId,
+            name: command.name,
+          });
+          if (!response) {
+            throw new Error(
+              `Template update failed for Name. Request information: { ${command.formId}, ${command.name} }`
+            );
+          }
 
-      revalidatePath(`/form-builder/${formID}`, "layout");
-      revalidatePath(`/form-builder/${formID}/published`, "page");
+          return { formRecord: response };
+        case UpdateTemplateAction.FormConfig:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.FormConfig,
+            formId: command.formId,
+            formConfig: command.formConfig,
+          });
+          if (!response) {
+            throw new Error(
+              `Template update failed for FormConfig. Request information: { ${command.formId} }`
+            );
+          }
+
+          return { formRecord: response };
+        case UpdateTemplateAction.IsPublished:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.IsPublished,
+            formId: command.formId,
+            isPublished: command.isPublished,
+            publishReason: command.publishReason,
+            publishFormType: command.publishFormType,
+            publishDescription: command.publishDescription,
+          });
+
+          if (!response) {
+            throw new Error(
+              `Template update failed for IsPublished. Request information: { ${command.formId}, ${command.isPublished} }`
+            );
+          }
+
+          if (command.isPublished) {
+            try {
+              await publishEditLockPublishedEvent(command.formId);
+            } catch (error) {
+              logMessage.warn(
+                `Failed to publish edit-lock published event for ${command.formId}: ${(error as Error).message}`
+              );
+            }
+          }
+
+          revalidatePath(`/form-builder/${command.formId}`, "layout");
+          revalidatePath(`/form-builder/${command.formId}/published`, "page");
+          break;
+        case UpdateTemplateAction.FormPurpose:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.FormPurpose,
+            formId: command.formId,
+            formPurpose: command.formPurpose,
+          });
+          if (!response) {
+            throw new Error(
+              `Template update failed for FormPurpose. Request information: { ${command.formId}, ${command.formPurpose} }`
+            );
+          }
+
+          return { formRecord: response };
+        case UpdateTemplateAction.FormSaveAndResume:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.FormSaveAndResume,
+            formId: command.formId,
+            saveAndResume: command.saveAndResume,
+          });
+          if (!response) {
+            throw new Error(
+              `Template update failed for FormSaveAndResume. Request information: { ${command.formId}, ${command.saveAndResume} }`
+            );
+          }
+
+          return { formRecord: response };
+        case UpdateTemplateAction.SecurityAttribute:
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.SecurityAttribute,
+            formId: command.formId,
+            securityAttribute: command.securityAttribute,
+          });
+          if (!response) {
+            throw new Error(
+              `Template update failed for SecurityAttribute. Request information: { ${command.formId}, ${command.securityAttribute} }`
+            );
+          }
+
+          return { formRecord: response };
+        case UpdateTemplateAction.ClosedData:
+          if (command.closingDate && !isValidDateString(command.closingDate)) {
+            throw new Error(
+              `Invalid closing date. Request information: { ${command.formId}, ${command.closingDate} }`
+            );
+          }
+
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.ClosedData,
+            formId: command.formId,
+            closingDate: command.closingDate,
+            closedDetails: command.closedDetails,
+          });
+
+          if (!response) {
+            throw new Error(
+              `Template update failed for ClosedData. Request information: { ${command.formId}, ${command.closingDate} }`
+            );
+          }
+
+          return { formRecord: response };
+        case UpdateTemplateAction.FormBranding:
+          const formConfig = await getFormJSONConfig(command.formId);
+
+          if (!formConfig) {
+            throw new Error(
+              `Template update failed for FormBranding. Request information: { ${command.formId} }`
+            );
+          }
+
+          const updatedFormConfig: FormProperties = {
+            ...formConfig,
+            brand: command.formConfig.brand,
+          };
+
+          response = await updateDbTemplate({
+            action: UpdateTemplateAction.FormBranding,
+            formId: command.formId,
+            formConfig: updatedFormConfig,
+          });
+
+          if (!response) {
+            throw new Error(
+              `Template update failed for FormBranding. Request information: { ${command.formId} }`
+            );
+          }
+
+          return { formRecord: response };
+        default:
+          return { formRecord: null, error: "Invalid action" };
+      }
     } catch (error) {
       if (error instanceof TemplateEditLockedError) {
         return { formRecord: null, error: "editLocked" };
@@ -261,163 +326,11 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
       hasError = error;
     }
 
-    if (!hasError && redirectAfter) {
-      redirect(redirectAfter);
+    if (!hasError && command.redirectAfter) {
+      redirect(command.redirectAfter);
     }
 
     return { formRecord: response, error: hasError ? (hasError as Error).message : undefined };
-  }
-);
-
-export const updateTemplateFormPurpose = AuthenticatedAction(
-  async (
-    session,
-    {
-      id: formID,
-      formPurpose,
-    }: {
-      id: string;
-      formPurpose: string;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    try {
-      await assertTemplateEditLockIfEnabled({
-        templateId: formID,
-        userId: session.user.id,
-      });
-      const response = await updateFormPurpose(formID, formPurpose);
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${formPurpose} }`
-        );
-      }
-
-      return { formRecord: response };
-    } catch (error) {
-      if (error instanceof TemplateEditLockedError) {
-        return { formRecord: null, error: "editLocked" };
-      }
-      return { formRecord: null, error: (error as Error).message };
-    }
-  }
-);
-
-export const updateTemplateFormSaveAndResume = AuthenticatedAction(
-  async (
-    session,
-    {
-      id: formID,
-      saveAndResume,
-    }: {
-      id: string;
-      saveAndResume: boolean;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    try {
-      await assertTemplateEditLockIfEnabled({
-        templateId: formID,
-        userId: session.user.id,
-      });
-      const response = await updateFormSaveAndResume(formID, saveAndResume);
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${saveAndResume} }`
-        );
-      }
-
-      return { formRecord: response };
-    } catch (error) {
-      if (error instanceof TemplateEditLockedError) {
-        return { formRecord: null, error: "editLocked" };
-      }
-      return { formRecord: null, error: (error as Error).message };
-    }
-  }
-);
-
-export const updateTemplateSecurityAttribute = AuthenticatedAction(
-  async (
-    session,
-    {
-      id: formID,
-      securityAttribute,
-    }: {
-      id: string;
-      securityAttribute: SecurityAttribute;
-    }
-  ): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
-    try {
-      await assertTemplateEditLockIfEnabled({
-        templateId: formID,
-        userId: session.user.id,
-      });
-      const response = await updateSecurityAttribute(formID, securityAttribute);
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${securityAttribute} }`
-        );
-      }
-
-      return { formRecord: response };
-    } catch (error) {
-      if (error instanceof TemplateEditLockedError) {
-        return { formRecord: null, error: "editLocked" };
-      }
-      return { formRecord: null, error: (error as Error).message };
-    }
-  }
-);
-
-export const closeForm = AuthenticatedAction(
-  async (
-    session,
-    {
-      id: formID,
-      closingDate,
-      closedDetails,
-    }: {
-      id: string;
-      closingDate: string | null;
-      closedDetails?: ClosedDetails;
-    }
-  ): Promise<{
-    formID: string;
-    closingDate: string | null;
-    error?: string;
-  }> => {
-    try {
-      await assertTemplateEditLockIfEnabled({
-        templateId: formID,
-        userId: session.user.id,
-      });
-
-      if (closingDate && !isValidDateString(closingDate)) {
-        throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
-      }
-
-      const response = await updateClosedData(formID, closingDate, closedDetails);
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${closingDate} }`
-        );
-      }
-
-      return response;
-    } catch (error) {
-      if (error instanceof TemplateEditLockedError) {
-        return { formID: "", closingDate: null, error: "editLocked" };
-      }
-      return { formID: "", closingDate: null, error: (error as Error).message };
-    }
   }
 );
 
@@ -444,11 +357,9 @@ export const updateTemplateUsers = AuthenticatedAction(
         templateId: formID,
         userId: session.user.id,
       });
-      const response = await updateAssignedUsersForTemplate(formID, users);
+      const response = await syncAssignedUsersForTemplate(formID, users);
       if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { ${formID}, ${users} }`
-        );
+        throw new Error(`Template response was null. Request information: { ${formID}, ${users} }`);
       }
 
       return { success: true };
@@ -638,44 +549,6 @@ Pour prévisualiser ce formulaire :
       return { success: true };
     } catch (error) {
       return { success: false, error: (error as Error).message };
-    }
-  }
-);
-
-export const updateBranding = AuthenticatedAction(
-  async (
-    _,
-    {
-      formId,
-      branding,
-    }: {
-      formId: string;
-      branding: BrandProperties | undefined;
-    }
-  ): Promise<{
-    formRecord: { id: string; updatedAt: string | undefined } | null;
-    error?: string;
-  }> => {
-    try {
-      const formConfig = await getFormJSONConfig(formId);
-
-      if (!formConfig) {
-        throw new Error(`Failed to get template for branding update with formId ${formId}`);
-      }
-
-      const updatedFormConfig: FormProperties = {
-        ...formConfig,
-        brand: branding,
-      };
-      const formRecord = await updateFormJsonConfig(formId, updatedFormConfig);
-
-      if (!formRecord) {
-        throw new Error(`Failed to update template for branding update with formId ${formId}`);
-      }
-
-      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
-    } catch (_) {
-      return { formRecord: null, error: "error" };
     }
   }
 );
