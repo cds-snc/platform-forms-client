@@ -59,15 +59,19 @@
   }
 }
 
+.gc-star-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 0.45em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0; /* hidden by default; animation overrides via keyframe */
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .gc-star-particle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 0.45em;
-    line-height: 1;
-    pointer-events: none;
-    user-select: none;
     animation: star-particle 500ms ease-out forwards;
   }
 

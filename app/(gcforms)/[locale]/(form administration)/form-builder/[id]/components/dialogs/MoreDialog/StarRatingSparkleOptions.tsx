@@ -24,8 +24,7 @@ export const StarRatingSparkleOptions = ({
           className="gc-input-checkbox__input"
           id={`sparkle-${item.id}-id-modal`}
           type="checkbox"
-          defaultChecked={checked}
-          value={`sparkle-${item.id}-value-modal-` + checked}
+          checked={checked}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setItem({
               ...item,

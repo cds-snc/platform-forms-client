@@ -12,7 +12,6 @@ interface StarRatingProps extends InputFieldProps {
 
 interface StarItemProps {
   starValue: number;
-  index: number;
   inputId: string;
   name: string;
   required: boolean | undefined;
@@ -172,7 +171,6 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
           <StarItem
             key={starValue}
             starValue={starValue}
-            index={index}
             inputId={`${id}.${starValue - 1}`}
             name={name}
             required={required}

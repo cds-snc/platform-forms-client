@@ -14,14 +14,11 @@ interface StarRatingSelectorProps {
 
 export const StarRatingSelector = ({ item }: StarRatingSelectorProps) => {
   const { t } = useTranslation("form-builder");
-  const { elements, updateField } = useTemplateStore((s) => ({
-    elements: s.form.elements,
+  const { updateField } = useTemplateStore((s) => ({
     updateField: s.updateField,
   }));
 
-  const elementIndex = elements.findIndex((el) => el.id === item.id);
-  const element = elements[elementIndex];
-  const numberOfStars = element?.properties.numberOfStars ?? DEFAULT_NUMBER_OF_STARS;
+  const numberOfStars = item.properties.numberOfStars ?? DEFAULT_NUMBER_OF_STARS;
 
   const options = Array.from({ length: MAX_STARS - MIN_STARS + 1 }, (_, i) => MIN_STARS + i);
 
@@ -36,7 +33,7 @@ export const StarRatingSelector = ({ item }: StarRatingSelectorProps) => {
         value={numberOfStars}
         onChange={(e) => {
           updateField(
-            `form.elements[${elementIndex}].properties.numberOfStars`,
+            `form.elements[${item.index}].properties.numberOfStars`,
             Number(e.target.value)
           );
         }}

@@ -120,7 +120,7 @@ export const SelectedElement = ({
         );
       }
       break;
-    case "starRating":
+    case FormElementTypes.starRating:
       element = (
         <>
           <ShortAnswer>{t("addElementDialog.starRating.title")}</ShortAnswer>
