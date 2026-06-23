@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect } from "vitest";
-import React from "react";
-import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
+import React, { useContext, useEffect } from "react";
+import { useTemplateStore, TemplateStoreProvider, TemplateStoreContext } from "../useTemplateStore";
 import { render, renderHook, act, waitFor, screen } from "@testing-library/react";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 import { FormRecord } from "@lib/types";
@@ -31,13 +31,24 @@ const promise = Promise.resolve();
 
 describe("TemplateStore", () => {
   it("Syncs published state and template version IDs from provider props", async () => {
+    const observedRef = {
+      current: undefined as
+        | Pick<FormRecord, "isPublished" | "currentPublishedVersionId" | "currentDraftVersionId">
+        | undefined,
+    };
+
     const Probe = () => {
       const observed = useTemplateStore((s) => ({
         isPublished: s.isPublished,
         currentPublishedVersionId: s.currentPublishedVersionId,
         currentDraftVersionId: s.currentDraftVersionId,
       }));
-      return <pre data-testid="template-store-probe">{JSON.stringify(observed)}</pre>;
+
+      useEffect(() => {
+        observedRef.current = observed;
+      }, [observed]);
+
+      return null;
     };
 
     const { rerender } = render(
@@ -47,13 +58,11 @@ describe("TemplateStore", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
-        JSON.stringify({
-          isPublished: false,
-          currentPublishedVersionId: null,
-          currentDraftVersionId: null,
-        })
-      );
+      expect(observedRef.current).toEqual({
+        isPublished: false,
+        currentPublishedVersionId: null,
+        currentDraftVersionId: null,
+      });
     });
 
     rerender(
@@ -67,13 +76,11 @@ describe("TemplateStore", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
-        JSON.stringify({
-          isPublished: true,
-          currentPublishedVersionId: "published-version-1",
-          currentDraftVersionId: null,
-        })
-      );
+      expect(observedRef.current).toEqual({
+        isPublished: true,
+        currentPublishedVersionId: "published-version-1",
+        currentDraftVersionId: null,
+      });
     });
 
     rerender(
@@ -88,13 +95,72 @@ describe("TemplateStore", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId("template-store-probe")).toHaveTextContent(
-        JSON.stringify({
+      expect(observedRef.current).toEqual({
+        isPublished: true,
+        currentPublishedVersionId: "published-version-1",
+        currentDraftVersionId: "draft-version-1",
+      });
+    });
+  });
+
+  it("Reapplies provider publication props after persisted hydration", async () => {
+    sessionStorage.setItem(
+      "form-storage",
+      JSON.stringify({
+        state: {
+          id: "form-1",
           isPublished: true,
           currentPublishedVersionId: "published-version-1",
-          currentDraftVersionId: "draft-version-1",
-        })
-      );
+          currentDraftVersionId: null,
+        },
+        version: 0,
+      })
+    );
+
+    const observedRef = {
+      current: undefined as
+        | Pick<FormRecord, "isPublished" | "currentPublishedVersionId" | "currentDraftVersionId">
+        | undefined,
+    };
+    const storeRef = { current: null as React.ContextType<typeof TemplateStoreContext> };
+
+    const Probe = () => {
+      const store = useContext(TemplateStoreContext);
+      const observed = useTemplateStore((s) => ({
+        isPublished: s.isPublished,
+        currentPublishedVersionId: s.currentPublishedVersionId,
+        currentDraftVersionId: s.currentDraftVersionId,
+      }));
+
+      useEffect(() => {
+        storeRef.current = store;
+        observedRef.current = observed;
+      }, [observed, store]);
+
+      return null;
+    };
+
+    render(
+      <TemplateStoreProvider
+        id="form-1"
+        isPublished={false}
+        currentPublishedVersionId="published-version-1"
+        currentDraftVersionId="draft-version-2"
+      >
+        <Probe />
+      </TemplateStoreProvider>
+    );
+
+    await act(async () => {
+      await storeRef.current?.persist.rehydrate();
+    });
+
+    await waitFor(() => {
+      expect(observedRef.current).toEqual({
+        isPublished: false,
+        currentPublishedVersionId: "published-version-1",
+        currentDraftVersionId: "draft-version-2",
+      });
     });
   });
 
