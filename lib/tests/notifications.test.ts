@@ -24,6 +24,11 @@ vi.mock("@gcforms/connectors", () => ({
     sendImmediate: vi.fn(),
     enqueueDeferred: vi.fn(),
   },
+  GCNotifyConnector: {
+    default: vi.fn(() => ({
+      sendEmail: vi.fn(),
+    })),
+  },
 }));
 
 vi.mock("@lib/integration/redisConnector", async () => {
