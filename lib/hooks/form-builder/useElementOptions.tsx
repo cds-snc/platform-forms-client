@@ -63,9 +63,9 @@ const Radio = dynamic(
 );
 const StarRatingDescription = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/StarRating"
-    ).then((mod) => ({ default: mod.StarRating })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/StarRating").then(
+      (mod) => ({ default: mod.StarRating })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const CheckBox = dynamic(
@@ -91,16 +91,16 @@ const Number = dynamic(
 );
 const QuestionSet = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/QuestionSet"
-    ).then((mod) => ({ default: mod.QuestionSet })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/QuestionSet").then(
+      (mod) => ({ default: mod.QuestionSet })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const Attestation = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Attestation"
-    ).then((mod) => ({ default: mod.Attestation })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Attestation").then(
+      (mod) => ({ default: mod.Attestation })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const Address = dynamic(
@@ -112,9 +112,9 @@ const Address = dynamic(
 );
 const AddressComplete = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/AddressComplete"
-    ).then((mod) => ({ default: mod.AddressComplete })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/AddressComplete").then(
+      (mod) => ({ default: mod.AddressComplete })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const Name = dynamic(
@@ -133,9 +133,9 @@ const Contact = dynamic(
 );
 const FirstMiddleLastName = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FirstMiddleLastName"
-    ).then((mod) => ({ default: mod.FirstMiddleLastName })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FirstMiddleLastName").then(
+      (mod) => ({ default: mod.FirstMiddleLastName })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const FileInput = dynamic(
@@ -147,9 +147,9 @@ const FileInput = dynamic(
 );
 const Departments = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Departments"
-    ).then((mod) => ({ default: mod.Departments })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Departments").then(
+      (mod) => ({ default: mod.Departments })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const Combobox = dynamic(
@@ -161,16 +161,16 @@ const Combobox = dynamic(
 );
 const FormattedDate = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FormattedDate"
-    ).then((mod) => ({ default: mod.FormattedDate })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/FormattedDate").then(
+      (mod) => ({ default: mod.FormattedDate })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 const CustomJson = dynamic(
   () =>
-    import(
-      "@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/CustomJson"
-    ).then((mod) => ({ default: mod.CustomJson })),
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/CustomJson").then(
+      (mod) => ({ default: mod.CustomJson })
+    ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
 
@@ -267,14 +267,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: groups.basic,
     },
     {
-      id: "starRating",
-      value: t("starRating"),
-      icon: StarIcon,
-      description: StarRatingDescription,
-      className: "",
-      group: groups.other,
-    },
-    {
       id: "checkbox",
       value: t("checkboxes"),
       icon: CheckIcon,
@@ -303,6 +295,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.fileInput.title"),
       icon: UploadIcon,
       description: FileInput,
+      className: "",
+      group: groups.other,
+    },
+    {
+      id: "starRating",
+      value: t("starRating"),
+      icon: StarIcon,
+      description: StarRatingDescription,
       className: "",
       group: groups.other,
     },
