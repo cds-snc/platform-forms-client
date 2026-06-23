@@ -10,7 +10,7 @@ export const UserFeatureFlags = {
 export const FeatureFlags = {
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
-  submissionNotifications: "submissionNotifications",
+  notifications: "notifications",
   topBanner: "topBanner",
   zitadelLogin: "zitadelLogin",
   ...UserFeatureFlags,

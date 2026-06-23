@@ -2,7 +2,7 @@
   "addressComplete": false,
   "formTimer": false,
   "hCaptcha": false,
-  "submissionNotifications": false,
+  "notifications": false,
   "templateVersioning": false,
   "topBanner": false,
   "responsesPilot": false,

@@ -46,9 +46,9 @@
       "title": "Template versioning",
       "description": "Enable draft versions and re-publishing flow for form templates"
     },
-    "submissionNotifications": {
-      "title": "Submission notifications",
-      "description": "Enable notifications for form users that have it enabled"
+    "notifications": {
+      "title": "Notifications",
+      "description": "Enable notifications to allow sending both immediate and deferred email messages"
     }
   },
   "addFlag": "Add user feature flag",

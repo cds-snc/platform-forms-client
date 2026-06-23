@@ -120,7 +120,7 @@ export async function submitForm(
 
       let notificationId: string | undefined;
 
-      const notificationsEnabled = await checkOne(FeatureFlags.submissionNotifications);
+      const notificationsEnabled = await checkOne(FeatureFlags.notifications);
       const shouldSendNotification =
         notificationsEnabled && (await isFormEligibleForNotifications(formId));
 

@@ -46,9 +46,9 @@
       "title": "Gestion des versions de formulaires",
       "description": "Activer le flux de version d'ébauches et de republication pour les modèles de formulaire"
     },
-    "submissionNotifications": {
-      "title": "[FR]Submission notifications",
-      "description": "[FR]Enable notifications for form users that have it enabled"
+    "notifications": {
+      "title": "[FR]Notifications",
+      "description": "[FR]Enable notifications to allow sending both immediate and deferred email messages"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",

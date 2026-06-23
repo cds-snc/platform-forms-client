@@ -5,6 +5,9 @@ import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@gcforms/database";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
+import { sendEmail } from "@lib/integration/notifyConnector";
 
 // Hard coded since only one interval is supported currently
 const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
@@ -366,11 +369,31 @@ export const sendArchivedFormNotifications = async (
     return;
   }
 
-  sendArchivedFormNotificationsToAllUsers(
-    templateUsers,
-    formId,
-    titleEn,
-    titleFr,
-    session.user.email
-  );
+  const notificationsEnabled = await checkOne(FeatureFlags.notifications);
+
+  if (notificationsEnabled) {
+    sendArchivedFormNotificationsToAllUsers(
+      templateUsers,
+      formId,
+      titleEn,
+      titleFr,
+      session.user.email
+    );
+  } else {
+    // Fallback to GC Notify
+    try {
+      const { t } = await serverTranslation("form-builder");
+      const HOST = await getOrigin();
+      const subject = t("settings.notifications.email.archivedForm.subject");
+      const body = await archivedFormEmailTemplate(HOST, titleEn, titleFr, session.user.email);
+
+      templateUsers.forEach((user) => {
+        sendEmail(user.email, { subject, formResponse: body }, "sendArchivedFormNotifications");
+      });
+    } catch (error) {
+      logMessage.warn(
+        `GC Notify fallback failed for archived form ${formId} with error: ${(error as Error).message}`
+      );
+    }
+  }
 };
