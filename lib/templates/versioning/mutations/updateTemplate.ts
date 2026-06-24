@@ -40,7 +40,7 @@ export const executeTemplateUpdate = async (
           where: {
             id: currentTemplate.currentDraftVersionId!,
           },
-          data: { ...updatePlan.data },
+          data: { jsonConfig: updatePlan.data.jsonConfig as Prisma.JsonObject },
         });
 
         return tx.template.update({
