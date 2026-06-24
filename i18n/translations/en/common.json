@@ -307,9 +307,9 @@
       "readyToContinue": {
         "title": "Ready to continue?",
         "intro": "For questions you’ve already answered:",
-        "text1": "1. Find the saved file on your device."
+        "text1": "1. Find the saved file on your device.",
         "text2": "2. Upload the file to add saved answers to the form.",
-        "text3": "3. Reattach any documents, as these do not upload with your answers."
+        "text3": "3. Reattach any documents, as these do not upload with your answers.",
         "text4": "4. Continue filling out the form."
       }
     },
