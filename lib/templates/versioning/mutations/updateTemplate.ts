@@ -33,10 +33,7 @@ export const executeTemplateUpdate = async (
 ) => {
   let updatedTemplate;
 
-  if (currentTemplate?.currentPublishedVersionId) {
-    if (currentTemplate.isPublished) {
-      return null; // throw?
-    }
+  if (currentTemplate?.currentDraftVersionId) {
     updatedTemplate = await prisma
       .$transaction(async (tx) => {
         await tx.templateVersion.update({
