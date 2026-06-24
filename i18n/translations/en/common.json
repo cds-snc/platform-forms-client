@@ -289,8 +289,8 @@
     },
     "resumePage": {
       "upload": {
-        "title": "Load your answers",
-        "description": "Upload your saved form in progress"
+        "title": "Load your saved answers",
+        "description": "Also reattach documents, such birth certificates and resumes."
       },
       "mismatchedForm": {
         "title": "Continue the form with these answers?",
@@ -306,17 +306,18 @@
       },
       "readyToContinue": {
         "title": "Ready to continue?",
-        "intro": "To continue the form you started:",
-        "text1": "1. Find the file saved on your device",
-        "text2": "2. Upload it to add your answers to the form",
-        "text3": "3. Continue filling out the form"
+        "intro": "For questions you’ve already answered:",
+        "text1": "1. Find the saved file on your device."
+        "text2": "2. Upload the file to add saved answers to the form.",
+        "text3": "3. Reattach any documents, as these do not upload with your answers."
+        "text4": "4. Continue filling out the form."
       }
     },
     "prompt": {
       "title": "Save to device",
       "text1": "Download a copy of your form in progress.",
-      "text2": "Resume later by finding the file on your device and loading your saved answers.",
-      "text3": "Make sure you protect your data by keeping the downloaded file in a safe place on a trusted device.",
+      "text2": "Resume later by finding the file on your device. Load your saved answers and reattach documents such as birth certificates or resumes.",
+      "text3": "Keep the file with your form answers in a safe place on a trusted device.",
       "okay": "Save",
       "cancel": "Cancel"
     },
@@ -380,7 +381,7 @@
     "spinner": "Submitting form"
   },
   "saveFileWarning": {
-    "text": "You'll need to re-upload any files attached when you resume filling the form."
+    "text": "Reattach any documents when you resume."
   },
   "confirmFileWarning": {
     "text": "This copy of your answers will not include the files you attached to your submission."
