@@ -20,7 +20,7 @@ export {
 
 export { isValidDateObject, isValidDate, isValidDateFormat } from "./validation/date";
 
-export { validateOnSubmit, validate, validateVisibleElements } from "./process";
+export { validate, validateVisibleElements } from "./process";
 
 export {
   getVisibleGroupsBasedOnValuesRecursive,
