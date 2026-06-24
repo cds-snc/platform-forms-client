@@ -142,7 +142,7 @@ describe("submitForm", () => {
       responses: mockValues,
       securityAttribute: mockTemplate.securityAttribute,
       formId: mockFormId,
-      versionId: "2",
+      version: 2,
       language: mockLanguage,
       fileChecksums: undefined,
     });
