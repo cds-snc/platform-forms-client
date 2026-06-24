@@ -281,7 +281,7 @@ export const Form = withFormik<FormProps, Responses>({
       ...values,
       currentGroup: props.currentGroup,
       groupHistory: props.getGroupHistory(),
-      matchedIds: props.matchedIds,
+      matchedIds: props.matchedIds.current,
     };
     const { errors } = validateVisibleElements(validationPrepValues, props);
     return errors;
@@ -338,7 +338,7 @@ export const Form = withFormik<FormProps, Responses>({
         ...formValuesWithoutFileContent,
         currentGroup: formikBag.props.currentGroup,
         groupHistory: formikBag.props.getGroupHistory(),
-        matchedIds: formikBag.props.matchedIds,
+        matchedIds: formikBag.props.matchedIds.current,
       };
       const result = await submitForm(
         validationPrepValues,

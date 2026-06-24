@@ -22,7 +22,7 @@ export interface FormProps {
   t: TFunction;
   allowGrouping?: boolean | undefined;
   getGroupHistory: () => string[];
-  matchedIds: string[];
+  matchedIds: React.RefObject<string[]>;
   saveSessionProgress: (language?: Language) => void;
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;
