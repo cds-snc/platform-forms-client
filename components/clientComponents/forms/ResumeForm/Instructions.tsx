@@ -13,7 +13,7 @@ export const Instructions = () => {
         <p className="mb-2 text-sm">{t("saveAndResume.resumePage.readyToContinue.intro")}</p>
         <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text1")}</p>
         <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text2")}</p>
-        <p className="mb-10 text-sm">{t("saveAndResume.resumePage.readyToContinue.text3")}</p>
+        <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text3")}</p>
         <p className="mb-10 text-sm">{t("saveAndResume.resumePage.readyToContinue.text4")}</p>
       </div>
     </div>
