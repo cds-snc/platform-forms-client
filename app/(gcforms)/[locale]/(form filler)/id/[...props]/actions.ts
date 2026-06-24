@@ -112,13 +112,13 @@ export async function submitForm(
       }
 
       const formData = normalizeFormResponses(template, values);
-      const versionId = template.versionNumber?.toString();
+      const version = template.versionNumber || 1;
 
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,
         securityAttribute: template.securityAttribute,
         formId,
-        versionId,
+        version,
         language,
         fileChecksums,
       });
