@@ -62,6 +62,8 @@ export const executeTemplateUpdate = async (
         });
       })
       .catch((e) => prismaErrors(e, null));
+  } else if (currentTemplate?.currentPublishedVersionId && currentTemplate.isPublished) {
+    return null;
   } else {
     updatedTemplate = await prisma.template
       .update({
