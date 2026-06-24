@@ -14,7 +14,7 @@ import {
   validateFormConfig,
 } from "../../mutations/updateTemplate";
 import { TemplateAlreadyPublishedError } from "../../internal/errors";
-import { Prisma } from "@root/packages/database/src/generated/browser";
+import type { Prisma } from "@gcforms/database";
 
 type CurrentTemplate = Prisma.TemplateGetPayload<{
   select: {
