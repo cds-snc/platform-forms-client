@@ -168,10 +168,6 @@ const scheduleFormSubmissionNotification = async (
 
   const notificationId = randomUUID();
 
-  logMessage.debug(
-    `Sending a deferred notification: formId=${formId}, notificationId=${notificationId}, notificationEmailType=${notificationEmailType}`
-  );
-
   // Fire-and-forget: write the deferred notification record to DynamoDB
   // The Reliability lambda will enqueue it once the submission is confirmed
   sendEmail(

@@ -42,7 +42,7 @@ export const sendEmail = async (
         }
 
         logMessage.debug(
-          `Queued notifications email via ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"} successfully:`
+          `Queued Notification email via ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"} successfully`
         );
         return;
       }
@@ -58,7 +58,7 @@ export const sendEmail = async (
         emails.map((addr) => gcNotifyConnector.sendEmail(addr, templateId, personalisation))
       );
 
-      logMessage.debug("Sent email directly to Notify successfully");
+      logMessage.debug("Sent email directly to GC Notify successfully");
     } catch (error) {
       logMessage.error(
         `Failed to send ${type} email to ${Array.isArray(email) ? email.join(", ") : email} through GC Notify. Reason: ${
