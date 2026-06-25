@@ -33,9 +33,13 @@ vi.mock("@root/i18n", () => ({
 }));
 
 vi.mock("@lib/notifications", () => ({
-  isFormEligibleForNotifications: vi.fn(),
+  isFormEligibleForEmails: vi.fn(),
   updateNotificationMarker: vi.fn(),
-  sendDeferredFormSubmissionNotification: vi.fn(),
+  prepareFormSubmissionEmail: vi.fn(),
+}));
+
+vi.mock("@lib/integration/notifyConnector", () => ({
+  sendEmail: vi.fn(),
 }));
 
 vi.mock("./lib/server/normalizeFormResponses", () => ({
@@ -54,7 +58,8 @@ import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
-import { isFormEligibleForNotifications, sendDeferredFormSubmissionNotification, updateNotificationMarker } from "@lib/notifications";
+import { isFormEligibleForEmails, prepareFormSubmissionEmail, updateNotificationMarker } from "@lib/notifications";
+import { sendEmail } from "@lib/integration/notifyConnector";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
 
@@ -95,9 +100,10 @@ describe("submitForm", () => {
       submissionId: "test-submission-id",
       fileURLMap: {}
     });
-    (isFormEligibleForNotifications as Mock).mockResolvedValue(false);
+    (isFormEligibleForEmails as Mock).mockResolvedValue(false);
     (updateNotificationMarker as Mock).mockResolvedValue(null);
-    (sendDeferredFormSubmissionNotification as Mock).mockResolvedValue(undefined);
+    (prepareFormSubmissionEmail as Mock).mockResolvedValue(null);
+    (sendEmail as Mock).mockResolvedValue(undefined);
   });
 
   it("should return MissingFormDataError when file input validation fails", async () => {
@@ -151,14 +157,21 @@ describe("submitForm", () => {
       fileChecksums: undefined,
       notificationId: undefined,
     });
-    expect(isFormEligibleForNotifications).not.toHaveBeenCalled();
-    expect(sendDeferredFormSubmissionNotification).not.toHaveBeenCalled();
+    expect(isFormEligibleForEmails).toHaveBeenCalledWith(mockFormId);
+    expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
+    expect(sendEmail).not.toHaveBeenCalled();
   });
 
   it("should send a first submission notification when form is eligible and no prior marker exists", async () => {
+    const mockEmailData = {
+      emails: ["user@example.com"],
+      subject: "You have a new submission",
+      formResponse: "Email body",
+    };
     (checkOne as Mock).mockResolvedValue(true);
-    (isFormEligibleForNotifications as Mock).mockResolvedValue(true);
+    (isFormEligibleForEmails as Mock).mockResolvedValue(true);
     (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
+    (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
 
     const result = await submitForm(mockValues, mockLanguage, mockFormId);
 
@@ -170,15 +183,21 @@ describe("submitForm", () => {
 
     expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId);
 
-    const notificationId = (processFormData as Mock).mock.calls[0][0].notificationId;
-    expect(notificationId).toBeTypeOf("string");
-
-    expect(sendDeferredFormSubmissionNotification).toHaveBeenCalledWith(
-      notificationId,
+    expect(prepareFormSubmissionEmail).toHaveBeenCalledWith(
       mockFormId,
       mockTemplate.form.titleEn,
       mockTemplate.form.titleFr,
       "FIRST_EMAIL"
+    );
+
+    const notificationId = (processFormData as Mock).mock.calls[0][0].notificationId;
+    expect(notificationId).toBeTypeOf("string");
+
+    expect(sendEmail).toHaveBeenCalledWith(
+      mockEmailData.emails,
+      { subject: mockEmailData.subject, formResponse: mockEmailData.formResponse },
+      "formSubmissionNotification",
+      { mode: "deferred", notificationId }
     );
     expect(processFormData).toHaveBeenCalledWith(
       expect.objectContaining({ notificationId })
@@ -186,9 +205,15 @@ describe("submitForm", () => {
   });
 
   it("should send a second submission notification when form is eligible and first marker already set", async () => {
+    const mockEmailData = {
+      emails: ["user@example.com"],
+      subject: "You have multiple new submissions",
+      formResponse: "Email body",
+    };
     (checkOne as Mock).mockResolvedValue(true);
-    (isFormEligibleForNotifications as Mock).mockResolvedValue(true);
+    (isFormEligibleForEmails as Mock).mockResolvedValue(true);
     (updateNotificationMarker as Mock).mockResolvedValue("SECOND_EMAIL");
+    (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
 
     const result = await submitForm(mockValues, mockLanguage, mockFormId);
 
@@ -200,15 +225,21 @@ describe("submitForm", () => {
 
     expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId);
 
-    const notificationId = (processFormData as Mock).mock.calls[0][0].notificationId;
-    expect(notificationId).toBeTypeOf("string");
-
-    expect(sendDeferredFormSubmissionNotification).toHaveBeenCalledWith(
-      notificationId,
+    expect(prepareFormSubmissionEmail).toHaveBeenCalledWith(
       mockFormId,
       mockTemplate.form.titleEn,
       mockTemplate.form.titleFr,
       "SECOND_EMAIL"
+    );
+
+    const notificationId = (processFormData as Mock).mock.calls[0][0].notificationId;
+    expect(notificationId).toBeTypeOf("string");
+
+    expect(sendEmail).toHaveBeenCalledWith(
+      mockEmailData.emails,
+      { subject: mockEmailData.subject, formResponse: mockEmailData.formResponse },
+      "formSubmissionNotification",
+      { mode: "deferred", notificationId }
     );
     expect(processFormData).toHaveBeenCalledWith(
       expect.objectContaining({ notificationId })
@@ -217,13 +248,14 @@ describe("submitForm", () => {
 
   it("should not send a notification when form is eligible but marker limit is reached", async () => {
     (checkOne as Mock).mockResolvedValue(true);
-    (isFormEligibleForNotifications as Mock).mockResolvedValue(true);
+    (isFormEligibleForEmails as Mock).mockResolvedValue(true);
     (updateNotificationMarker as Mock).mockResolvedValue(null);
 
     await submitForm(mockValues, mockLanguage, mockFormId);
 
     expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId);
-    expect(sendDeferredFormSubmissionNotification).not.toHaveBeenCalled();
+    expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
+    expect(sendEmail).not.toHaveBeenCalled();
     expect(processFormData).toHaveBeenCalledWith(
       expect.objectContaining({ notificationId: undefined })
     );

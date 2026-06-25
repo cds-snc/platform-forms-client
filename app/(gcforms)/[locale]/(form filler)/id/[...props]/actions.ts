@@ -14,10 +14,11 @@ import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
 import {
-  isFormEligibleForNotifications,
-  sendDeferredFormSubmissionNotification,
+  isFormEligibleForEmails,
+  prepareFormSubmissionEmail,
   updateNotificationMarker,
 } from "@lib/notifications";
+import { sendEmail } from "@lib/integration/notifyConnector";
 import { traceFunction } from "@lib/otel";
 
 import { MissingFormDataError } from "./lib/client/exceptions";
@@ -118,38 +119,11 @@ export async function submitForm(
 
       const formData = normalizeFormResponses(template, values);
 
-      let notificationId: string | undefined;
-
-      const notificationsEnabled = await checkOne(FeatureFlags.notifications);
-      const shouldSendNotification =
-        notificationsEnabled && (await isFormEligibleForNotifications(formId));
-
-      if (shouldSendNotification) {
-        const notificationEmailType = await updateNotificationMarker(formId);
-
-        // Only send a notification for Single email or Multiple email status
-        if (notificationEmailType) {
-          notificationId = randomUUID();
-
-          logMessage.debug(
-            `Sending a deferred notification: formId=${formId}, notificationId=${notificationId}, notificationEmailType=${notificationEmailType}`
-          );
-
-          // Fire-and-forget: create the deferred notification record in DynamoDB
-          // The Reliability lambda will enqueue it once the submission is confirmed
-          sendDeferredFormSubmissionNotification(
-            notificationId,
-            formId,
-            template.form.titleEn,
-            template.form.titleFr,
-            notificationEmailType
-          ).catch((error) =>
-            logMessage.warn(
-              `sendDeferredFormSubmissionNotification failed for form ${formId}: ${(error as Error).message}`
-            )
-          );
-        }
-      }
+      const notificationId = await scheduleFormSubmissionNotification(
+        formId,
+        template.form.titleEn,
+        template.form.titleFr
+      );
 
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,
@@ -170,3 +144,46 @@ export async function submitForm(
     }
   });
 }
+
+// Note: the returned notificationId is used in processFormData. Sending via the notifcation pipeline will
+// only kick off is anotificationId is present in processFormData.
+const scheduleFormSubmissionNotification = async (
+  formId: string,
+  formTitleEn: string,
+  formTitleFr: string
+): Promise<string | undefined> => {
+  const shouldSendNotification = await isFormEligibleForEmails(formId);
+  if (!shouldSendNotification) return undefined;
+
+  const notificationEmailType = await updateNotificationMarker(formId);
+  if (!notificationEmailType) return undefined;
+
+  const emailData = await prepareFormSubmissionEmail(
+    formId,
+    formTitleEn,
+    formTitleFr,
+    notificationEmailType
+  );
+  if (!emailData) return undefined;
+
+  const notificationId = randomUUID();
+
+  logMessage.debug(
+    `Sending a deferred notification: formId=${formId}, notificationId=${notificationId}, notificationEmailType=${notificationEmailType}`
+  );
+
+  // Fire-and-forget: write the deferred notification record to DynamoDB
+  // The Reliability lambda will enqueue it once the submission is confirmed
+  sendEmail(
+    emailData.emails,
+    { subject: emailData.subject, formResponse: emailData.formResponse },
+    "formSubmissionNotification",
+    { mode: "deferred", notificationId }
+  ).catch((error) =>
+    logMessage.warn(
+      `sendEmail deferred notification failed for form ${formId}: ${(error as Error).message}`
+    )
+  );
+
+  return notificationId;
+};

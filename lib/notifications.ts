@@ -1,12 +1,9 @@
-import { notification } from "@gcforms/connectors";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { checkOne } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
 import { sendEmail } from "@lib/integration/notifyConnector";
 
 // Hard coded since only one interval is supported currently
@@ -20,7 +17,10 @@ type Status = (typeof Status)[keyof typeof Status];
 
 export type NotificationEmailType = "FIRST_EMAIL" | "SECOND_EMAIL";
 
-export const isFormEligibleForNotifications = async (formId: string): Promise<boolean> => {
+// Determines whether to send email submission udpates.
+// Note: this does not includ notifications feature check. This is checking if form
+// meets the criteria to be sent emails (either by notifications or directly via GC Notify)
+export const isFormEligibleForEmails = async (formId: string): Promise<boolean> => {
   // Avoid legacy forms that receive delivery by email
   const deliveryOption = await _getDeliveryOption(formId);
   if (deliveryOption) {
@@ -63,36 +63,44 @@ export const updateNotificationMarker = async (
 };
 
 /**
- * Creates a deferred notification record in DynamoDB that will be picked up
- * and enqueued by the Reliability lambda once the submission is confirmed.
+ * Prepares the email data for a form submission notification.
+ * Returns the recipient emails and personalisation content, or null if nothing should be sent.
  *
- * Note: should be called as fire-and-forget (no await) so that a failure
- * does not block the submission response returned to the user.
+ * Note: should be awaited before fire-and-forget sendEmail so that any prep
+ * failure does not surface inside processFormData.
  */
-export const sendDeferredFormSubmissionNotification = async (
-  notificationId: string,
+export const prepareFormSubmissionEmail = async (
   formId: string,
   formTitleEn: string,
   formTitleFr: string,
   emailType: NotificationEmailType
-): Promise<void> => {
-  const users = await getNotificationsUsersForForm(formId);
-  if (!Array.isArray(users) || users.length === 0) {
-    return;
-  }
+): Promise<{ emails: string[]; subject: string; formResponse: string } | null> => {
+  try {
+    const users = await getNotificationsUsersForForm(formId);
+    if (!Array.isArray(users) || users.length === 0) return null;
 
-  const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
-  if (emails.length === 0) {
-    return;
-  }
+    const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
+    if (emails.length === 0) return null;
 
-  await sendEmailAfterSubmissionProcessed(
-    notificationId,
-    emails,
-    formTitleEn,
-    formTitleFr,
-    emailType === "SECOND_EMAIL"
-  );
+    const multipleSubmissions = emailType === "SECOND_EMAIL";
+    const { t } = await serverTranslation("form-builder");
+    const HOST = await getOrigin();
+
+    return {
+      emails,
+      subject: multipleSubmissions
+        ? t("settings.notifications.email.multipleSubmissions.subject")
+        : t("settings.notifications.email.singleSubmission.subject"),
+      formResponse: multipleSubmissions
+        ? await multipleSubmissionsEmailTemplate(HOST, formTitleEn, formTitleFr)
+        : await singleSubmissionEmailTemplate(HOST, formTitleEn, formTitleFr),
+    };
+  } catch (error) {
+    logMessage.warn(
+      `prepareFormSubmissionEmail failed for form ${formId}: ${(error as Error).message}`
+    );
+    return null;
+  }
 };
 
 /**
@@ -209,34 +217,6 @@ const getMarker = async (formId: string) => {
     .catch((err) => logMessage.error(`getMarker: ${err}`));
 };
 
-const sendEmailAfterSubmissionProcessed = async (
-  notificationId: string,
-  emails: string[],
-  formTitleEn: string,
-  formTitleFr: string,
-  multipleSubmissions: boolean = false
-) => {
-  try {
-    const { t } = await serverTranslation("form-builder");
-    const HOST = await getOrigin();
-
-    await notification.sendDeferred({
-      notificationId,
-      emails,
-      subject: multipleSubmissions
-        ? t("settings.notifications.email.multipleSubmissions.subject")
-        : t("settings.notifications.email.singleSubmission.subject"),
-      body: multipleSubmissions
-        ? await multipleSubmissionsEmailTemplate(HOST, formTitleEn, formTitleFr)
-        : await singleSubmissionEmailTemplate(HOST, formTitleEn, formTitleFr),
-    });
-  } catch (error) {
-    logMessage.warn(
-      `Deferred notification failed for notificationId ${notificationId} with error: ${(error as Error).message}`
-    );
-  }
-};
-
 const singleSubmissionEmailTemplate = async (
   HOST: string,
   formTitleEn: string,
@@ -320,36 +300,6 @@ const archivedFormEmailTemplate = async (
     `;
 };
 
-const sendArchivedFormNotificationsToAllUsers = async (
-  users: {
-    email: string;
-  }[],
-  formId: string,
-  formTitleEn: string,
-  formTitleFr: string,
-  actionEmail: string
-) => {
-  if (!Array.isArray(users) || users.length === 0) {
-    logMessage.debug("sendArchivedFormNotificationsToAllUsers missing users");
-    return;
-  }
-
-  try {
-    const { t } = await serverTranslation("form-builder");
-    const HOST = await getOrigin();
-
-    await notification.sendImmediate({
-      emails: users.map((u) => u.email),
-      subject: t("settings.notifications.email.archivedForm.subject"),
-      body: await archivedFormEmailTemplate(HOST, formTitleEn, formTitleFr, actionEmail),
-    });
-  } catch (error) {
-    logMessage.warn(
-      `Immediate notification failed for archived form ${formId} with error: ${(error as Error).message}`
-    );
-  }
-};
-
 interface Session {
   user: {
     email: string;
@@ -369,31 +319,18 @@ export const sendArchivedFormNotifications = async (
     return;
   }
 
-  const notificationsEnabled = await checkOne(FeatureFlags.notifications);
+  try {
+    const { t } = await serverTranslation("form-builder");
+    const HOST = await getOrigin();
+    const subject = t("settings.notifications.email.archivedForm.subject");
+    const body = await archivedFormEmailTemplate(HOST, titleEn, titleFr, session.user.email);
 
-  if (notificationsEnabled) {
-    sendArchivedFormNotificationsToAllUsers(
-      templateUsers,
-      formId,
-      titleEn,
-      titleFr,
-      session.user.email
+    templateUsers.forEach((user) => {
+      sendEmail(user.email, { subject, formResponse: body }, "sendArchivedFormNotifications");
+    });
+  } catch (error) {
+    logMessage.warn(
+      `sendArchivedFormNotifications failed for archived form ${formId} with error: ${(error as Error).message}`
     );
-  } else {
-    // Fallback to GC Notify
-    try {
-      const { t } = await serverTranslation("form-builder");
-      const HOST = await getOrigin();
-      const subject = t("settings.notifications.email.archivedForm.subject");
-      const body = await archivedFormEmailTemplate(HOST, titleEn, titleFr, session.user.email);
-
-      templateUsers.forEach((user) => {
-        sendEmail(user.email, { subject, formResponse: body }, "sendArchivedFormNotifications");
-      });
-    } catch (error) {
-      logMessage.warn(
-        `GC Notify fallback failed for archived form ${formId} with error: ${(error as Error).message}`
-      );
-    }
   }
 };

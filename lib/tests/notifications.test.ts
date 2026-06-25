@@ -17,7 +17,7 @@ vi.mock("@lib/logger", () => ({
   },
 }));
 
-// Unused in isFormEligibleForNotifications but imported at module level in notifications.ts
+// Unused in isFormEligibleForEmails but imported at module level in notifications.ts
 vi.mock("@gcforms/connectors", () => ({
   notification: {
     sendDeferred: vi.fn(),
@@ -47,7 +47,7 @@ vi.mock("@i18n", () => ({
   serverTranslation: vi.fn(),
 }));
 
-import { isFormEligibleForNotifications, updateNotificationMarker } from "@lib/notifications";
+import { isFormEligibleForEmails, updateNotificationMarker } from "@lib/notifications";
 import { prisma } from "@gcforms/database";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 
@@ -66,7 +66,7 @@ const mockNotificationUsers = (
   vi.mocked(prisma.template.findUnique).mockResolvedValueOnce({ users } as never);
 };
 
-describe("isFormEligibleForNotifications", () => {
+describe("isFormEligibleForEmails", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -74,7 +74,7 @@ describe("isFormEligibleForNotifications", () => {
   it("returns false when the form has a delivery option set (legacy email delivery form)", async () => {
     mockDeliveryOption({ emailAddress: "recipient@example.com" });
 
-    const result = await isFormEligibleForNotifications(mockFormId);
+    const result = await isFormEligibleForEmails(mockFormId);
 
     expect(result).toBe(false);
     // Should short-circuit — user query should never be called
@@ -85,7 +85,7 @@ describe("isFormEligibleForNotifications", () => {
     mockDeliveryOption(null); // no delivery option → continue
     vi.mocked(prisma.template.findUnique).mockResolvedValueOnce(null); // template not found for users query
 
-    const result = await isFormEligibleForNotifications(mockFormId);
+    const result = await isFormEligibleForEmails(mockFormId);
 
     expect(result).toBe(false);
   });
@@ -94,7 +94,7 @@ describe("isFormEligibleForNotifications", () => {
     mockDeliveryOption(null);
     mockNotificationUsers([]);
 
-    const result = await isFormEligibleForNotifications(mockFormId);
+    const result = await isFormEligibleForEmails(mockFormId);
 
     expect(result).toBe(false);
   });
@@ -106,7 +106,7 @@ describe("isFormEligibleForNotifications", () => {
       { id: "user-2", email: "user2@example.com", notificationsTemplates: [] },
     ]);
 
-    const result = await isFormEligibleForNotifications(mockFormId);
+    const result = await isFormEligibleForEmails(mockFormId);
 
     expect(result).toBe(false);
   });
@@ -117,7 +117,7 @@ describe("isFormEligibleForNotifications", () => {
       { id: "user-1", email: "user1@example.com", notificationsTemplates: [{ id: mockFormId }] },
     ]);
 
-    const result = await isFormEligibleForNotifications(mockFormId);
+    const result = await isFormEligibleForEmails(mockFormId);
 
     expect(result).toBe(true);
   });
@@ -129,7 +129,7 @@ describe("isFormEligibleForNotifications", () => {
       { id: "user-2", email: "user2@example.com", notificationsTemplates: [{ id: mockFormId }] },
     ]);
 
-    const result = await isFormEligibleForNotifications(mockFormId);
+    const result = await isFormEligibleForEmails(mockFormId);
 
     expect(result).toBe(true);
   });
