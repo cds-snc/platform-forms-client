@@ -276,7 +276,7 @@ export const Form = withFormik<FormProps, Responses>({
     return getFormInitialValues(props.formRecord, props.language);
   },
 
-  validate: (values, props) => () => {
+  validate: (values, props) => {
     const validationPrepValues = {
       ...values,
       currentGroup: props.currentGroup,
