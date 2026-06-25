@@ -22,10 +22,10 @@ export const sendEmail = async (
       }
 
       const emails = Array.isArray(email) ? email : [email];
-      const notificationsEnabled = await checkOne(FeatureFlags.notifications);
+      const notificationEnabled = await checkOne(FeatureFlags.notification);
       const hasFileAttachment = "application_file" in personalisation;
 
-      if (notificationsEnabled && !hasFileAttachment) {
+      if (notificationEnabled && !hasFileAttachment) {
         const subject = typeof personalisation.subject === "string" ? personalisation.subject : "";
         const body =
           typeof personalisation.formResponse === "string" ? personalisation.formResponse : "";
@@ -42,7 +42,7 @@ export const sendEmail = async (
         }
 
         logMessage.debug(
-          `Queued Notification email via ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"} successfully`
+          `Queued a Notification email via ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"} successfully`
         );
         return;
       }
