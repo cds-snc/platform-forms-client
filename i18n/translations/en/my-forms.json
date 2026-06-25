@@ -5,7 +5,8 @@
     "published": "Published",
     "all": "All",
     "archived": "Archived",
-    "recentlyEdited": "Recent"
+    "recentlyEdited": "Recent",
+    "closed": "Closed"
   },
   "account": {
     "viewAccount": "Your account"
@@ -22,8 +23,9 @@
     "noPublishedForms": "You have no published forms.",
     "noRecentlyEditedForms": "You have no recently edited forms.",
     "noArchivedForms": "You have no archived forms.",
+    "noClosedForms": "You have no closed forms.",
     "lastEditedBy": "By: {{lastEditedBy}}",
-    "readOnly": "Open - ",
+    "readOnly": "In progress - ",
     "editing": "{{name}} is editing",
     "announceLocked": "Form named {{formName}} is now being edited",
     "announceUnlockedLocked": "Form named {{formName}} is no longer being edited"
@@ -34,7 +36,8 @@
     "states": {
       "draft": "Draft",
       "published": "Published",
-      "archived": "Archived"
+      "archived": "Archived",
+      "closed": "Closed"
     },
     "title": {
       "notTranslatedEn": "No English translation",
@@ -44,6 +47,7 @@
     "deleteDate": " Delete date: ",
     "deletedIn": "Will be deleted in ",
     "days": " days",
+    "closedOn": "Closed on: {{date}}",
     "deliveryOption": {
       "email": "Responses get sent to:",
       "vault": "Responses page"

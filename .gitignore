@@ -120,3 +120,6 @@ eslint_report.html
 
 /otel
 next-env.d.ts
+
+# Ignore generated styles
+packages/core/styles/

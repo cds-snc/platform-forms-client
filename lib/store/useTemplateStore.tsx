@@ -52,6 +52,7 @@ import {
   getChoice,
   localizeField,
   getFormElementIndexes,
+  getName,
 } from "./helpers/elements";
 import { transform } from "./helpers/elements/transformFormProperties";
 import { BetaComponentsError, checkForBetaComponents } from "../validation/betaCheck";
@@ -200,7 +201,7 @@ const createTemplateStore = (
             getFormElementById: getFormElementById(set, get),
             getFormElementWithIndexById: getFormElementWithIndexById(set, get),
             getFormElementIndexes: getFormElementIndexes(set, get),
-            getName: () => get().name,
+            getName: getName(set, get),
             getDeliveryOption: () => get().deliveryOption,
             getSecurityAttribute: () => get().securityAttribute,
             getGroupsEnabled: () => get().allowGroupsFlag,
