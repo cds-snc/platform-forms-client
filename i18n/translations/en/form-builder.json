@@ -38,6 +38,7 @@
       "textField": "Add short answer",
       "textArea": "Add long answer",
       "radio": "Add radio buttons",
+      "starRating": "Add star rating",
       "checkbox": "Add checkboxes",
       "dropdown": "Add dropdown",
       "fileInput": "Add file upload",
@@ -279,6 +280,12 @@
       "title": "Radio buttons",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Select one option."
+    },
+    "starRating": {
+      "description": "A star rating element where users select a rating from 1 to N stars.",
+      "title": "Star rating",
+      "exampleQuestion": "How would you rate your experience?",
+      "numberOfStars": "Number of stars"
     },
     "richText": {
       "description": "A rich text element for inserting headings, paragraph text, lists, or links.",
@@ -754,6 +761,10 @@
       "errorInvalidRegex": "The regex pattern is invalid. Please enter a valid regex pattern.",
       "previousPatterns": "Previous patterns",
       "errorUnsafeRegex": "This regex pattern is potentially unsafe. Avoid patterns that could cause performance issues, such as those with nested quantifiers or excessive backtracking."
+    },
+    "starRatingSparkle": {
+      "title": "Sparkle effect",
+      "checkboxLabel": "Show a sparkle animation when a star is selected"
     }
   },
   "moreOptions": "More options",
@@ -1175,6 +1186,7 @@
   "shortAnswerText": "Short answer",
   "signInToTest": "<a href=\"/en/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Radio buttons",
+  "starRating": "Star rating",
   "start": "Start",
   "startErrorTemplateSize": "The form file is too large",
   "startErrorDuplicateQuestionId": "Question IDs must be unique",
