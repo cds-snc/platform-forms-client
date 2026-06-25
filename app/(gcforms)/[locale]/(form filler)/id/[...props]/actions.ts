@@ -131,6 +131,7 @@ export async function submitForm(
         formId,
         language,
         fileChecksums,
+        // If non-null will be used in the reliability lambda to kick off the deferred notification pipeline
         notificationId,
       });
 
@@ -145,41 +146,41 @@ export async function submitForm(
   });
 }
 
-// Note: the returned notificationId is used in processFormData. Sending via the notifcation pipeline will
-// only kick off is anotificationId is present in processFormData.
 const scheduleFormSubmissionNotification = async (
   formId: string,
   formTitleEn: string,
   formTitleFr: string
 ): Promise<string | undefined> => {
-  const shouldSendNotification = await isFormEligibleForEmails(formId);
-  if (!shouldSendNotification) return undefined;
+  try {
+    const shouldSendNotification = await isFormEligibleForEmails(formId);
+    if (!shouldSendNotification) return undefined;
 
-  const notificationEmailType = await updateNotificationMarker(formId);
-  if (!notificationEmailType) return undefined;
+    const notificationEmailType = await updateNotificationMarker(formId);
+    if (!notificationEmailType) return undefined;
 
-  const emailData = await prepareFormSubmissionEmail(
-    formId,
-    formTitleEn,
-    formTitleFr,
-    notificationEmailType
-  );
-  if (!emailData) return undefined;
+    const emailData = await prepareFormSubmissionEmail(
+      formId,
+      formTitleEn,
+      formTitleFr,
+      notificationEmailType
+    );
+    if (!emailData) return undefined;
 
-  const notificationId = randomUUID();
+    const notificationId = randomUUID();
 
-  // Fire-and-forget: write the deferred notification record to DynamoDB
-  // The Reliability lambda will enqueue it once the submission is confirmed
-  sendEmail(
-    emailData.emails,
-    { subject: emailData.subject, formResponse: emailData.formResponse },
-    "formSubmissionNotification",
-    { mode: "deferred", notificationId }
-  ).catch((error) =>
+    // Await to avoid a race condition where if the DB write fails, the reliability
+    // lambda will be given a reference to a non-existent record
+    await sendEmail(
+      emailData.emails,
+      { subject: emailData.subject, formResponse: emailData.formResponse },
+      "formSubmissionNotification",
+      { mode: "deferred", notificationId }
+    );
+    return notificationId;
+  } catch (error) {
     logMessage.warn(
-      `sendEmail deferred notification failed for form ${formId}: ${(error as Error).message}`
-    )
-  );
-
-  return notificationId;
+      `scheduleFormSubmissionNotification failed for form ${formId}: ${(error as Error).message}`
+    );
+    return undefined;
+  }
 };

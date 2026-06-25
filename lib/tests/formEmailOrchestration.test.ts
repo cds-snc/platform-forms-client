@@ -53,17 +53,21 @@ import { getRedisInstance } from "@lib/integration/redisConnector";
 
 const mockFormId = "test-form-id";
 
-// Helpers to set up the two sequential prisma.template.findUnique calls
-const mockDeliveryOption = (deliveryOption: object | null) => {
-  vi.mocked(prisma.template.findUnique).mockResolvedValueOnce(
-    deliveryOption !== null ? ({ deliveryOption } as never) : null
-  );
-};
-
-const mockNotificationUsers = (
-  users: { id: string; email: string; notificationsTemplates: { id: string }[] }[]
+// Helper to set up the single merged prisma.template.findUnique call
+const mockTemplate = (
+  options: {
+    deliveryOption?: object | null;
+    users?: { id: string; notificationsTemplates: { id: string }[] }[];
+  } | null
 ) => {
-  vi.mocked(prisma.template.findUnique).mockResolvedValueOnce({ users } as never);
+  if (options === null) {
+    vi.mocked(prisma.template.findUnique).mockResolvedValueOnce(null);
+  } else {
+    vi.mocked(prisma.template.findUnique).mockResolvedValueOnce({
+      deliveryOption: options.deliveryOption ?? null,
+      users: options.users ?? [],
+    } as never);
+  }
 };
 
 describe("isFormEligibleForEmails", () => {
@@ -72,18 +76,16 @@ describe("isFormEligibleForEmails", () => {
   });
 
   it("returns false when the form has a delivery option set (legacy email delivery form)", async () => {
-    mockDeliveryOption({ emailAddress: "recipient@example.com" });
+    mockTemplate({ deliveryOption: { emailAddress: "recipient@example.com" }, users: [] });
 
     const result = await isFormEligibleForEmails(mockFormId);
 
     expect(result).toBe(false);
-    // Should short-circuit — user query should never be called
     expect(prisma.template.findUnique).toHaveBeenCalledTimes(1);
   });
 
-  it("returns false when the form template is not found when fetching users", async () => {
-    mockDeliveryOption(null); // no delivery option → continue
-    vi.mocked(prisma.template.findUnique).mockResolvedValueOnce(null); // template not found for users query
+  it("returns false when the form template is not found", async () => {
+    mockTemplate(null);
 
     const result = await isFormEligibleForEmails(mockFormId);
 
@@ -91,8 +93,7 @@ describe("isFormEligibleForEmails", () => {
   });
 
   it("returns false when the form has no associated users", async () => {
-    mockDeliveryOption(null);
-    mockNotificationUsers([]);
+    mockTemplate({ users: [] });
 
     const result = await isFormEligibleForEmails(mockFormId);
 
@@ -100,11 +101,12 @@ describe("isFormEligibleForEmails", () => {
   });
 
   it("returns false when no users have notifications enabled", async () => {
-    mockDeliveryOption(null);
-    mockNotificationUsers([
-      { id: "user-1", email: "user1@example.com", notificationsTemplates: [] },
-      { id: "user-2", email: "user2@example.com", notificationsTemplates: [] },
-    ]);
+    mockTemplate({
+      users: [
+        { id: "user-1", notificationsTemplates: [] },
+        { id: "user-2", notificationsTemplates: [] },
+      ],
+    });
 
     const result = await isFormEligibleForEmails(mockFormId);
 
@@ -112,10 +114,9 @@ describe("isFormEligibleForEmails", () => {
   });
 
   it("returns true when at least one user has notifications enabled", async () => {
-    mockDeliveryOption(null);
-    mockNotificationUsers([
-      { id: "user-1", email: "user1@example.com", notificationsTemplates: [{ id: mockFormId }] },
-    ]);
+    mockTemplate({
+      users: [{ id: "user-1", notificationsTemplates: [{ id: mockFormId }] }],
+    });
 
     const result = await isFormEligibleForEmails(mockFormId);
 
@@ -123,11 +124,12 @@ describe("isFormEligibleForEmails", () => {
   });
 
   it("returns true when some users have notifications enabled and others do not", async () => {
-    mockDeliveryOption(null);
-    mockNotificationUsers([
-      { id: "user-1", email: "user1@example.com", notificationsTemplates: [] },
-      { id: "user-2", email: "user2@example.com", notificationsTemplates: [{ id: mockFormId }] },
-    ]);
+    mockTemplate({
+      users: [
+        { id: "user-1", notificationsTemplates: [] },
+        { id: "user-2", notificationsTemplates: [{ id: mockFormId }] },
+      ],
+    });
 
     const result = await isFormEligibleForEmails(mockFormId);
 
@@ -168,5 +170,14 @@ describe("updateNotificationMarker", () => {
 
     expect(result).toBeNull();
     expect(await redis.get(redisKey)).toBe("MULTIPLE_EMAIL_SENT");
+  });
+
+  it("returns FIRST_EMAIL and resets the marker when an unexpected value is present", async () => {
+    await redis.set(redisKey, "");
+
+    const result = await updateNotificationMarker(mockFormId);
+
+    expect(result).toBe("FIRST_EMAIL");
+    expect(await redis.get(redisKey)).toBe("SINGLE_EMAIL_SENT");
   });
 });

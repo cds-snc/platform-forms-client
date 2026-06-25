@@ -17,57 +17,74 @@ type Status = (typeof Status)[keyof typeof Status];
 
 export type NotificationEmailType = "FIRST_EMAIL" | "SECOND_EMAIL";
 
-// Determines whether to send email submission udpates.
-// Note: this does not includ notifications feature check. This is checking if form
-// meets the criteria to be sent emails (either by notifications or directly via GC Notify)
+// Determines whether to send email submission updates based on template state
 export const isFormEligibleForEmails = async (formId: string): Promise<boolean> => {
+  const template = await prisma.template
+    .findUnique({
+      where: { id: formId },
+      select: {
+        deliveryOption: true,
+        users: {
+          select: {
+            id: true,
+            notificationsTemplates: {
+              where: { id: formId },
+              select: { id: true },
+            },
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
   // Avoid legacy forms that receive delivery by email
-  const deliveryOption = await _getDeliveryOption(formId);
-  if (deliveryOption) {
-    return false;
-  }
+  if (!template || template.deliveryOption) return false;
 
-  const users = await getNotificationsUsersForForm(formId);
+  // Avoid some older forms that may not have users
+  if (!template.users.length) return false;
 
-  // Avoid some older forms may not have users
-  if (!Array.isArray(users) || users.length === 0) {
-    return false;
-  }
-
-  // Avoid forms that have no users have notifications enabled
-  const atLeastOneUserEnabled = users.some((user) => user.enabled);
-  if (!atLeastOneUserEnabled) {
-    return false;
-  }
-
-  return true;
+  // Avoid forms where no user has notifications enabled
+  return template.users.some((user) => user.notificationsTemplates.length > 0);
 };
 
 export const updateNotificationMarker = async (
   formId: string
 ): Promise<NotificationEmailType | null> => {
-  const marker = await getMarker(formId);
-  switch (marker ?? "") {
-    case Status.SINGLE_EMAIL_SENT:
-      // First email already sent — advance marker and signal second email
-      await setMarker(formId, Status.MULTIPLE_EMAIL_SENT);
-      return "SECOND_EMAIL";
-    case Status.MULTIPLE_EMAIL_SENT:
-      // Both emails already sent for this interval, do nothing
-      return null;
-    default:
-      // No email sent yet — advance marker and signal first email
-      await setMarker(formId);
-      return "FIRST_EMAIL";
+  const key = `notification:formId:${formId}`;
+  const ttl = NOTIFICATIONS_INTERVAL * 60; // convert from minutes to seconds
+  const redis = await getRedisInstance();
+
+  // The SET NX bit is atomic and helps prevent a race condition where two simultaneous submissions
+  // could both trigger a first email
+  const wasSet = await redis.set(key, Status.SINGLE_EMAIL_SENT, "EX", ttl, "NX");
+  if (wasSet === "OK") {
+    logMessage.debug(`updateNotificationMarker: formId ${formId} transitioned to FIRST_EMAIL`);
+    return "FIRST_EMAIL";
   }
+
+  const current = await redis.get(key);
+  if (current === Status.SINGLE_EMAIL_SENT) {
+    await redis.set(key, Status.MULTIPLE_EMAIL_SENT, "EX", ttl);
+    logMessage.debug(`updateNotificationMarker: formId ${formId} transitioned to SECOND_EMAIL`);
+    return "SECOND_EMAIL";
+  }
+
+  if (current === Status.MULTIPLE_EMAIL_SENT) {
+    logMessage.debug(`updateNotificationMarker: formId ${formId} — interval limit reached`);
+    return null;
+  }
+
+  // Unexpected or stale value (e.g. empty string from a bad previous write) - reset to a likely state
+  logMessage.warn(
+    `updateNotificationMarker: unexpected marker value "${current}" for formId ${formId}, resetting`
+  );
+  await redis.set(key, Status.SINGLE_EMAIL_SENT, "EX", ttl);
+  return "FIRST_EMAIL";
 };
 
 /**
  * Prepares the email data for a form submission notification.
  * Returns the recipient emails and personalisation content, or null if nothing should be sent.
- *
- * Note: should be awaited before fire-and-forget sendEmail so that any prep
- * failure does not surface inside processFormData.
  */
 export const prepareFormSubmissionEmail = async (
   formId: string,
@@ -175,48 +192,6 @@ export const getNotificationsUsersForForm = async (formId: string) => {
   }));
 };
 
-const _getDeliveryOption = async (formId: string) => {
-  const template = await prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-      },
-      select: {
-        deliveryOption: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!template) {
-    logMessage.debug(`_getDeliveryOption template not found with id ${formId}`);
-    return null;
-  }
-
-  return template.deliveryOption;
-};
-
-const setMarker = async (formId: string, status: Status = Status.SINGLE_EMAIL_SENT) => {
-  const ttl = NOTIFICATIONS_INTERVAL * 60; // convert from minutes to seconds
-  const redis = await getRedisInstance();
-  await redis
-    .set(`notification:formId:${formId}`, status, "EX", ttl)
-    .then(() =>
-      logMessage.debug(
-        `setMarker: notification:formId:${formId} set with ttl ${ttl} and marked ${status}`
-      )
-    )
-    .catch((err) =>
-      logMessage.error(`setMarker: notification:formId:${formId} failed to set ${err}`)
-    );
-};
-
-const getMarker = async (formId: string) => {
-  const redis = await getRedisInstance();
-  return redis
-    .get(`notification:formId:${formId}`)
-    .catch((err) => logMessage.error(`getMarker: ${err}`));
-};
-
 const singleSubmissionEmailTemplate = async (
   HOST: string,
   formTitleEn: string,
@@ -251,21 +226,21 @@ const multipleSubmissionsEmailTemplate = async (
   const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
   return `
-  ${t_en("settings.notifications.email.multipleSubmissions.paragraph1")}
-  ${formTitleEn}
-  
-  **[${t_en("settings.notifications.email.multipleSubmissions.paragraph2")}](${HOST}/auth/login)**
-  
-  *${t_en("settings.notifications.email.multipleSubmissions.paragraph3")}*
-  
-  ---
-  
-  ${t_fr("settings.notifications.email.multipleSubmissions.paragraph1")}
-  ${formTitleFr}
-  
-  **[${t_fr("settings.notifications.email.multipleSubmissions.paragraph2")}](${HOST}/auth/login)**
-  
-  *${t_fr("settings.notifications.email.multipleSubmissions.paragraph3")}*
+${t_en("settings.notifications.email.multipleSubmissions.paragraph1")}
+${formTitleEn}
+
+**[${t_en("settings.notifications.email.multipleSubmissions.paragraph2")}](${HOST}/auth/login)**
+
+*${t_en("settings.notifications.email.multipleSubmissions.paragraph3")}*
+
+---
+
+${t_fr("settings.notifications.email.multipleSubmissions.paragraph1")}
+${formTitleFr}
+
+**[${t_fr("settings.notifications.email.multipleSubmissions.paragraph2")}](${HOST}/auth/login)**
+
+*${t_fr("settings.notifications.email.multipleSubmissions.paragraph3")}*
     `;
 };
 
@@ -278,25 +253,25 @@ const archivedFormEmailTemplate = async (
   const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
   return `
-  ${t_en("settings.notifications.email.archivedForm.paragraph1")}
-  ${formTitleEn}
-  ${t_en("settings.notifications.email.archivedForm.paragraph2")}
-  ${actionEmail}
-  
-  **[${t_en("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
-  
-  *${t_en("settings.notifications.email.archivedForm.paragraph4")}*
-  
-  ---
-  
-  ${t_fr("settings.notifications.email.archivedForm.paragraph1")}
-  ${formTitleFr}
-  ${t_fr("settings.notifications.email.archivedForm.paragraph2")}
-  ${actionEmail}
-  
-  **[${t_fr("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
-  
-  *${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
+${t_en("settings.notifications.email.archivedForm.paragraph1")}
+${formTitleEn}
+${t_en("settings.notifications.email.archivedForm.paragraph2")}
+${actionEmail}
+
+**[${t_en("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+
+*${t_en("settings.notifications.email.archivedForm.paragraph4")}*
+
+---
+
+${t_fr("settings.notifications.email.archivedForm.paragraph1")}
+${formTitleFr}
+${t_fr("settings.notifications.email.archivedForm.paragraph2")}
+${actionEmail}
+
+**[${t_fr("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+
+*${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
     `;
 };
 
@@ -325,9 +300,16 @@ export const sendArchivedFormNotifications = async (
     const subject = t("settings.notifications.email.archivedForm.subject");
     const body = await archivedFormEmailTemplate(HOST, titleEn, titleFr, session.user.email);
 
-    templateUsers.forEach((user) => {
-      sendEmail(user.email, { subject, formResponse: body }, "sendArchivedFormNotifications");
-    });
+    const results = await Promise.allSettled(
+      templateUsers.map((user) =>
+        sendEmail(user.email, { subject, formResponse: body }, "sendArchivedFormNotifications")
+      )
+    );
+    results
+      .filter((r): r is PromiseRejectedResult => r.status === "rejected")
+      .forEach((r) =>
+        logMessage.warn(`sendArchivedFormNotifications: failed to send email: ${r.reason}`)
+      );
   } catch (error) {
     logMessage.warn(
       `sendArchivedFormNotifications failed for archived form ${formId} with error: ${(error as Error).message}`
