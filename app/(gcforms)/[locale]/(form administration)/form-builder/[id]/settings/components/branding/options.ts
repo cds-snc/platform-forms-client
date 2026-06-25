@@ -395,4 +395,13 @@ export const options = [
     logoTitleEn: "Canada Revenue Agency",
     logoTitleFr: "Agence du revenu du Canada",
   },
+  {
+    name: "pacifican",
+    urlEn: "https://www.canada.ca/en/pacific-economic-development.html",
+    urlFr: "https://www.canada.ca/fr/developpement-economique-pacifique.html",
+    logoEn: "/img/branding/pacifican-en.svg",
+    logoFr: "/img/branding/pacifican-fr.svg",
+    logoTitleEn: "Pacific Economic Development Canada",
+    logoTitleFr: "Développement économique Canada pour le Pacifique",
+  },
 ];
