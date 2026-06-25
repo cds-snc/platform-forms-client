@@ -42,7 +42,7 @@ export const sendEmail = async (
         }
 
         logMessage.debug(
-          `Queued notifications email via ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"} successfully`
+          `Queued notifications email via ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"} successfully:`
         );
         return;
       }

@@ -32,7 +32,7 @@ vi.mock("@root/i18n", () => ({
   serverTranslation: vi.fn(),
 }));
 
-vi.mock("@lib/notifications", () => ({
+vi.mock("@lib/formEmailOrchestration", () => ({
   isFormEligibleForEmails: vi.fn(),
   updateNotificationMarker: vi.fn(),
   prepareFormSubmissionEmail: vi.fn(),
@@ -58,7 +58,7 @@ import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
-import { isFormEligibleForEmails, prepareFormSubmissionEmail, updateNotificationMarker } from "@lib/notifications";
+import { isFormEligibleForEmails, prepareFormSubmissionEmail, updateNotificationMarker } from "@lib/formEmailOrchestration";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";

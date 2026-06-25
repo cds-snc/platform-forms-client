@@ -9,7 +9,7 @@ import { Notifications } from "./components/notifications/Notifications";
 import {
   getNotificationsUsersForForm,
   getUserNotificationSettingsForForm,
-} from "@lib/notifications";
+} from "@lib/formEmailOrchestration";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;

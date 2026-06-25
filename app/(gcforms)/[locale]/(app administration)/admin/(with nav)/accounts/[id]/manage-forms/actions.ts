@@ -6,7 +6,7 @@ import { TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/error
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
-import { sendArchivedFormNotifications } from "@lib/notifications";
+import { sendArchivedFormNotifications } from "@lib/formEmailOrchestration";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 

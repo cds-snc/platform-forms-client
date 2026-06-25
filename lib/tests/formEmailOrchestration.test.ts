@@ -47,7 +47,7 @@ vi.mock("@i18n", () => ({
   serverTranslation: vi.fn(),
 }));
 
-import { isFormEligibleForEmails, updateNotificationMarker } from "@lib/notifications";
+import { isFormEligibleForEmails, updateNotificationMarker } from "@lib/formEmailOrchestration";
 import { prisma } from "@gcforms/database";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 

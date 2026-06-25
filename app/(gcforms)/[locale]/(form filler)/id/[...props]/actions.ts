@@ -17,7 +17,7 @@ import {
   isFormEligibleForEmails,
   prepareFormSubmissionEmail,
   updateNotificationMarker,
-} from "@lib/notifications";
+} from "@lib/formEmailOrchestration";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { traceFunction } from "@lib/otel";
 
