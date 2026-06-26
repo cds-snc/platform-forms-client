@@ -166,6 +166,9 @@ const scheduleFormSubmissionNotification = async (
     );
     if (!emailData) return undefined;
 
+    // The flag is checked here (not just inside sendEmail) because the notificationId must only
+    // be generated and returned when the pipeline is active — it is passed to processFormData so
+    // the reliability lambda can enqueue the deferred send after the submission is persisted.
     const notificationEnabled = await checkOne(FeatureFlags.notification);
 
     // Notification flag ON: send via deferred notification pipeline

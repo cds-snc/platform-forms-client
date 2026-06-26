@@ -49,7 +49,7 @@ export const sendEmail = async (
         return;
       }
 
-      // Fallback: send directly via GC Notify (flag off, or email has a file attachment)
+      // Fallback: send directly via GC Notify (flag off, or email has a file attachment, or bypassNotificationPipeline is true)
 
       const templateId = process.env.TEMPLATE_ID;
       if (!templateId) {

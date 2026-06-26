@@ -331,4 +331,38 @@ describe("submitForm", () => {
       formRecord: templateWithFileInput,
       t: expect.any(Function)
     });
-  });});
+  });
+
+  it("should fall back to GC Notify (sendEmail without deferred mode) and return undefined notificationId when the notification flag is off", async () => {
+    const mockEmailData = {
+      emails: ["user@example.com"],
+      subject: "You have a new submission",
+      formResponse: "Email body",
+    };
+    // Flag OFF
+    (checkOne as Mock).mockResolvedValue(false);
+    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
+    (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
+    (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+
+    expect(result).toEqual({
+      id: mockFormId,
+      submissionId: "test-submission-id",
+      fileURLMap: {},
+    });
+
+    // sendEmail is called without deferred mode — falls back to GC Notify
+    expect(sendEmail).toHaveBeenCalledWith(
+      mockEmailData.emails,
+      { subject: mockEmailData.subject, formResponse: mockEmailData.formResponse },
+      "formSubmissionNotification"
+    );
+
+    // No notificationId is generated or forwarded to processFormData when the flag is off
+    expect(processFormData).toHaveBeenCalledWith(
+      expect.objectContaining({ notificationId: undefined })
+    );
+  });
+});
