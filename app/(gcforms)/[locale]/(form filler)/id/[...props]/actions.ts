@@ -19,7 +19,7 @@ import { traceFunction } from "@lib/otel";
 import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
-import { ResponseValidationValues } from "@root/packages/core/src/process";
+import { ResponseValidationValues } from "@gcforms/core";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 

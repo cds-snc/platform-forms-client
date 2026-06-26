@@ -53,7 +53,7 @@ import { serverTranslation } from "@root/i18n";
 import { sendNotifications } from "@lib/notifications";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
-import { ResponseValidationValues } from "@root/packages/core/src/process";
+import { ResponseValidationValues } from "@gcforms/core";
 
 describe("submitForm", () => {
   const mockFormId = "test-form-id";
