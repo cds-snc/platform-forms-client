@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "@serverComponents/globals/card/Card";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 
 export const LoggedOutTabName = {
   PUBLISH: "publish",

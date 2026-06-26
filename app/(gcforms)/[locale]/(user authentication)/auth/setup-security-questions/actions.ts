@@ -1,7 +1,7 @@
 "use server";
 
 import * as v from "valibot";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { createSecurityAnswers } from "@lib/auth";
 import { logMessage } from "@lib/logger";
 import { AuthenticatedAction } from "@lib/actions";

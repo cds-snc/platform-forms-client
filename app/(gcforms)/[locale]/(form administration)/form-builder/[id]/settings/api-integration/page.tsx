@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { Metadata } from "next";
 import Markdown from "markdown-to-jsx";
 
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { authCheckAndThrow } from "@lib/actions";
 import { ApiKeyButton } from "./components/ApiKeyButton";
 import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";

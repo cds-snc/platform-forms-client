@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { LeftNav } from "@clientComponents/admin/LeftNav/NavLink";
 import { AccountsIcon } from "@serverComponents/icons/AccountsIcon";
 import { SettingsIcon } from "@serverComponents/icons/SettingsIcon";

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Session } from "next-auth";
 import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { authorization } from "@lib/privileges";

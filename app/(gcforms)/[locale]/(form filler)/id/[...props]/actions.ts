@@ -12,7 +12,7 @@ import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements } from "@gcforms/core";
-import { serverTranslation } from "@root/i18n";
+import { serverTranslation } from "@i18n/server";
 import { sendNotifications } from "@lib/notifications";
 import { traceFunction } from "@lib/otel";
 

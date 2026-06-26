@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { authorization } from "@lib/privileges";
 import { Metadata } from "next";
 import { RedirectType, redirect } from "next/navigation";

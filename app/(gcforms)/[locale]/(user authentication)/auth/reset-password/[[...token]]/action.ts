@@ -1,7 +1,7 @@
 "use server";
 
 import * as v from "valibot";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { sendPasswordResetLink, validateSecurityAnswers } from "@lib/auth";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { logEvent } from "@lib/auditLogs";

@@ -1,5 +1,5 @@
 import { ViewTransition } from "react";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { authCheckAndThrow } from "@lib/actions";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";

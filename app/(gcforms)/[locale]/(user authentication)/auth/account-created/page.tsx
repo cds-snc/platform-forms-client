@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { Metadata } from "next";
 import { authCheckAndRedirect } from "@lib/actions";
@@ -31,7 +31,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   return (
     <div>
-      <h1 className="mb-12 mt-6 border-b-0">{t("accountCreated.title")}</h1>
+      <h1 className="mt-6 mb-12 border-b-0">{t("accountCreated.title")}</h1>
       <h3 className="!mb-2">{t("accountCreated.yourAccountListDescription")}</h3>
       <ul className="mb-4">
         <li>{t("accountCreated.yourAccountList.item1")}</li>

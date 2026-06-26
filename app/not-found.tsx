@@ -1,10 +1,10 @@
 import React from "react";
-import { serverTranslation } from "@i18n";
-
+import { serverTranslation } from "@i18n/server";
+import { I18n } from "@i18n";
 import { Metadata } from "next";
 
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
-import { Footer } from "@serverComponents/globals/Footer";
+import { Footer } from "@root/components/serverComponents/globals/Footer/Footer";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { languages } from "@i18n/settings";
 import { cookies } from "next/headers";
@@ -31,7 +31,9 @@ export default async function NotFound() {
         <main id="content">
           <div className="mt-10">
             <ErrorPanel headingTag="h1" title={t("404.title")}>
-              <p>{t("404.body")}</p>
+              <p>
+                <I18n i18nKey="404.body" namespace="error" />
+              </p>
             </ErrorPanel>
           </div>
         </main>

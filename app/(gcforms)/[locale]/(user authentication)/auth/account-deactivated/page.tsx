@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Metadata } from "next";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
@@ -24,7 +24,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const supportHref = `/${locale}/support`;
   return (
     <div>
-      <h2 className="mb-6 mt-4 p-0">{t("title")}</h2>
+      <h2 className="mt-4 mb-6 p-0">{t("title")}</h2>
       <p className="mb-10">{t("description")}</p>
       <div className="laptop:flex">
         <LinkButton.Primary href={supportHref} className="mb-2">

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getPageTitle } from "./lib/getPageTitle";
 

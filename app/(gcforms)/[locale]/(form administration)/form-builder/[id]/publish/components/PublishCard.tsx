@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Publish } from "./Publish";
 import { Language } from "@lib/types/form-builder-types";
 

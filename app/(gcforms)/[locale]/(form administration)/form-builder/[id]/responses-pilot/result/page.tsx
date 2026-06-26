@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Confirmation } from "./Confirmation";
 import { ApiClientGuard } from "../guards/ApiClientGuard";
 import { LocationGuard } from "../guards/LocationGuard";

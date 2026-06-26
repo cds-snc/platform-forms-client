@@ -12,7 +12,7 @@ import {
 } from "@lib/invitations/exceptions";
 import { removeAssignedUserFromTemplate } from "@lib/templates/mutations/removeAssignedUserFromTemplate";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
 import { cancelInvitation as cancelInvitationAction } from "@lib/invitations/cancelInvitation";

@@ -1,6 +1,6 @@
 "use server";
 
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 import {

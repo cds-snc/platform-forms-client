@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { DownloadIcon, UploadIcon } from "@serverComponents/icons";
 
 export const AdditionalResourcesSection = async ({ locale }: { locale: string }) => {
@@ -49,14 +49,11 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mb-1 block text-base 
-                font-bold
-                !text-slate-500 no-underline
-                hover:underline"
+                className="mb-1 block text-base font-bold !text-slate-500 no-underline hover:underline"
               >
                 {resource.title}
               </a>
-              <p className="text-lg font-bold text-slate-950 ">{resource.description}</p>
+              <p className="text-lg font-bold text-slate-950">{resource.description}</p>
             </div>
           </div>
         ))}
@@ -71,10 +68,7 @@ export const AdditionalResourcesSection = async ({ locale }: { locale: string })
               href={resource.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mb-1 block 
-              text-lg
-              font-bold !text-current no-underline
-              hover:underline"
+              className="mb-1 block text-lg font-bold !text-current no-underline hover:underline"
             >
               {resource.title}
             </a>

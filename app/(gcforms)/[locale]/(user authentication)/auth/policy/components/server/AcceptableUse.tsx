@@ -1,7 +1,7 @@
 import React from "react";
 import { RichText } from "../../../../../../../../components/clientComponents/forms/RichText/RichText";
 import { AcceptButton } from "../client/AcceptButton";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import enAcceptableUse from "@content/en/responsibilities.md";
 import frAcceptableUse from "@content/fr/responsibilities.md";
 

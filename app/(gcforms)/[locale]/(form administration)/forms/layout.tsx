@@ -3,8 +3,8 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
-import { SkipLink } from "@serverComponents/globals/SkipLink";
-import { Footer } from "@serverComponents/globals/Footer";
+import { SkipLink } from "@clientComponents/globals/SkipLink";
+import { Footer } from "@root/components/serverComponents/globals/Footer/Footer";
 import { AuthenticatedLayout } from "@lib/pages/auth";
 import { authorization } from "@lib/privileges";
 

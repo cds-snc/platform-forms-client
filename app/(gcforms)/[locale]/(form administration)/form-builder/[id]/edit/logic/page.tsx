@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Metadata } from "next";
 import { FlowWithProvider } from "./components/flow/FlowWithProvider";
 import { Suspense } from "react";
@@ -23,7 +23,7 @@ export async function generateMetadata(props: {
 }
 
 const Loading = () => (
-  <div className="flex h-full items-center justify-center ">
+  <div className="flex h-full items-center justify-center">
     <Loader />
   </div>
 );

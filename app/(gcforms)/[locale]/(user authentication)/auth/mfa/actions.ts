@@ -1,7 +1,7 @@
 "use server";
 
 import * as v from "valibot";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { redirect } from "next/navigation";
 import { requestNew2FAVerificationCode } from "@lib/auth";
 import { signIn } from "@lib/auth";

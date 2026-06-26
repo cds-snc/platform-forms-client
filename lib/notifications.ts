@@ -3,7 +3,7 @@ import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { prisma, prismaErrors } from "@gcforms/database";
 
 // Hard coded since only one interval is supported currently

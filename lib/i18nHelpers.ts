@@ -1,16 +1,18 @@
 import i18next from "i18next";
-import myFormsEn from "@i18n/translations/en/my-forms.json";
-import myFormsFr from "@i18n/translations/fr/my-forms.json";
-import commonEn from "@i18n/translations/en/common.json";
-import commonFr from "@i18n/translations/fr/common.json";
-import reviewEn from "@i18n/translations/en/review.json";
-import reviewFr from "@i18n/translations/fr/review.json";
+import myFormsEn from "@i18n/locales/en/my-forms.json";
+import myFormsFr from "@i18n/locales/fr/my-forms.json";
+import commonEn from "@i18n/locales/en/common.json";
+import commonFr from "@i18n/locales/fr/common.json";
+import reviewEn from "@i18n/locales/en/review.json";
+import reviewFr from "@i18n/locales/fr/review.json";
 
 /**
  * This custom translation function works like useTranslation() from react-i18next which was not working in this context.
  * The language resources are hard coded to avoid having to async load them from the file system.
  * @param translationFile
  */
+
+// BRYAN - TODO remove this and fix translation
 export const customTranslate = (translationFile: "my-forms" | "common" | "review") => {
   if (!i18next.isInitialized) {
     i18next.init({

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fallbackLng, languages } from "./i18n/settings";
+import { fallbackLng } from "./i18n/settings";
 import type { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
 import { logMessage } from "@lib/logger";
@@ -85,8 +85,6 @@ export const config = {
 
 export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
   const pathname = req.nextUrl.pathname;
-  const searchParams = req.nextUrl.searchParams.toString();
-
   // console.log(`Middleware: ${pathname} ${searchParams}`);
 
   if (req.headers.get("next-action") !== null) {
@@ -124,31 +122,21 @@ export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
 
   debugLogger(`Middleware: ${prefetchedRoute ? "PREFECTHED LINK" : ""} path = ${pathname}`);
 
-  // Layer 1 - Redirect to language selector if app path is not provided
-
-  const layer1 = languageSelectorRedirect(req, pathname, pathLang);
-  if (layer1) return layer1;
-
-  // Layer 2 - Redirect to url with locale if lng in path is not present or supported
-
-  const layer2 = addLangToPath(req, pathname, cookieLang, searchParams);
-  if (layer2) return layer2;
-
   // Add Session Data to the req for the remaining levels
 
   const authCallback: (
     reqWithAuth: NextAuthRequest,
     event: NextFetchEvent
   ) => ReturnType<NextMiddleware> = (reqWithAuth, _event) => {
-    // Layer 3 - Pages with Required Auth
-    const layer3 = pageRequiresAuth(reqWithAuth, pathname, pathLang);
-    if (layer3) return layer3;
+    // Layer 1 - Pages with Required Auth
+    const layer1 = pageRequiresAuth(reqWithAuth, pathname, pathLang);
+    if (layer1) return layer1;
 
-    // Layer 4 - Auth Users Redirect
+    // Layer 2 - Auth Users Redirect
     // Skip auth flow redirects for prefetched routes to prevent navigation issues
     if (!prefetchedRoute) {
-      const layer4 = authFlowRedirect(reqWithAuth, pathname, pathLang, cookieLang);
-      if (layer4) return layer4;
+      const layer2 = authFlowRedirect(reqWithAuth, pathname, pathLang, cookieLang);
+      if (layer2) return layer2;
     }
 
     // Final Layer - Set Content Security Policy
@@ -200,50 +188,6 @@ const setCORS = (req: NextRequest, pathname: string) => {
     debugLogger(`Middleware Action: Setting CORS on API route: ${pathname}`);
 
     return response;
-  }
-};
-
-/**
- * Redirect to the language selection page if `/en` or /fr` is the page path
- */
-const languageSelectorRedirect = (req: NextRequest, pathname: string, pathLang: string) => {
-  if (languages.some((lang) => new RegExp(`^/${lang}/?$`).test(pathname))) {
-    const redirect = NextResponse.redirect(new URL("/", req.url));
-    // Set cookie on response back to browser so client can render correct language on client components
-    redirect.cookies.set("i18next", pathLang);
-    debugLogger(
-      `Middleware Action: Redirecting to language selector: ${pathname} pathlang: ${pathLang} `
-    );
-    return redirect;
-  }
-};
-
-/**
- * Ensure the the language param is always in the path.
- * Set the language param using the cookie language if param is missing or not supported.
- */
-const addLangToPath = (
-  req: NextRequest,
-  pathname: string,
-  cookieLang: string | undefined,
-  searchParams: string
-) => {
-  if (pathname !== "/" && !languages.some((loc) => new RegExp(`^/${loc}/.+$`).test(pathname))) {
-    // Check to see if language cookie is present
-    if (languages.some((lang) => lang === cookieLang)) {
-      // Cookies language is already supported, redirect to that language
-      logMessage.debug(
-        `Middleware Action: Adding language to path: ${cookieLang}, pathname: ${pathname}`
-      );
-
-      return NextResponse.redirect(
-        new URL(`/${cookieLang}${pathname}${searchParams && "?" + searchParams}`, req.url)
-      );
-    } else {
-      // Redirect to fallback language
-      debugLogger(`Middleware Action: Adding default language to path:  ${pathname}`);
-      return NextResponse.redirect(new URL(`/${fallbackLng}${pathname}`, req.url));
-    }
   }
 };
 

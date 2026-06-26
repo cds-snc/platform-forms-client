@@ -30,7 +30,7 @@ export const Title = ({
   return (
     <HeadingTag
       data-testid="alert-heading"
-      className={cn("!mb-0 pb-0 !mt-0", headingClasses[HeadingTag], statusClass, className)}
+      className={cn("!mt-0 !mb-0 pb-0", headingClasses[HeadingTag], statusClass, className)}
     >
       {children}
     </HeadingTag>
@@ -130,6 +130,8 @@ type AlertProps = {
   onDismiss?: React.ReactEventHandler;
   focussable?: boolean;
   role?: "alert" | "note"; // use note for non-critical alerts (e.g. info)
+  i18nKey?: string;
+  namespace?: string;
 };
 
 const AlertContainer = ({
@@ -145,7 +147,12 @@ const AlertContainer = ({
   role = "alert",
   ...props
 }: AlertProps) => {
-  let alertTitle: JSX.Element | string | undefined = title;
+  const namespaces = ["common"];
+  if (props.namespace) {
+    namespaces.push(props.namespace);
+  }
+  const { t } = useTranslation(namespaces);
+  let alertTitle: JSX.Element | string | undefined = props.i18nKey && t(props.i18nKey);
   let alertBody: JSX.Element | string | undefined = body;
   let alertIcon: JSX.Element | false | undefined =
     status && icon == undefined ? defaultIcons[status] : icon;
@@ -156,8 +163,6 @@ const AlertContainer = ({
   if (dismissible && !onDismiss) {
     onDismiss = () => setDismissed(true);
   }
-
-  const { t } = useTranslation("common");
 
   // Used to focus on showing. Purely for visual users, the role=alert takes care of AT users.
   useEffect(() => {
@@ -192,7 +197,7 @@ const AlertContainer = ({
     <div
       ref={refFocus}
       {...(focussable && { tabIndex: -1 })}
-      className={cn("relative flex rounded-sm laptop:rounded-md p-4", className)}
+      className={cn("laptop:rounded-md relative flex rounded-sm p-4", className)}
       data-testid="alert"
       role={role}
       {...props}
@@ -201,7 +206,7 @@ const AlertContainer = ({
         <button
           data-testid="alert-dismiss"
           id="dismissButton"
-          aria-label={t("alert.dismissAlert")}
+          aria-label={t("alert.dismissAlert", { ns: "common" })}
           className="absolute right-0 mr-4 size-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
           onClick={onDismiss}
         >

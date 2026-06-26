@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 
 import { authCheckAndThrow } from "@lib/actions";
 import { FeatureFlags } from "@lib/cache/types";

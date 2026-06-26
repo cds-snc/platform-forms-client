@@ -1,4 +1,4 @@
-import { serverTranslation } from "@root/i18n";
+import { serverTranslation } from "@i18n/server";
 
 export const CoEditingHelp = async () => {
   const { t } = await serverTranslation("my-forms");

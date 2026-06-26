@@ -8,7 +8,7 @@ import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
 
 if (

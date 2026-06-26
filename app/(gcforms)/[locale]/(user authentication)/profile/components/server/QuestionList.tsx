@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 
 import { EditSecurityQuestionButton } from "../client/EditSecurityQuestionModal";
 
