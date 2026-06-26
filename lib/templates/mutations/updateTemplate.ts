@@ -2,13 +2,6 @@ import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { FormRecord, FormProperties } from "@lib/types";
 import { ClosedDetails } from "@gcforms/types";
-import { authorization } from "@lib/privileges";
-import {
-  AuditLogAccessDeniedDetails,
-  AuditLogDetails,
-  AuditLogEvent,
-  logEvent,
-} from "@lib/auditLogs";
 import { checkForBetaComponentsAsync } from "@lib/validation/betaCheck";
 import { logMessage } from "@lib/logger";
 import { checkFlag, parseTemplate } from "../internal";
@@ -16,23 +9,12 @@ import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { InvalidFormConfigError, TemplateAlreadyPublishedError } from "../internal/errors";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { isValidISODate } from "@lib/utils/date/isValidISODate";
-import { getFullTemplateByID } from "../queries/getFullTemplateByID";
-import { deleteDraftFormResponses } from "@lib/vault";
-import {
-  UpdateTemplateCommand,
-  UpdateFormPurposeCommand,
-  UpdateIsPublishedCommand,
-  UpdateTemplateAction,
-  UpdateClosedDataCommand,
-  UpdateFormBrandingCommand,
-  UpdateSecurityAttributeCommand,
-  UpdateFormSaveAndResumeCommand,
-  UpdateNameCommand,
-  UpdateFormConfigCommand,
-} from "../types";
-import isEqual from "lodash.isequal";
+import { UpdateTemplateCommand, UpdateTemplateAction } from "../types";
 import { updateTemplate as updateTemplateVersioningEnabled } from "../versioning/mutations/updateTemplate";
 import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { publishTemplate } from "./publishTemplate";
+import { authorizeForCommand } from "./shared/authorizeForCommand";
+import { logTemplateUpdateEvent } from "./shared/logTemplateUpdateEvent";
 
 /**
  * Validate the form config for a template update command
@@ -65,97 +47,6 @@ export const validateFormConfig = async (formConfig: FormProperties, user: { ema
       )}`
     );
     throw new InvalidFormConfigError();
-  }
-};
-
-type AuthorizationResult = Awaited<ReturnType<typeof authorization.canEditForm>>;
-
-export const authorizeForCommand = async (
-  command: UpdateTemplateCommand
-): Promise<AuthorizationResult> => {
-  switch (command.action) {
-    case UpdateTemplateAction.Name:
-      return authorization.canEditForm(command.formId).catch((e) => {
-        logEvent(
-          e.user.id,
-          { type: "Form", id: command.formId },
-          "AccessDenied",
-          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateForm
-        );
-        throw e;
-      });
-    case UpdateTemplateAction.FormConfig:
-      return authorization.canEditForm(command.formId).catch((e) => {
-        logEvent(
-          e.user.id,
-          { type: "Form", id: command.formId },
-          "AccessDenied",
-          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateFormJson
-        );
-        throw e;
-      });
-    case UpdateTemplateAction.ClosedData:
-      return authorization.canEditForm(command.formId).catch((e) => {
-        logEvent(
-          e.user.id,
-          { type: "Form", id: command.formId },
-          "AccessDenied",
-          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateClosingDate
-        );
-        throw e;
-      });
-    case UpdateTemplateAction.FormBranding:
-      return authorization.canEditForm(command.formId).catch((e) => {
-        logEvent(
-          e.user.id,
-          { type: "Form", id: command.formId },
-          "AccessDenied",
-          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateFormJson
-        );
-        throw e;
-      });
-    case UpdateTemplateAction.FormPurpose:
-      return authorization.canEditForm(command.formId).catch((e) => {
-        logEvent(
-          e.user.id,
-          { type: "Form", id: command.formId },
-          "AccessDenied",
-          AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetFormPurpose
-        );
-        throw e;
-      });
-    case UpdateTemplateAction.FormSaveAndResume:
-      return authorization.canEditForm(command.formId).catch((e) => {
-        logEvent(
-          e.user.id,
-          { type: "Form", id: command.formId },
-          "AccessDenied",
-          AuditLogAccessDeniedDetails.AccessDenied_AttemptToSetSaveAndResume
-        );
-        throw e;
-      });
-    case UpdateTemplateAction.SecurityAttribute:
-      return authorization.canEditForm(command.formId).catch((e) => {
-        logEvent(
-          e.user.id,
-          { type: "Form", id: command.formId },
-          "AccessDenied",
-          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateSecurityAttribute
-        );
-        throw e;
-      });
-    case UpdateTemplateAction.IsPublished:
-      return authorization.canPublishForm(command.formId).catch((e) => {
-        logEvent(
-          e.user.id,
-          { type: "Form", id: command.formId },
-          "AccessDenied",
-          AuditLogAccessDeniedDetails.AccessDenied_AttemptToPublishForm
-        );
-        throw e;
-      });
-    default:
-      throw new Error(`Unknown command action: ${JSON.stringify(command)}`);
   }
 };
 
@@ -290,114 +181,16 @@ const executeTemplateUpdate = async (updatePlan: UpdatePlan, lastEditedByUserId:
   return parseTemplate(updatedTemplate);
 };
 
-type UpdateAuditEvent = {
-  action: UpdateTemplateAction;
-  command: UpdateTemplateCommand;
-  user: { id: string; email: string };
-  beforeContext?: {
-    name?: string;
-    jsonConfig?: FormProperties;
-  };
-};
-
-export const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
-  switch (event.action) {
-    case UpdateTemplateAction.Name:
-      const nameCommand = event.command as UpdateNameCommand;
-      nameCommand.name !== undefined &&
-        (event.beforeContext?.name ?? "") !== nameCommand.name &&
-        logEvent(
-          event.user.id,
-          { type: "Form", id: nameCommand.formId },
-          AuditLogEvent.ChangeFormName,
-          AuditLogDetails.UpdatedFormName,
-          { newFormName: nameCommand.name ?? "" }
-        );
-      break;
-    case UpdateTemplateAction.FormConfig:
-      const formConfigCommand = event.command as UpdateFormConfigCommand;
-      !isEqual(event.beforeContext?.jsonConfig ?? {}, formConfigCommand.formConfig) &&
-        logEvent(
-          event.user.id,
-          { type: "Form", id: formConfigCommand.formId },
-          "UpdateForm",
-          AuditLogDetails.FormContentUpdated
-        );
-      break;
-    case UpdateTemplateAction.ClosedData:
-      const closedCommand = event.command as UpdateClosedDataCommand;
-
-      if (closedCommand.closingDate) {
-        const date = new Date(closedCommand.closingDate);
-        logEvent(
-          event.user.id,
-          { type: "Form", id: closedCommand.formId },
-          "UpdateForm",
-          AuditLogDetails.UpdateClosingDate,
-          { closingDate: date.toLocaleDateString("en-CA") }
-        );
-      } else {
-        logEvent(
-          event.user.id,
-          { type: "Form", id: event.command.formId },
-          "UpdateForm",
-          AuditLogDetails.RemoveClosingDate
-        );
-      }
-      break;
-    case UpdateTemplateAction.FormBranding:
-      const brandingCommand = event.command as UpdateFormBrandingCommand;
-      const brandName = brandingCommand.formConfig.brand?.name ?? "gc";
-      logEvent(
-        event.user.id,
-        { type: "Form", id: brandingCommand.formId },
-        AuditLogEvent.UpdateFormBranding,
-        AuditLogDetails.UpdateFormBranding,
-        { brand: brandName }
-      );
-      break;
-    case UpdateTemplateAction.FormPurpose:
-      const purposeCommand = event.command as UpdateFormPurposeCommand;
-      logEvent(
-        event.user.id,
-        { type: "Form", id: purposeCommand.formId },
-        AuditLogEvent.ChangeFormPurpose,
-        AuditLogDetails.SetFormPurpose,
-        { formPurpose: purposeCommand.formPurpose }
-      );
-      break;
-    case UpdateTemplateAction.FormSaveAndResume:
-      const saveAndResumeCommand = event.command as UpdateFormSaveAndResumeCommand;
-      logEvent(
-        event.user.id,
-        { type: "Form", id: saveAndResumeCommand.formId },
-        AuditLogEvent.ChangeFormSaveAndResume,
-        AuditLogDetails.SetSaveAndResume,
-        { saveAndResume: saveAndResumeCommand.saveAndResume ? "On" : "Off" }
-      );
-      break;
-    case UpdateTemplateAction.IsPublished:
-      const publishCommand = event.command as UpdateIsPublishedCommand;
-      logEvent(event.user.id, { type: "Form", id: publishCommand.formId }, "PublishForm");
-      break;
-    case UpdateTemplateAction.SecurityAttribute:
-      const securityCommand = event.command as UpdateSecurityAttributeCommand;
-      logEvent(
-        event.user.id,
-        { type: "Form", id: securityCommand.formId },
-        AuditLogEvent.ChangeSecurityAttribute,
-        AuditLogDetails.ChangeSecurityAttribute,
-        { securityAttribute: securityCommand.securityAttribute ?? "" }
-      );
-  }
-};
-
 /**
  * Update a form template
  * @param template A Form Record containing updated information
  * @returns The updated form template or null if the record does not exist
  */
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
+  if (command.action === UpdateTemplateAction.IsPublished) {
+    return publishTemplate(command);
+  }
+
   const templateVersioningEnabled = await isTemplateVersioningEnabled();
   if (templateVersioningEnabled) {
     return updateTemplateVersioningEnabled(command);
@@ -417,20 +210,6 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 
   if ("formConfig" in command) {
     await validateFormConfig(command.formConfig, user);
-  }
-
-  if (command.action === UpdateTemplateAction.IsPublished && command.isPublished) {
-    if (process.env.APP_ENV !== "test") {
-      try {
-        await deleteDraftFormResponses(command.formId);
-      } catch (e) {
-        if (e instanceof TemplateAlreadyPublishedError) {
-          // preserve old behavior if needed
-          return getFullTemplateByID(command.formId, false);
-        }
-        throw e;
-      }
-    }
   }
 
   const updateQuery = buildUpdateQuery(command);

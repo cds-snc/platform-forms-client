@@ -2,19 +2,14 @@ import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord, FormProperties } from "@lib/types";
 import { parseTemplate } from "../internal";
-import { getFullTemplateByID } from "../../queries/getFullTemplateByID";
-import { deleteDraftFormResponses } from "@lib/vault";
 import { UpdateTemplateCommand, UpdateTemplateAction } from "../../types";
 
-import {
-  authorizeForCommand,
-  buildUpdateQuery,
-  logTemplateUpdateEvent,
-  UpdatePlan,
-  validateFormConfig,
-} from "../../mutations/updateTemplate";
+import { buildUpdateQuery, UpdatePlan, validateFormConfig } from "../../mutations/updateTemplate";
+import { authorizeForCommand } from "../../mutations/shared/authorizeForCommand";
+import { logTemplateUpdateEvent } from "../../mutations/shared/logTemplateUpdateEvent";
 import { TemplateAlreadyPublishedError } from "../../internal/errors";
 import type { Prisma } from "@gcforms/database";
+import { publishTemplate } from "./publishTemplate";
 
 type CurrentTemplate = Prisma.TemplateGetPayload<{
   select: {
@@ -92,6 +87,10 @@ export const executeTemplateUpdate = async (
  * @returns The updated form template or null if the record does not exist
  */
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
+  if (command.action === UpdateTemplateAction.IsPublished) {
+    return publishTemplate(command);
+  }
+
   const { user } = await authorizeForCommand(command);
 
   const currentTemplate = await prisma.template.findUnique({
@@ -109,20 +108,6 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 
   if ("formConfig" in command) {
     await validateFormConfig(command.formConfig, user);
-  }
-
-  if (command.action === UpdateTemplateAction.IsPublished && command.isPublished) {
-    if (process.env.APP_ENV !== "test") {
-      try {
-        await deleteDraftFormResponses(command.formId);
-      } catch (e) {
-        if (e instanceof TemplateAlreadyPublishedError) {
-          // preserve old behavior if needed
-          return getFullTemplateByID(command.formId, false);
-        }
-        throw e;
-      }
-    }
   }
 
   const updateQuery = buildUpdateQuery(command);
