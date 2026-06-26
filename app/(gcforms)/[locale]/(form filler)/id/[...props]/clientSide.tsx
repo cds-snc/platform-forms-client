@@ -41,6 +41,8 @@ export const FormWrapper = ({
     setSubmissionDate,
     currentGroup,
     getGroupTitle,
+    matchedIds,
+    getGroupHistory,
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
@@ -169,6 +171,8 @@ export const FormWrapper = ({
         allowGrouping={allowGrouping}
         // Used in Formik handleSubmit where there is no access to useGCFormsContext
         currentGroup={currentGroup}
+        getGroupHistory={getGroupHistory}
+        matchedIds={matchedIds}
         setCaptchaFail={setCaptchaFail}
         captchaFail={captchaFail}
         captchaToken={captchaToken}
