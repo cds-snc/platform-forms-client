@@ -129,7 +129,7 @@ export const prepareFormSubmissionEmail = async (
  */
 export const getUserNotificationSettingsForForm = async (formId: string, userId: string) => {
   const template = await prisma.template
-    .findFirst({
+    .findUnique({
       where: {
         id: formId,
       },

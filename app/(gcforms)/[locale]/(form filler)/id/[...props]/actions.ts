@@ -166,17 +166,32 @@ const scheduleFormSubmissionNotification = async (
     );
     if (!emailData) return undefined;
 
-    const notificationId = randomUUID();
+    const notificationEnabled = await checkOne(FeatureFlags.notification);
 
-    // Await to avoid a race condition where if the DB write fails, the reliability
-    // lambda will be given a reference to a non-existent record
-    await sendEmail(
+    // Notification flag ON: send via deferred notification pipeline
+    if (notificationEnabled) {
+      const notificationId = randomUUID();
+      // Await before returning to ensure DB record  exist before the Lambda receives the notificationId
+      await sendEmail(
+        emailData.emails,
+        { subject: emailData.subject, formResponse: emailData.formResponse },
+        "formSubmissionNotification",
+        { mode: "deferred", notificationId }
+      );
+      return notificationId;
+    }
+
+    // Notification flag OFF: send directly via GC Notify fallback
+    sendEmail(
       emailData.emails,
       { subject: emailData.subject, formResponse: emailData.formResponse },
-      "formSubmissionNotification",
-      { mode: "deferred", notificationId }
+      "formSubmissionNotification"
+    ).catch((error) =>
+      logMessage.warn(
+        `scheduleFormSubmissionNotification: GC Notify fallback failed for form ${formId}: ${(error as Error).message}`
+      )
     );
-    return notificationId;
+    return undefined;
   } catch (error) {
     logMessage.warn(
       `scheduleFormSubmissionNotification failed for form ${formId}: ${(error as Error).message}`
