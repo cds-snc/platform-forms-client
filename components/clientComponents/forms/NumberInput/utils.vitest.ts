@@ -3,7 +3,7 @@ import {
   getNumberFormatOptions,
   formatNumberForDisplay,
   normalizeLocaleInput,
-} from "./utils";
+} from "@root/plugins/form-elements/numberInput/utils";
 
 describe("NumberInput Utils", () => {
   describe("langToLocale", () => {

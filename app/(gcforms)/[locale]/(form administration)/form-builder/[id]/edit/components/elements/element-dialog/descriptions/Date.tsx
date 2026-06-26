@@ -2,7 +2,8 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label, TextInput } from "@clientComponents/forms";
+import { Description, Label } from "@clientComponents/forms";
+import { TextInput } from "@root/plugins/shared";
 export const Date = () => {
   const { t } = useTranslation("form-builder");
 

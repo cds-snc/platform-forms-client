@@ -1,16 +1,10 @@
+import React from "react";
+import { isNumberInput } from "@gcforms/core";
 import { formatUserInput } from "@lib/utils/strings";
-import { FormItem } from "../helpers";
-import { isNumberInput } from "@root/packages/core/src";
-import { formatNumberForDisplay } from "../../NumberInput/utils";
-import { Language } from "@root/lib/types/form-builder-types";
+import { formatNumberForDisplay } from "./utils";
+import type { ReviewProps } from "../types";
 
-export const NumberInput = ({
-  formItem,
-  lang,
-}: {
-  formItem: FormItem | undefined;
-  lang: Language;
-}): React.ReactElement => {
+export const ReviewComponent = ({ formItem, language: lang }: ReviewProps): React.ReactElement => {
   if (!formItem || !formItem.element || !isNumberInput(formItem.element)) {
     return <></>;
   }

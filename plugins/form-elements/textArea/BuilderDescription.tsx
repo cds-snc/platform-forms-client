@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
+import { ExampleWrapper } from "@root/plugins/shared";
+import { TextArea as TextAreaComponent } from "./TextArea";
+import { Description, Label } from "@clientComponents/forms";
 
-import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label, TextArea as TextAreaComponent } from "@clientComponents/forms";
-
-export const TextArea = () => {
+const TextAreaDescription = () => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
@@ -13,7 +13,6 @@ export const TextArea = () => {
         {t("addElementDialog.textArea.title")}
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.textArea.description")}</p>
-
       <ExampleWrapper className="gcds-textarea-wrapper">
         <Label htmlFor="textarea" className="gcds-label">
           {t("addElementDialog.textArea.enterAnswer")}
@@ -24,3 +23,5 @@ export const TextArea = () => {
     </div>
   );
 };
+
+export default TextAreaDescription;

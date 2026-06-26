@@ -1,0 +1,32 @@
+"use client";
+import React from "react";
+import { useTranslation } from "@i18n/client";
+import { Checkbox, Label } from "@clientComponents/forms";
+import { ExampleWrapper } from "@root/plugins/shared";
+
+const BuilderDescriptionAttestation = () => {
+  const { t } = useTranslation("form-builder");
+  return (
+    <div>
+      <h3 data-testid="element-description-title" className="mb-0">
+        {t("addElementDialog.attestation.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.attestation.description")}</p>
+
+      <ExampleWrapper>
+        <Label className="gcds-label">
+          {t("addElementDialog.attest")}{" "}
+          <span className="label--required">({t("addElementDialog.allRequired")})</span>
+        </Label>
+
+        <div className="max-w-48 overflow-hidden p-2">
+          <Checkbox id="one" label={t("addElementDialog.condition1")} name={"nameOne"} />
+          <Checkbox id="two" label={t("addElementDialog.condition2")} name={"nameTwo"} />
+          <Checkbox id="three" label={t("addElementDialog.condition3")} name={"nameThree"} />
+        </div>
+      </ExampleWrapper>
+    </div>
+  );
+};
+
+export default BuilderDescriptionAttestation;

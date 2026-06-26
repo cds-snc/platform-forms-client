@@ -1,128 +1,28 @@
 "use client";
 
 import React, { ReactElement, type JSX } from "react";
-import { logMessage } from "@lib/logger";
-import {
-  Description,
-  Dropdown,
-  DynamicGroup,
-  FileInput,
-  FormGroup,
-  Label,
-  MultipleChoiceGroup,
-  RichText,
-  TextArea,
-  TextInput,
-  NumberInput,
-  ConditionalWrapper,
-  Combobox,
-  FormattedDate,
-} from "@clientComponents/forms";
-import {
-  FormElement,
-  FormElementTypes,
-  HTMLTextInputTypeAttribute,
-  PropertyChoices,
-  PublicFormRecord,
-  Responses,
-  Response,
-} from "@lib/types";
+import { DynamicGroup, ConditionalWrapper } from "@clientComponents/forms";
+import { FormElement, FormElementTypes, PublicFormRecord, Responses, Response } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
-import { managedData } from "@lib/managedData";
-import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
-import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
-import { isNumberInput } from "@gcforms/core";
-
-// This function is used for select/radio/checkbox i18n change of form labels
-function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
-  try {
-    if (!choices || !choices.length) {
-      return [];
-    }
-
-    return choices.map((choice) => {
-      return choice[lang];
-    });
-  } catch (err) {
-    logMessage.error(err as Error);
-    throw err;
-  }
-}
+import { getPlugin } from "@root/plugins/form-elements/registry";
+import type { Language } from "@lib/types/form-builder-types";
 
 // This function renders the form elements with passed in properties.
 function _buildForm(element: FormElement, lang: string): ReactElement {
   const id = element.subId ?? element.id;
 
-  let choices =
-    element.properties && element.properties.choices
-      ? getLocaleChoices(element.properties.choices, lang)
-      : [];
-
-  // Retrieve managed data from static json file if specified
-  if (element.properties.managedChoices) {
-    if (Array.isArray(element.properties.managedChoices)) {
-      // Handle multiple managed data files - merge and sort alphabetically
-      element.properties.managedChoices.forEach((dataFile) => {
-        const data = managedData[dataFile];
-        const fileChoices = data ? getLocaleChoices(data, lang) : [];
-        choices = choices.concat(fileChoices);
-      });
-      choices.sort((a, b) => a.localeCompare(b, lang));
-    } else {
-      // Backwards compatibility for single managed data file
-      const dataFile = element.properties.managedChoices;
-      const data = managedData[dataFile];
-      choices = data ? getLocaleChoices(data, lang) : [];
-    }
+  // Plugin-first dispatch: registered plugins take priority over the legacy switch.
+  // Plugin ViewerComponents are fully self-contained — none of the legacy variables below are used.
+  const plugin = getPlugin(element.type);
+  if (plugin) {
+    const { ViewerComponent } = plugin;
+    return <ViewerComponent element={element} language={lang as Language} />;
   }
 
   const subElements =
     element.properties && element.properties.subElements ? element.properties.subElements : [];
 
-  const isRequired: boolean = element.properties.validation
-    ? element.properties.validation.required
-    : false;
-
   const labelText = element.properties[getLocalizedProperty("title", lang)]?.toString();
-  const labelComponent = labelText ? (
-    <Label
-      key={`label-${id}`}
-      id={`label-${id}`}
-      htmlFor={`${id}`}
-      className={isRequired ? "required" : ""}
-      required={isRequired}
-      validation={element.properties.validation}
-      group={["radio", "checkbox"].indexOf(element.type) !== -1}
-      lang={lang}
-    >
-      {labelText}
-    </Label>
-  ) : null;
-
-  const textType: Exclude<HTMLTextInputTypeAttribute, "number"> =
-    element.properties?.validation?.type &&
-    ["email", "name", "password", "search", "tel", "url"].includes(
-      element.properties.validation.type
-    )
-      ? (element.properties.validation.type as Exclude<HTMLTextInputTypeAttribute, "number">)
-      : "text";
-
-  const spellCheck =
-    element.properties?.autoComplete &&
-    [
-      "email",
-      "name",
-      "tel",
-      "given-name",
-      "additional-name",
-      "family-name",
-      "address-line1",
-      "address-level2",
-      "address-level1",
-      "postal-code",
-    ].includes(element.properties?.autoComplete)
-      ? false
-      : undefined;
 
   const placeHolderPerLocale = element.properties[getLocalizedProperty("placeholder", lang)];
   const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
@@ -130,165 +30,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const descriptionPerLocale = element.properties[getLocalizedProperty("description", lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
-  const sortOrder = element.properties.sortOrder ? element.properties.sortOrder.toString() : "none";
-
   switch (element.type) {
-    case FormElementTypes.textField:
-    case FormElementTypes.numberInput:
-      // Render NumberInputs with backwards compatibility
-      // for legacy number inputs that were stored as
-      // text fields with validation.type "number"
-      if (isNumberInput(element)) {
-        return (
-          <div className="focus-group gcds-input-wrapper">
-            {labelComponent}
-            {description && <Description id={`${id}`}>{description}</Description>}
-            <NumberInput
-              id={`${id}`}
-              name={`${id}`}
-              required={isRequired}
-              ariaDescribedBy={description ? `desc-${id}` : undefined}
-              placeholder={placeHolder.toString()}
-              allowNegativeNumbers={element.properties.allowNegativeNumbers}
-              stepCount={element.properties.stepCount}
-              currencyCode={element.properties.currencyCode}
-              useThousandsSeparator={element.properties.useThousandsSeparator}
-              minValue={element.properties.validation?.minValue}
-              maxValue={element.properties.validation?.maxValue}
-              lang={lang}
-            />
-          </div>
-        );
-      }
-      return (
-        <div className="focus-group gcds-input-wrapper">
-          {labelComponent}
-          {description && <Description id={`${id}`}>{description}</Description>}
-          <TextInput
-            type={textType}
-            spellCheck={spellCheck}
-            id={`${id}`}
-            name={`${id}`}
-            required={isRequired}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            placeholder={placeHolder.toString()}
-            autoComplete={element.properties.autoComplete?.toString()}
-            maxLength={element.properties.validation?.maxLength}
-            lang={lang}
-          />
-        </div>
-      );
-    case FormElementTypes.textArea:
-      return (
-        <div className="focus-group gcds-textarea-wrapper">
-          {labelComponent}
-          {description && <Description id={`${id}`}>{description}</Description>}
-          <TextArea
-            id={`${id}`}
-            name={`${id}`}
-            required={isRequired}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            placeholder={placeHolder.toString()}
-            maxLength={element.properties.validation?.maxLength}
-            lang={lang}
-          />
-        </div>
-      );
-    case FormElementTypes.checkbox: {
-      const checkboxItems = choices.map((choice, index) => {
-        return {
-          key: `${id}.${index}`,
-          id: `${id}.${index}`,
-          name: `${id}`,
-          label: choice,
-          required: isRequired,
-        };
-      });
-
-      return (
-        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
-          {labelComponent}
-          {description && <Description id={`${id}`}>{description}</Description>}
-          <MultipleChoiceGroup
-            type={FormElementTypes.checkbox}
-            name={`${id}`}
-            choicesProps={checkboxItems}
-          />
-        </FormGroup>
-      );
-    }
-    case FormElementTypes.radio: {
-      const radioItems = choices.map((choice, index) => {
-        return {
-          key: `${id}.${index}`,
-          id: `${id}.${index}`,
-          name: `${id}`,
-          label: choice,
-          required: isRequired,
-        };
-      });
-
-      return (
-        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
-          {labelComponent}
-          {description && <Description id={`${id}`}>{description}</Description>}
-          <MultipleChoiceGroup
-            type={FormElementTypes.radio}
-            name={`${id}`}
-            choicesProps={radioItems}
-          />
-        </FormGroup>
-      );
-    }
-    case FormElementTypes.dropdown:
-      return (
-        <div className="focus-group">
-          {labelComponent}
-          {description && <Description id={`${id}`}>{description}</Description>}
-          <Dropdown
-            id={`${id}`}
-            sortOrder={sortOrder}
-            name={`${id}`}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            choices={choices}
-            lang={lang}
-            required={isRequired}
-          />
-        </div>
-      );
-    case FormElementTypes.richText:
-      return (
-        <>
-          {labelText && <h3>{labelText}</h3>}
-          <RichText>{description}</RichText>
-        </>
-      );
-    case FormElementTypes.fileInput:
-      return (
-        <div className="focus-group">
-          {labelText && (
-            <Label
-              key={`label-${id}`}
-              id={`label-${id}`}
-              className={isRequired ? "required" : ""}
-              required={isRequired}
-              lang={lang}
-              htmlFor={`${id}`}
-            >
-              {labelText}
-            </Label>
-          )}
-          {description && <Description id={`desc-${id}`}>{description}</Description>}
-          <FileInput
-            id={`${id}`}
-            name={`${id}`}
-            ariaDescribedBy={description ? `desc-${id}` : `label-${id}`}
-            fileType={element.properties.fileType}
-            required={isRequired}
-            lang={lang}
-          />
-        </div>
-      );
     case FormElementTypes.dynamicRow: {
       let rowTitle: string | undefined = undefined;
       let addButtonText: string | undefined = undefined;
@@ -325,62 +67,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           lang={lang}
           maxNumberOfRows={element.properties.maxNumberOfRows}
         />
-      );
-    }
-    case FormElementTypes.combobox: {
-      return (
-        <div className="focus-group">
-          {labelComponent}
-          {description && <Description id={`${id}`}>{description}</Description>}
-          <Combobox
-            strictValue={element.properties.strictValue}
-            id={`${id}`}
-            name={`${id}`}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            className="relative"
-            choices={choices}
-            lang={lang}
-            key={`${id}-${lang}`}
-          />
-        </div>
-      );
-    }
-    case FormElementTypes.addressComplete: {
-      const addressComponents = element.properties.addressComponents;
-      return (
-        <div className="focus-group">
-          <AddressComplete
-            label={labelText}
-            id={`${id}`}
-            name={`${id}`}
-            ariaDescribedBy={description}
-            key={`${id}-${lang}`}
-            splitAddress={addressComponents?.splitAddress}
-            canadianOnly={addressComponents?.canadianOnly}
-            required={isRequired}
-            lang={lang}
-          />
-        </div>
-      );
-    }
-    case FormElementTypes.formattedDate: {
-      return (
-        <div className="focus-group">
-          <FormattedDate
-            label={labelText}
-            description={description}
-            id={`${id}`}
-            name={`${id}`}
-            required={isRequired}
-            dateFormat={
-              element.properties.dateFormat
-                ? (element.properties.dateFormat as DateFormat)
-                : undefined
-            }
-            autocomplete={element.properties.autoComplete}
-            lang={lang}
-          />
-        </div>
       );
     }
     default:

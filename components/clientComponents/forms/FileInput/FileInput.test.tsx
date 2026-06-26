@@ -4,7 +4,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { Formik } from "formik";
-import { FileInput } from "@clientComponents/forms";
+import { FileInput } from "@root/plugins/form-elements/fileInput/FileInput";
 import { logMessage } from "@lib/logger";
 import { describe, it, expect } from "vitest";
 

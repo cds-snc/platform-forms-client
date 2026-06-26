@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label, TextInput } from "@clientComponents/forms";
+import { ExampleWrapper } from "@root/plugins/shared";
+import { TextInput } from "@root/plugins/shared";
+import { Description, Label } from "@clientComponents/forms";
 
-export const TextField = () => {
+const TextFieldDescription = () => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
@@ -12,7 +13,6 @@ export const TextField = () => {
         {t("addElementDialog.textField.title")}
       </h3>
       <p data-testid="element-description-text">{t("addElementDialog.textField.description")}</p>
-
       <ExampleWrapper className="gcds-input-wrapper">
         <Label htmlFor="name" className="gcds-label">
           {t("addElementDialog.textField.enterAnswer")}
@@ -23,3 +23,5 @@ export const TextField = () => {
     </div>
   );
 };
+
+export default TextFieldDescription;

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import { page } from "@vitest/browser/context";
-import { TextInput } from "@clientComponents/forms/TextInput/TextInput";
+import { TextInput } from "@root/plugins/shared";
 import { Formik } from "formik";
 import { render } from "vitest-browser-react";
 import { setupFonts } from "../helpers/setupFonts";

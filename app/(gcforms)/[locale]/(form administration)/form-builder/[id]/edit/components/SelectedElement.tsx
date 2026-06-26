@@ -1,15 +1,12 @@
 "use client";
 import React from "react";
 import { FormElementTypes, ValidationInputType } from "@lib/types";
-import { useTranslation } from "@i18n/client";
 
-import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
-import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
+import { SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder/useElementOptions";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
-import { DateElement } from "./elements/DateElement";
-import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
+import { getPlugin } from "@root/plugins/form-elements/registry";
 
 const filterSelected = (
   item: FormElementWithIndex,
@@ -89,142 +86,25 @@ export const SelectedElement = ({
   elIndex: number;
   formId: string;
 }) => {
-  const { t } = useTranslation("form-builder");
   let element = null;
 
   const selected = useGetSelectedOption(item);
 
-  switch (selected.id) {
-    case "textField":
-      element = <ShortAnswer>{t("shortAnswerText")}</ShortAnswer>;
-      break;
-    case "richText":
-      element = <RichText id={item.id} elIndex={item.index} />;
-      break;
-    case "textArea":
-      element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
-      break;
-    case "fileInput":
-      element = <ShortAnswer>{t("addElementDialog.fileInput.title")}</ShortAnswer>;
-      break;
-    case "radio":
-      if (elIndex !== -1) {
-        element = <SubOptions item={item} renderIcon={() => <RadioEmptyIcon />} />;
-      } else {
-        element = (
-          <>
-            <ShortAnswer>{t("addElementDialog.radio.title")}</ShortAnswer>
-            <Options item={item} formId={formId} />
-          </>
-        );
-      }
-      break;
-    case "checkbox":
-      if (elIndex !== -1) {
-        element = <SubOptions item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
-      } else {
-        element = (
-          <>
-            <ShortAnswer>
-              <div className="flex items-center">
-                <CheckIcon />
-                <span className="ml-2 text-lg">{t("addElementDialog.checkbox.title")}</span>
-              </div>
-            </ShortAnswer>
-            <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
-          </>
-        );
-      }
-      break;
-    case "dropdown":
-      if (elIndex !== -1) {
-        element = <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />;
-      } else {
-        const sortOrder = item.properties.sortOrder;
-        const sortOptions = sortOrder ? t(`sortOptions.${sortOrder}`) : t("sortOptions.none");
-        element = (
-          <>
-            <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
-            <div className="inline-block text-sm text-slate-600">
-              <span className="mr-2 inline-block">{t("sortOptions.label")}</span>
-              {sortOptions}
-            </div>
-            {!item.properties.managedChoices && (
-              <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
-            )}
-          </>
-        );
-      }
-      break;
-    case "combobox":
-      if (elIndex !== -1) {
-        element = (
-          <>
-            <ShortAnswer>
-              <>
-                {t("addElementDialog.combobox.title")}
-
-                {item.properties.strictValue && (
-                  <div className="ml-2 inline-block text-sm text-slate-600">
-                    - {t("strictValue.description")}
-                  </div>
-                )}
-              </>
-            </ShortAnswer>
-
-            {!item.properties.managedChoices && <SubOptions item={item} />}
-          </>
-        );
-      } else {
-        element = (
-          <>
-            <ShortAnswer>
-              <>
-                {t("addElementDialog.combobox.title")}
-
-                {item.properties.strictValue && (
-                  <div className="ml-2 inline-block text-sm text-slate-600">
-                    - {t("strictValue.description")}
-                  </div>
-                )}
-              </>
-            </ShortAnswer>
-
-            {!item.properties.managedChoices && <Options item={item} formId={formId} />}
-          </>
-        );
-      }
-      break;
-    case "email":
-      element = <ShortAnswer data-testid="email">name@example.com</ShortAnswer>;
-      break;
-    case "phone":
-      element = <ShortAnswer data-testid="phone">111-222-3333</ShortAnswer>;
-      break;
-    case "date":
-      element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
-      break;
-    case "formattedDate":
-      element = (
-        <DateElement
-          data-testid="formattedDate"
-          dateFormat={
-            item.properties.dateFormat ? (item.properties.dateFormat as DateFormat) : undefined
-          }
-        />
-      );
-      break;
-    case "number":
-      element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
-      break;
-    case "dynamicRow":
-      element = <SubElement item={item} elIndex={item.index} formId={formId} />;
-      break;
-    case "attestation":
-      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />;
-      break;
-    default:
-      element = null;
+  // Plugin-first dispatch: if a plugin is registered for this element type,
+  // use its BuilderComponent. The plugin handles all sub-type variants
+  // (e.g. email/phone/date for textField) internally.
+  const plugin = getPlugin(item.type as FormElementTypes);
+  if (plugin) {
+    const { BuilderComponent } = plugin;
+    element = <BuilderComponent item={item} elIndex={elIndex} formId={formId} />;
+  } else {
+    switch (selected.id) {
+      case "dynamicRow":
+        element = <SubElement item={item} elIndex={item.index} formId={formId} />;
+        break;
+      default:
+        element = null;
+    }
   }
 
   return (

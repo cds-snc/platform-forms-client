@@ -1,4 +1,4 @@
-import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
+import { formatNumberForDisplay } from "@root/plugins/form-elements/numberInput/utils";
 import { getElementOrSubElementById } from "@gcforms/core";
 import { Language } from "@lib/types/form-builder-types";
 import { FormElementTypes, FormRecord } from "@lib/types";

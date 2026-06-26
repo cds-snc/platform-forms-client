@@ -7,7 +7,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { Formik, Form } from "formik";
-import { NumberInput } from "./NumberInput";
+import { NumberInput } from "@root/plugins/form-elements/numberInput/NumberInput";
 
 vi.mock("@clientComponents/forms", () => ({
   ErrorMessage: ({ children, id }: { children: React.ReactNode; id: string }) => (

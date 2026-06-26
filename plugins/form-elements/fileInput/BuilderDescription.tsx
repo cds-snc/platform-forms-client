@@ -1,47 +1,29 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-
 import { useTranslation } from "@i18n/client";
-import { ExampleWrapper } from "./ExampleWrapper";
-import { Label, FileInput as FileInputComponent } from "@clientComponents/forms";
+import { ExampleWrapper } from "@root/plugins/shared";
+import { FileInput as FileInputComponent } from "./FileInput";
+import { Label } from "@clientComponents/forms";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
-export const FileInput = ({ title }: { title: string }) => {
-  const { hasApiKeyId } = useFormBuilderConfig();
-
-  const { translationLanguagePriority, id } = useTemplateStore((s) => ({
-    id: s.id,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
-
-  const formId = id || "0000";
-
-  const link = `/${translationLanguagePriority}/form-builder/${formId}/settings/api-integration`;
-
-  return hasApiKeyId ? (
-    <WithApiDescription title={title} />
-  ) : (
-    <DefaultDescription title={title} link={link} />
-  );
-};
-
-const Title = ({ title }: { title: string }) => {
+const Title = () => {
+  const { t } = useTranslation("form-builder");
   return (
     <div className="mb-4 flex items-center space-x-3">
       <h3 data-testid="element-description-title" className="mb-0">
-        {title}
+        {t("addElementDialog.fileInput.title")}
       </h3>
     </div>
   );
 };
 
-const WithApiDescription = ({ title }: { title: string }) => {
+const WithApiDescription = () => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
-      <Title title={title} />
+      <Title />
       <p data-testid="element-description-text">
         {t("addElementDialog.fileInputWithApi.description")}
       </p>
@@ -55,11 +37,11 @@ const WithApiDescription = ({ title }: { title: string }) => {
   );
 };
 
-const DefaultDescription = ({ title, link }: { title: string; link: string }) => {
+const DefaultDescription = ({ link }: { link: string }) => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
-      <Title title={title} />
+      <Title />
       <p className="mb-4">{t("addElementDialog.fileInputDefault.text1")}</p>
       <p className="mb-8">
         <strong>
@@ -77,3 +59,18 @@ const DefaultDescription = ({ title, link }: { title: string; link: string }) =>
     </div>
   );
 };
+
+const FileInputDescription = () => {
+  const { hasApiKeyId } = useFormBuilderConfig();
+  const { translationLanguagePriority, id } = useTemplateStore((s) => ({
+    id: s.id,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const formId = id || "0000";
+  const link = `/${translationLanguagePriority}/form-builder/${formId}/settings/api-integration`;
+
+  return hasApiKeyId ? <WithApiDescription /> : <DefaultDescription link={link} />;
+};
+
+export default FileInputDescription;

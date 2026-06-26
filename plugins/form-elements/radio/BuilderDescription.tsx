@@ -1,0 +1,38 @@
+"use client";
+import React from "react";
+import { useTranslation } from "@i18n/client";
+import { Description, Radio as RadioComponent, FormGroup } from "@clientComponents/forms";
+import { ExampleWrapper } from "@root/plugins/shared";
+
+const BuilderDescription = () => {
+  const { t } = useTranslation("form-builder");
+
+  return (
+    <>
+      <h3 className="mb-0" data-testid="element-description-title">
+        {t("addElementDialog.radio.title")}
+      </h3>
+      <p data-testid="element-description-text">{t("addElementDialog.radio.description")}</p>
+
+      <ExampleWrapper>
+        <FormGroup name={"radios"}>
+          <legend data-testid="label" className="gcds-label" id="label-1">
+            {t("addElementDialog.radio.chooseAnOption")}
+          </legend>
+          <Description>{t("addElementDialog.radio.selectOnlyOne")}</Description>
+
+          <RadioComponent
+            id="radio-yes"
+            label="Option A"
+            required={false}
+            value="yes"
+            name="name"
+          />
+          <RadioComponent id="radio-no" label="Option B" required={false} value="no" name="name" />
+        </FormGroup>
+      </ExampleWrapper>
+    </>
+  );
+};
+
+export default BuilderDescription;

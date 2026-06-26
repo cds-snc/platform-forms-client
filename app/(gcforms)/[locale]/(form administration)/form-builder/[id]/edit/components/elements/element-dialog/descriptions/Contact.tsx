@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { Label, TextInput, Radio as RadioComponent } from "@clientComponents/forms";
+import { Label, Radio as RadioComponent } from "@clientComponents/forms";
+import { TextInput } from "@root/plugins/shared";
 import { ExampleWrapper } from "./ExampleWrapper";
 
 export const Contact = () => {
