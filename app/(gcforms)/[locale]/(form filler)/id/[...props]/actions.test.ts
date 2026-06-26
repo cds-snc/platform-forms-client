@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
+import { NotificationsInterval } from "@gcforms/types";
 import { submitForm } from "./actions";
 import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
@@ -33,7 +34,7 @@ vi.mock("@root/i18n", () => ({
 }));
 
 vi.mock("@lib/formEmailOrchestration", () => ({
-  isFormEligibleForEmails: vi.fn(),
+  getFormNotificationInterval: vi.fn(),
   updateNotificationMarker: vi.fn(),
   prepareFormSubmissionEmail: vi.fn(),
 }));
@@ -58,7 +59,7 @@ import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
-import { isFormEligibleForEmails, prepareFormSubmissionEmail, updateNotificationMarker } from "@lib/formEmailOrchestration";
+import { getFormNotificationInterval, prepareFormSubmissionEmail, updateNotificationMarker } from "@lib/formEmailOrchestration";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
@@ -100,7 +101,7 @@ describe("submitForm", () => {
       submissionId: "test-submission-id",
       fileURLMap: {}
     });
-    (isFormEligibleForEmails as Mock).mockResolvedValue(false);
+    (getFormNotificationInterval as Mock).mockResolvedValue(false);
     (updateNotificationMarker as Mock).mockResolvedValue(null);
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(null);
     (sendEmail as Mock).mockResolvedValue(undefined);
@@ -157,7 +158,7 @@ describe("submitForm", () => {
       fileChecksums: undefined,
       notificationId: undefined,
     });
-    expect(isFormEligibleForEmails).toHaveBeenCalledWith(mockFormId);
+    expect(getFormNotificationInterval).toHaveBeenCalledWith(mockFormId);
     expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
     expect(sendEmail).not.toHaveBeenCalled();
   });
@@ -169,7 +170,7 @@ describe("submitForm", () => {
       formResponse: "Email body",
     };
     (checkOne as Mock).mockResolvedValue(true);
-    (isFormEligibleForEmails as Mock).mockResolvedValue(true);
+    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
     (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
 
@@ -181,7 +182,7 @@ describe("submitForm", () => {
       fileURLMap: {}
     });
 
-    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId);
+    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId, NotificationsInterval.DAY);
 
     expect(prepareFormSubmissionEmail).toHaveBeenCalledWith(
       mockFormId,
@@ -211,7 +212,7 @@ describe("submitForm", () => {
       formResponse: "Email body",
     };
     (checkOne as Mock).mockResolvedValue(true);
-    (isFormEligibleForEmails as Mock).mockResolvedValue(true);
+    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
     (updateNotificationMarker as Mock).mockResolvedValue("SECOND_EMAIL");
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
 
@@ -223,7 +224,7 @@ describe("submitForm", () => {
       fileURLMap: {}
     });
 
-    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId);
+    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId, NotificationsInterval.DAY);
 
     expect(prepareFormSubmissionEmail).toHaveBeenCalledWith(
       mockFormId,
@@ -248,12 +249,12 @@ describe("submitForm", () => {
 
   it("should not send a notification when form is eligible but marker limit is reached", async () => {
     (checkOne as Mock).mockResolvedValue(true);
-    (isFormEligibleForEmails as Mock).mockResolvedValue(true);
+    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
     (updateNotificationMarker as Mock).mockResolvedValue(null);
 
     await submitForm(mockValues, mockLanguage, mockFormId);
 
-    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId);
+    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId, NotificationsInterval.DAY);
     expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
     expect(sendEmail).not.toHaveBeenCalled();
     expect(processFormData).toHaveBeenCalledWith(

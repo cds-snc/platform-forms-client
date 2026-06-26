@@ -14,7 +14,7 @@ import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
 import {
-  isFormEligibleForEmails,
+  getFormNotificationInterval,
   prepareFormSubmissionEmail,
   updateNotificationMarker,
 } from "@lib/formEmailOrchestration";
@@ -152,10 +152,10 @@ const scheduleFormSubmissionNotification = async (
   formTitleFr: string
 ): Promise<string | undefined> => {
   try {
-    const shouldSendNotification = await isFormEligibleForEmails(formId);
-    if (!shouldSendNotification) return undefined;
+    const interval = await getFormNotificationInterval(formId);
+    if (!interval) return undefined;
 
-    const notificationEmailType = await updateNotificationMarker(formId);
+    const notificationEmailType = await updateNotificationMarker(formId, interval);
     if (!notificationEmailType) return undefined;
 
     const emailData = await prepareFormSubmissionEmail(

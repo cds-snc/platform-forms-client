@@ -1,13 +1,9 @@
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
-import { NotificationsInterval } from "@gcforms/types";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { sendEmail } from "@lib/integration/notifyConnector";
-
-// Hard coded since only one interval is supported currently
-const NOTIFICATIONS_INTERVAL = NotificationsInterval.DAY;
 
 const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -17,13 +13,19 @@ type Status = (typeof Status)[keyof typeof Status];
 
 export type NotificationEmailType = "FIRST_EMAIL" | "SECOND_EMAIL";
 
-// Determines whether to send email submission updates based on template state
-export const isFormEligibleForEmails = async (formId: string): Promise<boolean> => {
+/**
+ * Determines whether to send email submission updates based on template state.
+ *
+ * Returns the form's configured notification interval in minutes if eligible, false otherwise.
+ * A return of false means notifications are either disabled or the form is not set up for them.
+ */
+export const getFormNotificationInterval = async (formId: string): Promise<number | false> => {
   const template = await prisma.template
     .findUnique({
       where: { id: formId },
       select: {
         deliveryOption: true,
+        notificationsInterval: true,
         users: {
           select: {
             id: true,
@@ -40,18 +42,24 @@ export const isFormEligibleForEmails = async (formId: string): Promise<boolean> 
   // Avoid legacy forms that receive delivery by email
   if (!template || template.deliveryOption) return false;
 
+  // Respect the per-form interval setting — null means notifications are turned off
+  if (!template.notificationsInterval) return false;
+
   // Avoid some older forms that may not have users
   if (!template.users.length) return false;
 
   // Avoid forms where no user has notifications enabled
-  return template.users.some((user) => user.notificationsTemplates.length > 0);
+  if (!template.users.some((user) => user.notificationsTemplates.length > 0)) return false;
+
+  return template.notificationsInterval;
 };
 
 export const updateNotificationMarker = async (
-  formId: string
+  formId: string,
+  interval: number
 ): Promise<NotificationEmailType | null> => {
   const key = `notification:formId:${formId}`;
-  const ttl = NOTIFICATIONS_INTERVAL * 60; // convert from minutes to seconds
+  const ttl = interval * 60; // convert from minutes to seconds
   const redis = await getRedisInstance();
 
   // The SET NX bit is atomic and helps prevent a race condition where two simultaneous submissions
