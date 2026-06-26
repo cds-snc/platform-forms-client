@@ -10,6 +10,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { getSafeUrl } from "@lib/utils/getSafeUrl";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
+import { clearResponseStorage } from "@root/lib/hooks/useResponseCache";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -37,6 +38,14 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
   // Sanitize urlQuery to prevent security issues
   const safeUrlQuery = urlQuery ? getSafeUrl(urlQuery) : null;
 
+  // When the component unloads clear the response cache because we have already submitted
+
+  useEffect(() => {
+    return () => {
+      clearResponseStorage();
+    };
+  }, []);
+
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return (
@@ -44,6 +53,7 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
         <input type="hidden" value={submissionId} name="submissionId" />
         <input type="hidden" value={submissionDate} name="submissionDate" />
         <RichText className="confirmation">{pageText}</RichText>
+        {/* TODO - Can a user download a copy even if save / resume is not form enabled, current behavior is no */}
         {saveAndResume && <SaveResponse language={language} />}
       </>
     );

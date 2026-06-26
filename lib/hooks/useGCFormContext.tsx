@@ -1,13 +1,5 @@
 "use client";
-import React, {
-  createContext,
-  useContext,
-  ReactNode,
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-} from "react";
+import { createContext, useContext, ReactNode, useState, useRef } from "react";
 
 import type { Responses, GroupsType, PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -29,11 +21,9 @@ import {
 } from "@lib/utils/form-builder/groupsHistory";
 
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { useAppUpdate } from "@lib/hooks/useAppUpdate";
-import { useTranslation } from "@i18n/client";
-import { logMessage } from "../logger";
+
 import { FormValues } from "@root/packages/types/dist";
-import { copyObjectExcludingFileContent, saveSessionProgress } from "@lib/hooks/useResponseCache";
+import { copyObjectExcludingFileContent } from "@lib/hooks/useResponseCache";
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: Responses }) => void;
   getValues: () => Responses;
@@ -45,6 +35,7 @@ interface GCFormsContextValueType {
   handleNextAction: () => void;
   hasNextAction: (group: string) => boolean;
   isOffBoardSection: (group: string) => boolean;
+  formId: string;
   formRecord: PublicFormRecord;
   submissionId: string | undefined;
   setSubmissionId: (submissionId: string) => void;
@@ -80,57 +71,39 @@ export const GCFormsProvider = ({
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
-  const { updateRequired } = useAppUpdate();
-  const {
-    i18n: { language },
-  } = useTranslation();
+
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
   };
-  const saveToCache = useCallback(async () => {
-    // Do not save to cache when on the resume page as it will overwrite the loaded
-    // values from the file.  This is because the GCFormsContext also wraps the
-    // resume page
+  // const saveToCache = useCallback(async () => {
+  //   // Do not save to cache when on the resume page as it will overwrite the loaded
+  //   // values from the file.  This is because the GCFormsContext also wraps the
+  //   // resume page
 
-    logMessage.debug({ formId: formRecord.id, currentGroup, language });
-    if (window.location.href !== `/${language}/id/${formRecord.id}/resume`) {
-      await saveSessionProgress({
-        id: formRecord.id,
-        values: values.current,
-        history: history.current,
-        currentGroup: currentGroup || "",
-        language: language,
-      });
-    }
-  }, [formRecord.id, currentGroup, language]);
+  //   // Do not save to cache when on the confirmation page.  We want to ensure
+  //   // responses are cleared after a sucessful submission
 
-  useEffect(() => {
-    const updateCheck = async () => {
-      logMessage.debug(`Update is ${updateRequired ? "required" : "not required"}`);
-      if (updateRequired) {
-        logMessage.debug("Saving response state because update is required");
-        await saveToCache();
-      }
-    };
-    updateCheck();
-  }, [updateRequired, saveToCache]);
+  //   logMessage.debug(`Saving progress with values:`);
+  //   logMessage.debug(values.current);
+  //   await saveSessionProgress({
+  //     id: formRecord.id,
+  //     values: values.current,
+  //     history: history.current,
+  //     currentGroup: currentGroup || "",
+  //     language: language,
+  //   });
+  // }, [formRecord.id, currentGroup, language]);
 
-  useEffect(() => {
-    const visibilityChanged = async () => {
-      logMessage.debug(
-        `Window visibility changed: ${document.visibilityState ? "hidden" : "visible"}`
-      );
-      await saveToCache();
-    };
-
-    document.addEventListener("visibilitychange", visibilityChanged);
-
-    return () => {
-      logMessage.debug("Removing event listener for beforeUnloadHandler");
-
-      document.removeEventListener("visibilitychange", visibilityChanged);
-    };
-  }, [saveToCache]);
+  // useEffect(() => {
+  //   const updateCheck = async () => {
+  //     logMessage.debug(`Update is ${updateRequired ? "required" : "not required"}`);
+  //     if (updateRequired) {
+  //       logMessage.debug("Saving response state because update is required");
+  //       await saveToCache();
+  //     }
+  //   };
+  //   updateCheck();
+  // }, [updateRequired, saveToCache]);
 
   /**
    * Handle check if the group is an off-board section
@@ -240,6 +213,7 @@ export const GCFormsProvider = ({
     <GCFormsContext.Provider
       value={{
         formRecord,
+        formId: formRecord.id,
         submissionId,
         setSubmissionId,
         submissionDate,
@@ -291,6 +265,7 @@ export const useGCFormsContext = () => {
       isOffBoardSection: () => false,
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,
+      formId: "0000",
       groupsCheck: () => false,
       getGroupHistory: () => [],
       pushIdToHistory: () => [],

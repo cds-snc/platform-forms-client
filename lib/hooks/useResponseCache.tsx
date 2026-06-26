@@ -272,6 +272,8 @@ export const saveSessionProgress = async ({
   // Encode UTF-8 string to base64
   const encodedformDataEn = Buffer.from(formData, "utf8").toString("base64");
   sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformDataEn);
+
+  logMessage.debug("Completed Saving Response Session Progress");
 };
 // Start the promise on initial JS module load
 const rawSessionValuesPromise = restoreSessionProgress();
