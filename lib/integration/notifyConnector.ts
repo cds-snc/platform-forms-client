@@ -4,7 +4,9 @@ import { traceFunction } from "../otel";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 
-type SendEmailOptions = { mode?: "immediate" } | { mode: "deferred"; notificationId: string };
+type SendEmailOptions = ({ mode?: "immediate" } | { mode: "deferred"; notificationId: string }) & {
+  bypassNotificationPipeline?: boolean;
+};
 
 const gcNotifyConnector = GCNotifyConnector.default(process.env.NOTIFY_API_KEY ?? "");
 
@@ -25,7 +27,7 @@ export const sendEmail = async (
       const notificationEnabled = await checkOne(FeatureFlags.notification);
       const hasFileAttachment = "application_file" in personalisation;
 
-      if (notificationEnabled && !hasFileAttachment) {
+      if (notificationEnabled && !hasFileAttachment && !options?.bypassNotificationPipeline) {
         const subject = typeof personalisation.subject === "string" ? personalisation.subject : "";
         const body =
           typeof personalisation.formResponse === "string" ? personalisation.formResponse : "";

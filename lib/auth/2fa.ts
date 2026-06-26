@@ -18,7 +18,8 @@ export const sendVerificationCode = async (email: string, verificationCode: stri
 
 ${verificationCode}`,
       },
-      "2faVerificationCode"
+      "2faVerificationCode",
+      { bypassNotificationPipeline: true }
     );
   } catch (err) {
     logMessage.error(
