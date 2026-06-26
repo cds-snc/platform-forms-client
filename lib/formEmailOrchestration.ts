@@ -121,35 +121,6 @@ export const prepareFormSubmissionEmail = async (
 };
 
 /**
- * Returns whether the given user has notifications enabled for the given form
- *
- * @param formId
- * @param userId
- * @returns
- */
-export const getUserNotificationSettingsForForm = async (formId: string, userId: string) => {
-  const template = await prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-      },
-      select: {
-        notificationsUsers: {
-          where: {
-            id: userId,
-          },
-          select: {
-            id: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  return !!template?.notificationsUsers.length;
-};
-
-/**
  * Returns a list of users associated with the form and their notification settings
  *
  * @param formId
