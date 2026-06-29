@@ -108,12 +108,15 @@ export const SaveButton = () => {
   const { t } = useTranslation("form-builder");
   const router = useRouter();
   const lockChecksEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
-  const { isPublished, id, isLockedByOther, editLock } = useTemplateStore((s) => ({
-    isPublished: s.isPublished,
-    id: s.id,
-    isLockedByOther: s.isLockedByOther,
-    editLock: s.editLock,
-  }));
+  const { isPublished, id, isLockedByOther, editLock, currentDraftVersionId } = useTemplateStore(
+    (s) => ({
+      isPublished: s.isPublished,
+      id: s.id,
+      isLockedByOther: s.isLockedByOther,
+      editLock: s.editLock,
+      currentDraftVersionId: s.currentDraftVersionId,
+    })
+  );
 
   const { saveDraft, saveDraftIfNeeded, templateIsDirty, updatedAt } = useTemplateContext();
   const { status } = useSession();
@@ -202,7 +205,7 @@ export const SaveButton = () => {
     };
   }, [saveDraftIfNeeded]);
 
-  if (isPublished) {
+  if (isPublished && !currentDraftVersionId) {
     return null;
   }
 
