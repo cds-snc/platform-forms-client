@@ -137,6 +137,9 @@ export const createDraftVersion = AuthenticatedAction(
     }
 
     if (!hasError && redirectAfter) {
+      if (!redirectAfter.startsWith("/") || redirectAfter.startsWith("//")) {
+        return { formRecord: response, error: "Invalid redirect path" };
+      }
       redirect(redirectAfter);
     }
 
