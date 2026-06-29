@@ -411,7 +411,7 @@ const CardComponent = ({
 
           <>
             {card.hasDraft && card.versionNumber && (
-              <div className="mt-2 ml-4 flex items-center">
+              <div className="mt-2 ml-4 flex items-center text-sm">
                 <span
                   className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
                   aria-hidden="true"
