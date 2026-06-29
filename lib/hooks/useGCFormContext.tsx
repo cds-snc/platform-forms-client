@@ -27,7 +27,7 @@ import { copyObjectExcludingFileContent } from "@lib/hooks/useResponseCache";
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: Responses }) => void;
   getValues: () => Responses;
-  matchedIds: string[];
+  matchedIds: React.RefObject<string[]>;
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -67,7 +67,7 @@ export const GCFormsProvider = ({
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = useRef({});
   const history = useRef<string[]>([LOCKED_GROUPS.START]);
-  const [matchedIds, setMatchedIds] = useState<string[]>([]);
+  const matchedIds = useRef<string[]>([]);
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
@@ -127,7 +127,7 @@ export const GCFormsProvider = ({
       formRecord,
       values.current as FormValues
     );
-    const filteredMatchedIds = matchedIds.filter((id) => {
+    const filteredMatchedIds = matchedIds.current.filter((id) => {
       const parentId = id.split(".")[0];
       if (filteredResponses[parentId]) {
         return id;
@@ -147,8 +147,8 @@ export const GCFormsProvider = ({
   const updateValues = ({ formValues }: { formValues: Responses }): void => {
     values.current = formValues;
     const valueIds = mapIdsToValues(formRecord.form.elements, formValues as FormValues);
-    if (!idArraysMatch(matchedIds, valueIds)) {
-      setMatchedIds(valueIds);
+    if (!idArraysMatch(matchedIds.current, valueIds)) {
+      matchedIds.current = valueIds;
     }
   };
 
@@ -243,8 +243,10 @@ export const GCFormsProvider = ({
 
 export const useGCFormsContext = () => {
   const formsContext = useContext(GCFormsContext);
+  const defaultMatchedIdRef = useRef<string[]>([]);
   if (formsContext === undefined) {
     // For now just return a default context if we're not inside the provider
+
     return {
       updateValues: () => {
         return "noop";
@@ -256,7 +258,7 @@ export const useGCFormsContext = () => {
       setSubmissionId: () => void 0,
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
-      matchedIds: [""],
+      matchedIds: defaultMatchedIdRef,
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",
