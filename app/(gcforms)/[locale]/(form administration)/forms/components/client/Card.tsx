@@ -416,7 +416,7 @@ const CardComponent = ({
                   className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
                   aria-hidden="true"
                 ></span>
-                {card.versionNumber}
+                {t("card.draftVersion", { versionNumber: card.versionNumber })}
               </div>
             )}
           </>
