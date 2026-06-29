@@ -4,7 +4,7 @@ import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
 import { Alert, RichText } from "@clientComponents/forms";
-import { validateOnSubmit } from "@gcforms/core";
+import { validateVisibleElements } from "@gcforms/core";
 
 import { type FormProps, type InnerFormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -71,7 +71,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const showIntro = isGroupsCheck ? currentGroup === LOCKED_GROUPS.START : true;
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
-  // Used to set any values we'd like added for use in the below withFormik handleSubmit().
+  // Used to update the values in GCForms Context
   useFormValuesChanged();
 
   const errorList = props.errors ? getErrorList(props) : null;
@@ -276,7 +276,16 @@ export const Form = withFormik<FormProps, Responses>({
     return getFormInitialValues(props.formRecord, props.language);
   },
 
-  validate: (values, props) => validateOnSubmit(values, props),
+  validate: (values, props) => {
+    const validationPrepValues = {
+      ...values,
+      currentGroup: props.currentGroup,
+      groupHistory: props.getGroupHistory(),
+      matchedIds: props.matchedIds.current,
+    };
+    const { errors } = validateVisibleElements(validationPrepValues, props);
+    return errors;
+  },
 
   handleSubmit: async (values, formikBag) => {
     // If the form is closed, do not allow submission
@@ -325,8 +334,14 @@ export const Form = withFormik<FormProps, Responses>({
         }, 500);
       }
 
+      const validationPrepValues = {
+        ...formValuesWithoutFileContent,
+        currentGroup: formikBag.props.currentGroup,
+        groupHistory: formikBag.props.getGroupHistory(),
+        matchedIds: formikBag.props.matchedIds.current,
+      };
       const result = await submitForm(
-        formValuesWithoutFileContent,
+        validationPrepValues,
         formikBag.props.language,
         formikBag.props.formRecord.id,
         formikBag.props.captchaToken?.current,

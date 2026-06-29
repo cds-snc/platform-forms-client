@@ -24,6 +24,7 @@ import { traceFunction } from "@lib/otel";
 import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+import { ResponseValidationValues } from "@gcforms/core";
 import { randomUUID } from "crypto";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -39,7 +40,7 @@ export async function isFormClosed(formId: string): Promise<boolean> {
 }
 
 export async function submitForm(
-  values: Responses,
+  values: ResponseValidationValues,
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined,
@@ -117,7 +118,7 @@ export async function submitForm(
         }
       }
 
-      const formData = normalizeFormResponses(template, values);
+      const formData = normalizeFormResponses(template, values as Responses);
 
       const notificationId = await scheduleFormSubmissionNotification(
         formId,
