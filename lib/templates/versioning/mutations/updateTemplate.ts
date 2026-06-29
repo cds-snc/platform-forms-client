@@ -1,7 +1,7 @@
 import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord, FormProperties } from "@lib/types";
-import { parseTemplate } from "../internal";
+import { parseTemplate, templateRecordInclude } from "../internal";
 import { UpdateTemplateCommand, UpdateTemplateAction } from "../../types";
 import { authorizeForCommand } from "../../mutations/shared/authorizeForCommand";
 import { logTemplateUpdateEvent } from "../../mutations/shared/logTemplateUpdateEvent";
@@ -46,14 +46,7 @@ export const executeTemplateUpdate = async (
             ...updatePlan.data,
             lastEditedBy: { connect: { id: lastEditedByUserId } },
           },
-          include: {
-            deliveryOption: true,
-            lastEditedBy: {
-              select: {
-                name: true,
-              },
-            },
-          },
+          include: templateRecordInclude,
         });
       })
       .catch((e) => prismaErrors(e, null));
@@ -64,14 +57,7 @@ export const executeTemplateUpdate = async (
       .update({
         where: updatePlan.where,
         data: { ...updatePlan.data, lastEditedBy: { connect: { id: lastEditedByUserId } } },
-        include: {
-          deliveryOption: true,
-          lastEditedBy: {
-            select: {
-              name: true,
-            },
-          },
-        },
+        include: templateRecordInclude,
       })
       .catch((e) => prismaErrors(e, null));
   }
