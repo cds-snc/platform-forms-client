@@ -164,6 +164,51 @@ export const prepareFormSubmissionEmail = async (
   };
 };
 
+// Public facing function to send notifications to all related users on a form archival
+export const sendArchivedFormNotifications = async (
+  emailOfUserInitiatingAction: string,
+  formInformation: { id: string; title: { en: string; fr: string }; ownersEmailAddresses: string[] }
+): Promise<void> => {
+  // Some older forms may not have users, do nothing
+  if (formInformation.ownersEmailAddresses.length === 0) {
+    return;
+  }
+
+  const { t } = await serverTranslation("form-builder");
+  const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
+
+  const HOST = await getOrigin();
+  const subject = t("settings.notifications.email.archivedForm.subject");
+  const body = `
+${t_en("settings.notifications.email.archivedForm.paragraph1")}
+${formInformation.title.en}
+${t_en("settings.notifications.email.archivedForm.paragraph2")}
+${emailOfUserInitiatingAction}
+
+**[${t_en("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+
+*${t_en("settings.notifications.email.archivedForm.paragraph4")}*
+
+---
+
+${t_fr("settings.notifications.email.archivedForm.paragraph1")}
+${formInformation.title.fr}
+${t_fr("settings.notifications.email.archivedForm.paragraph2")}
+${emailOfUserInitiatingAction}
+
+**[${t_fr("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+
+*${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
+    `;
+
+  await sendEmail(
+    formInformation.ownersEmailAddresses,
+    { subject, formResponse: body },
+    `sendArchivedFormNotifications#${formInformation.id}`
+  );
+};
+
 const singleSubmissionEmailTemplate = async (
   HOST: string,
   formTitleEn: string,
@@ -216,58 +261,4 @@ ${formTitleFr}
 
 *${t_fr("settings.notifications.email.multipleSubmissions.paragraph3")}*
     `;
-};
-
-interface Session {
-  user: {
-    email: string;
-  };
-}
-
-// Public facing function to send notifications to all related users on a form archival
-export const sendArchivedFormNotifications = async (
-  session: Session,
-  formId: string,
-  titleEn: string,
-  titleFr: string,
-  templateUsers: { email: string }[]
-): Promise<void> => {
-  // Some older forms may not have users, do nothing
-  if (!Array.isArray(templateUsers) || templateUsers.length === 0) {
-    return;
-  }
-
-  const { t } = await serverTranslation("form-builder");
-  const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
-  const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
-
-  const HOST = await getOrigin();
-  const subject = t("settings.notifications.email.archivedForm.subject");
-  const body = `
-${t_en("settings.notifications.email.archivedForm.paragraph1")}
-${titleEn}
-${t_en("settings.notifications.email.archivedForm.paragraph2")}
-${session.user.email}
-
-**[${t_en("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
-
-*${t_en("settings.notifications.email.archivedForm.paragraph4")}*
-
----
-
-${t_fr("settings.notifications.email.archivedForm.paragraph1")}
-${titleFr}
-${t_fr("settings.notifications.email.archivedForm.paragraph2")}
-${session.user.email}
-
-**[${t_fr("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
-
-*${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
-    `;
-
-  await sendEmail(
-    templateUsers.map((t) => t.email),
-    { subject, formResponse: body },
-    `sendArchivedFormNotifications#${formId}`
-  );
 };

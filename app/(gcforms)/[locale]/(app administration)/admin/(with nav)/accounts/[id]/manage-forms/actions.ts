@@ -19,13 +19,14 @@ export const deleteForm = AuthenticatedAction(async (session, id: string) => {
 
     await deleteTemplate(id);
 
-    sendArchivedFormNotifications(
-      session,
+    sendArchivedFormNotifications(session.user.email, {
       id,
-      template.formRecord.form.titleEn,
-      template.formRecord.form.titleFr,
-      template.users
-    );
+      title: {
+        en: template.formRecord.form.titleEn,
+        fr: template.formRecord.form.titleFr,
+      },
+      ownersEmailAddresses: template.users.map((u) => u.email),
+    });
 
     revalidatePath("app/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-forms");
   } catch (error) {

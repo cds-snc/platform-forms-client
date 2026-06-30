@@ -50,13 +50,14 @@ export const deleteForm = AuthenticatedAction(
         }
       });
 
-      sendArchivedFormNotifications(
-        session,
+      sendArchivedFormNotifications(session.user.email, {
         id,
-        template.formRecord.form.titleEn,
-        template.formRecord.form.titleFr,
-        template.users
-      );
+        title: {
+          en: template.formRecord.form.titleEn,
+          fr: template.formRecord.form.titleFr,
+        },
+        ownersEmailAddresses: template.users.map((u) => u.email),
+      });
 
       revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
     } catch (e) {
