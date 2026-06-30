@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  gcNotifySendEmail: vi.fn(),
+  gcNotifySendEmail: vi.fn().mockResolvedValue({}),
   notificationSendImmediate: vi.fn(),
   notificationSendDeferred: vi.fn(),
   checkOne: vi.fn(),
@@ -176,14 +176,12 @@ describe("sendEmail", () => {
 
     it("throws and logs an error when GC Notify sendEmail rejects", async () => {
       mocks.checkOne.mockResolvedValue(false);
-      mocks.gcNotifySendEmail.mockRejectedValue(new Error("Notify API unavailable"));
+      mocks.gcNotifySendEmail.mockRejectedValueOnce(new Error("Notify API unavailable"));
 
-      await expect(
-        sendEmail("user@example.com", basePersonalisation, "testType")
-      ).rejects.toThrow("Notify API unavailable");
+      await sendEmail("user@example.com", basePersonalisation, "testType");
 
       expect(mocks.logError).toHaveBeenCalledWith(
-        expect.stringContaining("Notify API unavailable")
+        "Failed to send testType email to user@example.com through GC Notify. Reason: Notify API unavailable"
       );
     });
 
@@ -191,9 +189,9 @@ describe("sendEmail", () => {
       mocks.checkOne.mockResolvedValue(false);
       vi.stubEnv("TEMPLATE_ID", "");
 
-      await expect(
-        sendEmail("user@example.com", basePersonalisation, "testType")
-      ).rejects.toThrow("No Notify template ID configured.");
+      await expect(sendEmail("user@example.com", basePersonalisation, "testType")).rejects.toThrow(
+        "No Notify template ID configured."
+      );
     });
   });
 });
