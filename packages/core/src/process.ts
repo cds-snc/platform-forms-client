@@ -13,7 +13,9 @@ export type ResponseValidationValues = {
   currentGroup: string | null;
   groupHistory: string[];
   matchedIds: string[];
-  [key: string]: Response | null;
+  responses: {
+    [key: string]: Response | null;
+  };
 };
 
 /*
@@ -56,7 +58,7 @@ export const validateVisibleElements = (
   const valueMatchErrors: ValueMatchErrors = {};
 
   for (const formElement of props.formRecord.form.elements) {
-    const responseValue = values[formElement.id];
+    const responseValue = values.responses[formElement.id];
 
     const currentGroup = values.currentGroup as string;
     const groups = props.formRecord.form.groups as GroupsType;
@@ -71,7 +73,11 @@ export const validateVisibleElements = (
       continue;
     }
 
-    const isVisible = checkVisibilityRecursive(props.formRecord, formElement, values as FormValues);
+    const isVisible = checkVisibilityRecursive(
+      props.formRecord,
+      formElement,
+      values.responses as FormValues
+    );
 
     // If the form element is not visible, skip validation
     if (!isVisible) {

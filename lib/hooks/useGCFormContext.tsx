@@ -123,10 +123,7 @@ export const GCFormsProvider = ({
   const handleNextAction = () => {
     if (!currentGroup) return;
 
-    const filteredResponses = filterValuesByVisibleElements(
-      formRecord,
-      values.current as FormValues
-    );
+    const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
     const filteredMatchedIds = matchedIds.current.filter((id) => {
       const parentId = id.split(".")[0];
       if (filteredResponses[parentId]) {
