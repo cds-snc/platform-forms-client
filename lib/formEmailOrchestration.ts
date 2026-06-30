@@ -279,16 +279,11 @@ export const sendArchivedFormNotifications = async (
     const subject = t("settings.notifications.email.archivedForm.subject");
     const body = await archivedFormEmailTemplate(HOST, titleEn, titleFr, session.user.email);
 
-    const results = await Promise.allSettled(
-      templateUsers.map((user) =>
-        sendEmail(user.email, { subject, formResponse: body }, "sendArchivedFormNotifications")
-      )
+    await sendEmail(
+      templateUsers.map((t) => t.email),
+      { subject, formResponse: body },
+      "sendArchivedFormNotifications"
     );
-    results
-      .filter((r): r is PromiseRejectedResult => r.status === "rejected")
-      .forEach((r) =>
-        logMessage.warn(`sendArchivedFormNotifications: failed to send email: ${r.reason}`)
-      );
   } catch (error) {
     logMessage.warn(
       `sendArchivedFormNotifications failed for archived form ${formId} with error: ${(error as Error).message}`
