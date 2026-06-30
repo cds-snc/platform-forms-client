@@ -112,7 +112,7 @@ export async function submitForm(
         }
       }
 
-      const formData = normalizeFormResponses(template, values as Responses);
+      const formData = normalizeFormResponses(template, values.responses as Responses);
 
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,
