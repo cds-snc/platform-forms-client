@@ -32,6 +32,10 @@ export const sendEmail = async (
         const body =
           typeof personalisation.formResponse === "string" ? personalisation.formResponse : "";
 
+        logMessage.debug(
+          `Sending email through notification pipeline with option: ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"}`
+        );
+
         if (options?.mode === "deferred") {
           await notification.sendDeferred({
             notificationId: options.notificationId,
@@ -43,24 +47,30 @@ export const sendEmail = async (
           await notification.sendImmediate({ emails, subject, body });
         }
 
-        logMessage.debug(
-          `Queued a Notification email via ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"} successfully`
-        );
         return;
       }
 
       // Fallback: send directly via GC Notify (flag off, or email has a file attachment, or bypassNotificationPipeline is true)
 
       const templateId = process.env.TEMPLATE_ID;
+
       if (!templateId) {
         throw new Error("No Notify template ID configured.");
       }
 
-      await Promise.all(
-        emails.map((addr) => gcNotifyConnector.sendEmail(addr, templateId, personalisation))
-      );
+      logMessage.debug("Sending email directly through GC Notify");
 
-      logMessage.debug("Sent email directly to GC Notify successfully");
+      await Promise.all(
+        emails.map((addr) =>
+          gcNotifyConnector.sendEmail(addr, templateId, personalisation).catch((error) => {
+            logMessage.error(
+              `Failed to send ${type} email to ${addr} through GC Notify. Reason: ${
+                (error as Error).message
+              }`
+            );
+          })
+        )
+      );
     } catch (error) {
       logMessage.error(
         `Failed to send ${type} email to ${Array.isArray(email) ? email.join(", ") : email} through GC Notify. Reason: ${
