@@ -49,7 +49,7 @@ type TestCase = {
 };
 
 const toValidationValues = (value: Record<number, unknown>): ValidationValues => {
-  return value as unknown as ValidationValues;
+  return { responses: value } as unknown as ValidationValues;
 };
 
 const toValidationProps = (value: unknown): ValidationProps => {
@@ -429,13 +429,15 @@ describe("Test input validation", () => {
     test("validates required dynamicRow fields row correctly", () => {
       const { errors } = validateVisibleElements(
         {
-          0: [
-            { 1: "", 3: "" },
-            { 1: "", 3: "" },
-          ],
           currentGroup: null,
           groupHistory: [],
           matchedIds: [],
+          responses: {
+            0: [
+              { 1: "", 3: "" },
+              { 1: "", 3: "" },
+            ],
+          },
         },
         toValidationProps({ formRecord, t: (key: string) => key })
       );
@@ -453,13 +455,15 @@ describe("Test input validation", () => {
     test("validates dynamic row correctly", () => {
       const { errors } = validateVisibleElements(
         {
-          0: [
-            { 1: "test", 3: "" },
-            { 1: "test", 3: "" },
-          ],
           currentGroup: null,
           groupHistory: [],
           matchedIds: [],
+          responses: {
+            0: [
+              { 1: "test", 3: "" },
+              { 1: "test", 3: "" },
+            ],
+          },
         },
         toValidationProps({ formRecord, t: (key: string) => key })
       );
@@ -468,7 +472,7 @@ describe("Test input validation", () => {
   });
   test("Value not in elements", () => {
     const props = getFormMetaData("textField", "");
-    const values = { 4: "test value" };
+    const values = { responses: { 4: "test value" } };
     const { errors } = validateVisibleElements(toValidationValues(values), props);
     expect(errors).not.toHaveProperty("4");
   });
