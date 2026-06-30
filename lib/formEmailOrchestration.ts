@@ -100,32 +100,25 @@ export const prepareFormSubmissionEmail = async (
   formTitleFr: string,
   emailType: NotificationEmailType
 ): Promise<{ emails: string[]; subject: string; formResponse: string } | null> => {
-  try {
-    const users = await getNotificationsUsersForForm(formId);
-    if (!Array.isArray(users) || users.length === 0) return null;
+  const users = await getNotificationsUsersForForm(formId);
+  if (!Array.isArray(users) || users.length === 0) return null;
 
-    const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
-    if (emails.length === 0) return null;
+  const emails = users.filter(({ enabled }) => enabled).map(({ email }) => email);
+  if (emails.length === 0) return null;
 
-    const multipleSubmissions = emailType === "SECOND_EMAIL";
-    const { t } = await serverTranslation("form-builder");
-    const HOST = await getOrigin();
+  const multipleSubmissions = emailType === "SECOND_EMAIL";
+  const { t } = await serverTranslation("form-builder");
+  const HOST = await getOrigin();
 
-    return {
-      emails,
-      subject: multipleSubmissions
-        ? t("settings.notifications.email.multipleSubmissions.subject")
-        : t("settings.notifications.email.singleSubmission.subject"),
-      formResponse: multipleSubmissions
-        ? await multipleSubmissionsEmailTemplate(HOST, formTitleEn, formTitleFr)
-        : await singleSubmissionEmailTemplate(HOST, formTitleEn, formTitleFr),
-    };
-  } catch (error) {
-    logMessage.warn(
-      `prepareFormSubmissionEmail failed for form ${formId}: ${(error as Error).message}`
-    );
-    return null;
-  }
+  return {
+    emails,
+    subject: multipleSubmissions
+      ? t("settings.notifications.email.multipleSubmissions.subject")
+      : t("settings.notifications.email.singleSubmission.subject"),
+    formResponse: multipleSubmissions
+      ? await multipleSubmissionsEmailTemplate(HOST, formTitleEn, formTitleFr)
+      : await singleSubmissionEmailTemplate(HOST, formTitleEn, formTitleFr),
+  };
 };
 
 /**
