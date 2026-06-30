@@ -14,6 +14,49 @@ type Status = (typeof Status)[keyof typeof Status];
 export type NotificationEmailType = "FIRST_EMAIL" | "SECOND_EMAIL";
 
 /**
+ * Returns a list of users associated with the form and their notification settings
+ *
+ * @param formId
+ * @returns
+ */
+export const getNotificationsUsersForForm = async (formId: string) => {
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            email: true,
+            notificationsTemplates: {
+              where: {
+                id: formId,
+              },
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!template) {
+    logMessage.debug(`_getNotificationsUsers no users found for formId ${formId}`);
+    return null;
+  }
+
+  return template.users.map((user) => ({
+    id: user.id,
+    email: user.email,
+    enabled: user.notificationsTemplates.length > 0,
+  }));
+};
+
+/**
  * Determines whether to send email submission updates based on template state.
  *
  * Returns the form's configured notification interval in minutes if eligible, false otherwise.
@@ -121,49 +164,6 @@ export const prepareFormSubmissionEmail = async (
   };
 };
 
-/**
- * Returns a list of users associated with the form and their notification settings
- *
- * @param formId
- * @returns
- */
-export const getNotificationsUsersForForm = async (formId: string) => {
-  const template = await prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            email: true,
-            notificationsTemplates: {
-              where: {
-                id: formId,
-              },
-              select: {
-                id: true,
-              },
-            },
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!template) {
-    logMessage.debug(`_getNotificationsUsers no users found for formId ${formId}`);
-    return null;
-  }
-
-  return template.users.map((user) => ({
-    id: user.id,
-    email: user.email,
-    enabled: user.notificationsTemplates.length > 0,
-  }));
-};
-
 const singleSubmissionEmailTemplate = async (
   HOST: string,
   formTitleEn: string,
@@ -171,6 +171,7 @@ const singleSubmissionEmailTemplate = async (
 ) => {
   const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
+
   return `
 ${t_en("settings.notifications.email.singleSubmission.paragraph1")}
 ${formTitleEn}
@@ -197,6 +198,7 @@ const multipleSubmissionsEmailTemplate = async (
 ) => {
   const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
+
   return `
 ${t_en("settings.notifications.email.multipleSubmissions.paragraph1")}
 ${formTitleEn}
@@ -213,37 +215,6 @@ ${formTitleFr}
 **[${t_fr("settings.notifications.email.multipleSubmissions.paragraph2")}](${HOST}/auth/login)**
 
 *${t_fr("settings.notifications.email.multipleSubmissions.paragraph3")}*
-    `;
-};
-
-const archivedFormEmailTemplate = async (
-  HOST: string,
-  formTitleEn: string,
-  formTitleFr: string,
-  actionEmail: string
-) => {
-  const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
-  const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
-  return `
-${t_en("settings.notifications.email.archivedForm.paragraph1")}
-${formTitleEn}
-${t_en("settings.notifications.email.archivedForm.paragraph2")}
-${actionEmail}
-
-**[${t_en("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
-
-*${t_en("settings.notifications.email.archivedForm.paragraph4")}*
-
----
-
-${t_fr("settings.notifications.email.archivedForm.paragraph1")}
-${formTitleFr}
-${t_fr("settings.notifications.email.archivedForm.paragraph2")}
-${actionEmail}
-
-**[${t_fr("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
-
-*${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
     `;
 };
 
@@ -266,20 +237,37 @@ export const sendArchivedFormNotifications = async (
     return;
   }
 
-  try {
-    const { t } = await serverTranslation("form-builder");
-    const HOST = await getOrigin();
-    const subject = t("settings.notifications.email.archivedForm.subject");
-    const body = await archivedFormEmailTemplate(HOST, titleEn, titleFr, session.user.email);
+  const { t } = await serverTranslation("form-builder");
+  const { t: t_en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
 
-    await sendEmail(
-      templateUsers.map((t) => t.email),
-      { subject, formResponse: body },
-      "sendArchivedFormNotifications"
-    );
-  } catch (error) {
-    logMessage.warn(
-      `sendArchivedFormNotifications failed for archived form ${formId} with error: ${(error as Error).message}`
-    );
-  }
+  const HOST = await getOrigin();
+  const subject = t("settings.notifications.email.archivedForm.subject");
+  const body = `
+${t_en("settings.notifications.email.archivedForm.paragraph1")}
+${titleEn}
+${t_en("settings.notifications.email.archivedForm.paragraph2")}
+${session.user.email}
+
+**[${t_en("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+
+*${t_en("settings.notifications.email.archivedForm.paragraph4")}*
+
+---
+
+${t_fr("settings.notifications.email.archivedForm.paragraph1")}
+${titleFr}
+${t_fr("settings.notifications.email.archivedForm.paragraph2")}
+${session.user.email}
+
+**[${t_fr("settings.notifications.email.archivedForm.paragraph3")}](${HOST}/auth/login)**
+
+*${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
+    `;
+
+  await sendEmail(
+    templateUsers.map((t) => t.email),
+    { subject, formResponse: body },
+    `sendArchivedFormNotifications#${formId}`
+  );
 };
