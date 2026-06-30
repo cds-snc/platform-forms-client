@@ -63,7 +63,7 @@ export const submissionTypeExists = async (formID: string, status: VaultStatus) 
 
   const queryCommand = new QueryCommand({
     TableName: "Vault",
-    IndexName: "Status#CreatedAt_v2",
+    IndexName: "StatusCreatedAt_v2",
     // To optimize query since we only need to check whether one type of submission type exists
     ScanIndexForward: shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder(status),
     // Limit the amount of responses to 1.
@@ -135,7 +135,7 @@ export async function listAllSubmissions(
     while (lastEvaluatedKey !== undefined) {
       const queryCommand: QueryCommand = new QueryCommand({
         TableName: "Vault",
-        IndexName: "Status#CreatedAt_v2",
+        IndexName: "StatusCreatedAt_v2",
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         // Limit the amount of response to responseRetrievalLimit
         Limit: responseRetrievalLimit - accumulatedResponses.length,
