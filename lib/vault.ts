@@ -26,6 +26,7 @@ import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates/internal/errors";
 import { getAppSetting } from "./appSettings";
 import { delay, getExponentialBackoffTimeInMS } from "./utils/retryability";
+import { enrichOverviewsWithVersionId } from "./vaultHelpers";
 
 /**
  * Checks if any submissions exist for a given form and type
@@ -163,11 +164,13 @@ export async function listAllSubmissions(
               "Status#CreatedAt": statusCreatedAt,
               CreatedAt: createdAt,
               Name: name,
+              Version: version,
             }) => ({
               formID,
               status: vaultStatusFromStatusCreatedAt(statusCreatedAt),
               name,
               createdAt,
+              version,
             })
           )
         );
@@ -197,6 +200,13 @@ export async function listAllSubmissions(
       };
     } else {
       submissionsRemaining = false;
+    }
+
+    // Enrich overviews with version from the primary table.
+    if (accumulatedResponses.length > 0) {
+      // This helper handles errors and returns the (possibly unchanged) array
+
+      accumulatedResponses = await enrichOverviewsWithVersionId(formID, accumulatedResponses);
     }
 
     logEvent(

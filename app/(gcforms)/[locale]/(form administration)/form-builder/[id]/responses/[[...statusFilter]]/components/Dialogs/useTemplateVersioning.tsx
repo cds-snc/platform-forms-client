@@ -1,7 +1,12 @@
 "use client";
 import React from "react";
 
-type CheckedMeta = { id?: string; name?: string; versionId?: string | null }[];
+type CheckedMeta = {
+  id?: string;
+  name?: string;
+  version?: string | null;
+  versionId?: string | null;
+}[];
 
 export const useTemplateVersioning = (
   checkedItems: Map<string, boolean>,
@@ -13,7 +18,7 @@ export const useTemplateVersioning = (
     const map = new Map<string, { versionId?: string | null }>();
     if (checkedMeta && checkedMeta.length > 0) {
       checkedMeta.forEach((m) => {
-        if (m && m.name) map.set(m.name, { versionId: m.versionId });
+        if (m && m.name) map.set(m.name, { versionId: m.version ?? m.versionId });
       });
     }
     return map;

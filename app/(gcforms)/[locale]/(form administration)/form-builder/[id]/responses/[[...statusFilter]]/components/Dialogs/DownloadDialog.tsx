@@ -38,7 +38,12 @@ export const DownloadDialog = ({
   formName: string;
   onSuccessfulDownload: () => void;
   responseDownloadLimit: number;
-  checkedMeta?: { id?: string; name?: string; versionId?: string | null }[];
+  checkedMeta?: {
+    id?: string;
+    name?: string;
+    version?: string | null;
+    versionId?: string | null;
+  }[];
 }) => {
   const dialogRef = useDialogRef();
   const { t, i18n } = useTranslation("form-builder-responses");
