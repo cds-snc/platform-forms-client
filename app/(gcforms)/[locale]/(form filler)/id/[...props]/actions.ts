@@ -175,13 +175,15 @@ const scheduleFormSubmissionNotification = async (
     // Notification flag ON: send via deferred notification pipeline
     if (notificationEnabled) {
       const notificationId = randomUUID();
-      // Await before returning to ensure DB record  exist before the Lambda receives the notificationId
+
+      // Await before returning to ensure DB record exist before the Lambda receives the notificationId
       await sendEmail(
         emailData.emails,
         { subject: emailData.subject, formResponse: emailData.formResponse },
         "formSubmissionNotification",
         { mode: "deferred", notificationId }
       );
+
       return notificationId;
     }
 
@@ -195,11 +197,13 @@ const scheduleFormSubmissionNotification = async (
         `scheduleFormSubmissionNotification: GC Notify fallback failed for form ${formId}: ${(error as Error).message}`
       )
     );
+
     return undefined;
   } catch (error) {
     logMessage.warn(
       `scheduleFormSubmissionNotification failed for form ${formId}: ${(error as Error).message}`
     );
+
     return undefined;
   }
 };
