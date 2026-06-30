@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   checkOne: vi.fn(),
   logInfo: vi.fn(),
   logDebug: vi.fn(),
+  logWarn: vi.fn(),
   logError: vi.fn(),
 }));
 
@@ -25,7 +26,7 @@ vi.mock("@lib/logger", () => ({
     info: mocks.logInfo,
     debug: mocks.logDebug,
     error: mocks.logError,
-    warn: vi.fn(),
+    warn: mocks.logWarn,
   },
 }));
 
@@ -180,7 +181,7 @@ describe("sendEmail", () => {
 
       await sendEmail("user@example.com", basePersonalisation, "testType");
 
-      expect(mocks.logError).toHaveBeenCalledWith(
+      expect(mocks.logWarn).toHaveBeenCalledWith(
         "Failed to send testType email to user@example.com through GC Notify. Reason: Notify API unavailable"
       );
     });

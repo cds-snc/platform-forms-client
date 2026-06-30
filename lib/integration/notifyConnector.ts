@@ -63,7 +63,7 @@ export const sendEmail = async (
       await Promise.all(
         emails.map((addr) =>
           gcNotifyConnector.sendEmail(addr, templateId, personalisation).catch((error) => {
-            logMessage.error(
+            logMessage.warn(
               `Failed to send ${type} email to ${addr} through GC Notify. Reason: ${
                 (error as Error).message
               }`
