@@ -26,7 +26,6 @@ import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates/internal/errors";
 import { getAppSetting } from "./appSettings";
 import { delay, getExponentialBackoffTimeInMS } from "./utils/retryability";
-import { enrichOverviewsWithVersionId } from "./vaultHelpers";
 
 /**
  * Checks if any submissions exist for a given form and type
@@ -64,7 +63,7 @@ export const submissionTypeExists = async (formID: string, status: VaultStatus) 
 
   const queryCommand = new QueryCommand({
     TableName: "Vault",
-    IndexName: "StatusCreatedAt",
+    IndexName: "Status#CreatedAt_v2",
     // To optimize query since we only need to check whether one type of submission type exists
     ScanIndexForward: shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder(status),
     // Limit the amount of responses to 1.
@@ -136,7 +135,7 @@ export async function listAllSubmissions(
     while (lastEvaluatedKey !== undefined) {
       const queryCommand: QueryCommand = new QueryCommand({
         TableName: "Vault",
-        IndexName: "StatusCreatedAt",
+        IndexName: "Status#CreatedAt_v2",
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         // Limit the amount of response to responseRetrievalLimit
         Limit: responseRetrievalLimit - accumulatedResponses.length,
@@ -150,7 +149,7 @@ export async function listAllSubmissions(
           ":formID": formID,
           ...(status && { ":status": status }),
         },
-        ProjectionExpression: "FormID,#name,CreatedAt,#statusCreatedAtKey",
+        ProjectionExpression: "FormID,#name,CreatedAt,#statusCreatedAtKey,Version",
       });
 
       // eslint-disable-next-line no-await-in-loop
@@ -200,13 +199,6 @@ export async function listAllSubmissions(
       };
     } else {
       submissionsRemaining = false;
-    }
-
-    // Enrich overviews with version from the primary table.
-    if (accumulatedResponses.length > 0) {
-      // This helper handles errors and returns the (possibly unchanged) array
-
-      accumulatedResponses = await enrichOverviewsWithVersionId(formID, accumulatedResponses);
     }
 
     logEvent(
