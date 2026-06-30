@@ -50,7 +50,7 @@ export const deleteForm = AuthenticatedAction(
         }
       });
 
-      await sendArchivedFormNotifications(
+      sendArchivedFormNotifications(
         session,
         id,
         template.formRecord.form.titleEn,
