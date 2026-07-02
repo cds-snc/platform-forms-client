@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.18.0](https://github.com/cds-snc/platform-forms-client/compare/v4.17.2...v4.18.0) (2026-07-02)
+
+
+### Features
+
+* add PacifiCan branding ([#7436](https://github.com/cds-snc/platform-forms-client/issues/7436)) ([cc5303b](https://github.com/cds-snc/platform-forms-client/commit/cc5303bbea62ff664c16846535b292f6b60b3ee5))
+
+
+### Bug Fixes
+
+* rework ResponseValidationValues to isolate actual responses from the rest of the type attributes ([#7447](https://github.com/cds-snc/platform-forms-client/issues/7447)) ([987cf58](https://github.com/cds-snc/platform-forms-client/commit/987cf58c585e657eaf39ad6cf9d8a7169e4f753b))
+* useEffect loop with GCFormsContext and Formik ([#7431](https://github.com/cds-snc/platform-forms-client/issues/7431)) ([7809f91](https://github.com/cds-snc/platform-forms-client/commit/7809f91d38928f2fb067c848afb07eaff67f55ad))
+
+
+### Miscellaneous Chores
+
+* add version to vault queries ([#7450](https://github.com/cds-snc/platform-forms-client/issues/7450)) ([6a88691](https://github.com/cds-snc/platform-forms-client/commit/6a88691073f4b0ed842091bd77452adc2d5c3a80))
+* check auth before saving filename ([#7406](https://github.com/cds-snc/platform-forms-client/issues/7406)) ([67750f9](https://github.com/cds-snc/platform-forms-client/commit/67750f9951c4e8c01d77e63394af68af7c4ead80))
+* ensure filename gets saved to the db ([#7395](https://github.com/cds-snc/platform-forms-client/issues/7395)) ([7bca1c8](https://github.com/cds-snc/platform-forms-client/commit/7bca1c8e9248b2af2ba37349acda4c142c9ea699))
+* Refactor general update action ([#7402](https://github.com/cds-snc/platform-forms-client/issues/7402)) ([5351755](https://github.com/cds-snc/platform-forms-client/commit/5351755525bcaddd4e7560d43081192c3ef921b6))
+* Refactor template update mutations and actions ([#7386](https://github.com/cds-snc/platform-forms-client/issues/7386)) ([ec7c706](https://github.com/cds-snc/platform-forms-client/commit/ec7c706da26c50214f55b1c1e0608aca760168a6))
+* Remove unused api/templates routes ([#7398](https://github.com/cds-snc/platform-forms-client/issues/7398)) ([ca349f0](https://github.com/cds-snc/platform-forms-client/commit/ca349f02207541c3fc87b1f38439df2a38d8b7ea))
+* Template Versioning initial setup ([#7407](https://github.com/cds-snc/platform-forms-client/issues/7407)) ([2ecdf8c](https://github.com/cds-snc/platform-forms-client/commit/2ecdf8c3d33c82fe1c9777a029acd25a71e6f9bb))
+* Update content in pause and resume ([#7427](https://github.com/cds-snc/platform-forms-client/issues/7427)) ([dcfa04f](https://github.com/cds-snc/platform-forms-client/commit/dcfa04fe3df2016c84547cf1032acc1802fb6cd8))
+
 ## [4.17.2](https://github.com/cds-snc/platform-forms-client/compare/v4.17.1...v4.17.2) (2026-06-18)
 
 
