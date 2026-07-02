@@ -448,18 +448,6 @@ const CardComponent = ({
             isClosed={cardState === CARD_STATE.CLOSED}
           />
           {cardState === CARD_STATE.PUBLISHED && <CardFooterPublished cardId={card.id} />}
-
-          <>
-            {card.hasDraft && card.versionNumber && (
-              <div className="mt-2 flex items-center text-sm">
-                <span
-                  className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
-                  aria-hidden="true"
-                ></span>
-                {t("card.draftVersion", { versionNumber: card.versionNumber })}
-              </div>
-            )}
-          </>
         </div>
       </div>
       <div className="flex items-start">
