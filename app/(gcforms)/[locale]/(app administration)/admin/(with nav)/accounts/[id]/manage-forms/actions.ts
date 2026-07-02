@@ -20,7 +20,6 @@ export const deleteForm = AuthenticatedAction(async (session, id: string) => {
     await deleteTemplate(id);
 
     sendArchivedFormNotifications(session.user.email, {
-      id,
       title: {
         en: template.formRecord.form.titleEn,
         fr: template.formRecord.form.titleFr,

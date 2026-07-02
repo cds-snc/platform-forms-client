@@ -3,7 +3,7 @@ import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 import { serverTranslation } from "@i18n";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 
 const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -167,7 +167,7 @@ export const prepareFormSubmissionEmail = async (
 // Public facing function to send notifications to all related users on a form archival
 export const sendArchivedFormNotifications = async (
   emailOfUserInitiatingAction: string,
-  formInformation: { id: string; title: { en: string; fr: string }; ownersEmailAddresses: string[] }
+  formInformation: { title: { en: string; fr: string }; ownersEmailAddresses: string[] }
 ): Promise<void> => {
   // Some older forms may not have users, do nothing
   if (formInformation.ownersEmailAddresses.length === 0) {
@@ -202,11 +202,11 @@ ${emailOfUserInitiatingAction}
 *${t_fr("settings.notifications.email.archivedForm.paragraph4")}*
     `;
 
-  await sendEmail(
-    formInformation.ownersEmailAddresses,
-    { subject, formResponse: body },
-    `sendArchivedFormNotifications#${formInformation.id}`
-  );
+  await sendDefaultEmail({
+    to: formInformation.ownersEmailAddresses,
+    subject,
+    body,
+  });
 };
 
 const singleSubmissionEmailTemplate = async (

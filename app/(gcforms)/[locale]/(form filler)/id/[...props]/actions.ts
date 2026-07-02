@@ -18,7 +18,7 @@ import {
   prepareFormSubmissionEmail,
   updateNotificationMarker,
 } from "@lib/formEmailOrchestration";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import { traceFunction } from "@lib/otel";
 
 import { MissingFormDataError } from "./lib/client/exceptions";
@@ -172,36 +172,43 @@ const scheduleFormSubmissionNotification = async (
     // the reliability lambda can enqueue the deferred send after the submission is persisted.
     const notificationEnabled = await checkOne(FeatureFlags.notification);
 
-    // Notification flag ON: send via deferred notification pipeline
+    // Notification flag ON: send deferred email via notification pipeline
     if (notificationEnabled) {
       const notificationId = randomUUID();
 
-      // Await before returning to ensure DB record exist before the Lambda receives the notificationId
-      await sendEmail(
-        emailData.emails,
-        { subject: emailData.subject, formResponse: emailData.formResponse },
-        "formSubmissionNotification",
-        { mode: "deferred", notificationId }
+      /**
+       * Not using await here to avoid adding extra latency in the submission flow.
+       * Because the infra pipeline does not process submissions right away, the notification data should have enough time to get in DynamoDB before the Reliability lambda request its processing
+       */
+      sendDefaultEmail({
+        to: emailData.emails,
+        subject: emailData.subject,
+        body: emailData.formResponse,
+        options: { mode: "deferred", notificationId },
+      }).catch((error) =>
+        logMessage.warn(
+          `scheduleFormSubmissionNotification: failed to send deferred email via notification pipeline. Form ID: ${formId}. Reason: ${(error as Error).message}`
+        )
       );
 
       return notificationId;
     }
 
-    // Notification flag OFF: send directly via GC Notify fallback
-    sendEmail(
-      emailData.emails,
-      { subject: emailData.subject, formResponse: emailData.formResponse },
-      "formSubmissionNotification"
-    ).catch((error) =>
+    // Notification flag OFF: send immediate email
+    sendDefaultEmail({
+      to: emailData.emails,
+      subject: emailData.subject,
+      body: emailData.formResponse,
+    }).catch((error) =>
       logMessage.warn(
-        `scheduleFormSubmissionNotification: GC Notify fallback failed for form ${formId}: ${(error as Error).message}`
+        `scheduleFormSubmissionNotification: failed to send immediate email. Form ID: ${formId}. Reason: ${(error as Error).message}`
       )
     );
 
     return undefined;
   } catch (error) {
     logMessage.warn(
-      `scheduleFormSubmissionNotification failed for form ${formId}: ${(error as Error).message}`
+      `scheduleFormSubmissionNotification processing failed for form ${formId}. Reason: ${(error as Error).message}`
     );
 
     return undefined;

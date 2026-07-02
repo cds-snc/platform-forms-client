@@ -46,7 +46,7 @@ export class GCNotifyConnector {
   }
 
   public async sendEmail(
-    recipientAddress: string,
+    to: string,
     content: EmailContent,
     referenceIdentifier?: string
   ): Promise<void> {
@@ -61,7 +61,7 @@ export class GCNotifyConnector {
           Authorization: `ApiKey-v1 ${this.apiKey}`,
         },
         data: {
-          email_address: recipientAddress,
+          email_address: to,
           template_id: content.templateId,
           personalisation: {
             ...content.placeholders,

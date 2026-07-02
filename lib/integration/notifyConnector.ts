@@ -1,4 +1,10 @@
-import { GCNotifyConnector, notification, type Personalisation } from "@gcforms/connectors";
+import {
+  EmailAttachment,
+  EmailContent,
+  GCNotifyConnector,
+  sendImmediate,
+  sendDeferred,
+} from "@gcforms/connectors";
 import { logMessage } from "@lib/logger";
 import { traceFunction } from "../otel";
 import { checkOne } from "@lib/cache/flags";
@@ -10,12 +16,38 @@ type SendEmailOptions = ({ mode?: "immediate" } | { mode: "deferred"; notificati
 
 const gcNotifyConnector = GCNotifyConnector.default(process.env.NOTIFY_API_KEY ?? "");
 
-export const sendEmail = async (
-  email: string | string[],
-  personalisation: Personalisation,
-  type: string,
+const DEFAULT_TEMPLATE_ID = process.env.TEMPLATE_ID ?? "undefined";
+
+if (DEFAULT_TEMPLATE_ID === "undefined") {
+  throw new Error("TEMPLATE_ID environment variable is undefined");
+}
+
+export function sendDefaultEmail(input: {
+  to: string[];
+  subject: string;
+  body: string;
+  attachments?: EmailAttachment[];
+  options?: SendEmailOptions;
+}): Promise<void> {
+  return sendEmail(
+    input.to,
+    {
+      templateId: DEFAULT_TEMPLATE_ID,
+      placeholders: {
+        subject: input.subject,
+        formResponse: input.body,
+      },
+      attachments: input.attachments,
+    },
+    input.options
+  );
+}
+
+async function sendEmail(
+  to: string[],
+  content: EmailContent,
   options?: SendEmailOptions
-) => {
+): Promise<void> {
   return traceFunction("sendEmail", async () => {
     try {
       if (process.env.APP_ENV === "test") {
@@ -23,48 +55,33 @@ export const sendEmail = async (
         return;
       }
 
-      const emails = Array.isArray(email) ? email : [email];
       const notificationEnabled = await checkOne(FeatureFlags.notification);
-      const hasFileAttachment = "application_file" in personalisation;
 
-      if (notificationEnabled && !hasFileAttachment && !options?.bypassNotificationPipeline) {
-        const subject = typeof personalisation.subject === "string" ? personalisation.subject : "";
-        const body =
-          typeof personalisation.formResponse === "string" ? personalisation.formResponse : "";
-
+      if (notificationEnabled && options?.bypassNotificationPipeline !== true) {
         logMessage.debug(
           `Sending email through notification pipeline with option: ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"}`
         );
 
         if (options?.mode === "deferred") {
-          await notification.sendDeferred({
+          await sendDeferred({
             notificationId: options.notificationId,
-            emails,
-            subject,
-            body,
+            emails: to,
+            content,
           });
         } else {
-          await notification.sendImmediate({ emails, subject, body });
+          await sendImmediate({ emails: to, content });
         }
 
         return;
       }
 
-      // Fallback: send directly via GC Notify (flag off, or email has a file attachment, or bypassNotificationPipeline is true)
-
-      const templateId = process.env.TEMPLATE_ID;
-
-      if (!templateId) {
-        throw new Error("No Notify template ID configured.");
-      }
-
       logMessage.debug("Sending email directly through GC Notify");
 
       await Promise.all(
-        emails.map((addr) =>
-          gcNotifyConnector.sendEmail(addr, templateId, personalisation).catch((error) => {
+        to.map((emailAddress) =>
+          gcNotifyConnector.sendEmail(emailAddress, content).catch((error) => {
             logMessage.warn(
-              `Failed to send ${type} email to ${addr} through GC Notify. Reason: ${
+              `Failed to send email to ${emailAddress} through GC Notify. Reason: ${
                 (error as Error).message
               }`
             );
@@ -73,7 +90,7 @@ export const sendEmail = async (
       );
     } catch (error) {
       logMessage.error(
-        `Failed to send ${type} email to ${Array.isArray(email) ? email.join(", ") : email} through GC Notify. Reason: ${
+        `Failed to send email to ${to.join(", ")} through GC Notify. Reason: ${
           (error as Error).message
         }`
       );
@@ -81,4 +98,4 @@ export const sendEmail = async (
       throw error;
     }
   });
-};
+}

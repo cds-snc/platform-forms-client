@@ -51,7 +51,6 @@ export const deleteForm = AuthenticatedAction(
       });
 
       sendArchivedFormNotifications(session.user.email, {
-        id,
         title: {
           en: template.formRecord.form.titleEn,
           fr: template.formRecord.form.titleFr,
