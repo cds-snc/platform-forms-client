@@ -347,7 +347,7 @@ export const DownloadTable = ({
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
-        checkedMeta={tableItems.allItems.filter((s) => !removedRows.includes(s.name))}
+        checkedMeta={tableItems.allItems.filter((item) => tableItems.checkedItems.get(item.name))}
       />
     </>
   );
