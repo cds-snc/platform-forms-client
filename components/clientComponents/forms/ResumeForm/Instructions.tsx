@@ -5,7 +5,7 @@ export const Instructions = () => {
   const { t } = useTranslation(["form-builder", "common"]);
   return (
     <div className="mb-6 flex border-b-1 border-slate-500 p-2">
-      <LightBulbIcon className="mr-2 mt-[-2]" />
+      <LightBulbIcon className="mt-[-2] mr-2" />
       <div>
         <div className="mb-2 p-0 !text-xl">
           {t("saveAndResume.resumePage.readyToContinue.title")}

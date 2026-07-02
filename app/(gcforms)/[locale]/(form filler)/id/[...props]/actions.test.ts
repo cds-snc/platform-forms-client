@@ -71,6 +71,7 @@ describe("submitForm", () => {
   const mockTemplate: PublicFormRecord = {
     id: mockFormId,
     isPublished: true,
+    versionNumber: 2,
     closingDate: undefined,
     securityAttribute: "Unclassified",
     form: {
@@ -147,6 +148,7 @@ describe("submitForm", () => {
       responses: mockValues,
       securityAttribute: mockTemplate.securityAttribute,
       formId: mockFormId,
+      version: 2,
       language: mockLanguage,
       fileChecksums: undefined,
     });
