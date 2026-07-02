@@ -17,7 +17,8 @@ const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
     ...globalConfig,
     // SDK retries use exponential backoff with jitter by default
     maxAttempts: 15,
-  })
+  }),
+  { marshallOptions: { removeUndefinedValues: true } }
 );
 
 const sqsClient = new SQSClient({
