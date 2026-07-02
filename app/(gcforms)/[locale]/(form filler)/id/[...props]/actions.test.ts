@@ -40,7 +40,7 @@ vi.mock("@lib/formEmailOrchestration", () => ({
 }));
 
 vi.mock("@lib/integration/notifyConnector", () => ({
-  sendEmail: vi.fn(),
+  sendDefaultEmail: vi.fn(),
 }));
 
 vi.mock("./lib/server/normalizeFormResponses", () => ({
@@ -62,7 +62,7 @@ import {
   prepareFormSubmissionEmail,
   updateNotificationMarker,
 } from "@lib/formEmailOrchestration";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
 import { ResponseValidationValues } from "@gcforms/core";
@@ -113,7 +113,7 @@ describe("submitForm", () => {
     (getFormNotificationInterval as Mock).mockResolvedValue(false);
     (updateNotificationMarker as Mock).mockResolvedValue(null);
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(null);
-    (sendEmail as Mock).mockResolvedValue(undefined);
+    (sendDefaultEmail as Mock).mockResolvedValue(undefined);
   });
 
   it("should return MissingFormDataError when file input validation fails", async () => {
@@ -170,7 +170,7 @@ describe("submitForm", () => {
     });
     expect(getFormNotificationInterval).toHaveBeenCalledWith(mockFormId);
     expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
-    expect(sendEmail).not.toHaveBeenCalled();
+    expect(sendDefaultEmail).not.toHaveBeenCalled();
   });
 
   it("should send a first submission notification when form is eligible and no prior marker exists", async () => {
@@ -204,12 +204,12 @@ describe("submitForm", () => {
     const notificationId = (processFormData as Mock).mock.calls[0][0].notificationId;
     expect(notificationId).toBeTypeOf("string");
 
-    expect(sendEmail).toHaveBeenCalledWith(
-      mockEmailData.emails,
-      { subject: mockEmailData.subject, formResponse: mockEmailData.formResponse },
-      "formSubmissionNotification",
-      { mode: "deferred", notificationId }
-    );
+    expect(sendDefaultEmail).toHaveBeenCalledWith({
+      to: mockEmailData.emails,
+      subject: mockEmailData.subject,
+      body: mockEmailData.formResponse,
+      options: { mode: "deferred", notificationId },
+    });
     expect(processFormData).toHaveBeenCalledWith(expect.objectContaining({ notificationId }));
   });
 
@@ -244,12 +244,12 @@ describe("submitForm", () => {
     const notificationId = (processFormData as Mock).mock.calls[0][0].notificationId;
     expect(notificationId).toBeTypeOf("string");
 
-    expect(sendEmail).toHaveBeenCalledWith(
-      mockEmailData.emails,
-      { subject: mockEmailData.subject, formResponse: mockEmailData.formResponse },
-      "formSubmissionNotification",
-      { mode: "deferred", notificationId }
-    );
+    expect(sendDefaultEmail).toHaveBeenCalledWith({
+      to: mockEmailData.emails,
+      subject: mockEmailData.subject,
+      body: mockEmailData.formResponse,
+      options: { mode: "deferred", notificationId },
+    });
     expect(processFormData).toHaveBeenCalledWith(expect.objectContaining({ notificationId }));
   });
 
@@ -262,7 +262,7 @@ describe("submitForm", () => {
 
     expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId, NotificationsInterval.DAY);
     expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
-    expect(sendEmail).not.toHaveBeenCalled();
+    expect(sendDefaultEmail).not.toHaveBeenCalled();
     expect(processFormData).toHaveBeenCalledWith(
       expect.objectContaining({ notificationId: undefined })
     );
@@ -367,11 +367,11 @@ describe("submitForm", () => {
     });
 
     // sendEmail is called without deferred mode — falls back to GC Notify
-    expect(sendEmail).toHaveBeenCalledWith(
-      mockEmailData.emails,
-      { subject: mockEmailData.subject, formResponse: mockEmailData.formResponse },
-      "formSubmissionNotification"
-    );
+    expect(sendDefaultEmail).toHaveBeenCalledWith({
+      to: mockEmailData.emails,
+      subject: mockEmailData.subject,
+      body: mockEmailData.formResponse,
+    });
 
     // No notificationId is generated or forwarded to processFormData when the flag is off
     expect(processFormData).toHaveBeenCalledWith(
