@@ -25,6 +25,7 @@ import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { StatusFilter } from "../types";
 
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionOverview[];
@@ -66,6 +67,9 @@ export const DownloadTable = ({
     reducerTableItems,
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
+
+  const { getFlag } = useFeatureFlags();
+  const templateVersioningEnabled = getFlag("templateVersioning");
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -168,10 +172,11 @@ export const DownloadTable = ({
                   <p>{t(`tooltips.downloadTable.date.body`)}</p>
                 </Tooltip.Info>
               </th>
-
-              <th scope="col" className="p-4 text-left">
-                {t("downloadResponsesTable.header.version")}
-              </th>
+              {templateVersioningEnabled && (
+                <th scope="col" className="p-4 text-left">
+                  {t("downloadResponsesTable.header.version")}
+                </th>
+              )}
 
               <th scope="col" className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
@@ -191,7 +196,7 @@ export const DownloadTable = ({
           </thead>
           <tbody>
             <tr className="border-y-1 border-slate-400 bg-slate-100 py-2">
-              <td colSpan={5} className="px-4 py-2">
+              <td colSpan={templateVersioningEnabled ? 6 : 5} className="px-4 py-2">
                 <Pagination
                   startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
@@ -276,7 +281,7 @@ export const DownloadTable = ({
               );
             })}
             <tr className="border-y-1 border-slate-300 bg-slate-100 py-2">
-              <td colSpan={5} className="px-4 py-2">
+              <td colSpan={templateVersioningEnabled ? 6 : 5} className="px-4 py-2">
                 <Pagination
                   startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}

@@ -18,7 +18,7 @@ import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/fo
 import { FormBuilderError } from "../../exceptions";
 import { useTemplateVersioning } from "./useTemplateVersioning";
 import { VersionSelector } from "./VersionSelector";
-import { useFeatureFlags } from "@root/lib/hooks/useFeatureFlags";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const DownloadDialog = ({
   checkedItems,
