@@ -64,7 +64,7 @@ export const submissionTypeExists = async (formID: string, status: VaultStatus) 
 
   const queryCommand = new QueryCommand({
     TableName: "Vault",
-    IndexName: "StatusCreatedAt_v2",
+    IndexName: "StatusCreatedAt",
     // To optimize query since we only need to check whether one type of submission type exists
     ScanIndexForward: shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder(status),
     // Limit the amount of responses to 1.
