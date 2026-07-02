@@ -130,7 +130,8 @@
     "typography": "Typography",
     "upload": "Upload",
     "viewTemplates": "View Templates",
-    "allForms": "Forms"
+    "allForms": "Forms",
+    "events": "Audit logs"
   },
   "formElements": {
     "characterCount": {
