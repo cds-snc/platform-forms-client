@@ -268,6 +268,10 @@ export const DownloadTable = ({
                       onDownloadSuccess={() => {
                         setDownloadError(false);
                         setRemovedRows([...removedRows, submission.name]);
+                        tableItemsDispatch({
+                          type: TableActions.UNCHECK,
+                          payload: { ids: [submission.name] },
+                        });
                         // router.replace(router.asPath, undefined, { scroll: false });
                         if (statusFilter === StatusFilter.NEW) {
                           setShowDownloadSuccess("downloadSuccess");
@@ -330,6 +334,10 @@ export const DownloadTable = ({
         formName={formName}
         onSuccessfulDownload={(filteredIds) => {
           setRemovedRows([...removedRows, ...filteredIds]);
+          tableItemsDispatch({
+            type: TableActions.UNCHECK,
+            payload: { ids: filteredIds },
+          });
           // router.replace(router.asPath, undefined, { scroll: false });
           if (statusFilter === StatusFilter.NEW) {
             setShowDownloadSuccess("downloadSuccess");
