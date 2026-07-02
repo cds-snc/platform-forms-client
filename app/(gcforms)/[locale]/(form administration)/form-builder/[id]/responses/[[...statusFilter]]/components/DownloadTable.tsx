@@ -315,8 +315,8 @@ export const DownloadTable = ({
         setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
         formName={formName}
-        onSuccessfulDownload={() => {
-          setRemovedRows([...removedRows, ...tableItems.checkedItems.keys()]);
+        onSuccessfulDownload={(filteredIds) => {
+          setRemovedRows([...removedRows, ...filteredIds]);
           // router.replace(router.asPath, undefined, { scroll: false });
           if (statusFilter === StatusFilter.NEW) {
             setShowDownloadSuccess("downloadSuccess");

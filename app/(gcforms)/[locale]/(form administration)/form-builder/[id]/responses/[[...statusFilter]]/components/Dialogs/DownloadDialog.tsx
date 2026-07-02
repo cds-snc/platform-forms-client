@@ -37,7 +37,7 @@ export const DownloadDialog = ({
   setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
   formId: string;
   formName: string;
-  onSuccessfulDownload: () => void;
+  onSuccessfulDownload: (filteredIds: string[]) => void;
   responseDownloadLimit: number;
   checkedMeta?: { id?: string; name?: string; version?: string | null }[];
 }) => {
@@ -69,9 +69,9 @@ export const DownloadDialog = ({
     dialogRef.current?.close();
   };
 
-  const handleDownloadComplete = () => {
+  const handleDownloadComplete = (filteredIds: string[]) => {
     setIsDownloading(false);
-    onSuccessfulDownload();
+    onSuccessfulDownload(filteredIds);
     handleClose();
   };
 
@@ -169,7 +169,7 @@ export const DownloadDialog = ({
           const fileName = `${filePrefix}responses-reponses.zip`;
           downloadFileFromBlob(blob, fileName);
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         });
       }
 
@@ -197,7 +197,7 @@ export const DownloadDialog = ({
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(blob, fileName);
 
-            handleDownloadComplete();
+            handleDownloadComplete(filteredIds);
           });
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
@@ -206,7 +206,7 @@ export const DownloadDialog = ({
             `${filePrefix}responses-reponses.csv`
           );
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         }
       }
 
@@ -232,7 +232,7 @@ export const DownloadDialog = ({
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(blob, fileName);
 
-            handleDownloadComplete();
+            handleDownloadComplete(filteredIds);
           });
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
@@ -241,7 +241,7 @@ export const DownloadDialog = ({
             `${filePrefix}responses-reponses.json`
           );
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         }
       }
     } catch (err) {
