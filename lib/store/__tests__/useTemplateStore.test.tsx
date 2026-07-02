@@ -4,7 +4,7 @@
 import { describe, it, expect } from "vitest";
 import React, { useContext, useEffect } from "react";
 import { useTemplateStore, TemplateStoreProvider, TemplateStoreContext } from "../useTemplateStore";
-import { render, renderHook, act, waitFor, screen } from "@testing-library/react";
+import { render, renderHook, act, waitFor } from "@testing-library/react";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 import { FormRecord } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
@@ -162,6 +162,9 @@ describe("TemplateStore", () => {
         currentDraftVersionId: "draft-version-2",
       });
     });
+
+    // clear session storage to avoid affecting other tests
+    sessionStorage.removeItem("form-storage");
   });
 
   it("Updates the Element title", async () => {
