@@ -26,6 +26,7 @@ import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates/internal/errors";
 import { getAppSetting } from "./appSettings";
 import { delay, getExponentialBackoffTimeInMS } from "./utils/retryability";
+import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
 
 /**
  * Checks if any submissions exist for a given form and type
@@ -120,6 +121,8 @@ export async function listAllSubmissions(
       responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
     }
 
+    const templateVersioningEnabled = await isTemplateVersioningEnabled();
+
     // We're going to request one more than the limit so we can consistently determine if there are more responses
     const responseRetrievalLimit = responseDownloadLimit + 1;
 
@@ -135,7 +138,7 @@ export async function listAllSubmissions(
     while (lastEvaluatedKey !== undefined) {
       const queryCommand: QueryCommand = new QueryCommand({
         TableName: "Vault",
-        IndexName: "StatusCreatedAt_v2",
+        IndexName: templateVersioningEnabled ? "StatusCreatedAt_v2" : "StatusCreatedAt",
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         // Limit the amount of response to responseRetrievalLimit
         Limit: responseRetrievalLimit - accumulatedResponses.length,
@@ -149,7 +152,9 @@ export async function listAllSubmissions(
           ":formID": formID,
           ...(status && { ":status": status }),
         },
-        ProjectionExpression: "FormID,#name,CreatedAt,#statusCreatedAtKey,Version",
+        ProjectionExpression: templateVersioningEnabled
+          ? "FormID,#name,CreatedAt,#statusCreatedAtKey,Version"
+          : "FormID,#name,CreatedAt,#statusCreatedAtKey",
       });
 
       // eslint-disable-next-line no-await-in-loop
