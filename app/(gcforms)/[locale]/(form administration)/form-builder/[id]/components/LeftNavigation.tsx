@@ -87,7 +87,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
             <NavSettingsIcon />
           </LeftNav>
         </li>
-        {!isPublished && (
+        {(!isPublished || currentDraftVersionId) && (
           <li>
             <LeftNav
               testid="publish"
