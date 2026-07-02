@@ -7,6 +7,7 @@ import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
 import { Flags } from "@lib/cache/types";
 import { Announce } from "@gcforms/announce";
+import { AppUpdateProvider } from "@lib/hooks/useAppUpdate";
 
 export const ClientContexts: React.FC<{
   session: Session | null;
@@ -14,7 +15,7 @@ export const ClientContexts: React.FC<{
   featureFlags: Flags;
 }> = ({ session, children, featureFlags }) => {
   return (
-    <>
+    <AppUpdateProvider>
       <SessionProvider
         // initial session
         session={session}
@@ -30,6 +31,6 @@ export const ClientContexts: React.FC<{
         </AccessControlProvider>
       </SessionProvider>
       <Announce />
-    </>
+    </AppUpdateProvider>
   );
 };

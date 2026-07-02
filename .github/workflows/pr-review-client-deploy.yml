@@ -43,7 +43,7 @@ jobs:
         with:
           filters: |
             migrations:
-              - 'prisma/migrations/**'
+              - 'packages/database/prisma/migrations/**'
 
   build-and-push-container:
     needs: [run-check]

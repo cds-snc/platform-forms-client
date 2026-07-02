@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 
-import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
+import { saveSessionProgress } from "@lib/hooks/useResponseCache";
 
 import { type FormValues } from "@gcforms/types";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -28,7 +28,7 @@ type ResumeFormResponse = {
 };
 
 type PendingMismatchResume = Omit<ResumeFormResponse, "id"> & {
-  sourceFormId: string;
+  formVersionId: string;
 };
 
 export const Upload = ({ formId }: { formId: string }) => {
@@ -37,7 +37,6 @@ export const Upload = ({ formId }: { formId: string }) => {
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
 
-  const router = useRouter();
   const { logClientError } = useLogClient();
   const dialogRef = useDialogRef();
   const dragResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -73,16 +72,18 @@ export const Upload = ({ formId }: { formId: string }) => {
     values,
     history,
     currentGroup,
-    sourceFormId,
-  }: ResumeFormResponse & { sourceFormId?: string }) => {
-    saveSessionProgress(language, {
+    formVersionId,
+  }: ResumeFormResponse & { formVersionId?: string }) => {
+    saveSessionProgress({
       id,
       values,
-      history,
       currentGroup,
-      sourceFormId,
+      language,
+      history,
+      formVersionId,
+    }).then(() => {
+      window.location.href = `/${language}/id/${id}`;
     });
-    router.push(`/${language}/id/${id}`);
   };
 
   const handleContinueAnyway = () => {
@@ -96,7 +97,7 @@ export const Upload = ({ formId }: { formId: string }) => {
       values: pendingMismatchResume.values,
       history: pendingMismatchResume.history,
       currentGroup: pendingMismatchResume.currentGroup,
-      sourceFormId: pendingMismatchResume.sourceFormId,
+      formVersionId: pendingMismatchResume.formVersionId,
     });
     setPendingMismatchResume(null);
   };
@@ -173,7 +174,7 @@ export const Upload = ({ formId }: { formId: string }) => {
         if (id !== formId) {
           resetInput?.();
           setPendingMismatchResume({
-            sourceFormId: id,
+            formVersionId: id,
             values: parsed.values,
             history: parsed.history,
             currentGroup: parsed.currentGroup,
@@ -321,7 +322,7 @@ export const Upload = ({ formId }: { formId: string }) => {
             <p className="mt-4 text-sm">{t("saveAndResume.resumePage.mismatchedForm.warning")}</p>
             <p className="mt-4 text-sm">
               <Link
-                href={`/${language}/id/${pendingMismatchResume.sourceFormId}/resume`}
+                href={`/${language}/id/${pendingMismatchResume.formVersionId}/resume`}
                 className="text-blue-700 underline hover:text-blue-800"
               >
                 {t("saveAndResume.resumePage.mismatchedForm.matchingFormLink")}
