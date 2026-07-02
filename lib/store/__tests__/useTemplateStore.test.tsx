@@ -162,6 +162,9 @@ describe("TemplateStore", () => {
         currentDraftVersionId: "draft-version-2",
       });
     });
+
+    // clear session storage to avoid affecting other tests
+    sessionStorage.removeItem("form-storage");
   });
 
   it("Updates the Element title", async () => {
