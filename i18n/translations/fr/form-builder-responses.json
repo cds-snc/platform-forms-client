@@ -108,6 +108,7 @@
       "download": "Télécharger",
       "nextStep": "Prochaine étape",
       "date": "Date",
+      "version": "Version",
       "warning": "Avertissement",
       "pagination": {
         "start": "Début",
@@ -194,7 +195,10 @@
       "jsonDescription": "Pour API ou configuration des données",
       "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
       "cancel": "Annuler",
-      "download": "Télécharger"
+      "download": "Télécharger",
+      "chooseVersion": "Télécharger les réponses pour la version",
+      "chooseVersionPlaceholder": "Sélectionner une version",
+      "chooseVersionRequired": "Vous pouvez modifier la version sélectionnée si nécessaire"
     },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirmer la suppression de nouvelles réponses",
