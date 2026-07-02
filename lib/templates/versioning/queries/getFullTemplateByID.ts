@@ -2,23 +2,12 @@ import { FormRecord } from "@lib/types";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
-import { parseTemplate } from "../internal";
-import { isTemplateVersioningEnabled } from "../versioning/internal";
-import { getFullTemplateByID as getFullTemplateByIDVersioningEnabled } from "@lib/templates/versioning/queries/getFullTemplateByID";
+import { getBuilderVersion, parseTemplate, templateRecordInclude } from "../internal";
 
-/**
- * Get a form template by ID (includes full template information but requires view permission)
- * @param formID ID of form template
- * @returns FormRecord
- */
 export async function getFullTemplateByID(
   formID: string,
   allowDeleted?: boolean
 ): Promise<FormRecord | null> {
-  if (await isTemplateVersioningEnabled()) {
-    return getFullTemplateByIDVersioningEnabled(formID, allowDeleted);
-  }
-
   try {
     const { user } = await authorization.canViewForm(formID, allowDeleted).catch((e) => {
       logEvent(
@@ -36,14 +25,7 @@ export async function getFullTemplateByID(
           id: formID,
           ttl: allowDeleted ? { not: null } : null,
         },
-        include: {
-          deliveryOption: true,
-          lastEditedBy: {
-            select: {
-              name: true,
-            },
-          },
-        },
+        include: templateRecordInclude,
       })
       .catch((e) => prismaErrors(e, null));
 
@@ -51,8 +33,10 @@ export async function getFullTemplateByID(
 
     logEvent(user.id, { type: "Form", id: formID }, "ReadForm");
 
-    return parseTemplate(template);
-  } catch (e) {
+    return parseTemplate(template, {
+      version: getBuilderVersion(template),
+    });
+  } catch {
     return null;
   }
 }

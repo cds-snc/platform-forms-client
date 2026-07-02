@@ -118,7 +118,8 @@ export async function submitForm(
         }
       }
 
-      const formData = normalizeFormResponses(template, values as Responses);
+      const version = template.versionNumber || 1;
+      const formData = normalizeFormResponses(template, values.responses as Responses);
 
       const notificationId = await scheduleFormSubmissionNotification(
         formId,
@@ -130,6 +131,7 @@ export async function submitForm(
         responses: formData,
         securityAttribute: template.securityAttribute,
         formId,
+        version,
         language,
         fileChecksums,
         // If non-null will be used in the reliability lambda to kick off the deferred notification pipeline

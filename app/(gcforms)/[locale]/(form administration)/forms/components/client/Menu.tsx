@@ -2,12 +2,13 @@
 
 import { useTranslation } from "@i18n/client";
 import copy from "copy-to-clipboard";
-import { getForm, cloneForm, restoreForm } from "../../actions";
+import { getForm, cloneForm, restoreForm, createDraftVersion } from "../../actions";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { clearTemplateStorage } from "@lib/store/utils";
 import { useCallback, useState, useMemo } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import {
   MenuDropdown,
   MenuDropdownItemCallback,
@@ -35,6 +36,11 @@ export const Menu = ({
     i18n: { language },
   } = useTranslation("my-forms");
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
+
+  const [creatingDraft, setCreatingDraft] = useState(false);
+
+  const { getFlag } = useFeatureFlags();
+  const templateVersioningEnabled = getFlag("templateVersioning");
 
   const handleDelete = useCallback(() => {
     setShowConfirm(true);
@@ -116,6 +122,29 @@ export const Menu = ({
         callback: copyLinkCallback,
       },
       {
+        filtered: templateVersioningEnabled && isPublished ? false : true,
+        title: t("card.menu.createDraftVersion"),
+        callback: async () => {
+          if (creatingDraft) return;
+
+          setCreatingDraft(true);
+          try {
+            const res = await createDraftVersion({ id });
+            if (res?.error) {
+              toast.error(t("card.menu.somethingWentWrong"));
+              return;
+            }
+            // navigate into edit for this form (extract locale from path if available)
+            const lang = window.location.pathname.split("/")[1] || "en";
+            window.location.href = `/${lang}/form-builder/${id}/edit`;
+          } catch (e) {
+            // noop
+          } finally {
+            setCreatingDraft(false);
+          }
+        },
+      },
+      {
         filtered: (isPublished ? true : false) || (ttl ? true : false),
         title: t("card.menu.preview"),
         url: `/${language}/form-builder/${id}/preview`,
@@ -181,13 +210,15 @@ export const Menu = ({
       ttl,
       t,
       copyLinkCallback,
-      restoreFormCallback,
+      templateVersioningEnabled,
       language,
       id,
+      restoreFormCallback,
+      creatingDraft,
       status,
-      handleDelete,
       downloadForm,
       name,
+      handleDelete,
     ]
   );
 
