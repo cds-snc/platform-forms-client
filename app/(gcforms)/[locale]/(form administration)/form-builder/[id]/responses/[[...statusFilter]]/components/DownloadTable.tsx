@@ -168,6 +168,11 @@ export const DownloadTable = ({
                   <p>{t(`tooltips.downloadTable.date.body`)}</p>
                 </Tooltip.Info>
               </th>
+
+              <th scope="col" className="p-4 text-left">
+                {t("downloadResponsesTable.header.version")}
+              </th>
+
               <th scope="col" className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
                 <Tooltip.Info
@@ -239,6 +244,9 @@ export const DownloadTable = ({
                     {submission.name}
                   </th>
                   <td className="px-4 whitespace-nowrap">{createdDateTime}</td>
+                  <td className="px-4 whitespace-nowrap">
+                    {submission.version ?? t("downloadResponsesTable.unknown")}
+                  </td>
                   <td className="px-4 whitespace-nowrap">
                     <NextStep
                       statusFilter={statusFilter as StatusFilter}
@@ -324,7 +332,7 @@ export const DownloadTable = ({
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
-        checkedMeta={tableItems.allItems}
+        checkedMeta={tableItems.allItems.filter((s) => !removedRows.includes(s.name))}
       />
     </>
   );
