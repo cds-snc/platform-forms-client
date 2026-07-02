@@ -39,10 +39,18 @@ const calculateCollaboratorCount = (userCount: number, pendingUserCount: number)
 };
 
 const VersionNumberText = memo(
-  ({ hasDraft, versionNumber }: { hasDraft: boolean; versionNumber?: number }) => {
+  ({
+    hasDraft,
+    versionNumber,
+    isPublished,
+  }: {
+    hasDraft: boolean;
+    versionNumber?: number;
+    isPublished: boolean;
+  }) => {
     const { t } = useTranslation("my-forms");
 
-    if (hasDraft && versionNumber) {
+    if (isPublished && hasDraft && versionNumber) {
       return (
         <div className="mt-2 flex items-center text-sm">
           <span
@@ -91,7 +99,11 @@ const CardBanner = memo(
               ? t("card.states.published")
               : t("card.states.draft")}
         </div>
-        <VersionNumberText hasDraft={hasDraft} versionNumber={versionNumber} />
+        <VersionNumberText
+          isPublished={isPublished}
+          hasDraft={hasDraft}
+          versionNumber={versionNumber}
+        />
       </>
     );
   }
