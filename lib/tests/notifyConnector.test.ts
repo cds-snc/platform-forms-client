@@ -38,7 +38,6 @@ vi.mock("@lib/cache/flags", () => ({
 }));
 
 import { sendDefaultEmail } from "@lib/integration/notifyConnector";
-import { subject } from "@casl/ability";
 
 describe("sendDefaultEmail", () => {
   describe("test-environment guard", () => {
@@ -57,6 +56,7 @@ describe("sendDefaultEmail", () => {
   describe("routing logic", () => {
     beforeEach(() => {
       vi.stubEnv("APP_ENV", "production");
+      vi.stubEnv("TEMPLATE_ID", "dummy_template_id");
     });
 
     afterEach(() => {

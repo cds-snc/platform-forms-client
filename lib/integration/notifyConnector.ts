@@ -16,12 +16,6 @@ type SendEmailOptions = ({ mode?: "immediate" } | { mode: "deferred"; notificati
 
 const gcNotifyConnector = GCNotifyConnector.default(process.env.NOTIFY_API_KEY ?? "");
 
-const DEFAULT_TEMPLATE_ID = process.env.TEMPLATE_ID ?? "undefined";
-
-if (DEFAULT_TEMPLATE_ID === "undefined") {
-  throw new Error("TEMPLATE_ID environment variable is undefined");
-}
-
 export function sendDefaultEmail(input: {
   to: string[];
   subject: string;
@@ -32,7 +26,7 @@ export function sendDefaultEmail(input: {
   return sendEmail(
     input.to,
     {
-      templateId: DEFAULT_TEMPLATE_ID,
+      templateId: process.env.TEMPLATE_ID ?? "undefined",
       placeholders: {
         subject: input.subject,
         formResponse: input.body,
