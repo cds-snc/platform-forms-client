@@ -1,7 +1,5 @@
 # Changelog
 
-<<<<<<< HEAD
-
 ## [2.2.17] - 2026-07-03
 
 - Add new Star Rating input validation type
