@@ -35,7 +35,6 @@ export const useTemplateVersioning = (
       const versions = selectedVersionForDialog
         ? filteredIdsWithVersion.filter((id) => {
             const version = String(metaMap.get(id)?.version);
-            if (!version) return true;
             return version === selectedVersionForDialog;
           })
         : filteredIdsWithVersion;

@@ -254,7 +254,7 @@ export const DownloadTable = ({
                       className="px-4 whitespace-nowrap"
                       data-version={submission.version ?? "unknown"}
                     >
-                      {submission.version ?? 1}
+                      {submission.version ?? t("downloadResponsesTable.unknownVersion")}
                     </td>
                   )}
                   <td className="px-4 whitespace-nowrap">
