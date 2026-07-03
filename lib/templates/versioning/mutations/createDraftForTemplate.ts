@@ -9,6 +9,7 @@ import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
 import { parseTemplate } from "../internal/index";
+import { formCache } from "@lib/cache/formCache";
 
 export async function createDraftVersionForTemplate(formID: string): Promise<FormRecord | null> {
   if (!(await isTemplateVersioningEnabled())) {
@@ -144,6 +145,8 @@ export async function createDraftVersionForTemplate(formID: string): Promise<For
       if (createdPublishedVersionId) {
         updateData.currentPublishedVersionId = createdPublishedVersionId;
       }
+
+      if (formCache.cacheAvailable) formCache.invalidate(formID);
 
       return tx.template.update({
         where: {
