@@ -1,17 +1,17 @@
 "use server";
 
-import {
-  TemplateHasUnprocessedSubmissions,
-  deleteTemplate,
-  getFullTemplateByID,
-  cloneTemplate,
-  restoreTemplate,
-} from "@lib/templates";
+import { redirect } from "next/navigation";
+import { TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/errors";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { cloneTemplate } from "@lib/templates/mutations/cloneTemplate";
+import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
+import { restoreTemplate } from "@lib/templates/mutations/restoreTemplate";
 import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
 import { AuthenticatedAction } from "@lib/actions";
 import { sendArchivedFormNotifications } from "@lib/notifications";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
+import { createDraftVersionForTemplate } from "@lib/templates/versioning/mutations/createDraftForTemplate";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -39,7 +39,7 @@ export const getForm = AuthenticatedAction(
 export const deleteForm = AuthenticatedAction(
   async (session, id: string): Promise<void | { error?: string }> => {
     try {
-      const template = await getTemplateWithAssociatedUsers(id);
+      const template = await getTemplateWithAssignedUsers(id);
       if (!template) {
         throw new Error(`Invalid form archive attempt for form ID: ${id}`);
       }
@@ -102,5 +102,47 @@ export const cloneForm = AuthenticatedAction(
     } catch (e) {
       return { formRecord: null, error: (e as Error).message };
     }
+  }
+);
+
+export const createDraftVersion = AuthenticatedAction(
+  async (
+    _,
+    {
+      id: formID,
+      redirectAfter,
+    }: {
+      id: string;
+      redirectAfter?: string;
+    }
+  ): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    let hasError;
+    let response: FormRecord | null = null;
+
+    try {
+      response = await createDraftVersionForTemplate(formID);
+
+      if (!response) {
+        throw new Error(`Unable to create a draft version for ${formID}`);
+      }
+
+      revalidatePath(`/form-builder/${formID}`, "layout");
+      revalidatePath(`/form-builder/${formID}/published`, "page");
+      revalidatePath(`/form-builder/${formID}/publish`, "page");
+    } catch (error) {
+      hasError = error;
+    }
+
+    if (!hasError && redirectAfter) {
+      if (!redirectAfter.startsWith("/") || redirectAfter.startsWith("//")) {
+        return { formRecord: response, error: "Invalid redirect path" };
+      }
+      redirect(redirectAfter);
+    }
+
+    return { formRecord: response, error: hasError ? (hasError as Error).message : undefined };
   }
 );

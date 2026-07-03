@@ -6,8 +6,7 @@ import downloadReportProblemSchema from "@lib/middleware/schemas/download-report
 import { BatchGetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
-import { getAbility } from "@lib/privileges";
-import { checkUserHasTemplateOwnership } from "@lib/templates";
+import { authorization, getAbility } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { AccessControlError } from "@lib/auth/errors";
 import { vaultStatusFromStatusCreatedAt } from "@lib/vault";
@@ -205,7 +204,7 @@ export const PUT = middleware(
 
     // Ensure the user has owernship of this form
     try {
-      await checkUserHasTemplateOwnership(formId);
+      await authorization.canEditForm(formId);
     } catch (e) {
       if (e instanceof AccessControlError) {
         logEvent(

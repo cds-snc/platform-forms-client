@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useCallback } from "react";
 
 import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -33,8 +33,7 @@ import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headle
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
-  matchedIds: string[];
-  filteredMatchedIds: string[];
+  matchedIds: React.RefObject<string[]>;
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -80,19 +79,10 @@ export const GCFormsProvider = ({
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = React.useRef({});
   const history = React.useRef<string[]>([LOCKED_GROUPS.START]);
-  const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
+  const matchedIds = React.useRef<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
-
-  // eslint-disable-next-line react-hooks/refs
-  const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
-  const filteredMatchedIds = matchedIds.filter((id) => {
-    const parentId = id.split(".")[0];
-    if (filteredResponses[parentId]) {
-      return id;
-    }
-  });
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -116,6 +106,14 @@ export const GCFormsProvider = ({
   const handleNextAction = () => {
     if (!currentGroup) return;
 
+    const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
+    const filteredMatchedIds = matchedIds.current.filter((id) => {
+      const parentId = id.split(".")[0];
+      if (filteredResponses[parentId]) {
+        return id;
+      }
+    });
+
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
 
@@ -133,8 +131,8 @@ export const GCFormsProvider = ({
   }): void => {
     values.current = formValues;
     const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
-    if (!idArraysMatch(matchedIds, valueIds)) {
-      setMatchedIds(valueIds);
+    if (!idArraysMatch(matchedIds.current, valueIds)) {
+      matchedIds.current = valueIds;
     }
   };
 
@@ -143,9 +141,9 @@ export const GCFormsProvider = ({
     setCurrentGroup(group);
   };
 
-  const getValues = () => {
-    return values.current as FormValues;
-  };
+  const getValues = useCallback(() => {
+    return values.current;
+  }, []);
 
   const getNonce = () => {
     return nonce || "";
@@ -253,7 +251,6 @@ export const GCFormsProvider = ({
         updateValues,
         getValues,
         matchedIds,
-        filteredMatchedIds,
         groups,
         currentGroup,
         getPreviousGroup,
@@ -279,8 +276,10 @@ export const GCFormsProvider = ({
 
 export const useGCFormsContext = () => {
   const formsContext = useContext(GCFormsContext);
+  const defaultMatchedIdRef = React.useRef<string[]>([]);
   if (formsContext === undefined) {
     // For now just return a default context if we're not inside the provider
+
     return {
       updateValues: () => {
         return "noop";
@@ -292,8 +291,7 @@ export const useGCFormsContext = () => {
       setSubmissionId: () => void 0,
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
-      matchedIds: [""],
-      filteredMatchedIds: [""],
+      matchedIds: defaultMatchedIdRef,
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",

@@ -7,13 +7,20 @@ import { useTranslation } from "@i18n/client";
 import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 
-export const FileNameInput = () => {
-  const { t } = useTranslation(["form-builder"]);
-  const { updateField, getName, getIsPublished } = useTemplateStore((s) => ({
-    getName: s.getName,
-    updateField: s.updateField,
-    getIsPublished: s.getIsPublished,
-  }));
+export const FileNameInput = ({
+  templateVersioningEnabled,
+}: {
+  templateVersioningEnabled: boolean;
+}) => {
+  const { t } = useTranslation(["form-builder", "my-forms"]);
+  const { updateField, getName, getIsPublished, currentDraftVersionId, versionNumber } =
+    useTemplateStore((s) => ({
+      getName: s.getName,
+      updateField: s.updateField,
+      getIsPublished: s.getIsPublished,
+      currentDraftVersionId: s.currentDraftVersionId,
+      versionNumber: s.versionNumber,
+    }));
 
   const fileName = getName();
   const isPublished = getIsPublished();
@@ -81,8 +88,8 @@ export const FileNameInput = () => {
         style={widthStyle}
         ref={fileNameInput}
         className={cn(
-          "border-1 border-[#1B00C2] rounded-md px-2 py-1 min-w-[220px] max-w-[200px] laptop:min-w-[250px] laptop:max-w-[500px] text-base font-bold text-ellipsis placeholder-slate-500 mt-3",
-          !isPublished && "hover:border-1 hover:border-gray-default"
+          "laptop:min-w-62.5 laptop:max-w-[500px] mt-3 mr-2 max-w-[200px] min-w-55 rounded-md border-1 border-[#1B00C2] px-2 py-1 text-base font-bold text-ellipsis placeholder-slate-500",
+          !isPublished && "hover:border-gray-default hover:border-1"
         )}
         name="filename"
         placeholder={t("unnamedForm", { ns: "form-builder" })}
@@ -105,8 +112,18 @@ export const FileNameInput = () => {
           setHasManuallyEdited(true);
         }}
         aria-label={t("formName", { ns: "form-builder" })}
-        disabled={isPublished && true}
+        disabled={isPublished && !currentDraftVersionId && true}
       />
+
+      {templateVersioningEnabled && currentDraftVersionId && versionNumber && (
+        <div
+          data-draft-id={currentDraftVersionId}
+          className="inline-block self-start rounded border-solid border-yellow-700 bg-yellow-300 p-1 px-2 text-sm"
+        >
+          {t("card.states.draft", { ns: "my-forms" })} - {t("version", { ns: "my-forms" })}{" "}
+          {versionNumber}
+        </div>
+      )}
     </div>
   );
 };

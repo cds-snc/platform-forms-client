@@ -52,6 +52,7 @@ import {
   getChoice,
   localizeField,
   getFormElementIndexes,
+  getName,
 } from "./helpers/elements";
 import { transform } from "./helpers/elements/transformFormProperties";
 import { BetaComponentsError, checkForBetaComponents } from "../validation/betaCheck";
@@ -203,7 +204,7 @@ const createTemplateStore = (
             getFormElementById: getFormElementById(set, get),
             getFormElementWithIndexById: getFormElementWithIndexById(set, get),
             getFormElementIndexes: getFormElementIndexes(set, get),
-            getName: () => get().name,
+            getName: getName(set, get),
             getDeliveryOption: () => get().deliveryOption,
             getSecurityAttribute: () => get().securityAttribute,
             getGroupsEnabled: () => get().allowGroupsFlag,
@@ -215,6 +216,12 @@ const createTemplateStore = (
               set({ translationLanguagePriority: lang }),
             setFocusInput: (isSet) => set({ focusInput: isSet }),
             setIsPublished: (isPublished) => set({ isPublished }),
+            setTemplateVersionIds: (versionIds) =>
+              set({
+                currentPublishedVersionId: versionIds.currentPublishedVersionId ?? null,
+                currentDraftVersionId: versionIds.currentDraftVersionId ?? null,
+                versionNumber: versionIds.versionNumber ?? null,
+              }),
             setClosingDate: (value) => set({ closingDate: value }),
             setSaveAndResume: (value) => set({ saveAndResume: value }),
             setNotificationsInterval: (value) => set({ notificationsInterval: value }),
@@ -264,16 +271,47 @@ export const TemplateStoreProvider = ({
   }, [store]);
 
   useEffect(() => {
-    const state = store.getState();
+    // Persisted session storage can rehydrate stale publish/version metadata,
+    // so the latest server props must be the source of truth for this route.
+    const syncServerProps = () => {
+      const state = store.getState();
 
-    if (typeof props.isPublished === "boolean" && state.isPublished !== props.isPublished) {
-      state.setIsPublished(props.isPublished);
-    }
+      if (typeof props.isPublished === "boolean" && state.isPublished !== props.isPublished) {
+        state.setIsPublished(props.isPublished);
+      }
 
-    if (props.closingDate !== undefined && state.closingDate !== props.closingDate) {
-      state.setClosingDate(props.closingDate ?? null);
-    }
-  }, [store, props.isPublished, props.closingDate]);
+      if (
+        state.currentPublishedVersionId !== (props.currentPublishedVersionId ?? null) ||
+        state.currentDraftVersionId !== (props.currentDraftVersionId ?? null) ||
+        state.versionNumber !== (props.versionNumber ?? null)
+      ) {
+        state.setTemplateVersionIds({
+          currentPublishedVersionId: props.currentPublishedVersionId,
+          currentDraftVersionId: props.currentDraftVersionId,
+          versionNumber: props.versionNumber,
+        });
+      }
+
+      if (props.closingDate !== undefined && state.closingDate !== props.closingDate) {
+        state.setClosingDate(props.closingDate ?? null);
+      }
+    };
+
+    syncServerProps();
+
+    return store.persist.onFinishHydration(() => {
+      // Reapply after hydration so an older stored snapshot cannot flip a
+      // draft edit session back into a published, read-only state.
+      syncServerProps();
+    });
+  }, [
+    store,
+    props.isPublished,
+    props.currentPublishedVersionId,
+    props.currentDraftVersionId,
+    props.versionNumber,
+    props.closingDate,
+  ]);
 
   try {
     return (

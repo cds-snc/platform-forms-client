@@ -4,7 +4,8 @@ import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
 import { logMessage } from "@lib/logger";
-import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
+import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
@@ -17,10 +18,13 @@ import { traceFunction } from "@lib/otel";
 
 import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
+import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+import { ResponseValidationValues } from "@gcforms/core";
+
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
-  const closedDetails = await checkIfClosed(formId);
+  const closedDetails = await getTemplateClosureState(formId);
 
   if (closedDetails && closedDetails.isPastClosingDate) {
     return true;
@@ -30,7 +34,7 @@ export async function isFormClosed(formId: string): Promise<boolean> {
 }
 
 export async function submitForm(
-  values: Responses,
+  values: ResponseValidationValues,
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined,
@@ -58,9 +62,10 @@ export async function submitForm(
         };
       }
 
-      const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
-      // Skip hCaptcha verification for form-builder Preview (drafts)
-      if (template?.isPublished && process.env.APP_ENV !== "test") {
+      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
+
+      if (shouldVerifyHCaptcha) {
+        const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
         // hCaptcha runs regardless but only block submissions if the feature flag is enabled
         const captchaVerified = await verifyHCaptchaToken(captchaToken || "", formId);
         if (hCaptchaBlockingMode && !captchaVerified) {
@@ -107,12 +112,14 @@ export async function submitForm(
         }
       }
 
-      const formData = normalizeFormResponses(template, values);
+      const version = template.versionNumber || 1;
+      const formData = normalizeFormResponses(template, values.responses as Responses);
 
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,
         securityAttribute: template.securityAttribute,
         formId,
+        version,
         language,
         fileChecksums,
       });

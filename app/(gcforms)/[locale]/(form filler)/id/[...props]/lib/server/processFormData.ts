@@ -1,6 +1,6 @@
 import { Response, SignedURLMap } from "@lib/types";
 import { logMessage } from "@lib/logger";
-import { getPublicTemplateByID } from "@lib/templates";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { invokeSubmissionLambda } from "./invokeSubmissionLambda";
 import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "../client/exceptions";
 import { validatePayloadSize } from "@lib/validation/validatePayloadSize";
@@ -9,6 +9,7 @@ type ProcessFormDataParams = {
   responses: Record<string, Response>;
   securityAttribute?: string;
   formId: string;
+  version?: number;
   language?: string;
   fileChecksums?: Record<string, string>;
 };
@@ -17,6 +18,7 @@ export const processFormData = async ({
   responses,
   securityAttribute,
   formId,
+  version,
   language,
   fileChecksums,
 }: ProcessFormDataParams): Promise<{
@@ -59,6 +61,7 @@ export const processFormData = async ({
       responses,
       language ? language : "en",
       securityAttribute ? securityAttribute : "Protected A",
+      version,
       fileChecksums
     );
 
