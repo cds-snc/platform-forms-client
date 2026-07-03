@@ -174,7 +174,17 @@ export const DownloadTable = ({
               </th>
               {templateVersioningEnabled && (
                 <th scope="col" className="p-4 text-left">
-                  {t("downloadResponsesTable.header.version")}
+                  <span className="flex items-center">
+                    {t("downloadResponsesTable.header.version")}
+                    <Tooltip.Info
+                      side="top"
+                      triggerClassName="align-middle ml-1"
+                      tooltipClassName="font-normal"
+                    >
+                      <strong>{t(`tooltips.downloadTable.version.title`)}</strong>
+                      <p>{t(`tooltips.downloadTable.version.body`)}</p>
+                    </Tooltip.Info>
+                  </span>
                 </th>
               )}
 
