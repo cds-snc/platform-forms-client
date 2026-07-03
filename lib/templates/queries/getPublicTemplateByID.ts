@@ -3,6 +3,8 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { PublicFormRecord } from "@lib/types";
 import { mapTemplateToPublicFormRecord, parseTemplate } from "../internal";
 import { logMessage } from "@lib/logger";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { getPublicTemplateByID as getPublicTemplateByIDVersioningEnabled } from "@lib/templates/versioning/queries/getPublicTemplateByID";
 
 /**
  * Get a form template by ID (only includes public information but does not require any permission)
@@ -10,6 +12,10 @@ import { logMessage } from "@lib/logger";
  * @returns PublicFormRecord
  */
 export async function getPublicTemplateByID(formID: string): Promise<PublicFormRecord | null> {
+  if (await isTemplateVersioningEnabled()) {
+    return getPublicTemplateByIDVersioningEnabled(formID);
+  }
+
   try {
     if (formCache.cacheAvailable) {
       // This value will always be the latest if it exists because

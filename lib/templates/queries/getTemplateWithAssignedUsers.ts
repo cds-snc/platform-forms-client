@@ -3,11 +3,19 @@ import { FormRecord } from "@lib/types";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { parseTemplate } from "../internal";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { getTemplateWithAssignedUsers as getTemplateWithAssignedUsersVersioningEnabled } from "../versioning/queries/getTemplateWithAssignedUsers";
 
 export async function getTemplateWithAssignedUsers(formID: string): Promise<{
   formRecord: FormRecord;
   users: { id: string; name: string | null; email: string }[];
 } | null> {
+  const templateVersioningEnabled = await isTemplateVersioningEnabled();
+
+  if (templateVersioningEnabled) {
+    return getTemplateWithAssignedUsersVersioningEnabled(formID);
+  }
+
   const { user } = await authorization.canViewForm(formID).catch((e) => {
     logEvent(
       e.user.id,

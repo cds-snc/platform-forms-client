@@ -38,8 +38,48 @@ const calculateCollaboratorCount = (userCount: number, pendingUserCount: number)
   return userCount - 1 + pendingUserCount;
 };
 
+const VersionNumberText = memo(
+  ({
+    hasDraft,
+    versionNumber,
+    isPublished,
+  }: {
+    hasDraft: boolean;
+    versionNumber?: number;
+    isPublished: boolean;
+  }) => {
+    const { t } = useTranslation("my-forms");
+
+    if (isPublished && hasDraft && versionNumber) {
+      return (
+        <div className="mt-2 flex items-center text-sm">
+          <span
+            className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
+            aria-hidden="true"
+          ></span>
+          {t("card.draftVersion", { versionNumber: versionNumber })}
+        </div>
+      );
+    }
+
+    return null;
+  }
+);
+
+VersionNumberText.displayName = "VersionNumberText";
+
 const CardBanner = memo(
-  ({ isPublished, isClosed }: { isPublished: boolean; isClosed: boolean }) => {
+  ({
+    hasDraft,
+    versionNumber,
+    isPublished,
+    isClosed,
+  }: {
+    hasDraft: boolean;
+    versionNumber?: number;
+    isPublished: boolean;
+    isClosed: boolean;
+  }) => {
     const { t } = useTranslation("my-forms");
     const bulletColor = isClosed
       ? "bg-slate-500"
@@ -48,16 +88,23 @@ const CardBanner = memo(
         : "bg-yellow-400";
 
     return (
-      <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
-        <span
-          className={`inline-block h-3 w-3 rounded-full border-1 border-slate-50 ${bulletColor}`}
+      <>
+        <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
+          <span
+            className={`inline-block h-3 w-3 rounded-full border-1 border-slate-50 ${bulletColor}`}
+          />
+          {isClosed
+            ? t("card.states.closed")
+            : isPublished
+              ? t("card.states.published")
+              : t("card.states.draft")}
+        </div>
+        <VersionNumberText
+          isPublished={isPublished}
+          hasDraft={hasDraft}
+          versionNumber={versionNumber}
         />
-        {isClosed
-          ? t("card.states.closed")
-          : isPublished
-            ? t("card.states.published")
-            : t("card.states.draft")}
-      </div>
+      </>
     );
   }
 );
@@ -367,7 +414,6 @@ const CardComponent = ({
   );
 
   const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : card.overdue ? "bg-red-50" : ""}`;
-
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
       <div className="row-start-1 mt-1 flex min-w-0 flex-col">
@@ -407,7 +453,12 @@ const CardComponent = ({
               collaboratorCount={collaboratorCount}
             />
           )}
-          <CardBanner isPublished={card.isPublished} isClosed={cardState === CARD_STATE.CLOSED} />
+          <CardBanner
+            hasDraft={card.hasDraft}
+            versionNumber={card.versionNumber ?? undefined}
+            isPublished={card.isPublished}
+            isClosed={cardState === CARD_STATE.CLOSED}
+          />
           {cardState === CARD_STATE.PUBLISHED && <CardFooterPublished cardId={card.id} />}
         </div>
       </div>

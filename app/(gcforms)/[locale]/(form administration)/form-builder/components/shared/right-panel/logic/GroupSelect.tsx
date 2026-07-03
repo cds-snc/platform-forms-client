@@ -33,9 +33,9 @@ export const GroupSelect = ({
         data-selected={selected || ""}
         onChange={onChange}
         className={cn(
-          "center-right-15px inline-block p-2 border-black border-1 form-builder-dropdown my-0 w-[375px] text-black-default text-sm",
+          "center-right-15px form-builder-dropdown text-black-default my-0 inline-block w-[375px] border-1 border-black p-2 text-sm",
           className,
-          selected === "exit" && "opacity-50 cursor-not-allowed"
+          selected === "exit" && "cursor-not-allowed opacity-50"
         )}
         aria-labelledby={labelId}
       >
