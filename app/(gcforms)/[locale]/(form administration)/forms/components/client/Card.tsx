@@ -62,7 +62,9 @@ const VersionNumberText = memo(
             className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
             aria-hidden="true"
           ></span>
-          <Link href={link}>{t("card.draftVersion", { versionNumber: versionNumber })}</Link>
+          <Link href={link} prefetch={false}>
+            {t("card.draftVersion", { versionNumber: versionNumber })}
+          </Link>
         </div>
       );
     }
