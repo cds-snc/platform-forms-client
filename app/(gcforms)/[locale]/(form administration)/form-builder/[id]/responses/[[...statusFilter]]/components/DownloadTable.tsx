@@ -250,8 +250,11 @@ export const DownloadTable = ({
                   </th>
                   <td className="px-4 whitespace-nowrap">{createdDateTime}</td>
                   {templateVersioningEnabled && (
-                    <td className="px-4 whitespace-nowrap">
-                      {submission.version ?? t("downloadResponsesTable.unknown")}
+                    <td
+                      className="px-4 whitespace-nowrap"
+                      data-version={submission.version ?? "unknown"}
+                    >
+                      {submission.version ?? 1}
                     </td>
                   )}
                   <td className="px-4 whitespace-nowrap">
