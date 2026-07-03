@@ -27,7 +27,7 @@ export const PreviewFormWrapper = ({
   setSent: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }) => {
   const { status } = useSession();
-  const { saveSessionProgress, currentGroup } = useGCFormsContext();
+  const { saveSessionProgress, currentGroup, matchedIds, getGroupHistory } = useGCFormsContext();
 
   const { translationLanguagePriority, getLocalizationAttribute } = useTemplateStore((s) => ({
     translationLanguagePriority: s.translationLanguagePriority,
@@ -48,6 +48,8 @@ export const PreviewFormWrapper = ({
       language={translationLanguagePriority}
       t={translatedT}
       onSuccess={setSent}
+      matchedIds={matchedIds}
+      getGroupHistory={getGroupHistory}
       renderSubmit={({ validateForm }) => {
         return (
           <div id="PreviewSubmitButton">

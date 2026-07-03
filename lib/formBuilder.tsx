@@ -484,15 +484,6 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
       initialValues[element.id] = _getElementInitialValue(element, language);
     });
 
-  // Used to track the current group dynamically
-  initialValues.currentGroup = "";
-
-  // Used to track the group history dynamically
-  initialValues.groupHistory = [];
-
-  // Used to track the Ids of elements from show/hide that should be included (visible) dynamically
-  initialValues.matchedIds = [];
-
   return initialValues;
 };
 

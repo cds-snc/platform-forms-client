@@ -19,6 +19,7 @@ import { traceFunction } from "@lib/otel";
 import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+import { ResponseValidationValues } from "@gcforms/core";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -33,7 +34,7 @@ export async function isFormClosed(formId: string): Promise<boolean> {
 }
 
 export async function submitForm(
-  values: Responses,
+  values: ResponseValidationValues,
   language: string,
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined,
@@ -111,12 +112,14 @@ export async function submitForm(
         }
       }
 
-      const formData = normalizeFormResponses(template, values);
+      const version = template.versionNumber || 1;
+      const formData = normalizeFormResponses(template, values.responses as Responses);
 
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,
         securityAttribute: template.securityAttribute,
         formId,
+        version,
         language,
         fileChecksums,
       });

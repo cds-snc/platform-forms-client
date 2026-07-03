@@ -30,15 +30,19 @@ describe("useTemplateVersioning", () => {
     ]);
 
     const checkedMeta = [
-      { name: "response-1", versionId: "v1" },
-      { name: "response-2", versionId: null },
-      { name: "response-3", versionId: "v2" },
-      { name: "response-4", versionId: "v1" },
+      { name: "response-1", version: "v1" },
+      { name: "response-2", version: null },
+      { name: "response-3", version: "v2" },
+      { name: "response-4", version: "v1" },
     ];
 
     const { result } = renderHook(() => useTemplateVersioning(checkedItems, checkedMeta));
 
-    expect(result.current.filteredIdsWithVersion).toEqual(["response-1", "response-3", "response-4"]);
+    expect(result.current.filteredIdsWithVersion).toEqual([
+      "response-1",
+      "response-3",
+      "response-4",
+    ]);
     expect(result.current.dialogVersions).toEqual(["v1", "v2"]);
     expect(result.current.getFilteredIds()).toEqual(["response-1", "response-3", "response-4"]);
   });
@@ -51,9 +55,9 @@ describe("useTemplateVersioning", () => {
     ]);
 
     const checkedMeta = [
-      { name: "response-1", versionId: "v1" },
-      { name: "response-2", versionId: "v2" },
-      { name: "response-3", versionId: "v1" },
+      { name: "response-1", version: "v1" },
+      { name: "response-2", version: "v2" },
+      { name: "response-3", version: "v1" },
     ];
 
     const { result } = renderHook(() => useTemplateVersioning(checkedItems, checkedMeta));

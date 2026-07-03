@@ -289,8 +289,8 @@
     },
     "resumePage": {
       "upload": {
-        "title": "Téléversez vos réponses",
-        "description": "Continuez à partir de votre formulaire sauvegardé en cours"
+        "title": "Téléversez vos réponses sauvegardées",
+        "description": "Joignez également des fichiers joints, tels que certificats de naissance et CV."
       },
       "mismatchedForm": {
         "title": "Souhaitez-vous poursuivre le formulaire avec ces réponses?",
@@ -301,22 +301,23 @@
         "continue": "Continuer quand même"
       },
       "restart": {
-        "title": "Commencez le formulaire",
+        "title": "Commencez un nouveau formulaire",
         "description": "Remplissez un nouveau formulaire"
       },
       "readyToContinue": {
         "title": "Prêt à continuer?",
-        "intro": "Pour continuer le formulaire que vous avez commencé :",
+        "intro": "Pour les questions auxquelles vous avez déjà répondu :",
         "text1": "1. Trouvez le fichier sauvegardé sur votre appareil",
         "text2": "2. Téléversez-le pour intégrer vos réponses dans le formulaire",
-        "text3": "3. Continuer à remplir le formulaire"
+        "text3": "3. Joignez à nouveau tout documents, car ceux-ci ne sont pas téléversés avec vos réponses.",
+        "text4": "4. Continuer à remplir le formulaire."
       }
     },
     "prompt": {
       "title": "Sauvegarder sur l’appareil",
-      "text1": "Téléchargez une copie du formulaire rempli jusqu'à présent.",
-      "text2": "Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil et téléversant vos réponses sauvegardées.",
-      "text3": "Assurez vous de protéger vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
+      "text1": "Joignez à nouveau les documents téléversés lorsque vous reprendrez le formulaire.",
+      "text2": "Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil et téléversant vos réponses sauvegardées. Joignez à nouveau les documents demandés tels que certificats de naissance ou CV.",
+      "text3": "Conservez le fichier contenant vos réponses au formulaire en lieu sûr, sur un appareil de confiance.",
       "okay": "Sauvegarder",
       "cancel": "Annuler"
     },

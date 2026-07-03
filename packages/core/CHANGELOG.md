@@ -1,9 +1,18 @@
 # Changelog
 
+<<<<<<< HEAD
 
-## [2.2.15] - 2026-05-08
+## [2.2.17] - 2026-07-03
 
 - Add new Star Rating input validation type
+
+## [2.2.16] - 2026-06-30
+
+- Update validation type for form responses
+
+## [2.2.15] - 2026-06-25
+
+- Update validation type for form responses
 
 ## [2.2.14] - 2026-06-15
 

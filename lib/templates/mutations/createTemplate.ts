@@ -9,6 +9,8 @@ import { checkForBetaComponentsAsync } from "@lib/validation/betaCheck";
 import { NotificationsInterval } from "@gcforms/types";
 import { checkFlag, parseTemplate } from "../internal";
 import { InvalidFormConfigError } from "../internal/errors";
+import { createTemplate as createTemplateVersioningEnabled } from "../versioning/mutations/createTemplate";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
 
 // ******************************************
 // Exportable Module Functions
@@ -33,6 +35,11 @@ type CreateTemplateCommand = {
  * @returns Form Record or null if creation was not sucessfull.
  */
 export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
+  const templateVersioningEnabled = await isTemplateVersioningEnabled();
+  if (templateVersioningEnabled) {
+    return createTemplateVersioningEnabled(command);
+  }
+
   const { user } = await authorization.canCreateForm().catch((e) => {
     logEvent(
       e.user.id,

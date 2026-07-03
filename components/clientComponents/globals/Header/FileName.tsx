@@ -112,7 +112,7 @@ export const FileNameInput = ({
           setHasManuallyEdited(true);
         }}
         aria-label={t("formName", { ns: "form-builder" })}
-        disabled={isPublished && true}
+        disabled={isPublished && !currentDraftVersionId && true}
       />
 
       {templateVersioningEnabled && currentDraftVersionId && versionNumber && (

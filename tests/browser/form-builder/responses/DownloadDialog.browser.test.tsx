@@ -52,8 +52,8 @@ describe("<DownloadDialog />", () => {
       <DownloadDialog
         {...defaultProps}
         checkedMeta={[
-          { name: "response-1", versionId: "v1" },
-          { name: "response-2", versionId: "v1" },
+          { name: "response-1", version: "v1" },
+          { name: "response-2", version: "v1" },
         ]}
       />
     );
@@ -67,8 +67,8 @@ describe("<DownloadDialog />", () => {
       <DownloadDialog
         {...defaultProps}
         checkedMeta={[
-          { name: "response-1", versionId: null },
-          { name: "response-2", versionId: null },
+          { name: "response-1", version: null },
+          { name: "response-2", version: null },
         ]}
       />
     );
@@ -82,8 +82,8 @@ describe("<DownloadDialog />", () => {
       <DownloadDialog
         {...defaultProps}
         checkedMeta={[
-          { name: "response-1", versionId: "v1" },
-          { name: "response-2", versionId: "v2" },
+          { name: "response-1", version: "v1" },
+          { name: "response-2", version: "v2" },
         ]}
       />
     );
