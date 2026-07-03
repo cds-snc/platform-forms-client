@@ -221,6 +221,7 @@ export const Menu = ({
       downloadForm,
       name,
       handleDelete,
+      hasDraft,
     ]
   );
 
