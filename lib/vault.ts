@@ -174,7 +174,7 @@ export async function listAllSubmissions(
               status: vaultStatusFromStatusCreatedAt(statusCreatedAt),
               name,
               createdAt,
-              ...(templateVersioningEnabled && { version }),
+              ...(templateVersioningEnabled && { version: version ?? "1" }),
             })
           )
         );
