@@ -20,6 +20,7 @@ export const Menu = ({
   id,
   name,
   isPublished,
+  hasDraft,
   ttl,
   status,
   onRemove,
@@ -27,6 +28,7 @@ export const Menu = ({
   id: string;
   name: string;
   isPublished: boolean;
+  hasDraft?: boolean;
   ttl?: Date;
   status: FormTabStatus;
   onRemove?: (templateId: string) => void;
@@ -122,7 +124,7 @@ export const Menu = ({
         callback: copyLinkCallback,
       },
       {
-        filtered: templateVersioningEnabled && isPublished ? false : true,
+        filtered: templateVersioningEnabled && isPublished && !hasDraft ? false : true,
         title: t("card.menu.createDraftVersion"),
         callback: async () => {
           if (creatingDraft) return;
@@ -219,6 +221,7 @@ export const Menu = ({
       downloadForm,
       name,
       handleDelete,
+      hasDraft,
     ]
   );
 

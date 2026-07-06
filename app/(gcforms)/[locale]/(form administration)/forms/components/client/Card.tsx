@@ -40,15 +40,20 @@ const calculateCollaboratorCount = (userCount: number, pendingUserCount: number)
 
 const VersionNumberText = memo(
   ({
+    language,
+    cardId,
     hasDraft,
     versionNumber,
     isPublished,
   }: {
+    language: string;
+    cardId: string;
     hasDraft: boolean;
     versionNumber?: number;
     isPublished: boolean;
   }) => {
     const { t } = useTranslation("my-forms");
+    const link = `/${language}/form-builder/${cardId}/edit`;
 
     if (isPublished && hasDraft && versionNumber) {
       return (
@@ -57,7 +62,9 @@ const VersionNumberText = memo(
             className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
             aria-hidden="true"
           ></span>
-          {t("card.draftVersion", { versionNumber: versionNumber })}
+          <Link href={link} prefetch={false}>
+            {t("card.draftVersion", { versionNumber: versionNumber })}
+          </Link>
         </div>
       );
     }
@@ -70,11 +77,15 @@ VersionNumberText.displayName = "VersionNumberText";
 
 const CardBanner = memo(
   ({
+    language,
+    cardId,
     hasDraft,
     versionNumber,
     isPublished,
     isClosed,
   }: {
+    language: string;
+    cardId: string;
     hasDraft: boolean;
     versionNumber?: number;
     isPublished: boolean;
@@ -100,6 +111,8 @@ const CardBanner = memo(
               : t("card.states.draft")}
         </div>
         <VersionNumberText
+          language={language}
+          cardId={cardId}
           isPublished={isPublished}
           hasDraft={hasDraft}
           versionNumber={versionNumber}
@@ -454,6 +467,8 @@ const CardComponent = ({
             />
           )}
           <CardBanner
+            language={language}
+            cardId={card.id}
             hasDraft={card.hasDraft}
             versionNumber={card.versionNumber ?? undefined}
             isPublished={card.isPublished}
@@ -466,6 +481,7 @@ const CardComponent = ({
         <Menu
           id={card.id}
           name={card.name}
+          hasDraft={card.hasDraft}
           isPublished={card.isPublished}
           ttl={card.ttl ? card.ttl : undefined}
           status={status}

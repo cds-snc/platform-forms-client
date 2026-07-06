@@ -174,7 +174,17 @@ export const DownloadTable = ({
               </th>
               {templateVersioningEnabled && (
                 <th scope="col" className="p-4 text-left">
-                  {t("downloadResponsesTable.header.version")}
+                  <span className="flex items-center">
+                    {t("downloadResponsesTable.header.version")}
+                    <Tooltip.Info
+                      side="top"
+                      triggerClassName="align-middle ml-1"
+                      tooltipClassName="font-normal"
+                    >
+                      <strong>{t(`tooltips.downloadTable.version.title`)}</strong>
+                      <p>{t(`tooltips.downloadTable.version.body`)}</p>
+                    </Tooltip.Info>
+                  </span>
                 </th>
               )}
 
@@ -250,8 +260,11 @@ export const DownloadTable = ({
                   </th>
                   <td className="px-4 whitespace-nowrap">{createdDateTime}</td>
                   {templateVersioningEnabled && (
-                    <td className="px-4 whitespace-nowrap">
-                      {submission.version ?? t("downloadResponsesTable.unknown")}
+                    <td
+                      className="px-4 whitespace-nowrap"
+                      data-version={submission.version ?? "unknown"}
+                    >
+                      {submission.version ?? t("downloadResponsesTable.unknownVersion")}
                     </td>
                   )}
                   <td className="px-4 whitespace-nowrap">
