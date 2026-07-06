@@ -235,7 +235,6 @@ export type FormRecord = {
   currentPublishedVersionId?: string | null;
   currentDraftVersionId?: string | null;
   versionNumber?: number | null;
-  currentPublishedVersion?: number | null;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
