@@ -66,6 +66,8 @@ export const parseTemplate = (
     currentPublishedVersionId: template.currentPublishedVersionId ?? null,
     currentDraftVersionId: template.currentDraftVersionId ?? null,
     versionNumber: version?.versionNumber ?? null,
+    currentPublishedVersion: template.currentPublishedVersion?.versionNumber ?? null,
+    currentDraftVersion: template.currentDraftVersion?.versionNumber ?? null,
     ...(template.deliveryOption && {
       deliveryOption: {
         emailAddress: template.deliveryOption.emailAddress,
