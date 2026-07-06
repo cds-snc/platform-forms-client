@@ -52,7 +52,8 @@
       "email": "Responses get sent to:",
       "vault": "Responses page"
     },
-    "draftVersion": "Draft - version {{versionNumber}}",
+    "draftVersion": "Draft - version {{draftVersionNumber}}",
+    "versionNumber": "- version {{publishedVersionNumber}}",
     "menu": {
       "more": "More",
       "save": "Download copy",

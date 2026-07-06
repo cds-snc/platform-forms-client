@@ -183,7 +183,8 @@ export default async function Page(props: {
       url: `/${locale}/id/${id}`,
       isShared: userCount + pendingUserCount >= 2,
       hasDraft: !!template.currentDraftVersionId,
-      versionNumber: template.versionNumber ?? null,
+      currentPublishedVersion: Number(template.currentPublishedVersion) ?? null,
+      currentDraftVersion: Number(template.currentDraftVersion) ?? null,
       collaboratorCount: {
         userCount,
         pendingUserCount,
