@@ -6,7 +6,7 @@ import { TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/error
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
-import { sendArchivedFormNotifications } from "@lib/notifications";
+import { sendArchivedFormNotifications } from "@lib/formEmailOrchestration";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -18,13 +18,14 @@ export const deleteForm = AuthenticatedAction(async (session, id: string) => {
     }
 
     await deleteTemplate(id);
-    await sendArchivedFormNotifications(
-      session,
-      id,
-      template.formRecord.form.titleEn,
-      template.formRecord.form.titleFr,
-      template.users
-    );
+
+    sendArchivedFormNotifications(session.user.email, {
+      title: {
+        en: template.formRecord.form.titleEn,
+        fr: template.formRecord.form.titleFr,
+      },
+      ownersEmailAddresses: template.users.map((u) => u.email),
+    });
 
     revalidatePath("app/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-forms");
   } catch (error) {
