@@ -119,16 +119,15 @@ export const FormCaptcha = ({
         {doHCaptchaFlow ? "true" : "false"}, process.env.NEXT_PUBLIC_APP_ENV === production{" "}
         {process.env.NEXT_PUBLIC_APP_ENV === "production" ? "true" : "false"}
       </h1>
-      {hCaptchaDebugEnabled && (
-        <CaptchaDebugPanel
-          hCaptchaRef={hCaptchaRef}
-          captchaTokenRef={captchaTokenRef}
-          doHCaptchaFlow={doHCaptchaFlow}
-          hasFatalErrorRef={hasFatalErrorRef}
-          onErrorCallback={onErrorCallback}
-          resetToken={resetToken}
-        />
-      )}
+      <CaptchaDebugPanel
+        hCaptchaRef={hCaptchaRef}
+        captchaTokenRef={captchaTokenRef}
+        doHCaptchaFlow={doHCaptchaFlow}
+        hasFatalErrorRef={hasFatalErrorRef}
+        onErrorCallback={onErrorCallback}
+        resetToken={resetToken}
+        hCaptchaDebugEnabled={hCaptchaDebugEnabled}
+      />
     </>
   );
 };

@@ -43,7 +43,7 @@ export const CaptchaDebugPanel = ({
     }
   }, [isOpen, hasFatalErrorRef, hCaptchaRef, captchaTokenRef]);
 
-  // Only show if enabled (app setting) and NOT in production -- extra check just to be safe
+  // Only show if enabled (app setting) and NEVER in production (or all forms will see button)
   if (!hCaptchaDebugEnabled || process.env.NEXT_PUBLIC_APP_ENV === "production") {
     return null;
   }
