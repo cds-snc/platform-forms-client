@@ -39,8 +39,6 @@ export const Menu = ({
   } = useTranslation("my-forms");
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
-  // `creatingDraft` state removed — dialog handles create-draft flow now
-
   const { getFlag } = useFeatureFlags();
   const templateVersioningEnabled = getFlag("templateVersioning");
 
