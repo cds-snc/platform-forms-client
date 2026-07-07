@@ -63,6 +63,7 @@ interface ResponsesContextType {
   setSelectedFormat: Dispatch<SetStateAction<string>>;
   selectedVersion: string | null;
   setSelectedVersion: Dispatch<SetStateAction<string | null>>;
+  activeSelectedVersion: string | null;
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   currentSubmissionId: string | null;
@@ -213,6 +214,16 @@ export const ResponsesProvider = ({
     return Array.from(versionsSet).sort();
   }, [newFormSubmissions]);
 
+  // Derive the effective/active selected version without synchronously
+  // mutating state inside an effect. If exactly one version exists, treat
+  // that as the active selection; otherwise use the user-selected value.
+  const activeSelectedVersion = useMemo(() => {
+    if (!responseVersions || responseVersions.length === 0) return null;
+    if (responseVersions.length === 1) return responseVersions[0];
+    if (selectedVersion && responseVersions.includes(selectedVersion)) return selectedVersion;
+    return null;
+  }, [responseVersions, selectedVersion]);
+
   const resetProcessingCompleted = useCallback(() => {
     setProcessingCompleted(false);
   }, []);
@@ -236,12 +247,14 @@ export const ResponsesProvider = ({
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
       responseLogger.info(
-        `Processing ${formResponses.length} submissions for form ID ${formId} and version ${selectedVersion || 1}`
+        `Processing ${formResponses.length} submissions for form ID ${formId} and version ${
+          activeSelectedVersion || 1
+        }`
       );
 
-      // If a specific version is selected, only process submissions for that version
-      if (selectedVersion) {
-        formResponses = formResponses.filter((s) => String(s.version) === selectedVersion);
+      // If a specific version is selected (or implied), only process submissions for that version
+      if (activeSelectedVersion) {
+        formResponses = formResponses.filter((s) => String(s.version) === activeSelectedVersion);
       }
 
       responseLogger.info(
@@ -255,9 +268,11 @@ export const ResponsesProvider = ({
 
       try {
         formTemplate = await apiClient.getFormTemplate(
-          selectedVersion ? parseInt(selectedVersion, 10) : 1
+          activeSelectedVersion ? parseInt(activeSelectedVersion, 10) : 1
         );
-        responseLogger.info(`Loaded form template successfully version ${selectedVersion || 1}`);
+        responseLogger.info(
+          `Loaded form template successfully version ${activeSelectedVersion || 1}`
+        );
         formId = apiClient.getFormId();
       } catch (error) {
         responseLogger.error("Error loading form template: ", error);
@@ -356,8 +371,8 @@ export const ResponsesProvider = ({
         // Get subsequent submissions (always fetch full set, then filter)
         // eslint-disable-next-line no-await-in-loop
         formResponses = await retrieveResponses();
-        if (selectedVersion) {
-          formResponses = formResponses.filter((s) => String(s.version) === selectedVersion);
+        if (activeSelectedVersion) {
+          formResponses = formResponses.filter((s) => String(s.version) === activeSelectedVersion);
         }
       }
 
@@ -392,7 +407,7 @@ export const ResponsesProvider = ({
       privateApiKey,
       retrieveResponses,
       selectedFormat,
-      selectedVersion,
+      activeSelectedVersion,
       setInterrupt,
       t,
     ]
@@ -439,6 +454,7 @@ export const ResponsesProvider = ({
       setSelectedFormat,
       selectedVersion,
       setSelectedVersion,
+      activeSelectedVersion,
       interrupt: isProcessingInterrupted,
       setInterrupt,
       currentSubmissionId,
@@ -475,6 +491,7 @@ export const ResponsesProvider = ({
       hasMaliciousAttachments,
       selectedVersion,
       setSelectedVersion,
+      activeSelectedVersion,
       setCurrentSubmissionId,
       resetState,
       resetNewSubmissions,

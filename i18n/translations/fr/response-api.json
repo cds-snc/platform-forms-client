@@ -155,5 +155,11 @@
       "title": "Impossible de modifier le contenu du dossier",
       "message": "Veuillez accorder à votre navigateur l'accès de « modification » ou accès « en écriture » au dossier sélectionné. Vous trouverez cette option dans le menu du navigateur. Il est possible que votre ministère ait bloqué cette fonctionnalité."
     }
+  },
+  "tooltips": {
+    "version": {
+      "title": "Version du formulaire",
+      "body": "Indique la version du formulaire utilisée pour soumettre la réponse."
+    }
   }
 }

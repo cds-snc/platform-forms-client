@@ -7,7 +7,7 @@ import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/c
 import { VersionSelector } from "./components/VersionSelector";
 
 export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
-  const { newFormSubmissions, responseVersions, selectedVersion, setSelectedVersion } =
+  const { newFormSubmissions, responseVersions, activeSelectedVersion, setSelectedVersion } =
     useResponsesContext();
   const { t } = useTranslation("response-api");
 
@@ -37,7 +37,7 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
         </FocusHeader>
         <VersionSelector
           responseVersions={responseVersions}
-          selectedVersion={selectedVersion}
+          selectedVersion={activeSelectedVersion}
           setSelectedVersion={setSelectedVersion}
           t={t}
         />

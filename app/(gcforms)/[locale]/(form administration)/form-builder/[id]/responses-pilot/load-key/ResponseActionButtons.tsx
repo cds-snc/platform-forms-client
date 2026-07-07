@@ -12,7 +12,7 @@ export const ResponseActionButtons = () => {
     locale,
     formId,
     responseVersions,
-    selectedVersion,
+    activeSelectedVersion,
   } = useResponsesContext();
 
   const handleBack = () => {
@@ -39,7 +39,7 @@ export const ResponseActionButtons = () => {
           disabled={Boolean(
             !apiClient ||
             (newFormSubmissions && newFormSubmissions.length === 0) ||
-            (responseVersions && responseVersions.length > 1 && !selectedVersion)
+            (responseVersions && responseVersions.length > 1 && !activeSelectedVersion)
           )}
           onClick={handleNext}
           data-testid="continue-button"
