@@ -57,7 +57,7 @@ export const FormCaptcha = ({
 
       formSubmitEventRef.current = event;
 
-      // For any case that hCaptcha fails, skip hCaptcha all the form to submit
+      // For any case that hCaptcha fails, allow the form to submit
       try {
         if (hCaptchaRef.current) {
           hCaptchaRef.current.execute();
@@ -91,9 +91,9 @@ export const FormCaptcha = ({
   return (
     <form
       method="POST"
-      onSubmit={onFormSubmit}
       {...(dataTestId ? { "data-testid": dataTestId } : {})}
       {...rest}
+      onSubmit={onFormSubmit}
     >
       {children}
       {doHCaptchaFlow && (
