@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.3] - 2026-06-16
 
-- Add Response types without file content
+- Add Response types without and with file content
 
 ## [1.0.34] - 2026-06-11
 

@@ -37,7 +37,7 @@ import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitPro
 import { handleUploadError } from "@lib/fileInput/handleUploadError";
 import { hasFiles } from "@lib/fileExtractor";
 import { generateFileChecksums } from "@lib/utils/fileChecksum";
-import { copyObjectExcludingFileContent } from "@lib/hooks/useResponseCache";
+import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
 import { uploadFile } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
@@ -60,6 +60,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const { t } = useTranslation();
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
+  const [isServer, setIsServer] = useState(true);
 
   const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
   // TODO: This can be removed in the next refactor.
@@ -113,6 +114,18 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsServer(false);
+    }
+  }, [setIsServer]);
+
+  // Don't prerender the form on the server because inputs will change and cause
+  // hydration errors based on state stored client side
+  if (isServer) {
+    return <div className="h-[150dvh]" />;
+  }
 
   // Show the Captcha fail screen when hCAPTCHA detects a suspicous user
   // Note: check done here vs higher in the tree so the Form session will still exist on the screen

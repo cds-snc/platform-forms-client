@@ -23,7 +23,8 @@ import {
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 import { FormValues } from "@root/packages/types/dist";
-import { copyObjectExcludingFileContent } from "@lib/hooks/useResponseCache";
+import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
+
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: Responses }) => void;
   getValues: () => Responses;
@@ -75,35 +76,6 @@ export const GCFormsProvider = ({
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
   };
-  // const saveToCache = useCallback(async () => {
-  //   // Do not save to cache when on the resume page as it will overwrite the loaded
-  //   // values from the file.  This is because the GCFormsContext also wraps the
-  //   // resume page
-
-  //   // Do not save to cache when on the confirmation page.  We want to ensure
-  //   // responses are cleared after a sucessful submission
-
-  //   logMessage.debug(`Saving progress with values:`);
-  //   logMessage.debug(values.current);
-  //   await saveSessionProgress({
-  //     id: formRecord.id,
-  //     values: values.current,
-  //     history: history.current,
-  //     currentGroup: currentGroup || "",
-  //     language: language,
-  //   });
-  // }, [formRecord.id, currentGroup, language]);
-
-  // useEffect(() => {
-  //   const updateCheck = async () => {
-  //     logMessage.debug(`Update is ${updateRequired ? "required" : "not required"}`);
-  //     if (updateRequired) {
-  //       logMessage.debug("Saving response state because update is required");
-  //       await saveToCache();
-  //     }
-  //   };
-  //   updateCheck();
-  // }, [updateRequired, saveToCache]);
 
   /**
    * Handle check if the group is an off-board section

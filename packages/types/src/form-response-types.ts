@@ -24,6 +24,13 @@ export type FileInputResponse = {
   content: ArrayBuffer | null;
 };
 
+export type FileInputResponseWithContent = {
+  id: string;
+  name: string;
+  size: number;
+  content: ArrayBuffer;
+};
+
 export type FileInputResponseWithoutContent = {
   id: string;
   name: string | null;

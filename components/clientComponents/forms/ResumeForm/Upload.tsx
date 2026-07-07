@@ -81,9 +81,8 @@ export const Upload = ({ formId }: { formId: string }) => {
       language,
       history,
       formVersionId,
-    }).then(() => {
-      window.location.href = `/${language}/id/${id}`;
     });
+    window.location.href = `/${language}/id/${id}`;
   };
 
   const handleContinueAnyway = () => {

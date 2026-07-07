@@ -39,6 +39,7 @@ export type {
   FileInputResponse,
   ResponsesWithoutFileContent,
   FileInputResponseWithoutContent,
+  FileInputResponseWithContent,
 } from "./form-response-types";
 
 export type { dynamicRowType };

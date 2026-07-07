@@ -38,12 +38,11 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
   // Sanitize urlQuery to prevent security issues
   const safeUrlQuery = urlQuery ? getSafeUrl(urlQuery) : null;
 
-  // When the component unloads clear the response cache because we have already submitted
+  // When the component loads clear the response cache because we have already submitted
+  // GCFormsContext retains it's state to download form responses submission if requested
 
   useEffect(() => {
-    return () => {
-      clearResponseStorage();
-    };
+    clearResponseStorage();
   }, []);
 
   // Check if there's a custom text for the end page specified in the form's JSON config
