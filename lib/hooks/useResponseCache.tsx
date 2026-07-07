@@ -6,19 +6,22 @@ import {
   FileInput,
   ResponsesWithoutFileContent,
   FileInputResponseWithoutContent,
-  FormProperties,
-  FileInputResponse,
 } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
 import { use, useEffect } from "react";
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 import { logMessage } from "../logger";
 import { useAppUpdate } from "./useAppUpdate";
-
-import { v4 as uuid } from "uuid";
+import { useGCFormsContext } from "./useGCFormContext";
+import { copyObjectExcludingFileContent } from "../fileExtractor";
 
 const LOCAL_CACHE_NAME = "gcforms-virtual-files";
 const SESSION_STORAGE_KEY = "form-data";
+const CRYPTO_STORAGE_KEY = "crypto-key";
+
+////////////////////////////////////////
+// Types and Type Guards
+////////////////////////////////////////
 
 export type Options = {
   id: string;
@@ -49,28 +52,157 @@ const isFileInput = (response: unknown): response is FileInput => {
   );
 };
 
-export const isFileInputResponse = (response: unknown): response is FileInputResponse => {
-  return (
-    response !== null &&
-    typeof response === "object" &&
-    "name" in response &&
-    "size" in response &&
-    "content" in response
-  );
-};
 const isFileInputResponseWithoutContent = (
   response: unknown
 ): response is FileInputResponseWithoutContent => {
   return (
-    response !== null &&
-    typeof response === "object" &&
-    "id" in response &&
-    "name" in response &&
-    "size" in response
+    response !== null && typeof response === "object" && "name" in response && "size" in response
   );
 };
 
-const clearCache = async () => {
+////////////////////////////////////////
+// Crypto for File Encryption / Decryption
+////////////////////////////////////////
+
+class EncryptedCache {
+  private encryptionKey: CryptoKey;
+
+  private constructor(key: CryptoKey) {
+    this.encryptionKey = key;
+  }
+
+  public static async create(): Promise<EncryptedCache> {
+    if (typeof window === "undefined") {
+      return {} as unknown as EncryptedCache;
+    }
+    const key = await this.createOrLoadCryptoKey();
+    return new EncryptedCache(key);
+  }
+
+  private static createOrLoadCryptoKey = async () => {
+    const encryptionKey = sessionStorage.getItem(CRYPTO_STORAGE_KEY);
+    if (!encryptionKey) {
+      return window.crypto.subtle
+        .generateKey(
+          {
+            name: "AES-GCM",
+            length: 256,
+          },
+          true,
+          ["encrypt", "decrypt"]
+        )
+        .then(async (key) => {
+          const jwk = await window.crypto.subtle.exportKey("jwk", key);
+
+          sessionStorage.setItem(CRYPTO_STORAGE_KEY, JSON.stringify(jwk));
+          return key;
+        })
+        .catch((e) => {
+          logMessage.error("Could not generate or export private key");
+          logMessage.error(e);
+          throw e;
+        });
+    } else {
+      const jwk = JSON.parse(encryptionKey);
+
+      const key = await window.crypto.subtle
+        .importKey(
+          "jwk",
+          jwk,
+          {
+            name: "AES-GCM",
+            length: 256,
+          },
+          false,
+          ["encrypt", "decrypt"]
+        )
+        .catch((e) => {
+          logMessage.error("Could not import Private key");
+          logMessage.error(e);
+          throw e;
+        });
+
+      return key;
+    }
+  };
+
+  private encryptFile = async (file: ArrayBuffer) => {
+    const encryptionParams: AesGcmParams = {
+      name: "AES-GCM",
+      iv: window.crypto.getRandomValues(new Uint8Array(12)),
+    };
+
+    return {
+      encryptedFile: await window.crypto.subtle.encrypt(encryptionParams, this.encryptionKey, file),
+      iv: encryptionParams.iv,
+    };
+  };
+
+  private decryptFile = async (file: ArrayBuffer, iv: string) => {
+    const decryptParams: AesGcmParams = {
+      name: "AES-GCM",
+      iv: Uint8Array.fromBase64(iv),
+    };
+    return window.crypto.subtle.decrypt(decryptParams, this.encryptionKey, file);
+  };
+
+  public getFileInCache = async (id: string) => {
+    const localCache = await caches.open(LOCAL_CACHE_NAME);
+    const fileResponse = await localCache.match(`/virtual-files/${id}`);
+    if (!fileResponse || !fileResponse.ok) {
+      return null;
+    }
+    await localCache.delete(`/virtual-files/${id}`);
+
+    const iv = fileResponse.headers.get("IV");
+
+    if (iv === null) {
+      throw new Error(`Could not get IV value for /virtual-files/${id}`);
+    }
+
+    return this.decryptFile(await fileResponse.blob().then((data) => data.arrayBuffer()), iv);
+  };
+
+  public storeFileInCache = async (id: string, data: FileInput | object) => {
+    const localCache = await caches.open(LOCAL_CACHE_NAME);
+
+    // File input is empty or reset so remove file if it exists in cache
+    if (!isFileInput(data)) {
+      logMessage.debug(`Deleting file ${id} from cache`);
+      localCache.delete(`/virtual-files/${id}`);
+      return;
+    }
+
+    logMessage.debug(`Saving File ${id} in cache`);
+    const { encryptedFile, iv } = await this.encryptFile(data.content);
+    const fileBlob = new Blob([encryptedFile]);
+    const ivHeader = new Uint8Array("buffer" in iv ? iv.buffer : iv).toBase64();
+
+    const fileResponse = new Response(fileBlob, {
+      status: 200,
+      statusText: "OK",
+      headers: {
+        "Content-Length": fileBlob.size.toString(),
+        IV: ivHeader,
+      },
+    });
+    // Save it using a unique URL path identifier
+    await localCache.put(`/virtual-files/${id}`, fileResponse);
+    logMessage.debug(`Saved File ${id} in cache`);
+  };
+}
+
+export const encryptedCache = await EncryptedCache.create().catch((e) => {
+  logMessage.error(`Error in creation of encrypted Cache`);
+  logMessage.error(e);
+  throw e;
+});
+
+////////////////////////////////////////
+// Cache Functions
+////////////////////////////////////////
+
+const clearCacheFiles = async () => {
   const localCache = await caches.open(LOCAL_CACHE_NAME);
   const files = await localCache.keys();
   await Promise.all(
@@ -82,62 +214,37 @@ const clearCache = async () => {
 };
 
 // Needs to be called on submit
-const clearResponseStorage = async () => {
+export const clearResponseStorage = async () => {
   sessionStorage.removeItem(SESSION_STORAGE_KEY);
-  await clearCache();
+  sessionStorage.removeItem(CRYPTO_STORAGE_KEY);
+  await clearCacheFiles();
 };
 
-const getFileInCache = async (id: string) => {
-  const localCache = await caches.open(LOCAL_CACHE_NAME);
-  const fileResponse = await localCache.match(`/virtual-files/${id}`);
-  if (!fileResponse || !fileResponse.ok) {
-    return null;
-  }
-  await localCache.delete(`/virtual-files/${id}`);
-
-  return fileResponse.blob();
-};
-
-const storeFileInCache = async (id: string, data: FileInput) => {
-  const localCache = await caches.open(LOCAL_CACHE_NAME);
-
-  const fileBlob = new Blob([data.content]);
-
-  const fileResponse = new Response(fileBlob, {
-    status: 200,
-    statusText: "OK",
-    headers: {
-      "Content-Length": fileBlob.size.toString(),
-    },
-  });
-
-  // Save it using a unique URL path identifier
-  await localCache.put(`/virtual-files/${id}`, fileResponse);
-};
+////////////////////////////////////////
+// Form Content Saving and Restoration
+////////////////////////////////////////
 
 export const rebuildObjectWithFileContent = async (originalObject: ResponsesWithoutFileContent) => {
   const formValuesWithFileContent: Responses = { ...originalObject };
-  const rehydrateFileContent = async function <T>(rehydratedObject: T): Promise<T> {
+  const rehydrateFileContent = async function <T>(rehydratedObject: T, key: string): Promise<T> {
     if (rehydratedObject === null || typeof rehydratedObject !== "object") {
       return rehydratedObject;
     }
 
     if (Array.isArray(rehydratedObject)) {
-      return Promise.all(rehydratedObject.map((item) => rehydrateFileContent(item))) as T;
+      return Promise.all(rehydratedObject.map((item) => rehydrateFileContent(item, key))) as T;
     }
 
     if (isFileInputResponseWithoutContent(rehydratedObject)) {
       const fileData = {
         name: rehydratedObject.name,
         size: rehydratedObject.size,
-        content: await getFileInCache(rehydratedObject.id)
-          // Add error handling here to possible notify the user that file content could not be rehydrated
-          .then((file) => file && file.arrayBuffer())
-          .catch((e) => {
-            logMessage.error(e);
-            return null;
-          }),
+        content: await encryptedCache.getFileInCache(key),
       } as T;
+
+      logMessage.debug(
+        `Restoring file ${rehydratedObject.name} with values ${JSON.stringify(fileData)} `
+      );
 
       return fileData;
     }
@@ -145,62 +252,16 @@ export const rebuildObjectWithFileContent = async (originalObject: ResponsesWith
     await Promise.all(
       Object.keys(rehydratedObject).map(async (key) => {
         const obj = rehydratedObject as Record<string, T>;
-        obj[key] = await rehydrateFileContent(obj[key]);
+        obj[key] = await rehydrateFileContent(obj[key], key);
       })
     );
     return rehydratedObject;
   };
-  await rehydrateFileContent(formValuesWithFileContent);
+  await rehydrateFileContent(formValuesWithFileContent, "");
 
   return formValuesWithFileContent;
 };
 
-export const copyObjectExcludingFileContent = (
-  originalObject: Responses,
-  fileObjsRef: Record<string, FileInput> = {},
-  nullifyFileInput = false
-) => {
-  const formValuesWithoutFileContent: ResponsesWithoutFileContent = {};
-  function filterFileContent<T>(originalState: T, filteredState: Record<string, T>): T {
-    if (originalState === null || typeof originalState !== "object") {
-      return originalState;
-    }
-
-    if (Array.isArray(originalState)) {
-      return originalState.map((item) => filterFileContent(item, {})) as T;
-    }
-
-    if (isFileInputResponse(originalState)) {
-      // Used to nullify file input when saving progress to file
-      if (nullifyFileInput) {
-        return {
-          name: null,
-          size: null,
-        } as T;
-      }
-      const id = originalState.content !== null ? uuid() : null;
-
-      // Collect the file reference if there is content
-      if (id && isFileInput(originalState)) {
-        fileObjsRef[id] = originalState;
-      }
-      // Return a shallow copy without content
-      return {
-        id,
-        name: originalState.name,
-        size: originalState.size,
-      } as T;
-    }
-
-    Object.keys(originalState).forEach((key) => {
-      filteredState[key] = filterFileContent((originalState as Record<string, T>)[key], {});
-    });
-    return filteredState as unknown as T;
-  }
-  filterFileContent(originalObject, formValuesWithoutFileContent);
-
-  return { formValuesWithoutFileContent, fileObjsRef };
-};
 // Must remain outside of hook because it is invoked before components are rendered
 const restoreSessionProgress = async (): Promise<RestoredProgress | false | undefined> => {
   if (typeof sessionStorage === "undefined") {
@@ -230,7 +291,7 @@ const restoreSessionProgress = async (): Promise<RestoredProgress | false | unde
   }
 };
 
-export const saveSessionProgress = async ({
+export const saveSessionProgress = ({
   id,
   values,
   history,
@@ -245,19 +306,10 @@ export const saveSessionProgress = async ({
   logMessage.debug("Saving Response Session Progress");
 
   // Keep text data in session storage
-  // save files in indexDB, store private key in session storage
-  // clear session storage and index db on visibility change (data still stored in form state memory)
+  // save files in cache, store private key in session storage
 
-  // Extract file content from formValues so they are not part of the submission call to the submit action
-  const { formValuesWithoutFileContent, fileObjsRef } = copyObjectExcludingFileContent(values);
-
-  // Store the file content in indexDB
-
-  // const fileChecksums = await generateFileChecksums(fileObjsRef);
-
-  await Promise.all(
-    Object.keys(fileObjsRef).map((objId) => storeFileInCache(objId, fileObjsRef[objId]))
-  );
+  // Extract file content from formValues so they are not part of session storage
+  const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values);
 
   const formData = JSON.stringify({
     // Allow formId to be overwritten when used as part of Upload File to resume
@@ -278,21 +330,51 @@ export const saveSessionProgress = async ({
 // Start the promise on initial JS module load
 const rawSessionValuesPromise = restoreSessionProgress();
 
-export const useResponsesCache = (id: string, form: FormProperties, formVersionId?: string) => {
+type useResponseCacheOutput = {
+  cachedSession?: RestoredProgress;
+};
+
+////////////////////////////////////////
+// Hook for importing in to Form Component
+////////////////////////////////////////
+
+export const useResponsesCache = () => {
   const {
     t,
     i18n: { language },
   } = useTranslation();
-
-  type useResponseCacheOutput = {
-    cachedSession?: RestoredProgress;
-  };
-
   const { updateTriggered } = useAppUpdate();
+  const { formId, formRecord, getValues, getGroupHistory, currentGroup } = useGCFormsContext();
+
+  // Should save occur on a timed loop or on data change??
 
   const output: useResponseCacheOutput = {};
 
   const rawData = use(rawSessionValuesPromise);
+
+  //Bryan - Thursday start here and begin testing..
+
+  useEffect(() => {
+    const saveData = () => {
+      logMessage.debug(`Document visibility state is ${document.visibilityState}`);
+      if (document.visibilityState === "hidden") {
+        const values = getValues();
+        const history = getGroupHistory();
+        saveSessionProgress({
+          id: formId,
+          values,
+          history,
+          currentGroup: currentGroup || "",
+          language,
+        });
+      }
+    };
+
+    window.addEventListener("visibilitychange", saveData);
+    return () => {
+      window.removeEventListener("visibilitychange", saveData);
+    };
+  }, [formId, getValues, getGroupHistory, currentGroup, language]);
 
   useEffect(() => {
     // Show that there was an error loading data
@@ -304,7 +386,7 @@ export const useResponsesCache = (id: string, form: FormProperties, formVersionI
         toast.success(t("saveAndResume.formRestored"), "public-facing-form");
       }
     }
-  }, [rawData, language, t, updateTriggered]);
+  }, [rawData, t, updateTriggered]);
 
   if (!rawData) {
     // Show that there was an error loading data
@@ -316,14 +398,14 @@ export const useResponsesCache = (id: string, form: FormProperties, formVersionI
   output.cachedSession = { ...rawData };
 
   // if it's the wrong form and version we do not return any values
-  if (output.cachedSession.id !== id || output.cachedSession.formVersionId !== formVersionId) {
+  if (output.cachedSession.id !== formId) {
     delete output.cachedSession;
     return output;
   }
   if (output.cachedSession.language !== language) {
     // If caused by an i18n transtion ensure values are in the right language
     output.cachedSession.values = toggleSavedValues(
-      form,
+      formRecord.form,
       { values: output.cachedSession.values },
       output.cachedSession.language
     );

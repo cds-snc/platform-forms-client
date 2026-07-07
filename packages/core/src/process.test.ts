@@ -9,6 +9,7 @@ const baseValueObject = {
   currentGroup: null,
   groupHistory: [],
   matchedIds: [],
+  responses: {},
 };
 
 describe("Form validation - start page", () => {
