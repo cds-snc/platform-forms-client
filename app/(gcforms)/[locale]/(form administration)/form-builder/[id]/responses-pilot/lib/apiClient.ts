@@ -83,14 +83,20 @@ export class GCFormsApiClient {
     return this.formId;
   }
 
-  public getFormTemplate(): Promise<FormProperties> {
+  public getFormTemplate(selectedVersion: number = 1): Promise<FormProperties> {
     // Return cached template if available
     if (this.cachedFormTemplate) {
       return Promise.resolve(this.cachedFormTemplate);
     }
 
+    let endpoint = `/forms/${this.formId}/template`;
+
+    // Once this feature is fully rolled out, we can remove this check and always use the versioned endpoint.
+    if (process.env.NODE_ENV !== "production") {
+      endpoint = `/forms/${this.formId}/template?version=${selectedVersion}`;
+    }
     return this.httpClient
-      .get<FormProperties>(`/forms/${this.formId}/template`)
+      .get<FormProperties>(endpoint)
       .then((response) => {
         // Cache the template for future calls
         this.cachedFormTemplate = response.data;

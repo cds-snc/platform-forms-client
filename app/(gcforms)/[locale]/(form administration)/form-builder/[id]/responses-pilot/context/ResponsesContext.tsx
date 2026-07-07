@@ -235,13 +235,20 @@ export const ResponsesProvider = ({
       let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
+      // If a specific version is selected, only process submissions for that version
+      if (selectedVersion) {
+        formResponses = formResponses.filter((s) => String(s.version) === selectedVersion);
+      }
+
       if (!directoryHandle || !privateApiKey || !apiClient) {
         responseLogger.error("Missing required context values, aborting processing");
         return;
       }
 
       try {
-        formTemplate = await apiClient.getFormTemplate();
+        formTemplate = await apiClient.getFormTemplate(
+          selectedVersion ? parseInt(selectedVersion, 10) : 1
+        );
         formId = apiClient.getFormId();
       } catch (error) {
         responseLogger.error("Error loading form template: ", error);
@@ -337,9 +344,12 @@ export const ResponsesProvider = ({
           break;
         }
 
-        // Get subsequent submissions
+        // Get subsequent submissions (always fetch full set, then filter)
         // eslint-disable-next-line no-await-in-loop
         formResponses = await retrieveResponses();
+        if (selectedVersion) {
+          formResponses = formResponses.filter((s) => String(s.version) === selectedVersion);
+        }
       }
 
       // Timer end
@@ -373,6 +383,7 @@ export const ResponsesProvider = ({
       privateApiKey,
       retrieveResponses,
       selectedFormat,
+      selectedVersion,
       setInterrupt,
       t,
     ]
