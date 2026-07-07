@@ -97,9 +97,11 @@ export const CreateDraftConfirmDialog = () => {
         >
           <div className="p-4">
             <p className="mb-4">{t("confirm.createDraft.description")}</p>
-            {hasApiKeyId && (
-              <p className="text-warning mb-4 text-sm font-medium">
-                {t("confirm.createDraft.apiWarning")}
+            {hasApiKeyId ? (
+              <p className="text-warning mb-4 font-medium">{t("confirm.createDraft.apiWarning")}</p>
+            ) : (
+              <p className="text-warning mb-4 font-medium">
+                {t("confirm.createDraft.responseWarning")}
               </p>
             )}
             <p className="mb-4">{t("confirm.createDraft.liveForm")}</p>
