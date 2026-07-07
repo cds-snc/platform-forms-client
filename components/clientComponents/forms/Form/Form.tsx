@@ -204,6 +204,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             isPublished={isPublished}
             captchaTokenRef={props.captchaToken}
             resetCaptchaRef={props.resetCaptchaRef}
+            hCaptchaDebugEnabled={props.hCaptchaDebugEnabled}
           >
             {isGroupsCheck &&
               isShowReviewPage &&

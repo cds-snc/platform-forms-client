@@ -18,6 +18,7 @@ export interface PageContentProps {
   formId: string;
   saveAndResume: boolean;
   isAllowGrouping?: boolean;
+  hCaptchaDebugEnabled?: boolean;
 }
 
 export const PageContent = ({
@@ -29,6 +30,7 @@ export const PageContent = ({
   formId,
   saveAndResume,
   isAllowGrouping,
+  hCaptchaDebugEnabled = false,
 }: PageContentProps) => {
   const classes = cn("gc-form-wrapper");
 
@@ -70,6 +72,7 @@ export const PageContent = ({
           }
           formRecord={formRecord}
           allowGrouping={isAllowGrouping}
+          hCaptchaDebugEnabled={hCaptchaDebugEnabled}
         />
       </FormDelayProvider>
     </div>

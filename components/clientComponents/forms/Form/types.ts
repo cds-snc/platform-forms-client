@@ -30,6 +30,7 @@ export interface FormProps {
   captchaFail?: boolean;
   captchaToken?: React.RefObject<string>;
   resetCaptchaRef?: React.RefObject<(() => void) | undefined>;
+  hCaptchaDebugEnabled?: boolean;
 }
 
 export type InnerFormProps = FormProps & FormikProps<Responses>;

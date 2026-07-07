@@ -4,6 +4,7 @@ import { FormEvent, useRef, useEffect, useCallback } from "react";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 import { useHCaptchaToken } from "./useHCaptchaToken";
 import { useHCaptchaErrorHandling } from "./useHCaptchaErrorHandling";
+import { CaptchaDebugPanel } from "./CaptchaDebugPanel";
 
 /**
  * Acts as a hCaptcha wrapper to help simplify the wiring around adding hCaptcha to a form.
@@ -16,6 +17,7 @@ export const FormCaptcha = ({
   isPublished = true,
   captchaTokenRef,
   resetCaptchaRef,
+  hCaptchaDebugEnabled = false,
   ...rest
 }: {
   children: React.ReactNode;
@@ -25,6 +27,7 @@ export const FormCaptcha = ({
   isPublished?: boolean;
   captchaTokenRef: React.RefObject<string> | undefined;
   resetCaptchaRef?: React.RefObject<(() => void) | undefined>;
+  hCaptchaDebugEnabled?: boolean;
 } & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
@@ -89,26 +92,37 @@ export const FormCaptcha = ({
   }, [resetToken]);
 
   return (
-    <form
-      method="POST"
-      {...(dataTestId ? { "data-testid": dataTestId } : {})}
-      {...rest}
-      onSubmit={onFormSubmit}
-    >
-      {children}
-      {doHCaptchaFlow && (
-        <HCaptcha
-          ref={hCaptchaRef}
-          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
-          onVerify={onTokenGeneratedCallback}
-          onError={onErrorCallback}
-          onChalExpired={onChallengeExpiredCallback}
-          onExpire={resetToken}
-          languageOverride={lang}
-          size="invisible"
-          loadAsync={true}
-        />
-      )}
-    </form>
+    <>
+      <form
+        method="POST"
+        {...(dataTestId ? { "data-testid": dataTestId } : {})}
+        {...rest}
+        onSubmit={onFormSubmit}
+      >
+        {children}
+        {doHCaptchaFlow && (
+          <HCaptcha
+            ref={hCaptchaRef}
+            sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+            onVerify={onTokenGeneratedCallback}
+            onError={onErrorCallback}
+            onChalExpired={onChallengeExpiredCallback}
+            onExpire={resetToken}
+            languageOverride={lang}
+            size="invisible"
+            loadAsync={true}
+          />
+        )}
+      </form>
+      <CaptchaDebugPanel
+        hCaptchaRef={hCaptchaRef}
+        captchaTokenRef={captchaTokenRef}
+        doHCaptchaFlow={doHCaptchaFlow}
+        hasFatalErrorRef={hasFatalErrorRef}
+        onErrorCallback={onErrorCallback}
+        resetToken={resetToken}
+        hCaptchaDebugEnabled={hCaptchaDebugEnabled}
+      />
+    </>
   );
 };

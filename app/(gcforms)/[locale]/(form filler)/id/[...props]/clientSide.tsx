@@ -23,10 +23,12 @@ export const FormWrapper = ({
   formRecord,
   header,
   allowGrouping,
+  hCaptchaDebugEnabled = false,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   header: React.ReactNode;
   allowGrouping?: boolean | undefined;
+  hCaptchaDebugEnabled?: boolean;
 }) => {
   // TODO cast language as "en" | "fr" in TS below
   const {
@@ -178,6 +180,7 @@ export const FormWrapper = ({
         captchaFail={captchaFail}
         captchaToken={captchaToken}
         resetCaptchaRef={resetCaptchaRef}
+        hCaptchaDebugEnabled={hCaptchaDebugEnabled}
       >
         {currentForm}
       </Form>
