@@ -11,7 +11,8 @@ export const invokeSubmissionLambda = async (
   language: string,
   securityAttribute: string,
   version?: number,
-  fileChecksums?: Record<string, string>
+  fileChecksums?: Record<string, string>,
+  notificationId?: string
 ): Promise<{
   submissionId: string;
   fileURLMap?: SignedURLMap;
@@ -24,6 +25,7 @@ export const invokeSubmissionLambda = async (
       securityAttribute,
       ...(version && { version }),
       ...(fileChecksums && Object.keys(fileChecksums).length > 0 && { fileChecksums }),
+      ...(notificationId && { notificationId }),
     };
 
     const lambdaInvokeResponse = await lambdaClient.send(

@@ -12,6 +12,7 @@ type ProcessFormDataParams = {
   version?: number;
   language?: string;
   fileChecksums?: Record<string, string>;
+  notificationId?: string;
 };
 
 export const processFormData = async ({
@@ -21,6 +22,7 @@ export const processFormData = async ({
   version,
   language,
   fileChecksums,
+  notificationId,
 }: ProcessFormDataParams): Promise<{
   submissionId: string;
   fileURLMap?: SignedURLMap;
@@ -62,7 +64,8 @@ export const processFormData = async ({
       language ? language : "en",
       securityAttribute ? securityAttribute : "Protected A",
       version,
-      fileChecksums
+      fileChecksums,
+      notificationId
     );
 
     logMessage.info(`Response submitted for Form ID: ${form.id}`);
