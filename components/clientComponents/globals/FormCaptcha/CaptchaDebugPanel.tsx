@@ -19,7 +19,7 @@ export const CaptchaDebugPanel = ({
   hasFatalErrorRef: React.RefObject<boolean>;
   onErrorCallback: (code: string) => void;
   resetToken: () => void;
-  hCaptchaDebugEnabled?: boolean;
+  hCaptchaDebugEnabled: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 

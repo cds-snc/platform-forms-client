@@ -114,11 +114,6 @@ export const FormCaptcha = ({
           />
         )}
       </form>
-      <h1>
-        hCaptchaDebugEnabled={hCaptchaDebugEnabled ? "true" : "false"}, doHCaptchaFlow=
-        {doHCaptchaFlow ? "true" : "false"}, process.env.NEXT_PUBLIC_APP_ENV === production{" "}
-        {process.env.NEXT_PUBLIC_APP_ENV === "production" ? "true" : "false"}
-      </h1>
       <CaptchaDebugPanel
         hCaptchaRef={hCaptchaRef}
         captchaTokenRef={captchaTokenRef}
