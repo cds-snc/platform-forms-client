@@ -3,10 +3,6 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
-import {
-  FormBuilderConfigProvider,
-  formBuilderConfigDefault,
-} from "@lib/hooks/useFormBuilderConfig";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 import { AuthenticatedLayout } from "@lib/pages/auth";
@@ -18,23 +14,21 @@ export default AuthenticatedLayout(async ({ children, params, session }) => {
 
   return (
     <TemplateStoreProvider {...{ locale }}>
-      <FormBuilderConfigProvider formBuilderConfig={formBuilderConfigDefault}>
-        <SaveTemplateProvider>
-          <div className="bkd-soft flex h-full flex-col">
-            <SkipLink />
-            <Header
-              context={"default"}
-              showAccountMenu={!!session}
-              accountMenuPublishingEnabled={publishFormsEnabled}
-            />
-            <div className="shrink-0 grow basis-auto">
-              <main id="content">{children}</main>
-              <ToastContainer containerId="default" />
-            </div>
-            <Footer displayFormBuilderFooter className="mt-0" />
+      <SaveTemplateProvider>
+        <div className="bkd-soft flex h-full flex-col">
+          <SkipLink />
+          <Header
+            context={"default"}
+            showAccountMenu={!!session}
+            accountMenuPublishingEnabled={publishFormsEnabled}
+          />
+          <div className="shrink-0 grow basis-auto">
+            <main id="content">{children}</main>
+            <ToastContainer containerId="default" />
           </div>
-        </SaveTemplateProvider>
-      </FormBuilderConfigProvider>
+          <Footer displayFormBuilderFooter className="mt-0" />
+        </div>
+      </SaveTemplateProvider>
     </TemplateStoreProvider>
   );
 });
