@@ -34,6 +34,10 @@
       "nextSteps": {
         "title": "Next steps",
         "body": "Since GC Forms does not store responses indefinitely, you’ll need to retrieve and clear all response data within 45 days of submission."
+      },
+      "version": {
+        "title": "Form version",
+        "body": "Indicates the version of the form used to submit the response."
       }
     }
   },
@@ -108,6 +112,7 @@
       "download": "Download",
       "nextStep": "Next step",
       "date": "Date",
+      "version": "Version",
       "warning": "Warning",
       "pagination": {
         "start": "Start",
@@ -194,7 +199,10 @@
       "jsonDescription": "For API or data configuration",
       "downloadAllAsZip": "Download all as ZIP (compressed) file",
       "cancel": "Cancel",
-      "download": "Download"
+      "download": "Download",
+      "chooseVersion": "Download responses for version",
+      "chooseVersionPlaceholder": "Select a version",
+      "chooseVersionRequired": "You can change the selected version if needed"
     },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirm the removal of new responses",

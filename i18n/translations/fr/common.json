@@ -130,7 +130,8 @@
     "typography": "Typographie",
     "upload": "Téléverser",
     "viewTemplates": "Afficher les modèles",
-    "allForms": "Formulaires"
+    "allForms": "Formulaires",
+    "events": "Journaux d’audit"
   },
   "formElements": {
     "characterCount": {

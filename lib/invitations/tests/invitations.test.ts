@@ -3,7 +3,7 @@ import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import {
   InvalidDomainError,
   InvitationIsExpiredError,
@@ -152,15 +152,12 @@ describe("Invitations", () => {
         expect.stringContaining("register")
       );
 
-      expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith(
-        "invited@cds-snc.ca",
-        expect.objectContaining({
-          subject: expect.any(String),
-          formResponse: "email contents",
-        }),
-        "formInvitationToFutureUser"
-      );
+      expect(sendDefaultEmail).toHaveBeenCalledTimes(1);
+      expect(sendDefaultEmail).toHaveBeenCalledWith({
+        to: ["invited@cds-snc.ca"],
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        body: "email contents",
+      });
       expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
 
@@ -205,12 +202,12 @@ describe("Invitations", () => {
         expect.stringContaining("forms"),
         expect.stringContaining("forms")
       );
-      expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith(
-        "invited@cds-snc.ca",
-        expect.any(Object),
-        "formInvitationToExistingUser"
-      );
+      expect(sendDefaultEmail).toHaveBeenCalledTimes(1);
+      expect(sendDefaultEmail).toHaveBeenCalledWith({
+        to: ["invited@cds-snc.ca"],
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        body: "email contents",
+      });
       expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
 
@@ -281,12 +278,12 @@ describe("Invitations", () => {
         expect.stringContaining("register"),
         expect.stringContaining("register")
       );
-      expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith(
-        "invited2@cds-snc.ca",
-        expect.any(Object),
-        "formInvitationToFutureUser"
-      );
+      expect(sendDefaultEmail).toHaveBeenCalledTimes(1);
+      expect(sendDefaultEmail).toHaveBeenCalledWith({
+        to: ["invited2@cds-snc.ca"],
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        body: "email contents",
+      });
       expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
   });

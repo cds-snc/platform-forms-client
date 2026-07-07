@@ -180,6 +180,11 @@ export default async function Page(props: {
       overdue: false,
       ttl: ttl ? new Date(ttl) : null,
       hasEditLock: templateIdsWithEditLocks.has(id),
+      url: `/${locale}/id/${id}`,
+      isShared: userCount + pendingUserCount >= 2,
+      hasDraft: !!template.currentDraftVersionId,
+      currentPublishedVersion: Number(template.currentPublishedVersion) ?? null,
+      currentDraftVersion: Number(template.currentDraftVersion) ?? null,
       collaboratorCount: {
         userCount,
         pendingUserCount,

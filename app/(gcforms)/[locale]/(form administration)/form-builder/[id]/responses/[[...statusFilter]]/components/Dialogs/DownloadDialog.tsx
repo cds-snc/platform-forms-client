@@ -18,6 +18,7 @@ import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/fo
 import { FormBuilderError } from "../../exceptions";
 import { useTemplateVersioning } from "./useTemplateVersioning";
 import { VersionSelector } from "./VersionSelector";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -36,9 +37,9 @@ export const DownloadDialog = ({
   setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
   formId: string;
   formName: string;
-  onSuccessfulDownload: () => void;
+  onSuccessfulDownload: (filteredIds: string[]) => void;
   responseDownloadLimit: number;
-  checkedMeta?: { id?: string; name?: string; versionId?: string | null }[];
+  checkedMeta?: { id?: string; name?: string; version?: string | null }[];
 }) => {
   const dialogRef = useDialogRef();
   const { t, i18n } = useTranslation("form-builder-responses");
@@ -50,7 +51,10 @@ export const DownloadDialog = ({
     null
   );
 
-  const { dialogVersions } = useTemplateVersioning(checkedItems, checkedMeta);
+  const { getFlag } = useFeatureFlags();
+  const templateVersioningEnabled = getFlag("templateVersioning");
+
+  const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -65,9 +69,9 @@ export const DownloadDialog = ({
     dialogRef.current?.close();
   };
 
-  const handleDownloadComplete = () => {
+  const handleDownloadComplete = (filteredIds: string[]) => {
     setIsDownloading(false);
-    onSuccessfulDownload();
+    onSuccessfulDownload(filteredIds);
     handleClose();
   };
 
@@ -114,31 +118,30 @@ export const DownloadDialog = ({
       return;
     }
 
-    const ids = Array.from(checkedItems.keys());
-
     // Validate that CSV/HTML downloads only include responses with a matched version
     // Note: DownloadDialog doesn't receive full submission metadata by default; validation
     // will be performed by the caller when available. If not available, the server may return an error.
 
     const filePrefix = slugify(`${formName}-${getDate()}`) + "-";
 
-    // Exclude items without a version; only download responses that have a matched version
-    /*
-    const filteredIdsWithVersion = getFilteredIds();
-    if (
-      filteredIdsWithVersion.length === 0 &&
-      (selectedFormat === DownloadFormat.CSV || selectedFormat === DownloadFormat.HTML_ZIPPED)
-    ) {
-      setDownloadError("missing_version");
-      setIsDownloading(false);
-      return;
+    let filteredIds = Array.from(checkedItems.keys());
+
+    if (templateVersioningEnabled) {
+      // Exclude items without a version; only download responses that have a matched version
+      const filteredIdsWithVersion = getFilteredIds(selectedVersionForDialog);
+
+      if (
+        filteredIdsWithVersion.length === 0 &&
+        (selectedFormat === DownloadFormat.CSV || selectedFormat === DownloadFormat.HTML_ZIPPED)
+      ) {
+        setDownloadError("missing_version");
+        setIsDownloading(false);
+        return;
+      }
+
+      // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
+      filteredIds = filteredIdsWithVersion;
     }
-    */
-
-    // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
-    const filteredIds = ids;
-
-    // getFilteredIds(selectedVersionForDialog);
 
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -166,7 +169,7 @@ export const DownloadDialog = ({
           const fileName = `${filePrefix}responses-reponses.zip`;
           downloadFileFromBlob(blob, fileName);
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         });
       }
 
@@ -194,7 +197,7 @@ export const DownloadDialog = ({
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(blob, fileName);
 
-            handleDownloadComplete();
+            handleDownloadComplete(filteredIds);
           });
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
@@ -203,7 +206,7 @@ export const DownloadDialog = ({
             `${filePrefix}responses-reponses.csv`
           );
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         }
       }
 
@@ -229,7 +232,7 @@ export const DownloadDialog = ({
             const fileName = `${filePrefix}responses-reponses.zip`;
             downloadFileFromBlob(blob, fileName);
 
-            handleDownloadComplete();
+            handleDownloadComplete(filteredIds);
           });
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
@@ -238,7 +241,7 @@ export const DownloadDialog = ({
             `${filePrefix}responses-reponses.json`
           );
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         }
       }
     } catch (err) {

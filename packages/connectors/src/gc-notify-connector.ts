@@ -2,9 +2,18 @@ import { Agent } from "https";
 import { getAwsSecret } from "./utils";
 import axios, { AxiosError } from "axios";
 
-const API_URL: string = "https://api.notification.canada.ca";
+export type EmailAttachment = {
+  fileName: string;
+  base64EncodedFile: string;
+};
 
-export type Personalisation = Record<string, string | boolean | Record<string, string | boolean>>;
+export type EmailContent = {
+  templateId: string;
+  placeholders: Record<string, string>;
+  attachments?: EmailAttachment[];
+};
+
+const API_URL: string = "https://api.notification.canada.ca";
 
 const httpsAgent = new Agent({ keepAlive: true });
 
@@ -37,10 +46,9 @@ export class GCNotifyConnector {
   }
 
   public async sendEmail(
-    emailAddress: string,
-    templateId: string,
-    personalisation: Personalisation,
-    reference?: string
+    to: string,
+    content: EmailContent,
+    referenceIdentifier?: string
   ): Promise<void> {
     try {
       await axios({
@@ -53,10 +61,24 @@ export class GCNotifyConnector {
           Authorization: `ApiKey-v1 ${this.apiKey}`,
         },
         data: {
-          email_address: emailAddress,
-          template_id: templateId,
-          personalisation,
-          ...(reference && { reference }),
+          email_address: to,
+          template_id: content.templateId,
+          personalisation: {
+            ...content.placeholders,
+            ...(content.attachments
+              ? Object.fromEntries(
+                  content.attachments.map((f, i) => [
+                    `file${i}`,
+                    {
+                      file: f.base64EncodedFile,
+                      filename: f.fileName,
+                      sending_method: "attach",
+                    },
+                  ])
+                )
+              : {}),
+          },
+          ...(referenceIdentifier && { reference: referenceIdentifier }),
         },
       });
     } catch (error) {

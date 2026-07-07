@@ -38,8 +38,61 @@ const calculateCollaboratorCount = (userCount: number, pendingUserCount: number)
   return userCount - 1 + pendingUserCount;
 };
 
+const DraftVersionNumber = memo(
+  ({
+    language,
+    cardId,
+    hasDraft,
+    draftVersionNumber,
+    isPublished,
+  }: {
+    language: string;
+    cardId: string;
+    hasDraft: boolean;
+    draftVersionNumber?: number;
+    isPublished: boolean;
+  }) => {
+    const { t } = useTranslation("my-forms");
+    const link = `/${language}/form-builder/${cardId}/edit`;
+
+    if (isPublished && hasDraft && draftVersionNumber) {
+      return (
+        <div className="mt-2 flex items-center text-sm">
+          <span
+            className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
+            aria-hidden="true"
+          ></span>
+          <Link href={link} prefetch={false}>
+            {t("card.draftVersion", { draftVersionNumber: draftVersionNumber })}
+          </Link>
+        </div>
+      );
+    }
+
+    return null;
+  }
+);
+
+DraftVersionNumber.displayName = "DraftVersionNumber";
+
 const CardBanner = memo(
-  ({ isPublished, isClosed }: { isPublished: boolean; isClosed: boolean }) => {
+  ({
+    language,
+    cardId,
+    hasDraft,
+    publishedVersionNumber,
+    draftVersionNumber,
+    isPublished,
+    isClosed,
+  }: {
+    language: string;
+    cardId: string;
+    hasDraft: boolean;
+    publishedVersionNumber?: number;
+    draftVersionNumber?: number;
+    isPublished: boolean;
+    isClosed: boolean;
+  }) => {
     const { t } = useTranslation("my-forms");
     const bulletColor = isClosed
       ? "bg-slate-500"
@@ -47,17 +100,33 @@ const CardBanner = memo(
         ? "bg-emerald-500"
         : "bg-yellow-400";
 
+    const publishedVersionText =
+      isPublished && publishedVersionNumber
+        ? t("card.versionNumber", { publishedVersionNumber: publishedVersionNumber })
+        : "";
+
     return (
-      <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
-        <span
-          className={`inline-block h-3 w-3 rounded-full border-1 border-slate-50 ${bulletColor}`}
+      <>
+        <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
+          <span
+            className={`inline-block h-3 w-3 rounded-full border-1 border-slate-50 ${bulletColor}`}
+          />
+          {isClosed
+            ? t("card.states.closed")
+            : isPublished
+              ? t("card.states.published") +
+                t(publishedVersionText ? `${publishedVersionText}` : "")
+              : t("card.states.draft")}
+        </div>
+
+        <DraftVersionNumber
+          language={language}
+          cardId={cardId}
+          isPublished={isPublished}
+          hasDraft={hasDraft}
+          draftVersionNumber={draftVersionNumber}
         />
-        {isClosed
-          ? t("card.states.closed")
-          : isPublished
-            ? t("card.states.published")
-            : t("card.states.draft")}
-      </div>
+      </>
     );
   }
 );
@@ -367,7 +436,6 @@ const CardComponent = ({
   );
 
   const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : card.overdue ? "bg-red-50" : ""}`;
-
   return (
     <div className={wrapperClass} data-testid={`card-${card.id}`}>
       <div className="row-start-1 mt-1 flex min-w-0 flex-col">
@@ -407,7 +475,15 @@ const CardComponent = ({
               collaboratorCount={collaboratorCount}
             />
           )}
-          <CardBanner isPublished={card.isPublished} isClosed={cardState === CARD_STATE.CLOSED} />
+          <CardBanner
+            language={language}
+            cardId={card.id}
+            hasDraft={card.hasDraft}
+            publishedVersionNumber={card.currentPublishedVersion ?? undefined}
+            draftVersionNumber={card.currentDraftVersion ?? undefined}
+            isPublished={card.isPublished}
+            isClosed={cardState === CARD_STATE.CLOSED}
+          />
           {cardState === CARD_STATE.PUBLISHED && <CardFooterPublished cardId={card.id} />}
         </div>
       </div>
@@ -415,6 +491,7 @@ const CardComponent = ({
         <Menu
           id={card.id}
           name={card.name}
+          hasDraft={card.hasDraft}
           isPublished={card.isPublished}
           ttl={card.ttl ? card.ttl : undefined}
           status={status}

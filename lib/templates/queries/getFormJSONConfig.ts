@@ -2,8 +2,14 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { FormProperties } from "@lib/types";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { getFormJSONConfig as getFormJSONConfigVersioningEnabled } from "../versioning/queries/getFormJSONConfig";
 
 export const getFormJSONConfig = async (formId: string) => {
+  if (await isTemplateVersioningEnabled()) {
+    return getFormJSONConfigVersioningEnabled(formId);
+  }
+
   await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
