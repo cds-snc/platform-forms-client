@@ -19,7 +19,7 @@ export const CaptchaDebugPanel = ({
   hasFatalErrorRef: React.RefObject<boolean>;
   onErrorCallback: (code: string) => void;
   resetToken: () => void;
-  hCaptchaDebugEnabled: boolean;
+  hCaptchaDebugEnabled?: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,7 +29,7 @@ export const CaptchaDebugPanel = ({
     hasToken: false,
   });
 
-  // Update state snapshot when panel is open
+  // Poll related refs to get updates
   useEffect(() => {
     if (isOpen) {
       const interval = setInterval(() => {
@@ -43,7 +43,7 @@ export const CaptchaDebugPanel = ({
     }
   }, [isOpen, hasFatalErrorRef, hCaptchaRef, captchaTokenRef]);
 
-  // Only show if enabled (app setting) and NOT in production
+  // Only show if enabled (app setting) and NOT in production -- extra check just to be safe
   if (!hCaptchaDebugEnabled || process.env.NEXT_PUBLIC_APP_ENV === "production") {
     return null;
   }
@@ -51,21 +51,6 @@ export const CaptchaDebugPanel = ({
   const handleSimulateError = (errorCode: string) => {
     logMessage.info(`[Debug] Simulating hCaptcha error: ${errorCode}`);
     onErrorCallback(errorCode);
-  };
-
-  const handleForceExecuteError = () => {
-    logMessage.info("[Debug] Forcing execute() to throw error");
-    if (hCaptchaRef.current) {
-      const original = hCaptchaRef.current.execute;
-      hCaptchaRef.current.execute = () => {
-        throw new Error("Debug: Forced execute() error");
-      };
-      setTimeout(() => {
-        if (hCaptchaRef.current) {
-          hCaptchaRef.current.execute = original;
-        }
-      }, 100);
-    }
   };
 
   const handleClearToken = () => {
@@ -88,11 +73,6 @@ export const CaptchaDebugPanel = ({
     if (hCaptchaRef) {
       (hCaptchaRef as React.MutableRefObject<HCaptcha | null>).current = null;
     }
-  };
-
-  const handleClearFatalError = () => {
-    logMessage.info("[Debug] Clearing fatal error flag");
-    hasFatalErrorRef.current = false;
   };
 
   return (
@@ -184,15 +164,6 @@ export const CaptchaDebugPanel = ({
           <h4 className="my-0! py-0! text-sm! font-bold">Test Error Scenarios:</h4>
           <ul className="mb-2 list-none p-2 text-xs">
             <li className="mb-2">
-              <Button
-                theme="destructive"
-                onClick={handleForceExecuteError}
-                className="p-2! text-xs!"
-              >
-                Force execute() Error
-              </Button>
-            </li>
-            <li className="mb-2">
               <Button theme="destructive" onClick={handleClearRef} className="p-2! text-xs!">
                 Clear hCaptcha Ref
               </Button>
@@ -209,15 +180,6 @@ export const CaptchaDebugPanel = ({
             <li className="mb-2">
               <Button theme="destructive" onClick={handleInvalidateToken} className="p-2! text-xs!">
                 Set Invalid Token
-              </Button>
-            </li>
-          </ul>
-
-          <h4 className="my-0! py-0! text-sm! font-bold">Recovery:</h4>
-          <ul className="mb-2 list-none p-2 text-xs">
-            <li className="mb-2">
-              <Button theme="primary" onClick={handleClearFatalError} className="p-2! text-xs!">
-                Clear Fatal Error Flag
               </Button>
             </li>
           </ul>

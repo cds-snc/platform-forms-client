@@ -114,15 +114,16 @@ export const FormCaptcha = ({
           />
         )}
       </form>
-      <CaptchaDebugPanel
-        hCaptchaRef={hCaptchaRef}
-        captchaTokenRef={captchaTokenRef}
-        doHCaptchaFlow={doHCaptchaFlow}
-        hasFatalErrorRef={hasFatalErrorRef}
-        onErrorCallback={onErrorCallback}
-        resetToken={resetToken}
-        hCaptchaDebugEnabled={hCaptchaDebugEnabled}
-      />
+      {hCaptchaDebugEnabled && (
+        <CaptchaDebugPanel
+          hCaptchaRef={hCaptchaRef}
+          captchaTokenRef={captchaTokenRef}
+          doHCaptchaFlow={doHCaptchaFlow}
+          hasFatalErrorRef={hasFatalErrorRef}
+          onErrorCallback={onErrorCallback}
+          resetToken={resetToken}
+        />
+      )}
     </>
   );
 };
