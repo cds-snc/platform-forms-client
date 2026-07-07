@@ -1,8 +1,8 @@
 import { useCallback, useRef } from "react";
-import { logMessage } from "@lib/logger";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { logMessage } from "@lib/logger";
 
-export const useHCaptchaToken = (
+export const useCaptchaToken = (
   captchaTokenRef?: React.RefObject<string>,
   hCaptchaRef?: React.RefObject<HCaptcha | null>
 ) => {

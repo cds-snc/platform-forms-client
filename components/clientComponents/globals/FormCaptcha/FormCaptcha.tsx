@@ -1,9 +1,9 @@
+import { SubmitEvent, useRef, useEffect, useCallback } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
-import { FormEvent, useRef, useEffect, useCallback } from "react";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
-import { useHCaptchaToken } from "./useHCaptchaToken";
-import { useHCaptchaErrorHandling } from "./useHCaptchaErrorHandling";
+import { useCaptchaToken } from "./useCaptchaToken";
+import { useCaptchaErrorHandling } from "./useCaptchaErrorHandling";
 import { CaptchaDebugPanel } from "./CaptchaDebugPanel";
 
 /**
@@ -21,7 +21,7 @@ export const FormCaptcha = ({
   ...rest
 }: {
   children: React.ReactNode;
-  handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
+  handleSubmit: (e?: SubmitEvent<HTMLFormElement>) => void;
   lang: string;
   dataTestId?: string;
   isPublished?: boolean;
@@ -30,12 +30,12 @@ export const FormCaptcha = ({
   hCaptchaDebugEnabled?: boolean;
 } & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
-  const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
+  const formSubmitEventRef = useRef<SubmitEvent<HTMLFormElement>>(null);
   const doHCaptchaFlow = shouldCheckCaptcha(isPublished);
 
-  const { setToken, resetToken } = useHCaptchaToken(captchaTokenRef, hCaptchaRef);
+  const { setToken, resetToken } = useCaptchaToken(captchaTokenRef, hCaptchaRef);
 
-  const { onErrorCallback, hasFatalErrorRef } = useHCaptchaErrorHandling({
+  const { onErrorCallback, hasFatalErrorRef } = useCaptchaErrorHandling({
     resetToken,
     handleSubmit,
     formSubmitEventRef,
@@ -49,7 +49,7 @@ export const FormCaptcha = ({
   }, [resetCaptchaRef, resetToken]);
 
   const onFormSubmit = useCallback(
-    (event: FormEvent<HTMLFormElement>) => {
+    (event: SubmitEvent<HTMLFormElement>) => {
       event.preventDefault();
 
       // Skip hCaptcha if flow disabled or fatal error returned from hCaptcha
@@ -60,7 +60,7 @@ export const FormCaptcha = ({
 
       formSubmitEventRef.current = event;
 
-      // For any case that hCaptcha fails, allow the form to submit
+      // For any case that hCaptcha is the cause of failure (e.g. not loaded yet), allow the form to submit
       try {
         if (hCaptchaRef.current) {
           hCaptchaRef.current.execute();
@@ -81,7 +81,7 @@ export const FormCaptcha = ({
   const onTokenGeneratedCallback = useCallback(
     (token: string) => {
       setToken(token);
-      handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
+      handleSubmit(formSubmitEventRef.current as SubmitEvent<HTMLFormElement>);
     },
     [setToken, handleSubmit]
   );

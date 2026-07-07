@@ -1,15 +1,14 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, SubmitEvent } from "react";
 import { logMessage } from "@lib/logger";
-import { FormEvent } from "react";
 
-export const useHCaptchaErrorHandling = ({
+export const useCaptchaErrorHandling = ({
   resetToken,
   handleSubmit,
   formSubmitEventRef,
 }: {
   resetToken: () => void;
-  handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
-  formSubmitEventRef: React.RefObject<FormEvent<HTMLFormElement> | null>;
+  handleSubmit: (e?: SubmitEvent<HTMLFormElement>) => void;
+  formSubmitEventRef: React.RefObject<SubmitEvent<HTMLFormElement> | null>;
 }) => {
   const hasFatalErrorRef = useRef(false);
 
