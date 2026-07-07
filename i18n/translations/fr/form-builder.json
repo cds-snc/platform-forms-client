@@ -402,7 +402,6 @@
     "createDraft": {
       "title": "Créer une version brouillon",
       "description": "Cela créera une nouvelle version brouillon de votre gabarit publié.",
-      "apiWarning": "Les modifications apportées à un brouillon peuvent modifier le comportement et casser des intégrations d'API actives — vérifiez avec votre équipe informatique avant d'apporter des modifications.",
       "responseWarning": "Vous êtes responsable de vous assurer que le gabarit mis à jour fonctionne avec les flux de travail et les intégrations de votre équipe.",
       "liveForm": "Votre formulaire en ligne continuera à recueillir des réponses normalement jusqu'à ce que vous le republiciez.",
       "prompt": "Si vous comprenez le potentiel impact, tapez AGREE pour continuer.",

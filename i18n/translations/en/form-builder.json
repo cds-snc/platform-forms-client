@@ -402,7 +402,6 @@
     "createDraft": {
       "title": "Create draft version",
       "description": "This will create a new draft of your published template.",
-      "apiWarning": "Making changes in a draft can alter behavior and break active API integrations — check with your IT team before making changes.",
       "liveForm": "Your live form will continue collecting responses as usual until you republish.",
       "responseWarning": "You are responsible for ensuring the updated template works with your team's workflows and integrations.",
       "prompt": "If you understand the potential impact, type AGREE to continue.",

@@ -8,7 +8,6 @@ import ConfirmationAgreement from "./ConfirmationAgreement";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
 import { createDraftVersion } from "./actions";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 type OpenDetail = { id: string };
 
@@ -17,7 +16,6 @@ export const CreateDraftConfirmDialog = () => {
   const { Event } = useCustomEvent();
   const { t, i18n } = useTranslation("form-builder");
   const router = useRouter();
-  const { hasApiKeyId } = useFormBuilderConfig();
 
   const [isOpen, setIsOpen] = useState(false);
   const [formId, setFormId] = useState<string>("");
@@ -97,13 +95,9 @@ export const CreateDraftConfirmDialog = () => {
         >
           <div className="p-4">
             <p className="mb-4">{t("confirm.createDraft.description")}</p>
-            {hasApiKeyId ? (
-              <p className="text-warning mb-4 font-medium">{t("confirm.createDraft.apiWarning")}</p>
-            ) : (
-              <p className="text-warning mb-4 font-medium">
-                {t("confirm.createDraft.responseWarning")}
-              </p>
-            )}
+            <p className="text-warning mb-4 font-medium">
+              {t("confirm.createDraft.responseWarning")}
+            </p>
             <p className="mb-4">{t("confirm.createDraft.liveForm")}</p>
             <p className="mb-4 font-semibold">{t("confirm.createDraft.prompt")}</p>
             <ConfirmationAgreement handleAgreement={handleAgreement} />
