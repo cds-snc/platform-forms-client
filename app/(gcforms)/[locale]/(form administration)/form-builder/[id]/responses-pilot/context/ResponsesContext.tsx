@@ -235,10 +235,18 @@ export const ResponsesProvider = ({
       let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
+      responseLogger.info(
+        `Processing ${formResponses.length} submissions for form ID ${formId} and version ${selectedVersion || 1}`
+      );
+
       // If a specific version is selected, only process submissions for that version
       if (selectedVersion) {
         formResponses = formResponses.filter((s) => String(s.version) === selectedVersion);
       }
+
+      responseLogger.info(
+        `After filtering by version, ${formResponses.length} submissions remain for processing`
+      );
 
       if (!directoryHandle || !privateApiKey || !apiClient) {
         responseLogger.error("Missing required context values, aborting processing");
@@ -249,6 +257,7 @@ export const ResponsesProvider = ({
         formTemplate = await apiClient.getFormTemplate(
           selectedVersion ? parseInt(selectedVersion, 10) : 1
         );
+        responseLogger.info(`Loaded form template successfully version ${selectedVersion || 1}`);
         formId = apiClient.getFormId();
       } catch (error) {
         responseLogger.error("Error loading form template: ", error);
