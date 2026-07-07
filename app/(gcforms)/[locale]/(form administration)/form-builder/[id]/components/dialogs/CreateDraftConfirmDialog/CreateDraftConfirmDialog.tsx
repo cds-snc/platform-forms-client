@@ -69,7 +69,7 @@ export const CreateDraftConfirmDialog = () => {
   const actions = (
     <>
       <Button theme="secondary" onClick={handleClose} disabled={isSubmitting}>
-        {t("actions.cancel") || "Cancel"}
+        {t("actions.cancel")}
       </Button>
       <Button
         theme="primary"
@@ -77,9 +77,7 @@ export const CreateDraftConfirmDialog = () => {
         onClick={handleContinue}
         disabled={!agreed || isSubmitting}
       >
-        {isSubmitting
-          ? t("actions.continue") || "Continuing..."
-          : t("actions.continue") || "Continue"}
+        {isSubmitting ? t("actions.continuing") : t("actions.continue")}
       </Button>
     </>
   );
@@ -91,7 +89,7 @@ export const CreateDraftConfirmDialog = () => {
           handleClose={handleClose}
           dialogRef={dialog}
           actions={actions}
-          title={t("confirm.createDraft.title") || "Create draft version"}
+          title={t("confirm.createDraft.title")}
         >
           <div className="p-4">
             <p className="mb-4">{t("confirm.createDraft.description")}</p>

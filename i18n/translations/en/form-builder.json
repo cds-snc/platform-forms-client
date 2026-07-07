@@ -412,7 +412,8 @@
   },
   "actions": {
     "cancel": "Cancel",
-    "continue": "Continue"
+    "continue": "Continue",
+    "continuing": "Continuing..."
   },
   "confirmationMessage": "Confirmation message",
   "confirmationPage": "Confirmation page",
