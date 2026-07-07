@@ -90,6 +90,11 @@ export const CaptchaDebugPanel = ({
     }
   };
 
+  const handleClearFatalError = () => {
+    logMessage.info("[Debug] Clearing fatal error flag");
+    hasFatalErrorRef.current = false;
+  };
+
   return (
     <div
       data-testid="captcha-debug-panel"
@@ -204,6 +209,15 @@ export const CaptchaDebugPanel = ({
             <li className="mb-2">
               <Button theme="destructive" onClick={handleInvalidateToken} className="p-2! text-xs!">
                 Set Invalid Token
+              </Button>
+            </li>
+          </ul>
+
+          <h4 className="my-0! py-0! text-sm! font-bold">Recovery:</h4>
+          <ul className="mb-2 list-none p-2 text-xs">
+            <li className="mb-2">
+              <Button theme="primary" onClick={handleClearFatalError} className="p-2! text-xs!">
+                Clear Fatal Error Flag
               </Button>
             </li>
           </ul>

@@ -20,6 +20,7 @@ export const useHCaptchaErrorHandling = ({
 
       // Block suspicious errors (potential bot/attack)
       if (suspiciousErrors.includes(code)) {
+        hasFatalErrorRef.current = true;
         logMessage.warn(
           `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked.`
         );
@@ -29,8 +30,9 @@ export const useHCaptchaErrorHandling = ({
 
       // Handle configuration errors
       if (configErrors.includes(code)) {
+        hasFatalErrorRef.current = true;
+
         if (process.env.NODE_ENV === "development") {
-          hasFatalErrorRef.current = true;
           logMessage.error(
             `hCaptcha: configuration error "${code}" - bypassing in development mode. Fix your .env configuration.`
           );
@@ -40,9 +42,8 @@ export const useHCaptchaErrorHandling = ({
           return;
         }
 
-        // Critical hCaptcha response error
+        // Critical hCaptcha response error - block all submissions
         logMessage.error(`hCaptcha: critical configuration error "${code}". Blocking submission.`);
-        resetToken();
         return;
       }
 
