@@ -89,12 +89,7 @@ export class GCFormsApiClient {
       return Promise.resolve(this.cachedFormTemplate);
     }
 
-    let endpoint = `/forms/${this.formId}/template`;
-
-    // Once this feature is fully rolled out, we can remove this check and always use the versioned endpoint.
-    if (process.env.NODE_ENV !== "production") {
-      endpoint = `/forms/${this.formId}/template?version=${selectedVersion}`;
-    }
+    const endpoint = `/forms/${this.formId}/template?version=${selectedVersion}`;
     return this.httpClient
       .get<FormProperties>(endpoint)
       .then((response) => {
