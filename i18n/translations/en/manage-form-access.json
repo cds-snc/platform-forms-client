@@ -28,7 +28,7 @@
   "next": "Continue",
   "optionalMessage": "Message (optional)",
   "peopleWithAccess": "People with access",
-  "remove": "Remove invitation for {{email}}",
+  "remove": "Remove access for {{email}}",
   "removeButtonLabel": "Remove",
   "resend": "Re-send invitation to {{email}}",
   "templateNotFound": "Template not found {{templateId}}",
