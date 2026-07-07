@@ -54,8 +54,10 @@ export async function getAccessTokenFromApiKey(
   apiKey: PrivateApiKey,
   productId: string
 ): Promise<string> {
-  const zitadelURL = process.env.NEXT_PUBLIC_ZITADEL_URL;
-  if (!zitadelURL) {
+  // const zitadelURL = process.env.NEXT_PUBLIC_ZITADEL_URL;
+  const zitadelURL = "https://auth.forms-staging.cdssandbox.xyz";
+
+  https: if (!zitadelURL) {
     return Promise.reject(new Error("Zitadel URL is not set."));
   }
 

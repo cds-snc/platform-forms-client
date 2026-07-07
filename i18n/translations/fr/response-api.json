@@ -56,6 +56,10 @@
         "link": " Paramètres > Intégration API"
       },
       "close": "Fermer"
+    },
+    "versionSelector": {
+      "label": "Download responses for version",
+      "placeholder": "Choose a version"
     }
   },
   "locationPage": {

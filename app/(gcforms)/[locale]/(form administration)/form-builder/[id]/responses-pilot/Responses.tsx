@@ -4,9 +4,11 @@ import { useTranslation } from "@i18n/client";
 
 import Skeleton from "react-loading-skeleton";
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
+import { VersionSelector } from "./components/VersionSelector";
 
 export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
-  const { newFormSubmissions } = useResponsesContext();
+  const { newFormSubmissions, responseVersions, selectedVersion, setSelectedVersion } =
+    useResponsesContext();
   const { t } = useTranslation("response-api");
 
   if (newFormSubmissions === null) {
@@ -33,6 +35,12 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
         <FocusHeader headingTag="h2" dataTestId="new-responses-heading">
           {t("loadKeyPage.newResponsesAvailable")}
         </FocusHeader>
+        <VersionSelector
+          responseVersions={responseVersions}
+          selectedVersion={selectedVersion}
+          setSelectedVersion={setSelectedVersion}
+          t={t}
+        />
         {actions}
       </div>
       <div>

@@ -61,6 +61,8 @@ interface ResponsesContextType {
   setHasError: Dispatch<SetStateAction<boolean>>;
   selectedFormat: string;
   setSelectedFormat: Dispatch<SetStateAction<string>>;
+  selectedVersion: string | null;
+  setSelectedVersion: Dispatch<SetStateAction<string | null>>;
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   currentSubmissionId: string | null;
@@ -70,6 +72,7 @@ interface ResponsesContextType {
   resetState: () => void;
   resetNewSubmissions: () => void;
   logger: ResponseDownloadLogger;
+  responseVersions: string[];
 }
 
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
@@ -78,7 +81,7 @@ const CsvDetected = () => {
   const { t } = useTranslation("response-api");
   return (
     <div className="w-full">
-      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
+      <h3 className="mb-0! pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
       <p className="mb-2 text-black">{t("locationPage.csvDetected.message")}</p>
     </div>
   );
@@ -103,6 +106,7 @@ export const ResponsesProvider = ({
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("");
+  const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
   const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
   const [hasMaliciousAttachments, setHasMaliciousAttachments] = useState<boolean>(false);
   const [processedSubmissionsCount, setProcessedSubmissionsCountState] = useState<number>(0);
@@ -193,6 +197,21 @@ export const ResponsesProvider = ({
   const resetNewSubmissions = useCallback(() => {
     setNewFormSubmissions([]);
   }, []);
+
+  const responseVersions = useMemo(() => {
+    if (!newFormSubmissions || newFormSubmissions.length === 0) {
+      return [];
+    }
+
+    const versionsSet = new Set<string>();
+    newFormSubmissions.forEach((submission) => {
+      if (submission.version) {
+        versionsSet.add(String(submission.version));
+      }
+    });
+
+    return Array.from(versionsSet).sort();
+  }, [newFormSubmissions]);
 
   const resetProcessingCompleted = useCallback(() => {
     setProcessingCompleted(false);
@@ -368,6 +387,7 @@ export const ResponsesProvider = ({
     resetProcessedSubmissionsCount();
     setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
+    setSelectedVersion(null);
     setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
@@ -397,6 +417,8 @@ export const ResponsesProvider = ({
       setHasError,
       selectedFormat,
       setSelectedFormat,
+      selectedVersion,
+      setSelectedVersion,
       interrupt: isProcessingInterrupted,
       setInterrupt,
       currentSubmissionId,
@@ -406,6 +428,7 @@ export const ResponsesProvider = ({
       resetState,
       resetNewSubmissions,
       logger: responseLogger,
+      responseVersions,
     }),
     [
       locale,
@@ -430,9 +453,12 @@ export const ResponsesProvider = ({
       setInterrupt,
       currentSubmissionId,
       hasMaliciousAttachments,
+      selectedVersion,
+      setSelectedVersion,
       setCurrentSubmissionId,
       resetState,
       resetNewSubmissions,
+      responseVersions,
     ]
   );
 
