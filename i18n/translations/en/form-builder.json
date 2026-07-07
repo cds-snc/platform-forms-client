@@ -398,6 +398,22 @@
   "confirmationDescriptionItem3": "links to information or services that users are likely to need next.",
   "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form).",
   "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to the confirmation are:",
+  "confirm": {
+    "createDraft": {
+      "title": "Create draft version",
+      "description": "This will create a new draft of your published template.",
+      "apiWarning": "Making changes in a draft can alter behavior and break active API integrations — check with your IT team before making changes.",
+      "liveForm": "Your live form will continue collecting responses as usual until you republish.",
+      "prompt": "If you understand the impact, type AGREE to continue.",
+      "label": "Type AGREE",
+      "required": "required",
+      "placeholder": "AGREE"
+    }
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "continue": "Continue"
+  },
   "confirmationMessage": "Confirmation message",
   "confirmationPage": "Confirmation page",
   "contactSupport": "Contact support",
