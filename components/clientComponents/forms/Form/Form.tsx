@@ -203,6 +203,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             noValidate={true}
             isPublished={isPublished}
             captchaTokenRef={props.captchaToken}
+            resetCaptchaRef={props.resetCaptchaRef}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -361,6 +362,11 @@ export const Form = withFormik<FormProps, Responses>({
       // Start here to upload files and handle errors below into something easier to read
 
       if (result.error) {
+        // Prevents token reuse on retry to avoid an error
+        if (formikBag.props.resetCaptchaRef?.current) {
+          formikBag.props.resetCaptchaRef.current(); // FormCaptcha useEffect will call the resetToken logic
+        }
+
         if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
           formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
           formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
@@ -429,6 +435,11 @@ export const Form = withFormik<FormProps, Responses>({
         });
       } else {
         formikBag.setStatus("Error");
+      }
+
+      // Prevents token reuse on retry to avoid an error
+      if (formikBag.props.resetCaptchaRef?.current) {
+        formikBag.props.resetCaptchaRef.current(); // FormCaptcha useEffect will call the resetToken logic
       }
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {

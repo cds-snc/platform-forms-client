@@ -1,8 +1,9 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useEffect, useCallback } from "react";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+import { useHCaptchaToken } from "./useHCaptchaToken";
+import { useHCaptchaErrorHandling } from "./useHCaptchaErrorHandling";
 
 /**
  * Acts as a hCaptcha wrapper to help simplify the wiring around adding hCaptcha to a form.
@@ -14,6 +15,7 @@ export const FormCaptcha = ({
   dataTestId = "",
   isPublished = true,
   captchaTokenRef,
+  resetCaptchaRef,
   ...rest
 }: {
   children: React.ReactNode;
@@ -22,78 +24,89 @@ export const FormCaptcha = ({
   dataTestId?: string;
   isPublished?: boolean;
   captchaTokenRef: React.RefObject<string> | undefined;
+  resetCaptchaRef?: React.RefObject<(() => void) | undefined>;
 } & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
-
-  // Help developers understand when there is a configuration issue
-  const { getFlag } = useFeatureFlags();
-  const hCaptcha = getFlag("hCaptcha");
-
-  if (
-    process.env.NODE_ENV === "development" &&
-    hCaptcha &&
-    !process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY
-  ) {
-    logMessage.warn(`hCaptcha: flag is enabled but hCaptchaSiteKey is missing. This will cause 
-      hCaptcha to fail. Add the hCaptchaSiteKey to the App settings and make sure the
-      HCAPTCHA_SITE_VERIFY_KEY is in your .env`);
-  }
-
-  const onVerified = async (token: string) => {
-    if (captchaTokenRef) {
-      captchaTokenRef.current = token;
-    }
-    handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
-  };
-
   const doHCaptchaFlow = shouldCheckCaptcha(isPublished);
 
-  // see https://github.com/hCaptcha/react-hcaptcha
+  const { setToken, resetToken } = useHCaptchaToken(captchaTokenRef, hCaptchaRef);
+
+  const { onErrorCallback, hasFatalErrorRef } = useHCaptchaErrorHandling({
+    resetToken,
+    handleSubmit,
+    formSubmitEventRef,
+  });
+
+  // Expose resetToken function to parent components via resetCaptchaRef ref
+  useEffect(() => {
+    if (resetCaptchaRef) {
+      resetCaptchaRef.current = resetToken;
+    }
+  }, [resetCaptchaRef, resetToken]);
+
+  const onFormSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      // Skip hCaptcha if flow disabled or fatal error returned from hCaptcha
+      if (!doHCaptchaFlow || hasFatalErrorRef.current) {
+        handleSubmit(event);
+        return;
+      }
+
+      formSubmitEventRef.current = event;
+
+      // For any case that hCaptcha fails, skip hCaptcha all the form to submit
+      try {
+        if (hCaptchaRef.current) {
+          hCaptchaRef.current.execute();
+        } else {
+          logMessage.warn("hCaptcha: not ready, bypassing hCaptcha and submitting form");
+          handleSubmit(event);
+        }
+      } catch (error) {
+        logMessage.warn(
+          `hCaptcha: execute() failed, bypassing hCaptcha and submitting form: ${JSON.stringify(error)}`
+        );
+        handleSubmit(event);
+      }
+    },
+    [doHCaptchaFlow, handleSubmit, hasFatalErrorRef]
+  );
+
+  const onTokenGeneratedCallback = useCallback(
+    (token: string) => {
+      setToken(token);
+      handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
+    },
+    [setToken, handleSubmit]
+  );
+
+  const onChallengeExpiredCallback = useCallback(() => {
+    logMessage.info("hCaptcha: challenge expired");
+    resetToken();
+  }, [resetToken]);
+
   return (
     <form
       method="POST"
-      onSubmit={(e) => {
-        e.preventDefault();
-
-        if (!doHCaptchaFlow) {
-          handleSubmit(e);
-          return;
-        }
-
-        // The submit event is captured here so it can be used later in the passed in handleSubmit(e)
-        // that is called in onVerified() that is triggerd below via hCaptchaRef.current.execute()
-        // and later called from HCaptcha component event onVerify.
-        formSubmitEventRef.current = e;
-        hCaptchaRef.current?.execute();
-      }}
+      onSubmit={onFormSubmit}
       {...(dataTestId ? { "data-testid": dataTestId } : {})}
       {...rest}
     >
       {children}
       {doHCaptchaFlow && (
         <HCaptcha
-          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
-          onVerify={onVerified}
-          // Component will reset immediately after a Client sends bad data.
-          // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
-          onError={(code: string) => {
-            // @TODO investigate cases where the submission should be allowed through based on error code
-            // see https://docs.hcaptcha.com/#siteverify-error-codes-table
-            logMessage.warn(`hCatpcha: clientComponentError error ${code}`);
-          }}
-          onChalExpired={() => {
-            logMessage.info("hCaptcha: challenge expired");
-            hCaptchaRef.current?.resetCaptcha();
-          }}
-          onExpire={() => {
-            logMessage.info("hCaptcha: token expired");
-            hCaptchaRef.current?.resetCaptcha();
-          }}
           ref={hCaptchaRef}
+          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+          onVerify={onTokenGeneratedCallback}
+          onError={onErrorCallback}
+          onChalExpired={onChallengeExpiredCallback}
+          onExpire={resetToken}
           languageOverride={lang}
-          // Do not show a checkbox
           size="invisible"
+          loadAsync={true}
         />
       )}
     </form>

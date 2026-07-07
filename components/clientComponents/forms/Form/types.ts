@@ -29,6 +29,7 @@ export interface FormProps {
   setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;
   captchaFail?: boolean;
   captchaToken?: React.RefObject<string>;
+  resetCaptchaRef?: React.RefObject<(() => void) | undefined>;
 }
 
 export type InnerFormProps = FormProps & FormikProps<Responses>;
