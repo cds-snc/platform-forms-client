@@ -61,6 +61,7 @@ export const ResponseHtml = ({
                 responseID={responseID}
                 submissionDate={createdAt}
                 formResponse={response}
+                versionNumber={formRecord.versionNumber}
                 showCodes={showCodes}
                 t={t}
               />
@@ -82,6 +83,7 @@ export const ResponseHtml = ({
                   responseID={responseID}
                   submissionDate={createdAt}
                   formResponse={response}
+                  versionNumber={formRecord.versionNumber}
                   showCodes={showCodes}
                   t={t}
                 />

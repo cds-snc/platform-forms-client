@@ -37,6 +37,10 @@ describe("processResponse (html)", () => {
     const { processResponse } = await import("./processResponse");
 
     const htmlDir = await dir.getDirectoryHandle("html", { create: true });
+    const versionedFormTemplate = {
+      ...formTemplate,
+      versionNumber: 3,
+    } as FormProperties;
 
     const incrementProcessedSubmissionsCount = defaultIncrementProcessedSubmissionsCount;
     const t = defaultT;
@@ -52,7 +56,7 @@ describe("processResponse (html)", () => {
       responseName: "submission-1",
       selectedFormat: "html",
       formId: "test-form",
-      formTemplate: formTemplate as FormProperties,
+      formTemplate: versionedFormTemplate,
       t,
       logger: env.logger,
     });
@@ -69,5 +73,6 @@ describe("processResponse (html)", () => {
     expect(text).toContain("111-222-3333");
     expect(text).toContain("name@cds-snc.ca");
     expect(text).toContain("When will you release the GC Form Response pilot?");
+    expect(text).toContain("Version 3");
   });
 });

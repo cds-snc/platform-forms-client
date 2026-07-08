@@ -12,6 +12,7 @@ import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
 import { formatDateTimeUTC, formatDateTimeUTCFr } from "@lib/utils/form-builder";
 import { Language } from "@root/lib/types/form-builder-types";
+import { VersionBadge } from "../../html/components/VersionBadge";
 
 interface HTMLDownloadProps {
   lang: Language;
@@ -86,10 +87,13 @@ export const ResponseHtmlAggregated = ({
             <GcdsHeader language={"en"} skipLink={false} showLanguageToggle={false} pathname="" />
 
             <div className="gc-formview container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
-              <h1
-                id="main-header"
-                className="mt-14 mb-6"
-              >{`${formRecord.form[getProperty("title", lang)]}`}</h1>
+              <div className="mt-14 mb-6 flex flex-wrap items-start justify-between gap-4">
+                <h1 id="main-header">{`${formRecord.form[getProperty("title", lang)]}`}</h1>
+                <VersionBadge
+                  versionNumber={formRecord.versionNumber}
+                  versionText={t("responseTemplate.versionNumber", { lng: lang })}
+                />
+              </div>
 
               <div className="mb-14 border-2 border-dashed border-black bg-slate-50 p-8">
                 <div className="mb-4 flex justify-between">
