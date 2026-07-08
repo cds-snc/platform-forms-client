@@ -25,7 +25,15 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
 
-export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
+export const EditWithGroups = ({
+  id,
+  locale,
+  hasDraft,
+}: {
+  id: string;
+  locale: string;
+  hasDraft: boolean;
+}) => {
   const { t } = useTranslation("form-builder");
   const {
     title,
@@ -35,7 +43,6 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     getLocalizationAttribute,
     isPublished,
     getName,
-    currentDraftVersionId,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -44,7 +51,6 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     isPublished: s.isPublished,
-    currentDraftVersionId: s.currentDraftVersionId,
     getName: s.getName,
   }));
 
@@ -75,11 +81,11 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   }, [title]);
 
   useEffect(() => {
-    if (isPublished && !currentDraftVersionId) {
+    if (isPublished && !hasDraft) {
       router.replace(`/${locale}/form-builder/${id}/published`);
       return;
     }
-  }, [router, isPublished, id, locale, currentDraftVersionId]);
+  }, [router, isPublished, id, locale, hasDraft]);
 
   const _debounced = debounce(
     useCallback(

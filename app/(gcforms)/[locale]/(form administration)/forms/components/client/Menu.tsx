@@ -8,6 +8,7 @@ import { clearTemplateStorage } from "@lib/store/utils";
 import { useCallback, useState, useMemo } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import {
   MenuDropdown,
   MenuDropdownItemCallback,
@@ -19,6 +20,7 @@ export const Menu = ({
   id,
   name,
   isPublished,
+  hasDraft,
   ttl,
   status,
   onRemove,
@@ -26,6 +28,7 @@ export const Menu = ({
   id: string;
   name: string;
   isPublished: boolean;
+  hasDraft?: boolean;
   ttl?: Date;
   status: FormTabStatus;
   onRemove?: (templateId: string) => void;
@@ -35,6 +38,9 @@ export const Menu = ({
     i18n: { language },
   } = useTranslation("my-forms");
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
+
+  const { getFlag } = useFeatureFlags();
+  const templateVersioningEnabled = getFlag("templateVersioning");
 
   const handleDelete = useCallback(() => {
     setShowConfirm(true);
@@ -116,6 +122,19 @@ export const Menu = ({
         callback: copyLinkCallback,
       },
       {
+        filtered: templateVersioningEnabled && isPublished && !hasDraft ? false : true,
+        title: t("card.menu.createDraftVersion"),
+        callback: () => {
+          try {
+            const ev = new CustomEvent("open-create-draft-confirm-dialog", { detail: { id } });
+            window.document.dispatchEvent(ev);
+          } catch (e) {
+            // noop
+          }
+          return { message: "" };
+        },
+      },
+      {
         filtered: (isPublished ? true : false) || (ttl ? true : false),
         title: t("card.menu.preview"),
         url: `/${language}/form-builder/${id}/preview`,
@@ -181,13 +200,16 @@ export const Menu = ({
       ttl,
       t,
       copyLinkCallback,
-      restoreFormCallback,
+      templateVersioningEnabled,
       language,
       id,
+      restoreFormCallback,
+
       status,
-      handleDelete,
       downloadForm,
       name,
+      handleDelete,
+      hasDraft,
     ]
   );
 

@@ -22,7 +22,7 @@ import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID"
 import { getFormJSONConfig } from "@lib/templates/queries/getFormJSONConfig";
 import { isValidEmail } from "@gcforms/core";
 import { slugify } from "@lib/client/clientHelpers";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "@gcforms/types";
 import { redirect } from "next/navigation";
@@ -506,19 +506,10 @@ export const shareForm = AuthenticatedAction(
 
       const HOST = await getOrigin();
 
-      // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
-      await Promise.all(
-        emails.map((email: string) => {
-          return sendEmail(
-            email,
-            {
-              application_file: {
-                file: base64data,
-                filename: `${cleanedFilename}.json`,
-                sending_method: "attach",
-              },
-              subject: "Form shared | Formulaire partagé",
-              formResponse: `
+      await sendDefaultEmail({
+        to: emails,
+        subject: "Form shared | Formulaire partagé",
+        body: `
 **${session.user.name} (${session.user.email}) has shared a form with you.**
 
 To preview this form:
@@ -540,11 +531,13 @@ Pour prévisualiser ce formulaire :
   Aller sur [Formulaires GC](${HOST}). Aucun compte n'est nécessaire.
 - **Étape 3 :**
   Sélectionner "Ouvrir un formulaire".`,
-            },
-            "shareForm"
-          );
-        })
-      );
+        attachments: [
+          {
+            fileName: `${cleanedFilename}.json`,
+            base64EncodedFile: base64data,
+          },
+        ],
+      });
 
       return { success: true };
     } catch (error) {

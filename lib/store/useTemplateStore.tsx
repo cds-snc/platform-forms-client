@@ -271,27 +271,39 @@ export const TemplateStoreProvider = ({
   }, [store]);
 
   useEffect(() => {
-    const state = store.getState();
+    // Persisted session storage can rehydrate stale publish/version metadata,
+    // so the latest server props must be the source of truth for this route.
+    const syncServerProps = () => {
+      const state = store.getState();
 
-    if (typeof props.isPublished === "boolean" && state.isPublished !== props.isPublished) {
-      state.setIsPublished(props.isPublished);
-    }
+      if (typeof props.isPublished === "boolean" && state.isPublished !== props.isPublished) {
+        state.setIsPublished(props.isPublished);
+      }
 
-    if (
-      state.currentPublishedVersionId !== (props.currentPublishedVersionId ?? null) ||
-      state.currentDraftVersionId !== (props.currentDraftVersionId ?? null) ||
-      state.versionNumber !== (props.versionNumber ?? null)
-    ) {
-      state.setTemplateVersionIds({
-        currentPublishedVersionId: props.currentPublishedVersionId,
-        currentDraftVersionId: props.currentDraftVersionId,
-        versionNumber: props.versionNumber,
-      });
-    }
+      if (
+        state.currentPublishedVersionId !== (props.currentPublishedVersionId ?? null) ||
+        state.currentDraftVersionId !== (props.currentDraftVersionId ?? null) ||
+        state.versionNumber !== (props.versionNumber ?? null)
+      ) {
+        state.setTemplateVersionIds({
+          currentPublishedVersionId: props.currentPublishedVersionId,
+          currentDraftVersionId: props.currentDraftVersionId,
+          versionNumber: props.versionNumber,
+        });
+      }
 
-    if (props.closingDate !== undefined && state.closingDate !== props.closingDate) {
-      state.setClosingDate(props.closingDate ?? null);
-    }
+      if (props.closingDate !== undefined && state.closingDate !== props.closingDate) {
+        state.setClosingDate(props.closingDate ?? null);
+      }
+    };
+
+    syncServerProps();
+
+    return store.persist.onFinishHydration(() => {
+      // Reapply after hydration so an older stored snapshot cannot flip a
+      // draft edit session back into a published, read-only state.
+      syncServerProps();
+    });
   }, [
     store,
     props.isPublished,

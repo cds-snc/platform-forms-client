@@ -4,6 +4,7 @@ import { EditWithGroups } from "./components/EditWithGroups";
 import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDialog/DynamicRowDialog";
 import { MoreDialog } from "../components/dialogs/MoreDialog/MoreDialog";
 import { RulesDialog } from "../components/dialogs/RulesDialog/RulesDialog";
+import { getTemplateVersionState } from "@lib/templates/versioning/queries/getTemplateVersionState";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -23,9 +24,15 @@ export default async function Page(props: { params: Promise<{ id: string; locale
 
   const { id, locale } = params;
 
+  const templateVersionState = await getTemplateVersionState(id);
+
   return (
     <>
-      <EditWithGroups id={id} locale={locale} />
+      <EditWithGroups
+        id={id}
+        hasDraft={!!templateVersionState?.currentDraftVersionId}
+        locale={locale}
+      />
       <DynamicRowDialog />
       <MoreDialog />
       <RulesDialog />

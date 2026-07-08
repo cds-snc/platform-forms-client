@@ -3,6 +3,8 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { parseTemplate } from "../internal";
+import { isTemplateVersioningEnabled } from "../versioning/internal";
+import { getFullTemplateByID as getFullTemplateByIDVersioningEnabled } from "@lib/templates/versioning/queries/getFullTemplateByID";
 
 /**
  * Get a form template by ID (includes full template information but requires view permission)
@@ -13,6 +15,10 @@ export async function getFullTemplateByID(
   formID: string,
   allowDeleted?: boolean
 ): Promise<FormRecord | null> {
+  if (await isTemplateVersioningEnabled()) {
+    return getFullTemplateByIDVersioningEnabled(formID, allowDeleted);
+  }
+
   try {
     const { user } = await authorization.canViewForm(formID, allowDeleted).catch((e) => {
       logEvent(
