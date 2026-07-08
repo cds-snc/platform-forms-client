@@ -8,7 +8,7 @@ import {
   FileInputResponseWithoutContent,
 } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 import { logMessage } from "../logger";
 import { useAppUpdate } from "./useAppUpdate";
@@ -95,6 +95,7 @@ class EncryptedCache {
           const jwk = await window.crypto.subtle.exportKey("jwk", key);
 
           sessionStorage.setItem(CRYPTO_STORAGE_KEY, JSON.stringify(jwk));
+          logMessage.debug("Created Crypto key");
           return key;
         })
         .catch((e) => {
@@ -121,6 +122,7 @@ class EncryptedCache {
           logMessage.error(e);
           throw e;
         });
+      logMessage.debug("Imported Crypto key");
 
       return key;
     }
@@ -216,7 +218,6 @@ const clearCacheFiles = async () => {
 // Needs to be called on submit
 export const clearResponseStorage = async () => {
   sessionStorage.removeItem(SESSION_STORAGE_KEY);
-  sessionStorage.removeItem(CRYPTO_STORAGE_KEY);
   await clearCacheFiles();
 };
 
@@ -287,6 +288,7 @@ const restoreSessionProgress = async (): Promise<RestoredProgress | false | unde
       formVersionId: parsedData.formVersionId,
     };
   } catch (e) {
+    logMessage.error(e);
     return false;
   }
 };
@@ -328,7 +330,7 @@ export const saveSessionProgress = ({
   logMessage.debug("Completed Saving Response Session Progress");
 };
 // Start the promise on initial JS module load
-const rawSessionValuesPromise = restoreSessionProgress();
+const rawData = await restoreSessionProgress();
 
 type useResponseCacheOutput = {
   cachedSession?: RestoredProgress;
@@ -346,13 +348,7 @@ export const useResponsesCache = () => {
   const { updateTriggered } = useAppUpdate();
   const { formId, formRecord, getValues, getGroupHistory, currentGroup } = useGCFormsContext();
 
-  // Should save occur on a timed loop or on data change??
-
   const output: useResponseCacheOutput = {};
-
-  const rawData = use(rawSessionValuesPromise);
-
-  //Bryan - Thursday start here and begin testing..
 
   useEffect(() => {
     const saveData = () => {
@@ -386,7 +382,7 @@ export const useResponsesCache = () => {
         toast.success(t("saveAndResume.formRestored"), "public-facing-form");
       }
     }
-  }, [rawData, t, updateTriggered]);
+  }, [t, updateTriggered]);
 
   if (!rawData) {
     // Show that there was an error loading data
