@@ -8,7 +8,7 @@ import {
   containsNumber,
   containsSymbol,
 } from "@lib/validation/validation";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
 import {
   SignUpCommand,

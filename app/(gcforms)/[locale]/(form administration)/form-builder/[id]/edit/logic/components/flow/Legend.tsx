@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { LogicSectionArrowIcon } from "@serverComponents/icons/LogicSectionArrowIcon";
 import { LogicOptionArrowIcon } from "@serverComponents/icons/LogicOptionArrowIcon";
 import { Language } from "@lib/types/form-builder-types";

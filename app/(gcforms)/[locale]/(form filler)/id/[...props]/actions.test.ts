@@ -56,7 +56,7 @@ import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
-import { serverTranslation } from "@root/i18n";
+import { serverTranslation } from "@i18n/server";
 import {
   getFormNotificationInterval,
   prepareFormSubmissionEmail,

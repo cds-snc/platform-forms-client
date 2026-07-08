@@ -1,7 +1,7 @@
 "use server";
 
 import * as v from "valibot";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";

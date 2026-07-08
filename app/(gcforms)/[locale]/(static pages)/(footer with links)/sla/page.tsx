@@ -1,6 +1,6 @@
 import React from "react";
 import { RichText } from "@clientComponents/forms/RichText/RichText";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Metadata } from "next";
 import frContent from "@content/fr/sla.md";
 import enContent from "@content/en/sla.md";
@@ -24,7 +24,7 @@ const SLA = async (props: { params: Promise<{ locale: string }> }) => {
   const { locale } = params;
 
   return (
-    <RichText className="w-full tablet:w-[90%] laptop:w-[70%]">
+    <RichText className="tablet:w-[90%] laptop:w-[70%] w-full">
       {locale === "fr" ? frContent : enContent}
     </RichText>
   );

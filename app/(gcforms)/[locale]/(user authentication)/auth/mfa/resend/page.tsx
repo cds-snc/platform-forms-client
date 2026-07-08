@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Metadata } from "next";
 import { ReVerify } from "./components/client/ReVerify";
 import { authCheckAndThrow } from "@lib/actions";

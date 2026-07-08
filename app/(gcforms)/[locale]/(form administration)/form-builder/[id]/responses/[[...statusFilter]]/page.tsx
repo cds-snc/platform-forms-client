@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { getAppSetting } from "@lib/appSettings";
 import { authCheckAndThrow } from "@lib/actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";

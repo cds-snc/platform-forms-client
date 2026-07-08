@@ -4,7 +4,7 @@ import { SelectApiKey } from "@responses-pilot/load-key/SelectApiKey";
 import { render } from "./testUtils";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
 import { setupFonts } from "./testHelpers";
-import enTranslations from "@root/i18n/translations/en/response-api.json";
+import enTranslations from "@root/i18n/locales/en/response-api.json";
 
 import "@root/styles/app.css";
 

@@ -1,7 +1,7 @@
 import { authCheckAndThrow } from "@lib/actions";
 import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { Footer } from "@serverComponents/globals/Footer";
+import { Footer } from "@root/components/serverComponents/globals/Footer/Footer";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { AccessControlError } from "@lib/auth/errors";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";

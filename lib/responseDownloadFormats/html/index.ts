@@ -1,6 +1,6 @@
 import { ResponseHtml } from "./components/ResponseHtml";
 import { FormResponseSubmissions } from "../types";
-import { serverTranslation } from "@root/i18n";
+import { serverTranslation } from "@i18n/server";
 
 export const transform = async (formResponseSubmissions: FormResponseSubmissions) => {
   const { t } = await serverTranslation("my-forms");

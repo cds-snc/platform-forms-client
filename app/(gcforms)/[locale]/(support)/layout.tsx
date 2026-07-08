@@ -1,6 +1,6 @@
 import { cn } from "@lib/utils";
-import { Footer } from "@serverComponents/globals/Footer";
-import { SkipLink } from "@serverComponents/globals/SkipLink";
+import { Footer } from "@root/components/serverComponents/globals/Footer/Footer";
+import { SkipLink } from "@clientComponents/globals/SkipLink";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { type Language } from "@lib/types/form-builder-types";
 import { headers } from "next/headers";
@@ -22,7 +22,7 @@ export default async function Layout(props: {
       <div
         className={cn(
           "gc-formview",
-          "container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0"
+          "container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]"
         )}
       >
         <main id="content">{children}</main>

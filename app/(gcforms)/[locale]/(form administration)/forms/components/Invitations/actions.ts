@@ -1,6 +1,6 @@
 "use server";
 
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { acceptInvitation } from "@lib/invitations/acceptInvitation";
 import { declineInvitation } from "@lib/invitations/declineInvitation";
 import {

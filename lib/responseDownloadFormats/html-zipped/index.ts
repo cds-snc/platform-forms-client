@@ -3,7 +3,7 @@ import { ResponseHtml } from "../html/components/ResponseHtml";
 import { FormResponseSubmissions } from "../types";
 import { Language } from "@root/lib/types/form-builder-types";
 import { transform as transformAggregated } from "../html-aggregated";
-import { serverTranslation } from "@root/i18n";
+import { serverTranslation } from "@i18n/server";
 
 export const transform = async (
   formResponseSubmissions: FormResponseSubmissions,

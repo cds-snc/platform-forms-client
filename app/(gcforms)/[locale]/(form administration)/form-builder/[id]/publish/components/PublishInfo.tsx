@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import Markdown from "markdown-to-jsx";
 import { InfoCard } from "@serverComponents/globals/InfoCard/InfoCard";
 import { VaultDelivery } from "../VaultDelivery";

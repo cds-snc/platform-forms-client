@@ -51,7 +51,7 @@ import {
   getAddressAsAnswerElements,
   getAddressAsString,
 } from "@clientComponents/forms/AddressComplete/utils";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { traceFunction } from "@lib/otel";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];

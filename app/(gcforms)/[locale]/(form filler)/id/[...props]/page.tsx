@@ -7,9 +7,9 @@ import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayo
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { PageContent } from "./pageContent";
 import { allowGrouping } from "@lib/groups/utils/allowGrouping";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { headers } from "next/headers";
-import { Footer } from "@serverComponents/globals/Footer";
+import { Footer } from "@root/components/serverComponents/globals/Footer/Footer";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;

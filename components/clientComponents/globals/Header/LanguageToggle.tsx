@@ -1,38 +1,52 @@
 "use client";
-import React, { useCallback } from "react";
-import { useTranslation } from "@i18n/client";
-import { usePathname } from "next/navigation";
+
+/*--------------------------------------------*
+ * Framework and Third-Party
+ *--------------------------------------------*/
+import { useEffect } from "react";
+
+/*--------------------------------------------*
+ * Internal Aliases
+ *--------------------------------------------*/
+import { useTranslation } from "@i18n";
+const toggledLang = (language: string) => {
+  return language === "en" ? "fr" : "en";
+};
 
 const LanguageToggle = () => {
   const {
     t,
-    i18n: { language: currentLang },
-  } = useTranslation("common");
-  const pathname = usePathname();
-  const href =
-    pathname?.replace(`/${currentLang}`, `/${currentLang === "en" ? "fr" : "en"}`) ??
-    `/${currentLang}`;
+    i18n: { language: currentLang, changeLanguage },
+  } = useTranslation("header");
 
-  const handleClick = useCallback(() => {
-    // Dispatch beforeunload event using a custom event
-    // This will trigger a save to session when a user changes the language
-    const event = new Event("beforeunload", { bubbles: true, cancelable: true });
-    window.dispatchEvent(event);
-  }, []);
+  const lang = {
+    en: { text: "English", abbr: "en" },
+    fr: { text: "Français", abbr: "fr" },
+  };
+
+  const displayLang = lang[toggledLang(currentLang)];
+
+  useEffect(() => {
+    document.documentElement.lang = currentLang;
+  }, [currentLang]);
 
   return (
-    <div className="gc-lang-toggle-link text-right text-base">
+    <div className="gcds-lang-toggle inline-block">
       <h2 className="sr-only" lang={currentLang}>
-        {t("lang-toggle")}:{" "}
+        {t("lang-toggle")}
       </h2>
-      <a
-        href={href}
-        className="text-right text-base"
-        lang={currentLang === "en" ? "fr" : "en"}
-        onClick={handleClick}
+      <button
+        id="lang-toggle-link"
+        className="gcds-lang-toggle cursor-pointer border-none bg-transparent p-0 text-inherit underline hover:no-underline"
+        lang={displayLang.abbr}
+        onClick={() => {
+          const requestedLang = currentLang === "en" ? "fr" : "en";
+          changeLanguage(requestedLang);
+        }}
       >
-        {currentLang === "en" ? "Français" : "English"}
-      </a>
+        <span>{displayLang.text}</span>
+        <abbr title={displayLang.text}>{displayLang.abbr}</abbr>
+      </button>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Metadata } from "next";
 import { SecurityQuestionsForm } from "./components/client/SecurityQuestionsForm";
 import { retrievePoolOfSecurityQuestions } from "@lib/auth";

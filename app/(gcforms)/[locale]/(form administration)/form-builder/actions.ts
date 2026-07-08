@@ -14,7 +14,7 @@ import { updateTemplate as updateDbTemplate } from "@lib/templates/mutations/upd
 import { UpdateTemplateCommand, UpdateTemplateAction } from "@lib/templates/types";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";

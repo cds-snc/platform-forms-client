@@ -26,7 +26,7 @@ vi.mock("@lib/logger", () => ({
   },
 }));
 
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
 import { sendInvitation } from "./actions";
 

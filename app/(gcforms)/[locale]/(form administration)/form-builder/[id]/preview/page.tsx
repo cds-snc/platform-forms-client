@@ -1,4 +1,4 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Metadata } from "next";
 import { authCheckAndThrow } from "@lib/actions";
 import { notFound } from "next/navigation";

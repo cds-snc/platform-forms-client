@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { ExternalLinkIcon2, PersonIcon } from "@root/components/serverComponents/icons";
 
 export const AccountDetails = async ({

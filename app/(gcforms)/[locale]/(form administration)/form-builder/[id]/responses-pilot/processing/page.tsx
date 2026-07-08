@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { ProcessingDownloads } from "./ProcessingDownloads";
 import { ApiClientGuard } from "../guards/ApiClientGuard";
 import { FormatGuard } from "../guards/FormatGuard";

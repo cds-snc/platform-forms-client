@@ -1,11 +1,11 @@
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { Metadata } from "next";
 import { cn } from "@lib/utils";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { Start } from "./Start";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
-import { SkipLink } from "@serverComponents/globals/SkipLink";
-import { Footer } from "@serverComponents/globals/Footer";
+import { SkipLink } from "@clientComponents/globals/SkipLink";
+import { Footer } from "@root/components/serverComponents/globals/Footer/Footer";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { allowGrouping } from "@lib/groups/utils/allowGrouping";
 import { authorization } from "@root/lib/privileges";
