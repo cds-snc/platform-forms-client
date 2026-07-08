@@ -146,8 +146,11 @@ export const ResponseSection = ({
       </nav>
 
       <div className="mt-20 flex flex-wrap items-start justify-between gap-4">
-        <h2 className="gc-h1">{String(formRecord.form[getProperty("title", lang)])}</h2>
+        <h2 className="gc-h1" aria-describedby={`version-badge-${lang}`}>
+          {String(formRecord.form[getProperty("title", lang)])}
+        </h2>
         <VersionBadge
+          id={`version-badge-${lang}`}
           versionNumber={versionNumber}
           versionText={t("responseTemplate.versionNumber", { lng: lang })}
         />
