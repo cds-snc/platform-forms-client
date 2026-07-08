@@ -5,7 +5,15 @@ import { CheckForResponsesButton } from "../components/CheckForResponsesButton";
 
 export const ResponseActionButtons = () => {
   const { t, router } = useResponsesApp();
-  const { apiClient, newFormSubmissions, resetState, locale, formId } = useResponsesContext();
+  const {
+    apiClient,
+    newFormSubmissions,
+    resetState,
+    locale,
+    formId,
+    responseVersions,
+    activeSelectedVersion,
+  } = useResponsesContext();
 
   const handleBack = () => {
     resetState();
@@ -28,7 +36,11 @@ export const ResponseActionButtons = () => {
       ) : (
         <Button
           theme="primary"
-          disabled={Boolean(!apiClient || (newFormSubmissions && newFormSubmissions.length === 0))}
+          disabled={Boolean(
+            !apiClient ||
+            (newFormSubmissions && newFormSubmissions.length === 0) ||
+            (responseVersions && responseVersions.length > 1 && !activeSelectedVersion)
+          )}
           onClick={handleNext}
           data-testid="continue-button"
         >
