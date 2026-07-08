@@ -39,7 +39,7 @@ export const DownloadDialog = ({
   formName: string;
   onSuccessfulDownload: (filteredIds: string[]) => void;
   responseDownloadLimit: number;
-  checkedMeta?: { id?: string; name?: string; version?: string | null }[];
+  checkedMeta?: { id?: string; name?: string; version?: string | number | null }[];
 }) => {
   const dialogRef = useDialogRef();
   const { t, i18n } = useTranslation("form-builder-responses");
@@ -143,6 +143,8 @@ export const DownloadDialog = ({
       filteredIds = filteredIdsWithVersion;
     }
 
+    const selectedVersion = selectedVersionForDialog ?? dialogVersions[0] ?? null;
+
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
         const response = (await getSubmissionsByFormat({
@@ -150,6 +152,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.HTML_ZIPPED,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as HtmlZippedResponse | ServerActionError;
 
         if ("error" in response) {
@@ -179,6 +182,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.CSV,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as CSVResponse | ServerActionError;
 
         if ("error" in response) {
@@ -216,6 +220,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.JSON,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as JSONResponse | ServerActionError;
 
         if ("error" in response) {

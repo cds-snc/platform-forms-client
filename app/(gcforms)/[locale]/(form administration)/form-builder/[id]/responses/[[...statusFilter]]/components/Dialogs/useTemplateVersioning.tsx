@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-type CheckedMeta = { id?: string; name?: string; version?: string | null }[];
+type CheckedMeta = { id?: string; name?: string; version?: string | number | null }[];
 
 export const useTemplateVersioning = (
   checkedItems: Map<string, boolean>,
@@ -10,7 +10,7 @@ export const useTemplateVersioning = (
   const ids = React.useMemo(() => Array.from(checkedItems.keys()), [checkedItems]);
 
   const metaMap = React.useMemo(() => {
-    const map = new Map<string, { version?: string | null }>();
+    const map = new Map<string, { version?: string | number | null }>();
     if (checkedMeta && checkedMeta.length > 0) {
       checkedMeta.forEach((m) => {
         if (m && m.name) map.set(m.name, { version: m.version });
@@ -25,8 +25,7 @@ export const useTemplateVersioning = (
   );
 
   const dialogVersions = React.useMemo(
-    () =>
-      Array.from(new Set(filteredIdsWithVersion.map((id) => metaMap.get(id)!.version as string))),
+    () => Array.from(new Set(filteredIdsWithVersion.map((id) => String(metaMap.get(id)!.version)))),
     [filteredIdsWithVersion, metaMap]
   );
 
