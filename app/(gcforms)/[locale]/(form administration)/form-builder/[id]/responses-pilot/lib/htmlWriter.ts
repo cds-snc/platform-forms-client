@@ -20,30 +20,13 @@ const getSecurityAttribute = (formTemplate: FormProperties): SecurityAttribute =
   return "Unclassified";
 };
 
-const getVersionNumber = (formTemplate: FormProperties): number | null => {
-  const versionNumber = (formTemplate as { versionNumber?: unknown }).versionNumber;
-
-  if (typeof versionNumber === "number" && Number.isFinite(versionNumber)) {
-    return versionNumber;
-  }
-
-  if (typeof versionNumber === "string" && versionNumber.trim() !== "") {
-    const parsedVersion = Number(versionNumber);
-
-    if (Number.isFinite(parsedVersion)) {
-      return parsedVersion;
-    }
-  }
-
-  return null;
-};
-
 export const writeHtml = async ({
   htmlDirectoryHandle,
   formTemplate,
   submission,
   attachments,
   formId,
+  versionNumber,
   t,
 }: {
   htmlDirectoryHandle: FileSystemDirectoryHandle;
@@ -56,6 +39,7 @@ export const writeHtml = async ({
   attachments?: ResponseFilenameMapping;
   formId: string;
   t: TFunction<string | string[], undefined>;
+  versionNumber?: number | null;
 }) => {
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
 
@@ -73,14 +57,13 @@ export const writeHtml = async ({
   } as Submission;
 
   const securityAttribute = getSecurityAttribute(formTemplate);
-
   const formRecord: FormRecord = {
     id: formId,
     name: String((formTemplate as { name?: string }).name ?? formTemplate.titleEn ?? ""),
     form: formTemplate,
     isPublished: Boolean(formTemplate.isPublished),
     securityAttribute,
-    versionNumber: getVersionNumber(formTemplate),
+    versionNumber,
   };
 
   const html = renderToStaticMarkup(

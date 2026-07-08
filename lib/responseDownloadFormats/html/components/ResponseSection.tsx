@@ -147,7 +147,10 @@ export const ResponseSection = ({
 
       <div className="mt-20 flex flex-wrap items-start justify-between gap-4">
         <h2 className="gc-h1">{String(formRecord.form[getProperty("title", lang)])}</h2>
-        <VersionBadge versionNumber={versionNumber} />
+        <VersionBadge
+          versionNumber={versionNumber}
+          versionText={t("responseTemplate.versionNumber", { lng: lang })}
+        />
       </div>
       <h3 id={`columnTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
