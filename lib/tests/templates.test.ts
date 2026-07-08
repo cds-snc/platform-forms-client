@@ -351,6 +351,81 @@ describe("Template CRUD functions", () => {
       );
     });
 
+    it("Get a full template for a specific version when versioning is enabled", async () => {
+      vi.spyOn(versioningInternal, "isTemplateVersioningEnabled").mockResolvedValue(true);
+
+      const currentFormConfiguration = structuredClone(formConfiguration as FormProperties);
+      currentFormConfiguration.elements = [
+        ...currentFormConfiguration.elements,
+        {
+          id: 999,
+          type: "textField",
+          properties: {
+            titleEn: "Current question",
+            titleFr: "Question courante",
+            validation: { required: false },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+      ];
+
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", currentFormConfiguration, true),
+        currentPublishedVersion: {
+          id: "published-version-3",
+          versionNumber: 3,
+          status: "PUBLISHED",
+          jsonConfig: currentFormConfiguration,
+        },
+        currentDraftVersion: null,
+      });
+      (prismaMock.templateVersion.findFirst as MockedFunction<any>).mockResolvedValue({
+        id: "published-version-2",
+        versionNumber: 2,
+        status: "SUPERSEDED",
+        jsonConfig: formConfiguration,
+      });
+
+      const template = await getFullTemplateByID("formTestID", false, 2);
+
+      expect(prismaMock.templateVersion.findFirst).toHaveBeenCalledWith({
+        where: {
+          templateId: "formTestID",
+          versionNumber: 2,
+        },
+        select: {
+          id: true,
+          versionNumber: true,
+          status: true,
+          jsonConfig: true,
+        },
+      });
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          versionNumber: 2,
+        })
+      );
+    });
+
+    it("Ignores requested template version when versioning is disabled", async () => {
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      const template = await getFullTemplateByID("formTestID", false, 2);
+
+      expect(prismaMock.templateVersion.findFirst).not.toHaveBeenCalled();
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+        })
+      );
+    });
+
     it("Null returned when Template does not Exist", async () => {
       (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(null);
 

@@ -53,8 +53,22 @@ import {
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
 import { traceFunction } from "@lib/otel";
+import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
+
+type ResponseVersion = string | number | null;
+
+const parseTemplateVersionNumber = (version?: ResponseVersion) => {
+  if (version === undefined || version === null || version === "") return undefined;
+
+  if (typeof version === "number") {
+    return Number.isInteger(version) && version > 0 ? version : undefined;
+  }
+
+  const match = version.trim().match(/^v?(\d+)$/i);
+  return match ? Number.parseInt(match[1], 10) : undefined;
+};
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -124,11 +138,13 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       ids,
       format = DownloadFormat.HTML,
       lang,
+      version,
     }: {
       formID: string;
       ids: string[];
       format: DownloadFormat;
       lang: Language;
+      version?: ResponseVersion;
     }
   ): Promise<
     | HtmlResponse
@@ -145,7 +161,23 @@ export const getSubmissionsByFormat = AuthenticatedAction(
 
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
-        const fullFormTemplate = await getFullTemplateByID(formID);
+        const templateVersioningEnabled = await isTemplateVersioningEnabled();
+        const templateVersionNumber = templateVersioningEnabled
+          ? parseTemplateVersionNumber(version)
+          : undefined;
+
+        if (templateVersioningEnabled && version && templateVersionNumber === undefined) {
+          throw new FormBuilderError(
+            `Invalid response version: ${version}`,
+            FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
+          );
+        }
+
+        const fullFormTemplate = await getFullTemplateByID(
+          formID,
+          undefined,
+          templateVersionNumber
+        );
 
         if (fullFormTemplate === null) {
           logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
