@@ -11,10 +11,7 @@ import { getAllAppSettings } from "@root/lib/appSettings";
 // Note: the searchParam is used as the language key to display the success or error message
 export default AuthenticatedPage(
   [authorization.canAccessSettings],
-  async (props: {
-    params: Promise<{ locale: string }>;
-    searchParams: Promise<{ success?: string; error?: string }>;
-  }) => {
+  async (props: { searchParams: Promise<{ success?: string; error?: string }> }) => {
     const searchParams = await props.searchParams;
 
     const { success, error } = searchParams;

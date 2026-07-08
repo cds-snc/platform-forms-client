@@ -1,8 +1,6 @@
 import { Suspense, use, ViewTransition } from "react";
-import { serverTranslation } from "@i18n/server";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { authorization } from "@lib/privileges";
-import { Metadata } from "next";
 import { Loader } from "@clientComponents/globals/Loader";
 import { ManageAccountsIcon } from "@serverComponents/icons/ManageAccountsIcon";
 import { UsersList } from "./components/server/UsersList";
@@ -10,6 +8,8 @@ import { AccountsSearchForm } from "./components/client/AccountsSearchForm";
 import { DownloadAccountsButtons } from "./components/server/DownloadAccountsButtons";
 import { parseAccountsSearchParams } from "./lib/search";
 import { accountsRouteTransition } from "./lib/viewTransitions";
+import { I18n } from "@root/i18n";
+import { PageTitle } from "@root/components/serverComponents/globals/PageTitle";
 
 const AccountsPageContent = ({
   params,
@@ -20,14 +20,17 @@ const AccountsPageContent = ({
 }) => {
   const { locale } = use(params);
   const resolvedSearchParams = use(searchParams);
-  const { t } = use(serverTranslation("admin-users", { lang: locale }));
+
   const searchState = parseAccountsSearchParams(resolvedSearchParams);
 
   return (
     <ViewTransition {...accountsRouteTransition}>
+      <PageTitle key="accounts" namespace="admin-users" />
       <div className="mb-6 flex flex-wrap items-center gap-3">
         <ManageAccountsIcon className="size-12 fill-slate-700" />
-        <h1 className="mb-0 border-0">{t("accounts")}</h1>
+        <h1 className="mb-0 border-0">
+          <I18n i18nKey="accounts" namespace="admin-users" />
+        </h1>
         <DownloadAccountsButtons locale={locale} />
       </div>
       <AccountsSearchForm
@@ -52,19 +55,6 @@ const AccountsPageContent = ({
     </ViewTransition>
   );
 };
-
-export async function generateMetadata(props: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const params = await props.params;
-
-  const { locale } = params;
-
-  const { t } = await serverTranslation("admin-users", { lang: locale });
-  return {
-    title: `${t("accounts")}`,
-  };
-}
 
 export default AuthenticatedPage(
   [authorization.canViewAllUsers, authorization.canAccessPrivileges],
