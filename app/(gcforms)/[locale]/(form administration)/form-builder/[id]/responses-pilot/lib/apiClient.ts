@@ -83,14 +83,15 @@ export class GCFormsApiClient {
     return this.formId;
   }
 
-  public getFormTemplate(): Promise<FormProperties> {
+  public getFormTemplate(selectedVersion: number = 1): Promise<FormProperties> {
     // Return cached template if available
     if (this.cachedFormTemplate) {
       return Promise.resolve(this.cachedFormTemplate);
     }
 
+    const endpoint = `/forms/${this.formId}/template?version=${selectedVersion}`;
     return this.httpClient
-      .get<FormProperties>(`/forms/${this.formId}/template`)
+      .get<FormProperties>(endpoint)
       .then((response) => {
         // Cache the template for future calls
         this.cachedFormTemplate = response.data;
