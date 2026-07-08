@@ -29,18 +29,16 @@ export const notifyOwnerRemoved = async (
   });
 
   // Send email to remaining owners
-  users.forEach((owner) => {
-    const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
-      form.titleEn,
-      form.titleFr,
-      userToRemove.name || "An owner"
-    );
+  const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
+    form.titleEn,
+    form.titleFr,
+    userToRemove.name || "An owner"
+  );
 
-    sendDefaultEmail({
-      to: [owner.email],
-      subject: "Form access removed | Accès au formulaire supprimé",
-      body: ownerRemovedEmailContent,
-    });
+  sendDefaultEmail({
+    to: users.map((u) => u.email),
+    subject: "Form access removed | Accès au formulaire supprimé",
+    body: ownerRemovedEmailContent,
   });
 };
 
