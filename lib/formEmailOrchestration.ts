@@ -1,7 +1,7 @@
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
-import { serverTranslation } from "@i18n";
+import { serverTranslation } from "@i18n/server";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 

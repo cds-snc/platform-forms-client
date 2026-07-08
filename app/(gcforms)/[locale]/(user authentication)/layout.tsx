@@ -54,7 +54,7 @@ export default async function Layout(props: {
                 href={`/${locale}/form-builder`}
               >
                 <span className="">
-                  <SiteLogo title={t("title")} />
+                  <SiteLogo />
                 </span>
                 <span className="ml-3 inline-block text-[24px] leading-10 font-semibold text-[#1B00C2]">
                   {t("title", { ns: "common" })}
