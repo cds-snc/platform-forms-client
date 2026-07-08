@@ -88,8 +88,12 @@ export const ResponseHtmlAggregated = ({
 
             <div className="gc-formview container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
               <div className="mt-14 mb-6 flex flex-wrap items-start justify-between gap-4">
-                <h1 id="main-header">{`${formRecord.form[getProperty("title", lang)]}`}</h1>
+                <h1
+                  id="main-header"
+                  aria-describedby="version-badge"
+                >{`${formRecord.form[getProperty("title", lang)]}`}</h1>
                 <VersionBadge
+                  id="version-badge"
                   versionNumber={formRecord.versionNumber}
                   versionText={t("responseTemplate.versionNumber", { lng: lang })}
                 />
