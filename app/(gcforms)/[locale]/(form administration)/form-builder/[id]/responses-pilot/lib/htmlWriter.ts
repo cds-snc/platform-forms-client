@@ -38,8 +38,8 @@ export const writeHtml = async ({
   };
   attachments?: ResponseFilenameMapping;
   formId: string;
-  t: TFunction<string | string[], undefined>;
   versionNumber?: number | null;
+  t: TFunction<string | string[], undefined>;
 }) => {
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
 

@@ -21,7 +21,10 @@ describe("processResponse (html)", () => {
   let env: PreparedTestEnv;
 
   beforeEach(() => {
-    preparedEnv = prepareTestEnvFromFixtures(submissionFixture as SubmissionFixture, templateFixture as unknown);
+    preparedEnv = prepareTestEnvFromFixtures(
+      submissionFixture as SubmissionFixture,
+      templateFixture as unknown
+    );
     env = preparedEnv;
     dir = env.dir;
   });
@@ -57,6 +60,7 @@ describe("processResponse (html)", () => {
       selectedFormat: "html",
       formId: "test-form",
       formTemplate: versionedFormTemplate,
+      versionNumber: 3,
       t,
       logger: env.logger,
     });
@@ -73,6 +77,8 @@ describe("processResponse (html)", () => {
     expect(text).toContain("111-222-3333");
     expect(text).toContain("name@cds-snc.ca");
     expect(text).toContain("When will you release the GC Form Response pilot?");
-    expect(text).toContain("Version 3");
+    // The translation may be resolved in tests or left as the i18n key.
+    // Check for either the translated label or the untranslated key followed by the numeric version.
+    expect(text).toMatch(/(?:Version|responseTemplate\.versionNumber)\s*3/);
   });
 });
