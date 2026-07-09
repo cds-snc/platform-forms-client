@@ -267,37 +267,12 @@ export const ResponsesProvider = ({
       }
 
       try {
-        const requestedVersionNumber = activeSelectedVersion
-          ? parseInt(activeSelectedVersion, 10)
-          : 1;
-
-        try {
-          formTemplate = await apiClient.getFormTemplate(requestedVersionNumber);
-          responseLogger.info(
-            `Loaded form template successfully version ${activeSelectedVersion || 1}`
-          );
-        } catch (err) {
-          // Note: this code can be removed once the backend is updated to support versioned templates for all forms. The fallback logic is only needed for forms that do not yet have versioned templates.
-
-          // Only fallback to non-versioned template when requesting version 1.
-          if (requestedVersionNumber === 1) {
-            responseLogger.warn(
-              `Failed to load requested template version ${requestedVersionNumber} for form ${apiClient.getFormId()}, attempting fallback to non-versioned template.`
-            );
-            try {
-              formTemplate = await apiClient.getFormTemplate(1);
-              responseLogger.info(
-                `Loaded fallback non-versioned form template for form ${apiClient.getFormId()}`
-              );
-            } catch (err2) {
-              throw err2;
-            }
-          } else {
-            // For other versions, rethrow to surface the error
-            throw err;
-          }
-        }
-
+        formTemplate = await apiClient.getFormTemplate(
+          activeSelectedVersion ? parseInt(activeSelectedVersion, 10) : 1
+        );
+        responseLogger.info(
+          `Loaded form template successfully version ${activeSelectedVersion || 1}`
+        );
         formId = apiClient.getFormId();
       } catch (error) {
         responseLogger.error("Error loading form template: ", error);
