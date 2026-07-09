@@ -39,7 +39,7 @@ vi.mock("@formBuilder/components/shared/Toast", () => ({
   },
 }));
 
-vi.mock("@lib/hooks/logging/useLogClient", () => ({
+vi.mock("@lib/hooks/LogClient/useLogClient", () => ({
   useLogClient: () => ({
     logClientError: logClientErrorMock,
   }),
