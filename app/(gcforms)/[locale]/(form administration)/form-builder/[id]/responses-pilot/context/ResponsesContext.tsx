@@ -277,6 +277,8 @@ export const ResponsesProvider = ({
             `Loaded form template successfully version ${activeSelectedVersion || 1}`
           );
         } catch (err) {
+          // Note: this code can be removed once the backend is updated to support versioned templates for all forms. The fallback logic is only needed for forms that do not yet have versioned templates.
+
           // Only fallback to non-versioned template when requesting version 1.
           if (requestedVersionNumber === 1) {
             responseLogger.warn(
