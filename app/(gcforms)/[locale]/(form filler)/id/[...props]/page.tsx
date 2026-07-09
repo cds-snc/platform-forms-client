@@ -10,7 +10,6 @@ import { allowGrouping } from "@lib/groups/utils/allowGrouping";
 import { serverTranslation } from "@i18n";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
-import { getAppSettingAsBoolean } from "@lib/appSettings";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -69,7 +68,6 @@ export default async function Page(props0: {
   }
 
   const saveAndResume = formRecord?.saveAndResume || false;
-  const hCaptchaDebugEnabled = await getAppSettingAsBoolean("hCaptchaDebugEnabled");
 
   const footer = (
     <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
@@ -95,7 +93,6 @@ export default async function Page(props0: {
           formId={formId}
           saveAndResume={saveAndResume}
           isAllowGrouping={isAllowGrouping}
-          hCaptchaDebugEnabled={hCaptchaDebugEnabled}
         />
       </GCFormsProvider>
     </FormDisplayLayout>

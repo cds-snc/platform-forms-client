@@ -32,7 +32,7 @@ export const useCaptchaToken = (
       captchaTokenRef.current = "";
     }
 
-    // Reset the hCaptcha widget itself
+    // Reset the entire hCaptcha widget
     if (hCaptchaRef?.current) {
       hCaptchaRef.current.resetCaptcha();
     }
@@ -40,7 +40,8 @@ export const useCaptchaToken = (
     tokenTimestampRef.current = null;
     logMessage.info(`hCaptcha: manually reset token with age: ${tokenAge}s`);
 
-    return tokenAge; // Return age for external logging if needed
+    // Return age for external logging if needed
+    return tokenAge;
   }, [captchaTokenRef, hCaptchaRef]);
 
   const getTokenAge = useCallback(() => {

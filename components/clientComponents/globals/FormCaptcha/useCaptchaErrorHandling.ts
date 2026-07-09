@@ -17,7 +17,7 @@ export const useCaptchaErrorHandling = ({
       const configErrors = ["invalid-sitekey", "missing-sitekey"];
       const suspiciousErrors = ["invalid-data", "invalid-input-response"];
 
-      // Block suspicious errors (potential bot/attack)
+      // Block on suspicious errors (potential bot/attack)
       if (suspiciousErrors.includes(code)) {
         hasFatalErrorRef.current = true;
         logMessage.warn(
@@ -27,10 +27,11 @@ export const useCaptchaErrorHandling = ({
         return;
       }
 
-      // Handle configuration errors
+      // Block on critical hCaptcha configuration errors
       if (configErrors.includes(code)) {
         hasFatalErrorRef.current = true;
 
+        // TODO: Probably remove this block since hCaptcha local development does not really work/useful
         if (process.env.NODE_ENV === "development") {
           logMessage.error(
             `hCaptcha: configuration error "${code}" - bypassing in development mode. Fix your .env configuration.`
@@ -41,7 +42,6 @@ export const useCaptchaErrorHandling = ({
           return;
         }
 
-        // Critical hCaptcha response error - block all submissions
         logMessage.error(`hCaptcha: critical configuration error "${code}". Blocking submission.`);
         return;
       }
