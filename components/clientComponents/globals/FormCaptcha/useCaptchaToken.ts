@@ -1,26 +1,31 @@
 import { useCallback, useRef } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { logMessage } from "@lib/logger";
+import { useLogMessageToServer } from "@root/lib/hooks/logging/useLogMessageToServer";
 
 export const useCaptchaToken = (
   captchaTokenRef?: React.RefObject<string>,
   hCaptchaRef?: React.RefObject<HCaptcha | null>
 ) => {
   const tokenTimestampRef = useRef<number | null>(null);
+  const { logMessageToServer } = useLogMessageToServer();
 
   const setToken = useCallback(
     (token: string) => {
       if (captchaTokenRef) {
         captchaTokenRef.current = token;
         tokenTimestampRef.current = Date.now();
-        logMessage.info(
-          `hCaptcha: token generated ${new Date(tokenTimestampRef.current).toISOString()}`
-        );
+        logMessageToServer({
+          message: `hCaptcha: token generated ${new Date(tokenTimestampRef.current).toISOString()}`,
+          type: "info",
+        });
       } else {
-        logMessage.warn("hCaptcha: failed to generate a token");
+        logMessageToServer({
+          message: "hCaptcha: failed to generate a token",
+          type: "warn",
+        });
       }
     },
-    [captchaTokenRef]
+    [captchaTokenRef, logMessageToServer]
   );
 
   const resetToken = useCallback(() => {
@@ -38,11 +43,14 @@ export const useCaptchaToken = (
     }
 
     tokenTimestampRef.current = null;
-    logMessage.info(`hCaptcha: manually reset token with age: ${tokenAge}s`);
+    logMessageToServer({
+      message: `hCaptcha: manually reset token with age: ${tokenAge}s`,
+      type: "info",
+    });
 
     // Return age for external logging if needed
     return tokenAge;
-  }, [captchaTokenRef, hCaptchaRef]);
+  }, [captchaTokenRef, hCaptchaRef, logMessageToServer]);
 
   const getTokenAge = useCallback(() => {
     if (!tokenTimestampRef.current) return null;

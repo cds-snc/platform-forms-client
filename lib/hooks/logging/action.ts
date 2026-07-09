@@ -23,5 +23,22 @@ export const logErrorMessage = async (
     return;
   }
 
-  logMessage.error(`Client Error: ${code}-${timestamp} - formID: ${formId}`);
+  logMessageToServer({
+    message: `Client Error: ${code}-${timestamp} - formID: ${formId}`,
+    type: "error",
+  });
+};
+
+export const logMessageToServer = async ({
+  message,
+  type = "info",
+}: {
+  message: string;
+  type?: "info" | "warn" | "error";
+}): Promise<void> => {
+  if (!message) {
+    return;
+  }
+
+  logMessage[type](message);
 };

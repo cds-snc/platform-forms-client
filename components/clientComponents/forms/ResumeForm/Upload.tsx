@@ -13,7 +13,7 @@ import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorResuming } from "./ErrorResuming";
 import { ErrorLoading } from "./ErrorLoading";
-import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
+import { useLogClient } from "@lib/hooks/logging/useLogClient";
 import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
