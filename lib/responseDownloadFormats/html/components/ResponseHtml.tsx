@@ -45,7 +45,10 @@ export const ResponseHtml = ({
         </div>
         <div>
           <main id="content">
-            <h1 className="sr-only">{`${formRecord.form.titleEn} - ${formRecord.form.titleFr}`}</h1>
+            <h1
+              className="sr-only"
+              aria-describedby="version-badge-en"
+            >{`${formRecord.form.titleEn} - ${formRecord.form.titleFr}`}</h1>
             <div className="mt-14" />
             <div className="container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
               <ProtectedWarning securityAttribute={securityAttribute} lang="en" t={t} />
@@ -61,6 +64,7 @@ export const ResponseHtml = ({
                 responseID={responseID}
                 submissionDate={createdAt}
                 formResponse={response}
+                versionNumber={formRecord.versionNumber}
                 showCodes={showCodes}
                 t={t}
               />
@@ -82,6 +86,7 @@ export const ResponseHtml = ({
                   responseID={responseID}
                   submissionDate={createdAt}
                   formResponse={response}
+                  versionNumber={formRecord.versionNumber}
                   showCodes={showCodes}
                   t={t}
                 />
