@@ -70,12 +70,6 @@ export async function submitForm(
 
       const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
 
-      // TEMP -- REMOVE BEFORE RELEASE !!!!!!!!!!
-
-      // Simulate a timed out token
-      const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
-      await delay();
-
       if (shouldVerifyHCaptcha) {
         const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
         // hCaptcha runs regardless but only block submissions if the feature flag is enabled
