@@ -20,6 +20,13 @@ import { useTemplateVersioning } from "./useTemplateVersioning";
 import { VersionSelector } from "./VersionSelector";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
+export const getVersionedZipFileName = (baseFileName: string, version: string | null) => {
+  if (!version) return baseFileName;
+
+  const normalizedVersion = version.trim().replace(/^v/i, "");
+  return baseFileName.replace(/\.zip$/, `-v${normalizedVersion}.zip`);
+};
+
 export const DownloadDialog = ({
   checkedItems,
   isDialogVisible,
@@ -144,7 +151,9 @@ export const DownloadDialog = ({
       filteredIds = filteredIdsWithVersion;
     }
 
-    const selectedVersion = selectedVersionForDialog ?? dialogVersions[0] ?? null;
+    const selectedVersion = templateVersioningEnabled
+      ? (selectedVersionForDialog ?? dialogVersions[0] ?? null)
+      : null;
 
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -170,7 +179,10 @@ export const DownloadDialog = ({
         });
 
         zip.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-          const fileName = `${filePrefix}responses-reponses.zip`;
+          const fileName = getVersionedZipFileName(
+            `${filePrefix}responses-reponses.zip`,
+            selectedVersion
+          );
           downloadFileFromBlob(blob, fileName);
 
           handleDownloadComplete(filteredIds);
@@ -199,7 +211,10 @@ export const DownloadDialog = ({
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
           file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = `${filePrefix}responses-reponses.zip`;
+            const fileName = getVersionedZipFileName(
+              `${filePrefix}responses-reponses.zip`,
+              selectedVersion
+            );
             downloadFileFromBlob(blob, fileName);
 
             handleDownloadComplete(filteredIds);
@@ -235,7 +250,10 @@ export const DownloadDialog = ({
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.json", JSON.stringify(response.responses));
           file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = `${filePrefix}responses-reponses.zip`;
+            const fileName = getVersionedZipFileName(
+              `${filePrefix}responses-reponses.zip`,
+              selectedVersion
+            );
             downloadFileFromBlob(blob, fileName);
 
             handleDownloadComplete(filteredIds);
