@@ -65,6 +65,7 @@ export const DownloadDialog = ({
   const handleClose = () => {
     setSelectedFormat(defaultSelectedFormat);
     setZipAllFiles(true);
+    setSelectedVersionForDialog(null);
     setIsDialogVisible(false);
     dialogRef.current?.close();
   };
