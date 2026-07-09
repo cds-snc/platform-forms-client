@@ -46,7 +46,8 @@ export const FormWrapper = ({
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
-  const resetCaptchaRef = React.useRef<(() => void) | undefined>(undefined);
+  const resetCaptchaRef = React.useRef<{ resetToken: () => void } | null>(null);
+
   const saveAndResume = formRecord?.saveAndResume;
 
   // Generate form elements on the client to ensure Formik context is available

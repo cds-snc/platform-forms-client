@@ -362,17 +362,16 @@ export const Form = withFormik<FormProps, Responses>({
       // Start here to upload files and handle errors below into something easier to read
 
       if (result.error) {
-        // Prevents token reuse on retry to avoid an error
-        if (formikBag.props.resetCaptchaRef?.current) {
-          formikBag.props.resetCaptchaRef.current(); // FormCaptcha useEffect will call the resetToken logic
-        }
-
         if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
           formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
           formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
+
+        // Avoid a potential error where a token could be reused by re-submitting after an error
+        formikBag.props.resetCaptchaRef?.current?.resetToken?.();
+
         return;
       }
 
@@ -437,10 +436,8 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.setStatus("Error");
       }
 
-      // Prevents token reuse on retry to avoid an error
-      if (formikBag.props.resetCaptchaRef?.current) {
-        formikBag.props.resetCaptchaRef.current(); // FormCaptcha useEffect will call the resetToken logic
-      }
+      // Avoid a potential error where a token could be reused by re-submitting after an error
+      formikBag.props.resetCaptchaRef?.current?.resetToken?.();
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {
