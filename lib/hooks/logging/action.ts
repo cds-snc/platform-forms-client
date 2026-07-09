@@ -40,5 +40,9 @@ export const logMessageToServer = async ({
     return;
   }
 
-  logMessage[type](message);
+  // Validate type to prevent unvalidated dynamic method call
+  const validTypes = ["info", "warn", "error"] as const;
+  const safeType = validTypes.includes(type as (typeof validTypes)[number]) ? type : "info";
+
+  logMessage[safeType](message);
 };
