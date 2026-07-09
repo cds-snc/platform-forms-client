@@ -1,15 +1,7 @@
-import { useCallback, useRef, SubmitEvent } from "react";
+import { useCallback, useRef } from "react";
 import { logMessage } from "@lib/logger";
 
-export const useCaptchaErrorHandling = ({
-  resetToken,
-  handleSubmit,
-  formSubmitEventRef,
-}: {
-  resetToken: () => void;
-  handleSubmit: (e?: SubmitEvent<HTMLFormElement>) => void;
-  formSubmitEventRef: React.RefObject<SubmitEvent<HTMLFormElement> | null>;
-}) => {
+export const useCaptchaErrorHandling = ({ resetToken }: { resetToken: () => void }) => {
   const hasFatalErrorRef = useRef(false);
 
   const onErrorCallback = useCallback(
@@ -21,7 +13,7 @@ export const useCaptchaErrorHandling = ({
       if (suspiciousErrors.includes(code)) {
         hasFatalErrorRef.current = true;
         logMessage.warn(
-          `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked.`
+          `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked but reseting token to allow retry.`
         );
         resetToken();
         return;
@@ -30,19 +22,7 @@ export const useCaptchaErrorHandling = ({
       // Block on critical hCaptcha configuration errors
       if (configErrors.includes(code)) {
         hasFatalErrorRef.current = true;
-
-        // TODO: Probably remove this block since hCaptcha local development does not really work/useful
-        if (process.env.NODE_ENV === "development") {
-          logMessage.error(
-            `hCaptcha: configuration error "${code}" - bypassing in development mode. Fix your .env configuration.`
-          );
-          if (formSubmitEventRef.current) {
-            handleSubmit(formSubmitEventRef.current);
-          }
-          return;
-        }
-
-        logMessage.error(`hCaptcha: critical configuration error "${code}". Blocking submission.`);
+        logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
         return;
       }
 
@@ -50,7 +30,7 @@ export const useCaptchaErrorHandling = ({
       logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
       resetToken();
     },
-    [handleSubmit, resetToken, formSubmitEventRef]
+    [resetToken]
   );
 
   return {

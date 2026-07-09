@@ -32,11 +32,7 @@ export const FormCaptcha = ({
 
   const { setToken, resetToken } = useCaptchaToken(captchaTokenRef, hCaptchaRef);
 
-  const { onErrorCallback, hasFatalErrorRef } = useCaptchaErrorHandling({
-    resetToken,
-    handleSubmit,
-    formSubmitEventRef,
-  });
+  const { onErrorCallback, hasFatalErrorRef } = useCaptchaErrorHandling({ resetToken });
 
   // Expose resetToken function to parent components via resetCaptchaRef ref
   useEffect(() => {
