@@ -1,4 +1,3 @@
-import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { Prisma } from "@gcforms/database";
 import {
@@ -15,8 +14,22 @@ import {
   SecurityAttribute,
 } from "@gcforms/types";
 
+import { authCheckAndThrow } from "@lib/actions/auth";
+import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
+
 export const isTemplateVersioningEnabled = async () => {
-  return checkOne(FeatureFlags.templateVersioning);
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+
+  if (!session?.user) {
+    return false;
+  }
+
+  const hasAccess = await featureFlagAllowedForUser(
+    session.user.id,
+    FeatureFlags.templateVersioning
+  );
+
+  return hasAccess;
 };
 
 export const templateVersionSelect = {
