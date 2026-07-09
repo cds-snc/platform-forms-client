@@ -1,31 +1,28 @@
 import { useCallback, useRef } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { useLogMessageToServer } from "@root/lib/hooks/logging/useLogMessageToServer";
+import { logMessage } from "@root/lib/logger";
+
+// Logging is currently only client side to help debugging on staging. Ideally replace with a client-to-server logging solution for prod debugging.
 
 export const useCaptchaToken = (
   captchaTokenRef?: React.RefObject<string>,
   hCaptchaRef?: React.RefObject<HCaptcha | null>
 ) => {
   const tokenTimestampRef = useRef<number | null>(null);
-  const { logMessageToServer } = useLogMessageToServer();
 
   const setToken = useCallback(
     (token: string) => {
       if (captchaTokenRef) {
         captchaTokenRef.current = token;
         tokenTimestampRef.current = Date.now();
-        logMessageToServer({
-          message: `hCaptcha: token generated ${new Date(tokenTimestampRef.current).toISOString()}`,
-          type: "info",
-        });
+        logMessage.info(
+          `hCaptcha: token generated ${new Date(tokenTimestampRef.current).toISOString()}`
+        );
       } else {
-        logMessageToServer({
-          message: "hCaptcha: failed to generate a token",
-          type: "warn",
-        });
+        logMessage.warn("hCaptcha: failed to generate a token");
       }
     },
-    [captchaTokenRef, logMessageToServer]
+    [captchaTokenRef]
   );
 
   const resetToken = useCallback(() => {
@@ -43,14 +40,11 @@ export const useCaptchaToken = (
     }
 
     tokenTimestampRef.current = null;
-    logMessageToServer({
-      message: `hCaptcha: manually reset token with age: ${tokenAge}s`,
-      type: "info",
-    });
+    logMessage.info(`hCaptcha: manually reset token with age: ${tokenAge}s`);
 
     // Return age for external logging if needed
     return tokenAge;
-  }, [captchaTokenRef, hCaptchaRef, logMessageToServer]);
+  }, [captchaTokenRef, hCaptchaRef]);
 
   const getTokenAge = useCallback(() => {
     if (!tokenTimestampRef.current) return null;

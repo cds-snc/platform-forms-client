@@ -23,34 +23,5 @@ export const logErrorMessage = async (
     return;
   }
 
-  logMessageToServer({
-    message: `Client Error: ${code}-${timestamp} - formID: ${formId}`,
-    type: "error",
-  });
-};
-
-export const logMessageToServer = async ({
-  message,
-  type = "info",
-}: {
-  message: string;
-  type?: "info" | "warn" | "error";
-}): Promise<void> => {
-  if (!message) {
-    return;
-  }
-
-  // Only allow specific methods to prevent unvalidated dynamic method call
-  switch (type) {
-    case "warn":
-      logMessage.warn(message);
-      break;
-    case "error":
-      logMessage.error(message);
-      break;
-    case "info":
-    default:
-      logMessage.info(message);
-      break;
-  }
+  logMessage.error(`Client Error: ${code}-${timestamp} - formID: ${formId}`);
 };

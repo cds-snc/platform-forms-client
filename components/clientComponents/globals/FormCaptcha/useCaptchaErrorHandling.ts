@@ -1,9 +1,10 @@
-import { useLogMessageToServer } from "@root/lib/hooks/logging/useLogMessageToServer";
+import { logMessage } from "@root/lib/logger";
 import { useCallback, useRef } from "react";
+
+// Logging is currently only client side to help debugging on staging. Ideally replace with a client-to-server logging solution for prod debugging.
 
 export const useCaptchaErrorHandling = ({ resetToken }: { resetToken: () => void }) => {
   const hasFatalErrorRef = useRef(false);
-  const { logMessageToServer } = useLogMessageToServer();
 
   const onErrorCallback = useCallback(
     (code: string) => {
@@ -13,10 +14,9 @@ export const useCaptchaErrorHandling = ({ resetToken }: { resetToken: () => void
       // Block on suspicious errors (potential bot/attack)
       if (suspiciousErrors.includes(code)) {
         hasFatalErrorRef.current = true;
-        logMessageToServer({
-          message: `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked but reseting token to allow retry.`,
-          type: "warn",
-        });
+        logMessage.warn(
+          `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked but reseting token to allow retry.`
+        );
         resetToken();
         return;
       }
@@ -24,21 +24,15 @@ export const useCaptchaErrorHandling = ({ resetToken }: { resetToken: () => void
       // Block on critical hCaptcha configuration errors
       if (configErrors.includes(code)) {
         hasFatalErrorRef.current = true;
-        logMessageToServer({
-          message: `hCaptcha: critical configuration error "${code}". Submission blocked.`,
-          type: "error",
-        });
+        logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
         return;
       }
 
       // Recoverable errors, just reset the token and allow user to retry
-      logMessageToServer({
-        message: `hCaptcha: recoverable error "${code}" - user can retry submission`,
-        type: "warn",
-      });
+      logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
       resetToken();
     },
-    [resetToken, logMessageToServer]
+    [resetToken]
   );
 
   return {
