@@ -8,7 +8,7 @@ import { Language } from "@lib/types/form-builder-types";
 import React, { useEffect, useMemo, useState } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
-import { getRenderedForm } from "@lib/formBuilder";
+import { getRenderedForm, mergeFormValuesWithInitialValues } from "@lib/formBuilder";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
@@ -120,7 +120,19 @@ export const FormWrapper = ({
     }
   }, [savedValues, language, isEmptyForm, formRecord.id, formRestoredMessage]);
 
-  const initialValues = savedValues ? savedValues.values : undefined;
+  const initialValues = useMemo(() => {
+    if (!savedValues) {
+      return undefined;
+    }
+
+    if (!savedValues.values) {
+      return undefined;
+    }
+
+    // Merge restored answers onto the current form defaults so any newly added
+    // elements still get an explicit empty initial value and participate in validation.
+    return mergeFormValuesWithInitialValues(formRecord, language, savedValues.values);
+  }, [savedValues, formRecord, language]);
 
   // Show confirmation page if submissionId is present
   if (submissionId && submissionDate) {

@@ -467,6 +467,22 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
   return initialValues;
 };
 
+export const mergeFormValuesWithInitialValues = (
+  formRecord: PublicFormRecord,
+  language: string,
+  values: Responses
+): Responses => {
+  const initialValues = getFormInitialValues(formRecord, language);
+  const filteredValues = Object.fromEntries(
+    Object.entries(values).filter(([key]) => key in initialValues)
+  );
+
+  return {
+    ...initialValues,
+    ...filteredValues,
+  };
+};
+
 type GenerateElementProps = {
   element: FormElement;
   language: string;
