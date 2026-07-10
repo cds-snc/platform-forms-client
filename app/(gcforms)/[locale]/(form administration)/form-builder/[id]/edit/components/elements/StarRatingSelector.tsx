@@ -5,7 +5,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 const DEFAULT_NUMBER_OF_STARS = 5;
-const MIN_STARS = 3;
+const MIN_STARS = 1;
 const MAX_STARS = 10;
 
 interface StarRatingSelectorProps {
@@ -14,11 +14,11 @@ interface StarRatingSelectorProps {
 
 export const StarRatingSelector = ({ item }: StarRatingSelectorProps) => {
   const { t } = useTranslation("form-builder");
-  const { updateField } = useTemplateStore((s) => ({
+  const { updateField, numberOfStars } = useTemplateStore((s) => ({
     updateField: s.updateField,
+    numberOfStars:
+      s.form.elements[item.index]?.properties?.numberOfStars ?? DEFAULT_NUMBER_OF_STARS,
   }));
-
-  const numberOfStars = item.properties.numberOfStars ?? DEFAULT_NUMBER_OF_STARS;
 
   const options = Array.from({ length: MAX_STARS - MIN_STARS + 1 }, (_, i) => MIN_STARS + i);
 
