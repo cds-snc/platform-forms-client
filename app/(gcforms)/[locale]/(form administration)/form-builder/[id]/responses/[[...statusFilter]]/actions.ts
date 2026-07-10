@@ -173,11 +173,19 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           );
         }
 
-        const fullFormTemplate = await getFullTemplateByID(
-          formID,
-          undefined,
-          templateVersionNumber
-        );
+        let fullFormTemplate = await getFullTemplateByID(formID, undefined, templateVersionNumber);
+
+        // Note: this code can be removed once the backend is updated to support versioned templates for all forms. The fallback logic is only needed for forms that do not yet have versioned templates.
+
+        // Fallback: only allow fallback to non-versioned template when version 1
+        // was requested. This covers the case where responses were collected
+        // before any versions were created and the UI requests version 1.
+        if (fullFormTemplate === null && templateVersioningEnabled && templateVersionNumber === 1) {
+          logMessage.warn(
+            `Requested template version ${templateVersionNumber} not found for form ${formID}, attempting non-versioned fallback to version 1`
+          );
+          fullFormTemplate = await getFullTemplateByID(formID);
+        }
 
         if (fullFormTemplate === null) {
           logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
