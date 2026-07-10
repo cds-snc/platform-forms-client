@@ -322,7 +322,11 @@ const restoreSessionProgress = async (): Promise<RestoredProgress | false | unde
   if (typeof window === "undefined") {
     return false;
   }
-  const formData = await encryptedCache.retrieveFormDataInCache();
+  const formData = await encryptedCache.retrieveFormDataInCache().catch(async (e) => {
+    logMessage.error(e);
+    await clearCacheFiles();
+    return undefined;
+  });
 
   if (!formData) return undefined;
 
