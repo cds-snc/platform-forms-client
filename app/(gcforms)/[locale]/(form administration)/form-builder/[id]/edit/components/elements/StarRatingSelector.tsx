@@ -5,7 +5,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 const DEFAULT_NUMBER_OF_STARS = 5;
-const MIN_STARS = 2; // Two because one would make it impossible uncheck a star
+const MIN_STARS = 3; // Must match templates.schema.json minimum
 const MAX_STARS = 10;
 
 interface StarRatingSelectorProps {

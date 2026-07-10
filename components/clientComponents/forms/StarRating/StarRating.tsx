@@ -72,7 +72,7 @@ const StarItem = React.memo(function StarItem({
       <label
         htmlFor={inputId}
         className={`gc-star-rating__label relative cursor-pointer text-4xl leading-none select-none rounded${
-          focused ? "outline-blue-focus outline-[3px] outline-offset-2 outline-solid" : ""
+          focused ? " outline-blue-focus outline-[3px] outline-offset-2 outline-solid" : ""
         }`}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

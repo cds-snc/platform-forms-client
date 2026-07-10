@@ -15,9 +15,9 @@ export const StarRating = () => {
 
       <ExampleWrapper>
         <div>
-          <legend className="gcds-label" id="label-star-example">
+          <p className="gcds-label" id="label-star-example">
             {t("addElementDialog.starRating.exampleQuestion")}
-          </legend>
+          </p>
           <div className="mt-2 flex gap-1 text-4xl">
             <span className="text-yellow-400">★</span>
             <span className="text-yellow-400">★</span>
