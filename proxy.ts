@@ -261,6 +261,10 @@ const setCSP = (
   const requestHeaders = new Headers(req.headers);
 
   requestHeaders.set("x-nonce", nonce);
+  const cryptoKey = req.cookies.get("crypto-key")?.value;
+  if (cryptoKey) {
+    requestHeaders.set("x-crypto-key", cryptoKey);
+  }
   if (process.env.NODE_ENV !== "development") {
     // Set the CSP header on the request to the server
     requestHeaders.set("content-security-policy", csp);
@@ -280,6 +284,9 @@ const setCSP = (
 
   // Set cookie on response back to browser so client can render correct language on client components
   if (pathLang && cookieLang !== pathLang) response.cookies.set("i18next", pathLang);
+
+  // delete the crypto key cookie so that it cannot be reused
+  response.cookies.delete("crypto-key");
 
   return response;
 };

@@ -8,16 +8,15 @@ import {
   FileInputResponseWithoutContent,
 } from "@gcforms/types";
 import { useTranslation } from "@i18n/client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 import { logMessage } from "../logger";
 import { useAppUpdate } from "./useAppUpdate";
 import { useGCFormsContext } from "./useGCFormContext";
 import { copyObjectExcludingFileContent } from "../fileExtractor";
+import { SetCookie, stringifySetCookie } from "cookie";
 
 const LOCAL_CACHE_NAME = "gcforms-virtual-files";
-const SESSION_STORAGE_KEY = "form-data";
-const CRYPTO_STORAGE_KEY = "crypto-key";
 
 ////////////////////////////////////////
 // Types and Type Guards
@@ -65,48 +64,64 @@ const isFileInputResponseWithoutContent = (
 ////////////////////////////////////////
 
 class EncryptedCache {
-  private encryptionKey: CryptoKey;
+  private previousStateEncryptionKey: CryptoKey | undefined;
+  private currentStateEncryptionKey: CryptoKey;
 
-  private constructor(key: CryptoKey) {
-    this.encryptionKey = key;
+  private constructor(newKey: CryptoKey, previousKey?: CryptoKey) {
+    this.previousStateEncryptionKey = previousKey;
+    this.currentStateEncryptionKey = newKey;
   }
 
   public static async create(): Promise<EncryptedCache> {
     if (typeof window === "undefined") {
       return {} as unknown as EncryptedCache;
     }
-    const key = await this.createOrLoadCryptoKey();
-    return new EncryptedCache(key);
+    const keys = await this.createOrLoadCryptoKey();
+    return new EncryptedCache(keys.newKey, keys.oldKey);
   }
 
   private static createOrLoadCryptoKey = async () => {
-    const encryptionKey = sessionStorage.getItem(CRYPTO_STORAGE_KEY);
-    if (!encryptionKey) {
-      return window.crypto.subtle
-        .generateKey(
-          {
-            name: "AES-GCM",
-            length: 256,
-          },
-          true,
-          ["encrypt", "decrypt"]
-        )
-        .then(async (key) => {
-          const jwk = await window.crypto.subtle.exportKey("jwk", key);
+    const newKey = await window.crypto.subtle
+      .generateKey(
+        {
+          name: "AES-GCM",
+          length: 256,
+        },
+        true,
+        ["encrypt", "decrypt"]
+      )
+      .then(async (key) => {
+        const jwk = await window.crypto.subtle.exportKey("jwk", key);
 
-          sessionStorage.setItem(CRYPTO_STORAGE_KEY, JSON.stringify(jwk));
-          logMessage.debug("Created Crypto key");
-          return key;
-        })
-        .catch((e) => {
-          logMessage.error("Could not generate or export private key");
-          logMessage.error(e);
-          throw e;
-        });
-    } else {
+        const cookieValue: SetCookie = {
+          name: "crypto-key",
+          value: JSON.stringify(jwk),
+          path: "/",
+          secure: true,
+          sameSite: true,
+        };
+
+        document.cookie = stringifySetCookie(cookieValue);
+
+        logMessage.debug("Created Crypto key");
+        return key;
+      })
+      .catch((e) => {
+        logMessage.error("Could not generate or export private key");
+        logMessage.error(e);
+        throw e;
+      });
+    const keys: { newKey: CryptoKey; oldKey?: CryptoKey } = { newKey };
+
+    const encryptionKey = document
+      .querySelector('meta[name="crypto-key"]')
+      ?.getAttribute("content");
+
+    // Load previous key to decrypt previous state data
+    if (encryptionKey) {
       const jwk = JSON.parse(encryptionKey);
 
-      const key = await window.crypto.subtle
+      const importedKey = await window.crypto.subtle
         .importKey(
           "jwk",
           jwk,
@@ -124,28 +139,37 @@ class EncryptedCache {
         });
       logMessage.debug("Imported Crypto key");
 
-      return key;
+      keys.oldKey = importedKey;
     }
+
+    return keys;
   };
 
-  private encryptFile = async (file: ArrayBuffer) => {
+  private encryptData = async (data: ArrayBuffer) => {
     const encryptionParams: AesGcmParams = {
       name: "AES-GCM",
       iv: window.crypto.getRandomValues(new Uint8Array(12)),
     };
 
     return {
-      encryptedFile: await window.crypto.subtle.encrypt(encryptionParams, this.encryptionKey, file),
+      encryptedData: await window.crypto.subtle.encrypt(
+        encryptionParams,
+        this.currentStateEncryptionKey,
+        data
+      ),
       iv: encryptionParams.iv,
     };
   };
 
-  private decryptFile = async (file: ArrayBuffer, iv: string) => {
+  private decryptData = async (data: ArrayBuffer, iv: string) => {
+    if (!this.previousStateEncryptionKey) {
+      throw new Error("Can not decrypt file without previous crypto key");
+    }
     const decryptParams: AesGcmParams = {
       name: "AES-GCM",
       iv: Uint8Array.fromBase64(iv),
     };
-    return window.crypto.subtle.decrypt(decryptParams, this.encryptionKey, file);
+    return window.crypto.subtle.decrypt(decryptParams, this.previousStateEncryptionKey, data);
   };
 
   public getFileInCache = async (id: string) => {
@@ -162,7 +186,7 @@ class EncryptedCache {
       throw new Error(`Could not get IV value for /virtual-files/${id}`);
     }
 
-    return this.decryptFile(await fileResponse.blob().then((data) => data.arrayBuffer()), iv);
+    return this.decryptData(await fileResponse.blob().then((data) => data.arrayBuffer()), iv);
   };
 
   public storeFileInCache = async (id: string, data: FileInput | object) => {
@@ -176,7 +200,7 @@ class EncryptedCache {
     }
 
     logMessage.debug(`Saving File ${id} in cache`);
-    const { encryptedFile, iv } = await this.encryptFile(data.content);
+    const { encryptedData: encryptedFile, iv } = await this.encryptData(data.content);
     const fileBlob = new Blob([encryptedFile]);
     const ivHeader = new Uint8Array("buffer" in iv ? iv.buffer : iv).toBase64();
 
@@ -192,6 +216,42 @@ class EncryptedCache {
     await localCache.put(`/virtual-files/${id}`, fileResponse);
     logMessage.debug(`Saved File ${id} in cache`);
   };
+
+  public storeFormDataInCache = async (data: string) => {
+    const localCache = await caches.open(LOCAL_CACHE_NAME);
+
+    const dataBuffer = new TextEncoder().encode(data).buffer;
+
+    const { encryptedData, iv } = await this.encryptData(dataBuffer);
+    const ivHeader = new Uint8Array("buffer" in iv ? iv.buffer : iv).toBase64();
+
+    const formDataResponse = new Response(encryptedData, {
+      status: 200,
+      statusText: "OK",
+      headers: {
+        "Content-Type": "application/octet-stream",
+        IV: ivHeader,
+      },
+    });
+    await localCache.put(`/form-data`, formDataResponse);
+    logMessage.debug(`Saved Form Data in cache`);
+  };
+
+  public retrieveFormDataInCache = async (): Promise<Options | undefined> => {
+    const localCache = await caches.open(LOCAL_CACHE_NAME);
+
+    const formDataResponse = await localCache.match("/form-data");
+    if (!formDataResponse) return undefined;
+
+    const iv = formDataResponse.headers.get("IV");
+    if (iv === null) {
+      throw new Error(`Could not get IV value for encrypted form data`);
+    }
+
+    const decryptedBuffer = await this.decryptData(await formDataResponse.arrayBuffer(), iv);
+
+    return JSON.parse(new TextDecoder().decode(decryptedBuffer));
+  };
 }
 
 export const encryptedCache = await EncryptedCache.create().catch((e) => {
@@ -204,7 +264,7 @@ export const encryptedCache = await EncryptedCache.create().catch((e) => {
 // Cache Functions
 ////////////////////////////////////////
 
-const clearCacheFiles = async () => {
+export const clearCacheFiles = async () => {
   const localCache = await caches.open(LOCAL_CACHE_NAME);
   const files = await localCache.keys();
   await Promise.all(
@@ -213,12 +273,6 @@ const clearCacheFiles = async () => {
       localCache.delete(file);
     })
   );
-};
-
-// Needs to be called on submit
-export const clearResponseStorage = async () => {
-  sessionStorage.removeItem(SESSION_STORAGE_KEY);
-  await clearCacheFiles();
 };
 
 ////////////////////////////////////////
@@ -265,27 +319,21 @@ export const rebuildObjectWithFileContent = async (originalObject: ResponsesWith
 
 // Must remain outside of hook because it is invoked before components are rendered
 const restoreSessionProgress = async (): Promise<RestoredProgress | false | undefined> => {
-  if (typeof sessionStorage === "undefined") {
+  if (typeof window === "undefined") {
     return false;
   }
+  const formData = await encryptedCache.retrieveFormDataInCache();
 
-  const encodedformData = sessionStorage.getItem(SESSION_STORAGE_KEY);
-
-  if (!encodedformData) return undefined;
+  if (!formData) return undefined;
 
   try {
-    const formData = Buffer.from(encodedformData, "base64").toString("utf8");
-
-    if (!formData) return false;
-
-    const parsedData = JSON.parse(formData);
-    const rehydratedValues = await rebuildObjectWithFileContent(parsedData.values);
-    await clearResponseStorage();
+    const rehydratedValues = await rebuildObjectWithFileContent(formData.values);
+    await clearCacheFiles();
     return {
-      id: parsedData.id,
-      language: parsedData.language,
+      id: formData.id,
+      language: formData.language as Language,
       values: rehydratedValues,
-      formVersionId: parsedData.formVersionId,
+      formVersionId: formData.formVersionId,
     };
   } catch (e) {
     logMessage.error(e);
@@ -293,7 +341,7 @@ const restoreSessionProgress = async (): Promise<RestoredProgress | false | unde
   }
 };
 
-export const saveSessionProgress = ({
+export const saveSessionProgress = async ({
   id,
   values,
   history,
@@ -306,9 +354,6 @@ export const saveSessionProgress = ({
   }
 
   logMessage.debug("Saving Response Session Progress");
-
-  // Keep text data in session storage
-  // save files in cache, store private key in session storage
 
   // Extract file content from formValues so they are not part of session storage
   const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values);
@@ -323,10 +368,7 @@ export const saveSessionProgress = ({
     formVersionId,
   });
 
-  // Encode UTF-8 string to base64
-  const encodedformDataEn = Buffer.from(formData, "utf8").toString("base64");
-  sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformDataEn);
-
+  await encryptedCache.storeFormDataInCache(formData);
   logMessage.debug("Completed Saving Response Session Progress");
 };
 // Start the promise on initial JS module load
@@ -347,40 +389,38 @@ export const useResponsesCache = () => {
   } = useTranslation();
   const { updateTriggered } = useAppUpdate();
   const { formId, formRecord, getValues, getGroupHistory, currentGroup } = useGCFormsContext();
+  const prevValues = useRef({});
 
   const output: useResponseCacheOutput = {};
 
+  // AutoSave
   useEffect(() => {
-    const saveData = () => {
-      logMessage.debug(`Document visibility state is ${document.visibilityState}`);
-      if (document.visibilityState === "hidden") {
+    const id = setInterval(() => {
+      if (document.visibilityState !== "hidden") {
         const values = getValues();
-        const history = getGroupHistory();
-        saveSessionProgress({
-          id: formId,
-          values,
-          history,
-          currentGroup: currentGroup || "",
-          language,
-        });
+        if (values !== prevValues.current) {
+          const history = getGroupHistory();
+          saveSessionProgress({
+            id: formId,
+            values,
+            history,
+            currentGroup: currentGroup || "",
+            language,
+          }).then(() => {
+            prevValues.current = values;
+          });
+        }
       }
-    };
+    }, 2000);
 
-    window.addEventListener("visibilitychange", saveData);
     return () => {
-      window.removeEventListener("visibilitychange", saveData);
+      clearInterval(id);
     };
   }, [formId, getValues, getGroupHistory, currentGroup, language]);
 
   useEffect(() => {
-    // Show that there was an error loading data
-    if (rawData === false) {
-      toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
-    } else {
-      // Hard page refresh was not caused by a i18n
-      if (updateTriggered) {
-        toast.success(t("saveAndResume.formRestored"), "public-facing-form");
-      }
+    if (updateTriggered) {
+      toast.success(t("saveAndResume.formRestored"), "public-facing-form");
     }
   }, [t, updateTriggered]);
 

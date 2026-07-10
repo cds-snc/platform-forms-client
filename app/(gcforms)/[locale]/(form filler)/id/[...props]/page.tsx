@@ -75,6 +75,8 @@ export default async function Page(props0: {
 
   return (
     <Suspense>
+      {/* Add meta data to the page to not store in BFCache */}
+      <meta httpEquiv="Cache-Control" content="no-store" />
       <FormDisplayLayout
         pathname={pathname}
         language={language}

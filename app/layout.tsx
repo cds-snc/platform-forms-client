@@ -43,7 +43,9 @@ const NoIndexMetaTag =
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const locale = (await cookies()).get("i18next")?.value ?? languages[0];
-  const nonce = (await headers()).get("x-nonce") ?? "";
+  const headerSet = await headers();
+  const nonce = headerSet.get("x-nonce") ?? "";
+  const cryptoKey = headerSet.get("x-crypto-key");
   const session = await auth();
 
   return (
@@ -53,6 +55,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
         <meta name="authenticated" content={session ? "true" : "false"} />
+        {cryptoKey && <meta name="crypto-key" content={cryptoKey} />}
+
         {/* Currently wrapped in a suspense element because react does not handle SSR well when
         3rd party plugins add tags.  Our issue is that Cypress injects it's own tag in <head>
         that then causes hydration errors to be thrown */}
