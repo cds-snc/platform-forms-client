@@ -4,15 +4,11 @@ import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-const DEFAULT_NUMBER_OF_STARS = 5;
+export const DEFAULT_NUMBER_OF_STARS = 5;
 const MIN_STARS = 3; // Must match templates.schema.json minimum
 const MAX_STARS = 10;
 
-interface StarRatingSelectorProps {
-  item: FormElementWithIndex;
-}
-
-export const StarRatingSelector = ({ item }: StarRatingSelectorProps) => {
+export const StarRatingSelector = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const { updateField, numberOfStars } = useTemplateStore((s) => ({
     updateField: s.updateField,
