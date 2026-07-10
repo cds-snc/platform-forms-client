@@ -46,7 +46,7 @@ export const FormWrapper = ({
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
-  const resetCaptchaRef = React.useRef<{ resetToken: () => void } | null>(null);
+  const resetCaptchaRef = React.useRef<{ resetToken: () => void }>({ resetToken: () => {} });
 
   const saveAndResume = formRecord?.saveAndResume;
 

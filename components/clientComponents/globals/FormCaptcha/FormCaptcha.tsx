@@ -24,7 +24,7 @@ export const FormCaptcha = ({
   dataTestId?: string;
   isPublished?: boolean;
   captchaTokenRef: React.RefObject<string> | undefined;
-  resetCaptchaRef?: React.RefObject<{ resetToken: () => void } | null | undefined>;
+  resetCaptchaRef?: React.RefObject<{ resetToken: () => void }>;
 } & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<SubmitEvent<HTMLFormElement>>(null);
@@ -35,7 +35,7 @@ export const FormCaptcha = ({
   const { onErrorCallback, hasFatalErrorRef } = useCaptchaErrorHandling({ resetToken });
 
   useEffect(() => {
-    if (resetCaptchaRef?.current) {
+    if (resetCaptchaRef) {
       resetCaptchaRef.current.resetToken = resetToken;
     }
   }, [resetCaptchaRef, resetToken]);

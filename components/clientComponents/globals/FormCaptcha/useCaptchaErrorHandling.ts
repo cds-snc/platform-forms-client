@@ -11,11 +11,12 @@ export const useCaptchaErrorHandling = ({ resetToken }: { resetToken: () => void
       const configErrors = ["invalid-sitekey", "missing-sitekey"];
       const suspiciousErrors = ["invalid-data", "invalid-input-response"];
 
-      // Block on suspicious errors (potential bot/attack)
+      // Block on suspicious errors (potential bot/attack): reset the widget state
+      // and block the current submission. hCaptcha remains active for any subsequent
+      // attempts on this page load. Users can reload the page to and try again.
       if (suspiciousErrors.includes(code)) {
-        hasFatalErrorRef.current = true;
         logMessage.warn(
-          `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked but reseting token to allow retry.`
+          `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
         );
         resetToken();
         return;

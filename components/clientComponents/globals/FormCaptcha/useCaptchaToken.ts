@@ -46,14 +46,8 @@ export const useCaptchaToken = (
     return tokenAge;
   }, [captchaTokenRef, hCaptchaRef]);
 
-  const getTokenAge = useCallback(() => {
-    if (!tokenTimestampRef.current) return null;
-    return (Date.now() - tokenTimestampRef.current) / 1000;
-  }, []);
-
   return {
     setToken,
     resetToken,
-    getTokenAge,
   };
 };
