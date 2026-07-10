@@ -285,6 +285,7 @@
       "description": "Un élément d'évaluation par étoiles où les utilisateurs sélectionnent une note de 1 à N étoiles.",
       "title": "Évaluation par étoiles",
       "exampleQuestion": "Comment évalueriez-vous votre expérience?",
+      "exampleDescription": "[FR]The greater the number of stars, the better the experience.",
       "numberOfStars": "Nombre d'étoiles"
     },
     "richText": {

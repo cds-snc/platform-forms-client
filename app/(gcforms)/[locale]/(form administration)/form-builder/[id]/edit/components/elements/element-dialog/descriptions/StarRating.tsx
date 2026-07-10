@@ -1,7 +1,8 @@
 "use client";
-
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
+import { Description, FormGroup } from "@root/components/clientComponents/forms";
+import { StarRating as StarRatingComponent } from "@clientComponents/forms";
 
 export const StarRating = () => {
   const { t } = useTranslation("form-builder");
@@ -14,18 +15,21 @@ export const StarRating = () => {
       <p data-testid="element-description-text">{t("addElementDialog.starRating.description")}</p>
 
       <ExampleWrapper>
-        <div>
-          <p className="gcds-label" id="label-star-example">
+        <FormGroup name="star-rating-example" ariaDescribedBy="star-rating-example-description">
+          <legend data-testid="label" className="gcds-label" id="label-1">
             {t("addElementDialog.starRating.exampleQuestion")}
-          </p>
-          <div className="mt-2 flex gap-1 text-4xl">
-            <span className="text-yellow-400">★</span>
-            <span className="text-yellow-400">★</span>
-            <span className="text-yellow-400">★</span>
-            <span className="text-gray-300">★</span>
-            <span className="text-gray-300">★</span>
-          </div>
-        </div>
+          </legend>
+          <Description id="star-rating-example-description">
+            {t("addElementDialog.starRating.exampleDescription")}
+          </Description>
+          <StarRatingComponent
+            id={"star-rating-example-5"}
+            name={"star-rating-example-5"}
+            required={false}
+            numberOfStars={5}
+            sparkleOnSelect={false}
+          />
+        </FormGroup>
       </ExampleWrapper>
     </>
   );
