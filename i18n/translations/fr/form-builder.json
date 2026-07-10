@@ -405,6 +405,23 @@
   "confirmationDescriptionItem3": "des liens pour obtenir de l’information ou des liens vers des services que les utilisateur·rice·s pourraient utiliser plus tard.",
   "confirmationDescriptionItem4": "un lien vers le formulaire de rétroaction (Si vous n’en avez pas, vous pouvez en créer un à l’aide de Formulaires GC qui sera lancé même temps que votre formulaire principal).",
   "confirmationDescriptionParagraph": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis. Voici quelques éléments utiles à présenter dans la confirmation :",
+  "confirm": {
+    "createDraft": {
+      "title": "Créer une version brouillon",
+      "description": "Cela créera une nouvelle version brouillon de votre gabarit publié.",
+      "responseWarning": "Vous êtes responsable de vous assurer que le gabarit mis à jour fonctionne avec les flux de travail et les intégrations de votre équipe.",
+      "liveForm": "Votre formulaire en ligne continuera à recueillir des réponses normalement jusqu'à ce que vous le republiciez.",
+      "prompt": "Si vous comprenez le potentiel impact, tapez AGREE pour continuer.",
+      "label": "Tapez AGREE",
+      "required": "requis",
+      "placeholder": "ACCEPTE"
+    }
+  },
+  "actions": {
+    "cancel": "Annuler",
+    "continue": "Continuer",
+    "continuing": "En cours..."
+  },
   "confirmationMessage": "Message de confirmation",
   "confirmationPage": "Page de confirmation",
   "contactSupport": "Contacter l’équipe de soutien",

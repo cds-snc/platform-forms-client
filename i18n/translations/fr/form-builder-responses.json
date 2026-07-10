@@ -34,6 +34,10 @@
       "nextSteps": {
         "title": "Prochaines étapes",
         "body": "Étant donné que Formulaires GC ne conserve pas les réponses indéfiniment, vous devrez récupérer et effacer les données de réponses dans les 45 jours suivant la soumission."
+      },
+      "version": {
+        "title": "Version du formulaire",
+        "body": "Indique la version du formulaire utilisée pour soumettre la réponse."
       }
     }
   },

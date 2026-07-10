@@ -2,7 +2,7 @@ import { FormProperties } from "@lib/types";
 import { youHaveBeenRemovedEmailTemplate } from "@lib/invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
 import { ownerRemovedEmailTemplate } from "@lib/invitations/emailTemplates/ownerRemovedEmailTemplate";
 import { ownerAddedEmailTemplate } from "@lib/invitations/emailTemplates/ownerAddedEmailTemplate";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 
 /**
  * Notify owners of ownership changes (owner removed)
@@ -22,31 +22,23 @@ export const notifyOwnerRemoved = async (
     form.titleFr
   );
 
-  sendEmail(
-    userToRemove.email,
-    {
-      subject: "Form access removed | Accès au formulaire supprimé",
-      formResponse: youHaveBeenRemovedEmailContent,
-    },
-    "notifyRemovedOwner"
-  );
+  sendDefaultEmail({
+    to: [userToRemove.email],
+    subject: "Form access removed | Accès au formulaire supprimé",
+    body: youHaveBeenRemovedEmailContent,
+  });
 
   // Send email to remaining owners
-  users.forEach((owner) => {
-    const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
-      form.titleEn,
-      form.titleFr,
-      userToRemove.name || "An owner"
-    );
+  const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
+    form.titleEn,
+    form.titleFr,
+    userToRemove.name || "An owner"
+  );
 
-    sendEmail(
-      owner.email,
-      {
-        subject: "Form access removed | Accès au formulaire supprimé",
-        formResponse: ownerRemovedEmailContent,
-      },
-      "notifyOtherOwnersOfRemovedOwner"
-    );
+  sendDefaultEmail({
+    to: users.map((u) => u.email),
+    subject: "Form access removed | Accès au formulaire supprimé",
+    body: ownerRemovedEmailContent,
   });
 };
 
@@ -68,14 +60,9 @@ export const notifyOwnerAdded = async (
     userToAdd.name || userToAdd.email
   );
 
-  users.forEach((owner) => {
-    sendEmail(
-      owner.email,
-      {
-        subject: "Ownership change notification | Notification de changement de propriété",
-        formResponse: emailContent,
-      },
-      "notifyAddedOwner"
-    );
+  sendDefaultEmail({
+    to: users.map((u) => u.email),
+    subject: "Ownership change notification | Notification de changement de propriété",
+    body: emailContent,
   });
 };

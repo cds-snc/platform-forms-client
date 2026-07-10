@@ -11,6 +11,8 @@ type TemplateVersionStatus = (typeof TEMPLATE_VERSION_STATUS)[keyof typeof TEMPL
 export type TemplateVersionSnapshot = {
   id: string;
   versionNumber: number;
+  currentDraftVersion?: number | null;
+  currentPublishedVersion?: number | null;
   status: TemplateVersionStatus;
   jsonConfig: Prisma.JsonValue;
 };

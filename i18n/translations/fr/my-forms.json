@@ -52,7 +52,8 @@
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"
     },
-    "draftVersion": "Ébauche - version {{versionNumber}}",
+    "draftVersion": "Ébauche - version {{draftVersionNumber}}",
+    "versionNumber": "- version {{publishedVersionNumber}}",
     "menu": {
       "more": "Plus",
       "save": "Télécharger une copie",
@@ -93,7 +94,8 @@
     "copiedToCipboard": "Copié dans le presse-papiers",
     "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
     "submissionID": "Identifiant de soumission",
-    "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
+    "copyResponse": "Copier la ligne de réponse dans le presse-papiers",
+    "versionNumber": "Version"
   },
   "responseAggregatedTemplate": {
     "title": "Réponses au formulaire",

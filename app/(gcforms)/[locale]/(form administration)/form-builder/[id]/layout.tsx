@@ -110,6 +110,7 @@ export default async function Layout(props: {
             >
               <GroupStoreProvider>
                 <ManageFormAccessDialogContainer formId={id} />
+
                 <div className="h-full">
                   <div className="flex min-h-screen flex-col">
                     <Header

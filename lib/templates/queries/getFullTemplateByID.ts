@@ -13,10 +13,11 @@ import { getFullTemplateByID as getFullTemplateByIDVersioningEnabled } from "@li
  */
 export async function getFullTemplateByID(
   formID: string,
-  allowDeleted?: boolean
+  allowDeleted?: boolean,
+  versionNumber?: number
 ): Promise<FormRecord | null> {
   if (await isTemplateVersioningEnabled()) {
-    return getFullTemplateByIDVersioningEnabled(formID, allowDeleted);
+    return getFullTemplateByIDVersioningEnabled(formID, allowDeleted, versionNumber);
   }
 
   try {
