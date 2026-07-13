@@ -26,6 +26,7 @@ export const EventKeys = {
   submitProgress: "submit-progress",
   openUnconfirmedApiKeyDialog: "open-unconfirmed-api-key-dialog",
   openCreateDraftConfirmDialog: "open-create-draft-confirm-dialog",
+  formValuesChanged: "form-values-changed",
 } as const;
 
 export const useCustomEvent = () => {

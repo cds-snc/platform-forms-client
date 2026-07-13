@@ -4,6 +4,7 @@ import React, { createContext, useContext, ReactNode, useCallback } from "react"
 import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
+import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
 
 import { getNextAction, filterValuesByVisibleElements, idArraysMatch } from "@lib/formContext";
 
@@ -81,6 +82,7 @@ export const GCFormsProvider = ({
   formRecord: PublicFormRecord;
   nonce?: string;
 }) => {
+  const { Event } = useCustomEvent();
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = React.useRef({});
@@ -171,13 +173,10 @@ export const GCFormsProvider = ({
       );
       setVisibilityMap(updatedVisibility);
 
-      // Fire custom event for any form element listeners
-      if (typeof window !== "undefined") {
-        const event = new CustomEvent("formValuesChanged", {
-          detail: { changedChoiceIds, values: formValues },
-        });
-        window.document.dispatchEvent(event);
-      }
+      Event.fire(EventKeys.formValuesChanged, {
+        changedChoiceIds,
+        values: formValues,
+      });
     }
   };
 
