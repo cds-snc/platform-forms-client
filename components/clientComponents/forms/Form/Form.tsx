@@ -4,7 +4,7 @@ import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
 import { Alert, RichText } from "@clientComponents/forms";
-import { ResponseValidationValues, validateVisibleElements } from "@gcforms/core";
+import { validateVisibleElements } from "@gcforms/core";
 
 import { type FormProps, type InnerFormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -277,11 +277,11 @@ export const Form = withFormik<FormProps, Responses>({
   },
 
   validate: (values, props) => {
-    const validationPrepValues: ResponseValidationValues = {
+    const validationPrepValues = {
+      ...values,
       currentGroup: props.currentGroup,
       groupHistory: props.getGroupHistory(),
       matchedIds: props.matchedIds.current,
-      responses: values,
     };
     const { errors } = validateVisibleElements(validationPrepValues, props);
     return errors;
@@ -334,13 +334,12 @@ export const Form = withFormik<FormProps, Responses>({
         }, 500);
       }
 
-      const validationPrepValues: ResponseValidationValues = {
+      const validationPrepValues = {
+        ...formValuesWithoutFileContent,
         currentGroup: formikBag.props.currentGroup,
         groupHistory: formikBag.props.getGroupHistory(),
         matchedIds: formikBag.props.matchedIds.current,
-        responses: formValuesWithoutFileContent,
       };
-
       const result = await submitForm(
         validationPrepValues,
         formikBag.props.language,

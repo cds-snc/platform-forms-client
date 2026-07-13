@@ -71,13 +71,11 @@ describe("submitForm", () => {
   const mockFormId = "test-form-id";
   const mockLanguage = "en";
   const mockValues: ResponseValidationValues = {
+    "1": "test value",
+    "2": "another value",
     currentGroup: null,
     groupHistory: [],
     matchedIds: [],
-    responses: {
-      "1": "test value",
-      "2": "another value",
-    },
   };
 
   const mockTemplate: PublicFormRecord = {
@@ -158,7 +156,7 @@ describe("submitForm", () => {
       formRecord: mockTemplate,
       t: expect.any(Function),
     });
-    expect(normalizeFormResponses).toHaveBeenCalledWith(mockTemplate, mockValues.responses);
+    expect(normalizeFormResponses).toHaveBeenCalledWith(mockTemplate, mockValues);
     expect(processFormData).toHaveBeenCalledWith({
       responses: mockValues,
       securityAttribute: mockTemplate.securityAttribute,
@@ -299,16 +297,14 @@ describe("submitForm", () => {
 
     // Mock form values with a .exe file (which should be invalid based on fileType restriction)
     const valuesWithExeFile: ResponseValidationValues = {
+      "1": {
+        name: "malware.exe", // This .exe extension should be rejected by real validation
+        size: 5000,
+        id: "test-file-id",
+      },
       currentGroup: null,
       groupHistory: [],
       matchedIds: [],
-      responses: {
-        "1": {
-          name: "malware.exe", // This .exe extension should be rejected by real validation
-          size: 5000,
-          id: "test-file-id",
-        },
-      },
     };
 
     // Override template mock for this test

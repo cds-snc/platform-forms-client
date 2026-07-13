@@ -1,9 +1,5 @@
 # Changelog
 
-## [2.2.16] - 2026-06-30
-
-- Update validation type for form responses
-
 ## [2.2.15] - 2026-06-25
 
 - Update validation type for form responses
