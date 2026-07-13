@@ -11,6 +11,10 @@ import {
   mapIdsToValues,
   getValuesWithMatchedIds,
   getVisibleGroupsBasedOnValuesRecursive,
+  buildElementDependencies,
+  computeAllVisibility,
+  recomputeAffectedVisibility,
+  getChangedChoiceElementIds,
 } from "@gcforms/core";
 
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -62,6 +66,8 @@ interface GCFormsContextValueType {
     currentGroup: string;
   };
   getNonce: () => string;
+  visibilityMap: Map<string, boolean>;
+  isElementVisible: (elementId: string) => boolean;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -83,6 +89,16 @@ export const GCFormsProvider = ({
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
+
+  // Initialize visibility state with element dependencies
+  const elementDependencies = React.useMemo(
+    () => buildElementDependencies(formRecord.form.elements),
+    [formRecord.form.elements]
+  );
+
+  const [visibilityMap, setVisibilityMap] = React.useState<Map<string, boolean>>(() =>
+    computeAllVisibility(formRecord, {})
+  );
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -129,10 +145,39 @@ export const GCFormsProvider = ({
   }: {
     formValues: Record<string, string[] | string>;
   }): void => {
+    const oldValues = values.current;
     values.current = formValues;
     const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
+    }
+
+    // Recompute visibility only for affected elements
+    const changedChoiceIds = getChangedChoiceElementIds(
+      oldValues,
+      formValues,
+      formRecord.form.elements,
+      elementDependencies
+    );
+
+    if (changedChoiceIds.length > 0) {
+      // Recompute visibility for elements that depend on the changed choice elements
+      const updatedVisibility = recomputeAffectedVisibility(
+        formRecord,
+        formValues,
+        changedChoiceIds,
+        elementDependencies,
+        visibilityMap
+      );
+      setVisibilityMap(updatedVisibility);
+
+      // Fire custom event for any form element listeners
+      if (typeof window !== "undefined") {
+        const event = new CustomEvent("formValuesChanged", {
+          detail: { changedChoiceIds, values: formValues },
+        });
+        window.document.dispatchEvent(event);
+      }
     }
   };
 
@@ -148,6 +193,13 @@ export const GCFormsProvider = ({
   const getNonce = () => {
     return nonce || "";
   };
+
+  const isElementVisible = useCallback(
+    (elementId: string): boolean => {
+      return visibilityMap.get(elementId) ?? true;
+    },
+    [visibilityMap]
+  );
 
   // TODO: once groups flag is on, just use formHasGroups
   const groupsCheck = (groupsFlag: boolean | undefined) => {
@@ -267,6 +319,8 @@ export const GCFormsProvider = ({
         getProgressData,
         restoreSessionProgress,
         getNonce,
+        visibilityMap,
+        isElementVisible,
       }}
     >
       {children}
@@ -316,6 +370,8 @@ export const useGCFormsContext = () => {
         return {};
       },
       getNonce: () => "",
+      visibilityMap: new Map<string, boolean>(),
+      isElementVisible: () => true,
     };
   }
   return formsContext;

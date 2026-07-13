@@ -30,6 +30,17 @@ export {
 } from "./visibility";
 
 export {
+  type ElementDependencies,
+  type VisibilityState,
+  buildElementDependencies,
+  collectDependentElements,
+  computeAllVisibility,
+  recomputeAffectedVisibility,
+  getChangedChoiceElementIds,
+  initializeVisibilityState,
+} from "./visibilityOptimized";
+
+export {
   getElementsWithRuleForChoice,
   choiceRulesToConditonalRules,
   cleanChoiceIdsFromRules,
