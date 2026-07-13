@@ -54,7 +54,9 @@ interface GCFormsContextValueType {
   saveSessionProgress: (language: Language | undefined) => void;
   restoreSessionProgress: (
     language: Language
-  ) => false | { id: number; language: Language; values: FormValues | false };
+  ) =>
+    | false
+    | { id: number; language: Language; values: FormValues | false; versionNumber?: number | null; sourceFormId?: string };
   getProgressData: () => {
     id: string;
     values: FormValues;
@@ -200,6 +202,7 @@ export const GCFormsProvider = ({
       values: cleanedValues,
       history: history.current,
       currentGroup: currentGroup || "",
+      versionNumber: formRecord.versionNumber ?? null,
     };
   };
 
@@ -214,6 +217,7 @@ export const GCFormsProvider = ({
       values: vals,
       history: history.current,
       currentGroup: currentGroup || "",
+      versionNumber: formRecord.versionNumber ?? null,
     });
   };
 
@@ -313,7 +317,7 @@ export const useGCFormsContext = () => {
         };
       },
       restoreSessionProgress: () => {
-        return {};
+        return false;
       },
       getNonce: () => "",
     };

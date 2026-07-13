@@ -25,6 +25,7 @@ type ResumeFormResponse = {
   values: FormValues;
   history: string[];
   currentGroup: string;
+  versionNumber?: number | null;
 };
 
 type PendingMismatchResume = Omit<ResumeFormResponse, "id"> & {
@@ -74,6 +75,7 @@ export const Upload = ({ formId }: { formId: string }) => {
     history,
     currentGroup,
     sourceFormId,
+    versionNumber,
   }: ResumeFormResponse & { sourceFormId?: string }) => {
     saveSessionProgress(language, {
       id,
@@ -81,6 +83,7 @@ export const Upload = ({ formId }: { formId: string }) => {
       history,
       currentGroup,
       sourceFormId,
+      versionNumber: versionNumber ?? null,
     });
     router.push(`/${language}/id/${id}`);
   };
@@ -177,6 +180,7 @@ export const Upload = ({ formId }: { formId: string }) => {
             values: parsed.values,
             history: parsed.history,
             currentGroup: parsed.currentGroup,
+            versionNumber: (parsed as any).versionNumber ?? null,
           });
           return;
         }
