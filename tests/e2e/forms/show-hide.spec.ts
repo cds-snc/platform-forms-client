@@ -29,7 +29,8 @@ test.describe("Show/Hide conditional logic", { tag: "@published-form" }, () => {
     await expect(dependentField).toBeHidden();
 
     // Select the radio choice that triggers the conditional rule by accessible name
-    await page.getByRole("radio", { name: "b" }).check();
+    // Click the label for the radio input to avoid pointer interception issues
+    await page.locator('label[for="1.1"]').click();
 
     // Now the dependent field should be visible
     await expect(dependentField).toBeVisible({ timeout: 5000 });
