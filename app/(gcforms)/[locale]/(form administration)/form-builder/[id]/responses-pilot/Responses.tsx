@@ -5,11 +5,14 @@ import { useTranslation } from "@i18n/client";
 import Skeleton from "react-loading-skeleton";
 import { FocusHeader } from "@root/app/(gcforms)/[locale]/(support)/components/client/FocusHeader";
 import { VersionSelector } from "./components/VersionSelector";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
   const { newFormSubmissions, responseVersions, activeSelectedVersion, setSelectedVersion } =
     useResponsesContext();
   const { t } = useTranslation("response-api");
+  const { getFlag } = useFeatureFlags();
+  const isTemplateVersioningEnabled = getFlag("templateVersioning");
 
   if (newFormSubmissions === null) {
     return (
@@ -40,6 +43,7 @@ export const Responses = ({ actions }: { actions?: React.ReactNode }) => {
           selectedVersion={activeSelectedVersion}
           setSelectedVersion={setSelectedVersion}
           t={t}
+          isTemplateVersioningEnabled={isTemplateVersioningEnabled}
         />
         {actions}
       </div>

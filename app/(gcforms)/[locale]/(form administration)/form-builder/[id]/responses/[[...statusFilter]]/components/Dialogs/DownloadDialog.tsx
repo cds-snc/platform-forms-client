@@ -20,6 +20,13 @@ import { useTemplateVersioning } from "./useTemplateVersioning";
 import { VersionSelector } from "./VersionSelector";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
+export const getVersionedZipFileName = (baseFileName: string, version: string | null) => {
+  if (!version) return baseFileName;
+
+  const normalizedVersion = version.trim().replace(/^v/i, "");
+  return baseFileName.replace(/\.zip$/, `-v${normalizedVersion}.zip`);
+};
+
 export const DownloadDialog = ({
   checkedItems,
   isDialogVisible,
@@ -39,7 +46,7 @@ export const DownloadDialog = ({
   formName: string;
   onSuccessfulDownload: (filteredIds: string[]) => void;
   responseDownloadLimit: number;
-  checkedMeta?: { id?: string; name?: string; version?: string | null }[];
+  checkedMeta?: { id?: string; name?: string; version?: string | number | null }[];
 }) => {
   const dialogRef = useDialogRef();
   const { t, i18n } = useTranslation("form-builder-responses");
@@ -65,6 +72,7 @@ export const DownloadDialog = ({
   const handleClose = () => {
     setSelectedFormat(defaultSelectedFormat);
     setZipAllFiles(true);
+    setSelectedVersionForDialog(null);
     setIsDialogVisible(false);
     dialogRef.current?.close();
   };
@@ -143,6 +151,10 @@ export const DownloadDialog = ({
       filteredIds = filteredIdsWithVersion;
     }
 
+    const selectedVersion = templateVersioningEnabled
+      ? (selectedVersionForDialog ?? dialogVersions[0] ?? null)
+      : null;
+
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
         const response = (await getSubmissionsByFormat({
@@ -150,6 +162,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.HTML_ZIPPED,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as HtmlZippedResponse | ServerActionError;
 
         if ("error" in response) {
@@ -166,7 +179,10 @@ export const DownloadDialog = ({
         });
 
         zip.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-          const fileName = `${filePrefix}responses-reponses.zip`;
+          const fileName = getVersionedZipFileName(
+            `${filePrefix}responses-reponses.zip`,
+            selectedVersion
+          );
           downloadFileFromBlob(blob, fileName);
 
           handleDownloadComplete(filteredIds);
@@ -179,6 +195,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.CSV,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as CSVResponse | ServerActionError;
 
         if ("error" in response) {
@@ -194,7 +211,10 @@ export const DownloadDialog = ({
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
           file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = `${filePrefix}responses-reponses.zip`;
+            const fileName = getVersionedZipFileName(
+              `${filePrefix}responses-reponses.zip`,
+              selectedVersion
+            );
             downloadFileFromBlob(blob, fileName);
 
             handleDownloadComplete(filteredIds);
@@ -216,6 +236,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.JSON,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as JSONResponse | ServerActionError;
 
         if ("error" in response) {
@@ -229,7 +250,10 @@ export const DownloadDialog = ({
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.json", JSON.stringify(response.responses));
           file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = `${filePrefix}responses-reponses.zip`;
+            const fileName = getVersionedZipFileName(
+              `${filePrefix}responses-reponses.zip`,
+              selectedVersion
+            );
             downloadFileFromBlob(blob, fileName);
 
             handleDownloadComplete(filteredIds);

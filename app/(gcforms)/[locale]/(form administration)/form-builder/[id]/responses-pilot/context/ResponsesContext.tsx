@@ -333,6 +333,7 @@ export const ResponsesProvider = ({
               selectedFormat,
               formId: String(formId),
               formTemplate: formTemplate!,
+              versionNumber: activeSelectedVersion ? parseInt(activeSelectedVersion, 10) : 1,
               t,
               logger: responseLogger,
             });
