@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
 import { NotificationsInterval } from "@gcforms/types";
 import { submitForm } from "./actions";
-import { PublicFormRecord, FormElementTypes } from "@lib/types";
+import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
 // Mock all the dependencies
 vi.mock("@lib/templates/queries/getPublicTemplateByID", () => ({
@@ -65,19 +65,13 @@ import {
 import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
-import { ResponseValidationValues } from "@gcforms/core";
 
 describe("submitForm", () => {
   const mockFormId = "test-form-id";
   const mockLanguage = "en";
-  const mockValues: ResponseValidationValues = {
-    currentGroup: null,
-    groupHistory: [],
-    matchedIds: [],
-    responses: {
-      "1": "test value",
-      "2": "another value",
-    },
+  const mockValues: Responses = {
+    "1": "test value",
+    "2": "another value",
   };
 
   const mockTemplate: PublicFormRecord = {
@@ -158,7 +152,7 @@ describe("submitForm", () => {
       formRecord: mockTemplate,
       t: expect.any(Function),
     });
-    expect(normalizeFormResponses).toHaveBeenCalledWith(mockTemplate, mockValues.responses);
+    expect(normalizeFormResponses).toHaveBeenCalledWith(mockTemplate, mockValues);
     expect(processFormData).toHaveBeenCalledWith({
       responses: mockValues,
       securityAttribute: mockTemplate.securityAttribute,
@@ -298,16 +292,11 @@ describe("submitForm", () => {
     };
 
     // Mock form values with a .exe file (which should be invalid based on fileType restriction)
-    const valuesWithExeFile: ResponseValidationValues = {
-      currentGroup: null,
-      groupHistory: [],
-      matchedIds: [],
-      responses: {
-        "1": {
-          name: "malware.exe", // This .exe extension should be rejected by real validation
-          size: 5000,
-          id: "test-file-id",
-        },
+    const valuesWithExeFile: Responses = {
+      "1": {
+        name: "malware.exe", // This .exe extension should be rejected by real validation
+        size: 5000,
+        id: "test-file-id",
       },
     };
 
