@@ -25,11 +25,11 @@ import {
   containsNumber,
 } from "@lib/validation/validation";
 
-import { validateVisibleElements } from "../../../packages/core/src";
+import { validateOnSubmit } from "../../../packages/core/src";
 import { cleanup } from "@testing-library/react";
 
-type ValidationValues = Parameters<typeof validateVisibleElements>[0];
-type ValidationProps = Parameters<typeof validateVisibleElements>[1];
+type ValidationValues = Parameters<typeof validateOnSubmit>[0];
+type ValidationProps = Parameters<typeof validateOnSubmit>[1];
 
 type FormElementOverride = {
   properties?: {
@@ -336,11 +336,11 @@ describe("Test input validation", () => {
         formElement
       );
       passConditions.map((value: Record<number, unknown>) => {
-        const { errors } = validateVisibleElements(toValidationValues(value), props);
+        const errors = validateOnSubmit(toValidationValues(value), props);
         expect(Object.keys(errors)).toHaveLength(0);
       });
       failConditions.map((value: Record<number, unknown>) => {
-        const { errors } = validateVisibleElements(toValidationValues(value), props);
+        const errors = validateOnSubmit(toValidationValues(value), props);
         expect(errors).toMatchObject(expectedError);
       });
     }
@@ -427,15 +427,12 @@ describe("Test input validation", () => {
       },
     };
     test("validates required dynamicRow fields row correctly", () => {
-      const { errors } = validateVisibleElements(
+      const errors = validateOnSubmit(
         {
           0: [
             { 1: "", 3: "" },
             { 1: "", 3: "" },
           ],
-          currentGroup: null,
-          groupHistory: [],
-          matchedIds: [],
         },
         toValidationProps({ formRecord, t: (key: string) => key })
       );
@@ -451,15 +448,12 @@ describe("Test input validation", () => {
       });
     });
     test("validates dynamic row correctly", () => {
-      const { errors } = validateVisibleElements(
+      const errors = validateOnSubmit(
         {
           0: [
             { 1: "test", 3: "" },
             { 1: "test", 3: "" },
           ],
-          currentGroup: null,
-          groupHistory: [],
-          matchedIds: [],
         },
         toValidationProps({ formRecord, t: (key: string) => key })
       );
@@ -469,7 +463,7 @@ describe("Test input validation", () => {
   test("Value not in elements", () => {
     const props = getFormMetaData("textField", "");
     const values = { 4: "test value" };
-    const { errors } = validateVisibleElements(toValidationValues(values), props);
+    const errors = validateOnSubmit(toValidationValues(values), props);
     expect(errors).not.toHaveProperty("4");
   });
 });
