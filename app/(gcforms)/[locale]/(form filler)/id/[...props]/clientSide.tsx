@@ -109,8 +109,8 @@ export const FormWrapper = ({
     if (savedValues) {
       removeProgressStorage();
 
-      const savedVersionNumber = savedValues.versionNumber ?? 1;
-      const currentVersionNumber = formRecord.versionNumber ?? 1;
+      const savedVersionNumber = Number(savedValues.versionNumber) ?? 1;
+      const currentVersionNumber = Number(formRecord.versionNumber) ?? 1;
 
       if (savedValues.language === language && !isEmptyForm) {
         // If saved answers are for a different form id show mismatch warning
