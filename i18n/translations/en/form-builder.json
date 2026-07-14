@@ -794,7 +794,7 @@
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Help us improve",
   "publish": "Publish",
-  "republish": "Republish",
+  "republish": "Publish update",
   "readyToPublish": "Ready to publish",
   "published": "Published",
   "publishedBack": "Back to Forms",
@@ -831,8 +831,14 @@
   },
   "prePublishFormDialog": {
     "title": "Publish form",
-    "republishTitle": "Re-publish form",
+    "republishTitle": "Publish updated form",
     "text1": "What is your reason for publishing?",
+    "republish": {
+      "categoryLabel": "Template category",
+      "helpsUnderstand": "Help us understand the purpose of this form.",
+      "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it.",
+      "text2": "New form fillers only have access to the updated form. People mid-way through the earlier version can complete that form unless they reload the page."
+    },
     "readyForPublicUse": "Ready for public use",
     "readyForInternalUse": "Ready for internal use",
     "sharingForFeedback": "Sharing for feedback or approval",
