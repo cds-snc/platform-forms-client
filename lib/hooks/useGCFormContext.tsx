@@ -66,6 +66,7 @@ interface GCFormsContextValueType {
     values: FormValues;
     history: string[];
     currentGroup: string;
+    versionNumber?: number | null;
   };
   getNonce: () => string;
 }
@@ -206,7 +207,7 @@ export const GCFormsProvider = ({
       values: cleanedValues,
       history: history.current,
       currentGroup: currentGroup || "",
-      versionNumber: formRecord.versionNumber ?? null,
+      versionNumber: formRecord.versionNumber ?? 1,
     };
   };
 
@@ -318,6 +319,7 @@ export const useGCFormsContext = () => {
           values: {},
           history: [],
           currentGroup: "",
+          versionNumber: 1,
         };
       },
       restoreSessionProgress: () => {
