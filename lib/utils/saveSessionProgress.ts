@@ -81,7 +81,7 @@ export const restoreSessionProgress = ({
           id: parsedData.id,
           language: parsedData.language,
           values: vals ? (vals as FormValues) : false,
-          versionNumber: parsedData.versionNumber ?? null,
+          versionNumber: parsedData.versionNumber ?? 1,
           sourceFormId: parsedData.sourceFormId,
         };
       }
@@ -90,7 +90,7 @@ export const restoreSessionProgress = ({
         id: parsedData.id,
         language: parsedData.language,
         values: parsedData.values,
-        versionNumber: parsedData.versionNumber ?? null,
+        versionNumber: parsedData.versionNumber ?? 1,
         sourceFormId: parsedData.sourceFormId,
       };
     }
