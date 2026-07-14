@@ -29,6 +29,7 @@ import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLoc
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
 import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
+import { CreateDraftConfirmDialog } from "./components/dialogs/CreateDraftConfirmDialog/CreateDraftConfirmDialog";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -165,6 +166,7 @@ export default async function Layout(props: {
                     <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
                   </div>
                 </div>
+                <CreateDraftConfirmDialog />
               </GroupStoreProvider>
             </EditLockProvider>
           </RefStoreProvider>
