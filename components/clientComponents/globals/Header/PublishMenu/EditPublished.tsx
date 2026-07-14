@@ -1,8 +1,16 @@
 type Translate = (key: string) => string;
 import { Button } from "@clientComponents/globals";
 import { EventKeys } from "@root/lib/hooks/useCustomEvent";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const EditPublished = ({ formId, t }: { formId: string; t: Translate }) => {
+  const { getFlag } = useFeatureFlags();
+  const templateVersioningEnabled = getFlag("templateVersioning");
+
+  if (!templateVersioningEnabled) {
+    return null;
+  }
+
   return (
     <div className="mt-5 border-t border-slate-200 pt-4">
       <p className="mb-2 text-sm font-semibold text-slate-900">{t("publishViewEdit.title")}</p>
