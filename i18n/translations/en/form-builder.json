@@ -566,7 +566,7 @@
     "title": "Get a copy of your form"
   },
   "auditDownload": {
-    "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet. You’ll be able to get activity from June 15, 2026 onwards.",
+    "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for the last 30 days related to form creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet.",
     "downloadBtnText": "Download recent activity",
     "title": "View recent form activity",
     "dialog": {
