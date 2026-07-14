@@ -321,7 +321,7 @@ export const useGCFormsContext = () => {
         };
       },
       restoreSessionProgress: () => {
-        return false;
+        return {};
       },
       getNonce: () => "",
     };
