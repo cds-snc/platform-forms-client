@@ -14,6 +14,7 @@ export type Options = {
   values: FormValues;
   history: string[];
   currentGroup: string;
+  versionNumber?: number | null;
   sourceFormId?: string;
 };
 
@@ -21,12 +22,13 @@ type RestoredProgress = {
   id: number;
   language: Language;
   values: FormValues | false;
+  versionNumber?: number | null;
   sourceFormId?: string;
 };
 
 export const saveSessionProgress = (
   language: string = "en",
-  { id, values, history, currentGroup, sourceFormId }: Options
+  { id, values, history, currentGroup, sourceFormId, versionNumber }: Options
 ) => {
   if (typeof sessionStorage === "undefined") {
     return false;
@@ -39,6 +41,7 @@ export const saveSessionProgress = (
     currentGroup: currentGroup,
     language: language,
     sourceFormId: sourceFormId,
+    versionNumber: versionNumber ?? null,
   });
 
   // Encode UTF-8 string to base64
@@ -78,6 +81,7 @@ export const restoreSessionProgress = ({
           id: parsedData.id,
           language: parsedData.language,
           values: vals ? (vals as FormValues) : false,
+          versionNumber: parsedData.versionNumber ?? 1,
           sourceFormId: parsedData.sourceFormId,
         };
       }
@@ -86,6 +90,7 @@ export const restoreSessionProgress = ({
         id: parsedData.id,
         language: parsedData.language,
         values: parsedData.values,
+        versionNumber: parsedData.versionNumber ?? 1,
         sourceFormId: parsedData.sourceFormId,
       };
     }
