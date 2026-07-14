@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, ReactNode, useState, useRef } from "react";
 
-import type { Responses, GroupsType, PublicFormRecord } from "@gcforms/types";
+import type { FormValues, GroupsType, PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
@@ -22,13 +22,12 @@ import {
 
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
-import { FormValues } from "@root/packages/types/dist";
 import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
 
 interface GCFormsContextValueType {
-  updateValues: ({ formValues }: { formValues: Responses }) => void;
-  getValues: () => Responses;
-  matchedIds: React.RefObject<string[]>;
+  updateValues: ({ formValues }: { formValues: FormValues }) => void;
+  getValues: () => FormValues;
+  matchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -68,7 +67,7 @@ export const GCFormsProvider = ({
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = useRef({});
   const history = useRef<string[]>([LOCKED_GROUPS.START]);
-  const matchedIds = useRef<string[]>([]);
+  const [matchedIds, setMatchedIds] = useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
@@ -96,7 +95,7 @@ export const GCFormsProvider = ({
     if (!currentGroup) return;
 
     const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
-    const filteredMatchedIds = matchedIds.current.filter((id) => {
+    const filteredMatchedIds = matchedIds.filter((id) => {
       const parentId = id.split(".")[0];
       if (filteredResponses[parentId]) {
         return id;
@@ -113,11 +112,11 @@ export const GCFormsProvider = ({
     }
   };
 
-  const updateValues = ({ formValues }: { formValues: Responses }): void => {
+  const updateValues = ({ formValues }: { formValues: FormValues }): void => {
     values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord.form.elements, formValues as FormValues);
-    if (!idArraysMatch(matchedIds.current, valueIds)) {
-      matchedIds.current = valueIds;
+    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
+    if (!idArraysMatch(matchedIds, valueIds)) {
+      setMatchedIds(valueIds);
     }
   };
 
@@ -212,10 +211,8 @@ export const GCFormsProvider = ({
 
 export const useGCFormsContext = () => {
   const formsContext = useContext(GCFormsContext);
-  const defaultMatchedIdRef = useRef<string[]>([]);
   if (formsContext === undefined) {
     // For now just return a default context if we're not inside the provider
-
     return {
       updateValues: () => {
         return "noop";
@@ -227,7 +224,7 @@ export const useGCFormsContext = () => {
       setSubmissionId: () => void 0,
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
-      matchedIds: defaultMatchedIdRef,
+      matchedIds: [""],
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",

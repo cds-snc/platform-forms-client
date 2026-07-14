@@ -5,19 +5,14 @@ import { validate, validateVisibleElements } from "./process";
 
 // https://forms-staging.cdssandbox.xyz/en/id/cmeaj61dl0001xf01aja6mnpf
 
-const baseValueObject = {
-  currentGroup: null,
-  groupHistory: [],
-  matchedIds: [],
-  responses: {},
-};
-
 describe("Form validation - start page", () => {
   it("should validate start page when empty", () => {
+    const values = {};
+
     const currentGroup = "start";
 
     const errors = validate({
-      values: baseValueObject,
+      values: values,
       currentGroup,
       formRecord: contactFormRecord as PublicFormRecord,
     });
@@ -29,7 +24,7 @@ describe("Form validation - start page", () => {
   });
 
   it("should validate start page some fields are filled in", () => {
-    const values = { ...baseValueObject, 11: "English" };
+    const values = { 11: "English" };
     const currentGroup = "start";
 
     const errors = validate({
@@ -45,7 +40,6 @@ describe("Form validation - start page", () => {
 
   it("should show start group elements", () => {
     const values = {
-      ...baseValueObject,
       "2": "Tim",
       currentGroup: "start",
     };
@@ -70,7 +64,6 @@ describe("Form validation - start page", () => {
 describe("Form validation - details page", () => {
   it("should show other text field when 'Other' is selected", () => {
     const values = {
-      ...baseValueObject,
       "2": "Tim",
       "9": "111-222-3333",
       "10": "Tim@example.com",
@@ -95,7 +88,6 @@ describe("Form validation - details page", () => {
 
   it("should hide other text field when 'API' is selected", () => {
     const values = {
-      ...baseValueObject,
       "2": "Tim",
       "9": "111-222-3333",
       "10": "Tim@example.com",
@@ -119,7 +111,7 @@ describe("Form validation - details page", () => {
   });
 
   it("should validate details page when empty", () => {
-    const values = baseValueObject;
+    const values = {};
     const currentGroup = "b0e74a96-fa9e-43f4-8573-4b4ba23d65e5";
 
     const errors = validate({
