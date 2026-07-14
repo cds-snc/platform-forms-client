@@ -22,6 +22,7 @@ import {
   acquireEditLock,
   clearEditLockTakeoverSaveAcknowledgement,
   getEditLockAssignedPendingUsersCountCacheKey,
+  getEditLockAssignedUsersCacheKey,
   getEditLockAssignedUsersCountCacheKey,
   getEditLockStatus,
   getTemplateCollaboratorCount,
@@ -279,6 +280,24 @@ describe("editLocks with redis", () => {
     });
 
     await expect(shouldEnforceTemplateEditLock("form-9")).resolves.toBe(true);
+  });
+
+  it("enforces edit locking for cached versioned draft forms even when cached isPublished is true", async () => {
+    const cachedTemplate: PublicFormRecord = {
+      id: "form-9-cached",
+      form: {} as FormProperties,
+      isPublished: true,
+      currentDraftVersionId: "draft-version-3",
+      securityAttribute: "Unclassified",
+    };
+
+    vi.mocked(formCache.check).mockResolvedValue(cachedTemplate);
+
+    const redisInstance = await getRedisInstance();
+    await redisInstance.set(getEditLockAssignedUsersCacheKey("form-9-cached"), "1");
+
+    await expect(shouldEnforceTemplateEditLock("form-9-cached")).resolves.toBe(true);
+    expect(prisma.template.findUnique).not.toHaveBeenCalled();
   });
 
   it("revalidates a cached multi-user threshold when fresh assigned-user enforcement is required", async () => {
