@@ -75,6 +75,9 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
       return currentGroupElementIds.has(elementId);
     });
 
+    // Only use rules from the page we are currently walking.
+    // Some forms keep old rules from earlier pages. The old behavior could follow one of those
+    // old rules, go back up the form, and miss answers that should appear on the review page.
     const catchAllRule = relevantNextActions.find((action) =>
       action.choiceId.includes("catch-all")
     );
