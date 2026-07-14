@@ -278,6 +278,10 @@
       "title": "Check your answers carefully",
       "message": "Your saved answers were based on a different original form. Review them carefully before submitting."
     },
+    "formUpdatedWarning": {
+      "title": "We've changed some questions on this form",
+      "message": "Your saved answers may no longer be correct.  Review before submitting."
+    },
     "resumeUploadError": {
       "title": "Problem loading answers",
       "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",

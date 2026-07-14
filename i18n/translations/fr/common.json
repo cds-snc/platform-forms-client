@@ -274,6 +274,10 @@
     "more": "Plus",
     "cancel": "Annuler",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
+    "formUpdatedWarning": {
+      "title": "Nous avons modifié certaines questions de ce formulaire",
+      "message": "Vos réponses sauvegardées peuvent ne plus être correctes. Veuillez les vérifier avant de les soumettre."
+    },
     "formRestoredWarning": {
       "title": "Vérifiez attentivement vos réponses",
       "message": "Vos réponses sauvegardées proviennent d'un autre formulaire d'origine. Vérifiez-les attentivement avant de les soumettre."

@@ -52,14 +52,21 @@ interface GCFormsContextValueType {
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
   saveSessionProgress: (language: Language | undefined) => void;
-  restoreSessionProgress: (
-    language: Language
-  ) => false | { id: number; language: Language; values: FormValues | false };
+  restoreSessionProgress: (language: Language) =>
+    | false
+    | {
+        id: number;
+        language: Language;
+        values: FormValues | false;
+        versionNumber?: number | null;
+        sourceFormId?: string;
+      };
   getProgressData: () => {
     id: string;
     values: FormValues;
     history: string[];
     currentGroup: string;
+    versionNumber?: number | null;
   };
   getNonce: () => string;
 }
@@ -200,6 +207,7 @@ export const GCFormsProvider = ({
       values: cleanedValues,
       history: history.current,
       currentGroup: currentGroup || "",
+      versionNumber: formRecord.versionNumber ?? 1,
     };
   };
 
@@ -214,6 +222,7 @@ export const GCFormsProvider = ({
       values: vals,
       history: history.current,
       currentGroup: currentGroup || "",
+      versionNumber: formRecord.versionNumber ?? null,
     });
   };
 
@@ -310,10 +319,11 @@ export const useGCFormsContext = () => {
           values: {},
           history: [],
           currentGroup: "",
+          versionNumber: 1,
         };
       },
       restoreSessionProgress: () => {
-        return {};
+        return false;
       },
       getNonce: () => "",
     };
