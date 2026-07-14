@@ -18,6 +18,7 @@ import { EDIT_LOCK_POLL_INTERVAL_MS } from "./components/constants";
 import { CoEditingHelp } from "./components/server/CoEditingHelp";
 import type { FormsTemplate, FormsTemplateWithLockInfo, FormTabStatus } from "./components/types";
 import { TAB_STATUS } from "./components/types";
+import { CreateDraftConfirmDialog } from "../form-builder/[id]/components/dialogs/CreateDraftConfirmDialog/CreateDraftConfirmDialog";
 
 const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => string): string => {
   const statusTitleMap: Record<string, string> = {
@@ -183,7 +184,8 @@ export default async function Page(props: {
       url: `/${locale}/id/${id}`,
       isShared: userCount + pendingUserCount >= 2,
       hasDraft: !!template.currentDraftVersionId,
-      versionNumber: template.versionNumber ?? null,
+      currentPublishedVersion: Number(template.currentPublishedVersion) ?? null,
+      currentDraftVersion: Number(template.currentDraftVersion) ?? null,
       collaboratorCount: {
         userCount,
         pendingUserCount,
@@ -268,6 +270,8 @@ export default async function Page(props: {
           pollIntervalMs={EDIT_LOCK_POLL_INTERVAL_MS}
         />
       </div>
+
+      <CreateDraftConfirmDialog />
     </div>
   );
 }

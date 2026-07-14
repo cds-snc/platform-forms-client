@@ -29,6 +29,7 @@ export const processResponse = async ({
   selectedFormat,
   formId,
   formTemplate,
+  versionNumber,
   t,
   logger,
 }: {
@@ -43,6 +44,7 @@ export const processResponse = async ({
   selectedFormat: string;
   formId: string;
   formTemplate: FormProperties;
+  versionNumber?: number | null;
   t: TFunction<string | string[], undefined>;
   logger: ResponseDownloadLogger;
 }) => {
@@ -93,6 +95,7 @@ export const processResponse = async ({
         submission: confirmedResponse,
         attachments: confirmedResponse.attachments,
         formId,
+        versionNumber,
         t,
       });
       break;

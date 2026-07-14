@@ -66,4 +66,24 @@ describe("useTemplateVersioning", () => {
     expect(result.current.getFilteredIds("v2")).toEqual(["response-2"]);
     expect(result.current.getFilteredIds("missing-version")).toEqual([]);
   });
+
+  it("normalizes numeric versions for dialog filtering", () => {
+    const checkedItems = new Map<string, boolean>([
+      ["response-1", true],
+      ["response-2", true],
+      ["response-3", true],
+    ]);
+
+    const checkedMeta = [
+      { name: "response-1", version: 1 },
+      { name: "response-2", version: 2 },
+      { name: "response-3", version: 1 },
+    ];
+
+    const { result } = renderHook(() => useTemplateVersioning(checkedItems, checkedMeta));
+
+    expect(result.current.dialogVersions).toEqual(["1", "2"]);
+    expect(result.current.getFilteredIds("1")).toEqual(["response-1", "response-3"]);
+    expect(result.current.getFilteredIds("2")).toEqual(["response-2"]);
+  });
 });

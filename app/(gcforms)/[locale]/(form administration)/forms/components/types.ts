@@ -55,6 +55,7 @@ export type FormsTemplate = {
   isPublished: boolean;
   hasDraft: boolean;
   currentDraftVersion?: number | null;
+  currentPublishedVersion?: number | null;
   versionNumber?: number | null;
   ttl: Date | null;
   date: string;

@@ -61,6 +61,9 @@ interface ResponsesContextType {
   setHasError: Dispatch<SetStateAction<boolean>>;
   selectedFormat: string;
   setSelectedFormat: Dispatch<SetStateAction<string>>;
+  selectedVersion: string | null;
+  setSelectedVersion: Dispatch<SetStateAction<string | null>>;
+  activeSelectedVersion: string | null;
   interrupt: boolean;
   setInterrupt: Dispatch<SetStateAction<boolean>>;
   currentSubmissionId: string | null;
@@ -70,6 +73,7 @@ interface ResponsesContextType {
   resetState: () => void;
   resetNewSubmissions: () => void;
   logger: ResponseDownloadLogger;
+  responseVersions: string[];
 }
 
 const ResponsesContext = createContext<ResponsesContextType | undefined>(undefined);
@@ -78,7 +82,7 @@ const CsvDetected = () => {
   const { t } = useTranslation("response-api");
   return (
     <div className="w-full">
-      <h3 className="!mb-0 pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
+      <h3 className="mb-0! pb-0 text-xl font-semibold">{t("locationPage.csvDetected.title")}</h3>
       <p className="mb-2 text-black">{t("locationPage.csvDetected.message")}</p>
     </div>
   );
@@ -103,6 +107,7 @@ export const ResponsesProvider = ({
   const [processingCompleted, setProcessingCompleted] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>("");
+  const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
   const [currentSubmissionId, setCurrentSubmissionId] = useState<string | null>(null);
   const [hasMaliciousAttachments, setHasMaliciousAttachments] = useState<boolean>(false);
   const [processedSubmissionsCount, setProcessedSubmissionsCountState] = useState<number>(0);
@@ -194,6 +199,31 @@ export const ResponsesProvider = ({
     setNewFormSubmissions([]);
   }, []);
 
+  const responseVersions = useMemo(() => {
+    if (!newFormSubmissions || newFormSubmissions.length === 0) {
+      return [];
+    }
+
+    const versionsSet = new Set<string>();
+    newFormSubmissions.forEach((submission) => {
+      if (submission.version) {
+        versionsSet.add(String(submission.version));
+      }
+    });
+
+    return Array.from(versionsSet).sort();
+  }, [newFormSubmissions]);
+
+  // Derive the effective/active selected version without synchronously
+  // mutating state inside an effect. If exactly one version exists, treat
+  // that as the active selection; otherwise use the user-selected value.
+  const activeSelectedVersion = useMemo(() => {
+    if (!responseVersions || responseVersions.length === 0) return null;
+    if (responseVersions.length === 1) return responseVersions[0];
+    if (selectedVersion && responseVersions.includes(selectedVersion)) return selectedVersion;
+    return null;
+  }, [responseVersions, selectedVersion]);
+
   const resetProcessingCompleted = useCallback(() => {
     setProcessingCompleted(false);
   }, []);
@@ -216,13 +246,33 @@ export const ResponsesProvider = ({
       let htmlDirectoryHandle: FileSystemDirectoryHandle | null = null;
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
+      responseLogger.info(
+        `Processing ${formResponses.length} submissions for form ID ${formId} and version ${
+          activeSelectedVersion || 1
+        }`
+      );
+
+      // If a specific version is selected (or implied), only process submissions for that version
+      if (activeSelectedVersion) {
+        formResponses = formResponses.filter((s) => String(s.version) === activeSelectedVersion);
+      }
+
+      responseLogger.info(
+        `After filtering by version, ${formResponses.length} submissions remain for processing`
+      );
+
       if (!directoryHandle || !privateApiKey || !apiClient) {
         responseLogger.error("Missing required context values, aborting processing");
         return;
       }
 
       try {
-        formTemplate = await apiClient.getFormTemplate();
+        formTemplate = await apiClient.getFormTemplate(
+          activeSelectedVersion ? parseInt(activeSelectedVersion, 10) : 1
+        );
+        responseLogger.info(
+          `Loaded form template successfully version ${activeSelectedVersion || 1}`
+        );
         formId = apiClient.getFormId();
       } catch (error) {
         responseLogger.error("Error loading form template: ", error);
@@ -283,6 +333,7 @@ export const ResponsesProvider = ({
               selectedFormat,
               formId: String(formId),
               formTemplate: formTemplate!,
+              versionNumber: activeSelectedVersion ? parseInt(activeSelectedVersion, 10) : 1,
               t,
               logger: responseLogger,
             });
@@ -318,9 +369,12 @@ export const ResponsesProvider = ({
           break;
         }
 
-        // Get subsequent submissions
+        // Get subsequent submissions (always fetch full set, then filter)
         // eslint-disable-next-line no-await-in-loop
         formResponses = await retrieveResponses();
+        if (activeSelectedVersion) {
+          formResponses = formResponses.filter((s) => String(s.version) === activeSelectedVersion);
+        }
       }
 
       // Timer end
@@ -354,6 +408,7 @@ export const ResponsesProvider = ({
       privateApiKey,
       retrieveResponses,
       selectedFormat,
+      activeSelectedVersion,
       setInterrupt,
       t,
     ]
@@ -368,6 +423,7 @@ export const ResponsesProvider = ({
     resetProcessedSubmissionsCount();
     setHasMaliciousAttachments(false);
     setSelectedFormat("csv");
+    setSelectedVersion(null);
     setHasError(false);
     setInterrupt(false);
     interruptRef.current = false;
@@ -397,6 +453,9 @@ export const ResponsesProvider = ({
       setHasError,
       selectedFormat,
       setSelectedFormat,
+      selectedVersion,
+      setSelectedVersion,
+      activeSelectedVersion,
       interrupt: isProcessingInterrupted,
       setInterrupt,
       currentSubmissionId,
@@ -406,6 +465,7 @@ export const ResponsesProvider = ({
       resetState,
       resetNewSubmissions,
       logger: responseLogger,
+      responseVersions,
     }),
     [
       locale,
@@ -430,9 +490,13 @@ export const ResponsesProvider = ({
       setInterrupt,
       currentSubmissionId,
       hasMaliciousAttachments,
+      selectedVersion,
+      setSelectedVersion,
+      activeSelectedVersion,
       setCurrentSubmissionId,
       resetState,
       resetNewSubmissions,
+      responseVersions,
     ]
   );
 

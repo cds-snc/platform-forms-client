@@ -280,6 +280,7 @@ export const DownloadTable = ({
                       id={`button-${submission.name}`}
                       formId={submission.formID}
                       responseId={submission.name}
+                      version={submission.version}
                       onDownloadSuccess={() => {
                         setDownloadError(false);
                         setRemovedRows([...removedRows, submission.name]);

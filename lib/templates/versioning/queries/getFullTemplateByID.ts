@@ -6,7 +6,8 @@ import { getBuilderVersion, parseTemplate, templateRecordInclude } from "../inte
 
 export async function getFullTemplateByID(
   formID: string,
-  allowDeleted?: boolean
+  allowDeleted?: boolean,
+  versionNumber?: number
 ): Promise<FormRecord | null> {
   try {
     const { user } = await authorization.canViewForm(formID, allowDeleted).catch((e) => {
@@ -31,10 +32,29 @@ export async function getFullTemplateByID(
 
     if (!template) return null;
 
+    const requestedVersion = versionNumber
+      ? await prisma.templateVersion
+          .findFirst({
+            where: {
+              templateId: formID,
+              versionNumber,
+            },
+            select: {
+              id: true,
+              versionNumber: true,
+              status: true,
+              jsonConfig: true,
+            },
+          })
+          .catch((e) => prismaErrors(e, null))
+      : null;
+
+    if (versionNumber && !requestedVersion) return null;
+
     logEvent(user.id, { type: "Form", id: formID }, "ReadForm");
 
     return parseTemplate(template, {
-      version: getBuilderVersion(template),
+      version: requestedVersion ?? getBuilderVersion(template),
     });
   } catch {
     return null;

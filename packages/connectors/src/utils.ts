@@ -28,5 +28,6 @@ export const getAwsSQSQueueURL = async (
       QueueName: urlQueueName,
     })
   );
+
   return data.QueueUrl ?? null;
 };

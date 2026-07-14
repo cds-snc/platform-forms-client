@@ -38,24 +38,24 @@ const calculateCollaboratorCount = (userCount: number, pendingUserCount: number)
   return userCount - 1 + pendingUserCount;
 };
 
-const VersionNumberText = memo(
+const DraftVersionNumber = memo(
   ({
     language,
     cardId,
     hasDraft,
-    versionNumber,
+    draftVersionNumber,
     isPublished,
   }: {
     language: string;
     cardId: string;
     hasDraft: boolean;
-    versionNumber?: number;
+    draftVersionNumber?: number;
     isPublished: boolean;
   }) => {
     const { t } = useTranslation("my-forms");
     const link = `/${language}/form-builder/${cardId}/edit`;
 
-    if (isPublished && hasDraft && versionNumber) {
+    if (isPublished && hasDraft && draftVersionNumber) {
       return (
         <div className="mt-2 flex items-center text-sm">
           <span
@@ -63,7 +63,7 @@ const VersionNumberText = memo(
             aria-hidden="true"
           ></span>
           <Link href={link} prefetch={false}>
-            {t("card.draftVersion", { versionNumber: versionNumber })}
+            {t("card.draftVersion", { draftVersionNumber: draftVersionNumber })}
           </Link>
         </div>
       );
@@ -73,21 +73,23 @@ const VersionNumberText = memo(
   }
 );
 
-VersionNumberText.displayName = "VersionNumberText";
+DraftVersionNumber.displayName = "DraftVersionNumber";
 
 const CardBanner = memo(
   ({
     language,
     cardId,
     hasDraft,
-    versionNumber,
+    publishedVersionNumber,
+    draftVersionNumber,
     isPublished,
     isClosed,
   }: {
     language: string;
     cardId: string;
     hasDraft: boolean;
-    versionNumber?: number;
+    publishedVersionNumber?: number;
+    draftVersionNumber?: number;
     isPublished: boolean;
     isClosed: boolean;
   }) => {
@@ -98,6 +100,11 @@ const CardBanner = memo(
         ? "bg-emerald-500"
         : "bg-yellow-400";
 
+    const publishedVersionText =
+      isPublished && publishedVersionNumber
+        ? t("card.versionNumber", { publishedVersionNumber: publishedVersionNumber })
+        : "";
+
     return (
       <>
         <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
@@ -107,15 +114,17 @@ const CardBanner = memo(
           {isClosed
             ? t("card.states.closed")
             : isPublished
-              ? t("card.states.published")
+              ? t("card.states.published") +
+                t(publishedVersionText ? `${publishedVersionText}` : "")
               : t("card.states.draft")}
         </div>
-        <VersionNumberText
+
+        <DraftVersionNumber
           language={language}
           cardId={cardId}
           isPublished={isPublished}
           hasDraft={hasDraft}
-          versionNumber={versionNumber}
+          draftVersionNumber={draftVersionNumber}
         />
       </>
     );
@@ -470,7 +479,8 @@ const CardComponent = ({
             language={language}
             cardId={card.id}
             hasDraft={card.hasDraft}
-            versionNumber={card.versionNumber ?? undefined}
+            publishedVersionNumber={card.currentPublishedVersion ?? undefined}
+            draftVersionNumber={card.currentDraftVersion ?? undefined}
             isPublished={card.isPublished}
             isClosed={cardState === CARD_STATE.CLOSED}
           />
