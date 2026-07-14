@@ -77,7 +77,6 @@ export const DownloadTable = ({
       (submission) => submission.version !== vaultSubmissions[0].version
     );
 
-    // Has at least one submission that isn't a version 1 response and has mixed versions, show the version column. Otherwise hide it.
     const hasNonVersion1Submissions = vaultSubmissions.some(
       (submission) => Number(submission.version) !== 1 && submission.version !== undefined
     );
