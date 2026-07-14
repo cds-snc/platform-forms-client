@@ -4,7 +4,7 @@ import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
 import { Alert, RichText } from "@clientComponents/forms";
-import { ResponseValidationValues, validateVisibleElements } from "@gcforms/core";
+import { validateOnSubmit } from "@gcforms/core";
 
 import { type FormProps, type InnerFormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -71,7 +71,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const showIntro = isGroupsCheck ? currentGroup === LOCKED_GROUPS.START : true;
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
-  // Used to update the values in GCForms Context
+  // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
   const errorList = props.errors ? getErrorList(props) : null;
@@ -277,16 +277,7 @@ export const Form = withFormik<FormProps, Responses>({
     return getFormInitialValues(props.formRecord, props.language);
   },
 
-  validate: (values, props) => {
-    const validationPrepValues: ResponseValidationValues = {
-      currentGroup: props.currentGroup,
-      groupHistory: props.getGroupHistory(),
-      matchedIds: props.matchedIds.current,
-      responses: values,
-    };
-    const { errors } = validateVisibleElements(validationPrepValues, props);
-    return errors;
-  },
+  validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
     // If the form is closed, do not allow submission
@@ -335,15 +326,8 @@ export const Form = withFormik<FormProps, Responses>({
         }, 500);
       }
 
-      const validationPrepValues: ResponseValidationValues = {
-        currentGroup: formikBag.props.currentGroup,
-        groupHistory: formikBag.props.getGroupHistory(),
-        matchedIds: formikBag.props.matchedIds.current,
-        responses: formValuesWithoutFileContent,
-      };
-
       const result = await submitForm(
-        validationPrepValues,
+        formValuesWithoutFileContent,
         formikBag.props.language,
         formikBag.props.formRecord.id,
         formikBag.props.captchaToken?.current,

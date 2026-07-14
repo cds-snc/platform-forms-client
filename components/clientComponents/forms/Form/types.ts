@@ -21,8 +21,8 @@ export interface FormProps {
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
   allowGrouping?: boolean | undefined;
-  getGroupHistory: () => string[];
-  matchedIds: React.RefObject<string[]>;
+  groupHistory?: string[];
+  matchedIds?: string[];
   saveSessionProgress: (language?: Language) => void;
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;
