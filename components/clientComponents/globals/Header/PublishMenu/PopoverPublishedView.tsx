@@ -6,6 +6,7 @@ import { EditPublished } from "./EditPublished";
 type Translate = (key: string) => string;
 
 export const PopoverPublishedView = ({
+  formId,
   t,
   publishedLinks,
   copiedLink,
@@ -15,6 +16,7 @@ export const PopoverPublishedView = ({
   onPublishedStatusToggle,
   settingsHref,
 }: {
+  formId: string;
   t: Translate;
   publishedLinks: { en: string; fr: string };
   copiedLink: "en" | "fr" | null;
@@ -64,7 +66,7 @@ export const PopoverPublishedView = ({
         >
           {t("closedFormSettings")}
         </Link>
-        <EditPublished t={t} />
+        <EditPublished t={t} formId={formId} />
       </div>
     </div>
   );

@@ -322,6 +322,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
       >
         {showPublishedView ? (
           <PopoverPublishedView
+            formId={formId}
             t={t}
             publishedLinks={publishedLinks}
             copiedLink={copiedLink}
