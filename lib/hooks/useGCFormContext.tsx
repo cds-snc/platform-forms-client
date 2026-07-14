@@ -52,11 +52,15 @@ interface GCFormsContextValueType {
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
   saveSessionProgress: (language: Language | undefined) => void;
-  restoreSessionProgress: (
-    language: Language
-  ) =>
+  restoreSessionProgress: (language: Language) =>
     | false
-    | { id: number; language: Language; values: FormValues | false; versionNumber?: number | null; sourceFormId?: string };
+    | {
+        id: number;
+        language: Language;
+        values: FormValues | false;
+        versionNumber?: number | null;
+        sourceFormId?: string;
+      };
   getProgressData: () => {
     id: string;
     values: FormValues;

@@ -109,26 +109,30 @@ export const FormWrapper = ({
     if (savedValues) {
       removeProgressStorage();
 
+      const savedVersionNumber = savedValues.versionNumber ?? 1;
+      const currentVersionNumber = formRecord.versionNumber ?? 1;
+
       if (savedValues.language === language && !isEmptyForm) {
         // If saved answers are for a different form id show mismatch warning
         if (savedValues.sourceFormId && savedValues.sourceFormId !== formRecord.id) {
           toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
-        } else if (
-          // If the saved values carry a versionNumber and it differs from the current form
-          typeof savedValues.versionNumber !== "undefined" &&
-          (savedValues.versionNumber ?? 1) !== (formRecord.versionNumber ?? 1)
-        ) {
+        } else if (savedVersionNumber > 1 && savedVersionNumber !== currentVersionNumber) {
           // Show styled toast warning the user the form template changed since they started
-          toast.notice(<VersionChangedToast language={language as "en" | "fr"} />, "public-facing-form-wide");
+          toast.notice(<VersionChangedToast />, "public-facing-form-wide");
         } else {
           // Default restored success message
           toast.success(formRestoredMessage, "public-facing-form");
         }
       }
     }
-  }, [savedValues, language, isEmptyForm, formRecord.id, formRestoredMessage]);
-
-  
+  }, [
+    savedValues,
+    language,
+    isEmptyForm,
+    formRecord.id,
+    formRestoredMessage,
+    formRecord.versionNumber,
+  ]);
 
   const initialValues = useMemo(() => {
     if (!savedValues) {
