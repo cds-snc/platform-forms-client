@@ -27,9 +27,6 @@ export {
   checkPageVisibility,
   checkVisibilityRecursive,
   isElementVisible,
-} from "./visibility";
-
-export {
   type ElementDependencies,
   type VisibilityState,
   buildElementDependencies,
@@ -38,7 +35,7 @@ export {
   recomputeAffectedVisibility,
   getChangedChoiceElementIds,
   initializeVisibilityState,
-} from "./visibilityOptimized";
+} from "./visibility";
 
 export {
   getElementsWithRuleForChoice,
