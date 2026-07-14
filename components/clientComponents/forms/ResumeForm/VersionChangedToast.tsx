@@ -24,5 +24,3 @@ export const VersionChangedToast = () => {
     </div>
   );
 };
-
-export default VersionChangedToast;

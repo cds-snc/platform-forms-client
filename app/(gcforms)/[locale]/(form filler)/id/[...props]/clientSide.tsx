@@ -18,7 +18,7 @@ import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helpers";
 import { FormRestoredWarning } from "@clientComponents/forms/ResumeForm/FormRestoredWarning";
-import VersionChangedToast from "@clientComponents/forms/ResumeForm/VersionChangedToast";
+import { VersionChangedToast } from "@clientComponents/forms/ResumeForm/VersionChangedToast";
 
 export const FormWrapper = ({
   formRecord,
