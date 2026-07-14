@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ClosingDateToggle } from "@formBuilder/[id]/settings/manage/components/close/ClosingDateToggle";
 import { PublishedFormLink } from "./PublishedFormLink";
+import { EditPublished } from "./EditPublished";
 
 type Translate = (key: string) => string;
 
@@ -63,6 +64,7 @@ export const PopoverPublishedView = ({
         >
           {t("closedFormSettings")}
         </Link>
+        <EditPublished t={t} />
       </div>
     </div>
   );

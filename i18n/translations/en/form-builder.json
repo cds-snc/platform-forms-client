@@ -1669,5 +1669,10 @@
   },
   "fileUploadApiWarning": {
     "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
+  },
+  "publishViewEdit": {
+    "title": "Edit and re-publish",
+    "description": "Make an edit to your form while it is published",
+    "button": "Edit form"
   }
 }
