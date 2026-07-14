@@ -116,7 +116,7 @@ export const FormWrapper = ({
         // If saved answers are for a different form id show mismatch warning
         if (savedValues.sourceFormId && savedValues.sourceFormId !== formRecord.id) {
           toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
-        } else if (savedVersionNumber > 1 && savedVersionNumber !== currentVersionNumber) {
+        } else if (savedVersionNumber !== currentVersionNumber) {
           // Show styled toast warning the user the form template changed since they started
           toast.notice(<VersionChangedToast />, "public-facing-form-wide");
         } else {
