@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.15] - 2026-07-14
+
+- Refactor visibility to be event driven to improve performance and maintainability
+
 ## [2.2.14] - 2026-06-15
 
 - Replaced the self-import from @gcforms/core with a local import
