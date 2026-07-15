@@ -179,29 +179,32 @@ export const GCFormsProvider = ({
 
     if (changedChoiceIds.length > 0) {
       // Recompute visibility for elements that depend on the changed choice elements
-      const updatedVisibility = recomputeAffectedVisibility(
-        formRecord,
-        formValues,
-        changedChoiceIds,
-        elementDependencies,
-        visibilityMap,
-        elementMap
-      );
-      setVisibilityMap(updatedVisibility);
+      setVisibilityMap((prevVisibilityMap) => {
+        const updatedVisibility = recomputeAffectedVisibility(
+          formRecord,
+          formValues,
+          changedChoiceIds,
+          elementDependencies,
+          prevVisibilityMap,
+          elementMap
+        );
 
-      // Build a diff of which elements actually changed visibility so callers
-      // can efficiently decide whether they need to update
-      const visibilityChanges: Record<string, boolean> = {};
-      updatedVisibility.forEach((isVisible, id) => {
-        if (visibilityMap.get(id) !== isVisible) {
-          visibilityChanges[id] = isVisible;
-        }
-      });
+        // Build a diff of which elements actually changed visibility so callers
+        // can efficiently decide whether they need to update
+        const visibilityChanges: Record<string, boolean> = {};
+        updatedVisibility.forEach((isVisible, id) => {
+          if (prevVisibilityMap.get(id) !== isVisible) {
+            visibilityChanges[id] = isVisible;
+          }
+        });
 
-      Event.fire(EventKeys.formValuesChanged, {
-        changedChoiceIds,
-        visibilityChanges,
-        values: formValues,
+        Event.fire(EventKeys.formValuesChanged, {
+          changedChoiceIds,
+          visibilityChanges,
+          values: formValues,
+        });
+
+        return updatedVisibility;
       });
     }
   };

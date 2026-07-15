@@ -375,6 +375,12 @@ export const recomputeAffectedVisibility = (
   currentVisibilityMap: Map<string, boolean>,
   cachedElementMap?: Map<string, FormElement>
 ): Map<string, boolean> => {
+  // If the form uses groups, page visibility can change independently of conditional rules.
+  // To keep the visibility map correct, recompute everything.
+  if (formRecord.form.groups && Object.keys(formRecord.form.groups).length > 0) {
+    return computeAllVisibility(formRecord, values);
+  }
+
   // Collect all elements that depend on the changed elements
   const affectedElementIds = collectDependentElements(changedElementIds, elementDependencies);
 
