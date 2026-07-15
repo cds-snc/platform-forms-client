@@ -5,6 +5,7 @@ import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { TextArea } from "@formBuilder/components/shared/TextArea";
 import React, { useState } from "react";
 import { cn } from "@lib/utils";
+import ConfirmationAgreement from "../components/dialogs/CreateDraftConfirmDialog/ConfirmationAgreement";
 
 import { Label } from "@clientComponents/forms";
 
@@ -42,8 +43,10 @@ export const PrePublishDialog = ({
   const [prePublishStep, setPrePublishStep] = useState<PrePublishSteps>(
     PrePublishSteps.ReasonForPublish
   );
+  const [agreed, setAgreed] = useState(false);
 
   const isPublishReasonStep = prePublishStep === PrePublishSteps.ReasonForPublish;
+  const republishBlocked = Boolean(hasCurrentlyPublishedVersion && isPublishReasonStep && !agreed);
   const actionLabel = hasCurrentlyPublishedVersion
     ? t("republish")
     : isPublishReasonStep
@@ -53,7 +56,7 @@ export const PrePublishDialog = ({
   async function ContinuePublishSteps() {
     setError(false);
     if (prePublishStep == PrePublishSteps.ReasonForPublish) {
-      if (reasonForPublish == "") {
+      if (reasonForPublish == "" || (hasCurrentlyPublishedVersion && !agreed)) {
         setError(true);
       } else {
         if (hasCurrentlyPublishedVersion) {
@@ -86,6 +89,10 @@ export const PrePublishDialog = ({
     setReasonForPublish(event.target.value);
   }
 
+  function handleAgreement(value: string) {
+    setAgreed(value === "AGREE" || value === "ACCEPTE");
+  }
+
   const elementOptions = [
     {
       label: t("prePublishFormDialog.formtypes.Collect"),
@@ -102,7 +109,7 @@ export const PrePublishDialog = ({
 
   const actions = (
     <div className="flex gap-4">
-      <Button theme="primary" onClick={ContinuePublishSteps}>
+      <Button theme="primary" onClick={ContinuePublishSteps} disabled={republishBlocked}>
         {actionLabel}
       </Button>
 
@@ -205,6 +212,13 @@ export const PrePublishDialog = ({
 
             {hasCurrentlyPublishedVersion && (
               <p className="text-sm">{t("prePublishFormDialog.republish.text2")}</p>
+            )}
+
+            {hasCurrentlyPublishedVersion && (
+              <div>
+                <p className="mb-4 font-semibold">{t("confirm.createDraft.prompt")}</p>
+                <ConfirmationAgreement handleAgreement={handleAgreement} />
+              </div>
             )}
           </div>
         </Dialog>
