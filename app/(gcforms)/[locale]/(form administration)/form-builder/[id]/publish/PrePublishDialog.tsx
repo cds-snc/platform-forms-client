@@ -222,7 +222,9 @@ export const PrePublishDialog = ({
       {prePublishStep == PrePublishSteps.FormTypeAndDescription && (
         <Dialog
           title={
-            hasCurrentlyPublishedVersion ? "Publish updated form" : t("prePublishFormDialog.title")
+            hasCurrentlyPublishedVersion
+              ? t("prePublishFormDialog.republishTitle")
+              : t("prePublishFormDialog.title")
           }
           dialogRef={dialog}
           actions={actions}
