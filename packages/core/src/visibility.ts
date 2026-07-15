@@ -187,16 +187,19 @@ export const checkVisibilityRecursive = (
 
   // Resolve or initialize helper functions dynamically
   const activeElementMap = elementMap ?? buildElementMap(formRecord.form.elements);
+
+  const hasGroups = !!formRecord.form.groups && Object.keys(formRecord.form.groups).length > 0;
   const activeVisibleGroups =
     visibleGroupsCache ??
-    new Set(
-      getVisibleGroupsBasedOnValuesRecursive(
-        formRecord,
-        getValuesWithMatchedIds(formRecord.form.elements, values),
-        "start"
-      )
-    );
-
+    (hasGroups
+      ? new Set(
+          getVisibleGroupsBasedOnValuesRecursive(
+            formRecord,
+            getValuesWithMatchedIds(formRecord.form.elements, values),
+            "start"
+          )
+        )
+      : undefined);
   if (!checkPageVisibility(formRecord, element, values, activeVisibleGroups)) {
     checked[elId] = false;
     return false;
@@ -333,14 +336,17 @@ export const computeAllVisibility = (
   const checked: Record<string, boolean> = {};
 
   const elementMap = buildElementMap(formRecord.form.elements);
-  const visibleGroupsCache = new Set(
-    getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      getValuesWithMatchedIds(formRecord.form.elements, values),
-      "start"
-    )
-  );
 
+  const hasGroups = !!formRecord.form.groups && Object.keys(formRecord.form.groups).length > 0;
+  const visibleGroupsCache = hasGroups
+    ? new Set(
+        getVisibleGroupsBasedOnValuesRecursive(
+          formRecord,
+          getValuesWithMatchedIds(formRecord.form.elements, values),
+          "start"
+        )
+      )
+    : undefined;
   formRecord.form.elements.forEach((element) => {
     const isVisible = checkVisibilityRecursive(
       formRecord,
@@ -394,14 +400,8 @@ export const recomputeAffectedVisibility = (
   // Reuse caller-provided map to avoid rebuilding on every call (elements are static)
   const elementMap = cachedElementMap ?? buildElementMap(formRecord.form.elements);
 
-  const visibleGroupsCache = new Set(
-    getVisibleGroupsBasedOnValuesRecursive(
-      formRecord,
-      getValuesWithMatchedIds(formRecord.form.elements, values),
-      "start"
-    )
-  );
-
+  // No groups here (we return early above when groups are enabled), so avoid building visibleGroupsCache.
+  const visibleGroupsCache = undefined;
   // Build a cache
   const checked: Record<string, boolean> = {};
   currentVisibilityMap.forEach((val, key) => {
@@ -443,12 +443,12 @@ export const getChangedChoiceElementIds = (
   oldValues: FormValues,
   newValues: FormValues,
   formElements: FormElement[],
-  elementDependencies: ElementDependencies
+  elementDependencies: ElementDependencies,
+  cachedElementMap?: Map<string, FormElement>
 ): string[] => {
   const changedIds: string[] = [];
   const allKeys = new Set([...Object.keys(oldValues), ...Object.keys(newValues)]);
-  const elementMap = buildElementMap(formElements);
-
+  const elementMap = cachedElementMap ?? buildElementMap(formElements);
   allKeys.forEach((key) => {
     // Shallow comparison - FormValues is Record<string, string | string[]> so
     // JSON.stringify is unnecessarily expensive and allocates on every update.

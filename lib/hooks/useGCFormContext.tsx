@@ -169,12 +169,12 @@ export const GCFormsProvider = ({
       setMatchedIds(valueIds);
     }
 
-    // Recompute visibility only for affected elements
     const changedChoiceIds = getChangedChoiceElementIds(
       oldValues,
       formValues,
       formRecord.form.elements,
-      elementDependencies
+      elementDependencies,
+      elementMap
     );
 
     if (changedChoiceIds.length > 0) {
