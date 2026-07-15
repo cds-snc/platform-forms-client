@@ -50,15 +50,19 @@ export const Cards = ({
     });
   }, []);
 
-  // Setup edit lock polling - only poll for draft forms in the recentlyEdited and draft tabs
+  // Poll any template that can currently be edited from the cards view.
+  // With template versioning, published templates can still have an editable draft version.
   const shouldPoll =
-    !tabStatus || tabStatus === TAB_STATUS.RECENTLY_EDITED || tabStatus === TAB_STATUS.DRAFT;
-  const draftTemplates = useMemo(
-    () => templates.filter((t) => t.isPublished === false && t.ttl === null),
+    !tabStatus ||
+    tabStatus === TAB_STATUS.RECENTLY_EDITED ||
+    tabStatus === TAB_STATUS.DRAFT ||
+    tabStatus === TAB_STATUS.PUBLISHED;
+  const editableTemplates = useMemo(
+    () => templates.filter((t) => t.ttl === null && (!t.isPublished || t.hasDraft)),
     [templates]
   );
   useEditLockPolling({
-    templates: draftTemplates,
+    templates: editableTemplates,
     displayedCount,
     pollIntervalMs,
     enabled: shouldPoll,
