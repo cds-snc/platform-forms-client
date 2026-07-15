@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { Button } from "@clientComponents/globals";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
-import ConfirmationAgreement from "./ConfirmationAgreement";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
 import { createDraftVersion } from "./actions";
@@ -19,13 +18,11 @@ export const CreateDraftConfirmDialog = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [formId, setFormId] = useState<string>("");
-  const [agreed, setAgreed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleOpen = useCallback((detail: OpenDetail) => {
     if (detail && detail.id) {
       setFormId(detail.id);
-      setAgreed(false);
       setIsOpen(true);
     }
   }, []);
@@ -37,15 +34,9 @@ export const CreateDraftConfirmDialog = () => {
     };
   }, [Event, handleOpen]);
 
-  const handleAgreement = (value: string) => {
-    if (value === "AGREE" || value === "ACCEPTE") setAgreed(true);
-    else setAgreed(false);
-  };
-
   const handleClose = () => {
     dialog.current?.close();
     setIsOpen(false);
-    setAgreed(false);
     setIsSubmitting(false);
   };
 
@@ -74,12 +65,7 @@ export const CreateDraftConfirmDialog = () => {
       <Button theme="secondary" onClick={handleClose} disabled={isSubmitting}>
         {t("actions.cancel")}
       </Button>
-      <Button
-        theme="primary"
-        className="ml-4"
-        onClick={handleContinue}
-        disabled={!agreed || isSubmitting}
-      >
+      <Button theme="primary" className="ml-4" onClick={handleContinue} disabled={isSubmitting}>
         {isSubmitting ? t("actions.continuing") : t("actions.continue")}
       </Button>
     </>
@@ -95,13 +81,15 @@ export const CreateDraftConfirmDialog = () => {
           title={t("confirm.createDraft.title")}
         >
           <div className="p-4">
-            <p className="mb-4">{t("confirm.createDraft.description")}</p>
-            <p className="text-warning mb-4 font-medium">
-              {t("confirm.createDraft.responseWarning")}
-            </p>
             <p className="mb-4">{t("confirm.createDraft.liveForm")}</p>
-            <p className="mb-4 font-semibold">{t("confirm.createDraft.prompt")}</p>
-            <ConfirmationAgreement handleAgreement={handleAgreement} />
+
+            <p className="mb-2 font-bold">{t("confirm.createDraft.list.title")}</p>
+
+            <ul className="mb-8">
+              <li>{t("confirm.createDraft.list.listitem1")}</li>
+              <li>{t("confirm.createDraft.list.listitem2")}</li>
+              <li>{t("confirm.createDraft.list.listitem3")}</li>
+            </ul>
           </div>
         </Dialog>
       )}
