@@ -279,8 +279,8 @@
       "message": "Your saved answers were based on a different original form. Review them carefully before submitting."
     },
     "formUpdatedWarning": {
-      "title": "We've changed some questions on this form",
-      "message": "Your saved answers may no longer be correct.  Review before submitting."
+      "title": "We’ve updated this form",
+      "message": "Your saved answers may no longer apply.  Review before submitting."
     },
     "resumeUploadError": {
       "title": "Problem loading answers",

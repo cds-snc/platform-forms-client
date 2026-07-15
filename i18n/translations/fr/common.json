@@ -275,8 +275,8 @@
     "cancel": "Annuler",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
     "formUpdatedWarning": {
-      "title": "Nous avons modifié certaines questions de ce formulaire",
-      "message": "Vos réponses sauvegardées peuvent ne plus être correctes. Veuillez les vérifier avant de les soumettre."
+      "title": "We’ve updated this form [FR]",
+      "message": "Your saved answers may no longer apply.  Review before submitting. [FR]"
     },
     "formRestoredWarning": {
       "title": "Vérifiez attentivement vos réponses",

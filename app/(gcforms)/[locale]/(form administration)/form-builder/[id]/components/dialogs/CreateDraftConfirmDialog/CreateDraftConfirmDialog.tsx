@@ -81,10 +81,6 @@ export const CreateDraftConfirmDialog = () => {
           title={t("confirm.createDraft.title")}
         >
           <div className="p-4">
-            <p className="mb-4">{t("confirm.createDraft.description")}</p>
-            <p className="text-warning mb-4 font-medium">
-              {t("confirm.createDraft.responseWarning")}
-            </p>
             <p className="mb-4">{t("confirm.createDraft.liveForm")}</p>
 
             <p className="mb-2 font-bold">{t("confirm.createDraft.list.title")}</p>

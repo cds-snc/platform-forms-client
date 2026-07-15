@@ -400,12 +400,10 @@
   "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to the confirmation are:",
   "confirm": {
     "createDraft": {
-      "title": "Create draft version",
-      "description": "This will create a new draft of your published template.",
-      "responseWarning": "You are responsible for ensuring the updated template works with your team's workflows and integrations.",
-      "liveForm": "Your live form will continue collecting responses as usual until you republish.",
+      "title": "Update published form",
+      "liveForm": "The current version will continue collecting responses until you publish the updated form.",
       "list": {
-        "title": "⚠️ By publishing, you accept that you may need to:",
+        "title": "⚠️ Before publishing updates, discuss with your developers and test your form. :",
         "listitem1": "Adjust form questions and workflows.",
         "listitem2": "Revise lists and spreadsheets for organizing responses.",
         "listitem3": "Update API integration."
