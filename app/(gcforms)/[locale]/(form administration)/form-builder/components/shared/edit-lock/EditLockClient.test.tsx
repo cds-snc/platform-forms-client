@@ -9,6 +9,7 @@ const mockState = vi.hoisted(() => ({
   store: {
     lang: "en",
     isPublished: false,
+    currentDraftVersionId: null as string | null,
   },
   editLockContext: {
     takeover: vi.fn().mockResolvedValue(undefined),
@@ -69,6 +70,7 @@ vi.mock("@formBuilder/components/shared/Toast", () => ({
 describe("EditLockClient", () => {
   beforeEach(() => {
     mockState.store.isPublished = false;
+    mockState.store.currentDraftVersionId = null;
     mockState.editLockContext.hasSessionExpired = false;
     mockState.editLockContext.isEnabled = true;
     mockState.toast.success.mockClear();
@@ -97,6 +99,20 @@ describe("EditLockClient", () => {
     );
 
     expect(screen.queryByText("Take over editing")).not.toBeInTheDocument();
+    expect(screen.getByText("Child content")).toBeInTheDocument();
+  });
+
+  it("keeps the lock banner visible for published templates with a current draft version", () => {
+    mockState.store.isPublished = true;
+    mockState.store.currentDraftVersionId = "draft-version-1";
+
+    render(
+      <EditLockClient formId="test-form-id">
+        <div>Child content</div>
+      </EditLockClient>
+    );
+
+    expect(screen.getByText("Take over editing")).toBeInTheDocument();
     expect(screen.getByText("Child content")).toBeInTheDocument();
   });
 

@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "4.18.0",
+  "version": "4.18.1",
   "private": true,
   "workspaces": [
     "utils/*",
@@ -64,7 +64,7 @@
     "@gcforms/editor": "workspace:*",
     "@gcforms/tag-input": "workspace:*",
     "@gcforms/types": "workspace:*",
-    "@hcaptcha/react-hcaptcha": "^1.14.0",
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
     "@hcaptcha/types": "^1.1.0",
     "@headless-tree/core": "^1.7.0",
     "@headless-tree/react": "^1.7.0",

@@ -404,4 +404,13 @@ export const options = [
     logoTitleEn: "Pacific Economic Development Canada",
     logoTitleFr: "Développement économique Canada pour le Pacifique",
   },
+  {
+    name: "justice",
+    urlEn: "https://www.justice.gc.ca/eng",
+    urlFr: "https://www.justice.gc.ca/fra",
+    logoEn: "/img/branding/justice-en.svg",
+    logoFr: "/img/branding/justice-fr.svg",
+    logoTitleEn: "Department of Justice Canada",
+    logoTitleFr: "Ministère de la Justice Canada",
+  },
 ];

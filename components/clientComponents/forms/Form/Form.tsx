@@ -203,6 +203,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             noValidate={true}
             isPublished={isPublished}
             captchaTokenRef={props.captchaToken}
+            resetCaptchaRef={props.resetCaptchaRef}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -351,6 +352,10 @@ export const Form = withFormik<FormProps, Responses>({
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
+
+        // Avoid a potential error where a token could be reused by re-submitting after an error
+        formikBag.props.resetCaptchaRef?.current?.resetToken?.();
+
         return;
       }
 
@@ -414,6 +419,9 @@ export const Form = withFormik<FormProps, Responses>({
       } else {
         formikBag.setStatus("Error");
       }
+
+      // Avoid a potential error where a token could be reused by re-submitting after an error
+      formikBag.props.resetCaptchaRef?.current?.resetToken?.();
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {

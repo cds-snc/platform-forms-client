@@ -18,6 +18,7 @@ import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helpers";
 import { FormRestoredWarning } from "@clientComponents/forms/ResumeForm/FormRestoredWarning";
+import { VersionChangedToast } from "@clientComponents/forms/ResumeForm/VersionChangedToast";
 
 export const FormWrapper = ({
   formRecord,
@@ -44,6 +45,8 @@ export const FormWrapper = ({
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
+  const resetCaptchaRef = React.useRef<{ resetToken: () => void }>({ resetToken: () => {} });
+
   const saveAndResume = formRecord?.saveAndResume;
 
   // Generate form elements on the client to ensure Formik context is available
@@ -108,15 +111,30 @@ export const FormWrapper = ({
     if (savedValues) {
       removeProgressStorage();
 
+      const savedVersionNumber = Number(savedValues.versionNumber) ?? 1;
+      const currentVersionNumber = Number(formRecord.versionNumber) ?? 1;
+
       if (savedValues.language === language && !isEmptyForm) {
+        // If saved answers are for a different form id show mismatch warning
         if (savedValues.sourceFormId && savedValues.sourceFormId !== formRecord.id) {
           toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
+        } else if (savedVersionNumber !== currentVersionNumber) {
+          // Show styled toast warning the user the form template changed since they started
+          toast.notice(<VersionChangedToast />, "public-facing-form-wide");
         } else {
+          // Default restored success message
           toast.success(formRestoredMessage, "public-facing-form");
         }
       }
     }
-  }, [savedValues, language, isEmptyForm, formRecord.id, formRestoredMessage]);
+  }, [
+    savedValues,
+    language,
+    isEmptyForm,
+    formRecord.id,
+    formRestoredMessage,
+    formRecord.versionNumber,
+  ]);
 
   const initialValues = useMemo(() => {
     if (!savedValues) {
@@ -184,6 +202,7 @@ export const FormWrapper = ({
         setCaptchaFail={setCaptchaFail}
         captchaFail={captchaFail}
         captchaToken={captchaToken}
+        resetCaptchaRef={resetCaptchaRef}
       >
         {currentForm}
       </Form>

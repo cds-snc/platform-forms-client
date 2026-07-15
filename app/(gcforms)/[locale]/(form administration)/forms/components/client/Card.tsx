@@ -19,8 +19,8 @@ import { formatDateToEstYYYYMMDD } from "@root/lib/utils/date/utcToEst";
 const getCardState = (card: FormsTemplateWithLockInfo): CardState => {
   if (card.closingDate && dateHasPast(card.closingDate?.getTime())) return CARD_STATE.CLOSED;
   if (card.ttl) return CARD_STATE.ARCHIVED;
+  if (card.editLockInfo && (!card.isPublished || card.hasDraft)) return CARD_STATE.DRAFT_EDITING;
   if (card.isPublished) return CARD_STATE.PUBLISHED;
-  if (card.editLockInfo) return CARD_STATE.DRAFT_EDITING;
   return CARD_STATE.DRAFT_READONLY;
 };
 

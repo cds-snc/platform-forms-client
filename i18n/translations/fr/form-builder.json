@@ -566,7 +566,7 @@
     "title": "Obtenir une copie du formulaire"
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités de création, de collaboration et d’intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul. Vous obtiendrez les activités des 30 derniers jours, à partir du 15 juin 2026.",
+    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités des 30 derniers jours sur la création du formulaire, la collaboration et l'intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul.",
     "downloadBtnText": "Télécharger l'activité récente",
     "title": "Afficher l’activité récente du formulaire",
     "dialog": {
@@ -791,7 +791,7 @@
   "privacyStatement": "Avis de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
-  "republish": "Publier de nouveau",
+  "republish": "Publier une mise à jour",
   "readyToPublish": "Prêt à publier",
   "published": "Publié",
   "publishedBack": "Retourner aux formulaires",
@@ -829,8 +829,14 @@
   },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
-    "republishTitle": "Publier le formulaire à nouveau",
+    "republishTitle": "Publier une mise à jour",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
+    "republish": {
+      "categoryLabel": "Template category [FR]",
+      "helpsUnderstand": "Help us understand the purpose of this form. [FR]",
+      "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it. [FR]",
+      "text2": "New form fillers only have access to the updated form. People mid-way through the earlier version can complete that form unless they reload the page. [FR]"
+    },
     "readyForPublicUse": "Formulaire prêt pour un usage par le public",
     "readyForInternalUse": "Formulaire prêt pour un usage interne",
     "sharingForFeedback": "Formulaire à partager pour commentaires ou approbation",
