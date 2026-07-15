@@ -116,6 +116,9 @@ export const GCFormsProvider = ({
   const [visibilityMap, setVisibilityMap] = React.useState<Map<string, boolean>>(() =>
     computeAllVisibility(formRecord, {})
   );
+  // Ref stays in sync with state so updateValues always reads the latest map
+  // synchronously, even if multiple updates arrive before the next re-render.
+  const visibilityMapRef = React.useRef(visibilityMap);
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -178,33 +181,39 @@ export const GCFormsProvider = ({
     );
 
     if (changedChoiceIds.length > 0) {
-      // Recompute visibility for elements that depend on the changed choice elements
-      setVisibilityMap((prevVisibilityMap) => {
-        const updatedVisibility = recomputeAffectedVisibility(
-          formRecord,
-          formValues,
-          changedChoiceIds,
-          elementDependencies,
-          prevVisibilityMap,
-          elementMap
-        );
+      // Read the latest map from the ref (not stale closure state) and recompute
+      const prevVisibilityMap = visibilityMapRef.current;
+      const updatedVisibility = recomputeAffectedVisibility(
+        formRecord,
+        formValues,
+        changedChoiceIds,
+        elementDependencies,
+        prevVisibilityMap,
+        elementMap
+      );
 
-        // Build a diff of which elements actually changed visibility so callers
-        // can efficiently decide whether they need to update
-        const visibilityChanges: Record<string, boolean> = {};
-        updatedVisibility.forEach((isVisible, id) => {
-          if (prevVisibilityMap.get(id) !== isVisible) {
-            visibilityChanges[id] = isVisible;
-          }
-        });
+      // Keep the ref in sync so rapid successive calls use the latest base map
+      visibilityMapRef.current = updatedVisibility;
+      // Pure state update - no side effects inside the setter
+      setVisibilityMap(updatedVisibility);
 
+      // Build the diff outside the setter so it's available to the event payload
+      const visibilityChanges: Record<string, boolean> = {};
+      updatedVisibility.forEach((isVisible, id) => {
+        if (prevVisibilityMap.get(id) !== isVisible) {
+          visibilityChanges[id] = isVisible;
+        }
+      });
+
+      // Deferring to next tick because:
+      // - CustomEvent dispatch is synchronous.
+      // - Firing inline triggers a React "setState during render" warning.
+      queueMicrotask(() => {
         Event.fire(EventKeys.formValuesChanged, {
           changedChoiceIds,
           visibilityChanges,
           values: formValues,
         });
-
-        return updatedVisibility;
       });
     }
   };
