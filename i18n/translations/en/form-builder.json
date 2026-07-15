@@ -402,7 +402,14 @@
     "createDraft": {
       "title": "Create draft version",
       "description": "This will create a new draft of your published template.",
-      "liveForm": "Your live form will continue collecting responses as usual until you republish."
+      "responseWarning": "You are responsible for ensuring the updated template works with your team's workflows and integrations.",
+      "liveForm": "Your live form will continue collecting responses as usual until you republish.",
+      "list": {
+        "title": "⚠️ By publishing, you accept that you may need to:",
+        "listitem1": "Adjust form questions and workflows.",
+        "listitem2": "Revise lists and spreadsheets for organizing responses.",
+        "listitem3": "Update API integration."
+      }
     }
   },
   "actions": {

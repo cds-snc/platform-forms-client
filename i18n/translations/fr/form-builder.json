@@ -401,7 +401,15 @@
   "confirm": {
     "createDraft": {
       "title": "Créer une version brouillon",
-      "description": "Cela créera une nouvelle version brouillon de votre gabarit publié."
+      "description": "Cela créera une nouvelle version brouillon de votre gabarit publié.",
+      "responseWarning": "You are responsible for ensuring the updated template works with your team's workflows and integrations.[FR]",
+      "liveForm": "Your live form will continue collecting responses as usual until you republish.[FR]",
+      "list": {
+        "title": "⚠️ By publishing, you accept that you may need to: [FR]",
+        "listitem1": "Adjust form questions and workflows. [FR]",
+        "listitem2": "Revise lists and spreadsheets for organizing responses. [FR]",
+        "listitem3": "Update API integration. [FR]"
+      }
     }
   },
   "actions": {

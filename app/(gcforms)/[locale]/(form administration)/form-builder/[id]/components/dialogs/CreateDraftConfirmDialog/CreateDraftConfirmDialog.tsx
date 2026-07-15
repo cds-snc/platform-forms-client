@@ -86,6 +86,14 @@ export const CreateDraftConfirmDialog = () => {
               {t("confirm.createDraft.responseWarning")}
             </p>
             <p className="mb-4">{t("confirm.createDraft.liveForm")}</p>
+
+            <p className="mb-2 font-bold">{t("confirm.createDraft.list.title")}</p>
+
+            <ul className="mb-8">
+              <li>{t("confirm.createDraft.list.listitem1")}</li>
+              <li>{t("confirm.createDraft.list.listitem2")}</li>
+              <li>{t("confirm.createDraft.list.listitem3")}</li>
+            </ul>
           </div>
         </Dialog>
       )}
