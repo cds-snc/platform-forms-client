@@ -7,10 +7,9 @@ import {
   inGroup,
 } from "./helpers";
 
-// Element dependencies map showing which element IDs depend on which other elements
 export type ElementDependencies = Map<string, Set<string>>;
 
-// Helper to build an element lookup map to replace slow array searches
+// Helper to build an element lookup map to replace slower array searches
 const buildElementMap = (elements: FormElement[]): Map<string, FormElement> => {
   return new Map(elements.map((el) => [el.id.toString(), el]));
 };
