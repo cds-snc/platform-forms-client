@@ -444,8 +444,18 @@ export const getChangedChoiceElementIds = (
   const elementMap = buildElementMap(formElements);
 
   allKeys.forEach((key) => {
-    // Check if value actually changed
-    if (JSON.stringify(oldValues[key]) === JSON.stringify(newValues[key])) return;
+    // Shallow comparison - FormValues is Record<string, string | string[]> so
+    // JSON.stringify is unnecessarily expensive and allocates on every update.
+    const oldVal = oldValues[key];
+    const newVal = newValues[key];
+    if (oldVal === newVal) return;
+    if (
+      Array.isArray(oldVal) &&
+      Array.isArray(newVal) &&
+      oldVal.length === newVal.length &&
+      oldVal.every((v, i) => v === newVal[i])
+    )
+      return;
 
     // Check if this element is a choice-based input
     const element = elementMap.get(key);

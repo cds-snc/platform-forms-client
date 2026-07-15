@@ -15,6 +15,7 @@ import {
   MenuDropdownItemI,
 } from "./MenuDropdown/MenuDropdown";
 import { FormTabStatus, TAB_STATUS } from "../types";
+import { EventKeys } from "@root/lib/hooks/useCustomEvent";
 
 export const Menu = ({
   id,
@@ -126,7 +127,9 @@ export const Menu = ({
         title: t("card.menu.createDraftVersion"),
         callback: () => {
           try {
-            const ev = new CustomEvent("open-create-draft-confirm-dialog", { detail: { id } });
+            const ev = new CustomEvent(EventKeys.openCreateDraftConfirmDialog, {
+              detail: { id },
+            });
             window.document.dispatchEvent(ev);
           } catch (e) {
             // noop

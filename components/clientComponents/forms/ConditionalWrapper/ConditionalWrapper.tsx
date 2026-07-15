@@ -19,9 +19,10 @@ export const ConditionalWrapper = ({
   const { Event } = useCustomEvent();
   const elementId = element.id.toString();
 
-  // Local visibility state — updated via event subscription so only this
-  // component re-renders when *its* element's visibility changes, rather than
-  // every ConditionalWrapper re-rendering on every form value update.
+  // Local visibility state — updated via event subscription so visibility
+  // changes are applied without recomputing conditional logic inside every wrapper.
+  // Note: context function callers still re-render when the provider value changes;
+  // moving visibility into a dedicated context would eliminate that overhead.
   const [localVisible, setLocalVisible] = React.useState(() => isElementVisible(elementId));
 
   React.useEffect(() => {

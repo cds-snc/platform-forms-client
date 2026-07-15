@@ -134,12 +134,27 @@ export const PrePublishDialog = ({
           <div className="mx-5 my-8 flex flex-col gap-4">
             <h3 className="gc-h4 mb-1 pb-0 text-lg">
               <div className="flex-col">
-                <span className="">{t("prePublishFormDialog.text1")}</span>
-                <legend className="gcds-label required">
-                  <span data-testid="required" aria-hidden>
-                    ({t("required")})
-                  </span>
-                </legend>
+                {hasCurrentlyPublishedVersion ? (
+                  <div className="flex">
+                    <span className="mr-2 inline-block">
+                      {t("prePublishFormDialog.republish.categoryLabel")}
+                    </span>
+                    <legend className="required text-normal! inline-block!">
+                      <span data-testid="required" aria-hidden>
+                        ({t("required")})
+                      </span>
+                    </legend>
+                  </div>
+                ) : (
+                  <div className="flex">
+                    <span className="mr-2 inline-block">{t("prePublishFormDialog.text1")}</span>
+                    <legend className="required text-normal! inline-block!">
+                      <span data-testid="required" aria-hidden>
+                        ({t("required")})
+                      </span>
+                    </legend>
+                  </div>
+                )}
               </div>
             </h3>
             {error && (
@@ -148,7 +163,11 @@ export const PrePublishDialog = ({
                 <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
               </Alert.Danger>
             )}
-            <p className="text-sm">{t("prePublishFormDialog.helpsUnderstand")}</p>
+            {hasCurrentlyPublishedVersion ? (
+              <p className="text-sm">{t("prePublishFormDialog.republish.helpsUnderstand")}</p>
+            ) : (
+              <p className="text-sm">{t("prePublishFormDialog.helpsUnderstand")}</p>
+            )}
             <span>
               <Radio
                 onChange={onReasonForPublishChange}
@@ -179,6 +198,14 @@ export const PrePublishDialog = ({
                 label={t("prePublishFormDialog.other")}
               />
             </span>
+
+            {hasCurrentlyPublishedVersion && (
+              <p className="text-sm">{t("prePublishFormDialog.republish.text1")}</p>
+            )}
+
+            {hasCurrentlyPublishedVersion && (
+              <p className="text-sm">{t("prePublishFormDialog.republish.text2")}</p>
+            )}
           </div>
         </Dialog>
       )}

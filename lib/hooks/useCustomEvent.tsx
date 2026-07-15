@@ -29,10 +29,10 @@ export const EventKeys = {
   formValuesChanged: "form-values-changed",
 } as const;
 
-// Maps the caller's callback to the wrapper function registered with addEventListener,
-// so Event.off() can pass the exact same reference to removeEventListener.
+// Per-callback, per-event wrapper registry so the same callback can be
+// registered/removed for multiple event names without interference.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const listenerMap = new WeakMap<(detail: any) => void, (event: Event) => void>();
+const listenerMap = new WeakMap<(detail: any) => void, Map<string, (event: Event) => void>>();
 
 export const useCustomEvent = () => {
   // Attach listeners to a documentRef instead of document directly
@@ -65,7 +65,12 @@ export const useCustomEvent = () => {
       const wrapper = (event: Event) => {
         callback((event as CustomEvent).detail);
       };
-      listenerMap.set(callback, wrapper);
+      let perEvent = listenerMap.get(callback);
+      if (!perEvent) {
+        perEvent = new Map();
+        listenerMap.set(callback, perEvent);
+      }
+      perEvent.set(eventName, wrapper);
       documentRef.current.addEventListener(eventName, wrapper);
     },
 
@@ -76,10 +81,14 @@ export const useCustomEvent = () => {
      */
     off: (eventName, callback) => {
       if (!documentRef.current) return;
-      const wrapper = listenerMap.get(callback);
+      const perEvent = listenerMap.get(callback);
+      const wrapper = perEvent?.get(eventName);
       if (wrapper) {
         documentRef.current.removeEventListener(eventName, wrapper);
-        listenerMap.delete(callback);
+        perEvent!.delete(eventName);
+        if (perEvent!.size === 0) {
+          listenerMap.delete(callback);
+        }
       }
     },
   };

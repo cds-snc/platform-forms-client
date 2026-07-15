@@ -46,6 +46,7 @@ export const CreateDraftConfirmDialog = () => {
     dialog.current?.close();
     setIsOpen(false);
     setAgreed(false);
+    setIsSubmitting(false);
   };
 
   const handleContinue = async () => {
@@ -57,6 +58,8 @@ export const CreateDraftConfirmDialog = () => {
         setIsSubmitting(false);
         return;
       }
+
+      handleClose();
       // Navigate to edit page for the draft
       const lang = i18n.language || "en";
       router.push(`/${lang}/form-builder/${res.formRecord.id}/edit`);

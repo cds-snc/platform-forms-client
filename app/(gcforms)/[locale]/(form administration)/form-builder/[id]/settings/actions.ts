@@ -119,18 +119,13 @@ export const getFormEvents = AuthenticatedAction(
       return events
         .map((event) => {
           const dateOfEvent = new Date(event.timestamp);
-          // Only return if event is after June 15th 2026.
-          if (dateOfEvent < new Date("2026-06-15") && translated) {
-            return null;
-          } else {
-            return {
-              formId: event.subject.split("#")[1],
-              userId: event.userId,
-              event: event.event,
-              timestamp: dateOfEvent.toISOString(),
-              description: event.description,
-            };
-          }
+          return {
+            formId: event.subject.split("#")[1],
+            userId: event.userId,
+            event: event.event,
+            timestamp: dateOfEvent.toISOString(),
+            description: event.description,
+          };
         })
         .filter((event) => event !== null);
     } catch (error) {
