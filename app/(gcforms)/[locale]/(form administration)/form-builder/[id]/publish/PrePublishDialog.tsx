@@ -40,38 +40,56 @@ export const PrePublishDialog = ({
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
 
-  const [prePublishStep, setPrePublishStep] = useState<PrePublishSteps>(
-    PrePublishSteps.ReasonForPublish
+  const [prePublishStep, setPrePublishStep] = useState<PrePublishSteps>(() =>
+    hasCurrentlyPublishedVersion
+      ? PrePublishSteps.FormTypeAndDescription
+      : PrePublishSteps.ReasonForPublish
   );
   const [agreed, setAgreed] = useState(false);
 
   const isPublishReasonStep = prePublishStep === PrePublishSteps.ReasonForPublish;
   const republishBlocked = Boolean(hasCurrentlyPublishedVersion && isPublishReasonStep && !agreed);
   const actionLabel = hasCurrentlyPublishedVersion
-    ? t("republish")
+    ? prePublishStep === PrePublishSteps.FormTypeAndDescription
+      ? t("continue")
+      : t("republish")
     : isPublishReasonStep
       ? t("continue")
       : t("publish");
 
   async function ContinuePublishSteps() {
     setError(false);
-    if (prePublishStep == PrePublishSteps.ReasonForPublish) {
-      if (reasonForPublish == "" || (hasCurrentlyPublishedVersion && !agreed)) {
-        setError(true);
-      } else {
-        if (hasCurrentlyPublishedVersion) {
-          handleConfirm();
+    if (prePublishStep === PrePublishSteps.ReasonForPublish) {
+      // This step is confirmation for republish, or first step (reason) for initial publish
+      if (hasCurrentlyPublishedVersion) {
+        if (!agreed) {
+          setError(true);
           return;
         }
-
+        handleConfirm();
+        return;
+      } else {
+        if (reasonForPublish === "") {
+          setError(true);
+          return;
+        }
         setPrePublishStep(PrePublishSteps.FormTypeAndDescription);
+        return;
       }
     } else {
-      if (formType == "" || description == "") {
+      // Form type (+ description for initial publish)
+      if (formType === "" || (!hasCurrentlyPublishedVersion && description === "")) {
         setError(true);
-      } else {
-        handleConfirm();
+        return;
       }
+      if (hasCurrentlyPublishedVersion) {
+        // move to confirmation step (agree)
+        setPrePublishStep(PrePublishSteps.ReasonForPublish);
+        return;
+      }
+      // initial publish finalise
+      handleConfirm();
+      return;
     }
   }
 
@@ -85,6 +103,10 @@ export const PrePublishDialog = ({
     }
   }
 
+  async function onFormTypeRadioChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setFormType(event.target.value);
+  }
+
   async function onReasonForPublishChange(event: React.ChangeEvent<HTMLInputElement>) {
     setReasonForPublish(event.target.value);
   }
@@ -93,7 +115,7 @@ export const PrePublishDialog = ({
     setAgreed(value === "AGREE" || value === "ACCEPTE");
   }
 
-  const elementOptions = [
+  const formTypeOptions = [
     {
       label: t("prePublishFormDialog.formtypes.Collect"),
       value: "Collection of Feedback or Stats",
@@ -103,6 +125,13 @@ export const PrePublishDialog = ({
     { label: t("prePublishFormDialog.formtypes.Regulatory"), value: "Regulatory Compliance" },
     { label: t("prePublishFormDialog.formtypes.Operations"), value: "Organizational Operations" },
     { label: t("prePublishFormDialog.formtypes.Other"), value: "Other" },
+  ];
+
+  const templateCategoryOptions = [
+    { label: t("prePublishFormDialog.readyForPublicUse"), value: "public-use" },
+    { label: t("prePublishFormDialog.readyForInternalUse"), value: "internal-use" },
+    { label: t("prePublishFormDialog.sharingForFeedback"), value: "feedback-use" },
+    { label: t("prePublishFormDialog.other"), value: "other-use" },
   ];
 
   const [error, setError] = useState(false);
@@ -138,72 +167,50 @@ export const PrePublishDialog = ({
           className="max-h-[80%] overflow-y-scroll"
           handleClose={handleClose}
         >
-          <div className="mx-5 my-8 flex flex-col gap-4">
-            <h3 className="gc-h4 mb-1 pb-0 text-lg">
-              <div className="flex-col">
-                {hasCurrentlyPublishedVersion ? (
-                  <div className="flex">
-                    <span className="mr-2 inline-block">
-                      {t("prePublishFormDialog.republish.categoryLabel")}
-                    </span>
-                    <legend className="required text-normal! inline-block!">
-                      <span data-testid="required" aria-hidden>
-                        ({t("required")})
-                      </span>
-                    </legend>
+          <div className="mx-4 my-4 flex flex-col gap-4">
+            {!hasCurrentlyPublishedVersion && (
+              <>
+                <h3 className="gc-h4 mb-1 pb-0 text-lg">
+                  <div className="flex-col">
+                    <div className="flex">
+                      <span className="mr-2 inline-block">{t("prePublishFormDialog.text1")}</span>
+                      <legend className="required text-normal! inline-block!">
+                        <span data-testid="required" aria-hidden>
+                          ({t("required")})
+                        </span>
+                      </legend>
+                    </div>
                   </div>
-                ) : (
-                  <div className="flex">
-                    <span className="mr-2 inline-block">{t("prePublishFormDialog.text1")}</span>
-                    <legend className="required text-normal! inline-block!">
-                      <span data-testid="required" aria-hidden>
-                        ({t("required")})
-                      </span>
-                    </legend>
-                  </div>
+                </h3>
+
+                {error && (
+                  <Alert.Danger focussable={true} className="mb-5">
+                    <Alert.Title headingTag="h3">
+                      {t("prePublishFormDialog.error.title")}
+                    </Alert.Title>
+                    <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
+                  </Alert.Danger>
                 )}
-              </div>
-            </h3>
-            {error && (
-              <Alert.Danger focussable={true} className="mb-5">
-                <Alert.Title headingTag="h3">{t("prePublishFormDialog.error.title")}</Alert.Title>
-                <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
-              </Alert.Danger>
+                <p className="text-sm">{t("prePublishFormDialog.helpsUnderstand")}</p>
+              </>
             )}
-            {hasCurrentlyPublishedVersion ? (
-              <p className="text-sm">{t("prePublishFormDialog.republish.helpsUnderstand")}</p>
-            ) : (
-              <p className="text-sm">{t("prePublishFormDialog.helpsUnderstand")}</p>
-            )}
+
             <span>
-              <Radio
-                onChange={onReasonForPublishChange}
-                id="public-use"
-                name="reason-for-publish"
-                value="public-use"
-                label={t("prePublishFormDialog.readyForPublicUse")}
-              />
-              <Radio
-                onChange={onReasonForPublishChange}
-                id="internal-use"
-                name="reason-for-publish"
-                value="internal-use"
-                label={t("prePublishFormDialog.readyForInternalUse")}
-              />
-              <Radio
-                onChange={onReasonForPublishChange}
-                id="feedback-use"
-                name="reason-for-publish"
-                value="feedback-use"
-                label={t("prePublishFormDialog.sharingForFeedback")}
-              />
-              <Radio
-                onChange={onReasonForPublishChange}
-                id="other-use"
-                name="reason-for-publish"
-                value="other-use"
-                label={t("prePublishFormDialog.other")}
-              />
+              {/* For initial publish show reason radios; for republish this step is confirmation */}
+              {!hasCurrentlyPublishedVersion && (
+                <>
+                  {templateCategoryOptions.map((opt) => (
+                    <Radio
+                      key={opt.value}
+                      onChange={onReasonForPublishChange}
+                      id={`reason-${opt.value}`}
+                      name="reason-for-publish"
+                      value={opt.value}
+                      label={opt.label}
+                    />
+                  ))}
+                </>
+              )}
             </span>
 
             {hasCurrentlyPublishedVersion && (
@@ -214,48 +221,89 @@ export const PrePublishDialog = ({
       )}
       {prePublishStep == PrePublishSteps.FormTypeAndDescription && (
         <Dialog
-          title={t("prePublishFormDialog.title")}
+          title={
+            hasCurrentlyPublishedVersion ? "Publish updated form" : t("prePublishFormDialog.title")
+          }
           dialogRef={dialog}
           actions={actions}
           className="max-h-[80%] overflow-y-scroll"
           handleClose={handleClose}
         >
           <div className="mx-5 my-8 flex flex-col gap-4">
-            <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text2")}</h3>
+            {!hasCurrentlyPublishedVersion && (
+              <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text2")}</h3>
+            )}
+
             {error && (
               <Alert.Danger focussable={true} className="mb-5">
                 <Alert.Title headingTag="h3">{t("prePublishFormDialog.error.title")}</Alert.Title>
                 <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
               </Alert.Danger>
             )}
-            <p className="mb-4 text-sm">{t("prePublishFormDialog.thisInformation")}</p>
-            <Label className="gcds-label required" required={true}>
-              {t("prePublishFormDialog.whatType")}
-            </Label>
+
+            {!hasCurrentlyPublishedVersion && (
+              <p className="mb-4 text-sm">{t("prePublishFormDialog.thisInformation")}</p>
+            )}
+
+            {!hasCurrentlyPublishedVersion ? (
+              <Label className="gcds-label required" required={true}>
+                {t("prePublishFormDialog.whatType")}
+              </Label>
+            ) : (
+              <Label className="gcds-label required" required={true}>
+                {t("prePublishFormDialog.republish.categoryLabel")}
+              </Label>
+            )}
+
             <div className="mb-1">
-              <select
-                className={cn(
-                  "center-right-15px form-builder-dropdown text-black-default my-0 inline-block min-w-[400px] border-1 border-black p-2"
-                )}
-                value={formType}
-                onChange={(e) => onFormTypeChange(e)}
-              >
-                <option value="" disabled hidden>
-                  {t("logic.choiceSelect.selectOption")}
-                </option>
-                {elementOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+              {hasCurrentlyPublishedVersion ? (
+                <div className="flex flex-col gap-3">
+                  {templateCategoryOptions.map((option) => (
+                    <Radio
+                      key={option.value}
+                      onChange={onFormTypeRadioChange}
+                      id={`formtype-${option.value}`}
+                      name="template-category"
+                      value={option.value}
+                      label={option.label}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <select
+                  className={cn(
+                    "center-right-15px form-builder-dropdown text-black-default my-0 inline-block min-w-[400px] border-1 border-black p-2"
+                  )}
+                  value={formType}
+                  onChange={(e) => onFormTypeChange(e)}
+                >
+                  <option value="" disabled hidden>
+                    {t("logic.choiceSelect.selectOption")}
                   </option>
-                ))}
-              </select>
+                  {formTypeOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
-            <Label className="gcds-label required" required={true}>
-              {t("prePublishFormDialog.briefDesc")}
-            </Label>
-            <p>
-              <TextArea id="txtDescription" className="w-11/12" onChange={onDescriptionChange} />
-            </p>
+
+            {/* Show description (brief description) only for initial publishes; republish only captures category */}
+            {!hasCurrentlyPublishedVersion && (
+              <>
+                <Label className="gcds-label required" required={true}>
+                  {t("prePublishFormDialog.briefDesc")}
+                </Label>
+                <p>
+                  <TextArea
+                    id="txtDescription"
+                    className="w-11/12"
+                    onChange={onDescriptionChange}
+                  />
+                </p>
+              </>
+            )}
           </div>
         </Dialog>
       )}

@@ -836,7 +836,7 @@
     "republishTitle": "Publish updated form",
     "text1": "What is your reason for publishing?",
     "republish": {
-      "categoryLabel": "Template category",
+      "categoryLabel": "Form category",
       "helpsUnderstand": "Help us understand the purpose of this form.",
       "confirm": {
         "title": "Confirm publication",
