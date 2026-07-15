@@ -402,12 +402,14 @@
     "createDraft": {
       "title": "Créer une version brouillon",
       "description": "Cela créera une nouvelle version brouillon de votre gabarit publié.",
-      "responseWarning": "Vous êtes responsable de vous assurer que le gabarit mis à jour fonctionne avec les flux de travail et les intégrations de votre équipe.",
-      "liveForm": "Votre formulaire en ligne continuera à recueillir des réponses normalement jusqu'à ce que vous le republiciez.",
-      "prompt": "Si vous comprenez le potentiel impact, tapez AGREE pour continuer.",
-      "label": "Tapez AGREE",
-      "required": "requis",
-      "placeholder": "ACCEPTE"
+      "responseWarning": "You are responsible for ensuring the updated template works with your team's workflows and integrations.[FR]",
+      "liveForm": "Your live form will continue collecting responses as usual until you republish.[FR]",
+      "list": {
+        "title": "⚠️ By publishing, you accept that you may need to: [FR]",
+        "listitem1": "Adjust form questions and workflows. [FR]",
+        "listitem2": "Revise lists and spreadsheets for organizing responses. [FR]",
+        "listitem3": "Update API integration. [FR]"
+      }
     }
   },
   "actions": {
@@ -834,8 +836,20 @@
     "republish": {
       "categoryLabel": "Template category [FR]",
       "helpsUnderstand": "Help us understand the purpose of this form. [FR]",
-      "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it. [FR]",
-      "text2": "New form fillers only have access to the updated form. People mid-way through the earlier version can complete that form unless they reload the page. [FR]"
+      "confirm": {
+        "title": "Confirm publication [FR]",
+        "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it. [FR]",
+        "text2": "New form fillers only have access to the updated form. People mid-way through the previous form can complete the earlier version unless they reload the page. [FR]",
+        "list": "⚠️ By publishing, you accept that you may need to: [FR]",
+        "listitem1": "Adjust form questions and workflows. [FR]",
+        "listitem2": "Revise lists and spreadsheets for organizing responses. [FR]",
+        "listitem3": "Update API integration. [FR]",
+        "agree": {
+          "label": "To continue, enter [FR]",
+          "required": "required [FR]",
+          "placeholder": "AGREE [FR]"
+        }
+      }
     },
     "readyForPublicUse": "Formulaire prêt pour un usage par le public",
     "readyForInternalUse": "Formulaire prêt pour un usage interne",
