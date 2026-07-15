@@ -10,7 +10,7 @@ import {
 export type ElementDependencies = Map<string, Set<string>>;
 
 // Helper to build an element lookup map to replace slower array searches
-const buildElementMap = (elements: FormElement[]): Map<string, FormElement> => {
+export const buildElementMap = (elements: FormElement[]): Map<string, FormElement> => {
   return new Map(elements.map((el) => [el.id.toString(), el]));
 };
 
@@ -296,16 +296,18 @@ export const collectDependentElements = (
   elementDependencies: ElementDependencies
 ): Set<string> => {
   const dependents = new Set<string>();
+  // Separate visited set so the initial element IDs don't accidentally block
+  // their own dependents from being traversed (also handles circular deps)
+  const visited = new Set<string>();
 
   const traverse = (currentIds: string[]) => {
     currentIds.forEach((id) => {
-      // Early return handles circular dependencies and avoids redundant processing
-      if (dependents.has(id)) return;
+      if (visited.has(id)) return;
+      visited.add(id);
 
       const directDependents = elementDependencies.get(id);
       if (!directDependents) return;
 
-      // Track dependents immediately before recursing to prevent infinite loops
       directDependents.forEach((depId) => dependents.add(depId));
       traverse(Array.from(directDependents));
     });
@@ -355,13 +357,14 @@ export const computeAllVisibility = (
 };
 
 /**
- * Rcomputes visibility only for elements that depend on the changed elements.
+ * Recomputes visibility only for elements that depend on the changed elements.
  *
  * @param formRecord - The form record
  * @param values - The current form values
  * @param changedElementIds - IDs of elements whose values changed
  * @param elementDependencies - The pre-computed element dependencies map
  * @param currentVisibilityMap - The current visibility map to update
+ * @param cachedElementMap - Optional pre-built element lookup map (avoids rebuilding on every call)
  * @returns Updated visibility map
  */
 export const recomputeAffectedVisibility = (
@@ -369,7 +372,8 @@ export const recomputeAffectedVisibility = (
   values: FormValues,
   changedElementIds: string[],
   elementDependencies: ElementDependencies,
-  currentVisibilityMap: Map<string, boolean>
+  currentVisibilityMap: Map<string, boolean>,
+  cachedElementMap?: Map<string, FormElement>
 ): Map<string, boolean> => {
   // Collect all elements that depend on the changed elements
   const affectedElementIds = collectDependentElements(changedElementIds, elementDependencies);
@@ -381,7 +385,8 @@ export const recomputeAffectedVisibility = (
 
   // Create a new map to avoid mutating the current one
   const updatedMap = new Map(currentVisibilityMap);
-  const elementMap = buildElementMap(formRecord.form.elements);
+  // Reuse caller-provided map to avoid rebuilding on every call (elements are static)
+  const elementMap = cachedElementMap ?? buildElementMap(formRecord.form.elements);
 
   const visibleGroupsCache = new Set(
     getVisibleGroupsBasedOnValuesRecursive(

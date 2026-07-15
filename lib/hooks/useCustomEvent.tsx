@@ -29,6 +29,11 @@ export const EventKeys = {
   formValuesChanged: "form-values-changed",
 } as const;
 
+// Maps the caller's callback to the wrapper function registered with addEventListener,
+// so Event.off() can pass the exact same reference to removeEventListener.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const listenerMap = new WeakMap<(detail: any) => void, (event: Event) => void>();
+
 export const useCustomEvent = () => {
   // Attach listeners to a documentRef instead of document directly
   // https://www.preciousorigho.com/articles/a-better-way-to-create-event-listeners-in-react
@@ -56,10 +61,12 @@ export const useCustomEvent = () => {
      * @param callback (detail: CustomEventDetails) => void
      */
     on: (eventName, callback) => {
-      documentRef.current &&
-        documentRef.current.addEventListener(eventName, (event: Event) => {
-          callback((event as CustomEvent).detail);
-        });
+      if (!documentRef.current) return;
+      const wrapper = (event: Event) => {
+        callback((event as CustomEvent).detail);
+      };
+      listenerMap.set(callback, wrapper);
+      documentRef.current.addEventListener(eventName, wrapper);
     },
 
     /**
@@ -68,10 +75,12 @@ export const useCustomEvent = () => {
      * @param callback (detail: CustomEventDetails) => void
      */
     off: (eventName, callback) => {
-      documentRef.current &&
-        documentRef.current.removeEventListener(eventName, (event: Event) => {
-          callback((event as CustomEvent).detail);
-        });
+      if (!documentRef.current) return;
+      const wrapper = listenerMap.get(callback);
+      if (wrapper) {
+        documentRef.current.removeEventListener(eventName, wrapper);
+        listenerMap.delete(callback);
+      }
     },
   };
 

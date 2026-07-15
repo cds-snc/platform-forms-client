@@ -13,6 +13,7 @@ import {
   getValuesWithMatchedIds,
   getVisibleGroupsBasedOnValuesRecursive,
   buildElementDependencies,
+  buildElementMap,
   computeAllVisibility,
   recomputeAffectedVisibility,
   getChangedChoiceElementIds,
@@ -98,6 +99,13 @@ export const GCFormsProvider = ({
     [formRecord.form.elements]
   );
 
+  // Build the element lookup map once — elements don't change during a session.
+  // Passed to recomputeAffectedVisibility to avoid rebuilding it on every value change.
+  const elementMap = React.useMemo(
+    () => buildElementMap(formRecord.form.elements),
+    [formRecord.form.elements]
+  );
+
   const [visibilityMap, setVisibilityMap] = React.useState<Map<string, boolean>>(() =>
     computeAllVisibility(formRecord, {})
   );
@@ -169,12 +177,23 @@ export const GCFormsProvider = ({
         formValues,
         changedChoiceIds,
         elementDependencies,
-        visibilityMap
+        visibilityMap,
+        elementMap
       );
       setVisibilityMap(updatedVisibility);
 
+      // Build a diff of which elements actually changed visibility so callers
+      // can efficiently decide whether they need to update
+      const visibilityChanges: Record<string, boolean> = {};
+      updatedVisibility.forEach((isVisible, id) => {
+        if (visibilityMap.get(id) !== isVisible) {
+          visibilityChanges[id] = isVisible;
+        }
+      });
+
       Event.fire(EventKeys.formValuesChanged, {
         changedChoiceIds,
+        visibilityChanges,
         values: formValues,
       });
     }

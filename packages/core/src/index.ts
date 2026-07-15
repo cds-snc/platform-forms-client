@@ -30,6 +30,7 @@ export {
   type ElementDependencies,
   type VisibilityState,
   buildElementDependencies,
+  buildElementMap,
   collectDependentElements,
   computeAllVisibility,
   recomputeAffectedVisibility,
