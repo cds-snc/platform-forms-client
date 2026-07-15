@@ -284,8 +284,7 @@ export const buildElementDependencies = (formElements: FormElement[]): ElementDe
  * Collects all elements that depend on the given element IDs.
  * This handles chains of dependencies (A depends on B, B depends on C, etc.)
  *
- * Note: Exploring using a stack here vs recursion for slight perf gains.
- * Can go back to recursion if this is hard to read.
+ * Note: could also use a stack for slight perf gains but IMO recursion is more readable.
  *
  * @param elementIds - The starting element IDs to check dependencies for
  * @param elementDependencies - The element dependencies map
@@ -297,57 +296,25 @@ export const collectDependentElements = (
   elementDependencies: ElementDependencies
 ): Set<string> => {
   const dependents = new Set<string>();
-  const stack: string[] = [...initialElementIds];
 
-  while (stack.length > 0) {
-    const currentId = stack.pop();
-    if (!currentId) continue;
+  const traverse = (currentIds: string[]) => {
+    currentIds.forEach((id) => {
+      // Early return handles circular dependencies and avoids redundant processing
+      if (dependents.has(id)) return;
 
-    const directDependents = elementDependencies.get(currentId);
-    if (!directDependents) continue;
+      const directDependents = elementDependencies.get(id);
+      if (!directDependents) return;
 
-    directDependents.forEach((depId) => {
-      if (!dependents.has(depId)) {
-        dependents.add(depId);
-        stack.push(depId);
-      }
+      // Track dependents immediately before recursing to prevent infinite loops
+      directDependents.forEach((depId) => dependents.add(depId));
+      traverse(Array.from(directDependents));
     });
-  }
+  };
+
+  traverse(initialElementIds);
 
   return dependents;
 };
-// Note: recursive version below -- Can use instead or delete.
-// export const collectDependentElements = (
-//   elementIds: string[],
-//   elementDependencies: ElementDependencies,
-//   visited: Set<string> = new Set()
-// ): Set<string> => {
-//   const dependents = new Set<string>();
-
-//   elementIds.forEach((elementId) => {
-//     // Prevent infinite loops in circular dependencies
-//     if (visited.has(elementId)) return;
-//     visited.add(elementId);
-
-//     // Get direct dependents
-//     const directDependents = elementDependencies.get(elementId);
-//     if (directDependents) {
-//       directDependents.forEach((depId) => {
-//         dependents.add(depId);
-//       });
-
-//       // Recursively collect transitive dependents
-//       const transitiveDependents = collectDependentElements(
-//         Array.from(directDependents),
-//         elementDependencies,
-//         visited
-//       );
-//       transitiveDependents.forEach((depId) => dependents.add(depId));
-//     }
-//   });
-
-//   return dependents;
-// };
 
 /**
  * Computes the visibility of all form elements at once.
