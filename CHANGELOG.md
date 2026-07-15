@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.18.1](https://github.com/cds-snc/platform-forms-client/compare/v4.18.0...v4.18.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* improve hCaptcha logging and error handling ([#7462](https://github.com/cds-snc/platform-forms-client/issues/7462)) ([774a6ef](https://github.com/cds-snc/platform-forms-client/commit/774a6ef6fbbc48ad60ce7766a49ec46ba059f5d1))
+
+
+### Miscellaneous Chores
+
+* add check to hide versions column ([#7490](https://github.com/cds-snc/platform-forms-client/issues/7490)) ([64d04ea](https://github.com/cds-snc/platform-forms-client/commit/64d04eac6ebf5634a81edc7739912644b74a77cf))
+* add edit published to published dropdown ([#7491](https://github.com/cds-snc/platform-forms-client/issues/7491)) ([f80c00f](https://github.com/cds-snc/platform-forms-client/commit/f80c00ff06329a5e57bde9863a77860645bcfd8b))
+* add version updated toast ([#7489](https://github.com/cds-snc/platform-forms-client/issues/7489)) ([e4ac85b](https://github.com/cds-snc/platform-forms-client/commit/e4ac85bdf12ea1a3faff3e287f76343eeac76b62))
+* remove initial date from log settings description ([#7494](https://github.com/cds-snc/platform-forms-client/issues/7494)) ([73b8d4c](https://github.com/cds-snc/platform-forms-client/commit/73b8d4cf66818eb1aa1fcd61f0cdf67909dc4d59))
+* update publish dialog ([#7496](https://github.com/cds-snc/platform-forms-client/issues/7496)) ([45ff2e4](https://github.com/cds-snc/platform-forms-client/commit/45ff2e4bdc30f50e39c57883deb662bddef19954))
+* update react-hcaptcha to latest ([#7498](https://github.com/cds-snc/platform-forms-client/issues/7498)) ([27aa0a9](https://github.com/cds-snc/platform-forms-client/commit/27aa0a957759aeff1d9ab48c6b0656943aab9053))
+
 ## [4.18.0](https://github.com/cds-snc/platform-forms-client/compare/v4.17.2...v4.18.0) (2026-07-13)
 
 
