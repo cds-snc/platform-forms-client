@@ -70,6 +70,12 @@ export const useCustomEvent = () => {
         perEvent = new Map();
         listenerMap.set(callback, perEvent);
       }
+      // Remove any previously registered wrapper for this (callback, eventName) pair
+      // before adding the new one, to prevent duplicate listeners and leaks.
+      const existing = perEvent.get(eventName);
+      if (existing) {
+        documentRef.current.removeEventListener(eventName, existing);
+      }
       perEvent.set(eventName, wrapper);
       documentRef.current.addEventListener(eventName, wrapper);
     },
