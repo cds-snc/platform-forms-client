@@ -50,15 +50,29 @@ export const Cards = ({
     });
   }, []);
 
+  // Stable callback for the polling hook — must be memoized so the hook's
+  // useEffect doesn't tear down and restart on every poll-driven render.
+  const handlePollUpdate = useCallback(
+    (updater: (prev: FormsTemplateWithLockInfo[]) => FormsTemplateWithLockInfo[]) => {
+      startTransition(() => {
+        setTemplates(updater);
+      });
+    },
+    []
+  );
+
   // Poll any template that can currently be edited from the cards view.
   // With template versioning, published templates can still have an editable draft version.
+  // Also include templates currently shown as locked (hasEditLock=true) so a lock release
+  // is always detected even when hasDraft is stale in local state.
   const shouldPoll =
     !tabStatus ||
     tabStatus === TAB_STATUS.RECENTLY_EDITED ||
     tabStatus === TAB_STATUS.DRAFT ||
     tabStatus === TAB_STATUS.PUBLISHED;
   const editableTemplates = useMemo(
-    () => templates.filter((t) => t.ttl === null && (!t.isPublished || t.hasDraft)),
+    () =>
+      templates.filter((t) => t.ttl === null && (!t.isPublished || t.hasDraft || t.hasEditLock)),
     [templates]
   );
   useEditLockPolling({
@@ -66,11 +80,7 @@ export const Cards = ({
     displayedCount,
     pollIntervalMs,
     enabled: shouldPoll,
-    onUpdate: (nextTemplates) => {
-      startTransition(() => {
-        setTemplates(nextTemplates);
-      });
-    },
+    onUpdate: handlePollUpdate,
   });
 
   // Get the appropriate message when there are no forms to display
