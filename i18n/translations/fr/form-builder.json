@@ -400,12 +400,10 @@
   "confirmationDescriptionParagraph": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis. Voici quelques éléments utiles à présenter dans la confirmation :",
   "confirm": {
     "createDraft": {
-      "title": "Créer une version brouillon",
-      "description": "Cela créera une nouvelle version brouillon de votre gabarit publié.",
-      "responseWarning": "You are responsible for ensuring the updated template works with your team's workflows and integrations.[FR]",
-      "liveForm": "Your live form will continue collecting responses as usual until you republish.[FR]",
+      "title": "Mettre à jour le formulaire publié",
+      "liveForm": "The current version will continue collecting responses until you publish the updated form.[FR]",
       "list": {
-        "title": "⚠️ By publishing, you accept that you may need to: [FR]",
+        "title": "⚠️ Before publishing updates, discuss with your developers and test your form. [FR]",
         "listitem1": "Adjust form questions and workflows. [FR]",
         "listitem2": "Revise lists and spreadsheets for organizing responses. [FR]",
         "listitem3": "Update API integration. [FR]"
