@@ -207,18 +207,7 @@ export const PrePublishDialog = ({
             </span>
 
             {hasCurrentlyPublishedVersion && (
-              <p className="text-sm">{t("prePublishFormDialog.republish.text1")}</p>
-            )}
-
-            {hasCurrentlyPublishedVersion && (
-              <p className="text-sm">{t("prePublishFormDialog.republish.text2")}</p>
-            )}
-
-            {hasCurrentlyPublishedVersion && (
-              <div>
-                <p className="mb-4 font-semibold">{t("confirm.createDraft.prompt")}</p>
-                <ConfirmationAgreement handleAgreement={handleAgreement} />
-              </div>
+              <ConfirmationAgreement handleAgreement={handleAgreement} />
             )}
           </div>
         </Dialog>

@@ -402,12 +402,7 @@
     "createDraft": {
       "title": "Create draft version",
       "description": "This will create a new draft of your published template.",
-      "liveForm": "Your live form will continue collecting responses as usual until you republish.",
-      "responseWarning": "You are responsible for ensuring the updated template works with your team's workflows and integrations.",
-      "prompt": "If you understand the potential impact, type AGREE to continue.",
-      "label": "Type AGREE",
-      "required": "required",
-      "placeholder": "AGREE"
+      "liveForm": "Your live form will continue collecting responses as usual until you republish."
     }
   },
   "actions": {
@@ -836,8 +831,20 @@
     "republish": {
       "categoryLabel": "Template category",
       "helpsUnderstand": "Help us understand the purpose of this form.",
-      "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it.",
-      "text2": "New form fillers only have access to the updated form. People mid-way through the earlier version can complete that form unless they reload the page."
+      "confirm": {
+        "title": "Confirm publication",
+        "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it.",
+        "text2": "New form fillers only have access to the updated form. People mid-way through the previous form can complete the earlier version unless they reload the page.",
+        "list": "⚠️ By publishing, you accept that you may need to:",
+        "listitem1": "Adjust form questions and workflows.",
+        "listitem2": "Revise lists and spreadsheets for organizing responses.",
+        "listitem3": "Update API integration.",
+        "agree": {
+          "label": "To continue, enter",
+          "required": "required",
+          "placeholder": "AGREE"
+        }
+      }
     },
     "readyForPublicUse": "Ready for public use",
     "readyForInternalUse": "Ready for internal use",
