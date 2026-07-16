@@ -287,8 +287,6 @@ type AuditDetailsParams = {
   [AuditLogDetails.CreateDraftFromPublishedForm]: {
     versionNumber: string;
   };
-  [AuditLogDetails.PublishForm]: never;
-  [AuditLogDetails.RepublishForm]: never;
 };
 
 export const AuditLogAccessDeniedDetails = {
