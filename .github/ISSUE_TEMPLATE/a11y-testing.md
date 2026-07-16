@@ -1,5 +1,5 @@
 ---
-name: Manual accessibility testing
+name: Accessibility testing
 about: Step-by-step routine checklist for manual accessibility checks
 title: ''
 labels: 'a11y'
@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-## Checklist
+## Checklist for manual a11y testing
 
 ### Dev accessibility test scope
 - [ ] Entire pages and templates (designs)
