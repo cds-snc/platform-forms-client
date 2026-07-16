@@ -59,7 +59,7 @@ export const Menu = ({
         if (error === "Form Not Found") {
           toast.error(t("errors.formDownloadNotExist"));
         } else {
-          toast.error(t("errors.formDownloadFailed"));
+          toast.error(t("formDownloadFailed"));
         }
       }
 
