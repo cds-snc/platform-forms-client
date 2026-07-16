@@ -563,7 +563,13 @@
   "formDownload": {
     "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Obtenir une copie du formulaire"
+    "title": "Obtenir une copie du formulaire",
+    "versionSelector": {
+      "label": "Sélectionnez une version",
+      "currentDraft": "Version {{version}} - ébauche actuelle",
+      "currentPublished": "Version {{version}} - version publiée actuelle",
+      "previousVersion": "Version {{version}}"
+    }
   },
   "auditDownload": {
     "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités des 30 derniers jours sur la création du formulaire, la collaboration et l'intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul.",
