@@ -23,6 +23,7 @@ export const AuditLogEvent = {
   DeleteForm: "DeleteForm",
   UnarchiveForm: "UnarchiveForm",
   PublishForm: "PublishForm",
+  RepublishForm: "RepublishForm",
   ChangeFormName: "ChangeFormName",
   ChangeDeliveryOption: "ChangeDeliveryOption",
   ChangeFormPurpose: "ChangeFormPurpose",
@@ -84,6 +85,7 @@ const FormBuildingEvents = [
   AuditLogEvent.DeleteForm,
   AuditLogEvent.UnarchiveForm,
   AuditLogEvent.PublishForm,
+  AuditLogEvent.RepublishForm,
   AuditLogEvent.ChangeFormName,
   AuditLogEvent.ChangeDeliveryOption,
   AuditLogEvent.ChangeFormPurpose,
@@ -177,8 +179,9 @@ export const AuditLogDetails = {
     "Granted privilege ${privilege} to user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
   RevokedPrivilege:
     "Revoked privilege ${privilege} from user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
-  CreateDraftFromPublishedForm:
-    "User ${userId} created a draft version ${versionNumber} from published form ${formId} with versioned form ID ${versionedFormID}",
+  CreateDraftFromPublishedForm: "CreateDraftFromPublishedForm",
+  PublishForm: "PublishForm",
+  RepublishForm: "RepublishForm",
 } as const;
 
 export type AuditLogDetails = (typeof AuditLogDetails)[keyof typeof AuditLogDetails];
@@ -282,11 +285,10 @@ type AuditDetailsParams = {
   };
   [AuditLogDetails.UpdateFormBranding]: { brand: string };
   [AuditLogDetails.CreateDraftFromPublishedForm]: {
-    userId: string;
     versionNumber: string;
-    formId: string;
-    versionedFormID: string;
   };
+  [AuditLogDetails.PublishForm]: never;
+  [AuditLogDetails.RepublishForm]: never;
 };
 
 export const AuditLogAccessDeniedDetails = {

@@ -5,7 +5,12 @@ import {
   templateVersionSelect,
 } from "../internal/index";
 import { authorization } from "@lib/privileges";
-import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
+import {
+  AuditLogAccessDeniedDetails,
+  AuditLogDetails,
+  AuditLogEvent,
+  logEvent,
+} from "@lib/auditLogs";
 import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
 import { parseTemplate } from "../internal/index";
@@ -163,13 +168,10 @@ export async function createDraftVersionForTemplate(formID: string): Promise<For
   logEvent(
     user.id,
     { type: "Form", id: formID },
-    "CreateDraftFromPublishedForm",
+    AuditLogEvent.CreateDraftFromPublishedForm,
     AuditLogDetails.CreateDraftFromPublishedForm,
     {
-      userId: user.id,
-      formId: updatedTemplate.id,
       versionNumber: String(updatedTemplate.currentDraftVersion?.versionNumber ?? 0),
-      versionedFormID: updatedTemplate.currentDraftVersionId ?? "",
     }
   );
 

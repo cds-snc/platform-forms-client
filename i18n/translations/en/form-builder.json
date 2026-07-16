@@ -614,6 +614,7 @@
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
+      "RepublishForm": "Updated form published",
       "InvitationAccepted": "Invitation accepted",
       "UpdateFormBranding": "Updated form branding",
       "UpdatedNotificationSettings": "Updated notification settings",
@@ -622,6 +623,9 @@
       "InvitationCancelled": "Cancelled a collaboration invitation"
     },
     "eventDetails": {
+      "PublishForm": "Published form",
+      "RepublishForm": "Published updated form",
+      "CreateDraftFromPublishedForm": "Draft version {{versionNumber}}",
       "CreatedForm": "Created form",
       "UpdatedFormName": "Renamed form to: {{newFormName}}",
       "UpdatedFormContent": "Updated form content",
