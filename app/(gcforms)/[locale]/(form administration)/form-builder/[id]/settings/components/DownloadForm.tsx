@@ -6,6 +6,7 @@ import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { getDownloadableFormVersionConfig } from "../actions";
+import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { cn } from "@lib/utils";
 import {
@@ -52,18 +53,10 @@ export const DownloadForm = ({ versions }: Props) => {
       const fileName = name || (i18n.language === "fr" ? formConfig.titleFr : formConfig.titleEn);
 
       const data = JSON.stringify(formConfig, null, 2);
-      const tempUrl = window.URL.createObjectURL(new Blob([data]));
-      const link = document.createElement("a");
+      const filename =
+        slugify(`${fileName}-v${selectedVersionMeta.versionNumber}-${getDate()}`) + ".json";
 
-      link.href = tempUrl;
-      link.setAttribute(
-        "download",
-        slugify(`${fileName}-v${selectedVersionMeta.versionNumber}-${getDate()}`) + ".json"
-      );
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(tempUrl);
+      await downloadDataAsBlob(data, filename, { "application/json": [".json"] });
     } catch (err) {
       toast.error(t("errors.formDownloadFailed"));
     }
