@@ -9,7 +9,7 @@ import { getDownloadableFormVersionConfig } from "../actions";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { cn } from "@lib/utils";
 import {
-  type DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
+  DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
   type DownloadableTemplateVersion,
 } from "@lib/templates/types";
 
