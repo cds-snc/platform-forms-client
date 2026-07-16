@@ -3,8 +3,8 @@ import { TEMPLATE_VERSION_STATUS } from "../internal/types";
 import {
   DownloadableTemplateVersionsInput,
   DownloadableTemplateVersion,
-  formatDownloadableTemplateVersions,
 } from "../downloadableTemplateVersion";
+import { formatDownloadableTemplateVersions } from "@lib/utils/formatDownloadableTemplateVersions";
 
 export async function getDownloadableTemplateVersions(
   formID: string

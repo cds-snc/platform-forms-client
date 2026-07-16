@@ -1,0 +1,52 @@
+import {
+  DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
+  DownloadableTemplateVersion,
+  DownloadableTemplateVersionsInput,
+} from "@lib/templates/versioning/downloadableTemplateVersion";
+
+export function formatDownloadableTemplateVersions(
+  template: DownloadableTemplateVersionsInput
+): DownloadableTemplateVersion[] {
+  const downloadableVersions: DownloadableTemplateVersion[] = [];
+
+  if (template.currentDraftVersion) {
+    downloadableVersions.push({
+      id: template.currentDraftVersion.id,
+      versionNumber: template.currentDraftVersion.versionNumber,
+      label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
+    });
+  }
+
+  if (template.currentPublishedVersion) {
+    downloadableVersions.push({
+      id: template.currentPublishedVersion.id,
+      versionNumber: template.currentPublishedVersion.versionNumber,
+      label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentPublished,
+    });
+  }
+
+  const skippedVersionIds = new Set(
+    [template.currentDraftVersionId, template.currentPublishedVersionId].filter(Boolean)
+  );
+
+  (template.versions || []).forEach((version) => {
+    if (skippedVersionIds.has(version.id)) {
+      return;
+    }
+
+    downloadableVersions.push({
+      id: version.id,
+      versionNumber: version.versionNumber,
+      label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.published,
+    });
+  });
+
+  if (downloadableVersions.length === 0) {
+    downloadableVersions.push({
+      versionNumber: 1,
+      label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
+    });
+  }
+
+  return downloadableVersions.sort((left, right) => right.versionNumber - left.versionNumber);
+}
