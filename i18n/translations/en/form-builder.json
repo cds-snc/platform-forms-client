@@ -593,6 +593,7 @@
     },
     "events": {
       "CreateForm": "Form created",
+      "CreateDraftFromPublishedForm": "Draft created from published form",
       "DeleteForm": "Form archived",
       "UnarchiveForm": "Form restored",
       "ChangeDeliveryOption": "Delivery option changed",
@@ -613,6 +614,7 @@
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
+      "RepublishForm": "Re-published form",
       "InvitationAccepted": "Invitation accepted",
       "UpdateFormBranding": "Updated form branding",
       "UpdatedNotificationSettings": "Updated notification settings",
@@ -621,6 +623,7 @@
       "InvitationCancelled": "Cancelled a collaboration invitation"
     },
     "eventDetails": {
+      "CreateDraftFromPublishedForm": "Draft version {{versionNumber}}",
       "CreatedForm": "Created form",
       "UpdatedFormName": "Renamed form to: {{newFormName}}",
       "UpdatedFormContent": "Updated form content",
