@@ -1,13 +1,14 @@
 import { prisma, prismaErrors } from "@gcforms/database";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
 import {
-  DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
+  DownloadableTemplateVersionsInput,
   DownloadableTemplateVersion,
+  formatDownloadableTemplateVersions,
 } from "../downloadableTemplateVersion";
 
 export async function getDownloadableTemplateVersions(
   formID: string
-): Promise<DownloadableTemplateVersion[]> {
+): Promise<DownloadableTemplateVersionsInput | null> {
   const template = await prisma.template
     .findUnique({
       where: {
@@ -48,46 +49,20 @@ export async function getDownloadableTemplateVersions(
     .catch((e) => prismaErrors(e, null));
 
   if (!template) {
+    return null;
+  }
+
+  return template;
+}
+
+export async function getFormattedDownloadableTemplateVersions(
+  formID: string
+): Promise<DownloadableTemplateVersion[]> {
+  const template = await getDownloadableTemplateVersions(formID);
+
+  if (!template) {
     return [];
   }
 
-  const downloadableVersions: DownloadableTemplateVersion[] = [];
-
-  if (template.currentDraftVersion) {
-    downloadableVersions.push({
-      versionNumber: template.currentDraftVersion.versionNumber,
-      label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
-    });
-  }
-
-  if (template.currentPublishedVersion) {
-    downloadableVersions.push({
-      versionNumber: template.currentPublishedVersion.versionNumber,
-      label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentPublished,
-    });
-  }
-
-  const skippedVersionIds = new Set(
-    [template.currentDraftVersionId, template.currentPublishedVersionId].filter(Boolean)
-  );
-
-  template.versions.forEach((version) => {
-    if (skippedVersionIds.has(version.id)) {
-      return;
-    }
-
-    downloadableVersions.push({
-      versionNumber: version.versionNumber,
-      label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.published,
-    });
-  });
-
-  if (downloadableVersions.length === 0) {
-    downloadableVersions.push({
-      versionNumber: 1,
-      label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
-    });
-  }
-
-  return downloadableVersions.sort((left, right) => right.versionNumber - left.versionNumber);
+  return formatDownloadableTemplateVersions(template);
 }

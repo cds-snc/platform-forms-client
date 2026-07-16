@@ -24,7 +24,7 @@ import {
   DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
   DownloadableTemplateVersion,
 } from "@lib/templates/versioning/downloadableTemplateVersion";
-import { getDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
+import { getFormattedDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -183,9 +183,9 @@ export const getDownloadableFormVersions = AuthenticatedAction(
         };
       }
 
-      const versions = await getDownloadableTemplateVersions(formId);
+      const versions = await getFormattedDownloadableTemplateVersions(formId);
 
-      if (versions.length === 0) {
+      if (!versions || versions.length === 0) {
         throw new Error("Form Not Found");
       }
 
