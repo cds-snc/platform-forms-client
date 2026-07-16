@@ -593,7 +593,7 @@
     },
     "events": {
       "CreateForm": "Formulaire créé",
-      "CreateDraftFromPublishedForm": "Brouillon créé à partir du formulaire publié",
+      "CreateDraftFromPublishedForm": "Ébauche créée à partir du formulaire publié",
       "DeleteForm": "Formulaire archivé",
       "UnarchiveForm": "Formulaire désarchivé",
       "ChangeDeliveryOption": "Option de livraison modifiée",
