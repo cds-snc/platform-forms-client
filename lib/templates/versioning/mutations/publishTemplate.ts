@@ -137,6 +137,7 @@ export async function publishTemplate(
     action: command.action,
     command,
     user,
+    isRepublish: Boolean(templateVersionState?.currentPublishedVersionId),
   });
 
   return parseTemplate(updatedTemplate, {
