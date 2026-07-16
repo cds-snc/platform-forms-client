@@ -30,14 +30,16 @@ type Options = {
   history: string[];
   currentGroup: string;
   language: string;
-  formVersionId?: string;
+  sourceFormId?: string;
+  versionNumber?: number | null;
 };
 
 type RestoredProgress = {
   id: string;
   language: Language;
   values: Responses;
-  formVersionId?: string;
+  versionNumber: number;
+  sourceFormId?: string;
 };
 
 const shouldRunModuleOnInit = () => {
@@ -357,7 +359,8 @@ const restoreSessionProgress = async (): Promise<RestoredProgress | false | unde
       id: formData.id,
       language: formData.language as Language,
       values: rehydratedValues,
-      formVersionId: formData.formVersionId,
+      versionNumber: formData.versionNumber ?? 1,
+      sourceFormId: formData.sourceFormId,
     };
   } catch (e) {
     logMessage.error(e);
@@ -375,7 +378,8 @@ export const saveSessionProgress = async ({
   history,
   currentGroup,
   language,
-  formVersionId,
+  versionNumber,
+  sourceFormId,
 }: Options) => {
   if (typeof sessionStorage === "undefined") {
     return false;
@@ -393,7 +397,8 @@ export const saveSessionProgress = async ({
     history,
     currentGroup,
     language,
-    formVersionId,
+    versionNumber,
+    sourceFormId,
   });
 
   await Promise.all([

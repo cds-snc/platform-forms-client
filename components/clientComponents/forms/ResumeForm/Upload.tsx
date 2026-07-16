@@ -28,7 +28,7 @@ type ResumeFormResponse = {
 };
 
 type PendingMismatchResume = Omit<ResumeFormResponse, "id"> & {
-  formVersionId: string;
+  sourceFormId: string;
 };
 
 export const Upload = ({ formId }: { formId: string }) => {
@@ -72,17 +72,9 @@ export const Upload = ({ formId }: { formId: string }) => {
     values,
     history,
     currentGroup,
-    formVersionId,
-  }: ResumeFormResponse & { formVersionId?: string }) => {
-    await saveSessionProgress({
-      id,
-      values,
-      currentGroup,
-      language,
-      history,
-      formVersionId,
-    });
-
+    sourceFormId,
+  }: ResumeFormResponse & { sourceFormId?: string }) => {
+    await saveSessionProgress({ id, values, history, currentGroup, language, sourceFormId });
     window.location.href = `/${language}/id/${id}`;
   };
 
@@ -97,7 +89,7 @@ export const Upload = ({ formId }: { formId: string }) => {
       values: pendingMismatchResume.values,
       history: pendingMismatchResume.history,
       currentGroup: pendingMismatchResume.currentGroup,
-      formVersionId: pendingMismatchResume.formVersionId,
+      sourceFormId: pendingMismatchResume.sourceFormId,
     });
     setPendingMismatchResume(null);
   };
@@ -174,7 +166,7 @@ export const Upload = ({ formId }: { formId: string }) => {
         if (id !== formId) {
           resetInput?.();
           setPendingMismatchResume({
-            formVersionId: id,
+            sourceFormId: id,
             values: parsed.values,
             history: parsed.history,
             currentGroup: parsed.currentGroup,
@@ -322,7 +314,7 @@ export const Upload = ({ formId }: { formId: string }) => {
             <p className="mt-4 text-sm">{t("saveAndResume.resumePage.mismatchedForm.warning")}</p>
             <p className="mt-4 text-sm">
               <Link
-                href={`/${language}/id/${pendingMismatchResume.formVersionId}/resume`}
+                href={`/${language}/id/${pendingMismatchResume.sourceFormId}/resume`}
                 className="text-blue-700 underline hover:text-blue-800"
               >
                 {t("saveAndResume.resumePage.mismatchedForm.matchingFormLink")}
