@@ -614,17 +614,17 @@
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
-      "RepublishForm": "Re-published form [FR]",
-      "InvitationAccepted": "Invitation acceptée",
-      "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
-      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
-      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée",
-      "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
-    },
-    "eventDetails": {
-      "PublishForm": "Published form [FR]",
-      "RepublishForm": "Published updated form [FR]",
-      "CreateDraftFromPublishedForm": "Draft version {{versionNumber}} [FR]",
+      "RepublishForm": "Formulaire re-publié",
+"InvitationAccepted": "Invitation acceptée",
+"UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
+"UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
+"InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée",
+"InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
+},
+"eventDetails": {
+      "PublishForm": "Formulaire publié",
+      "RepublishForm": "Mise à jour du formulaire publié",
+      "CreateDraftFromPublishedForm": "Ébauche - version : {{versionNumber}}",
       "CreatedForm": "Formulaire créé",
       "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
