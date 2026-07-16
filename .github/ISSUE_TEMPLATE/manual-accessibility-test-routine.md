@@ -1,53 +1,51 @@
 ---
-name: Manual accessibility test routine
-about: Step-by-step check list for manual accessibility checks
+name: Manual accessibility testing
+about: Step-by-step routine checklist for manual accessibility checks
 title: ''
-labels: ''
+labels: 'a11y'
 assignees: ''
 
 ---
 
-### Dev accessibility Test Scope
-- [ ] Entire pages and templates(designs)
-- [ ] Page content and Widgets
+## Checklist
 
-### A basic testing routine
-- [ ] Run an Automated check (using Axe DevTools or Wave) (Optional)
-- [ ] Screen Reader Resources (voiceOver, Narrator)
+### Dev accessibility test scope
+- [ ] Entire pages and templates (designs)
+- [ ] Page content and widgets
 
-### Keyboard Accessibility
-- [ ] Enabling Keyboard Access (On Mac | Windows)
+### Basic testing routine
+- [ ] Run an automated check (using Axe DevTools or Wave)
+- [ ] Screen reader resources (VoiceOver, Narrator)
+
+### Keyboard accessibility
+- [ ] Enabling keyboard Access (On Mac | Windows)
 - [ ] Test tab focusability and tab order
 - [ ] Check keyboard functionality
-- [ ] Check Visual Focus Indicator
-- [ ] Test Keyboard Functionality with Screen Reader On
-- [ ] Test effective Focus Management (Form Validation)
+- [ ] Check visual focus indicator
+- [ ] Test keyboard functionality with screenreader ON
+- [ ] Test effective focus management (form validation)
 
-### Test for Touch Device Accessibility ( if applicable)
-- [ ] Touch Functionality
-- [ ] Touch Target Size
-- [ ] Touch Functionality with Screen Reader On
+### Test for touch device accessibility (if applicable)
+- [ ] Touch functionality
+- [ ] Touch target Size
+- [ ] Touch functionality with Screen Reader On
 
 ### Common tests
-- [ ] Test link text quality
-- [ ] Test Alt text quality
-- [ ] Test if Form Labels and Instructions are clear
-- [ ] Test if the form validation works or not
-- [ ] Test If the labels are correctly written and placed or not.
-- [ ] Test If the audio/video content is properly audible/visible or not.
-- [ ] Test If the colour contrast ratio is maintained or not with a Colour Contrast Analyser (CCA).
-- [ ] Test If the short keys are provided for the menu then you need to check if all of those are working fine.
-- [ ] Test if the navigation between tabs is an easy task.
-- [ ] Test If the heading is unique and conveying the meaning & structure or not.
-- [ ] Test If the link text is written with content description instead of creating ambiguity.
-- [ ] Test If the instructions are clearly given or not.
-- [ ] Test If the content is clear, concise and understandable or not.
+- [ ] Alt text is descriptive
+- [ ] Form labels and instructions are clear
+- [ ] Form validation works
+- [ ] Labels are correctly written and placed
+- [ ] Audio/video content is properly audible/visible
+- [ ] Colour contrast ratio is maintained (check with a colour contrast analyser)
+- [ ] Short keys are provided for the menu, then check if all are working fine
+- [ ] Navigation between tabs is an easy task
+- [ ] Heading is unique and conveying the meaning & structure
+- [ ] Link text is written with content description instead of creating ambiguity
+- [ ] Instructions are clearly given
+- [ ] Content is clear, concise and understandable
 
-### Finally
-- [ ] Test If a page has followed all the principles and guidelines above.
-- [ ] Create or update the related task with ATR card in the New Issues column 
-- [ ] Tag issues with a11y tag, and provide a triage rating
-
-[Triage methodology](https://docs.google.com/document/d/14vxChzDV1M1I2NHsoYDlBJElpIRqPSlqiyILBZbxC1w/edit)
+## Links
 
 [CDS a11y tools and resources](https://digital.canada.ca/a11y/tools-and-resources/)
+
+[Triage methodology](https://docs.google.com/document/d/14vxChzDV1M1I2NHsoYDlBJElpIRqPSlqiyILBZbxC1w/edit)
