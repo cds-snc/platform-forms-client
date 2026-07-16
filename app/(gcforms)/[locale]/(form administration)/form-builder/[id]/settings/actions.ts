@@ -19,8 +19,22 @@ import {
 } from "@lib/auditLogs";
 
 import { logMessage } from "@lib/logger";
+import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
+import {
+  DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
+  DownloadableTemplateVersion,
+} from "@lib/templates/types";
+import { getFormattedDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { getTemplateVersionById } from "@lib/templates/versioning/queries/getTemplateVersionById";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
+
+export type GetDownloadableFormVersionsResult =
+  | {
+      versions: DownloadableTemplateVersion[];
+    }
+  | ServerActionError;
 
 export const createServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
   revalidatePath(
@@ -119,23 +133,126 @@ export const getFormEvents = AuthenticatedAction(
       return events
         .map((event) => {
           const dateOfEvent = new Date(event.timestamp);
-          // Only return if event is after June 15th 2026.
-          if (dateOfEvent < new Date("2026-06-15") && translated) {
-            return null;
-          } else {
-            return {
-              formId: event.subject.split("#")[1],
-              userId: event.userId,
-              event: event.event,
-              timestamp: dateOfEvent.toISOString(),
-              description: event.description,
-            };
-          }
+          return {
+            formId: event.subject.split("#")[1],
+            userId: event.userId,
+            event: event.event,
+            timestamp: dateOfEvent.toISOString(),
+            description: event.description,
+          };
         })
         .filter((event) => event !== null);
     } catch (error) {
       logMessage.error(
         `Critical Error fetching form events for formId ${formId}: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
+  }
+);
+
+export const getDownloadableFormVersions = AuthenticatedAction(
+  async (_, formId: string): Promise<GetDownloadableFormVersionsResult> => {
+    try {
+      await authorization.canViewForm(formId).catch((e) => {
+        if (e instanceof AccessControlError) {
+          logEvent(
+            e.user.id,
+            { type: "Form", id: formId },
+            "AccessDenied",
+            AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
+          );
+        }
+        throw e;
+      });
+
+      if (!(await isTemplateVersioningEnabled())) {
+        const formRecord = await getFullTemplateByID(formId, false);
+
+        if (!formRecord) {
+          throw new Error("Form Not Found");
+        }
+
+        return {
+          versions: [
+            {
+              versionNumber: formRecord.versionNumber ?? 1,
+              label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
+            },
+          ],
+        };
+      }
+
+      const versions = await getFormattedDownloadableTemplateVersions(formId);
+
+      if (!versions || versions.length === 0) {
+        throw new Error("Form Not Found");
+      }
+
+      return { versions };
+    } catch (error) {
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
+  }
+);
+
+export type GetDownloadableFormVersionConfigResult =
+  | {
+      formConfig: unknown;
+    }
+  | ServerActionError;
+
+export const getDownloadableFormVersionConfig = AuthenticatedAction(
+  async (
+    _,
+    formId: string,
+    versionId?: string
+  ): Promise<GetDownloadableFormVersionConfigResult> => {
+    try {
+      await authorization.canViewForm(formId).catch((e) => {
+        if (e instanceof AccessControlError) {
+          logEvent(
+            e.user.id,
+            { type: "Form", id: formId },
+            "AccessDenied",
+            AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
+          );
+        }
+        throw e;
+      });
+
+      if (!(await isTemplateVersioningEnabled())) {
+        const formRecord = await getFullTemplateByID(formId, false);
+
+        if (!formRecord) {
+          throw new Error("Form Not Found");
+        }
+
+        return { formConfig: formRecord.form };
+      }
+
+      if (!versionId) {
+        throw new Error("Version Id Required");
+      }
+
+      const versionRecord = await getTemplateVersionById(versionId);
+
+      if (!versionRecord || !versionRecord.jsonConfig) {
+        throw new Error("Version Not Found");
+      }
+
+      const cfg =
+        typeof versionRecord.jsonConfig === "string"
+          ? JSON.parse(versionRecord.jsonConfig as string)
+          : versionRecord.jsonConfig;
+
+      return { formConfig: cfg };
+    } catch (error) {
+      logMessage.error(
+        `Critical Error fetching form version config for formId ${formId}: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
 
       return { error: "There was an error. Please try again later." } as ServerActionError;

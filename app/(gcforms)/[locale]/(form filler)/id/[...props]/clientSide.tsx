@@ -17,6 +17,7 @@ import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
+
 export const FormWrapper = ({
   formRecord,
   header,
@@ -43,6 +44,8 @@ export const FormWrapper = ({
   const { cachedSession } = useResponsesCache();
   const captchaToken = React.useRef("");
   // TODO : If the formRecord contains file inputs Save and Resume is not available
+  const resetCaptchaRef = React.useRef<{ resetToken: () => void }>({ resetToken: () => {} });
+
   const saveAndResume = formRecord?.saveAndResume;
 
   // Generate form elements on the client to ensure Formik context is available
@@ -124,6 +127,7 @@ export const FormWrapper = ({
         setCaptchaFail={setCaptchaFail}
         captchaFail={captchaFail}
         captchaToken={captchaToken}
+        resetCaptchaRef={resetCaptchaRef}
       >
         {currentForm}
       </Form>

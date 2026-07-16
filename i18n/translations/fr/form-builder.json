@@ -400,14 +400,14 @@
   "confirmationDescriptionParagraph": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis. Voici quelques éléments utiles à présenter dans la confirmation :",
   "confirm": {
     "createDraft": {
-      "title": "Créer une version brouillon",
-      "description": "Cela créera une nouvelle version brouillon de votre gabarit publié.",
-      "responseWarning": "Vous êtes responsable de vous assurer que le gabarit mis à jour fonctionne avec les flux de travail et les intégrations de votre équipe.",
-      "liveForm": "Votre formulaire en ligne continuera à recueillir des réponses normalement jusqu'à ce que vous le republiciez.",
-      "prompt": "Si vous comprenez le potentiel impact, tapez AGREE pour continuer.",
-      "label": "Tapez AGREE",
-      "required": "requis",
-      "placeholder": "ACCEPTE"
+      "title": "Mettre à jour le formulaire publié",
+      "liveForm": "The current version will continue collecting responses until you publish the updated form.[FR]",
+      "list": {
+        "title": "⚠️ Before publishing updates, discuss with your developers and test your form. [FR]",
+        "listitem1": "Adjust form questions and workflows. [FR]",
+        "listitem2": "Revise lists and spreadsheets for organizing responses. [FR]",
+        "listitem3": "Update API integration. [FR]"
+      }
     }
   },
   "actions": {
@@ -563,10 +563,16 @@
   "formDownload": {
     "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Obtenir une copie du formulaire"
+    "title": "Obtenir une copie du formulaire",
+    "versionSelector": {
+      "label": "Sélectionnez une version",
+      "currentDraft": "Version {{version}} - ébauche actuelle",
+      "currentPublished": "Version {{version}} - version publiée actuelle",
+      "previousVersion": "Version {{version}}"
+    }
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités de création, de collaboration et d’intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul. Vous obtiendrez les activités des 30 derniers jours, à partir du 15 juin 2026.",
+    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités des 30 derniers jours sur la création du formulaire, la collaboration et l'intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul.",
     "downloadBtnText": "Télécharger l'activité récente",
     "title": "Afficher l’activité récente du formulaire",
     "dialog": {
@@ -593,6 +599,7 @@
     },
     "events": {
       "CreateForm": "Formulaire créé",
+      "CreateDraftFromPublishedForm": "Ébauche créée à partir du formulaire publié",
       "DeleteForm": "Formulaire archivé",
       "UnarchiveForm": "Formulaire désarchivé",
       "ChangeDeliveryOption": "Option de livraison modifiée",
@@ -613,6 +620,7 @@
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
+      "RepublishForm": "Formulaire re-publié",
       "InvitationAccepted": "Invitation acceptée",
       "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
       "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
@@ -620,6 +628,7 @@
       "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
     },
     "eventDetails": {
+      "CreateDraftFromPublishedForm": "Ébauche - version : {{versionNumber}}",
       "CreatedForm": "Formulaire créé",
       "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
@@ -791,7 +800,7 @@
   "privacyStatement": "Avis de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
-  "republish": "Publier de nouveau",
+  "republish": "Publier une mise à jour",
   "readyToPublish": "Prêt à publier",
   "published": "Publié",
   "publishedBack": "Retourner aux formulaires",
@@ -829,8 +838,26 @@
   },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
-    "republishTitle": "Publier le formulaire à nouveau",
+    "republishTitle": "Publier une mise à jour",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
+    "republish": {
+      "categoryLabel": "Template category [FR]",
+      "helpsUnderstand": "Help us understand the purpose of this form. [FR]",
+      "confirm": {
+        "title": "Confirm publication [FR]",
+        "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it. [FR]",
+        "text2": "New form fillers only have access to the updated form. People mid-way through the previous form can complete the earlier version unless they reload the page. [FR]",
+        "list": "⚠️ By publishing, you accept that you may need to: [FR]",
+        "listitem1": "Adjust form questions and workflows. [FR]",
+        "listitem2": "Revise lists and spreadsheets for organizing responses. [FR]",
+        "listitem3": "Update API integration. [FR]",
+        "agree": {
+          "label": "To continue, enter [FR]",
+          "required": "required [FR]",
+          "placeholder": "AGREE [FR]"
+        }
+      }
+    },
     "readyForPublicUse": "Formulaire prêt pour un usage par le public",
     "readyForInternalUse": "Formulaire prêt pour un usage interne",
     "sharingForFeedback": "Formulaire à partager pour commentaires ou approbation",

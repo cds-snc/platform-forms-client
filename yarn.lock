@@ -1015,7 +1015,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.9, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.28.6, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.28.6, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.29.2
   resolution: "@babel/runtime@npm:7.29.2"
   checksum: 10c0/30b80a0140d16467792e1bbeb06f655b0dab70407da38dfac7fedae9c859f9ae9d846ef14ad77bd3814c064295fe9b1bc551f1541ea14646ae9f22b71a8bc17a
@@ -2211,23 +2211,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hcaptcha/loader@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@hcaptcha/loader@npm:2.2.0"
-  checksum: 10c0/f7e85a730844c095bdcc62b5199d129cf70195ff213b6202f81e6e4bd48da81110fcd5b5e9ad7d336493762d952620047eb7e5224c5f4f181dedee47d5e196a1
-  languageName: node
-  linkType: hard
-
-"@hcaptcha/react-hcaptcha@npm:^1.14.0":
-  version: 1.14.0
-  resolution: "@hcaptcha/react-hcaptcha@npm:1.14.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.17.9"
-    "@hcaptcha/loader": "npm:^2.2.0"
-  peerDependencies:
-    react: ">= 16.3.0"
-    react-dom: ">= 16.3.0"
-  checksum: 10c0/76182756003208e8c2771f58f7cb0e8da196835872d09859e45a8592eeebff741ad071319c7075e7aeee4ba73dd8c2cab9c412c6214469d883b6a53b4b894744
+"@hcaptcha/react-hcaptcha@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@hcaptcha/react-hcaptcha@npm:2.0.2"
+  checksum: 10c0/f817109ae388022c56ad9bfb64176d3443db8965a344c2d6112f9c8e3e1855667a2d6b0b32f634cafdb1f950a92c73712b690447d0c3a19968721afb1a505d59
   languageName: node
   linkType: hard
 
@@ -9916,7 +9903,7 @@ __metadata:
     "@gcforms/editor": "workspace:*"
     "@gcforms/tag-input": "workspace:*"
     "@gcforms/types": "workspace:*"
-    "@hcaptcha/react-hcaptcha": "npm:^1.14.0"
+    "@hcaptcha/react-hcaptcha": "npm:^2.0.2"
     "@hcaptcha/types": "npm:^1.1.0"
     "@headless-tree/core": "npm:^1.7.0"
     "@headless-tree/react": "npm:^1.7.0"

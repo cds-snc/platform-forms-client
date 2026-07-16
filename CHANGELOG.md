@@ -5,6 +5,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.18.1](https://github.com/cds-snc/platform-forms-client/compare/v4.18.0...v4.18.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* improve hCaptcha logging and error handling ([#7462](https://github.com/cds-snc/platform-forms-client/issues/7462)) ([774a6ef](https://github.com/cds-snc/platform-forms-client/commit/774a6ef6fbbc48ad60ce7766a49ec46ba059f5d1))
+
+
+### Miscellaneous Chores
+
+* add check to hide versions column ([#7490](https://github.com/cds-snc/platform-forms-client/issues/7490)) ([64d04ea](https://github.com/cds-snc/platform-forms-client/commit/64d04eac6ebf5634a81edc7739912644b74a77cf))
+* add edit published to published dropdown ([#7491](https://github.com/cds-snc/platform-forms-client/issues/7491)) ([f80c00f](https://github.com/cds-snc/platform-forms-client/commit/f80c00ff06329a5e57bde9863a77860645bcfd8b))
+* add version updated toast ([#7489](https://github.com/cds-snc/platform-forms-client/issues/7489)) ([e4ac85b](https://github.com/cds-snc/platform-forms-client/commit/e4ac85bdf12ea1a3faff3e287f76343eeac76b62))
+* remove initial date from log settings description ([#7494](https://github.com/cds-snc/platform-forms-client/issues/7494)) ([73b8d4c](https://github.com/cds-snc/platform-forms-client/commit/73b8d4cf66818eb1aa1fcd61f0cdf67909dc4d59))
+* update publish dialog ([#7496](https://github.com/cds-snc/platform-forms-client/issues/7496)) ([45ff2e4](https://github.com/cds-snc/platform-forms-client/commit/45ff2e4bdc30f50e39c57883deb662bddef19954))
+* update react-hcaptcha to latest ([#7498](https://github.com/cds-snc/platform-forms-client/issues/7498)) ([27aa0a9](https://github.com/cds-snc/platform-forms-client/commit/27aa0a957759aeff1d9ab48c6b0656943aab9053))
+
+## [4.18.0](https://github.com/cds-snc/platform-forms-client/compare/v4.17.2...v4.18.0) (2026-07-13)
+
+
+### Features
+
+* add PacifiCan branding ([#7436](https://github.com/cds-snc/platform-forms-client/issues/7436)) ([cc5303b](https://github.com/cds-snc/platform-forms-client/commit/cc5303bbea62ff664c16846535b292f6b60b3ee5))
+* notification v3 ([#6824](https://github.com/cds-snc/platform-forms-client/issues/6824)) ([1bbae1a](https://github.com/cds-snc/platform-forms-client/commit/1bbae1a6e3583339fb30d8d4243b78c9b02f84fa))
+
+
+### Bug Fixes
+
+* rework ResponseValidationValues to isolate actual responses from the rest of the type attributes ([#7447](https://github.com/cds-snc/platform-forms-client/issues/7447)) ([987cf58](https://github.com/cds-snc/platform-forms-client/commit/987cf58c585e657eaf39ad6cf9d8a7169e4f753b))
+* useEffect loop with GCFormsContext and Formik ([#7431](https://github.com/cds-snc/platform-forms-client/issues/7431)) ([7809f91](https://github.com/cds-snc/platform-forms-client/commit/7809f91d38928f2fb067c848afb07eaff67f55ad))
+
+
+### Reverts
+
+* gcformscontext update to fix show / hide ([#7487](https://github.com/cds-snc/platform-forms-client/issues/7487)) ([61d3930](https://github.com/cds-snc/platform-forms-client/commit/61d3930cbb94c721c8560da4235c0838f5d6d719))
+
+
+### Miscellaneous Chores
+
+* Add AddressComplete test. ([#7488](https://github.com/cds-snc/platform-forms-client/issues/7488)) ([c6a46f2](https://github.com/cds-snc/platform-forms-client/commit/c6a46f2586957e4a1b50605713460065e75a8a7f))
+* add create version confirm dialog ([#7464](https://github.com/cds-snc/platform-forms-client/issues/7464)) ([c1a629a](https://github.com/cds-snc/platform-forms-client/commit/c1a629ab5c1a6682b67133679357e759a54a534b))
+* add default version ([#7452](https://github.com/cds-snc/platform-forms-client/issues/7452)) ([cb0ed9d](https://github.com/cds-snc/platform-forms-client/commit/cb0ed9d8fc513e12c366426c029b10f61bff3f5f))
+* add Playwright test for show hide ([#7486](https://github.com/cds-snc/platform-forms-client/issues/7486)) ([5b989c4](https://github.com/cds-snc/platform-forms-client/commit/5b989c467893c6f9a6adc73b9e99b48010d594f3))
+* add published version number to card view ([#7457](https://github.com/cds-snc/platform-forms-client/issues/7457)) ([30cf090](https://github.com/cds-snc/platform-forms-client/commit/30cf090ec3881889114a95bd4b73009304589572))
+* add version number to response download files ([#7471](https://github.com/cds-snc/platform-forms-client/issues/7471)) ([72311c8](https://github.com/cds-snc/platform-forms-client/commit/72311c822c87c99682a402059cb92588793de301))
+* add version to vault queries ([#7450](https://github.com/cds-snc/platform-forms-client/issues/7450)) ([6a88691](https://github.com/cds-snc/platform-forms-client/commit/6a88691073f4b0ed842091bd77452adc2d5c3a80))
+* add version tooltip ([#7453](https://github.com/cds-snc/platform-forms-client/issues/7453)) ([0a36d52](https://github.com/cds-snc/platform-forms-client/commit/0a36d52750de757e964b019763b593403118f8ac))
+* allow template query fallback ([#7479](https://github.com/cds-snc/platform-forms-client/issues/7479)) ([d7989a9](https://github.com/cds-snc/platform-forms-client/commit/d7989a9428985abb76069436463cb1882080d9ed))
+* check auth before saving filename ([#7406](https://github.com/cds-snc/platform-forms-client/issues/7406)) ([67750f9](https://github.com/cds-snc/platform-forms-client/commit/67750f9951c4e8c01d77e63394af68af7c4ead80))
+* check user level feature flag for template versioning ([#7478](https://github.com/cds-snc/platform-forms-client/issues/7478)) ([f2d2350](https://github.com/cds-snc/platform-forms-client/commit/f2d235031814be6b024ee542992167cea4b8e5d2))
+* ensure filename gets saved to the db ([#7395](https://github.com/cds-snc/platform-forms-client/issues/7395)) ([7bca1c8](https://github.com/cds-snc/platform-forms-client/commit/7bca1c8e9248b2af2ba37349acda4c142c9ea699))
+* fix addresscomplete example spacing ([#7481](https://github.com/cds-snc/platform-forms-client/issues/7481)) ([ece0b4d](https://github.com/cds-snc/platform-forms-client/commit/ece0b4d3b660895177c4233cf9fa92a3ac290aa7))
+* improve code sending form access removed notification ([#7461](https://github.com/cds-snc/platform-forms-client/issues/7461)) ([9db00cc](https://github.com/cds-snc/platform-forms-client/commit/9db00cca3da18e490887630c29ab11c243286291))
+* Refactor general update action ([#7402](https://github.com/cds-snc/platform-forms-client/issues/7402)) ([5351755](https://github.com/cds-snc/platform-forms-client/commit/5351755525bcaddd4e7560d43081192c3ef921b6))
+* Refactor template update mutations and actions ([#7386](https://github.com/cds-snc/platform-forms-client/issues/7386)) ([ec7c706](https://github.com/cds-snc/platform-forms-client/commit/ec7c706da26c50214f55b1c1e0608aca760168a6))
+* Remove unused api/templates routes ([#7398](https://github.com/cds-snc/platform-forms-client/issues/7398)) ([ca349f0](https://github.com/cds-snc/platform-forms-client/commit/ca349f02207541c3fc87b1f38439df2a38d8b7ea))
+* response pilot hide select based on feature flag ([#7477](https://github.com/cds-snc/platform-forms-client/issues/7477)) ([eb6ccaf](https://github.com/cds-snc/platform-forms-client/commit/eb6ccafdab22632c732c24bce28ff516f29579c2))
+* Template Versioning initial setup ([#7407](https://github.com/cds-snc/platform-forms-client/issues/7407)) ([2ecdf8c](https://github.com/cds-snc/platform-forms-client/commit/2ecdf8c3d33c82fe1c9777a029acd25a71e6f9bb))
+* Update content in pause and resume ([#7427](https://github.com/cds-snc/platform-forms-client/issues/7427)) ([dcfa04f](https://github.com/cds-snc/platform-forms-client/commit/dcfa04fe3df2016c84547cf1032acc1802fb6cd8))
+* update edit publish links ([#7451](https://github.com/cds-snc/platform-forms-client/issues/7451)) ([0e741be](https://github.com/cds-snc/platform-forms-client/commit/0e741be0aad1fb5908dc3ab085a3d4f9eb6b0229))
+* Update removal message for access in French translation ([74f00b9](https://github.com/cds-snc/platform-forms-client/commit/74f00b919120a296869818ba77c0ba2c14fad7af))
+* Update remove message for access management ([fcb00b2](https://github.com/cds-snc/platform-forms-client/commit/fcb00b213b56286934f596c86a9d6d0b2bf7e090))
+* use template state vs template store for publish check ([#7454](https://github.com/cds-snc/platform-forms-client/issues/7454)) ([152a0ec](https://github.com/cds-snc/platform-forms-client/commit/152a0ec3443c960b2cd1f3cb01a13ac21e856481))
+* versioned response pilot ([#7458](https://github.com/cds-snc/platform-forms-client/issues/7458)) ([726f474](https://github.com/cds-snc/platform-forms-client/commit/726f474751c013dd103ad18676fa6388f56f23a3))
+
 ## [4.17.2](https://github.com/cds-snc/platform-forms-client/compare/v4.17.1...v4.17.2) (2026-06-18)
 
 

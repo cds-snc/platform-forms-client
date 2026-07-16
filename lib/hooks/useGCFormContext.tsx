@@ -51,6 +51,7 @@ interface GCFormsContextValueType {
     values: FormValues;
     history: string[];
     currentGroup: string;
+    versionNumber?: number | null;
   };
 }
 
@@ -152,6 +153,7 @@ export const GCFormsProvider = ({
       values: formValuesWithoutFileContent as FormValues,
       history: history.current,
       currentGroup: currentGroup || "",
+      versionNumber: formRecord.versionNumber ?? 1,
     };
   };
 
@@ -245,6 +247,7 @@ export const useGCFormsContext = () => {
           values: {},
           history: [],
           currentGroup: "",
+          versionNumber: 1,
         };
       },
     };
