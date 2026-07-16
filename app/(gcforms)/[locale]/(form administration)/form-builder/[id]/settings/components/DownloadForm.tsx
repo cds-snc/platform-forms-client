@@ -124,21 +124,44 @@ export const DownloadForm = () => {
           {t("formDownload.versionSelector.label")}
         </label>
         <div className="flex items-end gap-4">
-          <select
-            id="download-version-select"
-            className={cn("form-builder-dropdown text-black-default mt-0 mb-0 inline-block", {
-              "opacity-60": isLoading,
-            })}
-            value={selectedVersion}
-            onChange={(event) => setSelectedVersion(event.target.value)}
-            disabled={isLoading || versions.length === 0}
-          >
-            {versions.map((version) => (
-              <option key={version.versionNumber} value={version.versionNumber}>
-                {buildVersionLabel(version)}
-              </option>
-            ))}
-          </select>
+          <div className="relative inline-block">
+            <select
+              id="download-version-select"
+              className={cn(
+                "gc-select w-auto min-w-55 appearance-none rounded-md border-2 border-slate-800 py-2 pr-10 pl-4",
+                {
+                  "opacity-60": isLoading,
+                }
+              )}
+              value={selectedVersion}
+              onChange={(event) => setSelectedVersion(event.target.value)}
+              disabled={isLoading || versions.length === 0}
+            >
+              {versions.map((version) => (
+                <option key={version.versionNumber} value={version.versionNumber}>
+                  {buildVersionLabel(version)}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="#0f172a"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
           <Button
             theme="primary"
             onClick={downloadSelectedVersion}
