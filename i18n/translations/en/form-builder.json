@@ -614,7 +614,7 @@
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
-      "RepublishForm": "Updated form published",
+      "RepublishForm": "Re-published form",
       "InvitationAccepted": "Invitation accepted",
       "UpdateFormBranding": "Updated form branding",
       "UpdatedNotificationSettings": "Updated notification settings",
