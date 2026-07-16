@@ -107,8 +107,7 @@ export const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
       logEvent(
         event.user.id,
         { type: "Form", id: publishCommand.formId },
-        event.isRepublish ? AuditLogEvent.RepublishForm : AuditLogEvent.PublishForm,
-        event.isRepublish ? AuditLogDetails.RepublishForm : AuditLogDetails.PublishForm
+        event.isRepublish ? AuditLogEvent.RepublishForm : AuditLogEvent.PublishForm
       );
       break;
     case UpdateTemplateAction.SecurityAttribute:
