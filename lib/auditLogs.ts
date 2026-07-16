@@ -17,6 +17,7 @@ import { getClientIp } from "./ip";
 export const AuditLogEvent = {
   // Form Events
   CreateForm: "CreateForm",
+  CreateDraftFromPublishedForm: "CreateDraftFromPublishedForm",
   ReadForm: "ReadForm",
   UpdateForm: "UpdateForm",
   DeleteForm: "DeleteForm",
@@ -78,6 +79,7 @@ export const AuditLogEvent = {
 
 const FormBuildingEvents = [
   AuditLogEvent.CreateForm,
+  AuditLogEvent.CreateDraftFromPublishedForm,
   AuditLogEvent.UpdateForm,
   AuditLogEvent.DeleteForm,
   AuditLogEvent.UnarchiveForm,
@@ -175,6 +177,8 @@ export const AuditLogDetails = {
     "Granted privilege ${privilege} to user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
   RevokedPrivilege:
     "Revoked privilege ${privilege} from user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
+  CreateDraftFromPublishedForm:
+    "User ${userId} created a draft version ${versionNumber} from published form ${formId} with versioned form ID ${versionedFormID}",
 } as const;
 
 export type AuditLogDetails = (typeof AuditLogDetails)[keyof typeof AuditLogDetails];
@@ -277,6 +281,12 @@ type AuditDetailsParams = {
     abilityUserId: string;
   };
   [AuditLogDetails.UpdateFormBranding]: { brand: string };
+  [AuditLogDetails.CreateDraftFromPublishedForm]: {
+    userId: string;
+    versionNumber: string;
+    formId: string;
+    versionedFormID: string;
+  };
 };
 
 export const AuditLogAccessDeniedDetails = {

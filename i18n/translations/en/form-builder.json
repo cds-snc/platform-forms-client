@@ -593,6 +593,7 @@
     },
     "events": {
       "CreateForm": "Form created",
+      "CreateDraftFromPublishedForm": "Draft created from published form",
       "DeleteForm": "Form archived",
       "UnarchiveForm": "Form restored",
       "ChangeDeliveryOption": "Delivery option changed",
