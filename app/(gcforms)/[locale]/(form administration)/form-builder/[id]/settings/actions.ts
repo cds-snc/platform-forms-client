@@ -233,7 +233,15 @@ export const getDownloadableFormVersionConfig = AuthenticatedAction(
       }
 
       if (!versionId) {
-        throw new Error("Version Id Required");
+        // No version id provided (likely templates created before versioning).
+        // Fallback to returning the full template record.
+        const formRecord = await getFullTemplateByID(formId, false);
+
+        if (!formRecord) {
+          throw new Error("Form Not Found");
+        }
+
+        return { formConfig: formRecord.form };
       }
 
       const versionRecord = await getTemplateVersionById(versionId);
