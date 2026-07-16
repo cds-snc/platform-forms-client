@@ -24,18 +24,22 @@ export const DownloadForm = ({ versions }: Props) => {
     name: s.name,
   }));
   const [selectedVersion, setSelectedVersion] = useState<string>(
-    versions[0] ? String(versions[0].versionNumber) : ""
+    versions[0] ? (versions[0].id ?? String(versions[0].versionNumber)) : ""
   );
 
   const selectedVersionMeta = useMemo(() => {
-    return versions.find((version) => String(version.versionNumber) === selectedVersion);
+    return versions.find((version) =>
+      version.id
+        ? version.id === selectedVersion
+        : String(version.versionNumber) === selectedVersion
+    );
   }, [selectedVersion, versions]);
 
   const downloadSelectedVersion = async () => {
     if (!selectedVersionMeta) return;
 
     try {
-      const res = await getDownloadableFormVersionConfig(id, Number(selectedVersion));
+      const res = await getDownloadableFormVersionConfig(id, selectedVersionMeta.id);
       const result = res as { error?: unknown; formConfig?: unknown };
 
       if (result.error || !result.formConfig) {
@@ -101,7 +105,10 @@ export const DownloadForm = ({ versions }: Props) => {
               disabled={versions.length === 0}
             >
               {versions.map((version) => (
-                <option key={version.versionNumber} value={version.versionNumber}>
+                <option
+                  key={version.id ?? version.versionNumber}
+                  value={version.id ?? String(version.versionNumber)}
+                >
                   {buildVersionLabel(version)}
                 </option>
               ))}

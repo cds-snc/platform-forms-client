@@ -11,6 +11,7 @@ export type DownloadableTemplateVersionLabel =
 
 export type DownloadableTemplateVersion = {
   versionNumber: number;
+  id?: string;
   label: DownloadableTemplateVersionLabel;
   formConfig?: FormProperties;
 };
@@ -30,6 +31,7 @@ export function formatDownloadableTemplateVersions(
 
   if (template.currentDraftVersion) {
     downloadableVersions.push({
+      id: template.currentDraftVersion.id,
       versionNumber: template.currentDraftVersion.versionNumber,
       label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
     });
@@ -37,6 +39,7 @@ export function formatDownloadableTemplateVersions(
 
   if (template.currentPublishedVersion) {
     downloadableVersions.push({
+      id: template.currentPublishedVersion.id,
       versionNumber: template.currentPublishedVersion.versionNumber,
       label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentPublished,
     });
@@ -52,6 +55,7 @@ export function formatDownloadableTemplateVersions(
     }
 
     downloadableVersions.push({
+      id: version.id,
       versionNumber: version.versionNumber,
       label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.published,
     });

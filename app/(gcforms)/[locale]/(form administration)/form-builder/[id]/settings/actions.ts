@@ -26,6 +26,7 @@ import {
 } from "@lib/templates/versioning/downloadableTemplateVersion";
 import { getFormattedDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { getTemplateVersionById } from "@lib/templates/versioning/queries/getTemplateVersionById";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -206,7 +207,7 @@ export const getDownloadableFormVersionConfig = AuthenticatedAction(
   async (
     _,
     formId: string,
-    versionNumber?: number
+    versionId?: string
   ): Promise<GetDownloadableFormVersionConfigResult> => {
     try {
       await authorization.canViewForm(formId).catch((e) => {
@@ -231,45 +232,20 @@ export const getDownloadableFormVersionConfig = AuthenticatedAction(
         return { formConfig: formRecord.form };
       }
 
-      // Template versioning enabled: find the requested version jsonConfig
-      const template = await (
-        await import("@gcforms/database")
-      ).prisma.template
-        .findUnique({
-          where: { id: formId },
-          select: {
-            currentDraftVersion: { select: { versionNumber: true, jsonConfig: true } },
-            currentPublishedVersion: { select: { versionNumber: true, jsonConfig: true } },
-            versions: { select: { versionNumber: true, jsonConfig: true } },
-          },
-        })
-        .catch((e) => {
-          logMessage.error(
-            `DB error fetching template version config: ${e instanceof Error ? e.message : String(e)}`
-          );
-          return null;
-        });
-
-      if (!template) throw new Error("Form Not Found");
-
-      const candidates: Array<{ versionNumber?: number; jsonConfig?: string | unknown } | null> =
-        [];
-      candidates.push(template.currentDraftVersion ?? null);
-      candidates.push(template.currentPublishedVersion ?? null);
-      if (template.versions && Array.isArray(template.versions)) {
-        template.versions.forEach((v) => candidates.push(v));
+      if (!versionId) {
+        throw new Error("Version Id Required");
       }
 
-      const match = candidates.find((c) => c && c.versionNumber === versionNumber) || candidates[0];
+      const versionRecord = await getTemplateVersionById(versionId);
 
-      if (!match || !match.jsonConfig) {
+      if (!versionRecord || !versionRecord.jsonConfig) {
         throw new Error("Version Not Found");
       }
 
       const cfg =
-        typeof match.jsonConfig === "string"
-          ? JSON.parse(match.jsonConfig as string)
-          : match.jsonConfig;
+        typeof versionRecord.jsonConfig === "string"
+          ? JSON.parse(versionRecord.jsonConfig as string)
+          : versionRecord.jsonConfig;
 
       return { formConfig: cfg };
     } catch (error) {
