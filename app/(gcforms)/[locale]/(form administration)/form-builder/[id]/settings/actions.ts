@@ -19,8 +19,21 @@ import {
 } from "@lib/auditLogs";
 
 import { logMessage } from "@lib/logger";
+import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
+import {
+  DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
+  DownloadableTemplateVersion,
+} from "@lib/templates/versioning/downloadableTemplateVersion";
+import { getDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
+
+export type GetDownloadableFormVersionsResult =
+  | {
+      versions: DownloadableTemplateVersion[];
+    }
+  | ServerActionError;
 
 export const createServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
   revalidatePath(
@@ -133,6 +146,52 @@ export const getFormEvents = AuthenticatedAction(
         `Critical Error fetching form events for formId ${formId}: ${error instanceof Error ? error.message : "Unknown error"}`
       );
 
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
+  }
+);
+
+export const getDownloadableFormVersions = AuthenticatedAction(
+  async (_, formId: string): Promise<GetDownloadableFormVersionsResult> => {
+    try {
+      await authorization.canViewForm(formId).catch((e) => {
+        if (e instanceof AccessControlError) {
+          logEvent(
+            e.user.id,
+            { type: "Form", id: formId },
+            "AccessDenied",
+            AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
+          );
+        }
+        throw e;
+      });
+
+      if (!(await isTemplateVersioningEnabled())) {
+        const formRecord = await getFullTemplateByID(formId, false);
+
+        if (!formRecord) {
+          throw new Error("Form Not Found");
+        }
+
+        return {
+          versions: [
+            {
+              versionNumber: formRecord.versionNumber ?? 1,
+              label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
+              formConfig: formRecord.form,
+            },
+          ],
+        };
+      }
+
+      const versions = await getDownloadableTemplateVersions(formId);
+
+      if (versions.length === 0) {
+        throw new Error("Form Not Found");
+      }
+
+      return { versions };
+    } catch (error) {
       return { error: "There was an error. Please try again later." } as ServerActionError;
     }
   }

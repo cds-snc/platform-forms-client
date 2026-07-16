@@ -563,7 +563,13 @@
   "formDownload": {
     "description": "Keep a version stored locally on your computer or use this file to share a draft in progress.",
     "downloadBtnText": "Download form file",
-    "title": "Get a copy of your form"
+    "title": "Get a copy of your form",
+    "versionSelector": {
+      "label": "Select a version",
+      "currentDraft": "Version {{version}} - current draft",
+      "currentPublished": "Version {{version}} - current published",
+      "previousVersion": "Version {{version}}"
+    }
   },
   "auditDownload": {
     "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for the last 30 days related to form creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet.",
