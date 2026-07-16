@@ -205,9 +205,8 @@ export const GCFormsProvider = ({
         }
       });
 
-      // Deferring to next tick because:
-      // - CustomEvent dispatch is synchronous.
-      // - Firing inline triggers a React "setState during render" warning.
+      // Deferring to next tick because CustomEvent dispatch is synchronous and
+      // firing inline triggers a React "setState during render" warning
       queueMicrotask(() => {
         Event.fire(EventKeys.formValuesChanged, {
           changedChoiceIds,
