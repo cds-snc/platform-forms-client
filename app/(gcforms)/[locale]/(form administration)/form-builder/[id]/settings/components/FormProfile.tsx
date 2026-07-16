@@ -19,7 +19,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 
 import { Branding } from "./branding/Branding";
 import { DownloadForm } from "./DownloadForm";
-import { DownloadableTemplateVersion } from "@lib/templates/versioning/downloadableTemplateVersion";
+import { type DownloadableTemplateVersion } from "@lib/templates/types";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
 import { AuditForm } from "./AuditForm";
 

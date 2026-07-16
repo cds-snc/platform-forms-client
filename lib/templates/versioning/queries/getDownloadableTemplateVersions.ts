@@ -1,9 +1,9 @@
 import { prisma, prismaErrors } from "@gcforms/database";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
 import {
-  DownloadableTemplateVersionsInput,
+  type DownloadableTemplateVersionsInput,
   DownloadableTemplateVersion,
-} from "../downloadableTemplateVersion";
+} from "@lib/templates/types";
 import { formatDownloadableTemplateVersions } from "@lib/utils/formatDownloadableTemplateVersions";
 
 export async function getDownloadableTemplateVersions(

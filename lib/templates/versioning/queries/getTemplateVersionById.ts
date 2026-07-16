@@ -1,11 +1,10 @@
 import { logMessage } from "@lib/logger";
+import { prisma } from "@gcforms/database";
 
 export async function getTemplateVersionById(
   versionId: string
 ): Promise<{ jsonConfig?: string | unknown } | null> {
-  const db = (await import("@gcforms/database")).prisma;
-
-  const versionRecord = await db.templateVersion
+  const versionRecord = await prisma.templateVersion
     .findUnique({
       where: { id: versionId },
       select: { jsonConfig: true },

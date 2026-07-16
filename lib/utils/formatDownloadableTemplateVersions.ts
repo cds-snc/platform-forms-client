@@ -2,7 +2,7 @@ import {
   DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
   DownloadableTemplateVersion,
   DownloadableTemplateVersionsInput,
-} from "@lib/templates/versioning/downloadableTemplateVersion";
+} from "@lib/templates/types";
 
 export function formatDownloadableTemplateVersions(
   template: DownloadableTemplateVersionsInput

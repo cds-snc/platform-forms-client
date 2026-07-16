@@ -23,7 +23,7 @@ import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal"
 import {
   DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
   DownloadableTemplateVersion,
-} from "@lib/templates/versioning/downloadableTemplateVersion";
+} from "@lib/templates/types";
 import { getFormattedDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { getTemplateVersionById } from "@lib/templates/versioning/queries/getTemplateVersionById";

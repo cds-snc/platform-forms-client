@@ -9,9 +9,9 @@ import { getDownloadableFormVersionConfig } from "../actions";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { cn } from "@lib/utils";
 import {
-  DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
-  DownloadableTemplateVersion,
-} from "@lib/templates/versioning/downloadableTemplateVersion";
+  type DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
+  type DownloadableTemplateVersion,
+} from "@lib/templates/types";
 
 type Props = {
   versions: DownloadableTemplateVersion[];
