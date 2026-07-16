@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useField } from "formik";
 import { MAX_FILE_SIZE } from "@root/constants";
 
@@ -25,7 +25,6 @@ export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
 };
 
 import { ResetButton } from "./ResetButton";
-import { encryptedCache } from "@root/lib/hooks/useResponseCache";
 
 // Heavily inspired by https://scottaohara.github.io/a11y_styled_form_controls/src/file-upload/
 
@@ -39,10 +38,6 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { value } = field;
-
-  useEffect(() => {
-    encryptedCache.storeFileInCache(name, value);
-  }, [name, value]);
 
   const [fileName, setFileName] = useState(value?.name);
   const [fileSize, setFileSize] = useState<{

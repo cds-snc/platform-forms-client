@@ -5,7 +5,8 @@ import { Button } from "./Buttons";
 import { useAppUpdate } from "@lib/hooks/useAppUpdate";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { FormSavingEvent } from "@root/lib/client/formDataSavingEvent";
 
 const LeftIcon = ({ className, title }: { className?: string; title?: string }) => (
   <svg
@@ -81,22 +82,15 @@ const regex = /^\/?(en|fr)\/id\/[a-z0-9]+$/;
 export const UpdateModal = () => {
   const { t } = useTranslation("common");
 
-  const [isPublicFacing, setIsPublicFacing] = useState<boolean | undefined>(undefined);
+  const isPublicFacing = window ? regex.test(window.location.pathname) : undefined;
 
-  useEffect(() => {
-    const id = window.setTimeout(() => {
-      setIsPublicFacing(regex.test(window.location.pathname));
-    }, 0);
-    return () => window.clearTimeout(id);
-  }, []);
+  if (isPublicFacing === undefined) return null;
 
   const heading = isPublicFacing ? t("appUpdate.user.title") : t("appUpdate.builder.title");
   const message = isPublicFacing
     ? t("appUpdate.user.description")
     : t("appUpdate.builder.description");
   const buttonText = isPublicFacing ? t("appUpdate.user.button") : t("appUpdate.builder.button");
-
-  if (isPublicFacing === undefined) return null;
 
   return (
     <div
@@ -120,8 +114,20 @@ export const UpdateModal = () => {
         <Markdown options={{ forceBlock: true }}>{message}</Markdown>
         <div className="mt-6 flex justify-start">
           <Button
-            onClick={() => {
-              window.location.reload();
+            onClick={async () => {
+              const isFormPage = document.querySelector('meta[name="form-filler"]');
+              const targetLink = window.location.href;
+
+              if (isFormPage) {
+                // This will trigger a save to session when a user changes the language on a page with form data
+                const saveEvent = new FormSavingEvent(targetLink);
+                window.dispatchEvent(saveEvent);
+              } else {
+                // Dispatch beforeunload event using a custom event
+                const event = new Event("beforeunload", { bubbles: true, cancelable: true });
+                window.dispatchEvent(event);
+                window.location.reload();
+              }
             }}
             className="px-4 py-2"
             type="submit"

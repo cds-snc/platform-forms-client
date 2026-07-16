@@ -60,6 +60,7 @@ export const PageContent = ({
   // Form page (default)
   return (
     <div className={classes}>
+      <meta name="form-filler" />
       <FormDelayProvider>
         <FormWrapper
           header={

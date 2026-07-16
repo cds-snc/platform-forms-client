@@ -67,14 +67,14 @@ export const Upload = ({ formId }: { formId: string }) => {
 
   useEffect(() => clearDragResetTimeout, []);
 
-  const restoreProgress = ({
+  const restoreProgress = async ({
     id,
     values,
     history,
     currentGroup,
     formVersionId,
   }: ResumeFormResponse & { formVersionId?: string }) => {
-    saveSessionProgress({
+    await saveSessionProgress({
       id,
       values,
       currentGroup,
@@ -82,6 +82,7 @@ export const Upload = ({ formId }: { formId: string }) => {
       history,
       formVersionId,
     });
+
     window.location.href = `/${language}/id/${id}`;
   };
 
@@ -113,7 +114,7 @@ export const Upload = ({ formId }: { formId: string }) => {
       resetInput?.();
     };
 
-    fileReader.onload = (e) => {
+    fileReader.onload = async (e) => {
       try {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") {
           errorCode = FormServerErrorCodes.FORM_RESUME_NO_TARGET;
@@ -181,7 +182,7 @@ export const Upload = ({ formId }: { formId: string }) => {
           return;
         }
 
-        restoreProgress(parsed);
+        await restoreProgress(parsed);
       } catch (e) {
         const timestamp = Date.now();
 

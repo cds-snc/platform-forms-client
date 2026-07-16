@@ -10,7 +10,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { getSafeUrl } from "@lib/utils/getSafeUrl";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
-import { clearResponseStorage } from "@root/lib/hooks/useResponseCache";
+import { encryptedCache } from "@root/lib/hooks/useResponseCache";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -42,7 +42,7 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
   // GCFormsContext retains it's state to download form responses submission if requested
 
   useEffect(() => {
-    clearResponseStorage();
+    encryptedCache.clearCache();
   }, []);
 
   // Check if there's a custom text for the end page specified in the form's JSON config

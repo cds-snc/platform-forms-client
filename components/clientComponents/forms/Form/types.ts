@@ -21,7 +21,6 @@ export interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
-  saveSessionProgress: (language?: Language) => void;
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;
   setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;

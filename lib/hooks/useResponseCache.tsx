@@ -1,3 +1,4 @@
+"use client";
 import { FormRestoredWarning } from "@clientComponents/forms/ResumeForm/FormRestoredWarning";
 import { toast } from "@formBuilder/components/shared/Toast";
 import type { Language } from "@lib/types/form-builder-types";
@@ -15,6 +16,7 @@ import { useAppUpdate } from "./useAppUpdate";
 import { useGCFormsContext } from "./useGCFormContext";
 import { copyObjectExcludingFileContent } from "../fileExtractor";
 import { SetCookie, stringifySetCookie } from "cookie";
+import { FormSavingEvent } from "../client/formDataSavingEvent";
 
 const LOCAL_CACHE_NAME = "gcforms-virtual-files";
 
@@ -22,7 +24,7 @@ const LOCAL_CACHE_NAME = "gcforms-virtual-files";
 // Types and Type Guards
 ////////////////////////////////////////
 
-export type Options = {
+type Options = {
   id: string;
   values: Responses;
   history: string[];
@@ -31,11 +33,18 @@ export type Options = {
   formVersionId?: string;
 };
 
-export type RestoredProgress = {
+type RestoredProgress = {
   id: string;
   language: Language;
   values: Responses;
   formVersionId?: string;
+};
+
+const shouldRunModuleOnInit = () => {
+  if (typeof window !== "undefined") {
+    return true;
+  }
+  return false;
 };
 
 const isFileInput = (response: unknown): response is FileInput => {
@@ -62,22 +71,36 @@ const isFileInputResponseWithoutContent = (
 ////////////////////////////////////////
 // Crypto for File Encryption / Decryption
 ////////////////////////////////////////
+export type { EncryptedCache };
 
 class EncryptedCache {
   private previousStateEncryptionKey: CryptoKey | undefined;
   private currentStateEncryptionKey: CryptoKey;
+  private cookieEncryptionKey: SetCookie;
 
-  private constructor(newKey: CryptoKey, previousKey?: CryptoKey) {
+  private constructor(newKey: CryptoKey, cookieKey: SetCookie, previousKey?: CryptoKey) {
     this.previousStateEncryptionKey = previousKey;
     this.currentStateEncryptionKey = newKey;
+    this.cookieEncryptionKey = cookieKey;
   }
 
-  public static async create(): Promise<EncryptedCache> {
-    if (typeof window === "undefined") {
-      return {} as unknown as EncryptedCache;
+  public static async create() {
+    if (!shouldRunModuleOnInit()) {
+      return {} as EncryptedCache;
     }
+
     const keys = await this.createOrLoadCryptoKey();
-    return new EncryptedCache(keys.newKey, keys.oldKey);
+    const jwk = await window.crypto.subtle.exportKey("jwk", keys.newKey);
+
+    const cookieValue: SetCookie = {
+      name: "crypto-key",
+      value: JSON.stringify(jwk),
+      path: "/",
+      secure: true,
+      sameSite: true,
+    };
+
+    return new EncryptedCache(keys.newKey, cookieValue, keys.oldKey);
   }
 
   private static createOrLoadCryptoKey = async () => {
@@ -91,18 +114,6 @@ class EncryptedCache {
         ["encrypt", "decrypt"]
       )
       .then(async (key) => {
-        const jwk = await window.crypto.subtle.exportKey("jwk", key);
-
-        const cookieValue: SetCookie = {
-          name: "crypto-key",
-          value: JSON.stringify(jwk),
-          path: "/",
-          secure: true,
-          sameSite: true,
-        };
-
-        document.cookie = stringifySetCookie(cookieValue);
-
         logMessage.debug("Created Crypto key");
         return key;
       })
@@ -111,7 +122,10 @@ class EncryptedCache {
         logMessage.error(e);
         throw e;
       });
-    const keys: { newKey: CryptoKey; oldKey?: CryptoKey } = { newKey };
+
+    const keys: { newKey: CryptoKey; oldKey?: CryptoKey } = {
+      newKey,
+    };
 
     const encryptionKey = document
       .querySelector('meta[name="crypto-key"]')
@@ -145,6 +159,11 @@ class EncryptedCache {
     return keys;
   };
 
+  public prepareForReload = () => {
+    document.cookie = stringifySetCookie(this.cookieEncryptionKey);
+    logMessage.debug("Cookie set in preparation for reload");
+  };
+
   private encryptData = async (data: ArrayBuffer) => {
     const encryptionParams: AesGcmParams = {
       name: "AES-GCM",
@@ -173,6 +192,9 @@ class EncryptedCache {
   };
 
   public getFileInCache = async (id: string) => {
+    if (!this.previousStateEncryptionKey) {
+      return null;
+    }
     const localCache = await caches.open(LOCAL_CACHE_NAME);
     const fileResponse = await localCache.match(`/virtual-files/${id}`);
     if (!fileResponse || !fileResponse.ok) {
@@ -194,12 +216,10 @@ class EncryptedCache {
 
     // File input is empty or reset so remove file if it exists in cache
     if (!isFileInput(data)) {
-      logMessage.debug(`Deleting file ${id} from cache`);
       localCache.delete(`/virtual-files/${id}`);
       return;
     }
 
-    logMessage.debug(`Saving File ${id} in cache`);
     const { encryptedData: encryptedFile, iv } = await this.encryptData(data.content);
     const fileBlob = new Blob([encryptedFile]);
     const ivHeader = new Uint8Array("buffer" in iv ? iv.buffer : iv).toBase64();
@@ -214,7 +234,6 @@ class EncryptedCache {
     });
     // Save it using a unique URL path identifier
     await localCache.put(`/virtual-files/${id}`, fileResponse);
-    logMessage.debug(`Saved File ${id} in cache`);
   };
 
   public storeFormDataInCache = async (data: string) => {
@@ -238,6 +257,9 @@ class EncryptedCache {
   };
 
   public retrieveFormDataInCache = async (): Promise<Options | undefined> => {
+    if (!this.previousStateEncryptionKey) {
+      return undefined;
+    }
     const localCache = await caches.open(LOCAL_CACHE_NAME);
 
     const formDataResponse = await localCache.match("/form-data");
@@ -252,8 +274,21 @@ class EncryptedCache {
 
     return JSON.parse(new TextDecoder().decode(decryptedBuffer));
   };
-}
 
+  public clearCache = async () => {
+    if (typeof caches !== "undefined") {
+      const localCache = await caches.open(LOCAL_CACHE_NAME);
+      const files = await localCache.keys();
+      await Promise.all(
+        files.map(async (file) => {
+          logMessage.debug(`Cleaning up file ${file.url}`);
+          return localCache.delete(file);
+        })
+      );
+    }
+  };
+}
+// Create encrypted cache instance which will be stored on the global `window` object
 export const encryptedCache = await EncryptedCache.create().catch((e) => {
   logMessage.error(`Error in creation of encrypted Cache`);
   logMessage.error(e);
@@ -261,25 +296,10 @@ export const encryptedCache = await EncryptedCache.create().catch((e) => {
 });
 
 ////////////////////////////////////////
-// Cache Functions
-////////////////////////////////////////
-
-export const clearCacheFiles = async () => {
-  const localCache = await caches.open(LOCAL_CACHE_NAME);
-  const files = await localCache.keys();
-  await Promise.all(
-    files.map((file) => {
-      logMessage.debug(`Cleaning up file ${file.url}`);
-      localCache.delete(file);
-    })
-  );
-};
-
-////////////////////////////////////////
 // Form Content Saving and Restoration
 ////////////////////////////////////////
 
-export const rebuildObjectWithFileContent = async (originalObject: ResponsesWithoutFileContent) => {
+const rebuildObjectWithFileContent = async (originalObject: ResponsesWithoutFileContent) => {
   const formValuesWithFileContent: Responses = { ...originalObject };
   const rehydrateFileContent = async function <T>(rehydratedObject: T, key: string): Promise<T> {
     if (rehydratedObject === null || typeof rehydratedObject !== "object") {
@@ -294,7 +314,7 @@ export const rebuildObjectWithFileContent = async (originalObject: ResponsesWith
       const fileData = {
         name: rehydratedObject.name,
         size: rehydratedObject.size,
-        content: await encryptedCache.getFileInCache(key),
+        content: await encryptedCache.getFileInCache(rehydratedObject.id),
       } as T;
 
       logMessage.debug(
@@ -319,20 +339,20 @@ export const rebuildObjectWithFileContent = async (originalObject: ResponsesWith
 
 // Must remain outside of hook because it is invoked before components are rendered
 const restoreSessionProgress = async (): Promise<RestoredProgress | false | undefined> => {
-  if (typeof window === "undefined") {
+  if (!shouldRunModuleOnInit()) {
     return false;
   }
-  const formData = await encryptedCache.retrieveFormDataInCache().catch(async (e) => {
-    logMessage.error(e);
-    await clearCacheFiles();
-    return undefined;
-  });
-
-  if (!formData) return undefined;
-
   try {
+    const formData = await encryptedCache.retrieveFormDataInCache().catch(async (e: unknown) => {
+      logMessage.error(e);
+      await encryptedCache.clearCache();
+      return undefined;
+    });
+
+    if (!formData) return undefined;
+
     const rehydratedValues = await rebuildObjectWithFileContent(formData.values);
-    await clearCacheFiles();
+
     return {
       id: formData.id,
       language: formData.language as Language,
@@ -342,6 +362,10 @@ const restoreSessionProgress = async (): Promise<RestoredProgress | false | unde
   } catch (e) {
     logMessage.error(e);
     return false;
+  } finally {
+    if (shouldRunModuleOnInit()) {
+      await encryptedCache.clearCache();
+    }
   }
 };
 
@@ -360,7 +384,7 @@ export const saveSessionProgress = async ({
   logMessage.debug("Saving Response Session Progress");
 
   // Extract file content from formValues so they are not part of session storage
-  const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values);
+  const { formValuesWithoutFileContent, fileObjsRef } = copyObjectExcludingFileContent(values);
 
   const formData = JSON.stringify({
     // Allow formId to be overwritten when used as part of Upload File to resume
@@ -372,14 +396,21 @@ export const saveSessionProgress = async ({
     formVersionId,
   });
 
-  await encryptedCache.storeFormDataInCache(formData);
+  await Promise.all([
+    encryptedCache.storeFormDataInCache(formData),
+    Object.keys(fileObjsRef).map((key) => encryptedCache.storeFileInCache(key, fileObjsRef[key])),
+  ]);
+  encryptedCache.prepareForReload();
+
   logMessage.debug("Completed Saving Response Session Progress");
 };
+
 // Start the promise on initial JS module load
 const rawData = await restoreSessionProgress();
 
 type useResponseCacheOutput = {
   cachedSession?: RestoredProgress;
+  saveSessionFromContext: () => Promise<boolean | undefined>;
 };
 
 ////////////////////////////////////////
@@ -393,34 +424,55 @@ export const useResponsesCache = () => {
   } = useTranslation();
   const { updateTriggered } = useAppUpdate();
   const { formId, formRecord, getValues, getGroupHistory, currentGroup } = useGCFormsContext();
-  const prevValues = useRef({});
+  const hasSaved = useRef(false);
+  const saveSessionFromContext = async () => {
+    const values = getValues();
+    const history = getGroupHistory();
+    return saveSessionProgress({
+      id: formId,
+      values,
+      history,
+      currentGroup: currentGroup || "",
+      language,
+    });
+  };
 
-  const output: useResponseCacheOutput = {};
+  const output: useResponseCacheOutput = {
+    saveSessionFromContext,
+  };
 
-  // AutoSave
+  // Listen and save form data when required
   useEffect(() => {
-    const id = setInterval(() => {
-      if (document.visibilityState !== "hidden") {
-        const values = getValues();
-        if (values !== prevValues.current) {
-          const history = getGroupHistory();
-          saveSessionProgress({
-            id: formId,
-            values,
-            history,
-            currentGroup: currentGroup || "",
-            language,
-          }).then(() => {
-            prevValues.current = values;
-          });
-        }
-      }
-    }, 2000);
-
-    return () => {
-      clearInterval(id);
+    // Public facing form filler page
+    const saveData = (ev: Event) => {
+      const formSavingEvent = ev as FormSavingEvent;
+      saveSessionFromContext().then(() => {
+        hasSaved.current = true;
+        const event = new Event("beforeunload", { bubbles: true, cancelable: true });
+        window.dispatchEvent(event);
+        logMessage.debug(`Window href navigating to ${formSavingEvent.href}`);
+        window.location.href = formSavingEvent.href;
+      });
     };
-  }, [formId, getValues, getGroupHistory, currentGroup, language]);
+    window.addEventListener("saveformdata", saveData);
+    return () => {
+      window.removeEventListener("saveformdata", saveData);
+    };
+  });
+
+  //Show user warning if navigating through a path that does not save data
+  useEffect(() => {
+    // Public facing form filler page
+    const warnUser = (event: BeforeUnloadEvent) => {
+      if (!hasSaved.current) {
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("beforeunload", warnUser);
+    return () => {
+      window.removeEventListener("beforeunload", warnUser);
+    };
+  });
 
   useEffect(() => {
     if (updateTriggered) {
