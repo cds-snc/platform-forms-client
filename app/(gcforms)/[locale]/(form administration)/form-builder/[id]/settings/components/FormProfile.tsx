@@ -131,8 +131,6 @@ export const FormProfile = ({
     [savedSuccessMessage, id, updateField, formPurpose]
   );
 
-  // versions are provided by the server page; render DownloadForm with provided versions
-
   return (
     <>
       {status === "authenticated" && (
