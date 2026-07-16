@@ -398,7 +398,7 @@ export const saveSessionProgress = async ({
     history,
     currentGroup,
     language,
-    versionNumber,
+    versionNumber: versionNumber ?? 1,
     restoredForm,
   });
 
@@ -449,6 +449,9 @@ export const useResponsesCache = () => {
     saveSessionFromContext,
   };
 
+  const previousFormVersionNumber = rawData ? rawData.versionNumber : 1;
+  const currentFormVersionNumber = formRecord.versionNumber ?? 1;
+
   // Listen and save form data when required
   useEffect(() => {
     // Public facing form filler page
@@ -485,7 +488,7 @@ export const useResponsesCache = () => {
   if (updateTriggered || (rawData && rawData.restoredForm)) {
     toast.success(t("saveAndResume.formRestored"), "public-facing-form");
   }
-  if (rawData && rawData.versionNumber !== formRecord.versionNumber) {
+  if (previousFormVersionNumber !== currentFormVersionNumber) {
     toast.notice(<VersionChangedToast />, "public-facing-form-wide");
   }
 
