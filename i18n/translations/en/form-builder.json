@@ -623,8 +623,6 @@
       "InvitationCancelled": "Cancelled a collaboration invitation"
     },
     "eventDetails": {
-      "PublishForm": "Published form",
-      "RepublishForm": "Published updated form",
       "CreateDraftFromPublishedForm": "Draft version {{versionNumber}}",
       "CreatedForm": "Created form",
       "UpdatedFormName": "Renamed form to: {{newFormName}}",

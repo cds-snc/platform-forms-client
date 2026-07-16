@@ -622,8 +622,6 @@
       "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
     },
     "eventDetails": {
-      "PublishForm": "Formulaire publié",
-      "RepublishForm": "Mise à jour du formulaire publié",
       "CreateDraftFromPublishedForm": "Ébauche - version : {{versionNumber}}",
       "CreatedForm": "Formulaire créé",
       "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
