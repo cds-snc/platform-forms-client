@@ -1,7 +1,5 @@
 "use client";
-import React from "react";
-import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
+import { useGCFormsContext, useVisibilityContext } from "@lib/hooks/useGCFormContext";
 import { type ConditionalRule, type FormElement } from "@gcforms/types";
 import { inGroup } from "@gcforms/core";
 
@@ -15,23 +13,8 @@ export const ConditionalWrapper = ({
   rules: ConditionalRule[] | null;
   lang: string;
 }) => {
-  const { isElementVisible, currentGroup, groups } = useGCFormsContext();
-  const { Event } = useCustomEvent();
-  const elementId = element.id.toString();
-
-  // Local visibility state — updated via event subscription so visibility
-  // changes are applied without recomputing conditional logic inside every wrapper
-  const [localVisible, setLocalVisible] = React.useState(() => isElementVisible(elementId));
-
-  React.useEffect(() => {
-    const handler = ({ visibilityChanges }: { visibilityChanges?: Record<string, boolean> }) => {
-      if (visibilityChanges && elementId in visibilityChanges) {
-        setLocalVisible(visibilityChanges[elementId]);
-      }
-    };
-    Event.on(EventKeys.formValuesChanged, handler);
-    return () => Event.off(EventKeys.formValuesChanged, handler);
-  }, [Event, elementId]);
+  const { currentGroup, groups } = useGCFormsContext();
+  const { isElementVisible } = useVisibilityContext();
 
   // Check if the element is a child of a dynamic element
   if (element.subId) {
@@ -43,7 +26,6 @@ export const ConditionalWrapper = ({
     currentGroup &&
     groups &&
     Object.keys(groups).length >= 1 &&
-    groups &&
     !inGroup(currentGroup, element.id, groups)
   )
     return null;
@@ -51,7 +33,7 @@ export const ConditionalWrapper = ({
   // If there's no rule or no choiceId, just return the children
   if (!rules || rules.length < 1) return children;
 
-  if (!localVisible) {
+  if (!isElementVisible(element.id.toString())) {
     return null;
   }
 

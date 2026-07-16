@@ -75,11 +75,15 @@ interface GCFormsContextValueType {
     versionNumber?: number | null;
   };
   getNonce: () => string;
-  visibilityMap: Map<string, boolean>;
-  isElementVisible: (elementId: string) => boolean;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
+
+interface VisibilityContextValueType {
+  isElementVisible: (elementId: string) => boolean;
+}
+
+const VisibilityContext = createContext<VisibilityContextValueType | undefined>(undefined);
 
 export const GCFormsProvider = ({
   children,
@@ -357,11 +361,11 @@ export const GCFormsProvider = ({
         getProgressData,
         restoreSessionProgress,
         getNonce,
-        visibilityMap,
-        isElementVisible,
       }}
     >
-      {children}
+      <VisibilityContext.Provider value={{ isElementVisible }}>
+        {children}
+      </VisibilityContext.Provider>
     </GCFormsContext.Provider>
   );
 };
@@ -409,9 +413,16 @@ export const useGCFormsContext = () => {
         return false;
       },
       getNonce: () => "",
-      visibilityMap: new Map<string, boolean>(),
-      isElementVisible: () => true,
     };
   }
   return formsContext;
+};
+
+export const useVisibilityContext = () => {
+  const ctx = useContext(VisibilityContext);
+  // Outside the provider (e.g. tests, Storybook) treat every element as visible
+  if (ctx === undefined) {
+    return { isElementVisible: () => true };
+  }
+  return ctx;
 };
