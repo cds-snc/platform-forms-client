@@ -72,14 +72,14 @@ export const Upload = ({ formId }: { formId: string }) => {
     window.location.href = `/${language}/id/${id}`;
   };
 
-  const handleContinueAnyway = () => {
+  const handleContinueAnyway = async () => {
     if (!pendingMismatchResume) {
       return;
     }
 
     dialogRef.current?.close();
-    restoreProgress({
-      id: formId,
+    await restoreProgress({
+      id: pendingMismatchResume.sourceFormId,
       values: pendingMismatchResume.values,
       history: pendingMismatchResume.history,
       currentGroup: pendingMismatchResume.currentGroup,

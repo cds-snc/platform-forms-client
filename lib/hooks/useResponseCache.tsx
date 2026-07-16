@@ -485,17 +485,22 @@ export const useResponsesCache = () => {
     };
   });
 
-  if (updateTriggered || (rawData && rawData.restoredForm)) {
-    toast.success(t("saveAndResume.formRestored"), "public-facing-form");
-  }
-  if (previousFormVersionNumber !== currentFormVersionNumber) {
-    toast.notice(<VersionChangedToast />, "public-facing-form-wide");
-  }
+  useEffect(() => {
+    if (updateTriggered || (rawData && rawData.restoredForm)) {
+      toast.success(t("saveAndResume.formRestored"), "public-facing-form");
+    }
+
+    if (previousFormVersionNumber !== currentFormVersionNumber) {
+      toast.notice(<VersionChangedToast />, "public-facing-form-wide");
+    }
+
+    if (!rawData) {
+      // Show that there was an error loading data
+      if (rawData === false) toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
+    }
+  }, [t, updateTriggered, previousFormVersionNumber, currentFormVersionNumber]);
 
   if (!rawData) {
-    // Show that there was an error loading data
-    if (rawData === false) toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
-
     return output;
   }
 
