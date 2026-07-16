@@ -615,13 +615,13 @@
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
       "RepublishForm": "Formulaire re-publié",
-"InvitationAccepted": "Invitation acceptée",
-"UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
-"UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
-"InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée",
-"InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
-},
-"eventDetails": {
+      "InvitationAccepted": "Invitation acceptée",
+      "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
+      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
+      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée",
+      "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
+    },
+    "eventDetails": {
       "PublishForm": "Formulaire publié",
       "RepublishForm": "Mise à jour du formulaire publié",
       "CreateDraftFromPublishedForm": "Ébauche - version : {{versionNumber}}",
