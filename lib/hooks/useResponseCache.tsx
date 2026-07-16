@@ -1,5 +1,6 @@
 "use client";
 import { FormRestoredWarning } from "@clientComponents/forms/ResumeForm/FormRestoredWarning";
+import { VersionChangedToast } from "@clientComponents/forms/ResumeForm/VersionChangedToast";
 import { toast } from "@formBuilder/components/shared/Toast";
 import type { Language } from "@lib/types/form-builder-types";
 import {
@@ -30,8 +31,8 @@ type Options = {
   history: string[];
   currentGroup: string;
   language: string;
-  sourceFormId?: string;
   versionNumber?: number | null;
+  restoredForm: boolean;
 };
 
 type RestoredProgress = {
@@ -39,7 +40,7 @@ type RestoredProgress = {
   language: Language;
   values: Responses;
   versionNumber: number;
-  sourceFormId?: string;
+  restoredForm: boolean;
 };
 
 const shouldRunModuleOnInit = () => {
@@ -360,7 +361,7 @@ const restoreSessionProgress = async (): Promise<RestoredProgress | false | unde
       language: formData.language as Language,
       values: rehydratedValues,
       versionNumber: formData.versionNumber ?? 1,
-      sourceFormId: formData.sourceFormId,
+      restoredForm: formData.restoredForm ?? false,
     };
   } catch (e) {
     logMessage.error(e);
@@ -379,7 +380,7 @@ export const saveSessionProgress = async ({
   currentGroup,
   language,
   versionNumber,
-  sourceFormId,
+  restoredForm,
 }: Options) => {
   if (typeof sessionStorage === "undefined") {
     return false;
@@ -398,7 +399,7 @@ export const saveSessionProgress = async ({
     currentGroup,
     language,
     versionNumber,
-    sourceFormId,
+    restoredForm,
   });
 
   await Promise.all([
@@ -439,6 +440,8 @@ export const useResponsesCache = () => {
       history,
       currentGroup: currentGroup || "",
       language,
+      versionNumber: formRecord.versionNumber,
+      restoredForm: false,
     });
   };
 
@@ -479,11 +482,12 @@ export const useResponsesCache = () => {
     };
   });
 
-  useEffect(() => {
-    if (updateTriggered) {
-      toast.success(t("saveAndResume.formRestored"), "public-facing-form");
-    }
-  }, [t, updateTriggered]);
+  if (updateTriggered || (rawData && rawData.restoredForm)) {
+    toast.success(t("saveAndResume.formRestored"), "public-facing-form");
+  }
+  if (rawData && rawData.versionNumber !== formRecord.versionNumber) {
+    toast.notice(<VersionChangedToast />, "public-facing-form-wide");
+  }
 
   if (!rawData) {
     // Show that there was an error loading data

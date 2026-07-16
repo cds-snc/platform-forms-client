@@ -67,14 +67,8 @@ export const Upload = ({ formId }: { formId: string }) => {
 
   useEffect(() => clearDragResetTimeout, []);
 
-  const restoreProgress = async ({
-    id,
-    values,
-    history,
-    currentGroup,
-    sourceFormId,
-  }: ResumeFormResponse & { sourceFormId?: string }) => {
-    await saveSessionProgress({ id, values, history, currentGroup, language, sourceFormId });
+  const restoreProgress = async ({ id, values, history, currentGroup }: ResumeFormResponse) => {
+    await saveSessionProgress({ id, values, history, currentGroup, language, restoredForm: true });
     window.location.href = `/${language}/id/${id}`;
   };
 
@@ -89,7 +83,6 @@ export const Upload = ({ formId }: { formId: string }) => {
       values: pendingMismatchResume.values,
       history: pendingMismatchResume.history,
       currentGroup: pendingMismatchResume.currentGroup,
-      sourceFormId: pendingMismatchResume.sourceFormId,
     });
     setPendingMismatchResume(null);
   };
