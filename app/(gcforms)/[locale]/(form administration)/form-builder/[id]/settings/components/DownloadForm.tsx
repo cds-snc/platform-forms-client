@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { FormProperties } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { getDownloadableFormVersions } from "../actions";
+import { getDownloadableFormVersionConfig } from "../actions";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { cn } from "@lib/utils";
 import {
@@ -12,91 +13,56 @@ import {
   DownloadableTemplateVersion,
 } from "@lib/templates/versioning/downloadableTemplateVersion";
 
-const extractDownloadableVersions = (value: unknown): DownloadableTemplateVersion[] | null => {
-  if (!value || typeof value !== "object" || !("versions" in value)) {
-    return null;
-  }
-
-  const candidate = value as { versions?: unknown };
-
-  return Array.isArray(candidate.versions)
-    ? (candidate.versions as DownloadableTemplateVersion[])
-    : null;
+type Props = {
+  versions: DownloadableTemplateVersion[];
 };
 
-const fetchDownloadableFormVersions = async (formId: string): Promise<unknown> => {
-  return getDownloadableFormVersions(formId);
-};
-
-export const DownloadForm = () => {
+export const DownloadForm = ({ versions }: Props) => {
   const { t, i18n } = useTranslation("form-builder");
   const { id, name } = useTemplateStore((s) => ({
     id: s.id,
     name: s.name,
   }));
-  const [versions, setVersions] = useState<DownloadableTemplateVersion[]>([]);
-  const [selectedVersion, setSelectedVersion] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedVersion, setSelectedVersion] = useState<string>(
+    versions[0] ? String(versions[0].versionNumber) : ""
+  );
 
-  useEffect(() => {
-    let active = true;
-
-    const loadVersions = async () => {
-      setIsLoading(true);
-      const nextVersions = extractDownloadableVersions(await fetchDownloadableFormVersions(id));
-
-      if (!active) {
-        return;
-      }
-
-      if (!nextVersions) {
-        toast.error(t("errors.formDownloadFailed"));
-        setVersions([]);
-        setSelectedVersion("");
-        setIsLoading(false);
-        return;
-      }
-
-      setVersions(nextVersions);
-      setSelectedVersion(nextVersions[0] ? String(nextVersions[0].versionNumber) : "");
-      setIsLoading(false);
-    };
-
-    loadVersions();
-
-    return () => {
-      active = false;
-    };
-  }, [id, t]);
-
-  const selectedVersionConfig = useMemo(() => {
+  const selectedVersionMeta = useMemo(() => {
     return versions.find((version) => String(version.versionNumber) === selectedVersion);
   }, [selectedVersion, versions]);
 
-  const downloadSelectedVersion = () => {
-    if (!selectedVersionConfig) {
-      return;
+  const downloadSelectedVersion = async () => {
+    if (!selectedVersionMeta) return;
+
+    try {
+      const res = await getDownloadableFormVersionConfig(id, Number(selectedVersion));
+      const result = res as { error?: unknown; formConfig?: unknown };
+
+      if (result.error || !result.formConfig) {
+        toast.error(t("errors.formDownloadFailed"));
+        return;
+      }
+
+      const formConfig = result.formConfig as FormProperties;
+
+      const fileName = name || (i18n.language === "fr" ? formConfig.titleFr : formConfig.titleEn);
+
+      const data = JSON.stringify(formConfig, null, 2);
+      const tempUrl = window.URL.createObjectURL(new Blob([data]));
+      const link = document.createElement("a");
+
+      link.href = tempUrl;
+      link.setAttribute(
+        "download",
+        slugify(`${fileName}-v${selectedVersionMeta.versionNumber}-${getDate()}`) + ".json"
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(tempUrl);
+    } catch (err) {
+      toast.error(t("errors.formDownloadFailed"));
     }
-
-    const fileName =
-      name ||
-      (i18n.language === "fr"
-        ? selectedVersionConfig.formConfig.titleFr
-        : selectedVersionConfig.formConfig.titleEn);
-
-    const data = JSON.stringify(selectedVersionConfig.formConfig, null, 2);
-    const tempUrl = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-
-    link.href = tempUrl;
-    link.setAttribute(
-      "download",
-      slugify(`${fileName}-v${selectedVersionConfig.versionNumber}-${getDate()}`) + ".json"
-    );
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(tempUrl);
   };
 
   const buildVersionLabel = (version: DownloadableTemplateVersion) => {
@@ -128,14 +94,11 @@ export const DownloadForm = () => {
             <select
               id="download-version-select"
               className={cn(
-                "gc-select w-auto min-w-55 appearance-none rounded-md border-2 border-slate-800 py-2 pr-10 pl-4",
-                {
-                  "opacity-60": isLoading,
-                }
+                "gc-select w-auto min-w-55 appearance-none rounded-md border-2 border-slate-800 py-2 pr-10 pl-4"
               )}
               value={selectedVersion}
               onChange={(event) => setSelectedVersion(event.target.value)}
-              disabled={isLoading || versions.length === 0}
+              disabled={versions.length === 0}
             >
               {versions.map((version) => (
                 <option key={version.versionNumber} value={version.versionNumber}>
@@ -165,7 +128,7 @@ export const DownloadForm = () => {
           <Button
             theme="primary"
             onClick={downloadSelectedVersion}
-            disabled={isLoading || !selectedVersionConfig}
+            disabled={!selectedVersionMeta}
             dataTestId="download-file-button"
           >
             {t("formDownload.downloadBtnText")}

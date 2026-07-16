@@ -3,6 +3,8 @@ import { Metadata } from "next";
 
 import { getAppSetting } from "@lib/appSettings";
 import { FormProfile } from "./components/FormProfile";
+import { getDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
+import { DownloadableTemplateVersion } from "@lib/templates/versioning/downloadableTemplateVersion";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -17,12 +19,29 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page() {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}) {
+  const resolved = await params;
+  const { id } = resolved;
+
   const hasBrandingRequestForm = Boolean(await getAppSetting("brandingRequestForm"));
+
+  let versions: DownloadableTemplateVersion[] = [];
+  if (id) {
+    try {
+      versions = await getDownloadableTemplateVersions(id);
+    } catch (e) {
+      // Protect server rendering from DB/param issues — fall back to empty list
+      versions = [];
+    }
+  }
 
   return (
     <>
-      <FormProfile hasBrandingRequestForm={hasBrandingRequestForm} />
+      <FormProfile hasBrandingRequestForm={hasBrandingRequestForm} versions={versions} />
     </>
   );
 }

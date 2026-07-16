@@ -12,5 +12,5 @@ export type DownloadableTemplateVersionLabel =
 export type DownloadableTemplateVersion = {
   versionNumber: number;
   label: DownloadableTemplateVersionLabel;
-  formConfig: FormProperties;
+  formConfig?: FormProperties;
 };

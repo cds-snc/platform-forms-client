@@ -4,15 +4,6 @@ import {
   DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
   DownloadableTemplateVersion,
 } from "../downloadableTemplateVersion";
-import { FormProperties } from "@lib/types";
-
-const parseJsonConfig = (raw: unknown): FormProperties => {
-  if (typeof raw === "string") {
-    return JSON.parse(raw) as FormProperties;
-  }
-
-  return raw as FormProperties;
-};
 
 export async function getDownloadableTemplateVersions(
   formID: string
@@ -24,21 +15,18 @@ export async function getDownloadableTemplateVersions(
       },
       select: {
         isPublished: true,
-        jsonConfig: true,
         currentDraftVersionId: true,
         currentPublishedVersionId: true,
         currentDraftVersion: {
           select: {
             id: true,
             versionNumber: true,
-            jsonConfig: true,
           },
         },
         currentPublishedVersion: {
           select: {
             id: true,
             versionNumber: true,
-            jsonConfig: true,
           },
         },
         versions: {
@@ -50,7 +38,6 @@ export async function getDownloadableTemplateVersions(
           select: {
             id: true,
             versionNumber: true,
-            jsonConfig: true,
           },
           orderBy: {
             versionNumber: "desc",
@@ -70,7 +57,6 @@ export async function getDownloadableTemplateVersions(
     downloadableVersions.push({
       versionNumber: template.currentDraftVersion.versionNumber,
       label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
-      formConfig: parseJsonConfig(template.currentDraftVersion.jsonConfig),
     });
   }
 
@@ -78,7 +64,6 @@ export async function getDownloadableTemplateVersions(
     downloadableVersions.push({
       versionNumber: template.currentPublishedVersion.versionNumber,
       label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentPublished,
-      formConfig: parseJsonConfig(template.currentPublishedVersion.jsonConfig),
     });
   }
 
@@ -94,7 +79,6 @@ export async function getDownloadableTemplateVersions(
     downloadableVersions.push({
       versionNumber: version.versionNumber,
       label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.published,
-      formConfig: parseJsonConfig(version.jsonConfig),
     });
   });
 
@@ -102,7 +86,6 @@ export async function getDownloadableTemplateVersions(
     downloadableVersions.push({
       versionNumber: 1,
       label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
-      formConfig: parseJsonConfig(template.jsonConfig),
     });
   }
 

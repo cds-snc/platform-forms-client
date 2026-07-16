@@ -178,7 +178,6 @@ export const getDownloadableFormVersions = AuthenticatedAction(
             {
               versionNumber: formRecord.versionNumber ?? 1,
               label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
-              formConfig: formRecord.form,
             },
           ],
         };
@@ -192,6 +191,94 @@ export const getDownloadableFormVersions = AuthenticatedAction(
 
       return { versions };
     } catch (error) {
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
+  }
+);
+
+export type GetDownloadableFormVersionConfigResult =
+  | {
+      formConfig: unknown;
+    }
+  | ServerActionError;
+
+export const getDownloadableFormVersionConfig = AuthenticatedAction(
+  async (
+    _,
+    formId: string,
+    versionNumber?: number
+  ): Promise<GetDownloadableFormVersionConfigResult> => {
+    try {
+      await authorization.canViewForm(formId).catch((e) => {
+        if (e instanceof AccessControlError) {
+          logEvent(
+            e.user.id,
+            { type: "Form", id: formId },
+            "AccessDenied",
+            AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
+          );
+        }
+        throw e;
+      });
+
+      if (!(await isTemplateVersioningEnabled())) {
+        const formRecord = await getFullTemplateByID(formId, false);
+
+        if (!formRecord) {
+          throw new Error("Form Not Found");
+        }
+
+        return { formConfig: formRecord.form };
+      }
+
+      // Template versioning enabled: find the requested version jsonConfig
+      const template = await (
+        await import("@gcforms/database")
+      ).prisma.template
+        .findUnique({
+          where: { id: formId },
+          select: {
+            currentDraftVersion: { select: { versionNumber: true, jsonConfig: true } },
+            currentPublishedVersion: { select: { versionNumber: true, jsonConfig: true } },
+            versions: { select: { versionNumber: true, jsonConfig: true } },
+          },
+        })
+        .catch((e) => {
+          logMessage.error(
+            `DB error fetching template version config: ${e instanceof Error ? e.message : String(e)}`
+          );
+          return null;
+        });
+
+      if (!template) throw new Error("Form Not Found");
+
+      const candidates: Array<{ versionNumber?: number; jsonConfig?: string | unknown } | null> =
+        [];
+      candidates.push(template.currentDraftVersion ?? null);
+      candidates.push(template.currentPublishedVersion ?? null);
+      if (template.versions && Array.isArray(template.versions)) {
+        template.versions.forEach((v) => candidates.push(v));
+      }
+
+      const match = candidates.find((c) => c && c.versionNumber === versionNumber) || candidates[0];
+
+      if (!match || !match.jsonConfig) {
+        throw new Error("Version Not Found");
+      }
+
+      const cfg =
+        typeof match.jsonConfig === "string"
+          ? JSON.parse(match.jsonConfig as string)
+          : match.jsonConfig;
+
+      return { formConfig: cfg };
+    } catch (error) {
+      logMessage.error(
+        `Critical Error fetching form version config for formId ${formId}: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+
       return { error: "There was an error. Please try again later." } as ServerActionError;
     }
   }
