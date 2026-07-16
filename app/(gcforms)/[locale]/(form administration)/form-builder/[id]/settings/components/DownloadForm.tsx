@@ -90,48 +90,52 @@ export const DownloadForm = ({ versions }: Props) => {
         <p className="mb-4" id="download-hint">
           {t("formDownload.description")}
         </p>
-        <label htmlFor="download-version-select" className="mb-1 block font-bold">
-          {t("formDownload.versionSelector.label")}
-        </label>
+        {versions.length > 1 ? (
+          <label htmlFor="download-version-select" className="mb-1 block font-bold">
+            {t("formDownload.versionSelector.label")}
+          </label>
+        ) : null}
         <div className="flex items-end gap-4">
-          <div className="relative inline-block">
-            <select
-              id="download-version-select"
-              className={cn(
-                "gc-select w-auto min-w-55 appearance-none rounded-md border-2 border-slate-800 py-2 pr-10 pl-4"
-              )}
-              value={selectedVersion}
-              onChange={(event) => setSelectedVersion(event.target.value)}
-              disabled={versions.length === 0}
-            >
-              {versions.map((version) => (
-                <option
-                  key={version.id ?? version.versionNumber}
-                  value={version.id ?? String(version.versionNumber)}
-                >
-                  {buildVersionLabel(version)}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+          {versions.length > 1 ? (
+            <div className="relative inline-block">
+              <select
+                id="download-version-select"
+                className={cn(
+                  "gc-select w-auto min-w-55 appearance-none rounded-md border-2 border-slate-800 py-2 pr-10 pl-4"
+                )}
+                value={selectedVersion}
+                onChange={(event) => setSelectedVersion(event.target.value)}
+                disabled={versions.length === 0}
               >
-                <path
-                  d="M6 9l6 6 6-6"
-                  stroke="#0f172a"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+                {versions.map((version) => (
+                  <option
+                    key={version.id ?? version.versionNumber}
+                    value={version.id ?? String(version.versionNumber)}
+                  >
+                    {buildVersionLabel(version)}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M6 9l6 6 6-6"
+                    stroke="#0f172a"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
             </div>
-          </div>
+          ) : null}
           <Button
             theme="primary"
             onClick={downloadSelectedVersion}
