@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { logMessage } from "@root/lib/logger";
 import { FormSavingEvent } from "@lib/client/formDataSavingEvent";
 
 // Note that this is the langugage toggle on form filler
@@ -14,7 +13,7 @@ export const LanguageToggleScript = () => {
       langToggleLink.onclick = async (ev) => {
         if (isFormPage) {
           ev.preventDefault();
-          logMessage.debug("link clicked");
+
           const targetLink = (ev.currentTarget as HTMLAnchorElement)?.href;
 
           // This will trigger a save to session when a user changes the language

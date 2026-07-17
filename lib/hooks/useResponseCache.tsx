@@ -116,10 +116,6 @@ class EncryptedCache {
         true,
         ["encrypt", "decrypt"]
       )
-      .then(async (key) => {
-        logMessage.debug("Created Crypto key");
-        return key;
-      })
       .catch((e) => {
         logMessage.error("Could not generate or export private key");
         logMessage.error(e);
@@ -154,7 +150,6 @@ class EncryptedCache {
           logMessage.error(e);
           throw e;
         });
-      logMessage.debug("Imported Crypto key");
 
       keys.oldKey = importedKey;
     }
@@ -164,7 +159,6 @@ class EncryptedCache {
 
   public prepareForReload = () => {
     document.cookie = stringifySetCookie(this.cookieEncryptionKey);
-    logMessage.debug("Cookie set in preparation for reload");
   };
 
   private encryptData = async (data: ArrayBuffer) => {
@@ -256,7 +250,6 @@ class EncryptedCache {
       },
     });
     await localCache.put(`/form-data`, formDataResponse);
-    logMessage.debug(`Saved Form Data in cache`);
   };
 
   public retrieveFormDataInCache = async (): Promise<Options | undefined> => {
@@ -284,7 +277,6 @@ class EncryptedCache {
       const files = await localCache.keys();
       await Promise.all(
         files.map(async (file) => {
-          logMessage.debug(`Cleaning up file ${file.url}`);
           return localCache.delete(file);
         })
       );
@@ -319,10 +311,6 @@ const rebuildObjectWithFileContent = async (originalObject: ResponsesWithoutFile
         size: rehydratedObject.size,
         content: await encryptedCache.getFileInCache(rehydratedObject.id),
       } as T;
-
-      logMessage.debug(
-        `Restoring file ${rehydratedObject.name} with values ${JSON.stringify(fileData)} `
-      );
 
       return fileData;
     }
@@ -461,7 +449,6 @@ export const useResponsesCache = () => {
         hasSaved.current = true;
         const event = new Event("beforeunload", { bubbles: true, cancelable: true });
         window.dispatchEvent(event);
-        logMessage.debug(`Window href navigating to ${formSavingEvent.href}`);
         window.location.href = formSavingEvent.href;
       });
     };
