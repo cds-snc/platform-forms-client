@@ -9,7 +9,7 @@ import React, { useMemo, useState } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 import { getRenderedForm } from "@lib/formBuilder";
-
+import { mergeFormValuesWithInitialValues } from "@lib/formBuilder";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
 import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
@@ -93,7 +93,11 @@ export const FormWrapper = ({
       {header}
 
       <Form
-        initialValues={cachedSession?.values}
+        initialValues={
+          cachedSession
+            ? mergeFormValuesWithInitialValues(formRecord, language, cachedSession?.values)
+            : undefined
+        }
         formRecord={formRecord}
         language={language}
         onSuccess={(formID, submissionId) => {

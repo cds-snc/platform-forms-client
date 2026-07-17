@@ -494,7 +494,7 @@ export const useResponsesCache = () => {
 
   output.cachedSession = { ...rawData };
 
-  // if it's the wrong form and version we do not return any values
+  // if it's the wrong form we do not return any values
   if (output.cachedSession.id !== formId) {
     delete output.cachedSession;
     return output;
