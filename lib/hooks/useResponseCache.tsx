@@ -502,8 +502,8 @@ export const useResponsesCache = () => {
   if (output.cachedSession.language !== language) {
     // If caused by an i18n transtion ensure values are in the right language
     output.cachedSession.values = toggleSavedValues(
-      formRecord.form,
-      { values: output.cachedSession.values },
+      formRecord.form.elements,
+      output.cachedSession.values,
       output.cachedSession.language
     );
   }
