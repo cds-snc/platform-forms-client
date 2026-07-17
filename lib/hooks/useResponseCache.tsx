@@ -492,13 +492,13 @@ export const useResponsesCache = () => {
     return output;
   }
 
-  output.cachedSession = { ...rawData };
-
   // if it's the wrong form we do not return any values
-  if (output.cachedSession.id !== formId) {
-    delete output.cachedSession;
+  if (rawData.id !== formId) {
     return output;
   }
+
+  output.cachedSession = { ...rawData };
+
   if (output.cachedSession.language !== language) {
     // If caused by an i18n transtion ensure values are in the right language
     output.cachedSession.values = toggleSavedValues(
