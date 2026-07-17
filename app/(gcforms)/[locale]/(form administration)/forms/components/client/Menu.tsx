@@ -212,12 +212,12 @@ export const Menu = ({
       language,
       id,
       restoreFormCallback,
-
       status,
       downloadForm,
       name,
       handleDelete,
       hasDraft,
+      isEmailDelivery,
     ]
   );
 
