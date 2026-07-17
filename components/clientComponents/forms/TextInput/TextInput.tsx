@@ -27,6 +27,8 @@ export const TextInput = (
     spellCheck,
     lang,
   } = props;
+
+  // We need to update this so it's not depandent on Formik. We should be able to use this component outside of a Formik form.
   const [field, meta, helpers] = useField(props);
 
   const { setRemainingCharacters, ariaDescribedByIds, CharacterCountDisplay } = useCharacterCount({
