@@ -49,6 +49,8 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
   }
 }
 
+// Start here -- we want to avoid building all the form elements at once, so we will build them as needed.
+
 // This function renders the form elements with passed in properties.
 function _buildForm(element: FormElement, lang: string): ReactElement {
   const id = element.subId ?? element.id;
