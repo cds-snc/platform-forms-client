@@ -419,7 +419,7 @@ export const options = [
     urlFr: "https://agriculture.canada.ca/fr",
     logoEn: "/img/branding/agriculture-en.svg",
     logoFr: "/img/branding/agriculture-fr.svg",
-    logoTitleEn: "Agriculture and Agri Food Canada",
+    logoTitleEn: "Agriculture and Agri-Food Canada",
     logoTitleFr: "Agriculture et Agroalimentaire Canada",
   },
 ];
