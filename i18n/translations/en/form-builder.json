@@ -1701,5 +1701,6 @@
     "title": "Edit and re-publish",
     "description": "Make an edit to your form while it is published",
     "button": "Edit form"
-  }
+  },
+  "formDownloadFailed": "Failed to download the form."
 }
