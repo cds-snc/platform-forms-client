@@ -89,7 +89,7 @@ export const FormWrapper = ({
   }
 
   return (
-    <>
+    <div id="form-filler">
       {header}
 
       <Form
@@ -149,6 +149,6 @@ export const FormWrapper = ({
           />
         </>
       )}
-    </>
+    </div>
   );
 };

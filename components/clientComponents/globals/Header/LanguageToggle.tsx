@@ -15,7 +15,7 @@ const LanguageToggle = () => {
     `/${currentLang}`;
 
   const handleClick = (ev: React.MouseEvent<HTMLAnchorElement>) => {
-    const isFormPage = document.querySelector('meta[name="form-filler"]');
+    const isFormPage = document.querySelector('div[id="form-filler"]');
 
     if (isFormPage) {
       ev.preventDefault();

@@ -8,7 +8,7 @@ import { FormSavingEvent } from "@lib/client/formDataSavingEvent";
 export const LanguageToggleScript = () => {
   useEffect(() => {
     const langToggleLink = document.getElementById("lang-toggle-link");
-    const isFormPage = document.querySelector('meta[name="form-filler"]');
+    const isFormPage = document.querySelector('div[id="form-filler"]');
     if (langToggleLink) {
       langToggleLink.onclick = async (ev) => {
         if (isFormPage) {

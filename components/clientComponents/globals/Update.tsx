@@ -115,7 +115,7 @@ export const UpdateModal = () => {
         <div className="mt-6 flex justify-start">
           <Button
             onClick={async () => {
-              const isFormPage = document.querySelector('meta[name="form-filler"]');
+              const isFormPage = document.querySelector('div[id="form-filler"]');
               const targetLink = window.location.href;
 
               if (isFormPage) {

@@ -462,7 +462,8 @@ export const useResponsesCache = () => {
   useEffect(() => {
     // Public facing form filler page
     const warnUser = (event: BeforeUnloadEvent) => {
-      if (!hasSaved.current) {
+      // Ask the user if they want to continue only if the form is still in progress
+      if (!hasSaved.current && document.querySelector('div[id="form-filler"]')) {
         event.preventDefault();
       }
     };
