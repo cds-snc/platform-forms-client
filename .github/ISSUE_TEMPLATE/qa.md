@@ -7,4 +7,4 @@ assignees: ''
 
 ---
 
-## Checklist for QA testing
+## QA testing checklist
