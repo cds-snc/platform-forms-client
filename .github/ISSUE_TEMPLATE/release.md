@@ -14,7 +14,8 @@ assignees: ''
 - [ ] Manual QA testing of response retrieval scenarios completed
 - [ ] All content is completely bilingual in English and French
 - [ ] Testing from form filler perspective completed
-- [ ] Multiple modalities covered (devices, browsers, keyboard, screenreader) 
+- [ ] Multiple modalities covered (devices, browsers, keyboard, screenreader)
+- [ ] Policy documentation (ToU, SLA, T&C) updated (if needed)
 - [ ] API documentation updated (if needed)
 - [ ] Guidance updated (if needed)
 - [ ] ATO documentation / Risk register updated (if needed)
