@@ -532,6 +532,7 @@ const CardComponent = ({
           isPublished={card.isPublished}
           ttl={card.ttl ? card.ttl : undefined}
           status={status}
+          deliveryOption={card.deliveryOption}
           onRemove={onRemove}
         />
       </div>
