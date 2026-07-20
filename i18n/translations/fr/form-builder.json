@@ -405,7 +405,7 @@
       "list": {
         "title": "⚠️  Avant de publier les mises à jour, discutez avec vos développeurs et testez votre formulaire. Vous pourriez devoir : ",
         "listitem1": "Ajuster les questions du formulaire et vos flux de travail.",
-        "listitem2": "Révisez les listes et les feuilles de calcul pour organiser les réponses.",
+        "listitem2": "Révisez les listes et les feuilles de calcul où vous organisez les réponses.",
         "listitem3": "Mettre à jour l’intégration de l’API."
       }
     }
