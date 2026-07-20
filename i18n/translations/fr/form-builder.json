@@ -404,7 +404,7 @@
       "liveForm": "La version actuelle continuera de recueillir des réponses jusqu’à ce que vous publiez la mise à jour du formulaire.",
       "list": {
         "title": "⚠️  Avant de publier les mises à jour, discutez avec vos développeurs et testez votre formulaire. Vous pourriez devoir : ",
-        "listitem1": "Ajuster les questions du formulaire et les flux de travail.",
+        "listitem1": "Ajuster les questions du formulaire et vos flux de travail.",
         "listitem2": "Révisez les listes et les feuilles de calcul pour organiser les réponses.",
         "listitem3": "Mettre à jour l’intégration de l’API."
       }
