@@ -401,7 +401,7 @@
   "confirm": {
     "createDraft": {
       "title": "Mettre à jour le formulaire publié",
-      "liveForm": "La version actuelle continuera de recueillir des réponses jusqu’à ce que vous publiiez la mise à jour du formulaire.",
+      "liveForm": "La version actuelle continuera de recueillir des réponses jusqu’à ce que vous publiez la mise à jour du formulaire.",
       "list": {
         "title": "⚠️  Avant de publier les mises à jour, discutez avec vos développeurs et testez votre formulaire.Vous pourriez devoir : ",
         "listitem1": "Ajuster les questions du formulaire et les flux de travail.",
