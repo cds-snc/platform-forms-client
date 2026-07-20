@@ -848,7 +848,7 @@
         "text1": "Après la publication, la version précédente demeure dans notre base de données. Mais elle ne pourra plus être consultée.",
         "text2": "Les nouvelles personnes remplissant le formulaire n’auront accès qu’à la dernière version du formulaire. Les personnes qui n’avaient pas terminé de remplir l’ancienne version du formulaire pourront continuer à remplir cette version, tant qu’elles n’actualisent pas la page.",
         "list": "⚠️ En publiant, vous acceptez que vous ayez peut-être à : ",
-        "listitem1": "Ajuster les questions du formulaire et les flux de travail.",
+        "listitem1": "Ajuster les questions du formulaire et vos flux de travail.",
         "listitem2": "Révisez les listes et les feuilles de calcul pour organiser les réponses.",
         "listitem3": "Mettre à jour l’intégration de l’API.",
         "agree": {
