@@ -838,7 +838,7 @@
   },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
-    "republishTitle": "Publier une mise à jour",
+    "republishTitle": "Publier le formulaire mis à jour",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
     "republish": {
       "categoryLabel": "Catégorie de formulaire",
