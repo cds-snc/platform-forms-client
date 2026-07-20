@@ -844,7 +844,7 @@
       "categoryLabel": "Catégorie de formulaire (obligatoire)",
       "helpsUnderstand": "Aidez-nous à comprendre l’objectif de ce formulaire.",
       "confirm": {
-        "title": "Publier la mise à jour du formulaire",
+        "title": "Confirmer la publication",
         "text1": "Après la publication, la version précédente demeure dans notre base de données. Mais elle ne pourra plus être consultée.",
         "text2": "Les nouvelles personnes remplissant le formulaire n’auront accès qu’à la dernière version du formulaire. Les personnes qui n’avaient pas terminé de remplir l’ancienne version du formulaire pourront continuer à remplir cette version, tant qu’elles n’actualisent pas la page.",
         "list": "⚠️ En publiant, vous acceptez que vous ayez peut-être à : ",
