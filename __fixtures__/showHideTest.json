@@ -1,0 +1,99 @@
+{
+  "titleEn": "Show hide test",
+  "titleFr": "",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "confirmation": {
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [1, 2],
+  "elements": [
+    {
+      "id": 1,
+      "type": "radio",
+      "uuid": "48bacadf-a046-4c66-bcaa-cd8671d0a50c",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "a",
+            "fr": "a"
+          },
+          {
+            "en": "b",
+            "fr": "b"
+          }
+        ],
+        "titleEn": "My radio element",
+        "titleFr": "My radio elemen",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 2,
+      "type": "textArea",
+      "uuid": "99968cd7-9275-4ffe-b509-168e3cb1326d",
+      "properties": {
+        "tags": [],
+        "choices": [],
+        "titleEn": "More",
+        "titleFr": "More",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "1.1"
+          }
+        ]
+      }
+    }
+  ],
+  "groups": {
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Page de confirmation",
+      "elements": []
+    },
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Page de départ",
+      "elements": ["1", "2"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "Fin (Page récapitulative et confirmation)",
+      "elements": [],
+      "nextAction": "end"
+    }
+  },
+  "groupsLayout": [],
+  "lastGeneratedElementId": 2
+}

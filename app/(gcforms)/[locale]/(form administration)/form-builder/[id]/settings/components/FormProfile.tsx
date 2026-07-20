@@ -19,13 +19,20 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 
 import { Branding } from "./branding/Branding";
 import { DownloadForm } from "./DownloadForm";
+import { type DownloadableTemplateVersion } from "@lib/templates/types";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
 import { AuditForm } from "./AuditForm";
 
 import { IntendedUse, PurposeOption } from "./intendedUse/IntendedUse";
 import { UpdateTemplateAction } from "@lib/templates/types";
 
-export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
+export const FormProfile = ({
+  hasBrandingRequestForm,
+  versions,
+}: {
+  hasBrandingRequestForm: boolean;
+  versions: DownloadableTemplateVersion[];
+}) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const lang = i18n.language === "en" ? "en" : "fr";
@@ -161,7 +168,7 @@ export const FormProfile = ({ hasBrandingRequestForm }: { hasBrandingRequestForm
           {/*--------------------------------------------*
            * Download section
            *--------------------------------------------*/}
-          <DownloadForm />
+          <DownloadForm versions={versions} />
 
           {/*--------------------------------------------*
            * Audit Form section

@@ -9,7 +9,7 @@ import {
 } from "./exceptions";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { prisma, Invitation } from "@gcforms/database";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";
 import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
 import { getOrigin } from "@lib/origin";
@@ -198,14 +198,11 @@ const _sendInvitationEmail = async (
       formUrlFr
     );
 
-    await sendEmail(
-      email,
-      {
-        subject: "Invitation to access form | Invitation pour accéder au formulaire",
-        formResponse: emailContent,
-      },
-      "formInvitationToExistingUser"
-    );
+    await sendDefaultEmail({
+      to: [email],
+      subject: "Invitation to access form | Invitation pour accéder au formulaire",
+      body: emailContent,
+    });
 
     return;
   }
@@ -221,14 +218,11 @@ const _sendInvitationEmail = async (
     registerUrlFr
   );
 
-  await sendEmail(
-    email,
-    {
-      subject: "Invitation to access form | Invitation pour accéder au formulaire",
-      formResponse: emailContent,
-    },
-    "formInvitationToFutureUser"
-  );
+  await sendDefaultEmail({
+    to: [email],
+    subject: "Invitation to access form | Invitation pour accéder au formulaire",
+    body: emailContent,
+  });
 };
 
 /**

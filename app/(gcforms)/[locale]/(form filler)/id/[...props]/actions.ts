@@ -13,12 +13,19 @@ import { FeatureFlags } from "@lib/cache/types";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
-import { sendNotifications } from "@lib/notifications";
+import {
+  getFormNotificationInterval,
+  prepareFormSubmissionEmail,
+  updateNotificationMarker,
+} from "@lib/formEmailOrchestration";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import { traceFunction } from "@lib/otel";
 
 import { MissingFormDataError } from "./lib/client/exceptions";
 import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+
+import { randomUUID } from "crypto";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -111,17 +118,25 @@ export async function submitForm(
         }
       }
 
+      const version = template.versionNumber || 1;
       const formData = normalizeFormResponses(template, values);
+
+      const notificationId = await scheduleFormSubmissionNotification(
+        formId,
+        template.form.titleEn,
+        template.form.titleFr
+      );
 
       const { submissionId, fileURLMap } = await processFormData({
         responses: formData,
         securityAttribute: template.securityAttribute,
         formId,
+        version,
         language,
         fileChecksums,
+        // If non-null will be used in the reliability lambda to kick off the deferred notification pipeline
+        notificationId,
       });
-
-      sendNotifications(formId, template.form.titleEn, template.form.titleFr);
 
       return { id: formId, submissionId, fileURLMap };
     } catch (e) {
@@ -133,3 +148,71 @@ export async function submitForm(
     }
   });
 }
+
+const scheduleFormSubmissionNotification = async (
+  formId: string,
+  formTitleEn: string,
+  formTitleFr: string
+): Promise<string | undefined> => {
+  try {
+    const interval = await getFormNotificationInterval(formId);
+    if (!interval) return undefined;
+
+    const notificationEmailType = await updateNotificationMarker(formId, interval);
+    if (!notificationEmailType) return undefined;
+
+    const emailData = await prepareFormSubmissionEmail(
+      formId,
+      formTitleEn,
+      formTitleFr,
+      notificationEmailType
+    );
+    if (!emailData) return undefined;
+
+    // The flag is checked here (not just inside sendEmail) because the notificationId must only
+    // be generated and returned when the pipeline is active — it is passed to processFormData so
+    // the reliability lambda can enqueue the deferred send after the submission is persisted.
+    const notificationEnabled = await checkOne(FeatureFlags.notification);
+
+    // Notification flag ON: send deferred email via notification pipeline
+    if (notificationEnabled) {
+      const notificationId = randomUUID();
+
+      /**
+       * Not using await here to avoid adding extra latency in the submission flow.
+       * Because the infra pipeline does not process submissions right away, the notification data should have enough time to get in DynamoDB before the Reliability lambda request its processing
+       */
+      sendDefaultEmail({
+        to: emailData.emails,
+        subject: emailData.subject,
+        body: emailData.formResponse,
+        options: { mode: "deferred", notificationId },
+      }).catch((error) =>
+        logMessage.warn(
+          `scheduleFormSubmissionNotification: failed to send deferred email via notification pipeline. Form ID: ${formId}. Reason: ${(error as Error).message}`
+        )
+      );
+
+      return notificationId;
+    }
+
+    // Notification flag OFF: send immediate email
+    sendDefaultEmail({
+      to: emailData.emails,
+      subject: emailData.subject,
+      body: emailData.formResponse,
+    }).catch((error) =>
+      logMessage.warn(
+        `scheduleFormSubmissionNotification: failed to send immediate email. Form ID: ${formId}. Reason: ${(error as Error).message}`
+      )
+    );
+
+    return undefined;
+  } catch (error) {
+    logMessage.warn(
+      `scheduleFormSubmissionNotification processing failed for form ${formId}. Reason: ${(error as Error).message}`
+    );
+
+    return undefined;
+  }
+};

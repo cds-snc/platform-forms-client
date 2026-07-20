@@ -52,7 +52,8 @@
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"
     },
-    "draftVersion": "Ébauche - version {{versionNumber}}",
+    "draftVersion": "Ébauche - version {{draftVersionNumber}}",
+    "versionNumber": "- version {{publishedVersionNumber}}",
     "menu": {
       "more": "Plus",
       "save": "Télécharger une copie",
@@ -67,7 +68,8 @@
       "clone": "Dupliquer",
       "cloneSuccess": "Le formulaire a été dupliqué.",
       "cloneFailed": "Le formulaire n'a pas pu être dupliqué.",
-      "ariaLabel": "Menu pour le formulaire {{name}}"
+      "ariaLabel": "Menu pour le formulaire {{name}}",
+      "createDraftVersion": "Modifier le formulaire publié"
     },
     "actionRequired": "Réponses en retard",
     "editLock": {
@@ -92,7 +94,8 @@
     "copiedToCipboard": "Copié dans le presse-papiers",
     "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
     "submissionID": "Identifiant de soumission",
-    "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
+    "copyResponse": "Copier la ligne de réponse dans le presse-papiers",
+    "versionNumber": "Version"
   },
   "responseAggregatedTemplate": {
     "title": "Réponses au formulaire",

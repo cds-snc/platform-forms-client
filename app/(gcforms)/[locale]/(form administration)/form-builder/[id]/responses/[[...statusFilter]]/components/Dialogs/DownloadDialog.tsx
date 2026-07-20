@@ -18,6 +18,14 @@ import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/fo
 import { FormBuilderError } from "../../exceptions";
 import { useTemplateVersioning } from "./useTemplateVersioning";
 import { VersionSelector } from "./VersionSelector";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+
+export const getVersionedZipFileName = (baseFileName: string, version: string | null) => {
+  if (!version) return baseFileName;
+
+  const normalizedVersion = version.trim().replace(/^v/i, "");
+  return baseFileName.replace(/\.zip$/, `-v${normalizedVersion}.zip`);
+};
 
 export const DownloadDialog = ({
   checkedItems,
@@ -36,9 +44,9 @@ export const DownloadDialog = ({
   setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
   formId: string;
   formName: string;
-  onSuccessfulDownload: () => void;
+  onSuccessfulDownload: (filteredIds: string[]) => void;
   responseDownloadLimit: number;
-  checkedMeta?: { id?: string; name?: string; versionId?: string | null }[];
+  checkedMeta?: { id?: string; name?: string; version?: string | number | null }[];
 }) => {
   const dialogRef = useDialogRef();
   const { t, i18n } = useTranslation("form-builder-responses");
@@ -50,7 +58,10 @@ export const DownloadDialog = ({
     null
   );
 
-  const { dialogVersions } = useTemplateVersioning(checkedItems, checkedMeta);
+  const { getFlag } = useFeatureFlags();
+  const templateVersioningEnabled = getFlag("templateVersioning");
+
+  const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -61,13 +72,14 @@ export const DownloadDialog = ({
   const handleClose = () => {
     setSelectedFormat(defaultSelectedFormat);
     setZipAllFiles(true);
+    setSelectedVersionForDialog(null);
     setIsDialogVisible(false);
     dialogRef.current?.close();
   };
 
-  const handleDownloadComplete = () => {
+  const handleDownloadComplete = (filteredIds: string[]) => {
     setIsDownloading(false);
-    onSuccessfulDownload();
+    onSuccessfulDownload(filteredIds);
     handleClose();
   };
 
@@ -114,31 +126,34 @@ export const DownloadDialog = ({
       return;
     }
 
-    const ids = Array.from(checkedItems.keys());
-
     // Validate that CSV/HTML downloads only include responses with a matched version
     // Note: DownloadDialog doesn't receive full submission metadata by default; validation
     // will be performed by the caller when available. If not available, the server may return an error.
 
     const filePrefix = slugify(`${formName}-${getDate()}`) + "-";
 
-    // Exclude items without a version; only download responses that have a matched version
-    /*
-    const filteredIdsWithVersion = getFilteredIds();
-    if (
-      filteredIdsWithVersion.length === 0 &&
-      (selectedFormat === DownloadFormat.CSV || selectedFormat === DownloadFormat.HTML_ZIPPED)
-    ) {
-      setDownloadError("missing_version");
-      setIsDownloading(false);
-      return;
+    let filteredIds = Array.from(checkedItems.keys());
+
+    if (templateVersioningEnabled) {
+      // Exclude items without a version; only download responses that have a matched version
+      const filteredIdsWithVersion = getFilteredIds(selectedVersionForDialog);
+
+      if (
+        filteredIdsWithVersion.length === 0 &&
+        (selectedFormat === DownloadFormat.CSV || selectedFormat === DownloadFormat.HTML_ZIPPED)
+      ) {
+        setDownloadError("missing_version");
+        setIsDownloading(false);
+        return;
+      }
+
+      // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
+      filteredIds = filteredIdsWithVersion;
     }
-    */
 
-    // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
-    const filteredIds = ids;
-
-    // getFilteredIds(selectedVersionForDialog);
+    const selectedVersion = templateVersioningEnabled
+      ? (selectedVersionForDialog ?? dialogVersions[0] ?? null)
+      : null;
 
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -147,6 +162,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.HTML_ZIPPED,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as HtmlZippedResponse | ServerActionError;
 
         if ("error" in response) {
@@ -163,10 +179,13 @@ export const DownloadDialog = ({
         });
 
         zip.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-          const fileName = `${filePrefix}responses-reponses.zip`;
+          const fileName = getVersionedZipFileName(
+            `${filePrefix}responses-reponses.zip`,
+            selectedVersion
+          );
           downloadFileFromBlob(blob, fileName);
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         });
       }
 
@@ -176,6 +195,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.CSV,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as CSVResponse | ServerActionError;
 
         if ("error" in response) {
@@ -191,10 +211,13 @@ export const DownloadDialog = ({
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
           file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = `${filePrefix}responses-reponses.zip`;
+            const fileName = getVersionedZipFileName(
+              `${filePrefix}responses-reponses.zip`,
+              selectedVersion
+            );
             downloadFileFromBlob(blob, fileName);
 
-            handleDownloadComplete();
+            handleDownloadComplete(filteredIds);
           });
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
@@ -203,7 +226,7 @@ export const DownloadDialog = ({
             `${filePrefix}responses-reponses.csv`
           );
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         }
       }
 
@@ -213,6 +236,7 @@ export const DownloadDialog = ({
           ids: filteredIds,
           format: DownloadFormat.JSON,
           lang: i18n.language as Language,
+          version: selectedVersion,
         })) as JSONResponse | ServerActionError;
 
         if ("error" in response) {
@@ -226,10 +250,13 @@ export const DownloadDialog = ({
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.json", JSON.stringify(response.responses));
           file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = `${filePrefix}responses-reponses.zip`;
+            const fileName = getVersionedZipFileName(
+              `${filePrefix}responses-reponses.zip`,
+              selectedVersion
+            );
             downloadFileFromBlob(blob, fileName);
 
-            handleDownloadComplete();
+            handleDownloadComplete(filteredIds);
           });
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
@@ -238,7 +265,7 @@ export const DownloadDialog = ({
             `${filePrefix}responses-reponses.json`
           );
 
-          handleDownloadComplete();
+          handleDownloadComplete(filteredIds);
         }
       }
     } catch (err) {

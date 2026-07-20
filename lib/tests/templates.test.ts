@@ -8,7 +8,6 @@ import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateB
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
-import { UpdateTemplateAction } from "@lib/templates/types";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
@@ -25,15 +24,17 @@ import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 import v8 from "v8";
 import { Prisma } from "@gcforms/database";
 
-import { logEvent } from "@lib/auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
 import { AccessControlError } from "@lib/auth/errors";
+import * as versioningInternal from "@lib/templates/versioning/internal";
 import {
   mockAuthorizationPass,
   mockAuthorizationFail,
   mockGetAbility,
 } from "__utils__/authorization";
+import { UpdateTemplateAction } from "../templates/types";
 
 vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<any>("@lib/auditLogs");
@@ -113,6 +114,7 @@ describe("Template CRUD functions", () => {
       mockUnprocessedSubmissions.mockReset();
       // Default to no unprocessed submissions unless a test overrides
       mockUnprocessedSubmissions.mockResolvedValue(false);
+      vi.spyOn(versioningInternal, "isTemplateVersioningEnabled").mockResolvedValue(false);
     });
 
     it("Create a Template", async () => {
@@ -266,6 +268,58 @@ describe("Template CRUD functions", () => {
       expect(mockedLogEvent).toHaveBeenCalledTimes(0);
     });
 
+    it("Get a public template with version number from the published version", async () => {
+      vi.spyOn(versioningInternal, "isTemplateVersioningEnabled").mockResolvedValue(true);
+
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        currentPublishedVersion: {
+          id: "published-version-2",
+          versionNumber: 2,
+          status: "PUBLISHED",
+          jsonConfig: formConfiguration,
+        },
+        currentDraftVersion: null,
+      });
+
+      const template = await getPublicTemplateByID("formTestID");
+
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: true,
+          securityAttribute: "Unclassified",
+          versionNumber: 2,
+        })
+      );
+    });
+
+    it("Does not include a public template version number when versioning is disabled", async () => {
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        currentPublishedVersion: {
+          id: "published-version-2",
+          versionNumber: 2,
+          status: "PUBLISHED",
+          jsonConfig: formConfiguration,
+        },
+        currentDraftVersion: null,
+      });
+
+      const template = await getPublicTemplateByID("formTestID");
+
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: true,
+          securityAttribute: "Unclassified",
+        })
+      );
+      expect(template?.versionNumber).toBeUndefined();
+    });
+
     it("Get a full template", async () => {
       (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
@@ -294,6 +348,81 @@ describe("Template CRUD functions", () => {
         userID,
         { type: "Form", id: "formTestID" },
         "ReadForm"
+      );
+    });
+
+    it("Get a full template for a specific version when versioning is enabled", async () => {
+      vi.spyOn(versioningInternal, "isTemplateVersioningEnabled").mockResolvedValue(true);
+
+      const currentFormConfiguration = structuredClone(formConfiguration as FormProperties);
+      currentFormConfiguration.elements = [
+        ...currentFormConfiguration.elements,
+        {
+          id: 999,
+          type: "textField",
+          properties: {
+            titleEn: "Current question",
+            titleFr: "Question courante",
+            validation: { required: false },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+      ];
+
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", currentFormConfiguration, true),
+        currentPublishedVersion: {
+          id: "published-version-3",
+          versionNumber: 3,
+          status: "PUBLISHED",
+          jsonConfig: currentFormConfiguration,
+        },
+        currentDraftVersion: null,
+      });
+      (prismaMock.templateVersion.findFirst as MockedFunction<any>).mockResolvedValue({
+        id: "published-version-2",
+        versionNumber: 2,
+        status: "SUPERSEDED",
+        jsonConfig: formConfiguration,
+      });
+
+      const template = await getFullTemplateByID("formTestID", false, 2);
+
+      expect(prismaMock.templateVersion.findFirst).toHaveBeenCalledWith({
+        where: {
+          templateId: "formTestID",
+          versionNumber: 2,
+        },
+        select: {
+          id: true,
+          versionNumber: true,
+          status: true,
+          jsonConfig: true,
+        },
+      });
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          versionNumber: 2,
+        })
+      );
+    });
+
+    it("Ignores requested template version when versioning is disabled", async () => {
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      const template = await getFullTemplateByID("formTestID", false, 2);
+
+      expect(prismaMock.templateVersion.findFirst).not.toHaveBeenCalled();
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+        })
       );
     });
 
@@ -448,7 +577,7 @@ describe("Template CRUD functions", () => {
       expect(mockedLogEvent).toHaveBeenCalledWith(
         userID,
         { id: "formtestID", type: "Form" },
-        "PublishForm"
+        AuditLogEvent.PublishForm
       );
     });
 
@@ -912,7 +1041,7 @@ describe("Template CRUD functions", () => {
         userID,
         { id: "test1", type: "Form" },
         "AccessDenied",
-        "Attempted to update form jsonConfig"
+        AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateFormJson
       );
     });
     it("Update `isPublished` on a specific form", async () => {

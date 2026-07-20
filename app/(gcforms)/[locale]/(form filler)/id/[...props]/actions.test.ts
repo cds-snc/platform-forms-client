@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
+import { NotificationsInterval } from "@gcforms/types";
 import { submitForm } from "./actions";
 import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
@@ -32,8 +33,14 @@ vi.mock("@root/i18n", () => ({
   serverTranslation: vi.fn(),
 }));
 
-vi.mock("@lib/notifications", () => ({
-  sendNotifications: vi.fn(),
+vi.mock("@lib/formEmailOrchestration", () => ({
+  getFormNotificationInterval: vi.fn(),
+  updateNotificationMarker: vi.fn(),
+  prepareFormSubmissionEmail: vi.fn(),
+}));
+
+vi.mock("@lib/integration/notifyConnector", () => ({
+  sendDefaultEmail: vi.fn(),
 }));
 
 vi.mock("./lib/server/normalizeFormResponses", () => ({
@@ -44,15 +51,18 @@ vi.mock("./lib/server/processFormData", () => ({
   processFormData: vi.fn(),
 }));
 
-
-
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
-import { sendNotifications } from "@lib/notifications";
+import {
+  getFormNotificationInterval,
+  prepareFormSubmissionEmail,
+  updateNotificationMarker,
+} from "@lib/formEmailOrchestration";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
 
@@ -67,6 +77,7 @@ describe("submitForm", () => {
   const mockTemplate: PublicFormRecord = {
     id: mockFormId,
     isPublished: true,
+    versionNumber: 2,
     closingDate: undefined,
     securityAttribute: "Unclassified",
     form: {
@@ -91,9 +102,12 @@ describe("submitForm", () => {
     (normalizeFormResponses as Mock).mockReturnValue(mockValues);
     (processFormData as Mock).mockResolvedValue({
       submissionId: "test-submission-id",
-      fileURLMap: {}
+      fileURLMap: {},
     });
-    (sendNotifications as Mock).mockResolvedValue(undefined);
+    (getFormNotificationInterval as Mock).mockResolvedValue(false);
+    (updateNotificationMarker as Mock).mockResolvedValue(null);
+    (prepareFormSubmissionEmail as Mock).mockResolvedValue(null);
+    (sendDefaultEmail as Mock).mockResolvedValue(undefined);
   });
 
   it("should return MissingFormDataError when file input validation fails", async () => {
@@ -101,8 +115,8 @@ describe("submitForm", () => {
     (validateVisibleElements as Mock).mockReturnValue({
       errors: {},
       valueMatchErrors: {
-        "file-input-1": ["File validation error"]
-      }
+        "file-input-1": ["File validation error"],
+      },
     });
     (valuesMatchErrorContainsElementType as Mock).mockReturnValue(true);
 
@@ -112,8 +126,8 @@ describe("submitForm", () => {
       id: mockFormId,
       error: {
         name: "MissingFormDataError",
-        message: "Form data validation failed due to file input errors"
-      }
+        message: "Form data validation failed due to file input errors",
+      },
     });
 
     // Verify that valuesMatchErrorContainsElementType was called with correct parameters
@@ -129,27 +143,122 @@ describe("submitForm", () => {
     expect(result).toEqual({
       id: mockFormId,
       submissionId: "test-submission-id",
-      fileURLMap: {}
+      fileURLMap: {},
     });
 
     // Verify function calls
     expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId);
     expect(validateVisibleElements).toHaveBeenCalledWith(mockValues, {
       formRecord: mockTemplate,
-      t: expect.any(Function)
+      t: expect.any(Function),
     });
     expect(normalizeFormResponses).toHaveBeenCalledWith(mockTemplate, mockValues);
     expect(processFormData).toHaveBeenCalledWith({
       responses: mockValues,
       securityAttribute: mockTemplate.securityAttribute,
       formId: mockFormId,
+      version: 2,
       language: mockLanguage,
-      fileChecksums: undefined
+      fileChecksums: undefined,
+      notificationId: undefined,
     });
-    expect(sendNotifications).toHaveBeenCalledWith(
+    expect(getFormNotificationInterval).toHaveBeenCalledWith(mockFormId);
+    expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
+    expect(sendDefaultEmail).not.toHaveBeenCalled();
+  });
+
+  it("should send a first submission notification when form is eligible and no prior marker exists", async () => {
+    const mockEmailData = {
+      emails: ["user@example.com"],
+      subject: "You have a new submission",
+      formResponse: "Email body",
+    };
+    (checkOne as Mock).mockResolvedValue(true);
+    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
+    (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
+    (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+
+    expect(result).toEqual({
+      id: mockFormId,
+      submissionId: "test-submission-id",
+      fileURLMap: {},
+    });
+
+    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId, NotificationsInterval.DAY);
+
+    expect(prepareFormSubmissionEmail).toHaveBeenCalledWith(
       mockFormId,
       mockTemplate.form.titleEn,
-      mockTemplate.form.titleFr
+      mockTemplate.form.titleFr,
+      "FIRST_EMAIL"
+    );
+
+    const notificationId = (processFormData as Mock).mock.calls[0][0].notificationId;
+    expect(notificationId).toBeTypeOf("string");
+
+    expect(sendDefaultEmail).toHaveBeenCalledWith({
+      to: mockEmailData.emails,
+      subject: mockEmailData.subject,
+      body: mockEmailData.formResponse,
+      options: { mode: "deferred", notificationId },
+    });
+    expect(processFormData).toHaveBeenCalledWith(expect.objectContaining({ notificationId }));
+  });
+
+  it("should send a second submission notification when form is eligible and first marker already set", async () => {
+    const mockEmailData = {
+      emails: ["user@example.com"],
+      subject: "You have multiple new submissions",
+      formResponse: "Email body",
+    };
+    (checkOne as Mock).mockResolvedValue(true);
+    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
+    (updateNotificationMarker as Mock).mockResolvedValue("SECOND_EMAIL");
+    (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+
+    expect(result).toEqual({
+      id: mockFormId,
+      submissionId: "test-submission-id",
+      fileURLMap: {},
+    });
+
+    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId, NotificationsInterval.DAY);
+
+    expect(prepareFormSubmissionEmail).toHaveBeenCalledWith(
+      mockFormId,
+      mockTemplate.form.titleEn,
+      mockTemplate.form.titleFr,
+      "SECOND_EMAIL"
+    );
+
+    const notificationId = (processFormData as Mock).mock.calls[0][0].notificationId;
+    expect(notificationId).toBeTypeOf("string");
+
+    expect(sendDefaultEmail).toHaveBeenCalledWith({
+      to: mockEmailData.emails,
+      subject: mockEmailData.subject,
+      body: mockEmailData.formResponse,
+      options: { mode: "deferred", notificationId },
+    });
+    expect(processFormData).toHaveBeenCalledWith(expect.objectContaining({ notificationId }));
+  });
+
+  it("should not send a notification when form is eligible but marker limit is reached", async () => {
+    (checkOne as Mock).mockResolvedValue(true);
+    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
+    (updateNotificationMarker as Mock).mockResolvedValue(null);
+
+    await submitForm(mockValues, mockLanguage, mockFormId);
+
+    expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId, NotificationsInterval.DAY);
+    expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
+    expect(sendDefaultEmail).not.toHaveBeenCalled();
+    expect(processFormData).toHaveBeenCalledWith(
+      expect.objectContaining({ notificationId: undefined })
     );
   });
 
@@ -158,7 +267,7 @@ describe("submitForm", () => {
     // a .exe file is properly rejected by the validation logic
 
     // Import the actual validation functions
-    const actualCore = await vi.importActual("@gcforms/core") as {
+    const actualCore = (await vi.importActual("@gcforms/core")) as {
       validateVisibleElements: typeof validateVisibleElements;
       valuesMatchErrorContainsElementType: typeof valuesMatchErrorContainsElementType;
     };
@@ -196,11 +305,13 @@ describe("submitForm", () => {
 
     // Use real validation functions for this test instead of mocks
     (validateVisibleElements as Mock).mockImplementation(actualCore.validateVisibleElements);
-    (valuesMatchErrorContainsElementType as Mock).mockImplementation(actualCore.valuesMatchErrorContainsElementType);
+    (valuesMatchErrorContainsElementType as Mock).mockImplementation(
+      actualCore.valuesMatchErrorContainsElementType
+    );
 
     // Mock the translation function with a real implementation
     (serverTranslation as Mock).mockResolvedValue({
-      t: (key: string) => key // Simple passthrough translation
+      t: (key: string) => key, // Simple passthrough translation
     });
 
     const result = await submitForm(valuesWithExeFile, mockLanguage, mockFormId);
@@ -210,8 +321,8 @@ describe("submitForm", () => {
       id: mockFormId,
       error: {
         name: "MissingFormDataError",
-        message: "Form data validation failed due to file input errors"
-      }
+        message: "Form data validation failed due to file input errors",
+      },
     });
 
     // Verify that the template was fetched
@@ -220,6 +331,40 @@ describe("submitForm", () => {
     // Verify that real validation was called with our form data
     expect(validateVisibleElements).toHaveBeenCalledWith(valuesWithExeFile, {
       formRecord: templateWithFileInput,
-      t: expect.any(Function)
+      t: expect.any(Function),
     });
-  });});
+  });
+
+  it("should fall back to GC Notify (sendEmail without deferred mode) and return undefined notificationId when the notification flag is off", async () => {
+    const mockEmailData = {
+      emails: ["user@example.com"],
+      subject: "You have a new submission",
+      formResponse: "Email body",
+    };
+    // Flag OFF
+    (checkOne as Mock).mockResolvedValue(false);
+    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
+    (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
+    (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+
+    expect(result).toEqual({
+      id: mockFormId,
+      submissionId: "test-submission-id",
+      fileURLMap: {},
+    });
+
+    // sendEmail is called without deferred mode — falls back to GC Notify
+    expect(sendDefaultEmail).toHaveBeenCalledWith({
+      to: mockEmailData.emails,
+      subject: mockEmailData.subject,
+      body: mockEmailData.formResponse,
+    });
+
+    // No notificationId is generated or forwarded to processFormData when the flag is off
+    expect(processFormData).toHaveBeenCalledWith(
+      expect.objectContaining({ notificationId: undefined })
+    );
+  });
+});

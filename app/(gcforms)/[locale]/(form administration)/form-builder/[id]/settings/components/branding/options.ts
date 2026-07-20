@@ -395,4 +395,22 @@ export const options = [
     logoTitleEn: "Canada Revenue Agency",
     logoTitleFr: "Agence du revenu du Canada",
   },
+  {
+    name: "pacifican",
+    urlEn: "https://www.canada.ca/en/pacific-economic-development.html",
+    urlFr: "https://www.canada.ca/fr/developpement-economique-pacifique.html",
+    logoEn: "/img/branding/pacifican-en.svg",
+    logoFr: "/img/branding/pacifican-fr.svg",
+    logoTitleEn: "Pacific Economic Development Canada",
+    logoTitleFr: "Développement économique Canada pour le Pacifique",
+  },
+  {
+    name: "justice",
+    urlEn: "https://www.justice.gc.ca/eng",
+    urlFr: "https://www.justice.gc.ca/fra",
+    logoEn: "/img/branding/justice-en.svg",
+    logoFr: "/img/branding/justice-fr.svg",
+    logoTitleEn: "Department of Justice Canada",
+    logoTitleFr: "Ministère de la Justice Canada",
+  },
 ];

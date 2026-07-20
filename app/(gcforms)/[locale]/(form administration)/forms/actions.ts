@@ -8,7 +8,7 @@ import { restoreTemplate } from "@lib/templates/mutations/restoreTemplate";
 import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
 import { AuthenticatedAction } from "@lib/actions";
-import { sendArchivedFormNotifications } from "@lib/notifications";
+import { sendArchivedFormNotifications } from "@lib/formEmailOrchestration";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -50,13 +50,13 @@ export const deleteForm = AuthenticatedAction(
         }
       });
 
-      await sendArchivedFormNotifications(
-        session,
-        id,
-        template.formRecord.form.titleEn,
-        template.formRecord.form.titleFr,
-        template.users
-      );
+      sendArchivedFormNotifications(session.user.email, {
+        title: {
+          en: template.formRecord.form.titleEn,
+          fr: template.formRecord.form.titleFr,
+        },
+        ownersEmailAddresses: template.users.map((u) => u.email),
+      });
 
       revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
     } catch (e) {

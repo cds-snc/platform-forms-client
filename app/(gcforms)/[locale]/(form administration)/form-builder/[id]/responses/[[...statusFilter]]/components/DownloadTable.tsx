@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, useMemo } from "react";
 import {
   NagwareResult,
   StartFromExclusiveResponse,
@@ -25,6 +25,7 @@ import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { StatusFilter } from "../types";
 
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionOverview[];
@@ -66,6 +67,22 @@ export const DownloadTable = ({
     reducerTableItems,
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
+
+  const { getFlag } = useFeatureFlags();
+  const templateVersioningEnabled = getFlag("templateVersioning");
+
+  // Check to see if we should show the version column. If there are mixed versions and at least one submission is not version 1, show the version column. Otherwise hide it.
+  const showVersionsColumn = useMemo(() => {
+    const hasMixedVersions = vaultSubmissions.some(
+      (submission) => submission.version !== vaultSubmissions[0].version
+    );
+
+    const hasNonVersion1Submissions = vaultSubmissions.some(
+      (submission) => Number(submission.version) !== 1 && submission.version !== undefined
+    );
+
+    return hasNonVersion1Submissions && templateVersioningEnabled && hasMixedVersions;
+  }, [vaultSubmissions, templateVersioningEnabled]);
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -168,6 +185,22 @@ export const DownloadTable = ({
                   <p>{t(`tooltips.downloadTable.date.body`)}</p>
                 </Tooltip.Info>
               </th>
+              {showVersionsColumn && (
+                <th scope="col" className="p-4 text-left">
+                  <span className="flex items-center">
+                    {t("downloadResponsesTable.header.version")}
+                    <Tooltip.Info
+                      side="top"
+                      triggerClassName="align-middle ml-1"
+                      tooltipClassName="font-normal"
+                    >
+                      <strong>{t(`tooltips.downloadTable.version.title`)}</strong>
+                      <p>{t(`tooltips.downloadTable.version.body`)}</p>
+                    </Tooltip.Info>
+                  </span>
+                </th>
+              )}
+
               <th scope="col" className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
                 <Tooltip.Info
@@ -186,7 +219,7 @@ export const DownloadTable = ({
           </thead>
           <tbody>
             <tr className="border-y-1 border-slate-400 bg-slate-100 py-2">
-              <td colSpan={5} className="px-4 py-2">
+              <td colSpan={templateVersioningEnabled ? 6 : 5} className="px-4 py-2">
                 <Pagination
                   startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
@@ -239,6 +272,14 @@ export const DownloadTable = ({
                     {submission.name}
                   </th>
                   <td className="px-4 whitespace-nowrap">{createdDateTime}</td>
+                  {showVersionsColumn && (
+                    <td
+                      className="px-4 whitespace-nowrap"
+                      data-version={submission.version ?? "unknown"}
+                    >
+                      {submission.version ?? t("downloadResponsesTable.unknownVersion")}
+                    </td>
+                  )}
                   <td className="px-4 whitespace-nowrap">
                     <NextStep
                       statusFilter={statusFilter as StatusFilter}
@@ -252,9 +293,14 @@ export const DownloadTable = ({
                       id={`button-${submission.name}`}
                       formId={submission.formID}
                       responseId={submission.name}
+                      version={submission.version}
                       onDownloadSuccess={() => {
                         setDownloadError(false);
                         setRemovedRows([...removedRows, submission.name]);
+                        tableItemsDispatch({
+                          type: TableActions.UNCHECK,
+                          payload: { ids: [submission.name] },
+                        });
                         // router.replace(router.asPath, undefined, { scroll: false });
                         if (statusFilter === StatusFilter.NEW) {
                           setShowDownloadSuccess("downloadSuccess");
@@ -268,7 +314,7 @@ export const DownloadTable = ({
               );
             })}
             <tr className="border-y-1 border-slate-300 bg-slate-100 py-2">
-              <td colSpan={5} className="px-4 py-2">
+              <td colSpan={templateVersioningEnabled ? 6 : 5} className="px-4 py-2">
                 <Pagination
                   startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
@@ -315,8 +361,12 @@ export const DownloadTable = ({
         setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
         formName={formName}
-        onSuccessfulDownload={() => {
-          setRemovedRows([...removedRows, ...tableItems.checkedItems.keys()]);
+        onSuccessfulDownload={(filteredIds) => {
+          setRemovedRows([...removedRows, ...filteredIds]);
+          tableItemsDispatch({
+            type: TableActions.UNCHECK,
+            payload: { ids: filteredIds },
+          });
           // router.replace(router.asPath, undefined, { scroll: false });
           if (statusFilter === StatusFilter.NEW) {
             setShowDownloadSuccess("downloadSuccess");
@@ -324,7 +374,7 @@ export const DownloadTable = ({
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
-        checkedMeta={tableItems.allItems}
+        checkedMeta={tableItems.allItems.filter((item) => tableItems.checkedItems.get(item.name))}
       />
     </>
   );
