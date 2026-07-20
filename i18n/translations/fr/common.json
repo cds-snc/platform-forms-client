@@ -362,8 +362,8 @@
         "description": " Conservez ce fichier en un lieu sûr sur votre appareil pour protéger vos renseignements personnels."
       },
       "badge": {
-        "text": "Formulaire soumis le ",
-        "lastSaved": "{{day}} {{month}} {{year}}",
+        "text": "Formulaire soumis : ",
+        "lastSaved": "le {{day}} {{month}} {{year}}",
         "submissionId": "Numéro de référence : {{submissionId}}"
       },
       "generateHtmlError": {
