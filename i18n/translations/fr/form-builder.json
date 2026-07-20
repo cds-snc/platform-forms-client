@@ -400,7 +400,7 @@
   "confirmationDescriptionParagraph": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis. Voici quelques éléments utiles à présenter dans la confirmation :",
   "confirm": {
     "createDraft": {
-      "title": "Mettre à jour un formulaire publié",
+      "title": "Mettre à jour le formulaire publié",
       "liveForm": "La version actuelle continuera de recueillir des réponses jusqu’à ce que vous publiiez la mise à jour du formulaire.",
       "list": {
         "title": "⚠️  Avant de publier les mises à jour, discutez avec vos développeurs et testez votre formulaire.Vous pourriez devoir : ",
