@@ -51,15 +51,18 @@ const DraftVersionNumber = memo(
     hasDraft,
     draftVersionNumber,
     isPublished,
+    linkDraftVersion,
   }: {
     language: string;
     cardId: string;
     hasDraft: boolean;
     draftVersionNumber?: number;
     isPublished: boolean;
+    linkDraftVersion?: boolean;
   }) => {
     const { t } = useTranslation("my-forms");
     const link = `/${language}/form-builder/${cardId}/edit`;
+    const label = t("card.draftVersion", { draftVersionNumber: draftVersionNumber });
 
     if (isPublished && hasDraft && draftVersionNumber) {
       return (
@@ -68,9 +71,13 @@ const DraftVersionNumber = memo(
             className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-400"
             aria-hidden="true"
           ></span>
-          <Link href={link} prefetch={false}>
-            {t("card.draftVersion", { draftVersionNumber: draftVersionNumber })}
-          </Link>
+          {linkDraftVersion ? (
+            <Link href={link} prefetch={false}>
+              {label}
+            </Link>
+          ) : (
+            <span>{label}</span>
+          )}
         </div>
       );
     }
@@ -90,6 +97,8 @@ const CardBanner = memo(
     draftVersionNumber,
     isPublished,
     isClosed,
+    liveFormLink,
+    linkDraftVersion,
   }: {
     language: string;
     cardId: string;
@@ -98,6 +107,8 @@ const CardBanner = memo(
     draftVersionNumber?: number;
     isPublished: boolean;
     isClosed: boolean;
+    liveFormLink?: string;
+    linkDraftVersion?: boolean;
   }) => {
     const { t } = useTranslation("my-forms");
     const bulletColor = isClosed
@@ -111,18 +122,25 @@ const CardBanner = memo(
         ? t("card.versionNumber", { publishedVersionNumber: publishedVersionNumber })
         : "";
 
+    const publishedLabel = isClosed
+      ? t("card.states.closed")
+      : isPublished
+        ? t("card.states.published") + t(publishedVersionText ? `${publishedVersionText}` : "")
+        : t("card.states.draft");
+
     return (
       <>
         <div className="mt-4 flex items-center gap-1 self-start text-sm" aria-hidden="true">
           <span
             className={`inline-block h-3 w-3 rounded-full border-1 border-slate-50 ${bulletColor}`}
           />
-          {isClosed
-            ? t("card.states.closed")
-            : isPublished
-              ? t("card.states.published") +
-                t(publishedVersionText ? `${publishedVersionText}` : "")
-              : t("card.states.draft")}
+          {liveFormLink ? (
+            <Link href={liveFormLink} prefetch={false}>
+              {publishedLabel}
+            </Link>
+          ) : (
+            publishedLabel
+          )}
         </div>
 
         <DraftVersionNumber
@@ -131,6 +149,7 @@ const CardBanner = memo(
           isPublished={isPublished}
           hasDraft={hasDraft}
           draftVersionNumber={draftVersionNumber}
+          linkDraftVersion={linkDraftVersion}
         />
       </>
     );
@@ -445,6 +464,9 @@ const CardComponent = ({
       ),
     [card.collaboratorCount.userCount, card.collaboratorCount.pendingUserCount]
   );
+  const isPublishedDraftOnDraftTab =
+    status === TAB_STATUS.DRAFT && card.isPublished && card.hasDraft;
+  const liveFormLink = isPublishedDraftOnDraftTab ? `/${language}/id/${card.id}` : undefined;
 
   const wrapperClass = `grid h-full max-w-[16em] min-w-[16em] grid-cols-[1fr_auto] gap-2 rounded-md border-1 border-slate-300 pt-2 pr-3 pb-4 pl-5 shadow-lg shadow-slate-900/5 ${card.editLockInfo ? "bg-yellow-50" : card.overdue ? "bg-red-50" : ""}`;
   return (
@@ -456,7 +478,7 @@ const CardComponent = ({
           isPublished={card.isPublished}
           isClosed={cardState === CARD_STATE.CLOSED}
           collaboratorCount={collaboratorCount}
-          linkToEdit={status === TAB_STATUS.DRAFT && card.isPublished && card.hasDraft}
+          linkToEdit={isPublishedDraftOnDraftTab}
         />
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
         <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
@@ -467,7 +489,7 @@ const CardComponent = ({
             overdue={card.overdue}
             ttl={card.ttl}
             language={language}
-            isPublishedDraft={status === TAB_STATUS.DRAFT && card.isPublished && card.hasDraft}
+            isPublishedDraft={isPublishedDraftOnDraftTab}
           />
         </Suspense>
         <div className="mt-auto">
@@ -496,6 +518,8 @@ const CardComponent = ({
             draftVersionNumber={card.currentDraftVersion ?? undefined}
             isPublished={card.isPublished}
             isClosed={cardState === CARD_STATE.CLOSED}
+            liveFormLink={liveFormLink}
+            linkDraftVersion={!isPublishedDraftOnDraftTab}
           />
           {cardState === CARD_STATE.PUBLISHED && <CardFooterPublished cardId={card.id} />}
         </div>
