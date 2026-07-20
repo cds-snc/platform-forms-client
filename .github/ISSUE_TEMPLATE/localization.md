@@ -1,8 +1,8 @@
 ---
 name: 'Localization'
-about: Use this template to document outline content ready for localization
+about: Use this template to document content ready for localization
 title: 'Localization'
-labels: 'French'
+labels: 'french'
 assignees: 'nchoquet'
 
 ---
