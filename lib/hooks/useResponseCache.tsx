@@ -478,7 +478,7 @@ export const useResponsesCache = () => {
       toast.success(t("saveAndResume.formRestored"), "public-facing-form");
     }
 
-    if (previousFormVersionNumber !== currentFormVersionNumber) {
+    if (previousFormVersionNumber !== currentFormVersionNumber && rawData && rawData.restoredForm) {
       toast.notice(<VersionChangedToast />, "public-facing-form-wide");
     }
 
