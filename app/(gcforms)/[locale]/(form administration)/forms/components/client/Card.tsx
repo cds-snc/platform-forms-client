@@ -8,7 +8,13 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { cn, dateHasPast } from "@root/lib/utils";
 
-import { CARD_STATE, CardState, FormsTemplateWithLockInfo, FormTabStatus } from "../types";
+import {
+  CARD_STATE,
+  CardState,
+  FormsTemplateWithLockInfo,
+  FormTabStatus,
+  TAB_STATUS,
+} from "../types";
 import { DraftEditLink } from "../client/DraftEditLink";
 import { Menu } from "../client/Menu";
 import { Unarchive } from "../client/Unarchive";
@@ -140,6 +146,7 @@ const CardLinks = memo(
     overdue,
     ttl,
     language,
+    isPublishedDraft,
   }: {
     id: string;
     isPublished: boolean;
@@ -147,6 +154,8 @@ const CardLinks = memo(
     overdue: boolean;
     ttl?: Date | null;
     language: string;
+    // true when this card is a published template that also has a draft
+    isPublishedDraft?: boolean;
   }) => {
     const { t } = useTranslation("my-forms");
     const responsesLink = `/${language}/form-builder/${id}/responses`;
@@ -169,7 +178,7 @@ const CardLinks = memo(
         )}
 
         {/* Vault delivery */}
-        {deliveryOption && ttl == null && !deliveryOption.emailAddress && (
+        {deliveryOption && ttl == null && !deliveryOption.emailAddress && !isPublishedDraft && (
           <>
             {overdue ? (
               <Link
@@ -194,7 +203,7 @@ const CardLinks = memo(
         )}
 
         {/* Settings link - only for published non-archived forms */}
-        {ttl == null && (
+        {ttl == null && !isPublishedDraft && (
           <Link
             className="mt-2 mb-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
             href={settingsLink}
@@ -217,12 +226,14 @@ const CardTitle = memo(
     isPublished,
     collaboratorCount,
     isClosed,
+    linkToEdit,
   }: {
     id: string;
     name: string;
     isPublished: boolean;
     collaboratorCount: number;
     isClosed: boolean;
+    linkToEdit?: boolean;
   }) => {
     const {
       t,
@@ -243,7 +254,7 @@ const CardTitle = memo(
           {content}
         </span>
       );
-    } else if (isPublished) {
+    } else if (isPublished && !linkToEdit) {
       titleElement = (
         <Link className={classesLink} href={`/${language}/id/${id}`} prefetch={false}>
           {content}
@@ -445,6 +456,7 @@ const CardComponent = ({
           isPublished={card.isPublished}
           isClosed={cardState === CARD_STATE.CLOSED}
           collaboratorCount={collaboratorCount}
+          linkToEdit={status === TAB_STATUS.DRAFT && card.isPublished && card.hasDraft}
         />
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
         <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>
@@ -455,6 +467,7 @@ const CardComponent = ({
             overdue={card.overdue}
             ttl={card.ttl}
             language={language}
+            isPublishedDraft={status === TAB_STATUS.DRAFT && card.isPublished && card.hasDraft}
           />
         </Suspense>
         <div className="mt-auto">
