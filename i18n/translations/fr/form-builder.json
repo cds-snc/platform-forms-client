@@ -563,7 +563,13 @@
   "formDownload": {
     "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Obtenir une copie du formulaire"
+    "title": "Obtenir une copie du formulaire",
+    "versionSelector": {
+      "label": "Sélectionnez une version",
+      "currentDraft": "Version {{version}} - ébauche actuelle",
+      "currentPublished": "Version {{version}} - version publiée actuelle",
+      "previousVersion": "Version {{version}}"
+    }
   },
   "auditDownload": {
     "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités des 30 derniers jours sur la création du formulaire, la collaboration et l'intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul.",
@@ -593,6 +599,7 @@
     },
     "events": {
       "CreateForm": "Formulaire créé",
+      "CreateDraftFromPublishedForm": "Ébauche créée à partir du formulaire publié",
       "DeleteForm": "Formulaire archivé",
       "UnarchiveForm": "Formulaire désarchivé",
       "ChangeDeliveryOption": "Option de livraison modifiée",
@@ -613,6 +620,7 @@
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
+      "RepublishForm": "Formulaire re-publié",
       "InvitationAccepted": "Invitation acceptée",
       "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
       "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
@@ -620,6 +628,7 @@
       "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
     },
     "eventDetails": {
+      "CreateDraftFromPublishedForm": "Ébauche - version : {{versionNumber}}",
       "CreatedForm": "Formulaire créé",
       "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
@@ -1694,5 +1703,6 @@
   },
   "fileUploadApiWarning": {
     "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
-  }
+  },
+  "formDownloadFailed": "Le téléchargement du formulaire a échoué."
 }

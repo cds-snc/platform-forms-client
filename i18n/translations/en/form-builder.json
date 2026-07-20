@@ -563,7 +563,13 @@
   "formDownload": {
     "description": "Keep a version stored locally on your computer or use this file to share a draft in progress.",
     "downloadBtnText": "Download form file",
-    "title": "Get a copy of your form"
+    "title": "Get a copy of your form",
+    "versionSelector": {
+      "label": "Select a version",
+      "currentDraft": "Version {{version}} - current draft",
+      "currentPublished": "Version {{version}} - current published",
+      "previousVersion": "Version {{version}}"
+    }
   },
   "auditDownload": {
     "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for the last 30 days related to form creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet.",
@@ -593,6 +599,7 @@
     },
     "events": {
       "CreateForm": "Form created",
+      "CreateDraftFromPublishedForm": "Draft created from published form",
       "DeleteForm": "Form archived",
       "UnarchiveForm": "Form restored",
       "ChangeDeliveryOption": "Delivery option changed",
@@ -613,6 +620,7 @@
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
+      "RepublishForm": "Re-published form",
       "InvitationAccepted": "Invitation accepted",
       "UpdateFormBranding": "Updated form branding",
       "UpdatedNotificationSettings": "Updated notification settings",
@@ -621,6 +629,7 @@
       "InvitationCancelled": "Cancelled a collaboration invitation"
     },
     "eventDetails": {
+      "CreateDraftFromPublishedForm": "Draft version {{versionNumber}}",
       "CreatedForm": "Created form",
       "UpdatedFormName": "Renamed form to: {{newFormName}}",
       "UpdatedFormContent": "Updated form content",
@@ -1692,5 +1701,6 @@
     "title": "Edit and re-publish",
     "description": "Make an edit to your form while it is published",
     "button": "Edit form"
-  }
+  },
+  "formDownloadFailed": "Failed to download the form."
 }
