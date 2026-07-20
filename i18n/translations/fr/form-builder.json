@@ -854,7 +854,7 @@
         "agree": {
           "label": "Pour continuer, saisissez ACCEPTE",
           "required": "(obligatoire)",
-          "placeholder": "J’ACCEPTE"
+          "placeholder": "ACCEPTE"
         }
       }
     },
