@@ -852,7 +852,7 @@
         "listitem2": "Révisez les listes et les feuilles de calcul pour organiser les réponses.",
         "listitem3": "Mettre à jour l’intégration de l’API.",
         "agree": {
-          "label": "Pour continuer, saisir ",
+          "label": "Pour continuer, saisissez ACCEPTE",
           "required": "(obligatoire)",
           "placeholder": "J’ACCEPTE"
         }
