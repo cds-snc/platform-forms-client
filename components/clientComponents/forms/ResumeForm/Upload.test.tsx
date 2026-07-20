@@ -7,14 +7,12 @@ import userEvent from "@testing-library/user-event";
 
 import { Upload } from "./Upload";
 
-const { pushMock, saveSessionProgressMock, toastErrorMock, logClientErrorMock } = vi.hoisted(
-  () => ({
-    pushMock: vi.fn(),
-    saveSessionProgressMock: vi.fn(),
-    toastErrorMock: vi.fn(),
-    logClientErrorMock: vi.fn(),
-  })
-);
+const { saveSessionProgressMock, toastErrorMock, logClientErrorMock } = vi.hoisted(() => ({
+  pushMock: vi.fn(),
+  saveSessionProgressMock: vi.fn(),
+  toastErrorMock: vi.fn(),
+  logClientErrorMock: vi.fn(),
+}));
 
 vi.mock("@i18n/client", () => ({
   useTranslation: () => ({
