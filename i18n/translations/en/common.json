@@ -362,7 +362,7 @@
         "description": " Keep this file in a secure spot on your device to protect your information."
       },
       "badge": {
-        "text": "Form submitted on ",
+        "text": "Form submitted: ",
         "lastSaved": "{{month}} {{day}}, {{year}}",
         "submissionId": "Submission ID: {{submissionId}}"
       },
