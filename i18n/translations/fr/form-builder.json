@@ -841,7 +841,7 @@
     "republishTitle": "Publier une mise à jour",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
     "republish": {
-      "categoryLabel": "Catégorie de formulaire (obligatoire)",
+      "categoryLabel": "Catégorie de formulaire",
       "helpsUnderstand": "Aidez-nous à comprendre l’objectif de ce formulaire.",
       "confirm": {
         "title": "Confirmer la publication",
