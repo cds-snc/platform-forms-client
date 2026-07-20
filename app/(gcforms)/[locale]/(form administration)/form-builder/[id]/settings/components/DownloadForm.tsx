@@ -44,7 +44,7 @@ export const DownloadForm = ({ versions }: Props) => {
       const result = res as { error?: unknown; formConfig?: unknown };
 
       if (result.error || !result.formConfig) {
-        toast.error(t("errors.formDownloadFailed"));
+        toast.error(t("formDownloadFailed"));
         return;
       }
 
@@ -58,7 +58,7 @@ export const DownloadForm = ({ versions }: Props) => {
 
       await downloadDataAsBlob(data, filename, { "application/json": [".json"] });
     } catch (err) {
-      toast.error(t("errors.formDownloadFailed"));
+      toast.error(t("formDownloadFailed"));
     }
   };
 

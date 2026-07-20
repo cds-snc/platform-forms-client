@@ -24,17 +24,17 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
     throw e;
   });
 
-  // Check if the form is draft or not.
-  const template = await prisma.template.findFirstOrThrow({
+  const template = await prisma.template.findUnique({
     where: {
       id: formID,
     },
     select: {
       isPublished: true,
+      apiServiceAccount: { select: { id: true } },
     },
   });
 
-  if (!template) throw new TemplateNotFoundError();
+  if (template === null) throw new TemplateNotFoundError();
 
   // Only check submissions if the form is published.
   if (template.isPublished) {
@@ -44,7 +44,9 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   }
 
   // Check and delete any API keys from IDP
-  await deleteKey(formID);
+  if (template.apiServiceAccount !== null) {
+    await deleteKey(formID);
+  }
 
   const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
   const templateMarkedAsDeleted = await prisma.template
