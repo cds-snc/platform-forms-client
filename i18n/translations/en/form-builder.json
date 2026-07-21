@@ -1698,9 +1698,9 @@
     "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
   },
   "publishViewEdit": {
-    "title": "Edit and re-publish",
-    "description": "Make an edit to your form while it is published",
-    "button": "Edit form"
+    "title": "Update a published form",
+    "description": "Change a form that's already live",
+    "button": "Update"
   },
   "formDownloadFailed": "Failed to download the form."
 }
