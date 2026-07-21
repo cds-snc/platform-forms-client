@@ -1704,5 +1704,10 @@
   "fileUploadApiWarning": {
     "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
   },
+  "publishViewEdit": {
+    "title": "Mettre à jour un formulaire publié",
+    "description": "Modifier un formulaire déjà en production",
+    "button": "Mettre à jour"
+  },
   "formDownloadFailed": "Le téléchargement du formulaire a échoué."
 }
