@@ -479,7 +479,13 @@ export const useResponsesCache = () => {
     }
 
     if (previousFormVersionNumber !== currentFormVersionNumber && rawData && rawData.restoredForm) {
-      toast.notice(<VersionChangedToast />, "public-facing-form-wide");
+      toast.notice(
+        <VersionChangedToast
+          previousFormVersionNumber={String(previousFormVersionNumber)}
+          currentFormVersionNumber={String(currentFormVersionNumber)}
+        />,
+        "public-facing-form-wide"
+      );
     }
 
     if (!rawData) {
