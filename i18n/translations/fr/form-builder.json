@@ -1704,5 +1704,10 @@
   "fileUploadApiWarning": {
     "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
   },
+  "publishViewEdit": {
+    "title": "Edit and re-publish [FR]",
+    "description": "Make an edit to your form while it is published [FR]",
+    "button": "Edit form [FR]"
+  },
   "formDownloadFailed": "Le téléchargement du formulaire a échoué."
 }
