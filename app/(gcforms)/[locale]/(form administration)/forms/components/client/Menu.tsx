@@ -24,6 +24,7 @@ export const Menu = ({
   hasDraft,
   ttl,
   status,
+  deliveryOption,
   onRemove,
 }: {
   id: string;
@@ -32,6 +33,7 @@ export const Menu = ({
   hasDraft?: boolean;
   ttl?: Date;
   status: FormTabStatus;
+  deliveryOption?: { emailAddress: string } | null;
   onRemove?: (templateId: string) => void;
 }) => {
   const {
@@ -39,6 +41,8 @@ export const Menu = ({
     i18n: { language },
   } = useTranslation("my-forms");
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
+
+  const isEmailDelivery = deliveryOption && deliveryOption.emailAddress;
 
   const { getFlag } = useFeatureFlags();
   const templateVersioningEnabled = getFlag("templateVersioning");
@@ -123,7 +127,8 @@ export const Menu = ({
         callback: copyLinkCallback,
       },
       {
-        filtered: templateVersioningEnabled && isPublished && !hasDraft ? false : true,
+        filtered:
+          templateVersioningEnabled && !isEmailDelivery && isPublished && !hasDraft ? false : true,
         title: t("card.menu.createDraftVersion"),
         callback: () => {
           try {
@@ -207,12 +212,12 @@ export const Menu = ({
       language,
       id,
       restoreFormCallback,
-
       status,
       downloadForm,
       name,
       handleDelete,
       hasDraft,
+      isEmailDelivery,
     ]
   );
 
