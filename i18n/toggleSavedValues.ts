@@ -1,15 +1,11 @@
-import { FormProperties, Response, FormElement, Responses } from "@gcforms/types";
+import { Response, FormElement, Responses, FormElementTypes } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 
-type FormElements = {
-  elements: FormElement[];
-};
-
-export const findElement = (form: FormElements, elId: string | number) => {
-  if (!form || !form.elements) {
+export const findElement = (form: FormElement[], elId: string | number) => {
+  if (!form) {
     return;
   }
-  return form.elements.find((element) => Number(element.id) === Number(elId));
+  return form.find((element) => Number(element.id) === Number(elId));
 };
 
 export const findChoiceByValue = (
@@ -34,19 +30,8 @@ export const findChoiceByValue = (
   return found;
 };
 
-export const getToggledValue = (
-  form: FormElements,
-  elId: number | string,
-  value: Response,
-  lang: Language
-) => {
-  const el = findElement(form, elId);
-
-  if (!el) {
-    return;
-  }
-
-  const choice = findChoiceByValue(el, value, lang);
+export const getToggledValue = (element: FormElement, value: Response, lang: Language) => {
+  const choice = findChoiceByValue(element, value, lang);
 
   if (!choice || typeof choice === "boolean") {
     return;
@@ -58,29 +43,49 @@ export const getToggledValue = (
 };
 
 export const toggleSavedValues = (
-  form: FormProperties,
+  formElements: FormElement[],
   savedValues: Responses,
   fromLang: Language
 ) => {
-  if (!savedValues.values) {
+  if (!savedValues) {
     return savedValues;
   }
 
-  const savedToggled: Responses = Object.entries(savedValues.values).reduce(
+  const savedToggled: Responses = Object.entries(savedValues).reduce(
     (acc: { [key: string]: Response }, [key, value]) => {
       if (isNaN(Number(key))) {
         return acc;
       }
 
+      const el = findElement(formElements, key);
+      if (!el) {
+        return acc;
+      }
+
+      if (
+        el.type === FormElementTypes.dynamicRow &&
+        el.properties.subElements &&
+        Array.isArray(value)
+      ) {
+        const dynamicRowElements = el.properties.subElements.map((el, index) => ({
+          ...el,
+          id: index,
+        }));
+        acc[key] = (value as unknown as Responses[]).map((obj) => {
+          return toggleSavedValues(dynamicRowElements, obj, fromLang);
+        });
+        return acc;
+      }
+
       if (Array.isArray(value)) {
-        acc[key] = value.map((v) => {
-          const found = getToggledValue(form, key, v, fromLang);
+        acc[key] = (value as string[]).map((v) => {
+          const found = getToggledValue(el, v, fromLang);
           return found ? found : v;
         });
         return acc;
       }
 
-      const found = getToggledValue(form, key, value, fromLang);
+      const found = getToggledValue(el, value, fromLang);
       acc[key] = found ? found : value;
 
       return acc;

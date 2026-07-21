@@ -394,5 +394,17 @@
     "title": "Se connecter à Formulaires GC",
     "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
     "button": "Se connecter"
+  },
+  "appUpdate": {
+    "builder": {
+      "title": "Veuillez mettre à jour Formulaires GC",
+      "description": "Vérifiez votre formulaire après la mise à jour et avant la publication.",
+      "button": "Mettre à jour"
+    },
+    "user": {
+      "title": "Pour continuer, mettez à jour ce formulaire",
+      "description": "Vérifiez vos réponses après la mise à jour et avant de soumettre votre formulaire.",
+      "button": "Mettre à jour"
+    }
   }
 }

@@ -1,11 +1,21 @@
 import { useTranslation } from "@i18n/client";
 import { WarningIcon } from "@serverComponents/icons";
 
-export const VersionChangedToast = () => {
+export const VersionChangedToast = ({
+  previousFormVersionNumber,
+  currentFormVersionNumber,
+}: {
+  previousFormVersionNumber: string;
+  currentFormVersionNumber: string;
+}) => {
   const { t } = useTranslation("common");
 
   return (
-    <div className="w-full px-4 py-2 text-black">
+    <div
+      className="w-full px-4 py-2 text-black"
+      data-previous-version={previousFormVersionNumber}
+      data-current-version={currentFormVersionNumber}
+    >
       <div className="flex items-start gap-6">
         <div className="flex shrink-0 flex-col items-center self-stretch">
           <div className="h-8 w-1.5 bg-[#a86e00]" />

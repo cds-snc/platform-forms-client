@@ -5,20 +5,18 @@ import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
-import { getRenderedForm, mergeFormValuesWithInitialValues } from "@lib/formBuilder";
-import { toast } from "@formBuilder/components/shared/Toast";
+
+import { getRenderedForm } from "@lib/formBuilder";
+import { mergeFormValuesWithInitialValues } from "@lib/formBuilder";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
 import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helpers";
-import { FormRestoredWarning } from "@clientComponents/forms/ResumeForm/FormRestoredWarning";
-import { VersionChangedToast } from "@clientComponents/forms/ResumeForm/VersionChangedToast";
+import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
 
 export const FormWrapper = ({
   formRecord,
@@ -35,7 +33,6 @@ export const FormWrapper = ({
     i18n: { language },
   } = useTranslation(["common", "confirmation", "form-closed", "review"]);
   const {
-    saveSessionProgress,
     setSubmissionId,
     submissionId,
     submissionDate,
@@ -44,7 +41,9 @@ export const FormWrapper = ({
     getGroupTitle,
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
+  const { cachedSession } = useResponsesCache();
   const captchaToken = React.useRef("");
+  // TODO : If the formRecord contains file inputs Save and Resume is not available
   const resetCaptchaRef = React.useRef<{ resetToken: () => void }>({ resetToken: () => {} });
 
   const saveAndResume = formRecord?.saveAndResume;
@@ -54,24 +53,7 @@ export const FormWrapper = ({
     return getRenderedForm(formRecord, language as Language);
   }, [formRecord, language]);
 
-  const formRestoredMessage = t("saveAndResume.formRestored");
   const router = useRouter();
-
-  const savedValues = useMemo(() => {
-    const result = restoreSessionProgress({
-      id: formRecord.id,
-      form: formRecord.form,
-      language: language as Language,
-    });
-
-    if (!result) {
-      return false;
-    }
-
-    return result;
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language, formRecord.id]);
 
   // For multi-page forms update the sub page head title or review page title
   // Single-page forms will be skipped since since the title set in page.tsx is sufficient
@@ -93,63 +75,6 @@ export const FormWrapper = ({
   const isMultiPageForm = showReviewPage(formRecord.form);
   useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
-  const isEmptyForm = useMemo(() => {
-    try {
-      if (!savedValues) {
-        return false;
-      }
-      const elements = stripExcludedKeys(savedValues.values || {});
-      const elementValues = flattenStructureToValues(elements);
-      return elementValues.join("") === "";
-    } catch (e) {
-      return true;
-    }
-  }, [savedValues]);
-
-  useEffect(() => {
-    // Clear session storage after values are restored
-    if (savedValues) {
-      removeProgressStorage();
-
-      const savedVersionNumber = Number(savedValues.versionNumber) ?? 1;
-      const currentVersionNumber = Number(formRecord.versionNumber) ?? 1;
-
-      if (savedValues.language === language && !isEmptyForm) {
-        // If saved answers are for a different form id show mismatch warning
-        if (savedValues.sourceFormId && savedValues.sourceFormId !== formRecord.id) {
-          toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
-        } else if (savedVersionNumber !== currentVersionNumber) {
-          // Show styled toast warning the user the form template changed since they started
-          toast.notice(<VersionChangedToast />, "public-facing-form-wide");
-        } else {
-          // Default restored success message
-          toast.success(formRestoredMessage, "public-facing-form");
-        }
-      }
-    }
-  }, [
-    savedValues,
-    language,
-    isEmptyForm,
-    formRecord.id,
-    formRestoredMessage,
-    formRecord.versionNumber,
-  ]);
-
-  const initialValues = useMemo(() => {
-    if (!savedValues) {
-      return undefined;
-    }
-
-    if (!savedValues.values) {
-      return undefined;
-    }
-
-    // Merge restored answers onto the current form defaults so any newly added
-    // elements still get an explicit empty initial value and participate in validation.
-    return mergeFormValuesWithInitialValues(formRecord, language, savedValues.values);
-  }, [savedValues, formRecord, language]);
-
   // Show confirmation page if submissionId is present
   if (submissionId && submissionDate) {
     return (
@@ -164,10 +89,15 @@ export const FormWrapper = ({
   }
 
   return (
-    <>
+    <div id="form-filler">
       {header}
+
       <Form
-        initialValues={initialValues || undefined}
+        initialValues={
+          cachedSession
+            ? mergeFormValuesWithInitialValues(formRecord, language, cachedSession?.values)
+            : undefined
+        }
         formRecord={formRecord}
         language={language}
         onSuccess={(formID, submissionId) => {
@@ -183,7 +113,6 @@ export const FormWrapper = ({
           }
         }}
         t={t}
-        saveSessionProgress={saveSessionProgress}
         saveAndResumeEnabled={saveAndResume}
         renderSubmit={({ validateForm, fallBack }) => {
           return (
@@ -224,6 +153,6 @@ export const FormWrapper = ({
           />
         </>
       )}
-    </>
+    </div>
   );
 };
