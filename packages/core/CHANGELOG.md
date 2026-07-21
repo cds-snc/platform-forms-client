@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.17] - 2026-07-21
+
+- Republish package following failed NPM publication
+
 ## [2.2.14] - 2026-06-15
 
 - Replaced the self-import from @gcforms/core with a local import
