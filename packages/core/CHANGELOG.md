@@ -1,8 +1,12 @@
 # Changelog
 
-## [2.2.15] - 2026-07-14
+## [2.3.0] - 2026-07-22
 
-- Refactor visibility to be event driven to improve performance and maintainability
+- Update visibility to be event driven with a different function signature
+
+## [2.2.17] - 2026-07-21
+
+- Republish package following failed NPM publication
 
 ## [2.2.14] - 2026-06-15
 

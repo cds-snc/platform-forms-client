@@ -275,8 +275,8 @@
     "cancel": "Annuler",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
     "formUpdatedWarning": {
-      "title": "We’ve updated this form [FR]",
-      "message": "Your saved answers may no longer apply.  Review before submitting. [FR]"
+      "title": "Nous avons mis à jour ce formulaire",
+      "message": "Vos réponses enregistrées pourraient ne plus s’appliquer. Confirmez vos réponses avant de soumettre le formulaire."
     },
     "formRestoredWarning": {
       "title": "Vérifiez attentivement vos réponses",
@@ -362,8 +362,8 @@
         "description": " Conservez ce fichier en un lieu sûr sur votre appareil pour protéger vos renseignements personnels."
       },
       "badge": {
-        "text": "Formulaire soumis le ",
-        "lastSaved": "{{day}} {{month}} {{year}}",
+        "text": "Formulaire soumis : ",
+        "lastSaved": "le {{day}} {{month}} {{year}}",
         "submissionId": "Numéro de référence : {{submissionId}}"
       },
       "generateHtmlError": {
@@ -394,5 +394,17 @@
     "title": "Se connecter à Formulaires GC",
     "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
     "button": "Se connecter"
+  },
+  "appUpdate": {
+    "builder": {
+      "title": "Veuillez mettre à jour Formulaires GC",
+      "description": "Vérifiez votre formulaire après la mise à jour et avant la publication.",
+      "button": "Mettre à jour"
+    },
+    "user": {
+      "title": "Pour continuer, mettez à jour ce formulaire",
+      "description": "Vérifiez vos réponses après la mise à jour et avant de soumettre votre formulaire.",
+      "button": "Mettre à jour"
+    }
   }
 }

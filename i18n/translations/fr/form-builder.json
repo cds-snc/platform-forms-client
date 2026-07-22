@@ -401,12 +401,12 @@
   "confirm": {
     "createDraft": {
       "title": "Mettre à jour le formulaire publié",
-      "liveForm": "The current version will continue collecting responses until you publish the updated form.[FR]",
+      "liveForm": "La version actuelle continuera de recueillir des réponses jusqu’à ce que vous publiez la mise à jour du formulaire.",
       "list": {
-        "title": "⚠️ Before publishing updates, discuss with your developers and test your form. [FR]",
-        "listitem1": "Adjust form questions and workflows. [FR]",
-        "listitem2": "Revise lists and spreadsheets for organizing responses. [FR]",
-        "listitem3": "Update API integration. [FR]"
+        "title": "⚠️  Avant de publier les mises à jour, discutez avec vos développeurs et testez votre formulaire. Vous pourriez devoir : ",
+        "listitem1": "Ajuster les questions du formulaire et vos flux de travail.",
+        "listitem2": "Révisez les listes et les feuilles de calcul où vous organisez les réponses.",
+        "listitem3": "Mettre à jour l’intégration de l’API."
       }
     }
   },
@@ -838,23 +838,23 @@
   },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
-    "republishTitle": "Publier une mise à jour",
+    "republishTitle": "Publier le formulaire mis à jour",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
     "republish": {
-      "categoryLabel": "Template category [FR]",
-      "helpsUnderstand": "Help us understand the purpose of this form. [FR]",
+      "categoryLabel": "Catégorie de formulaire",
+      "helpsUnderstand": "Aidez-nous à comprendre l’objectif de ce formulaire.",
       "confirm": {
-        "title": "Confirm publication [FR]",
-        "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it. [FR]",
-        "text2": "New form fillers only have access to the updated form. People mid-way through the previous form can complete the earlier version unless they reload the page. [FR]",
-        "list": "⚠️ By publishing, you accept that you may need to: [FR]",
-        "listitem1": "Adjust form questions and workflows. [FR]",
-        "listitem2": "Revise lists and spreadsheets for organizing responses. [FR]",
-        "listitem3": "Update API integration. [FR]",
+        "title": "Confirmer la publication",
+        "text1": "Après la publication, la version précédente demeure dans notre base de données. Mais elle ne pourra plus être consultée.",
+        "text2": "Les nouvelles personnes remplissant le formulaire n’auront accès qu’à la dernière version du formulaire. Les personnes qui n’avaient pas terminé de remplir l’ancienne version du formulaire pourront continuer à remplir cette version, tant qu’elles n’actualisent pas la page.",
+        "list": "⚠️ En publiant, vous acceptez que vous ayez peut-être à : ",
+        "listitem1": "Ajuster les questions du formulaire et vos flux de travail.",
+        "listitem2": "Réviser les listes et les feuilles de calcul où vous organisez les réponses.",
+        "listitem3": "Mettre à jour l’intégration de l’API.",
         "agree": {
-          "label": "To continue, enter [FR]",
-          "required": "required [FR]",
-          "placeholder": "AGREE [FR]"
+          "label": "Pour continuer, saisissez ACCEPTE",
+          "required": "(obligatoire)",
+          "placeholder": "ACCEPTE"
         }
       }
     },
@@ -1703,6 +1703,11 @@
   },
   "fileUploadApiWarning": {
     "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
+  },
+  "publishViewEdit": {
+    "title": "Mettre à jour un formulaire publié",
+    "description": "Modifier un formulaire déjà en production",
+    "button": "Mettre à jour"
   },
   "formDownloadFailed": "Le téléchargement du formulaire a échoué."
 }

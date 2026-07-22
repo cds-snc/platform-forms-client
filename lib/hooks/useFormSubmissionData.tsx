@@ -8,7 +8,8 @@ import { useCallback } from "react";
 import { slugify } from "@lib/client/clientHelpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { type HTMLProps } from "@lib/saveAndResume/types";
-import { copyObjectExcludingFileContent } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
+
+import { copyObjectExcludingFileContent } from "../fileExtractor";
 
 import { getValuesWithMatchedIds, getVisibleGroupsBasedOnValuesRecursive } from "@gcforms/core";
 

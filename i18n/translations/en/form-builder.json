@@ -403,10 +403,10 @@
       "title": "Update published form",
       "liveForm": "The current version will continue collecting responses until you publish the updated form.",
       "list": {
-        "title": "⚠️ Before publishing updates, discuss with your developers and test your form. :",
+        "title": "⚠️ Before publishing updates, discuss with your developers and test your form. You may need to:",
         "listitem1": "Adjust form questions and workflows.",
         "listitem2": "Revise lists and spreadsheets for organizing responses.",
-        "listitem3": "Update API integration."
+        "listitem3": "Update the API integration."
       }
     }
   },
@@ -852,9 +852,9 @@
         "list": "⚠️ By publishing, you accept that you may need to:",
         "listitem1": "Adjust form questions and workflows.",
         "listitem2": "Revise lists and spreadsheets for organizing responses.",
-        "listitem3": "Update API integration.",
+        "listitem3": "Update your API integration.",
         "agree": {
-          "label": "To continue, enter",
+          "label": "To continue, enter AGREE",
           "required": "required",
           "placeholder": "AGREE"
         }

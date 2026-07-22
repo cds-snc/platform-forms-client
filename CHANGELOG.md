@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.19.0](https://github.com/cds-snc/platform-forms-client/compare/v4.18.1...v4.19.0) (2026-07-21)
+
+
+### Features
+
+* add Justice Canada branding ([#7507](https://github.com/cds-snc/platform-forms-client/issues/7507)) ([caefc6a](https://github.com/cds-snc/platform-forms-client/commit/caefc6a62ddbf1550a43c1a2185f058425a48e13))
+
+
+### Miscellaneous Chores
+
+* Add audit logs for versioned templates ([#7514](https://github.com/cds-snc/platform-forms-client/issues/7514)) ([b2d31db](https://github.com/cds-snc/platform-forms-client/commit/b2d31dba7b538e16c429d2b64583d27ee8f8d0c6))
+* Add localization issue template to GitHub ([#7512](https://github.com/cds-snc/platform-forms-client/issues/7512)) ([e7cb719](https://github.com/cds-snc/platform-forms-client/commit/e7cb71995e9fff3a86a82ce0e51658f425f72863))
+* add on the fly back-fill for versions table ([#7525](https://github.com/cds-snc/platform-forms-client/issues/7525)) ([18be6dc](https://github.com/cds-snc/platform-forms-client/commit/18be6dc667b0d0f21fb6d28918da083bd94685a8))
+* add version select for download json ([#7515](https://github.com/cds-snc/platform-forms-client/issues/7515)) ([7d6c457](https://github.com/cds-snc/platform-forms-client/commit/7d6c457e960d5df5bfec59a1f98974f7dad13478))
+* avoid deleting API key during template deletion when none exists ([#7519](https://github.com/cds-snc/platform-forms-client/issues/7519)) ([a41bdc8](https://github.com/cds-snc/platform-forms-client/commit/a41bdc84b4af25b7d944b32b4ded9859bcd22e89))
+* cleanup some strings ([#7511](https://github.com/cds-snc/platform-forms-client/issues/7511)) ([58067ff](https://github.com/cds-snc/platform-forms-client/commit/58067ff7227374f5d701629731cdd0925682803e))
+* fix edit lock gates for versioning  ([#7500](https://github.com/cds-snc/platform-forms-client/issues/7500)) ([f6b67e4](https://github.com/cds-snc/platform-forms-client/commit/f6b67e4b81124a5bef5a0463c0e51ba7c9a7048c))
+* include published drafts ([#7531](https://github.com/cds-snc/platform-forms-client/issues/7531)) ([53b7b53](https://github.com/cds-snc/platform-forms-client/commit/53b7b534997d8faceaf37a645dc843cc6b22ea8f))
+* Minor formatting tweak for saved answers file ([#7533](https://github.com/cds-snc/platform-forms-client/issues/7533)) ([46bf50c](https://github.com/cds-snc/platform-forms-client/commit/46bf50ce0182182aca27317e8cfd7baf319a74f1))
+* Missing French strings for edit and republish ([#7535](https://github.com/cds-snc/platform-forms-client/issues/7535)) ([145f823](https://github.com/cds-snc/platform-forms-client/commit/145f823910ef5dbde7724d9e440a1a55c221f585))
+* move agree for re-publish step ([#7502](https://github.com/cds-snc/platform-forms-client/issues/7502)) ([5504f5d](https://github.com/cds-snc/platform-forms-client/commit/5504f5d0135bc937cc271215894641c7f7cbd73b))
+* prevent edit published for forms using email delivery ([#7521](https://github.com/cds-snc/platform-forms-client/issues/7521)) ([4ed1062](https://github.com/cds-snc/platform-forms-client/commit/4ed1062d91130950a1c976eb0b489a04cf3a23f3))
+* Update content for form versioning ([#7532](https://github.com/cds-snc/platform-forms-client/issues/7532)) ([11908c9](https://github.com/cds-snc/platform-forms-client/commit/11908c9a2e091d026c4fd09d8cd7a6b7218c005d))
+* Update GitHub issue templates  ([#7516](https://github.com/cds-snc/platform-forms-client/issues/7516)) ([641fc26](https://github.com/cds-snc/platform-forms-client/commit/641fc261a893d73d19bc244b7413a582e9618801))
+
 ## [4.18.1](https://github.com/cds-snc/platform-forms-client/compare/v4.18.0...v4.18.1) (2026-07-14)
 
 
