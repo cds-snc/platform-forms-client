@@ -37,7 +37,7 @@
       },
       "version": {
         "title": "Version du formulaire",
-        "body": "Indique la version du formulaire utilisée pour soumettre la réponse."
+        "body": "Affiche la version utilisée par la personne remplissant le formulaire."
       }
     }
   },
