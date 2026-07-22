@@ -9,9 +9,6 @@ import {
 } from "@gcforms/core";
 import { FormElement, PublicFormRecord, FormValues } from "@gcforms/types";
 
-// TODO: These tests only cover the updated visibility logic (not the old).
-// Could also test more edge-like cases.
-
 describe("visibility", () => {
   // Helper to create a simple form element
   const createElement = (
