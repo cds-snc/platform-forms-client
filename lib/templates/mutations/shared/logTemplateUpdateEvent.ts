@@ -19,6 +19,7 @@ export type UpdateAuditEvent = {
   action: UpdateTemplateAction;
   command: UpdateTemplateCommand;
   user: { id: string; email: string };
+  isRepublish?: boolean;
   beforeContext?: {
     name?: string;
     jsonConfig?: FormProperties;
@@ -103,7 +104,11 @@ export const logTemplateUpdateEvent = async (event: UpdateAuditEvent) => {
       break;
     case UpdateTemplateAction.IsPublished:
       const publishCommand = event.command as UpdateIsPublishedCommand;
-      logEvent(event.user.id, { type: "Form", id: publishCommand.formId }, "PublishForm");
+      logEvent(
+        event.user.id,
+        { type: "Form", id: publishCommand.formId },
+        event.isRepublish ? AuditLogEvent.RepublishForm : AuditLogEvent.PublishForm
+      );
       break;
     case UpdateTemplateAction.SecurityAttribute:
       const securityCommand = event.command as UpdateSecurityAttributeCommand;

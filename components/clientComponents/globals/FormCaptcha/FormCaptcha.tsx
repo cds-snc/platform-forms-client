@@ -1,8 +1,9 @@
+import { SubmitEvent, useRef, useEffect, useCallback } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FormEvent, useRef } from "react";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
+import { useCaptchaToken } from "./useCaptchaToken";
+import { useCaptchaErrorHandling } from "./useCaptchaErrorHandling";
 
 /**
  * Acts as a hCaptcha wrapper to help simplify the wiring around adding hCaptcha to a form.
@@ -14,90 +15,95 @@ export const FormCaptcha = ({
   dataTestId = "",
   isPublished = true,
   captchaTokenRef,
+  resetCaptchaRef,
   ...rest
 }: {
   children: React.ReactNode;
-  handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
+  handleSubmit: (e?: SubmitEvent<HTMLFormElement>) => void;
   lang: string;
   dataTestId?: string;
   isPublished?: boolean;
   captchaTokenRef: React.RefObject<string> | undefined;
+  resetCaptchaRef?: React.RefObject<{ resetToken: () => void }>;
 } & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
-  const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
-
-  // Help developers understand when there is a configuration issue
-  const { getFlag } = useFeatureFlags();
-  const hCaptcha = getFlag("hCaptcha");
-
-  const HCAPTCHA_SITE_KEY = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
-
-  if (
-    process.env.NODE_ENV === "development" &&
-    hCaptcha &&
-    // !process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY
-    !HCAPTCHA_SITE_KEY
-  ) {
-    logMessage.warn(`hCaptcha: flag is enabled but hCaptchaSiteKey is missing. This will cause 
-      hCaptcha to fail. Add the hCaptchaSiteKey to the App settings and make sure the
-      HCAPTCHA_SITE_VERIFY_KEY is in your .env`);
-  }
-
-  const onVerified = async (token: string) => {
-    if (captchaTokenRef) {
-      captchaTokenRef.current = token;
-    }
-    handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
-  };
-
+  const formSubmitEventRef = useRef<SubmitEvent<HTMLFormElement>>(null);
   const doHCaptchaFlow = shouldCheckCaptcha(isPublished);
 
-  // see https://github.com/hCaptcha/react-hcaptcha
+  const { setToken, resetToken } = useCaptchaToken(captchaTokenRef, hCaptchaRef);
+ 
+  const HCAPTCHA_SITE_KEY = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
+
+  const { onErrorCallback, hasFatalErrorRef } = useCaptchaErrorHandling({ resetToken });
+
+  useEffect(() => {
+    if (resetCaptchaRef) {
+      resetCaptchaRef.current.resetToken = resetToken;
+    }
+  }, [resetCaptchaRef, resetToken]);
+
+  const onFormSubmit = useCallback(
+    (event: SubmitEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      // Skip hCaptcha and allow submission though when hCaptcha's disabled or returns a fatal error code
+      if (!doHCaptchaFlow || hasFatalErrorRef.current) {
+        handleSubmit(event);
+        return;
+      }
+
+      formSubmitEventRef.current = event;
+
+      // Skip hCaptcha and allow submission though when when hCaptcha itself generates an excepetion (e.g. not loaded yet)
+      try {
+        if (hCaptchaRef.current) {
+          hCaptchaRef.current.execute();
+        } else {
+          logMessage.warn("hCaptcha: not ready, bypassing hCaptcha and submitting form");
+          handleSubmit(event);
+        }
+      } catch (error) {
+        logMessage.warn(
+          `hCaptcha: execute() failed, bypassing hCaptcha and submitting form: ${JSON.stringify(error)}`
+        );
+        handleSubmit(event);
+      }
+    },
+    [doHCaptchaFlow, handleSubmit, hasFatalErrorRef]
+  );
+
+  const onTokenGeneratedCallback = useCallback(
+    (token: string) => {
+      setToken(token);
+      handleSubmit(formSubmitEventRef.current as SubmitEvent<HTMLFormElement>);
+    },
+    [setToken, handleSubmit]
+  );
+
+  const onChallengeExpiredCallback = useCallback(() => {
+    logMessage.info("hCaptcha: challenge expired");
+    resetToken();
+  }, [resetToken]);
+
   return (
     <form
       method="POST"
-      onSubmit={(e) => {
-        e.preventDefault();
-
-        if (!doHCaptchaFlow) {
-          handleSubmit(e);
-          return;
-        }
-
-        // The submit event is captured here so it can be used later in the passed in handleSubmit(e)
-        // that is called in onVerified() that is triggerd below via hCaptchaRef.current.execute()
-        // and later called from HCaptcha component event onVerify.
-        formSubmitEventRef.current = e;
-        hCaptchaRef.current?.execute();
-      }}
       {...(dataTestId ? { "data-testid": dataTestId } : {})}
       {...rest}
+      onSubmit={onFormSubmit}
     >
       {children}
       {doHCaptchaFlow && (
         <HCaptcha
-          // sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
-          sitekey={HCAPTCHA_SITE_KEY || ""}
-          onVerify={onVerified}
-          // Component will reset immediately after a Client sends bad data.
-          // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
-          onError={(code: string) => {
-            // @TODO investigate cases where the submission should be allowed through based on error code
-            // see https://docs.hcaptcha.com/#siteverify-error-codes-table
-            logMessage.warn(`hCatpcha: clientComponentError error ${code}`);
-          }}
-          onChalExpired={() => {
-            logMessage.info("hCaptcha: challenge expired");
-            hCaptchaRef.current?.resetCaptcha();
-          }}
-          onExpire={() => {
-            logMessage.info("hCaptcha: token expired");
-            hCaptchaRef.current?.resetCaptcha();
-          }}
           ref={hCaptchaRef}
+          sitekey={HCAPTCHA_SITE_KEY || ""}
+          onVerify={onTokenGeneratedCallback}
+          onError={onErrorCallback}
+          onChalExpired={onChallengeExpiredCallback}
+          onExpire={resetToken}
           languageOverride={lang}
-          // Do not show a checkbox
           size="invisible"
+          loadAsync={true}
         />
       )}
     </form>

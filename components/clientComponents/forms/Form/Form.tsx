@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
@@ -37,11 +37,8 @@ import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitPro
 import { handleUploadError } from "@lib/fileInput/handleUploadError";
 import { hasFiles } from "@lib/fileExtractor";
 import { generateFileChecksums } from "@lib/utils/fileChecksum";
-
-import {
-  copyObjectExcludingFileContent,
-  uploadFile,
-} from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
+import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
+import { uploadFile } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
@@ -63,6 +60,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const { t } = useTranslation();
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
+  const [isServer, setIsServer] = useState(true);
 
   const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
   // TODO: This can be removed in the next refactor.
@@ -117,22 +115,17 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  const handleSessionSave = useCallback(() => {
-    props.saveSessionProgress && props.saveSessionProgress(language as Language);
-  }, [language, props]);
-
   useEffect(() => {
-    const beforeUnloadHandler = () => {
-      handleSessionSave();
-      return null;
-    };
+    if (typeof window !== "undefined") {
+      setIsServer(false);
+    }
+  }, [setIsServer]);
 
-    window.addEventListener("beforeunload", beforeUnloadHandler);
-
-    return () => {
-      window.removeEventListener("beforeunload", beforeUnloadHandler);
-    };
-  }, [handleSessionSave]);
+  // Don't prerender the form on the server because inputs will change and cause
+  // hydration errors based on state stored client side
+  if (isServer) {
+    return <div className="h-[150dvh]" />;
+  }
 
   // Show the Captcha fail screen when hCAPTCHA detects a suspicous user
   // Note: check done here vs higher in the tree so the Form session will still exist on the screen
@@ -203,6 +196,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             noValidate={true}
             isPublished={isPublished}
             captchaTokenRef={props.captchaToken}
+            resetCaptchaRef={props.resetCaptchaRef}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -335,13 +329,6 @@ export const Form = withFormik<FormProps, Responses>({
 
       clearInterval(progressInterval);
 
-      // Failed to find Server Action (likely due to newer deployment)
-      if (result === undefined) {
-        formikBag.props.saveSessionProgress();
-        logMessage.info("Failed to find Server Action caught and session saved");
-        formikBag.setStatus(FormStatus.SERVER_ID_ERROR);
-        return;
-      }
       // Start here to upload files and handle errors below into something easier to read
 
       if (result.error) {
@@ -351,6 +338,10 @@ export const Form = withFormik<FormProps, Responses>({
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
+
+        // Avoid a potential error where a token could be reused by re-submitting after an error
+        formikBag.props.resetCaptchaRef?.current?.resetToken?.();
+
         return;
       }
 
@@ -414,6 +405,9 @@ export const Form = withFormik<FormProps, Responses>({
       } else {
         formikBag.setStatus("Error");
       }
+
+      // Avoid a potential error where a token could be reused by re-submitting after an error
+      formikBag.props.resetCaptchaRef?.current?.resetToken?.();
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, useMemo } from "react";
 import {
   NagwareResult,
   StartFromExclusiveResponse,
@@ -70,6 +70,19 @@ export const DownloadTable = ({
 
   const { getFlag } = useFeatureFlags();
   const templateVersioningEnabled = getFlag("templateVersioning");
+
+  // Check to see if we should show the version column. If there are mixed versions and at least one submission is not version 1, show the version column. Otherwise hide it.
+  const showVersionsColumn = useMemo(() => {
+    const hasMixedVersions = vaultSubmissions.some(
+      (submission) => submission.version !== vaultSubmissions[0].version
+    );
+
+    const hasNonVersion1Submissions = vaultSubmissions.some(
+      (submission) => Number(submission.version) !== 1 && submission.version !== undefined
+    );
+
+    return hasNonVersion1Submissions && templateVersioningEnabled && hasMixedVersions;
+  }, [vaultSubmissions, templateVersioningEnabled]);
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -172,7 +185,7 @@ export const DownloadTable = ({
                   <p>{t(`tooltips.downloadTable.date.body`)}</p>
                 </Tooltip.Info>
               </th>
-              {templateVersioningEnabled && (
+              {showVersionsColumn && (
                 <th scope="col" className="p-4 text-left">
                   <span className="flex items-center">
                     {t("downloadResponsesTable.header.version")}
@@ -259,7 +272,7 @@ export const DownloadTable = ({
                     {submission.name}
                   </th>
                   <td className="px-4 whitespace-nowrap">{createdDateTime}</td>
-                  {templateVersioningEnabled && (
+                  {showVersionsColumn && (
                     <td
                       className="px-4 whitespace-nowrap"
                       data-version={submission.version ?? "unknown"}

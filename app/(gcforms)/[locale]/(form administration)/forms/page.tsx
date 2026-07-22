@@ -118,9 +118,19 @@ export default async function Page(props: {
   // Brace yourself, Prisma is a bit... hopefully the comments below help.
   const options: TemplateOptions = {
     requestedWhere: {
-      // Published filter: use DB field isPublished since have it, this also indirectly defines Draft since draft=!published
-      isPublished:
-        status === TAB_STATUS.PUBLISHED ? true : status === TAB_STATUS.DRAFT ? false : undefined,
+      // Published filter: when viewing Drafts, include both unpublished templates
+      // and published templates that have an active draft (published drafts).
+      ...(status === TAB_STATUS.DRAFT
+        ? {
+            OR: [
+              { isPublished: false },
+              { AND: [{ isPublished: true }, { currentDraftVersionId: { not: null } }] },
+            ],
+          }
+        : {
+            // default published filter for other tabs
+            isPublished: status === TAB_STATUS.PUBLISHED ? true : undefined,
+          }),
       // Archived filter: ttl: { not: null } for archived, null (must have no ttl) for all others except closed (no filter)
       ttl:
         status === TAB_STATUS.ARCHIVED

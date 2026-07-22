@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 
-import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
+import { saveSessionProgress } from "@lib/hooks/useResponseCache";
 
 import { type FormValues } from "@gcforms/types";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -37,7 +37,6 @@ export const Upload = ({ formId }: { formId: string }) => {
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
 
-  const router = useRouter();
   const { logClientError } = useLogClient();
   const dialogRef = useDialogRef();
   const dragResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -68,35 +67,22 @@ export const Upload = ({ formId }: { formId: string }) => {
 
   useEffect(() => clearDragResetTimeout, []);
 
-  const restoreProgress = ({
-    id,
-    values,
-    history,
-    currentGroup,
-    sourceFormId,
-  }: ResumeFormResponse & { sourceFormId?: string }) => {
-    saveSessionProgress(language, {
-      id,
-      values,
-      history,
-      currentGroup,
-      sourceFormId,
-    });
-    router.push(`/${language}/id/${id}`);
+  const restoreProgress = async ({ id, values, history, currentGroup }: ResumeFormResponse) => {
+    await saveSessionProgress({ id, values, history, currentGroup, language, restoredForm: true });
+    window.location.href = `/${language}/id/${id}`;
   };
 
-  const handleContinueAnyway = () => {
+  const handleContinueAnyway = async () => {
     if (!pendingMismatchResume) {
       return;
     }
 
     dialogRef.current?.close();
-    restoreProgress({
-      id: formId,
+    await restoreProgress({
+      id: pendingMismatchResume.sourceFormId,
       values: pendingMismatchResume.values,
       history: pendingMismatchResume.history,
       currentGroup: pendingMismatchResume.currentGroup,
-      sourceFormId: pendingMismatchResume.sourceFormId,
     });
     setPendingMismatchResume(null);
   };
@@ -113,7 +99,7 @@ export const Upload = ({ formId }: { formId: string }) => {
       resetInput?.();
     };
 
-    fileReader.onload = (e) => {
+    fileReader.onload = async (e) => {
       try {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") {
           errorCode = FormServerErrorCodes.FORM_RESUME_NO_TARGET;
@@ -181,7 +167,7 @@ export const Upload = ({ formId }: { formId: string }) => {
           return;
         }
 
-        restoreProgress(parsed);
+        await restoreProgress(parsed);
       } catch (e) {
         const timestamp = Date.now();
 

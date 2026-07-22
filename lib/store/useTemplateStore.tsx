@@ -60,6 +60,7 @@ import { useFeatureFlags } from "../hooks/useFeatureFlags";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { useTranslation } from "@root/i18n/client";
 import { getImportedTemplate } from "./importBuffer";
+import { useRehydrate } from "./hooks/useRehydrate";
 
 const createTemplateStore = (
   checkFeatureFlag: (flag: string) => boolean,
@@ -189,14 +190,10 @@ const createTemplateStore = (
             generateElementId: generateElementId(set, get),
             transform: transform(set, get),
             getSchema: () => {
-              // hasHydrated should work here but we get an error. leaving this timeout for now.
-              setTimeout(() => {
-                if (!get().hasTransformed) {
-                  get().transform();
-                }
+              if (get().hasHydrated && !get().hasTransformed) {
+                get().transform();
                 set({ hasTransformed: true });
-              }, 500);
-
+              }
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
             getId: () => get().id,
@@ -313,11 +310,19 @@ export const TemplateStoreProvider = ({
     props.closingDate,
   ]);
 
+  useEffect(() => {
+    if (!store.getState().hasHydrated) {
+      store.persist.rehydrate();
+    }
+  }, [store]);
+
   try {
     return (
       <TemplateStoreContext.Provider value={store}>
         <FlowRefProvider>
-          <TreeRefProvider>{children}</TreeRefProvider>
+          <TreeRefProvider>
+            <OnlyRenderOnceHydrated>{children}</OnlyRenderOnceHydrated>
+          </TreeRefProvider>
         </FlowRefProvider>
       </TemplateStoreContext.Provider>
     );
@@ -337,4 +342,12 @@ export const useTemplateStore = <T,>(
   const store = useContext(TemplateStoreContext);
   if (!store) throw new Error("Missing Template Store Provider in tree");
   return useStoreWithEqualityFn(store, selector, equalityFn ?? shallow);
+};
+
+const OnlyRenderOnceHydrated = ({ children }: React.PropsWithChildren) => {
+  const hasHydrated = useRehydrate();
+  if (hasHydrated) {
+    return <>{children}</>;
+  }
+  return null;
 };

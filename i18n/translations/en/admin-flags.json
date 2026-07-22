@@ -34,10 +34,6 @@
       "title": "Responses Pilot",
       "description": "Enable new flow for downloading form responses with API key in browser"
     },
-    "userSideAuditLogs": {
-      "title": "Download form activity",
-      "description": "Enable the download of form key actions (in last 30 days) via Settings"
-    },
     "zitadelLogin": {
       "title": "Zitadel Login",
       "description": "Enable Zitadel as a login method for users"
