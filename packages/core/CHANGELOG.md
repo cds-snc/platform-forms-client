@@ -4,6 +4,10 @@
 
 - Update visibility to be event driven with a different function signature
 
+## [2.2.18] - 2026-07-22
+
+- Republish package following failed NPM publication
+
 ## [2.2.17] - 2026-07-21
 
 - Republish package following failed NPM publication
