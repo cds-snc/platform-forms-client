@@ -31,6 +31,14 @@ export const EventKeys = {
 
 // Per-callback, per-event wrapper registry so the same callback can be
 // registered/removed for multiple event names without interference.
+//
+// Note: `any` is intentional: callbacks have different generic types and TypeScript's
+// "contravariance" prevents a typed common base. Type safety is at the call (on/off/fire).
+// Another option would be using a `Symbol` + wrapper but that looks unusual and has
+// drawbacks e.g. no automatic garbage collection of the wrapper etc.
+// `unknown` is also not ideal because it would require casting to `any` in the wrapper,
+// which is less safe.
+//
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const listenerMap = new WeakMap<(detail: any) => void, Map<string, (event: Event) => void>>();
 
@@ -65,6 +73,7 @@ export const useCustomEvent = () => {
       const wrapper = (event: Event) => {
         callback((event as CustomEvent).detail);
       };
+
       let perEvent = listenerMap.get(callback);
       if (!perEvent) {
         perEvent = new Map();

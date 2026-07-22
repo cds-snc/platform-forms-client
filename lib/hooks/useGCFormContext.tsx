@@ -1,5 +1,13 @@
 "use client";
-import { createContext, useContext, ReactNode, useState, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 
 import type { FormValues, GroupsType, PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -87,24 +95,24 @@ export const GCFormsProvider = ({
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
 
   // Initialize visibility state with element dependencies
-  const elementDependencies = React.useMemo(
+  const elementDependencies = useMemo(
     () => buildElementDependencies(formRecord.form.elements),
     [formRecord.form.elements]
   );
 
   // Build the element lookup map once — elements don't change during a session.
   // Passed to recomputeAffectedVisibility to avoid rebuilding it on every value change.
-  const elementMap = React.useMemo(
+  const elementMap = useMemo(
     () => buildElementMap(formRecord.form.elements),
     [formRecord.form.elements]
   );
 
-  const [visibilityMap, setVisibilityMap] = React.useState<Map<string, boolean>>(() =>
+  const [visibilityMap, setVisibilityMap] = useState<Map<string, boolean>>(() =>
     computeAllVisibility(formRecord, {})
   );
   // Ref stays in sync with state so updateValues always reads the latest map
   // synchronously, even if multiple updates arrive before the next re-render.
-  const visibilityMapRef = React.useRef(visibilityMap);
+  const visibilityMapRef = useRef(visibilityMap);
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -344,7 +352,7 @@ export const useGCFormsContext = () => {
 
 export const useVisibilityContext = () => {
   const ctx = useContext(VisibilityContext);
-  // Outside the provider (e.g. tests, Storybook) treat every element as visible
+  // Outside the provider treat every element as visible
   if (ctx === undefined) {
     return { isElementVisible: () => true };
   }
