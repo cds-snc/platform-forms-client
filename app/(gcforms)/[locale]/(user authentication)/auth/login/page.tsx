@@ -35,8 +35,7 @@ export default async function Page(props: {
     process.env.APP_ENV !== "test" && (await checkOne(FeatureFlags.zitadelLogin));
   const cookieStore = await cookies();
   const resetParam = searchParams.reset;
-  const shouldClearGcPlatformLoginHint =
-    resetParam === "1" || resetParam === "true" || resetParam === true;
+  const shouldClearGcPlatformLoginHint = resetParam === "1" || resetParam === "true";
 
   const hasGcPlatformLoginHint =
     !shouldClearGcPlatformLoginHint &&
