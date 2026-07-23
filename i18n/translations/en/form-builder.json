@@ -854,8 +854,8 @@
         "listitem2": "Revise lists and spreadsheets for organizing responses.",
         "listitem3": "Update your API integration.",
         "agree": {
-          "label": "To continue, enter AGREE",
-          "required": "required",
+          "label": "To continue, enter ",
+          "required": "(required)",
           "placeholder": "AGREE"
         }
       }
