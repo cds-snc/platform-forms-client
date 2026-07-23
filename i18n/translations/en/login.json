@@ -2,6 +2,13 @@
   "title": "Sign in",
   "signUpText": "If you do not have an account, you can",
   "signUpLink": "create one now.",
+  "migrationPanel": {
+    "title": "Migrate to new GC Platform sign in",
+    "bodyLead": "Use the same email address as your GC Forms account. Keep existing forms and responses.",
+    "bodyDeadline": "Create a GC Platform account by {{deadline}} to keep using GC Forms.",
+    "createAccount": "Create GC Platform account",
+    "signInWithGcPlatform": "Sign in with GC Platform"
+  },
   "continueButton": "Continue",
   "resetPasswordText": "Reset your password",
   "fields": {

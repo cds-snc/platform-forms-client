@@ -7,6 +7,7 @@ import { SiteLogo } from "@serverComponents/icons";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
+import { GcPlatformMigrationPanel } from "./auth/login/components/client/GcPlatformMigrationPanel";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -21,9 +22,9 @@ export default async function Layout(props: {
   const { t } = await serverTranslation("common", { lang: locale });
 
   return (
-    <div className="flex min-h-full flex-col bg-gray-soft">
+    <div className="bg-gray-soft flex min-h-full flex-col">
       <SkipLink />
-      <header className="mb-4 bg-white px-16 py-6 laptop:px-32">
+      <header className="laptop:px-32 mb-4 bg-white px-16 py-6">
         <div className="flex justify-between">
           <div className="canada-flag">
             <Link href={t("fip.link")} aria-label={t("fip.text")}>
@@ -44,19 +45,19 @@ export default async function Layout(props: {
         </div>
       </header>
       <div id="page-container" className="gc-authpages">
-        <div className="account-wrapper mt-10 flex items-center justify-center">
+        <div className="account-wrapper mt-10 flex items-start justify-center gap-8">
           <div
-            className={`rounded-2xl border-1 border-[#D1D5DB] bg-white p-10 tablet:w-[768px] has-[#auth-panel]:tablet:w-[658px] laptop:w-[850px]`}
+            className={`tablet:w-[768px] has-[#auth-panel]:tablet:w-[658px] laptop:w-[850px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
           >
             <main id="content">
               <Link
-                className="mb-6 mr-10 inline-flex no-underline focus:bg-white"
+                className="mr-10 mb-6 inline-flex no-underline focus:bg-white"
                 href={`/${locale}/form-builder`}
               >
                 <span className="">
                   <SiteLogo title={t("title")} />
                 </span>
-                <span className="ml-3 inline-block text-[24px] font-semibold leading-10 text-[#1B00C2]">
+                <span className="ml-3 inline-block text-[24px] leading-10 font-semibold text-[#1B00C2]">
                   {t("title", { ns: "common" })}
                 </span>
               </Link>
@@ -64,6 +65,7 @@ export default async function Layout(props: {
               <ToastContainer autoClose={false} containerId="default" />
             </main>
           </div>
+          <GcPlatformMigrationPanel locale={locale} />
         </div>
       </div>
       <Footer displayFormBuilderFooter />
