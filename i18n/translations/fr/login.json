@@ -5,7 +5,7 @@
   "migrationPanel": {
     "title": "Migrate to new GC Platform sign in [FR]",
     "bodyLead": "<strong>Use the same email address as your GC Forms account.</strong> Keep existing forms and responses. [FR]",
-    "bodyDeadline": "<strong>Create a GC Platform account by {{deadline}} to keep using GC Forms.</strong> [FR]",
+    "bodyDeadline": "<strong>Create a GC Platform account by October 30, 2026 to keep using GC Forms.</strong> [FR]",
     "createAccount": "Create GC Platform account [FR]",
     "signInWithGcPlatform": "Sign in with GC Platform [FR]"
   },
