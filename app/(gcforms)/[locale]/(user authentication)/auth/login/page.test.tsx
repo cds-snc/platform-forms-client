@@ -62,6 +62,7 @@ describe("login page", () => {
     authCheckAndThrow.mockRejectedValue(new Error("no session"));
     cookies.mockResolvedValue({
       get: vi.fn(() => undefined),
+      delete: vi.fn(),
     });
   });
 
@@ -72,7 +73,12 @@ describe("login page", () => {
   it("renders the standard login form when the GC Platform flow is disabled", async () => {
     checkOne.mockResolvedValue(false);
 
-    render(await Page({ params: Promise.resolve({ locale: "en" }) }));
+    render(
+      await Page({
+        params: Promise.resolve({ locale: "en" }),
+        searchParams: Promise.resolve({}),
+      })
+    );
 
     expect(screen.getByTestId("login-form")).toBeInTheDocument();
     expect(screen.queryByTestId("oidc-redirect")).not.toBeInTheDocument();
@@ -81,7 +87,12 @@ describe("login page", () => {
   it("renders the standard login form when the GC Platform flow is enabled without the hint cookie", async () => {
     checkOne.mockResolvedValue(true);
 
-    render(await Page({ params: Promise.resolve({ locale: "en" }) }));
+    render(
+      await Page({
+        params: Promise.resolve({ locale: "en" }),
+        searchParams: Promise.resolve({}),
+      })
+    );
 
     expect(screen.getByTestId("login-form")).toBeInTheDocument();
     expect(screen.queryByTestId("oidc-redirect")).not.toBeInTheDocument();
@@ -93,9 +104,35 @@ describe("login page", () => {
       get: vi.fn(() => ({ value: "gc-platform" })),
     });
 
-    render(await Page({ params: Promise.resolve({ locale: "en" }) }));
+    render(
+      await Page({
+        params: Promise.resolve({ locale: "en" }),
+        searchParams: Promise.resolve({}),
+      })
+    );
 
     expect(screen.getByTestId("oidc-redirect")).toBeInTheDocument();
     expect(screen.queryByTestId("login-form")).not.toBeInTheDocument();
+  });
+
+  it("clears the platform hint cookie when requested via query param", async () => {
+    const deleteCookie = vi.fn();
+
+    checkOne.mockResolvedValue(true);
+    cookies.mockResolvedValue({
+      get: vi.fn(() => ({ value: "gc-platform" })),
+      delete: deleteCookie,
+    });
+
+    render(
+      await Page({
+        params: Promise.resolve({ locale: "en" }),
+        searchParams: Promise.resolve({ clearPlatformLoginHint: "1" }),
+      })
+    );
+
+    expect(deleteCookie).toHaveBeenCalledWith("gc-platform-login");
+    expect(screen.getByTestId("login-form")).toBeInTheDocument();
+    expect(screen.queryByTestId("oidc-redirect")).not.toBeInTheDocument();
   });
 });

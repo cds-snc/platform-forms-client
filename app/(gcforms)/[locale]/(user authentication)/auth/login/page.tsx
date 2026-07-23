@@ -22,14 +22,25 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: { params: Promise<{ locale: string }> }) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
 
   const { locale } = params;
   const isZitadelLoginEnabled =
     process.env.APP_ENV !== "test" && (await checkOne(FeatureFlags.zitadelLogin));
   const cookieStore = await cookies();
+  const shouldClearGcPlatformLogin = searchParams.reset === "1";
+
+  if (shouldClearGcPlatformLogin) {
+    cookieStore.delete(GC_PLATFORM_LOGIN_HINT_COOKIE);
+  }
+
   const hasGcPlatformLoginHint =
+    !shouldClearGcPlatformLoginHint &&
     cookieStore.get(GC_PLATFORM_LOGIN_HINT_COOKIE)?.value === GC_PLATFORM_LOGIN_HINT_VALUE;
 
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
