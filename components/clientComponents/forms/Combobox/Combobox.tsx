@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { InputFieldProps } from "@lib/types";
+import React, { useLayoutEffect, useState } from "react";
+import { InputFieldProps, PropertyChoices } from "@lib/types";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
@@ -11,17 +11,60 @@ import { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "@gcforms/an
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
   strictValue?: boolean;
+  onValueChange?: (value: string) => void;
+  // On mount checks the choices list and if not found falls back to this
+  allChoices?: PropertyChoices[];
 }
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
-  const { id, name, className, choices = [], required, ariaDescribedBy, strictValue, lang } = props;
+  const {
+    id,
+    name,
+    className,
+    choices = [],
+    required,
+    ariaDescribedBy,
+    strictValue,
+    lang,
+    onValueChange,
+    allChoices,
+  } = props;
   const classes = cn("gc-combobox gcds-input-wrapper", className);
   const { t } = useTranslation("common", { lng: lang });
 
   const [field, meta, helpers] = useField(props);
   const { setError, setTouched, setValue } = helpers;
 
-  const [items, setItems] = React.useState(choices);
+  const [filterText, setFilterText] = useState("");
+
+  // Ensure the value is in the current langauge on mount
+  useLayoutEffect(() => {
+    if (!allChoices || !lang || !field.value) {
+      return;
+    }
+
+    // Already have an entry in the current language?
+    const lowerValue = field.value.toLowerCase();
+    if (choices.some((choice) => choice.toLowerCase() === lowerValue)) {
+      return;
+    }
+
+    // Entry not in the current language, look it up and set it
+    const bilingualEntry = allChoices.find((choice) =>
+      Object.values(choice).some(
+        (value) => typeof value === "string" && value.toLowerCase() === lowerValue
+      )
+    );
+    if (bilingualEntry && bilingualEntry[lang]) {
+      setValue(bilingualEntry[lang]);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // ^ Intentional: run once on mount. Combobox will remount on language change via key prop key={`${id}-${lang}`}.
+
+  // Used to get the choices when the language changes
+  const items = choices.filter((choice) =>
+    filterText ? choice.toLowerCase().includes(filterText.toLowerCase()) : true
+  );
 
   const getMatchingChoice = (inputValue: string) => {
     const normalizedInputValue = inputValue.trim().toLowerCase();
@@ -53,11 +96,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
     useCombobox({
       onInputValueChange({ inputValue }) {
-        setItems(
-          choices.filter((choice) => {
-            return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
-          })
-        );
+        setFilterText(inputValue || "");
         setError(undefined);
         setValue(inputValue);
       },
@@ -65,6 +104,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       onSelectedItemChange({ selectedItem }) {
         setError(undefined);
         setValue(selectedItem);
+        onValueChange?.(selectedItem ?? "");
       },
       initialInputValue: field.value || "",
       // Suppress downshift's built-in live region so we can customize announcements and

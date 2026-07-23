@@ -7,9 +7,12 @@ import { useTranslation } from "@i18n/client";
 export const ExampleWrapper = ({
   children,
   className,
+  initialValues: providedInitialValues,
 }: {
   children: React.ReactNode;
   className?: string;
+  // all values to be overriden from a language change
+  initialValues?: Record<string, string>;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -17,6 +20,7 @@ export const ExampleWrapper = ({
     initialValues: {
       name: "",
       "test-address": "", // AddressComplete already uses formik, and double activation causes issues.
+      ...providedInitialValues,
     },
     onSubmit: () => {
       return;
