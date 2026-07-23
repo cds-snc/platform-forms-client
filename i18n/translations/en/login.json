@@ -4,8 +4,8 @@
   "signUpLink": "create one now.",
   "migrationPanel": {
     "title": "Migrate to new GC Platform sign in",
-    "bodyLead": "Use the same email address as your GC Forms account. Keep existing forms and responses.",
-    "bodyDeadline": "Create a GC Platform account by {{deadline}} to keep using GC Forms.",
+    "bodyLead": "<strong>Use the same email address as your GC Forms account.</strong> Keep existing forms and responses.",
+    "bodyDeadline": "<strong>Create a GC Platform account by {{deadline}} to keep using GC Forms.</strong>",
     "createAccount": "Create GC Platform account",
     "signInWithGcPlatform": "Sign in with GC Platform"
   },

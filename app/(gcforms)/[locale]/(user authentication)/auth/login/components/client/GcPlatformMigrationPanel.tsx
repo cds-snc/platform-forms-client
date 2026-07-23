@@ -5,8 +5,11 @@ import { GC_PLATFORM_LOGIN_HINT_COOKIE, GC_PLATFORM_LOGIN_HINT_VALUE } from "@ro
 import { parseCookie } from "cookie";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
+import { Trans } from "react-i18next";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+
+import { PlatformSignInLogo } from "./PlatformSignInLogo";
 import { GcPlatformSignInButton } from "./GcPlatformSignInButton";
 
 type GcPlatformMigrationPanelProps = {
@@ -35,9 +38,27 @@ export const GcPlatformMigrationPanel = ({ locale }: GcPlatformMigrationPanelPro
   return (
     <aside data-testid="gc-platform-migration-panel">
       <div className="mb-6 w-full max-w-96 rounded-xl border border-[#BFC5CB] bg-white p-6">
+        <div className="mb-6">
+          <PlatformSignInLogo />
+        </div>
+
         <h2 className="mb-4 text-2xl leading-tight font-semibold">{t("migrationPanel.title")}</h2>
-        <p className="mb-4">{t("migrationPanel.bodyLead")}</p>
-        <p className="mb-6">{t("migrationPanel.bodyDeadline")}</p>
+        <p className="mb-4 text-base">
+          <Trans
+            ns="login"
+            i18nKey="migrationPanel.bodyLead"
+            defaults="<strong></strong>"
+            components={{ strong: <strong /> }}
+          />
+        </p>
+        <p className="mb-6 text-base">
+          <Trans
+            ns="login"
+            i18nKey="migrationPanel.bodyDeadline"
+            defaults="<strong></strong>"
+            components={{ strong: <strong /> }}
+          />
+        </p>
         <div className="mb-4">
           <LinkButton.Primary href={beforeYouStartUrl} target="_blank">
             {t("migrationPanel.createAccount")}
