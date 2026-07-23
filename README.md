@@ -1,6 +1,6 @@
 [La version française suit.](#---------------------------------------------------------------------)
 
-# Platform - GC Forms
+# Platform - GC Forms!
 
 This repository is the web application for the GC Forms platform product.
 
