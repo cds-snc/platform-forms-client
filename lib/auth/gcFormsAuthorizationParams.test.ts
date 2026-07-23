@@ -5,7 +5,7 @@ describe("gcFormsAuthorizationParams", () => {
   it("requests account selection when starting the gcForms OIDC flow", () => {
     expect(gcFormsAuthorizationParams).toEqual({
       max_age: 0,
-      // prompt: "select_account",
+      prompt: "select_account",
     });
   });
 });
