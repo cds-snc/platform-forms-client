@@ -4,6 +4,7 @@ import { FeatureFlags } from "@lib/cache/types";
 import { GC_PLATFORM_LOGIN_HINT_COOKIE, GC_PLATFORM_LOGIN_HINT_VALUE } from "@root/constants";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
+import { ClearGcPlatformLoginHint } from "./components/client/ClearGcPlatformLoginHint";
 import { LoginForm } from "./components/client/LoginForm";
 import { OidcRedirect } from "./components/client/OidcRedirect";
 import { authCheckAndThrow } from "@lib/actions";
@@ -33,11 +34,9 @@ export default async function Page(props: {
   const isZitadelLoginEnabled =
     process.env.APP_ENV !== "test" && (await checkOne(FeatureFlags.zitadelLogin));
   const cookieStore = await cookies();
-  const shouldClearGcPlatformLogin = searchParams.reset === "1";
-
-  if (shouldClearGcPlatformLogin) {
-    cookieStore.delete(GC_PLATFORM_LOGIN_HINT_COOKIE);
-  }
+  const resetParam = searchParams.reset;
+  const shouldClearGcPlatformLoginHint =
+    resetParam === "1" || resetParam === "true" || resetParam === true;
 
   const hasGcPlatformLoginHint =
     !shouldClearGcPlatformLoginHint &&
@@ -53,6 +52,7 @@ export default async function Page(props: {
 
   return (
     <div id="auth-panel">
+      {shouldClearGcPlatformLoginHint && <ClearGcPlatformLoginHint />}
       <LoginForm />
     </div>
   );

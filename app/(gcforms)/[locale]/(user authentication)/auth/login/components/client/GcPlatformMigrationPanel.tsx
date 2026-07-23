@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { GC_PLATFORM_LOGIN_HINT_COOKIE, GC_PLATFORM_LOGIN_HINT_VALUE } from "@root/constants";
 import { parseCookie } from "cookie";
@@ -19,6 +20,8 @@ type GcPlatformMigrationPanelProps = {
 export const GcPlatformMigrationPanel = ({ locale }: GcPlatformMigrationPanelProps) => {
   const pathname = usePathname();
   const { getFlag } = useFeatureFlags();
+  const [hasMounted, setHasMounted] = useState(false);
+  const [hasGcPlatformLoginHint, setHasGcPlatformLoginHint] = useState(false);
   const {
     t,
     i18n: { language },
@@ -27,11 +30,18 @@ export const GcPlatformMigrationPanel = ({ locale }: GcPlatformMigrationPanelPro
   const isLoginPage = pathname === `/${locale}/auth/login`;
   const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
   const beforeYouStartUrl = `${process.env.NEXT_PUBLIC_ZITADEL_URL ?? ""}/before-you-start`;
-  const parsedCookies = typeof document !== "undefined" ? parseCookie(document.cookie) : null;
-  const hasGcPlatformLoginHint =
-    parsedCookies?.[GC_PLATFORM_LOGIN_HINT_COOKIE] === GC_PLATFORM_LOGIN_HINT_VALUE;
 
-  if (!isLoginPage || !isZitadelLoginEnabled || hasGcPlatformLoginHint) {
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- mount gate prevents a server/client render mismatch
+    setHasMounted(true);
+
+    const parsedCookies = parseCookie(document.cookie);
+    setHasGcPlatformLoginHint(
+      parsedCookies[GC_PLATFORM_LOGIN_HINT_COOKIE] === GC_PLATFORM_LOGIN_HINT_VALUE
+    );
+  }, []);
+
+  if (!hasMounted || !isLoginPage || !isZitadelLoginEnabled || hasGcPlatformLoginHint) {
     return null;
   }
 

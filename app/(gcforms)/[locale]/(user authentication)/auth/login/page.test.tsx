@@ -49,6 +49,10 @@ vi.mock("./components/client/OidcRedirect", () => ({
   ),
 }));
 
+vi.mock("./components/client/ClearGcPlatformLoginHint", () => ({
+  ClearGcPlatformLoginHint: () => <div data-testid="clear-platform-login-hint" />,
+}));
+
 vi.mock("./components/client/GcPlatformSignInButton", () => ({
   GcPlatformSignInButton: ({ label }: { label: string }) => <button>{label}</button>,
 }));
@@ -62,7 +66,6 @@ describe("login page", () => {
     authCheckAndThrow.mockRejectedValue(new Error("no session"));
     cookies.mockResolvedValue({
       get: vi.fn(() => undefined),
-      delete: vi.fn(),
     });
   });
 
@@ -116,22 +119,37 @@ describe("login page", () => {
   });
 
   it("clears the platform hint cookie when requested via query param", async () => {
-    const deleteCookie = vi.fn();
-
     checkOne.mockResolvedValue(true);
     cookies.mockResolvedValue({
       get: vi.fn(() => ({ value: "gc-platform" })),
-      delete: deleteCookie,
     });
 
     render(
       await Page({
         params: Promise.resolve({ locale: "en" }),
-        searchParams: Promise.resolve({ clearPlatformLoginHint: "1" }),
+        searchParams: Promise.resolve({ reset: "1" }),
       })
     );
 
-    expect(deleteCookie).toHaveBeenCalledWith("gc-platform-login");
+    expect(screen.getByTestId("clear-platform-login-hint")).toBeInTheDocument();
+    expect(screen.getByTestId("login-form")).toBeInTheDocument();
+    expect(screen.queryByTestId("oidc-redirect")).not.toBeInTheDocument();
+  });
+
+  it("clears the platform hint cookie when reset=true", async () => {
+    checkOne.mockResolvedValue(true);
+    cookies.mockResolvedValue({
+      get: vi.fn(() => ({ value: "gc-platform" })),
+    });
+
+    render(
+      await Page({
+        params: Promise.resolve({ locale: "en" }),
+        searchParams: Promise.resolve({ reset: "true" }),
+      })
+    );
+
+    expect(screen.getByTestId("clear-platform-login-hint")).toBeInTheDocument();
     expect(screen.getByTestId("login-form")).toBeInTheDocument();
     expect(screen.queryByTestId("oidc-redirect")).not.toBeInTheDocument();
   });
