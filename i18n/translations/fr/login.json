@@ -3,11 +3,11 @@
   "signUpText": "Si vous n’avez pas de compte, vous pouvez en",
   "signUpLink": "créer un maintenant.",
   "migrationPanel": {
-    "title": "Passez à la nouvelle connexion de la Plateforme GC",
-    "bodyLead": "<strong>Utilisez la même adresse courriel que pour votre compte GC Forms.</strong> Conservez vos formulaires et vos réponses existants.",
-    "bodyDeadline": "Créez un compte de la Plateforme GC d’ici le {{deadline}} pour continuer à utiliser GC Forms.",
-    "createAccount": "Créer un compte de la Plateforme GC",
-    "signInWithGcPlatform": "Se connecter avec la Plateforme GC"
+    "title": "Migrate to new GC Platform sign in [FR]",
+    "bodyLead": "<strong>Use the same email address as your GC Forms account.</strong> Keep existing forms and responses. [FR]",
+    "bodyDeadline": "<strong>Create a GC Platform account by {{deadline}} to keep using GC Forms.</strong> [FR]",
+    "createAccount": "Create GC Platform account [FR]",
+    "signInWithGcPlatform": "Sign in with GC Platform [FR]"
   },
   "continueButton": "Continuer",
   "resetPasswordText": "Réinitialiser votre mot de passe",
