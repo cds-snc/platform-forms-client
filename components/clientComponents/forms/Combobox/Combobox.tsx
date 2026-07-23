@@ -11,7 +11,6 @@ import { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "@gcforms/an
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
   strictValue?: boolean;
-  onValueChange?: (value: string) => void;
   // On mount checks the choices list and if not found falls back to this
   allChoices?: PropertyChoices[];
 }
@@ -26,7 +25,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
     ariaDescribedBy,
     strictValue,
     lang,
-    onValueChange,
     allChoices,
   } = props;
   const classes = cn("gc-combobox gcds-input-wrapper", className);
@@ -104,7 +102,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       onSelectedItemChange({ selectedItem }) {
         setError(undefined);
         setValue(selectedItem);
-        onValueChange?.(selectedItem ?? "");
       },
       initialInputValue: field.value || "",
       // Suppress downshift's built-in live region so we can customize announcements and
