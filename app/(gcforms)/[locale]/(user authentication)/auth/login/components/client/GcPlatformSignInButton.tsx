@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@clientComponents/globals";
-import { GC_PLATFORM_LOGIN_HINT_COOKIE, GC_PLATFORM_LOGIN_HINT_VALUE } from "@root/constants";
-import { SetCookie, stringifySetCookie } from "cookie";
+import { createGcPlatformLoginHintCookie } from "./gcPlatformLoginHintCookie";
 import { signIn } from "next-auth/react";
 
 type GcPlatformSignInButtonProps = {
@@ -12,15 +11,7 @@ type GcPlatformSignInButtonProps = {
 
 export const GcPlatformSignInButton = ({ locale, label }: GcPlatformSignInButtonProps) => {
   const handleClick = async () => {
-    const cookieValue: SetCookie = {
-      name: GC_PLATFORM_LOGIN_HINT_COOKIE,
-      value: GC_PLATFORM_LOGIN_HINT_VALUE,
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-      sameSite: true,
-    };
-
-    document.cookie = stringifySetCookie(cookieValue);
+    document.cookie = createGcPlatformLoginHintCookie();
     await signIn("gcForms", { redirectTo: `/${locale}/auth/policy` }, { max_age: 0 });
   };
 
