@@ -413,4 +413,13 @@ export const options = [
     logoTitleEn: "Department of Justice Canada",
     logoTitleFr: "Ministère de la Justice Canada",
   },
+  {
+    name: "agriculture",
+    urlEn: "https://agriculture.canada.ca/en",
+    urlFr: "https://agriculture.canada.ca/fr",
+    logoEn: "/img/branding/agriculture-en.svg",
+    logoFr: "/img/branding/agriculture-fr.svg",
+    logoTitleEn: "Agriculture and Agri-Food Canada",
+    logoTitleFr: "Agriculture et Agroalimentaire Canada",
+  },
 ];
