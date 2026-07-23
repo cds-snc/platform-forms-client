@@ -58,8 +58,8 @@
       "close": "Fermer"
     },
     "versionSelector": {
-      "label": "Download responses for version",
-      "placeholder": "Choose a version"
+      "label": "Télécharger les réponses pour la version",
+      "placeholder": "Choisir une version"
     }
   },
   "locationPage": {
