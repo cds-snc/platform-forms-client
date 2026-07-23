@@ -37,7 +37,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
 
   const [filterText, setFilterText] = useState("");
 
-  // Ensure the value is in the current langauge on mount
+  // Ensure the value is in the current language on mount
   useLayoutEffect(() => {
     if (!allChoices || !lang || !field.value) {
       return;
