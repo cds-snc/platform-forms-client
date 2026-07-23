@@ -278,7 +278,7 @@
       "title": "Vérifiez attentivement vos réponses",
       "message": "Vos réponses sauvegardées proviennent d'un autre formulaire d'origine. Vérifiez-les attentivement avant de les soumettre."
     },
-        "formUpdatedWarning": {
+    "formUpdatedWarning": {
       "title": "Nous avons mis à jour ce formulaire",
       "message": "Vos réponses enregistrées pourraient ne plus s’appliquer. Confirmez vos réponses avant de soumettre le formulaire."
     },
