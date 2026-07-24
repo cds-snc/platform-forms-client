@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.3.0] - 2026-07-22
+
+- Update visibility to be event driven with a different function signature
+
 ## [2.2.18] - 2026-07-22
 
 - Republish package following failed NPM publication

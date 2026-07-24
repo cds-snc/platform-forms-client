@@ -26,7 +26,21 @@ export const EventKeys = {
   submitProgress: "submit-progress",
   openUnconfirmedApiKeyDialog: "open-unconfirmed-api-key-dialog",
   openCreateDraftConfirmDialog: "open-create-draft-confirm-dialog",
+  formValuesChanged: "form-values-changed",
 } as const;
+
+// Per-callback, per-event wrapper registry so the same callback can be
+// registered/removed for multiple event names without interference.
+//
+// Note: `any` is intentional: callbacks have different generic types and TypeScript's
+// "contravariance" prevents a typed common base. Type safety is at the call (on/off/fire).
+// Another option would be using a `Symbol` + wrapper but that looks unusual and has
+// drawbacks e.g. no automatic garbage collection of the wrapper etc.
+// `unknown` is also not ideal because it would require casting to `any` in the wrapper,
+// which is less safe.
+//
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const listenerMap = new WeakMap<(detail: any) => void, Map<string, (event: Event) => void>>();
 
 export const useCustomEvent = () => {
   // Attach listeners to a documentRef instead of document directly
@@ -55,10 +69,24 @@ export const useCustomEvent = () => {
      * @param callback (detail: CustomEventDetails) => void
      */
     on: (eventName, callback) => {
-      documentRef.current &&
-        documentRef.current.addEventListener(eventName, (event: Event) => {
-          callback((event as CustomEvent).detail);
-        });
+      if (!documentRef.current) return;
+      const wrapper = (event: Event) => {
+        callback((event as CustomEvent).detail);
+      };
+
+      let perEvent = listenerMap.get(callback);
+      if (!perEvent) {
+        perEvent = new Map();
+        listenerMap.set(callback, perEvent);
+      }
+      // Remove any previously registered wrapper for this (callback, eventName) pair
+      // before adding the new one, to prevent duplicate listeners and leaks.
+      const existing = perEvent.get(eventName);
+      if (existing) {
+        documentRef.current.removeEventListener(eventName, existing);
+      }
+      perEvent.set(eventName, wrapper);
+      documentRef.current.addEventListener(eventName, wrapper);
     },
 
     /**
@@ -67,10 +95,16 @@ export const useCustomEvent = () => {
      * @param callback (detail: CustomEventDetails) => void
      */
     off: (eventName, callback) => {
-      documentRef.current &&
-        documentRef.current.removeEventListener(eventName, (event: Event) => {
-          callback((event as CustomEvent).detail);
-        });
+      if (!documentRef.current) return;
+      const perEvent = listenerMap.get(callback);
+      const wrapper = perEvent?.get(eventName);
+      if (wrapper) {
+        documentRef.current.removeEventListener(eventName, wrapper);
+        perEvent!.delete(eventName);
+        if (perEvent!.size === 0) {
+          listenerMap.delete(callback);
+        }
+      }
     },
   };
 
