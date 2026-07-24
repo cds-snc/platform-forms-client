@@ -5,19 +5,18 @@ import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
+
 import { getRenderedForm } from "@lib/formBuilder";
-import { toast } from "@formBuilder/components/shared/Toast";
+import { mergeFormValuesWithInitialValues } from "@lib/formBuilder";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
 import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { flattenStructureToValues, stripExcludedKeys } from "./lib/client/helpers";
-import { FormRestoredWarning } from "@clientComponents/forms/ResumeForm/FormRestoredWarning";
+import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
 
 export const FormWrapper = ({
   formRecord,
@@ -34,18 +33,19 @@ export const FormWrapper = ({
     i18n: { language },
   } = useTranslation(["common", "confirmation", "form-closed", "review"]);
   const {
-    saveSessionProgress,
     setSubmissionId,
     submissionId,
     submissionDate,
     setSubmissionDate,
     currentGroup,
     getGroupTitle,
-    matchedIds,
-    getGroupHistory,
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
+  const { cachedSession } = useResponsesCache();
   const captchaToken = React.useRef("");
+  // TODO : If the formRecord contains file inputs Save and Resume is not available
+  const resetCaptchaRef = React.useRef<{ resetToken: () => void }>({ resetToken: () => {} });
+
   const saveAndResume = formRecord?.saveAndResume;
 
   // Generate form elements on the client to ensure Formik context is available
@@ -53,24 +53,7 @@ export const FormWrapper = ({
     return getRenderedForm(formRecord, language as Language);
   }, [formRecord, language]);
 
-  const formRestoredMessage = t("saveAndResume.formRestored");
   const router = useRouter();
-
-  const savedValues = useMemo(() => {
-    const result = restoreSessionProgress({
-      id: formRecord.id,
-      form: formRecord.form,
-      language: language as Language,
-    });
-
-    if (!result) {
-      return false;
-    }
-
-    return result;
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language, formRecord.id]);
 
   // For multi-page forms update the sub page head title or review page title
   // Single-page forms will be skipped since since the title set in page.tsx is sufficient
@@ -92,36 +75,6 @@ export const FormWrapper = ({
   const isMultiPageForm = showReviewPage(formRecord.form);
   useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
-  const isEmptyForm = useMemo(() => {
-    try {
-      if (!savedValues) {
-        return false;
-      }
-      const elements = stripExcludedKeys(savedValues.values || {});
-      const elementValues = flattenStructureToValues(elements);
-      return elementValues.join("") === "";
-    } catch (e) {
-      return true;
-    }
-  }, [savedValues]);
-
-  useEffect(() => {
-    // Clear session storage after values are restored
-    if (savedValues) {
-      removeProgressStorage();
-
-      if (savedValues.language === language && !isEmptyForm) {
-        if (savedValues.sourceFormId && savedValues.sourceFormId !== formRecord.id) {
-          toast.notice(<FormRestoredWarning />, "public-facing-form-wide");
-        } else {
-          toast.success(formRestoredMessage, "public-facing-form");
-        }
-      }
-    }
-  }, [savedValues, language, isEmptyForm, formRecord.id, formRestoredMessage]);
-
-  const initialValues = savedValues ? savedValues.values : undefined;
-
   // Show confirmation page if submissionId is present
   if (submissionId && submissionDate) {
     return (
@@ -136,10 +89,15 @@ export const FormWrapper = ({
   }
 
   return (
-    <>
+    <div id="form-filler">
       {header}
+
       <Form
-        initialValues={initialValues || undefined}
+        initialValues={
+          cachedSession
+            ? mergeFormValuesWithInitialValues(formRecord, language, cachedSession?.values)
+            : undefined
+        }
         formRecord={formRecord}
         language={language}
         onSuccess={(formID, submissionId) => {
@@ -155,7 +113,6 @@ export const FormWrapper = ({
           }
         }}
         t={t}
-        saveSessionProgress={saveSessionProgress}
         saveAndResumeEnabled={saveAndResume}
         renderSubmit={({ validateForm, fallBack }) => {
           return (
@@ -171,11 +128,10 @@ export const FormWrapper = ({
         allowGrouping={allowGrouping}
         // Used in Formik handleSubmit where there is no access to useGCFormsContext
         currentGroup={currentGroup}
-        getGroupHistory={getGroupHistory}
-        matchedIds={matchedIds}
         setCaptchaFail={setCaptchaFail}
         captchaFail={captchaFail}
         captchaToken={captchaToken}
+        resetCaptchaRef={resetCaptchaRef}
       >
         {currentForm}
       </Form>
@@ -197,6 +153,6 @@ export const FormWrapper = ({
           />
         </>
       )}
-    </>
+    </div>
   );
 };

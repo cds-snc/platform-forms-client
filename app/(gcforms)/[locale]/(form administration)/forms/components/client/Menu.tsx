@@ -15,6 +15,7 @@ import {
   MenuDropdownItemI,
 } from "./MenuDropdown/MenuDropdown";
 import { FormTabStatus, TAB_STATUS } from "../types";
+import { EventKeys } from "@root/lib/hooks/useCustomEvent";
 
 export const Menu = ({
   id,
@@ -23,6 +24,7 @@ export const Menu = ({
   hasDraft,
   ttl,
   status,
+  deliveryOption,
   onRemove,
 }: {
   id: string;
@@ -31,6 +33,7 @@ export const Menu = ({
   hasDraft?: boolean;
   ttl?: Date;
   status: FormTabStatus;
+  deliveryOption?: { emailAddress: string } | null;
   onRemove?: (templateId: string) => void;
 }) => {
   const {
@@ -38,6 +41,8 @@ export const Menu = ({
     i18n: { language },
   } = useTranslation("my-forms");
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
+
+  const isEmailDelivery = deliveryOption && deliveryOption.emailAddress;
 
   const { getFlag } = useFeatureFlags();
   const templateVersioningEnabled = getFlag("templateVersioning");
@@ -54,7 +59,7 @@ export const Menu = ({
         if (error === "Form Not Found") {
           toast.error(t("errors.formDownloadNotExist"));
         } else {
-          toast.error(t("errors.formDownloadFailed"));
+          toast.error(t("formDownloadFailed"));
         }
       }
 
@@ -122,11 +127,14 @@ export const Menu = ({
         callback: copyLinkCallback,
       },
       {
-        filtered: templateVersioningEnabled && isPublished && !hasDraft ? false : true,
+        filtered:
+          templateVersioningEnabled && !isEmailDelivery && isPublished && !hasDraft ? false : true,
         title: t("card.menu.createDraftVersion"),
         callback: () => {
           try {
-            const ev = new CustomEvent("open-create-draft-confirm-dialog", { detail: { id } });
+            const ev = new CustomEvent(EventKeys.openCreateDraftConfirmDialog, {
+              detail: { id },
+            });
             window.document.dispatchEvent(ev);
           } catch (e) {
             // noop
@@ -204,12 +212,12 @@ export const Menu = ({
       language,
       id,
       restoreFormCallback,
-
       status,
       downloadForm,
       name,
       handleDelete,
       hasDraft,
+      isEmailDelivery,
     ]
   );
 

@@ -1,4 +1,4 @@
-import { Responses, PublicFormRecord, GroupsType, FormValues, Response } from "@gcforms/types";
+import { Responses, PublicFormRecord, GroupsType, FormValues } from "@gcforms/types";
 import { isFieldResponseValid, TranslateFn } from "./validation/validation";
 import { inGroup } from "./helpers";
 import { checkVisibilityRecursive } from "./visibility";
@@ -9,15 +9,6 @@ import {
   hasValue,
 } from "./validation/valueMatchesType";
 
-export type ResponseValidationValues = {
-  currentGroup: string | null;
-  groupHistory: string[];
-  matchedIds: string[];
-  responses: {
-    [key: string]: Response | null;
-  };
-};
-
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit
  this allows passing in currentGroup vs adding the currentGroup to values beforehand
@@ -27,7 +18,7 @@ export const validate = ({
   currentGroup,
   formRecord,
 }: {
-  values: ResponseValidationValues;
+  values: Responses;
   currentGroup: string;
   formRecord: PublicFormRecord;
 }) => {
@@ -35,15 +26,31 @@ export const validate = ({
 
   const identityT = ((key: string) => key) as unknown as TranslateFn;
 
-  const { errors } = validateVisibleElements(values, {
+  const errors = validateOnSubmit(values, {
     formRecord,
     t: identityT,
   });
   return errors;
 };
 
+/**
+ * validateOnSubmit is called for form submission validation
+ * @param values
+ * @param props
+ */
+export const validateOnSubmit = (
+  values: Responses,
+  props: {
+    formRecord: PublicFormRecord;
+    t: TranslateFn;
+  }
+): Responses => {
+  const { errors } = validateVisibleElements(values, props);
+  return errors;
+};
+
 export const validateVisibleElements = (
-  values: ResponseValidationValues,
+  values: Responses,
   props: {
     formRecord: PublicFormRecord;
     t: TranslateFn;
@@ -58,7 +65,7 @@ export const validateVisibleElements = (
   const valueMatchErrors: ValueMatchErrors = {};
 
   for (const formElement of props.formRecord.form.elements) {
-    const responseValue = values.responses[formElement.id];
+    const responseValue = values[formElement.id];
 
     const currentGroup = values.currentGroup as string;
     const groups = props.formRecord.form.groups as GroupsType;
@@ -73,11 +80,7 @@ export const validateVisibleElements = (
       continue;
     }
 
-    const isVisible = checkVisibilityRecursive(
-      props.formRecord,
-      formElement,
-      values.responses as FormValues
-    );
+    const isVisible = checkVisibilityRecursive(props.formRecord, formElement, values as FormValues);
 
     // If the form element is not visible, skip validation
     if (!isVisible) {
@@ -89,7 +92,7 @@ export const validateVisibleElements = (
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
         responseValue,
-        values as Responses,
+        values,
         formElement.type,
         formElement,
         formElement.properties.validation,
@@ -108,12 +111,7 @@ export const validateVisibleElements = (
       continue;
     }
 
-    const matched = valueMatchesType(
-      responseValue as Responses,
-      formElement.type,
-      formElement,
-      props.t
-    );
+    const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
 
     if (matched?.error && matched.details) {
       valueMatchErrors[formElement.id] = matched.details;

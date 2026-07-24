@@ -114,7 +114,7 @@ const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templa
 const getEditLockStreamKey = (templateId: string) => `${EDIT_LOCK_STREAM_PREFIX}:${templateId}`;
 const getEditLockTakeoverSaveAckKey = (templateId: string, sessionId: string) =>
   `${EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX}:${templateId}:${sessionId}`;
-const getEditLockAssignedUsersCacheKey = (templateId: string) =>
+export const getEditLockAssignedUsersCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
 export const getEditLockAssignedUsersCountCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_COUNT_CACHE_PREFIX}:${templateId}`;
@@ -617,7 +617,12 @@ const shouldEnforceTemplateEditLockInternal = async (
   const cachedTemplate = formCache.cacheAvailable
     ? await formCache.check(templateId).catch(() => null)
     : null;
-  const cachedIsPublished = cachedTemplate?.isPublished ?? null;
+  const cachedIsPublished = cachedTemplate
+    ? getEffectiveTemplatePublishState({
+        isPublished: cachedTemplate.isPublished,
+        currentDraftVersionId: cachedTemplate.currentDraftVersionId,
+      })
+    : null;
 
   let cachedHasEnoughUsers: boolean | null = null;
 

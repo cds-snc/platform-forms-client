@@ -24,7 +24,7 @@ import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 import v8 from "v8";
 import { Prisma } from "@gcforms/database";
 
-import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
+import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
 import { AccessControlError } from "@lib/auth/errors";
@@ -577,7 +577,7 @@ describe("Template CRUD functions", () => {
       expect(mockedLogEvent).toHaveBeenCalledWith(
         userID,
         { id: "formtestID", type: "Form" },
-        "PublishForm"
+        AuditLogEvent.PublishForm
       );
     });
 

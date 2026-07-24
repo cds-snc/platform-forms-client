@@ -278,6 +278,10 @@
       "title": "Check your answers carefully",
       "message": "Your saved answers were based on a different original form. Review them carefully before submitting."
     },
+    "formUpdatedWarning": {
+      "title": "We’ve updated this form",
+      "message": "Your saved answers may no longer apply.  Review before submitting."
+    },
     "resumeUploadError": {
       "title": "Problem loading answers",
       "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",
@@ -358,7 +362,7 @@
         "description": " Keep this file in a secure spot on your device to protect your information."
       },
       "badge": {
-        "text": "Form submitted on ",
+        "text": "Form submitted: ",
         "lastSaved": "{{month}} {{day}}, {{year}}",
         "submissionId": "Submission ID: {{submissionId}}"
       },
@@ -395,5 +399,17 @@
     "title": "Sign in to GC Forms",
     "description": "Use your government account to build forms and access submitted responses.",
     "button": "Sign in"
+  },
+  "appUpdate": {
+    "builder": {
+      "title": "Update GC Forms to continue",
+      "description": "Review your form after updating and before publishing.",
+      "button": "Update "
+    },
+    "user": {
+      "title": "To continue, update the software for this form",
+      "description": "Review your answers after updating and before submitting.",
+      "button": "Update"
+    }
   }
 }

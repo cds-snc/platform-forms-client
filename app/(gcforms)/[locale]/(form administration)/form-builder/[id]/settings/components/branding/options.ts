@@ -404,4 +404,22 @@ export const options = [
     logoTitleEn: "Pacific Economic Development Canada",
     logoTitleFr: "Développement économique Canada pour le Pacifique",
   },
+  {
+    name: "justice",
+    urlEn: "https://www.justice.gc.ca/eng",
+    urlFr: "https://www.justice.gc.ca/fra",
+    logoEn: "/img/branding/justice-en.svg",
+    logoFr: "/img/branding/justice-fr.svg",
+    logoTitleEn: "Department of Justice Canada",
+    logoTitleFr: "Ministère de la Justice Canada",
+  },
+  {
+    name: "nserc",
+    urlEn: "https://nserc-crsng.canada.ca/en",
+    urlFr: "https://nserc-crsng.canada.ca/fr",
+    logoEn: "/img/branding/nserc-en.svg",
+    logoFr: "/img/branding/nserc-fr.svg",
+    logoTitleEn: "Natural Sciences and Engineering Research Council of Canada",
+    logoTitleFr: "Conseil de recherches en sciences naturelles et en génie du Canada",
+  },
 ];

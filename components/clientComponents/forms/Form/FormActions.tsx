@@ -21,7 +21,7 @@ export const FormActions = ({
   }
 
   return (
-    <div className="sticky bottom-0 -mx-5 mt-10 flex border-gcds-blue-muted bg-gcds-blue-100 p-4">
+    <div className="border-gcds-blue-muted bg-gcds-blue-100 sticky bottom-0 -mx-5 mt-10 flex p-4">
       <div className="flex w-full justify-between">
         {children}
         <SaveAndResume language={language as Language} formId={formId} />

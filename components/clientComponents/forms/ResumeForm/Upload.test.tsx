@@ -7,14 +7,12 @@ import userEvent from "@testing-library/user-event";
 
 import { Upload } from "./Upload";
 
-const { pushMock, saveSessionProgressMock, toastErrorMock, logClientErrorMock } = vi.hoisted(
-  () => ({
-    pushMock: vi.fn(),
-    saveSessionProgressMock: vi.fn(),
-    toastErrorMock: vi.fn(),
-    logClientErrorMock: vi.fn(),
-  })
-);
+const { saveSessionProgressMock, toastErrorMock, logClientErrorMock } = vi.hoisted(() => ({
+  pushMock: vi.fn(),
+  saveSessionProgressMock: vi.fn(),
+  toastErrorMock: vi.fn(),
+  logClientErrorMock: vi.fn(),
+}));
 
 vi.mock("@i18n/client", () => ({
   useTranslation: () => ({
@@ -23,13 +21,7 @@ vi.mock("@i18n/client", () => ({
   }),
 }));
 
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: pushMock,
-  }),
-}));
-
-vi.mock("@lib/utils/saveSessionProgress", () => ({
+vi.mock("@lib/hooks/useResponseCache", () => ({
   saveSessionProgress: saveSessionProgressMock,
 }));
 
@@ -120,16 +112,16 @@ describe("Upload", () => {
     );
 
     await waitFor(() => {
-      expect(saveSessionProgressMock).toHaveBeenCalledWith("en", {
-        id: "current-form",
+      expect(saveSessionProgressMock).toHaveBeenCalledWith({
+        language: "en",
+        id: "previous-form",
         values: { firstName: "Avery" },
         history: ["start"],
         currentGroup: "start",
-        sourceFormId: "previous-form",
+        restoredForm: true,
       });
     });
 
-    expect(pushMock).toHaveBeenCalledWith("/en/id/current-form");
     expect(toastErrorMock).not.toHaveBeenCalled();
     expect(logClientErrorMock).not.toHaveBeenCalled();
   });
@@ -165,16 +157,16 @@ describe("Upload", () => {
     fireEvent.drop(hotspot, dragData);
 
     await waitFor(() => {
-      expect(saveSessionProgressMock).toHaveBeenCalledWith("en", {
+      expect(saveSessionProgressMock).toHaveBeenCalledWith({
         id: "current-form",
         values: { firstName: "Avery" },
         history: ["start"],
+        language: "en",
         currentGroup: "start",
-        sourceFormId: undefined,
+        restoredForm: true,
       });
     });
 
-    expect(pushMock).toHaveBeenCalledWith("/en/id/current-form");
     expect(hotspot).toHaveClass("min-h-50");
     expect(hotspot).toHaveAttribute("aria-pressed", "false");
   });

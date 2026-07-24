@@ -408,14 +408,14 @@
   "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to the confirmation are:",
   "confirm": {
     "createDraft": {
-      "title": "Create draft version",
-      "description": "This will create a new draft of your published template.",
-      "liveForm": "Your live form will continue collecting responses as usual until you republish.",
-      "responseWarning": "You are responsible for ensuring the updated template works with your team's workflows and integrations.",
-      "prompt": "If you understand the potential impact, type AGREE to continue.",
-      "label": "Type AGREE",
-      "required": "required",
-      "placeholder": "AGREE"
+      "title": "Update published form",
+      "liveForm": "The current version will continue collecting responses until you publish the updated form.",
+      "list": {
+        "title": "⚠️ Before publishing updates, discuss with your developers and test your form. You may need to:",
+        "listitem1": "Adjust form questions and workflows.",
+        "listitem2": "Revise lists and spreadsheets for organizing responses.",
+        "listitem3": "Update the API integration."
+      }
     }
   },
   "actions": {
@@ -571,10 +571,16 @@
   "formDownload": {
     "description": "Keep a version stored locally on your computer or use this file to share a draft in progress.",
     "downloadBtnText": "Download form file",
-    "title": "Get a copy of your form"
+    "title": "Get a copy of your form",
+    "versionSelector": {
+      "label": "Select a version",
+      "currentDraft": "Version {{version}} - current draft",
+      "currentPublished": "Version {{version}} - current published",
+      "previousVersion": "Version {{version}}"
+    }
   },
   "auditDownload": {
-    "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet. You’ll be able to get activity from June 15, 2026 onwards.",
+    "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for the last 30 days related to form creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet.",
     "downloadBtnText": "Download recent activity",
     "title": "View recent form activity",
     "dialog": {
@@ -601,6 +607,7 @@
     },
     "events": {
       "CreateForm": "Form created",
+      "CreateDraftFromPublishedForm": "Draft created from published form",
       "DeleteForm": "Form archived",
       "UnarchiveForm": "Form restored",
       "ChangeDeliveryOption": "Delivery option changed",
@@ -621,6 +628,7 @@
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
+      "RepublishForm": "Re-published form",
       "InvitationAccepted": "Invitation accepted",
       "UpdateFormBranding": "Updated form branding",
       "UpdatedNotificationSettings": "Updated notification settings",
@@ -629,6 +637,7 @@
       "InvitationCancelled": "Cancelled a collaboration invitation"
     },
     "eventDetails": {
+      "CreateDraftFromPublishedForm": "Draft version {{versionNumber}}",
       "CreatedForm": "Created form",
       "UpdatedFormName": "Renamed form to: {{newFormName}}",
       "UpdatedFormContent": "Updated form content",
@@ -806,7 +815,7 @@
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Help us improve",
   "publish": "Publish",
-  "republish": "Republish",
+  "republish": "Publish update",
   "readyToPublish": "Ready to publish",
   "published": "Published",
   "publishedBack": "Back to Forms",
@@ -843,8 +852,26 @@
   },
   "prePublishFormDialog": {
     "title": "Publish form",
-    "republishTitle": "Re-publish form",
+    "republishTitle": "Publish updated form",
     "text1": "What is your reason for publishing?",
+    "republish": {
+      "categoryLabel": "Form category",
+      "helpsUnderstand": "Help us understand the purpose of this form.",
+      "confirm": {
+        "title": "Confirm publication",
+        "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it.",
+        "text2": "New form fillers only have access to the updated form. People mid-way through the previous form can complete the earlier version unless they reload the page.",
+        "list": "⚠️ By publishing, you accept that you may need to:",
+        "listitem1": "Adjust form questions and workflows.",
+        "listitem2": "Revise lists and spreadsheets for organizing responses.",
+        "listitem3": "Update your API integration.",
+        "agree": {
+          "label": "To continue, enter ",
+          "required": "(required)",
+          "placeholder": "AGREE"
+        }
+      }
+    },
     "readyForPublicUse": "Ready for public use",
     "readyForInternalUse": "Ready for internal use",
     "sharingForFeedback": "Sharing for feedback or approval",
@@ -1682,5 +1709,11 @@
   },
   "fileUploadApiWarning": {
     "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
-  }
+  },
+  "publishViewEdit": {
+    "title": "Edit and re-publish",
+    "description": "Make an edit to your form while it is published",
+    "button": "Edit form"
+  },
+  "formDownloadFailed": "Failed to download the form."
 }

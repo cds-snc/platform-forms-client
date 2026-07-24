@@ -1,16 +1,16 @@
 # Changelog
 
-## [2.2.17] - 2026-07-03
+## [2.2.19] - 2026-07-03
 
 - Add new Star Rating input validation type
 
-## [2.2.16] - 2026-06-30
+## [2.2.18] - 2026-07-22
 
-- Update validation type for form responses
+- Republish package following failed NPM publication
 
-## [2.2.15] - 2026-06-25
+## [2.2.17] - 2026-07-21
 
-- Update validation type for form responses
+- Republish package following failed NPM publication
 
 ## [2.2.14] - 2026-06-15
 

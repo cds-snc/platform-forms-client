@@ -59,14 +59,21 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       ? getLocaleChoices(element.properties.choices, lang)
       : [];
 
+  // allow a bilingual translation - match entry from one language to another
+  let allManagedChoices: PropertyChoices[] | undefined;
+
   // Retrieve managed data from static json file if specified
   if (element.properties.managedChoices) {
     if (Array.isArray(element.properties.managedChoices)) {
       // Handle multiple managed data files - merge and sort alphabetically
+      allManagedChoices = [];
       element.properties.managedChoices.forEach((dataFile) => {
         const data = managedData[dataFile];
         const fileChoices = data ? getLocaleChoices(data, lang) : [];
         choices = choices.concat(fileChoices);
+        if (data) {
+          allManagedChoices!.push(...data);
+        }
       });
       choices.sort((a, b) => a.localeCompare(b, lang));
     } else {
@@ -74,6 +81,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       const dataFile = element.properties.managedChoices;
       const data = managedData[dataFile];
       choices = data ? getLocaleChoices(data, lang) : [];
+      allManagedChoices = data;
     }
   }
 
@@ -321,11 +329,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         const rowTitleProp = getLocalizedProperty("rowTitle", lang) as "rowTitleEn" | "rowTitleFr";
 
         const addButtonProp = getLocalizedProperty("addButtonText", lang) as
-          | "addButtonTextEn"
-          | "addButtonTextFr";
+          "addButtonTextEn" | "addButtonTextFr";
         const removeButtonProp = getLocalizedProperty("removeButtonText", lang) as
-          | "removeButtonTextEn"
-          | "removeButtonTextFr";
+          "removeButtonTextEn" | "removeButtonTextFr";
 
         rowTitle = props[rowTitleProp];
         addButtonText = props[addButtonProp];
@@ -358,6 +364,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             className="relative"
             choices={choices}
+            allChoices={allManagedChoices}
             lang={lang}
             key={`${id}-${lang}`}
           />
@@ -484,7 +491,32 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
       initialValues[element.id] = _getElementInitialValue(element, language);
     });
 
+  // Used to track the current group dynamically
+  initialValues.currentGroup = "";
+
+  // Used to track the group history dynamically
+  initialValues.groupHistory = [];
+
+  // Used to track the Ids of elements from show/hide that should be included (visible) dynamically
+  initialValues.matchedIds = [];
+
   return initialValues;
+};
+
+export const mergeFormValuesWithInitialValues = (
+  formRecord: PublicFormRecord,
+  language: string,
+  values: Responses
+): Responses => {
+  const initialValues = getFormInitialValues(formRecord, language);
+  const filteredValues = Object.fromEntries(
+    Object.entries(values).filter(([key]) => key in initialValues)
+  );
+
+  return {
+    ...initialValues,
+    ...filteredValues,
+  };
 };
 
 type GenerateElementProps = {
