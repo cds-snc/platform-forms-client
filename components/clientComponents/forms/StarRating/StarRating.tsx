@@ -4,6 +4,7 @@ import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { useTranslation } from "@i18n/client";
+import { StarRatingObject } from "@root/lib/responseDownloadFormats/utils/formatStarRatingAnswer";
 
 interface StarRatingProps extends InputFieldProps {
   numberOfStars?: number;
@@ -72,7 +73,7 @@ const StarItem = React.memo(function StarItem({
       <label
         htmlFor={inputId}
         className={`gc-star-rating__label relative cursor-pointer text-4xl leading-none select-none rounded${
-          focused ? " outline-blue-focus outline-[3px] outline-offset-2 outline-solid" : ""
+          focused ? "outline-blue-focus outline-[3px] outline-offset-2 outline-solid" : ""
         }`}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -123,7 +124,17 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
     () => false
   );
 
-  const currentValue = isClient && field.value ? Number(field.value) : 0;
+  const parseStoredValue = (raw: string): number => {
+    if (!raw) return 0;
+    try {
+      const parsed = JSON.parse(raw) as StarRatingObject;
+      return parsed?.value ?? 0;
+    } catch {
+      return 0;
+    }
+  };
+
+  const currentValue = isClient ? parseStoredValue(field.value) : 0;
   const activeValue = hovered !== null ? hovered : currentValue;
 
   // numberOfStars is a static prop — only recompute if it changes
@@ -158,11 +169,11 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
       }
 
       const newValue = stars[newIndex];
-      helpers.setValue(String(newValue));
+      helpers.setValue(JSON.stringify({ value: newValue, numberOfStars }));
       setHovered(newValue);
       inputRefs.current[newIndex]?.focus();
     },
-    [stars, helpers]
+    [stars, helpers, numberOfStars]
   );
 
   const errorId = meta.error ? `error-${id}` : undefined;
@@ -185,7 +196,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
             inputId={`${id}.${starValue - 1}`}
             name={name}
             required={required}
-            checked={isClient && field.value === String(starValue)}
+            checked={isClient && currentValue === starValue}
             tabIndex={getTabIndex(starValue)}
             ariaLabel={t("starRating.starLabel", { count: starValue })}
             active={activeValue >= starValue}
@@ -196,7 +207,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
             sparkle={sparkleStar === starValue}
             onSparkleEnd={() => setSparkleStar(null)}
             onChange={() => {
-              helpers.setValue(String(starValue));
+              helpers.setValue(JSON.stringify({ value: starValue, numberOfStars }));
               if (sparkleOnSelect) setSparkleStar(starValue);
             }}
             onFocus={(e) => {

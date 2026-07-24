@@ -1,18 +1,19 @@
-import { getElementOrSubElementById } from "@gcforms/core";
 import { FormElementTypes, FormRecord } from "@lib/types";
 
 import { Answer } from "../types";
 
-const DEFAULT_NUMBER_OF_STARS = 5;
+export type StarRatingObject = { value: number; numberOfStars: number };
 
 /**
  * Formats a star rating answer as a fraction string (e.g. "3/5").
  * Returns `undefined` when the item is not a star rating element.
  * Returns the raw answer unchanged when it is empty or already a placeholder.
+ *
+ * The answer is stored as a JSON object e.g. `{"value":3,"numberOfStars":5}`.
  */
 export const formatStarRatingAnswer = (
   item: Answer,
-  formRecord: FormRecord
+  _formRecord: FormRecord
 ): string | undefined => {
   if (item.type !== FormElementTypes.starRating) {
     return undefined;
@@ -24,8 +25,19 @@ export const formatStarRatingAnswer = (
     return rawAnswer;
   }
 
-  const element = getElementOrSubElementById(formRecord.form.elements, String(item.questionId));
-  const numberOfStars = element?.properties.numberOfStars ?? DEFAULT_NUMBER_OF_STARS;
+  try {
+    const parsed = JSON.parse(rawAnswer) as StarRatingObject;
+    if (
+      parsed !== null &&
+      typeof parsed === "object" &&
+      "value" in parsed &&
+      "numberOfStars" in parsed
+    ) {
+      return `${parsed.value}/${parsed.numberOfStars}`;
+    }
+  } catch {
+    // Not a valid star rating JSON object
+  }
 
-  return `${rawAnswer}/${numberOfStars}`;
+  return rawAnswer;
 };
