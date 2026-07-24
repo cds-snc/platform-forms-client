@@ -17,6 +17,7 @@ import {
   ConditionalWrapper,
   Combobox,
   FormattedDate,
+  StarRating,
 } from "@clientComponents/forms";
 import {
   FormElement,
@@ -100,7 +101,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       className={isRequired ? "required" : ""}
       required={isRequired}
       validation={element.properties.validation}
-      group={["radio", "checkbox"].indexOf(element.type) !== -1}
+      group={["radio", "checkbox", "starRating"].indexOf(element.type) !== -1}
       lang={lang}
     >
       {labelText}
@@ -244,6 +245,24 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             type={FormElementTypes.radio}
             name={`${id}`}
             choicesProps={radioItems}
+          />
+        </FormGroup>
+      );
+    }
+    case FormElementTypes.starRating: {
+      const numberOfStars = element.properties.numberOfStars ?? 5;
+      const sparkleOnSelect = element.properties.sparkleOnSelect ?? false;
+      return (
+        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+          {labelComponent}
+          {description && <Description id={`${id}`}>{description}</Description>}
+          <StarRating
+            id={`${id}`}
+            name={`${id}`}
+            required={isRequired}
+            numberOfStars={numberOfStars}
+            sparkleOnSelect={sparkleOnSelect}
+            lang={lang}
           />
         </FormGroup>
       );
@@ -421,6 +440,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
   switch (element.type) {
     // Radio and dropdown resolve to string values
     case FormElementTypes.radio:
+    case FormElementTypes.starRating:
     case FormElementTypes.dropdown:
     case FormElementTypes.combobox:
     case FormElementTypes.formattedDate:

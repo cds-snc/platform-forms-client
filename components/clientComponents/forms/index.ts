@@ -22,3 +22,4 @@ export { Combobox } from "./Combobox/Combobox";
 export { ManagedCombobox } from "./AddressComplete/ManagedCombobox";
 export { AddressComplete } from "./AddressComplete/AddressComplete";
 export { FormattedDate } from "./FormattedDate/FormattedDate";
+export { StarRating } from "./StarRating/StarRating";

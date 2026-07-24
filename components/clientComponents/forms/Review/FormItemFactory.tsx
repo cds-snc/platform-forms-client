@@ -9,6 +9,7 @@ import { FileInput } from "./FormElements/FileInput";
 import { DynamicRow } from "./FormElements/DyanmicRow/DynamicRow";
 import { RichText } from "./FormElements/RichText";
 import { NumberInput } from "./FormElements/NumberInput";
+import { StarRating } from "./FormElements/StarRating";
 
 export const FormItemFactory = ({
   formItem,
@@ -37,6 +38,9 @@ export const FormItemFactory = ({
 
     case FormElementTypes.formattedDate:
       return <FormattedDate formItem={formItem} />;
+
+    case FormElementTypes.starRating:
+      return <StarRating formItem={formItem} />;
 
     case FormElementTypes.addressComplete:
     case FormElementTypes.address: // TODO deprecated?

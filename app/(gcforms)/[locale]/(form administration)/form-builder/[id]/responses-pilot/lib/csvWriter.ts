@@ -250,6 +250,28 @@ export const getRow = ({
         .join("\n");
     }
     let answerText = mappedAnswer.answer;
+
+    // Star rating: format as fraction (e.g. "3/5")
+    if (element.type === FormElementTypes.starRating) {
+      const rawAnswer = String(answerText);
+      if (rawAnswer && rawAnswer !== "-") {
+        try {
+          const parsed = JSON.parse(rawAnswer) as { value: number; numberOfStars: number };
+          if (
+            parsed !== null &&
+            typeof parsed === "object" &&
+            "value" in parsed &&
+            "numberOfStars" in parsed
+          ) {
+            return `${parsed.value}/${parsed.numberOfStars}`;
+          }
+        } catch {
+          // Not a valid star rating JSON object
+        }
+      }
+      return rawAnswer || "-";
+    }
+
     if (
       typeof answerText === "string" &&
       specialChars.some((char) => answerText.startsWith(char))
