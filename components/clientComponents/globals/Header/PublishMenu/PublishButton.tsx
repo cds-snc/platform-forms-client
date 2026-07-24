@@ -145,7 +145,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const showPublishAction = allChecksPass;
   const isTemplateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
   const showPublishedView = isTemplateVersioningEnabled
-    ? Boolean(currentPublishedVersionId && !currentDraftVersionId)
+    ? Boolean(isPublished && !currentDraftVersionId)
     : isPublished;
   const triggerLabel = showPublishedView ? t("published") : t("publish");
   const isPublishReady = !showPublishedView && allChecksPass && !!userCanPublish;
