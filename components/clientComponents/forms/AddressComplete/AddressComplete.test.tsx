@@ -61,10 +61,13 @@ vi.mock("formik", async () => {
 	};
 });
 
-vi.mock("./utils", () => ({
+vi.mock("./actions", () => ({
 	getAddressCompleteChoices: getAddressCompleteChoicesMock,
 	getSelectedAddress: getSelectedAddressMock,
 	getAddressCompleteRetrieve: getAddressCompleteRetrieveMock,
+}));
+
+vi.mock("./utils", () => ({
 	matchesAddressPattern: matchesAddressPatternMock,
 }));
 
@@ -144,7 +147,6 @@ describe("AddressComplete", () => {
 		getAddressCompleteRetrieveMock.mockResolvedValue([]);
 		formikState.value = "";
 		formikState.error = undefined;
-		process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY = "test-api-key";
 	});
 
 	it("renders all address fields and country selector when not canadian-only", async () => {
@@ -211,7 +213,6 @@ describe("AddressComplete", () => {
 
 		await waitFor(() => {
 			expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith(
-				"test-api-key",
 				"123 Main",
 				"CAN"
 			);
@@ -253,7 +254,7 @@ describe("AddressComplete", () => {
 		await user.click(setFirst);
 
 		await waitFor(() => {
-			expect(getSelectedAddressMock).toHaveBeenCalledWith("test-api-key", "id-retrieve-1", "CAN", "en");
+			expect(getSelectedAddressMock).toHaveBeenCalledWith("id-retrieve-1", "CAN", "en");
 		});
 
 		await waitFor(() => {
@@ -302,7 +303,7 @@ describe("AddressComplete", () => {
 		await user.click(screen.getByTestId("address-streetAddress-set-first"));
 
 		await waitFor(() => {
-			expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("test-api-key", "nested-id-1", "CAN");
+			expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("nested-id-1", "CAN");
 		});
 
 		expect(changeInputValueMock).toHaveBeenCalledWith("", true);
@@ -334,7 +335,7 @@ describe("AddressComplete", () => {
 		await user.type(screen.getByTestId("address-streetAddress-input"), "10 Rue");
 
 		await waitFor(() => {
-			expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("test-api-key", "10 Rue", "FRA");
+			expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("10 Rue", "FRA");
 		});
 	});
 
