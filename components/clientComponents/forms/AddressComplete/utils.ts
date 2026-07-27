@@ -1,6 +1,10 @@
 import { FormElement, FormElementTypes } from "@lib/types";
 import { AddressElements } from "./types";
 
+export const getAddressAsString = (address: AddressElements): string => {
+  return `${address.streetAddress}, ${address.city}, ${address.province} ${address.postalCode} ${address.country}`;
+};
+
 export const getAddressAsReviewElements = (
   address: AddressElements,
   element: FormElement,
