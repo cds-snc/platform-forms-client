@@ -143,10 +143,11 @@
     "descriptionEnd": "."
   },
   "updatePublishedHelp": {
-    "title": "New feature: Update a form after publication",
+    "title": "New feature:",
+    "descriptionBold": "Update a form after publication",
     "step1": "Beside the name of the published form, select the three vertical dots.",
     "step2": "Choose \"Edit published form\" and follow the prompts.",
-    "step3": "Test the edited form before publishing. You or your developers may need to adjust the form so it works as expected.",
+    "step3": "Test the edited form before publishing.",
     "description": "The live form continues collecting responses until you publish the update."
   }
 }
