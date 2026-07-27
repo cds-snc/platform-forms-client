@@ -6,7 +6,7 @@ export const UpdatePublishedHelp = async () => {
   return (
     <div className="mt-4 rounded border border-violet-700 bg-violet-50 p-4 text-sm">
       <h2 className="mb-0 p-0 text-base font-bold">{t("updatePublishedHelp.title")}</h2>
-      <p className="mt-3"><strong></p>{t("updatePublishedHelp.descriptionBold")}</strong></p>
+      <p className="mt-3"><strong>{t("updatePublishedHelp.descriptionBold")}</strong></p>
       <ol className="mt-3 pl-4">
         <li>{t("updatePublishedHelp.step1")}</li>
         <li>{t("updatePublishedHelp.step2")}</li>
