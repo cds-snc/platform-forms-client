@@ -145,8 +145,8 @@
   "updatePublishedHelp": {
     "title": "Nouvelle fonctionnalité :",
     "descriptionBold": "Mettre à jour un formulaire après la publication",
-    "step1": "À côté du nom du formulaire publié, sélectionnez les trois points verticaux. ",
-    "step2": "Choisissez « Modifier un formulaire publié » et suivez les invites. ",
-    "step3": "Testez le formulaire modifié avant de le publier. ",
+    "step1": "À côté du nom du formulaire publié, sélectionnez les trois points verticaux.",
+    "step2": "Choisissez « Modifier un formulaire publié » et suivez les invites.",
+    "step3": "Testez le formulaire modifié avant de le publier.",
     "description": "La version actuelle du formulaire continue de recueillir des réponses jusqu’à ce que vous publiiez la mise à jour."
 }
