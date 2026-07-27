@@ -1,5 +1,6 @@
 import { FormElement, FormElementTypes } from "@lib/types";
 import { AddressElements } from "./types";
+import { Answer } from "@lib/responseDownloadFormats/types";
 
 export const getAddressAsString = (address: AddressElements): string => {
   return `${address.streetAddress}, ${address.city}, ${address.province} ${address.postalCode} ${address.country}`;
@@ -21,6 +22,26 @@ export const getAddressAsReviewElements = (
     });
   }
   return returnArray;
+};
+
+export const getAddressAsAnswerElements = (
+  question: FormElement,
+  address: AddressElements,
+  extraTranslations: { [key: string]: { en: string; fr: string } }
+): Answer[] => {
+  const answerArray = [];
+  for (const key in address) {
+    const answerObj: Answer = {
+      questionId: question.id,
+      questionEn: extraTranslations[key as keyof AddressElements].en,
+      questionFr: extraTranslations[key as keyof AddressElements].fr,
+      answer: address[key as keyof AddressElements],
+    };
+
+    answerArray.push(answerObj);
+  }
+
+  return answerArray;
 };
 
 // Helper function to test if the address has multiple results.
