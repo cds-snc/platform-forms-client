@@ -323,6 +323,7 @@ export const Form = withFormik<FormProps, Responses>({
         formValuesWithoutFileContent,
         formikBag.props.language,
         formikBag.props.formRecord.id,
+        formikBag.props.isPreview ?? false,
         formikBag.props.captchaToken?.current,
         fileChecksums
       );
