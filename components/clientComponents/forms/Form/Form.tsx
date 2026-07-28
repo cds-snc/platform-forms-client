@@ -195,6 +195,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             handleSubmit={handleSubmit}
             noValidate={true}
             isPublished={isPublished}
+            isPreview={props.isPreview}
             captchaTokenRef={props.captchaToken}
             resetCaptchaRef={props.resetCaptchaRef}
           >
