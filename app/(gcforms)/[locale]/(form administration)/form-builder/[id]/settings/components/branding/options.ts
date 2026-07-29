@@ -422,4 +422,13 @@ export const options = [
     logoTitleEn: "Natural Sciences and Engineering Research Council of Canada",
     logoTitleFr: "Conseil de recherches en sciences naturelles et en génie du Canada",
   },
+  {
+    name: "agriculture",
+    urlEn: "https://agriculture.canada.ca/en",
+    urlFr: "https://agriculture.canada.ca/fr",
+    logoEn: "/img/branding/agriculture-en.svg",
+    logoFr: "/img/branding/agriculture-fr.svg",
+    logoTitleEn: "Agriculture and Agri-Food Canada",
+    logoTitleFr: "Agriculture et Agroalimentaire Canada",
+  },
 ];

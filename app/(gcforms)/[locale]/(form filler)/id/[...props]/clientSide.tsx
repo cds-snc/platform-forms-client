@@ -75,6 +75,20 @@ export const FormWrapper = ({
   const isMultiPageForm = showReviewPage(formRecord.form);
   useUpdateHeadTitle(getPageTitle(), isMultiPageForm);
 
+  const initialValues = useMemo(() => {
+    if (!cachedSession) {
+      return undefined;
+    }
+
+    if (!cachedSession.values) {
+      return undefined;
+    }
+
+    // Merge restored answers onto the current form defaults so any newly added
+    // elements still get an explicit empty initial value and participate in validation.
+    return mergeFormValuesWithInitialValues(formRecord, language, cachedSession.values);
+  }, [cachedSession, formRecord, language]);
+
   // Show confirmation page if submissionId is present
   if (submissionId && submissionDate) {
     return (
@@ -93,11 +107,7 @@ export const FormWrapper = ({
       {header}
 
       <Form
-        initialValues={
-          cachedSession
-            ? mergeFormValuesWithInitialValues(formRecord, language, cachedSession?.values)
-            : undefined
-        }
+        initialValues={initialValues || undefined}
         formRecord={formRecord}
         language={language}
         onSuccess={(formID, submissionId) => {

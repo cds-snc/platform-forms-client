@@ -120,7 +120,7 @@ describe("submitForm", () => {
     });
     (valuesMatchErrorContainsElementType as Mock).mockReturnValue(true);
 
-    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, false);
 
     expect(result).toEqual({
       id: mockFormId,
@@ -138,7 +138,7 @@ describe("submitForm", () => {
   });
 
   it("should successfully submit form and return submission details", async () => {
-    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, false);
 
     expect(result).toEqual({
       id: mockFormId,
@@ -147,7 +147,7 @@ describe("submitForm", () => {
     });
 
     // Verify function calls
-    expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId);
+    expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId, "published");
     expect(validateVisibleElements).toHaveBeenCalledWith(mockValues, {
       formRecord: mockTemplate,
       t: expect.any(Function),
@@ -178,7 +178,7 @@ describe("submitForm", () => {
     (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
 
-    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, false);
 
     expect(result).toEqual({
       id: mockFormId,
@@ -218,7 +218,7 @@ describe("submitForm", () => {
     (updateNotificationMarker as Mock).mockResolvedValue("SECOND_EMAIL");
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
 
-    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, false);
 
     expect(result).toEqual({
       id: mockFormId,
@@ -252,7 +252,7 @@ describe("submitForm", () => {
     (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
     (updateNotificationMarker as Mock).mockResolvedValue(null);
 
-    await submitForm(mockValues, mockLanguage, mockFormId);
+    await submitForm(mockValues, mockLanguage, mockFormId, false);
 
     expect(updateNotificationMarker).toHaveBeenCalledWith(mockFormId, NotificationsInterval.DAY);
     expect(prepareFormSubmissionEmail).not.toHaveBeenCalled();
@@ -314,7 +314,7 @@ describe("submitForm", () => {
       t: (key: string) => key, // Simple passthrough translation
     });
 
-    const result = await submitForm(valuesWithExeFile, mockLanguage, mockFormId);
+    const result = await submitForm(valuesWithExeFile, mockLanguage, mockFormId, false);
 
     // The real validation should detect the .exe file as invalid and trigger the error
     expect(result).toEqual({
@@ -326,13 +326,23 @@ describe("submitForm", () => {
     });
 
     // Verify that the template was fetched
-    expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId);
+    expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId, "published");
 
     // Verify that real validation was called with our form data
     expect(validateVisibleElements).toHaveBeenCalledWith(valuesWithExeFile, {
       formRecord: templateWithFileInput,
       t: expect.any(Function),
     });
+  });
+
+  it("should fetch draft template when isPreview is true", async () => {
+    const previewTemplate = { ...mockTemplate } as PublicFormRecord;
+    (getPublicTemplateByID as Mock).mockResolvedValue(previewTemplate);
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, true);
+
+    expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId, "draft");
+    expect(result).toEqual({ id: mockFormId, submissionId: "test-submission-id", fileURLMap: {} });
   });
 
   it("should fall back to GC Notify (sendEmail without deferred mode) and return undefined notificationId when the notification flag is off", async () => {
@@ -347,7 +357,7 @@ describe("submitForm", () => {
     (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
 
-    const result = await submitForm(mockValues, mockLanguage, mockFormId);
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, false);
 
     expect(result).toEqual({
       id: mockFormId,
