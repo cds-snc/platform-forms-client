@@ -3,6 +3,7 @@
 import { FormElement } from "@lib/types";
 import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
 import { Answer } from "@lib/responseDownloadFormats/types";
+import { type Language } from "@lib/types/form-builder-types";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -28,7 +29,11 @@ export const getAddressCompleteChoices = async (query: string, countryCode: stri
 };
 
 // Functions returns the selected address.
-export const getSelectedAddress = async (value: string, countryCode: string, language: string) => {
+export const getSelectedAddress = async (
+  value: string,
+  countryCode: string,
+  language: Language
+) => {
   const selectedResult = value;
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
@@ -69,7 +74,7 @@ export const getAddressCompleteRetrieve = async (query: string, countryCode: str
 // Helper function combines API component results into single address object.
 export const getAddressComponents = async (
   addressCompleteResult: AddressCompleteResult[],
-  language: string
+  language: Language
 ) => {
   const englishResult = addressCompleteResult.find((result) => result.Language === "ENG");
   const frenchResult = addressCompleteResult.find((result) => result.Language === "FRE");
