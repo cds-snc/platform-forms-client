@@ -314,7 +314,7 @@ const authFlowRedirect = (
   const origin = req.nextUrl.origin;
 
   // Ignore if user is in the auth flow of MfA
-  if (session && !onAuthFlow) {
+  if (session?.user && !onAuthFlow) {
     if (
       !session.user.hasSecurityQuestions &&
       !path.startsWith("/auth/setup-security-questions") &&
