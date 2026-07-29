@@ -6,7 +6,7 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
 import { cn } from "@lib/utils";
 
-interface ManagedComboboxProps extends InputFieldProps {
+export interface ManagedComboboxProps extends InputFieldProps {
   choices?: string[];
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSetValue?: (value: string) => void;

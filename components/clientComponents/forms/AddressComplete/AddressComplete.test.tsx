@@ -7,6 +7,15 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AddressComplete } from "./AddressComplete";
 import type { AddressCompleteProps } from "./types";
+import type { ManagedComboboxProps } from "./ManagedCombobox";
+
+interface ManagedComboboxRef {
+	changeInputValue: (value: string, keepOpen: boolean) => void;
+}
+
+type ManagedComboboxMockProps = ManagedComboboxProps & {
+	"data-testid"?: string;
+};
 
 const {
 	getFlagMock,
@@ -72,7 +81,7 @@ vi.mock("./utils", () => ({
 }));
 
 vi.mock("@clientComponents/forms", () => {
-	const ManagedCombobox = React.forwardRef((props: any, ref) => {
+	const ManagedCombobox = React.forwardRef<ManagedComboboxRef, ManagedComboboxMockProps>((props, ref) => {
 		const [inputValue, setInputValue] = useState(props.baseValue || "");
 
 		useImperativeHandle(ref, () => ({
