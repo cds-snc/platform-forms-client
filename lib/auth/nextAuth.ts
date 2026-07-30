@@ -20,6 +20,8 @@ import {
 } from "@lib/auth/adapterUserSanitizers";
 import { applyIdentityClaimsToToken } from "@lib/auth/oidcIdentityClaims";
 
+import { filterZitadelUrl } from "@lib/utils/filterZitadelUrl";
+
 /**
  * Checks the active status of a user using a cache strategy
  * @param userID id of the user to check
@@ -47,12 +49,6 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
   activeStatusUpdate(userID, user?.active ?? false);
 
   return user?.active ?? false;
-};
-
-// Temporary function to use the "unified sso auth" url without breaking API key generation or other code using the current "forms" Zitadel provider.
-const filterZitadelUrl = (url: string = ""): string => {
-  // Handles case of https://auth.forms-staging.cdssandbox.xyz transforms to https://auth.cdssandbox.xyz
-  return url.replace("auth.forms-staging.", "auth.");
 };
 
 const prismaAdapter = PrismaAdapter(prisma);
