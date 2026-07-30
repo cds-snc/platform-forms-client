@@ -9,14 +9,13 @@ import {
   getAddressCompleteChoices,
   getSelectedAddress,
   getAddressCompleteRetrieve,
-  matchesAddressPattern,
-} from "./utils";
+} from "./actions";
+import { matchesAddressPattern } from "./utils";
 import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
 import { cn } from "@lib/utils";
-import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { Language } from "@lib/types/form-builder-types";
 import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
@@ -36,11 +35,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const [choices, setChoices] = useState<string[]>([]);
   const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
 
-  // Cache and Allow values
-  const [isReady, setIsReady] = useState(false);
-  const [allow, setAllow] = useState(false);
-  const [apiKey, setApiKey] = useState("");
-
   const toFullAddress = (address: AddressCompleteChoice): string => {
     return address.Text + ", " + address.Description;
   };
@@ -52,23 +46,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const featureFlags = {
     addressComplete: getFlag("addressComplete"),
   };
-  useEffect(() => {
-    const checkAllowed = async () => {
-      if (featureFlags.addressComplete) {
-        setAllow(true);
-        setApiKey(process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY || "");
-      } else {
-        setApiKey("");
-      }
-
-      setIsReady(true);
-    };
-
-    if (apiKey === "") {
-      // Don't recheck.
-      checkAllowed();
-    }
-  }, [apiKey, featureFlags.addressComplete]);
 
   //Form fillers address elements
   const [addressObject, setAddressObject] = useState<AddressElements>(
@@ -125,7 +102,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     setAddressData("streetAddress", e.target.value); // Update the street address in the address object
     // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
 
-    if (!allow) {
+    if (!featureFlags.addressComplete) {
       return;
     } // Abandon if addressComplete is disabled.
 
@@ -136,17 +113,13 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       return;
     } // Abandon, don't search on nested addresses.
 
-    const responseData = await getAddressCompleteChoices(
-      apiKey,
-      query,
-      addressObject?.country || "CAN"
-    );
+    const responseData = await getAddressCompleteChoices(query, addressObject?.country || "CAN");
 
     handleAddressComplete(responseData);
   };
 
   const onAddressSet = async (value: string) => {
-    if (!allow) {
+    if (!featureFlags.addressComplete) {
       return;
     } // Abandon if addressComplete is disabled.
 
@@ -170,7 +143,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       // Handle the Next value.
       if (nextValue == AddressCompleNext.Retrieve) {
         const responseData = await getSelectedAddress(
-          apiKey,
           selectedResult.Id,
           addressObject?.country || "CAN",
           i18n.language as Language
@@ -185,7 +157,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       } else if (nextValue == AddressCompleNext.Find) {
         // Do another lookup for the address.
         const responseData = await getAddressCompleteRetrieve(
-          apiKey,
           selectedResult.Id,
           addressObject?.country || "CAN"
         );
@@ -269,7 +240,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </div>
         )}
         {!props.canadianOnly && (
-          <div className="mb-6 mt-4">
+          <div className="mt-4 mb-6">
             <Label
               htmlFor={`${name}-country`}
               className={props.required ? "gcds-label required" : "gcds-label"}
@@ -304,7 +275,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Description id={`${name}-streetDesc`}>
             {t("addElementDialog.addressComplete.street.description")}
           </Description>
-          {isReady && (
+          {
             <ManagedCombobox
               ref={comboboxRef}
               choices={choices}
@@ -315,18 +286,14 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onSetValue={onAddressSet}
               baseValue={addressObject.streetAddress}
               required={props.required}
-              placeholderText={allow ? t("addElementDialog.addressComplete.startTyping") : ""}
+              placeholderText={
+                featureFlags.addressComplete
+                  ? t("addElementDialog.addressComplete.startTyping")
+                  : ""
+              }
               ariaDescribedBy={`${name}-streetDesc`}
             />
-          )}
-          {!isReady && (
-            <>
-              <div role="status" className="mt-2">
-                <SpinnerIcon className="size-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
-                <span className="sr-only">{t("loading")}</span>
-              </div>
-            </>
-          )}
+          }
           <input type="hidden" {...field} />
         </div>
 
