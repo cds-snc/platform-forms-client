@@ -8,7 +8,7 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
-import { formatStarRatingAnswer } from "@lib/responseDownloadFormats/utils/formatStarRatingAnswer";
+import { checkAndformatStarRatingAnswer } from "@root/lib/responseDownloadFormats/utils/checkAndformatStarRatingAnswer";
 
 /*
  ⚡ NOTE: CSS is compiled 
@@ -29,7 +29,7 @@ const QuestionColumns = ({
 
   const renderRow = (index: number | string, lang: Language, item: Answer) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
-    const starRatingValue = formatStarRatingAnswer(item, formRecord);
+    const starRatingValue = checkAndformatStarRatingAnswer(item);
     return (
       <div key={`row-${index}`} className="border-gray flex w-full flex-row border-b py-4">
         <dt data-testid={`col-question-${index}`} className="w-96 py-4 font-bold">

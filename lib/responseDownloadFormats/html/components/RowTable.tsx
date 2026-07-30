@@ -7,7 +7,7 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
-import { formatStarRatingAnswer } from "@lib/responseDownloadFormats/utils/formatStarRatingAnswer";
+import { checkAndformatStarRatingAnswer } from "@root/lib/responseDownloadFormats/utils/checkAndformatStarRatingAnswer";
 
 const QuestionRows = ({
   submission,
@@ -21,7 +21,7 @@ const QuestionRows = ({
   const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: Language, item: Answer, subItem = false) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
-    const starRatingValue = formatStarRatingAnswer(item, formRecord);
+    const starRatingValue = checkAndformatStarRatingAnswer(item);
     return (
       <div
         key={`row-${index}`}

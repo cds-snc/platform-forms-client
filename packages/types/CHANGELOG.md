@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.38] - 2026-06-23
 
-- Add Star Rating element type
+- Add Star Rating element and object type
 
 ## [1.0.37] - 2026-07-22
 

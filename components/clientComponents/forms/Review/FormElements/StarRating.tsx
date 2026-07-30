@@ -1,7 +1,6 @@
-import { safeJSONParse } from "@lib/utils";
 import { FormItem } from "../helpers";
 import { BaseElement } from "./BaseElement";
-import { StarRatingObject } from "@lib/responseDownloadFormats/utils/formatStarRatingAnswer";
+import { parseStarRatingAnswer } from "../../StarRating/utils";
 
 export const StarRating = ({
   formItem,
@@ -12,14 +11,9 @@ export const StarRating = ({
     return <></>;
   }
 
-  const parsed = safeJSONParse<StarRatingObject>(formItem.values as string);
+  const parsed = parseStarRatingAnswer(formItem.values as string);
 
-  if (
-    !parsed ||
-    typeof parsed !== "object" ||
-    !("value" in parsed) ||
-    !("numberOfStars" in parsed)
-  ) {
+  if (!parsed) {
     return <BaseElement formItem={formItem} />;
   }
 

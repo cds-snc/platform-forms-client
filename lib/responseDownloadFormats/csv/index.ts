@@ -3,7 +3,7 @@ import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
 import { sortByLayout } from "@lib/utils/form-builder";
-import { formatStarRatingAnswer } from "../utils/formatStarRatingAnswer";
+import { checkAndformatStarRatingAnswer } from "../utils/checkAndformatStarRatingAnswer";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -66,7 +66,7 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
           .join("\n");
       }
       let answerText = answer.answer;
-      const starRatingText = formatStarRatingAnswer(answer, formResponseSubmissions.formRecord);
+      const starRatingText = checkAndformatStarRatingAnswer(answer);
       if (starRatingText !== undefined) {
         return starRatingText;
       }

@@ -9,6 +9,7 @@ import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
+import { formatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -254,22 +255,7 @@ export const getRow = ({
     // Star rating: format as fraction (e.g. "3/5")
     if (element.type === FormElementTypes.starRating) {
       const rawAnswer = String(answerText);
-      if (rawAnswer && rawAnswer !== "-") {
-        try {
-          const parsed = JSON.parse(rawAnswer) as { value: number; numberOfStars: number };
-          if (
-            parsed !== null &&
-            typeof parsed === "object" &&
-            "value" in parsed &&
-            "numberOfStars" in parsed
-          ) {
-            return `${parsed.value}/${parsed.numberOfStars}`;
-          }
-        } catch {
-          // Not a valid star rating JSON object
-        }
-      }
-      return rawAnswer || "-";
+      return formatStarRatingAnswer(rawAnswer);
     }
 
     if (

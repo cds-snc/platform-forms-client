@@ -2,9 +2,8 @@
 import React, { useCallback, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
-import { InputFieldProps } from "@lib/types";
+import { InputFieldProps, StarRatingObject } from "@lib/types";
 import { useTranslation } from "@i18n/client";
-import { StarRatingObject } from "@lib/responseDownloadFormats/utils/formatStarRatingAnswer";
 import { StarItem } from "./StarItem";
 
 interface StarRatingProps extends InputFieldProps {
