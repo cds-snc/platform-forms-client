@@ -39,7 +39,7 @@ export function useEditLockPolling({
   const abortControllerRef = useRef<AbortController | null>(null);
   const fetchInProgressRef = useRef(false);
   const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastActivityAtRef = useRef<number>(Date.now());
+  const lastActivityAtRef = useRef<number>(0);
 
   // Keep refs in sync with state
   useEffect(() => {
@@ -78,6 +78,15 @@ export function useEditLockPolling({
       });
 
       if (!response.ok) {
+        // Stop polling if unauthenticated - the enabled flag should prevent this but guard anyway
+        if (response.status === 401) {
+          if (timeoutIdRef.current) {
+            clearTimeout(timeoutIdRef.current);
+            timeoutIdRef.current = null;
+          }
+          return;
+        }
+
         // Handle permission errors by filtering out "invalid" templates we don't have access to.
         // This seems to happen mainly with some Archived forms. This seems strange because the initial
         // templates were pulled on page load without error. Regardless this helps handle invalid
@@ -202,6 +211,8 @@ export function useEditLockPolling({
     }
   }, []);
 
+  const scheduleNextPollRef = useRef<() => void>(() => undefined);
+
   const scheduleNextPoll = useCallback(() => {
     clearScheduledPoll();
 
@@ -211,9 +222,13 @@ export function useEditLockPolling({
 
     timeoutIdRef.current = setTimeout(() => {
       void fetchEditLockUpdates();
-      scheduleNextPoll();
+      scheduleNextPollRef.current();
     }, getDynamicPollIntervalMs());
   }, [clearScheduledPoll, fetchEditLockUpdates, getDynamicPollIntervalMs]);
+
+  useEffect(() => {
+    scheduleNextPollRef.current = scheduleNextPoll;
+  }, [scheduleNextPoll]);
 
   const markActivity = useCallback(() => {
     lastActivityAtRef.current = Date.now();
@@ -223,6 +238,7 @@ export function useEditLockPolling({
   // Poll for edit lock updates with progressive backoff based on inactivity.
   // Also pause/resume polling based on tab visibility.
   useEffect(() => {
+    lastActivityAtRef.current = Date.now();
     const startPolling = () => {
       if (document.hidden || !enabled) {
         return;

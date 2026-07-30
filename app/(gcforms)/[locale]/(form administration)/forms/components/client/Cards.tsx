@@ -7,6 +7,7 @@ import { useTranslation } from "@i18n/client";
 import { CARDS_PER_BATCH } from "../constants";
 import { useEditLockPolling } from "../hooks/useEditLockPolling";
 import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
+import { useSession } from "next-auth/react";
 import { NewFormButton } from "./NewFormButton";
 
 export const Cards = ({
@@ -21,6 +22,7 @@ export const Cards = ({
   pollIntervalMs: number;
 }) => {
   const { t } = useTranslation("my-forms");
+  const { status } = useSession();
   const [templates, setTemplates] = useState<FormsTemplateWithLockInfo[]>(initialTemplates);
   const [displayedCount, setDisplayedCount] = useState<number>(CARDS_PER_BATCH);
 
@@ -66,10 +68,11 @@ export const Cards = ({
   // Also include templates currently shown as locked (hasEditLock=true) so a lock release
   // is always detected even when hasDraft is stale in local state.
   const shouldPoll =
-    !tabStatus ||
-    tabStatus === TAB_STATUS.RECENTLY_EDITED ||
-    tabStatus === TAB_STATUS.DRAFT ||
-    tabStatus === TAB_STATUS.PUBLISHED;
+    status === "authenticated" &&
+    (!tabStatus ||
+      tabStatus === TAB_STATUS.RECENTLY_EDITED ||
+      tabStatus === TAB_STATUS.DRAFT ||
+      tabStatus === TAB_STATUS.PUBLISHED);
   const editableTemplates = useMemo(
     () =>
       templates.filter((t) => t.ttl === null && (!t.isPublished || t.hasDraft || t.hasEditLock)),
