@@ -41,6 +41,7 @@
     "playwright:ui:local": "playwright install chromium --with-deps && PLAYWRIGHT_ISOLATE_DB=true playwright test --ui --trace on",
     "playwright:headless:local": "playwright install chromium --with-deps && PLAYWRIGHT_ISOLATE_DB=true playwright test --trace on",
     "playwright:headless:ci": "CI=true playwright test",
+    "local:publish:core": "yarn workspace @gcforms/core build && yarn dlx yalc publish packages/core && (yarn dlx yalc update @gcforms/core || yarn dlx yalc add @gcforms/core)",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install && yarn db:generate",
     "upgrade": "yarn next upgrade"
   },

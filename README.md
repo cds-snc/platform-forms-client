@@ -53,6 +53,29 @@ yarn dev
 
 Browse web application on `http://localhost:3000`.
 
+### Edit `@gcforms/core` styles locally
+
+If you are changing styles in `packages/core/src/styles`, use the local `yalc` workflow to test the built package the same way it will be consumed after publish.
+
+Build `@gcforms/core`, publish it to your local `yalc` store, and add or update it in this app:
+
+```sh
+yarn local:publish:core
+```
+
+Recommended review loop:
+
+1. Edit the SCSS source in `packages/core/src/styles`.
+2. Start the app with `yarn dev` if it is not already running.
+3. Run `yarn local:publish:core` to rebuild and refresh the local published package.
+4. Refresh the app and review the change in the browser.
+
+Notes:
+
+- This flow tests the built `@gcforms/core` package, not the workspace source directly.
+- Generated files under `packages/core/styles/` are ignored by git and do not need to be committed.
+- If the app is already running, use `yarn local:publish:core`; you do not need to restart `yarn dev` for every change unless Next fails to pick up the updated package.
+
 ### How to access databases
 
 #### PostgreSQL GUI

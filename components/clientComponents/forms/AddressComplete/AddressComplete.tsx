@@ -228,7 +228,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         id={id}
         tabIndex={0}
       >
-        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset"}>
+        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset size-h3"}>
           {label}
         </legend>
 
