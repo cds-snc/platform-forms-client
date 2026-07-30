@@ -29,7 +29,7 @@ export const GcPlatformMigrationPanel = ({ locale }: GcPlatformMigrationPanelPro
 
   const isLoginPage = pathname === `/${locale}/auth/login`;
   const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
-  const beforeYouStartUrl = `${process.env.NEXT_PUBLIC_ZITADEL_URL ?? ""}/before-you-start`;
+  const beforeYouStartUrl = `${process.env.NEXT_PUBLIC_ZITADEL_URL ?? ""}/ui/v2/before-you-start`;
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- mount gate prevents a server/client render mismatch
