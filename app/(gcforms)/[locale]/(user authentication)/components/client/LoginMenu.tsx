@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/utils";
+import { createClearGcPlatformLoginHintCookie } from "../../auth/login/components/client/gcPlatformLoginHintCookie";
 
 export const LoginMenu = () => {
   const { i18n, t } = useTranslation("common");
   const handleClick = () => {
     clearTemplateStore();
+    document.cookie = createClearGcPlatformLoginHintCookie();
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const timeOptions = { timeZone: tz };
