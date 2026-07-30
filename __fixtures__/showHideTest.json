@@ -15,7 +15,7 @@
     "referrerUrlEn": "",
     "referrerUrlFr": ""
   },
-  "layout": [1, 2],
+  "layout": [1, 2, 3, 4],
   "elements": [
     {
       "id": 1,
@@ -70,6 +70,60 @@
           }
         ]
       }
+    },
+    {
+      "id": 3,
+      "type": "radio",
+      "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "properties": {
+        "tags": [],
+        "choices": [
+          {
+            "en": "Yes",
+            "fr": "Oui"
+          },
+          {
+            "en": "No",
+            "fr": "Non"
+          }
+        ],
+        "titleEn": "Have you applied before?",
+        "titleFr": "Have you applied before?",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 4,
+      "type": "textField",
+      "uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "properties": {
+        "tags": [],
+        "choices": [],
+        "titleEn": "Previous application details",
+        "titleFr": "Previous application details",
+        "questionId": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "3.0"
+          }
+        ]
+      }
     }
   ],
   "groups": {
@@ -81,9 +135,16 @@
     },
     "start": {
       "name": "Start",
-      "titleEn": "Start page",
-      "titleFr": "Page de départ",
+      "titleEn": "Page 1",
+      "titleFr": "Page 1",
       "elements": ["1", "2"],
+      "nextAction": "page2"
+    },
+    "page2": {
+      "name": "Page2",
+      "titleEn": "Page 2",
+      "titleFr": "Page 2",
+      "elements": ["3", "4"],
       "nextAction": "review"
     },
     "review": {
@@ -94,6 +155,6 @@
       "nextAction": "end"
     }
   },
-  "groupsLayout": [],
-  "lastGeneratedElementId": 2
+  "groupsLayout": ["page2"],
+  "lastGeneratedElementId": 4
 }

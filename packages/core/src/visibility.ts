@@ -1,12 +1,18 @@
 import { FormElement, PublicFormRecord, GroupsType, FormValues } from "@gcforms/types";
-
 import {
-  getElementById,
+  isChoiceInputType,
   matchRule,
   getValuesWithMatchedIds,
   findGroupByElementId,
   inGroup,
 } from "./helpers";
+
+export type ElementDependencies = Map<string, Set<string>>;
+
+// Helper to build an element lookup map to replace slower array searches
+export const buildElementMap = (elements: FormElement[]): Map<string, FormElement> => {
+  return new Map(elements.map((el) => [el.id.toString(), el]));
+};
 
 /**
  * Recursively traverses the form groups to build a list of visible groups based on values.
@@ -37,7 +43,6 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
     return visibleGroups;
   }
 
-  // Push the current group to visibleGroups
   visibleGroups.push(currentGroup);
 
   // If there is no nextAction, treat as "end"
@@ -56,7 +61,9 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
       nextAction,
       visibleGroups
     );
-  } else if (Array.isArray(nextAction)) {
+  }
+
+  if (Array.isArray(nextAction)) {
     const currentGroupElementIds = new Set((groups[currentGroup].elements || []).map(String));
     const relevantNextActions = nextAction.filter((action) => {
       if (action.choiceId.includes("catch-all")) {
@@ -73,7 +80,6 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
     const catchAllRule = relevantNextActions.find((action) =>
       action.choiceId.includes("catch-all")
     );
-
     let matchFound = false;
 
     for (const action of relevantNextActions) {
@@ -117,7 +123,8 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
 export const checkPageVisibility = (
   formRecord: PublicFormRecord,
   element: FormElement,
-  values: FormValues
+  values: FormValues,
+  precomputedVisibleGroups?: Set<string>
 ): boolean => {
   // If groups object is empty or not defined, default to visible
   if (!formRecord.form.groups || Object.keys(formRecord.form.groups).length === 0) {
@@ -126,6 +133,12 @@ export const checkPageVisibility = (
 
   // Get the current element's group ID
   const groupId = findGroupByElementId(formRecord, element.id);
+  if (!groupId) return false;
+
+  // Use pre-computed set if it exists to avoid walking the "tree" repeatedly
+  if (precomputedVisibleGroups) {
+    return precomputedVisibleGroups.has(groupId);
+  }
 
   // Get an array of values with matched ids instead of raw values
   const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, values);
@@ -161,23 +174,41 @@ export const checkVisibilityRecursive = (
   formRecord: PublicFormRecord,
   element: FormElement,
   values: FormValues,
-  checked: Record<string, boolean> = {}
+  checked: Record<string, boolean> = {},
+  elementMap?: Map<string, FormElement>,
+  visibleGroupsCache?: Set<string>
 ): boolean => {
-  // If the current page is not visible, the element is not visible
-  if (!checkPageVisibility(formRecord, element, values)) {
-    return false;
-  }
-
-  const rules = element.properties.conditionalRules;
-  if (!rules || rules.length === 0) return true;
-
-  const formElements = formRecord.form.elements;
-
   const elId = element.id.toString();
 
   // Check if already computed
   if (checked[elId] !== undefined) {
     return checked[elId];
+  }
+
+  // Resolve or initialize helper functions dynamically
+  const activeElementMap = elementMap ?? buildElementMap(formRecord.form.elements);
+
+  const hasGroups = !!formRecord.form.groups && Object.keys(formRecord.form.groups).length > 0;
+  const activeVisibleGroups =
+    visibleGroupsCache ??
+    (hasGroups
+      ? new Set(
+          getVisibleGroupsBasedOnValuesRecursive(
+            formRecord,
+            getValuesWithMatchedIds(formRecord.form.elements, values),
+            "start"
+          )
+        )
+      : undefined);
+  if (!checkPageVisibility(formRecord, element, values, activeVisibleGroups)) {
+    checked[elId] = false;
+    return false;
+  }
+
+  const rules = element.properties.conditionalRules;
+  if (!rules || rules.length === 0) {
+    checked[elId] = true;
+    return true;
   }
 
   // Mark as being checked (prevents circular dependency infinite loops)
@@ -187,12 +218,18 @@ export const checkVisibilityRecursive = (
   // At least one rule must be satisfied for the element to be visible
   const isVisible = rules.some((rule) => {
     const [elementId] = rule.choiceId.split(".");
-    const ruleParent = getElementById(formElements, elementId);
-    if (!ruleParent) return matchRule(rule, formElements, values);
+    const ruleParent = activeElementMap.get(elementId);
+    if (!ruleParent) return matchRule(rule, formRecord.form.elements, values);
 
     return (
-      checkVisibilityRecursive(formRecord, ruleParent, values, checked) &&
-      matchRule(rule, formElements, values)
+      checkVisibilityRecursive(
+        formRecord,
+        ruleParent,
+        values,
+        checked,
+        activeElementMap,
+        activeVisibleGroups
+      ) && matchRule(rule, formRecord.form.elements, values)
     );
   });
 
@@ -204,19 +241,262 @@ export const checkVisibilityRecursive = (
 
 export const isElementVisible = (
   currentGroup: string | undefined,
-  groups: GroupsType,
+  groups: GroupsType | undefined,
   values: FormValues,
   formRecord: PublicFormRecord,
-  element: FormElement
-) => {
-  if (
-    currentGroup &&
-    groups &&
-    Object.keys(groups).length >= 1 &&
-    groups &&
-    !inGroup(currentGroup, element.id, groups)
-  )
-    return false;
+  element: FormElement,
+  elementMap?: Map<string, FormElement>,
+  checked: Record<string, boolean> = {}
+): boolean => {
+  if (currentGroup && groups && Object.keys(groups).length > 0) {
+    if (!inGroup(currentGroup, element.id, groups)) return false;
+  }
 
-  return checkVisibilityRecursive(formRecord, element, values);
+  return checkVisibilityRecursive(formRecord, element, values, checked, elementMap);
+};
+
+/**
+ * Builds an element dependencies map showing which elements depend on which other elements
+ * based on conditional rules.
+ *
+ * @param formElements - The form elements to analyze
+ * @returns A map where keys are element IDs and values are sets of element IDs that depend on them
+ */
+export const buildElementDependencies = (formElements: FormElement[]): ElementDependencies => {
+  const elementDependencies: ElementDependencies = new Map();
+
+  formElements.forEach((element) => {
+    const rules = element.properties.conditionalRules;
+    if (!rules || rules.length === 0) return;
+
+    rules.forEach((rule) => {
+      const [parentElementId] = rule.choiceId.split(".");
+      let dependents = elementDependencies.get(parentElementId);
+      if (!dependents) {
+        dependents = new Set();
+        elementDependencies.set(parentElementId, dependents);
+      }
+      dependents.add(element.id.toString());
+    });
+  });
+
+  return elementDependencies;
+};
+
+/**
+ * Collects all elements that depend on the given element IDs.
+ * This handles chains of dependencies (A depends on B, B depends on C, etc.)
+ *
+ * Note: could also use a stack for slight perf gains but IMO recursion is more readable.
+ *
+ * @param elementIds - The starting element IDs to check dependencies for
+ * @param elementDependencies - The element dependencies map
+ * @param visited - Set of already visited element IDs to prevent infinite loops
+ * @returns A set of all element IDs that directly or transitively depend on the input elements
+ */
+export const collectDependentElements = (
+  initialElementIds: string[],
+  elementDependencies: ElementDependencies
+): Set<string> => {
+  const dependents = new Set<string>();
+  // Separate visited set so the initial element IDs don't accidentally block
+  // their own dependents from being traversed (also handles circular deps)
+  const visited = new Set<string>();
+
+  const traverse = (currentIds: string[]) => {
+    currentIds.forEach((id) => {
+      if (visited.has(id)) return;
+      visited.add(id);
+
+      const directDependents = elementDependencies.get(id);
+      if (!directDependents) return;
+
+      directDependents.forEach((depId) => dependents.add(depId));
+      traverse(Array.from(directDependents));
+    });
+  };
+
+  traverse(initialElementIds);
+
+  return dependents;
+};
+
+/**
+ * Computes the visibility of all form elements at once.
+ *
+ * @param formRecord - The form record
+ * @param values - The current form values
+ * @returns A map of element IDs to their visibility status
+ */
+export const computeAllVisibility = (
+  formRecord: PublicFormRecord,
+  values: FormValues
+): Map<string, boolean> => {
+  const visibilityMap = new Map<string, boolean>();
+  const checked: Record<string, boolean> = {};
+
+  const elementMap = buildElementMap(formRecord.form.elements);
+
+  const hasGroups = !!formRecord.form.groups && Object.keys(formRecord.form.groups).length > 0;
+  const visibleGroupsCache = hasGroups
+    ? new Set(
+        getVisibleGroupsBasedOnValuesRecursive(
+          formRecord,
+          getValuesWithMatchedIds(formRecord.form.elements, values),
+          "start"
+        )
+      )
+    : undefined;
+  formRecord.form.elements.forEach((element) => {
+    const isVisible = checkVisibilityRecursive(
+      formRecord,
+      element,
+      values,
+      checked,
+      elementMap,
+      visibleGroupsCache
+    );
+    visibilityMap.set(element.id.toString(), isVisible);
+  });
+
+  return visibilityMap;
+};
+
+/**
+ * Recomputes visibility only for elements that depend on the changed elements.
+ *
+ * @param formRecord - The form record
+ * @param values - The current form values
+ * @param changedElementIds - IDs of elements whose values changed
+ * @param elementDependencies - The pre-computed element dependencies map
+ * @param currentVisibilityMap - The current visibility map to update
+ * @param cachedElementMap - Optional pre-built element lookup map (avoids rebuilding on every call)
+ * @returns Updated visibility map
+ */
+export const recomputeAffectedVisibility = (
+  formRecord: PublicFormRecord,
+  values: FormValues,
+  changedElementIds: string[],
+  elementDependencies: ElementDependencies,
+  currentVisibilityMap: Map<string, boolean>,
+  cachedElementMap?: Map<string, FormElement>
+): Map<string, boolean> => {
+  // If the form uses groups, page visibility can change independently of conditional rules.
+  // To keep the visibility map correct, recompute everything.
+  if (formRecord.form.groups && Object.keys(formRecord.form.groups).length > 0) {
+    return computeAllVisibility(formRecord, values);
+  }
+
+  // Collect all elements that depend on the changed elements
+  const affectedElementIds = collectDependentElements(changedElementIds, elementDependencies);
+
+  // If no elements are affected, return the current map
+  if (affectedElementIds.size === 0) {
+    return currentVisibilityMap;
+  }
+
+  // Create a new map to avoid mutating the current one
+  const updatedMap = new Map(currentVisibilityMap);
+  // Reuse caller-provided map to avoid rebuilding on every call (elements are static)
+  const elementMap = cachedElementMap ?? buildElementMap(formRecord.form.elements);
+
+  // No groups here (we return early above when groups are enabled), so avoid building visibleGroupsCache.
+  const visibleGroupsCache = undefined;
+  // Build a cache
+  const checked: Record<string, boolean> = {};
+  currentVisibilityMap.forEach((val, key) => {
+    if (!affectedElementIds.has(key)) {
+      checked[key] = val;
+    }
+  });
+
+  // Recompute visibility only for affected elements
+  affectedElementIds.forEach((elementId) => {
+    const element = elementMap.get(elementId);
+    if (element) {
+      const isVisible = checkVisibilityRecursive(
+        formRecord,
+        element,
+        values,
+        checked,
+        elementMap,
+        visibleGroupsCache
+      );
+      updatedMap.set(elementId, isVisible);
+    }
+  });
+
+  return updatedMap;
+};
+
+/**
+ * Determines which element IDs have changed between two sets of form values.
+ * Only returns IDs for choice-based elements (radio, checkbox, dropdown) that have conditional dependents.
+ *
+ * @param oldValues - The previous form values
+ * @param newValues - The new form values
+ * @param formElements - The form elements
+ * @param elementDependencies - The element dependencies map to check which elements have dependents
+ * @returns Array of element IDs that changed and have dependents
+ */
+export const getChangedChoiceElementIds = (
+  oldValues: FormValues,
+  newValues: FormValues,
+  formElements: FormElement[],
+  elementDependencies: ElementDependencies,
+  cachedElementMap?: Map<string, FormElement>
+): string[] => {
+  const changedIds: string[] = [];
+  const allKeys = new Set([...Object.keys(oldValues), ...Object.keys(newValues)]);
+  const elementMap = cachedElementMap ?? buildElementMap(formElements);
+  allKeys.forEach((key) => {
+    // Shallow comparison - FormValues is Record<string, string | string[]> so
+    // JSON.stringify is unnecessarily expensive and allocates on every update.
+    const oldVal = oldValues[key];
+    const newVal = newValues[key];
+    if (oldVal === newVal) return;
+    if (
+      Array.isArray(oldVal) &&
+      Array.isArray(newVal) &&
+      oldVal.length === newVal.length &&
+      oldVal.every((v, i) => v === newVal[i])
+    )
+      return;
+
+    // Check if this element is a choice-based input
+    const element = elementMap.get(key);
+    if (!element || !isChoiceInputType(element.type)) return;
+
+    // Check if any elements depend on this one
+    if (elementDependencies.has(key)) {
+      changedIds.push(key);
+    }
+  });
+
+  return changedIds;
+};
+
+export interface VisibilityState {
+  visibilityMap: Map<string, boolean>;
+  elementDependencies: ElementDependencies;
+}
+
+/**
+ * Initializes the visibility state for a form
+ *
+ * @param formRecord - The form record
+ * @param values - Initial form values
+ * @returns Initial visibility state
+ */
+export const initializeVisibilityState = (
+  formRecord: PublicFormRecord,
+  values: FormValues
+): VisibilityState => {
+  const elementDependencies = buildElementDependencies(formRecord.form.elements);
+  const visibilityMap = computeAllVisibility(formRecord, values);
+
+  return {
+    visibilityMap,
+    elementDependencies,
+  };
 };

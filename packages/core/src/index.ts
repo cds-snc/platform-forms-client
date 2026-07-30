@@ -27,6 +27,15 @@ export {
   checkPageVisibility,
   checkVisibilityRecursive,
   isElementVisible,
+  type ElementDependencies,
+  type VisibilityState,
+  buildElementDependencies,
+  buildElementMap,
+  collectDependentElements,
+  computeAllVisibility,
+  recomputeAffectedVisibility,
+  getChangedChoiceElementIds,
+  initializeVisibilityState,
 } from "./visibility";
 
 export {
