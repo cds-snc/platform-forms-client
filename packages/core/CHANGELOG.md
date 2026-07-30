@@ -1,8 +1,8 @@
 # Changelog
 
-## [2.2.19] - 2026-07-30
+## [2.2.20] - 2026-07-30
 
-- Update fieldset styles
+- Fixes legend reset nesting to apply only to fieldset
 
 ## [2.2.18] - 2026-07-22
 
