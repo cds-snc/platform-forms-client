@@ -13,6 +13,8 @@ import { FeatureFlags } from "@lib/cache/types";
 import { PlatformSignInLogo } from "./PlatformSignInLogo";
 import { GcPlatformSignInButton } from "./GcPlatformSignInButton";
 
+import { filterZitadelUrl } from "@lib/utils/filterZitadelUrl";
+
 type GcPlatformMigrationPanelProps = {
   locale: string;
 };
@@ -29,7 +31,9 @@ export const GcPlatformMigrationPanel = ({ locale }: GcPlatformMigrationPanelPro
 
   const isLoginPage = pathname === `/${locale}/auth/login`;
   const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
-  const beforeYouStartUrl = `${process.env.NEXT_PUBLIC_ZITADEL_URL ?? ""}/ui/v2/before-you-start`;
+
+  const baseUrl = filterZitadelUrl(process.env.NEXT_PUBLIC_ZITADEL_URL ?? "");
+  const beforeYouStartUrl = `${baseUrl}/ui/v2/before-you-start`;
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- mount gate prevents a server/client render mismatch
