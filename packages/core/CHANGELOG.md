@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.19] - 2026-07-30
+
+- Update fieldset styles
+
 ## [2.2.18] - 2026-07-22
 
 - Republish package following failed NPM publication
