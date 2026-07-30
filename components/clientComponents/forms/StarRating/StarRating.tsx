@@ -86,10 +86,10 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
   const errorId = meta.error ? `error-${id}` : undefined;
 
   return (
-    <div className="gc-star-rating">
+    <div>
       {meta.error && <ErrorMessage id={errorId}>{meta.error}</ErrorMessage>}
       <div
-        className="gc-star-rating__stars flex gap-1"
+        className="flex gap-1"
         role="radiogroup"
         aria-labelledby={`label-${id}`}
         aria-required={required || undefined}

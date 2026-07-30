@@ -59,7 +59,7 @@
   }
 }
 
-.gc-star-particle {
+.star-sparkle-particle {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -71,16 +71,16 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .gc-star-particle {
+  .star-sparkle-particle {
     animation: star-particle 500ms ease-out forwards;
   }
 
-  .gc-star-particle--1 { --tx: -20px; --ty: -22px; }
-  .gc-star-particle--2 { --tx: 0px;   --ty: -28px; animation-delay: 30ms; }
-  .gc-star-particle--3 { --tx: 22px;  --ty: -20px; animation-delay: 15ms; }
-  .gc-star-particle--4 { --tx: 26px;  --ty: 10px;  animation-delay: 25ms; }
-  .gc-star-particle--5 { --tx: 0px;   --ty: 28px;  animation-delay: 10ms; }
-  .gc-star-particle--6 { --tx: -26px; --ty: 10px;  animation-delay: 20ms; }
+  .star-sparkle-particle--1 { --tx: -20px; --ty: -22px; }
+  .star-sparkle-particle--2 { --tx: 0px;   --ty: -28px; animation-delay: 30ms; }
+  .star-sparkle-particle--3 { --tx: 22px;  --ty: -20px; animation-delay: 15ms; }
+  .star-sparkle-particle--4 { --tx: 26px;  --ty: 10px;  animation-delay: 25ms; }
+  .star-sparkle-particle--5 { --tx: 0px;   --ty: 28px;  animation-delay: 10ms; }
+  .star-sparkle-particle--6 { --tx: -26px; --ty: 10px;  animation-delay: 20ms; }
 }
 
 ::view-transition-old(.accounts-nav-forward) {

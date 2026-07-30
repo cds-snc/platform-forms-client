@@ -61,7 +61,7 @@ export const StarItem = memo(function StarItem({
       />
       <label
         htmlFor={inputId}
-        className={`gc-star-rating__label relative cursor-pointer text-4xl leading-none select-none rounded${
+        className={`relative cursor-pointer text-4xl leading-none select-none rounded${
           focused ? "outline-blue-focus outline-[3px] outline-offset-2 outline-solid" : ""
         }`}
         onMouseEnter={onMouseEnter}
@@ -71,21 +71,14 @@ export const StarItem = memo(function StarItem({
           [1, 2, 3, 4, 5, 6].map((n) => (
             <span
               key={n}
-              className={`gc-star-particle gc-star-particle--${n}`}
+              className={`star-sparkle-particle star-sparkle-particle--${n}`}
               aria-hidden="true"
               {...(n === 2 ? { onAnimationEnd: onSparkleEnd } : {})}
             >
               ★
             </span>
           ))}
-        <span
-          className={
-            active
-              ? "gc-star-rating__star gc-star-rating__star--active text-yellow-400"
-              : "gc-star-rating__star text-gray-300"
-          }
-          aria-hidden="true"
-        >
+        <span className={active ? "text-yellow-400" : "text-gray-300"} aria-hidden="true">
           ★
         </span>
       </label>
