@@ -63,6 +63,13 @@ Build `@gcforms/core`, publish it to your local `yalc` store, and add or update 
 yarn local:publish:core
 ```
 
+If you see the following message after running that command, it is expected and no cause for concern:
+
+```
+Did not find package @gcforms/core in lockfile, please use 'add' command to add it explicitly.
+Removing installation of @gcforms/core in /Users/dave.samojlenko/Code/gcdigital/forms-client
+```
+
 Recommended review loop:
 
 1. Edit the SCSS source in `packages/core/src/styles`.
