@@ -1,8 +1,12 @@
 # Changelog
 
-## [2.2.19] - 2026-07-03
+## [2.2.21] - 2026-07-30
 
 - Add new Star Rating input validation type
+
+## [2.2.20] - 2026-07-30
+
+- Fixes legend reset nesting to apply only to fieldset
 
 ## [2.2.18] - 2026-07-22
 

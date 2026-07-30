@@ -62,6 +62,8 @@ import { useTranslation } from "@root/i18n/client";
 import { getImportedTemplate } from "./importBuffer";
 import { useRehydrate } from "./hooks/useRehydrate";
 
+import { logMessage } from "@lib/logger";
+
 const createTemplateStore = (
   checkFeatureFlag: (flag: string) => boolean,
   initProps?: Partial<InitialTemplateStoreProps>
@@ -191,8 +193,16 @@ const createTemplateStore = (
             transform: transform(set, get),
             getSchema: () => {
               if (get().hasHydrated && !get().hasTransformed) {
-                get().transform();
-                set({ hasTransformed: true });
+                // Defer transform to avoid updating state during render
+                Promise.resolve().then(() => {
+                  try {
+                    get().transform?.();
+                    set({ hasTransformed: true });
+                  } catch (e) {
+                    // swallow errors to avoid breaking render
+                    logMessage?.warn?.("deferred transform failed");
+                  }
+                });
               }
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
