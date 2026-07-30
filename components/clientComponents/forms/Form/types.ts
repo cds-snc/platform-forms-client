@@ -19,8 +19,8 @@ export interface FormProps {
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
   allowGrouping?: boolean | undefined;
-  groupHistory?: string[];
-  matchedIds?: string[];
+  getGroupHistory: () => string[];
+  matchedIds: React.RefObject<string[]>;
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;
   setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;
