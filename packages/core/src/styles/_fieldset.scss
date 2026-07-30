@@ -7,15 +7,15 @@
     border: 0;
     padding: 0;
     min-inline-size: auto;
-  }
 
-  legend {
-    padding: 0;
-  }
+    legend {
+      padding: 0;
+    }
 
-  slot {
-    display: block;
-    margin: 0;
+    slot {
+      display: block;
+      margin: 0;
+    }
   }
 }
 
