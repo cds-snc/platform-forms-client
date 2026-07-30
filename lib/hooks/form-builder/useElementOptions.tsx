@@ -61,7 +61,7 @@ const Radio = dynamic(
     ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
-const StarRatingDescription = dynamic(
+const StarRating = dynamic(
   () =>
     import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/StarRating").then(
       (mod) => ({ default: mod.StarRating })
@@ -302,7 +302,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       id: "starRating",
       value: t("starRating"),
       icon: StarIcon,
-      description: StarRatingDescription,
+      description: StarRating,
       className: "",
       group: groups.other,
     },
