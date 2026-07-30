@@ -218,6 +218,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     }
   };
 
+  const searchHintText = featureFlags.addressComplete
+    ? `${t("addElementDialog.addressComplete.startTyping")}.`
+    : "";
+
   return (
     <>
       <fieldset
@@ -275,6 +279,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Description id={`${name}-streetDesc`}>
             {t("addElementDialog.addressComplete.street.description")}
           </Description>
+          <Description>{searchHintText}</Description>
           {
             <ManagedCombobox
               ref={comboboxRef}
@@ -286,11 +291,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onSetValue={onAddressSet}
               baseValue={addressObject.streetAddress}
               required={props.required}
-              placeholderText={
-                featureFlags.addressComplete
-                  ? t("addElementDialog.addressComplete.startTyping")
-                  : ""
-              }
               ariaDescribedBy={`${name}-streetDesc`}
             />
           }
