@@ -1,8 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, FormGroup } from "@root/components/clientComponents/forms";
-import { StarRating as StarRatingComponent } from "@clientComponents/forms";
+import { Description, FormGroup, StarRating as StarRatingComponent } from "@clientComponents/forms";
 
 export const StarRating = () => {
   const { t } = useTranslation("form-builder");
