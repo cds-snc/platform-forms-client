@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
@@ -9,7 +9,6 @@ import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
 import { ShareButton } from "./ShareMenu/ShareButton";
 import LanguageToggle from "./LanguageToggle";
-import { Button } from "@clientComponents/globals";
 import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
@@ -46,7 +45,6 @@ export const Header = ({
 
   const { getFlag } = useFeatureFlags();
   const isEnabled = getFlag(FeatureFlags.topBanner);
-  const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
   const templateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
 
   useEffect(() => {
@@ -100,25 +98,9 @@ export const Header = ({
               <ul className="flex list-none items-center justify-end px-0 text-base">
                 {(alwaysShowLoginLink || status !== "authenticated") && (
                   <li className="tablet:mr-4 mr-2 py-2 text-base">
-                    {isZitadelLoginEnabled ? (
-                      <form
-                        action={async () => {
-                          await signIn(
-                            "gcForms",
-                            { redirectTo: `/${language}/auth/policy` },
-                            { max_age: 0 }
-                          );
-                        }}
-                      >
-                        <Button type="submit" theme="link">
-                          {t("loginMenu.login")}
-                        </Button>
-                      </form>
-                    ) : (
-                      <Link href={`/${language}/auth/login`} prefetch={false}>
-                        {t("loginMenu.login")}
-                      </Link>
-                    )}
+                    <Link href={`/${language}/auth/login`} prefetch={false}>
+                      {t("loginMenu.login")}
+                    </Link>
                   </li>
                 )}
                 {isFormBuilder && (
