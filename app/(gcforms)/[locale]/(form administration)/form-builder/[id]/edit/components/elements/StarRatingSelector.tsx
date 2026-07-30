@@ -19,13 +19,13 @@ export const StarRatingSelector = ({ item }: { item: FormElementWithIndex }) => 
   const options = Array.from({ length: MAX_STARS - MIN_STARS + 1 }, (_, i) => MIN_STARS + i);
 
   return (
-    <div className="mt-4">
-      <label className="mb-2 block text-sm font-semibold" htmlFor={`star-count-${item.id}`}>
+    <div className="gcds-select-wrapper">
+      <label className="my-2 block text-sm font-semibold" htmlFor={`star-count-${item.id}`}>
         {t("addElementDialog.starRating.numberOfStars")}
       </label>
       <select
         id={`star-count-${item.id}`}
-        className="gc-dropdown rounded border border-gray-400 px-3 py-2 text-sm"
+        className="gc-dropdown"
         value={numberOfStars}
         onChange={(e) => {
           updateField(
