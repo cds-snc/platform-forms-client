@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.0](https://github.com/cds-snc/platform-forms-client/compare/v4.20.0...v4.21.0) (2026-07-30)
+
+
+### Features
+
+* AddressComplete Server Side ([#7591](https://github.com/cds-snc/platform-forms-client/issues/7591)) ([2456cab](https://github.com/cds-snc/platform-forms-client/commit/2456cabaa2f893689654ab5952aad3231877ab3c))
+
+
+### Bug Fixes
+
+* Adds session check for edit-lock polling ([#7606](https://github.com/cds-snc/platform-forms-client/issues/7606)) ([d6bf1c7](https://github.com/cds-snc/platform-forms-client/commit/d6bf1c7c822fc7b98bef36b8fe40d95ab741d494))
+* versioning content ([#7599](https://github.com/cds-snc/platform-forms-client/issues/7599)) ([9d52115](https://github.com/cds-snc/platform-forms-client/commit/9d52115d51aea297c5e3513494205dd2b896f355))
+
+
+### Miscellaneous Chores
+
+* remove formPurpose database migration script ([#7600](https://github.com/cds-snc/platform-forms-client/issues/7600)) ([0b57d85](https://github.com/cds-snc/platform-forms-client/commit/0b57d85256b92fa601c8b9d5e2947e8f1212d066))
+* remove reference to old StatusCreatedAt index ([#7602](https://github.com/cds-snc/platform-forms-client/issues/7602)) ([fe79bba](https://github.com/cds-snc/platform-forms-client/commit/fe79bba3a0c4e8ac5fa1aa5c57eeeac4ad8880ac))
+* update archive card ([#7605](https://github.com/cds-snc/platform-forms-client/issues/7605)) ([b466c40](https://github.com/cds-snc/platform-forms-client/commit/b466c404b7f0661681cc5cdb7999f96bb359bf37))
+
 ## [4.20.0](https://github.com/cds-snc/platform-forms-client/compare/v4.19.0...v4.20.0) (2026-07-29)
 
 
