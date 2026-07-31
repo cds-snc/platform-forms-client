@@ -8,8 +8,9 @@ import { ClientLogBatch, ClientLogEntry, LogLevel } from "@lib/clientLogging/typ
 
 const MAX_ENTRIES_PER_BATCH = 25;
 const MAX_MESSAGE_LENGTH = 1000;
-// Avoid exessive number of key=value pairs that could slow down JSON.stringify (and increase the paylod)
+// Avoid excessive number of key=value pairs that could slow down JSON.stringify (and increase the payload)
 const MAX_CONTEXT_KEYS = 20;
+const MAX_CONTEXT_KEY_LENGTH = 64;
 // In the future we may want to only alllow warn and error if e.g. debug gets too "noisy"
 const VALID_LEVELS = new Set<LogLevel>(["debug", "info", "warn", "error"]);
 
@@ -23,7 +24,9 @@ const isValidContext = (context: unknown): boolean => {
   }
   const obj = context as Record<string, unknown>;
   return (
-    Object.keys(obj).length <= MAX_CONTEXT_KEYS && Object.values(obj).every(isValidContextValue)
+    Object.keys(obj).length <= MAX_CONTEXT_KEYS &&
+    Object.keys(obj).every((k) => k.length <= MAX_CONTEXT_KEY_LENGTH) &&
+    Object.values(obj).every(isValidContextValue)
   );
 };
 
@@ -44,11 +47,14 @@ const isValidEntry = (entry: unknown): entry is ClientLogEntry => {
   );
 };
 
+// Removes newlines and control chars to prevent log injection in line-based viewers
+const sanitizeMessage = (message: string): string =>
+  message.replace(/[\x00-\x1F\x7F]/g, " ").trim();
+
 const formatEntry = (entry: ClientLogEntry): string => {
-  // Adjust for de-duped messages with a count of occurrances
   const count = entry.count && entry.count > 1 ? ` (x${entry.count})` : "";
   const context = entry.context ? ` ${JSON.stringify(entry.context)}` : "";
-  return `[CLIENT] ${entry.message}${count}${context}`;
+  return `[CLIENT] ${sanitizeMessage(entry.message)}${count}${context}`;
 };
 
 // Avoids a nested try-catch in the handler; returns null on parse failure
@@ -75,6 +81,11 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
     const withinLimit = await checkClientLogRateLimit(ip);
     if (!withinLimit) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
+    // Reject non-JSON before attempting to parse
+    if (!req.headers.get("content-type")?.includes("application/json")) {
+      return NextResponse.json({ error: "Unsupported content type" }, { status: 415 });
     }
 
     const body = await parseRequestBody(req);
