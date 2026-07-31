@@ -159,9 +159,9 @@ describe("AddressComplete", () => {
     vi.clearAllMocks();
     getFlagMock.mockReturnValue(false);
     matchesAddressPatternMock.mockReturnValue(false);
-    getAddressCompleteChoicesMock.mockResolvedValue([]);
-    getSelectedAddressMock.mockResolvedValue(undefined);
-    getAddressCompleteRetrieveMock.mockResolvedValue([]);
+    getAddressCompleteChoicesMock.mockResolvedValue({ items: [], error: null });
+    getSelectedAddressMock.mockResolvedValue({ address: null, error: null });
+    getAddressCompleteRetrieveMock.mockResolvedValue({ items: [], error: null });
     formikState.value = "";
     formikState.error = undefined;
   });
@@ -199,7 +199,7 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue([
+    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
       {
         Id: "1",
         Text: "123 Main St",
@@ -218,7 +218,7 @@ describe("AddressComplete", () => {
         Description: "Ottawa",
         Next: "Retrieve",
       },
-    ]);
+    ], error: null });
 
     renderComponent();
 
@@ -241,21 +241,21 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue([
+    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
       {
         Id: "id-retrieve-1",
         Text: "100 Queen St",
         Description: "Toronto",
         Next: "Retrieve",
       },
-    ]);
-    getSelectedAddressMock.mockResolvedValue({
+    ], error: null });
+    getSelectedAddressMock.mockResolvedValue({ address: {
       streetAddress: "100 Queen St",
       city: "Toronto",
       province: "Ontario",
       postalCode: "M5H 2N2",
       country: "CAN",
-    });
+    }, error: null });
 
     renderComponent();
 
@@ -291,22 +291,22 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue([
+    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
       {
         Id: "nested-id-1",
         Text: "King St W",
         Description: "Toronto - 15489 Addresses",
         Next: "Find",
       },
-    ]);
-    getAddressCompleteRetrieveMock.mockResolvedValue([
+    ], error: null });
+    getAddressCompleteRetrieveMock.mockResolvedValue({ items: [
       {
         Id: "nested-id-2",
         Text: "123 King St W",
         Description: "Toronto",
         Next: "Retrieve",
       },
-    ]);
+    ], error: null });
 
     renderComponent();
 

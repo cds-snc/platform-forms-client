@@ -103,7 +103,11 @@
         "postalCode": "Postal code",
         "postalCodeOrZip": "Postal or zip code",
         "country": "Country"
-      }
+      },
+      "apiKeyMissing": "Address lookup is unavailable because the API key is not configured.",
+      "apiKeyInvalid": "Address lookup failed due to an invalid API key. Please check configuration.",
+      "serviceUnavailable": "Address lookup is temporarily unavailable. Please try again later.",
+      "networkError": "A network error occurred while looking up addresses. Check your connection and try again."
     },
     "allRequired": "All required",
     "answer": "Answer...",
