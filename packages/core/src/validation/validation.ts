@@ -13,6 +13,7 @@ import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
 import { isSafeRegex } from "./regex";
 import { isNumberInput } from "../utils/isNumberInput";
+import { isValidAddress } from "./isValidAddress";
 
 // Minimal translation function type to avoid i18next dependency
 export type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
@@ -182,31 +183,8 @@ export const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.addressComplete: {
-      if (validator.required) {
-        // The AddressComplete component stores its value as a JSON string of an object
-        // with keys like streetAddress, city, province, postalCode and country.
-        // When the element is required, ensure none of the main address fields
-        // are left blank (street, city, province, postal).
-        if (!value) return t("input-validation.required");
-
-        try {
-          const parsed = JSON.parse(String(value));
-          if (parsed && typeof parsed === "object") {
-            const street = String(parsed.streetAddress || "").trim();
-            const city = String(parsed.city || "").trim();
-            const province = String(parsed.province || "").trim();
-            const postal = String(parsed.postalCode || "").trim();
-
-            // If any of the address subfields are empty, treat as missing.
-            if (!street || !city || !province || !postal) {
-              return t("input-validation.required");
-            }
-          }
-        } catch (e) {
-          // If parse fails, fall back to the simple empty check above.
-        }
-      }
-
+      const error = isValidAddress(value, validator, t);
+      if (error) return error;
       break;
     }
     case FormElementTypes.dynamicRow: {
