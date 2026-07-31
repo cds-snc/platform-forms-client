@@ -13,6 +13,7 @@ export interface ManagedComboboxProps extends InputFieldProps {
   baseValue?: string;
   useFilter?: boolean;
   placeholderText?: string;
+  overrideError?: string | null;
 }
 
 export const ManagedCombobox = React.forwardRef(
@@ -27,6 +28,7 @@ export const ManagedCombobox = React.forwardRef(
       baseValue = "",
       useFilter = true,
       placeholderText = "",
+      overrideError,
     } = props;
     const classes = cn("gc-combobox gcds-input-wrapper relative", className);
 
@@ -90,7 +92,9 @@ export const ManagedCombobox = React.forwardRef(
 
     return (
       <div className={classes} data-testid="combobox">
-        {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+        {(overrideError || meta.error) && (
+          <ErrorMessage id={"errorMessage" + id}>{overrideError ?? meta.error}</ErrorMessage>
+        )}
 
         <input
           {...getInputProps({

@@ -1,6 +1,71 @@
 import { FormElement, FormElementTypes } from "@lib/types";
+import type { AddressValidationError } from "@gcforms/core";
+import enReview from "@i18n/translations/en/review.json";
+import frReview from "@i18n/translations/fr/review.json";
 import { AddressElements } from "./types";
 import { Answer } from "@lib/responseDownloadFormats/types";
+
+type AddressFieldKey = keyof AddressValidationError["fields"];
+
+const getNestedTranslation = (source: unknown, path: string): string | undefined => {
+  const value = path.split(".").reduce<unknown>((currentValue, segment) => {
+    if (!currentValue || typeof currentValue !== "object") return undefined;
+    return (currentValue as Record<string, unknown>)[segment];
+  }, source);
+
+  return typeof value === "string" ? value : undefined;
+};
+
+export const addressErrorSummaryFields = {
+  streetAddress: {
+    anchorSuffix: "streetAddress",
+    labelPath: "addressComponents.streetName",
+  },
+  city: {
+    anchorSuffix: "city",
+    labelPath: "addressComponents.city",
+  },
+  province: {
+    anchorSuffix: "province",
+    labelPath: "addressComponents.provinceOrState",
+  },
+  postalCode: {
+    anchorSuffix: "postal",
+    labelPath: "addressComponents.postalCode",
+  },
+} satisfies Record<AddressFieldKey, { anchorSuffix: string; labelPath: string }>;
+
+const addressErrorSummaryLabels = Object.fromEntries(
+  (
+    Object.entries(addressErrorSummaryFields) as Array<
+      [AddressFieldKey, (typeof addressErrorSummaryFields)[AddressFieldKey]]
+    >
+  ).map(([fieldKey, config]) => [
+    fieldKey,
+    {
+      en: getNestedTranslation(enReview, config.labelPath) ?? fieldKey,
+      fr: getNestedTranslation(frReview, config.labelPath) ?? fieldKey,
+    },
+  ])
+) as Record<AddressFieldKey, { en: string; fr: string }>;
+
+export const isAddressValidationError = (value: unknown): value is AddressValidationError => {
+  return Boolean(
+    value &&
+    typeof value === "object" &&
+    "fields" in (value as Record<string, unknown>) &&
+    (value as AddressValidationError).fields
+  );
+};
+
+export const getAddressFieldLabel = (
+  fieldKey: keyof typeof addressErrorSummaryFields,
+  language: string
+): string => {
+  return language === "fr"
+    ? addressErrorSummaryLabels[fieldKey].fr
+    : addressErrorSummaryLabels[fieldKey].en;
+};
 
 export const getAddressAsString = (address: AddressElements): string => {
   return `${address.streetAddress}, ${address.city}, ${address.province} ${address.postalCode} ${address.country}`;

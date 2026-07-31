@@ -11,7 +11,7 @@ import {
   getAddressCompleteRetrieve,
 } from "./actions";
 import { matchesAddressPattern } from "./utils";
-import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
+import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
@@ -19,6 +19,7 @@ import { cn } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { isValidAddressSubFieldInvalid, getAddressSubFieldError } from "@gcforms/core";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string, keepOpen: boolean) => void;
@@ -40,6 +41,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   };
 
   const comboboxRef = useRef<ManagedComboboxRef>(null);
+
+  const countryError = getAddressSubFieldError(meta.error, "country");
+  const streetError = getAddressSubFieldError(meta.error, "streetAddress");
+  const cityError = getAddressSubFieldError(meta.error, "city");
+  const provinceError = getAddressSubFieldError(meta.error, "province");
+  const postalError = getAddressSubFieldError(meta.error, "postalCode");
 
   // Check if addressComplete is allowed.
   const { getFlag } = useFeatureFlags();
@@ -258,7 +265,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               name={`${name}-country`}
               choices={countryChoices}
               onSetValue={(val) => setCountry(val)}
-              className={cn(meta.error && "gc-error-input")}
+              className={cn(
+                isValidAddressSubFieldInvalid(meta.error, "country") && "gc-error-input"
+              )}
+              overrideError={countryError}
               required={props.required}
               baseValue="Canada"
               useFilter={true}
@@ -292,6 +302,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               baseValue={addressObject.streetAddress}
               required={props.required}
               ariaDescribedBy={`${name}-streetDesc`}
+              className={cn(
+                isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+              )}
+              overrideError={streetError}
             />
           }
           <input type="hidden" {...field} />
@@ -301,13 +315,19 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Label htmlFor={`${name}-city`} className="gcds-label">
             {t("addElementDialog.addressComplete.city")}
           </Label>
+          {cityError && (
+            <ErrorMessage id={"errorMessage" + `${name}-city`}>{cityError}</ErrorMessage>
+          )}
           <input
             type="text"
             id={`${name}-city`}
             name={`${name}-city`}
             value={addressObject.city}
             onChange={(e) => setAddressData("city", e.target.value)}
-            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            className={cn(
+              "gc-input-text",
+              isValidAddressSubFieldInvalid(meta.error, "city") && "gc-error-input"
+            )}
             required={props.required}
             data-testid="addresscomplete-input-city"
           />
@@ -319,13 +339,19 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             {!props.canadianOnly &&
               t("addElementDialog.addressComplete.components.provinceOrState")}
           </Label>
+          {provinceError && (
+            <ErrorMessage id={"errorMessage" + `${name}-province`}>{provinceError}</ErrorMessage>
+          )}
           <input
             type="text"
             id={`${name}-province`}
             name={`${name}-province`}
             value={addressObject.province}
             onChange={(e) => setAddressData("province", e.target.value)}
-            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            className={cn(
+              "gc-input-text",
+              isValidAddressSubFieldInvalid(meta.error, "province") && "gc-error-input"
+            )}
             required={required}
             data-testid="addresscomplete-input-province"
           />
@@ -337,13 +363,19 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             {!props.canadianOnly &&
               t("addElementDialog.addressComplete.components.postalCodeOrZip")}
           </Label>
+          {postalError && (
+            <ErrorMessage id={"errorMessage" + `${name}-postal`}>{postalError}</ErrorMessage>
+          )}
           <input
             id={`${name}-postal`}
             type="text"
             name={`${name}-postal`}
             value={addressObject.postalCode}
             onChange={(e) => setAddressData("postalCode", e.target.value)}
-            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            className={cn(
+              "gc-input-text",
+              isValidAddressSubFieldInvalid(meta.error, "postalCode") && "gc-error-input"
+            )}
             required={required}
             data-testid="addresscomplete-input-postalCode"
           />

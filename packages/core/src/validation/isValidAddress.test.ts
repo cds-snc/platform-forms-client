@@ -11,7 +11,7 @@ describe("isValidAddress", () => {
     expect(result).toBe("input-validation.required");
   });
 
-  it("returns required error when any address subfield is empty", () => {
+  it("returns per-field errors when any address subfield is empty", () => {
     const validator: ValidationProperties = { required: true };
     const value = JSON.stringify({
       streetAddress: "",
@@ -20,7 +20,14 @@ describe("isValidAddress", () => {
       postalCode: "K1A0B1",
     });
     const result = isValidAddress(value, validator, t);
-    expect(result).toBe("input-validation.required");
+    expect(result).toEqual({
+      fields: {
+        streetAddress: "input-validation.required",
+        city: null,
+        province: null,
+        postalCode: null,
+      },
+    });
   });
 
   it("returns null for a valid address object when required is true", () => {

@@ -145,4 +145,44 @@ describe("getErrorList", () => {
 
     expect(getErrorList(props)).toBeNull();
   });
+
+  test("renders one error per invalid address-complete subfield", () => {
+    const props = {
+      touched: true,
+      errors: {
+        1: {
+          fields: {
+            streetAddress: null,
+            city: "input-validation.required",
+            province: null,
+            postalCode: "input-validation.required",
+          },
+        },
+      },
+      language: "en",
+      formRecord: {
+        form: {
+          layout: [1],
+          elements: [
+            {
+              id: 1,
+              type: "addressComplete",
+              properties: {
+                titleEn: "Mailing address",
+                titleFr: "Adresse postale",
+                validation: { required: true },
+              },
+            },
+          ],
+        },
+      },
+    } as never;
+
+    render(getErrorList(props));
+
+    const links = screen.getAllByRole("link");
+    expect(links.map((link) => link.getAttribute("href"))).toEqual(["#1-city", "#1-postal"]);
+    expect(links[0]).toHaveTextContent("input-validation.required: City or town");
+    expect(links[1]).toHaveTextContent("input-validation.required: Postal code");
+  });
 });
