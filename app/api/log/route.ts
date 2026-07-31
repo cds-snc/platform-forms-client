@@ -4,13 +4,17 @@ import { getClientIp } from "@lib/ip";
 import { checkClientLogRateLimit } from "@lib/clientLogging/rateLimiter";
 import { ClientLogBatch, ClientLogEntry, LogLevel } from "@lib/clientLogging/types";
 
-// TODO probably move below into a config/constants file
-
 const MAX_ENTRIES_PER_BATCH = 25;
 const MAX_MESSAGE_LENGTH = 1000;
 // Avoid excessive number of key=value pairs that could slow down JSON.stringify (and increase the payload)
 const MAX_CONTEXT_KEYS = 20;
-const MAX_CONTEXT_KEY_LENGTH = 64;
+// Block oversized inputs. 100 seems resonable but could also go with 64 (2^6 is used in other similar examples)
+const MAX_CONTEXT_KEY_LENGTH = 100;
+const MAX_CONTEXT_VALUE_LENGTH = 200;
+// Stricly UUID length - always 36 chars
+const MAX_SESSION_ID_LENGTH = 36;
+// Allows for logs that sat in the buffer a while, and for client clocks that are slightly off
+const MAX_TIMESTAMP_SKEW_MS = 10 * 60 * 1000;
 // In the future we may want to only alllow warn and error if e.g. debug gets too "noisy"
 const VALID_LEVELS = new Set<LogLevel>(["debug", "info", "warn", "error"]);
 
@@ -26,8 +30,18 @@ const isValidContext = (context: unknown): boolean => {
   return (
     Object.keys(obj).length <= MAX_CONTEXT_KEYS &&
     Object.keys(obj).every((k) => k.length <= MAX_CONTEXT_KEY_LENGTH) &&
-    Object.values(obj).every(isValidContextValue)
+    Object.values(obj).every((v) => {
+      if (!isValidContextValue(v)) return false;
+      if (typeof v === "string" && v.length > MAX_CONTEXT_VALUE_LENGTH) return false;
+      return true;
+    })
   );
+};
+
+// Ensure the timestamp is accurate within 10 minutes e.g. avoid allowing a user setting a timestamp 2 hours in the future
+const isValidTimestamp = (timestamp: number): boolean => {
+  const now = Date.now();
+  return timestamp > now - MAX_TIMESTAMP_SKEW_MS && timestamp < now + MAX_TIMESTAMP_SKEW_MS;
 };
 
 const isValidEntry = (entry: unknown): entry is ClientLogEntry => {
@@ -43,6 +57,9 @@ const isValidEntry = (entry: unknown): entry is ClientLogEntry => {
     e.message.length > 0 &&
     e.message.length <= MAX_MESSAGE_LENGTH &&
     typeof e.timestamp === "number" &&
+    isValidTimestamp(e.timestamp) &&
+    (e.sessionId === undefined ||
+      (typeof e.sessionId === "string" && e.sessionId.length <= MAX_SESSION_ID_LENGTH)) &&
     (e.context === undefined || isValidContext(e.context))
   );
 };
@@ -52,9 +69,11 @@ const sanitizeMessage = (message: string): string =>
   message.replace(/[\x00-\x1F\x7F]/g, " ").trim();
 
 const formatEntry = (entry: ClientLogEntry): string => {
+  // Adding a sessionId helps to identify the issue and what led up to the issue
+  const sid = entry.sessionId ? `[${entry.sessionId}] ` : "";
   const count = entry.count && entry.count > 1 ? ` (x${entry.count})` : "";
   const context = entry.context ? ` ${JSON.stringify(entry.context)}` : "";
-  return `[CLIENT] ${sanitizeMessage(entry.message)}${count}${context}`;
+  return `[CLIENT] ${sid}${sanitizeMessage(entry.message)}${count}${context}`;
 };
 
 // Avoids a nested try-catch in the handler; returns null on parse failure
@@ -80,11 +99,14 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
 
     const withinLimit = await checkClientLogRateLimit(ip);
     if (!withinLimit) {
+      // TODO: are we OK with IPs in the error logs? -- not sure if we do this anywhere else, if not, this should be removed.
+      logMessage.warn(`Client log rate limit exceeded: ${ip}`);
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
 
     // Reject non-JSON before attempting to parse
     if (!req.headers.get("content-type")?.includes("application/json")) {
+      // TODO or would we rather keep the error more vague?
       return NextResponse.json({ error: "Unsupported content type" }, { status: 415 });
     }
 
