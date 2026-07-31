@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { logMessage } from "@lib/logger";
 import { getClientIp } from "@lib/ip";
 import { checkClientLogRateLimit } from "@lib/clientLogging/rateLimiter";
+import { validateLogToken } from "@lib/clientLogging/logToken";
 import { ClientLogBatch, ClientLogEntry, LogLevel } from "@lib/clientLogging/types";
 
 const MAX_ENTRIES_PER_BATCH = 25;
@@ -92,7 +93,7 @@ const formatEntry = (entry: ClientLogEntry): string => {
   const count = entry.count && entry.count > 1 ? `(x${entry.count})` : "";
   const context = entry.context ? JSON.stringify(entry.context) : "";
   const message = sanitizeMessage(entry.message);
-  return `[CLIENT] ${entry.sessionId}} ${message} ${count} ${context}`;
+  return `[CLIENT] [${entry.sessionId}] ${message} ${count} ${context}`.trimEnd();
 };
 
 // Avoids a nested try-catch in the handler; returns null on parse failure
@@ -118,9 +119,14 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
 
     const withinLimit = await checkClientLogRateLimit(ip);
     if (!withinLimit) {
-      // TODO: are we OK with IPs in the error logs? -- currently done in audit logs but not sure the context of an error log is OK
       logMessage.warn(`Client log rate limit exceeded: ${ip}`);
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
+    // sendBeacon requests cannot send headers so token validation is skipped for them
+    const logToken = req.headers.get("x-log-token");
+    if (logToken !== null && !validateLogToken(logToken)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const contentLength = Number(req.headers.get("content-length") ?? 0);

@@ -107,10 +107,16 @@ class ClientLogger {
   flush(): void {
     if (this.buffer.length === 0) return;
     const entries = this.drainEntries();
+    // Read lazily on each flush so long-lived sessions pick up token rotation
+    const logToken =
+      document?.querySelector('meta[name="x-log-token"]')?.getAttribute("content") ?? "";
     try {
       fetch(LOG_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(logToken && { "X-Log-Token": logToken }),
+        },
         body: JSON.stringify({ entries }),
         keepalive: true,
       }).catch(() => {
@@ -122,6 +128,7 @@ class ClientLogger {
   }
 
   // Used on page unload via visibilitychange
+  // sendBeacon does not support custom headers, so the token is not sent — rate limiting still applies
   private flushBeacon(): void {
     if (this.buffer.length === 0) return;
     const entries = this.drainEntries();

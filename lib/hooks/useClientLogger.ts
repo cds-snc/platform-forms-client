@@ -1,6 +1,6 @@
 "use client";
 
-import { clientLogger } from "@lib/client/clientLogger";
+import { clientLogger } from "@lib/clientLogging/clientLogger";
 import type { LogContext } from "@lib/clientLogging/types";
 
 /**
