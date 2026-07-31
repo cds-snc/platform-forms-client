@@ -8,10 +8,22 @@ const FLUSH_INTERVAL_MS = 5000;
 const MAX_BUFFER_SIZE = 10;
 const LOG_ENDPOINT = "/api/log";
 
-// Note: Class used to make it easier to pass the state around and also enforce a singleton pattern
+// Falls back to Math.random in non-secure contexts (e.g. http dev environments)
+const generateSessionId = (): string => {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  const BASE_36_RADIX = 36;
+  const LEADING_CHARS_TO_DROP = 2;
+  return Math.random().toString(BASE_36_RADIX).slice(LEADING_CHARS_TO_DROP);
+};
+
+// Note: Class used to make it easier to pass the state around and also enforce a singleton pattern -- TODO probably remove this comment, kind of obvious..
 class ClientLogger {
   private buffer: ClientLogEntry[] = [];
   private timer: ReturnType<typeof setTimeout> | null = null;
+  // Identifies all logs from a single browser session for CloudWatch correlation
+  private readonly sessionId = generateSessionId();
 
   constructor() {
     if (typeof window !== "undefined") {
@@ -65,7 +77,7 @@ class ClientLogger {
       return;
     }
 
-    this.buffer.push({ level, message, context, timestamp: Date.now() });
+    this.buffer.push({ level, message, context, timestamp: Date.now(), sessionId: this.sessionId });
 
     if (this.buffer.length >= MAX_BUFFER_SIZE) {
       this.flush();
@@ -98,6 +110,7 @@ class ClientLogger {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ entries }),
+        keepalive: true,
       }).catch(() => {
         // Logs are best-effort — swallow network failures silently
       });

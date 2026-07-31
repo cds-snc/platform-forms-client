@@ -9,6 +9,7 @@ export interface ClientLogEntry {
   context?: LogContext;
   timestamp: number;
   count?: number;
+  sessionId?: string;
 }
 
 export interface ClientLogBatch {
