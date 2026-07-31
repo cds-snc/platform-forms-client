@@ -5,6 +5,8 @@ import { checkClientLogRateLimit } from "@lib/clientLogging/rateLimiter";
 import { ClientLogBatch, ClientLogEntry, LogLevel } from "@lib/clientLogging/types";
 
 const MAX_ENTRIES_PER_BATCH = 25;
+// Theoretical max valid batch is ~175KB; this leaves headroom while rejecting clearly abusive payloads
+const MAX_BODY_BYTES = 200_000;
 const MAX_MESSAGE_LENGTH = 1000;
 // Avoid excessive number of key=value pairs that could slow down JSON.stringify (and increase the payload)
 const MAX_CONTEXT_KEYS = 20;
@@ -22,20 +24,17 @@ const MAX_TIMESTAMP_SKEW_MS = 10 * 60 * 1000;
 // In the future we may want to only alllow warn and error if e.g. debug gets too "noisy"
 const VALID_LEVELS = new Set<LogLevel>(["debug", "info", "warn", "error"]);
 
-const isValidContextValue = (v: unknown): boolean => {
-  return typeof v === "string" || typeof v === "number" || typeof v === "boolean";
-};
-
 const isValidContext = (context: unknown): boolean => {
   if (typeof context !== "object" || context === null || Array.isArray(context)) {
     return false;
   }
   const obj = context as Record<string, unknown>;
+  const keys = Object.keys(obj);
   return (
-    Object.keys(obj).length <= MAX_CONTEXT_KEYS &&
-    Object.keys(obj).every((k) => k.length <= MAX_CONTEXT_KEY_LENGTH) &&
+    keys.length <= MAX_CONTEXT_KEYS &&
+    keys.every((k) => k.length <= MAX_CONTEXT_KEY_LENGTH) &&
     Object.values(obj).every((v) => {
-      if (!isValidContextValue(v)) return false;
+      if (typeof v !== "string" && typeof v !== "number" && typeof v !== "boolean") return false;
       if (typeof v === "string" && v.length > MAX_CONTEXT_VALUE_LENGTH) return false;
       return true;
     })
@@ -46,6 +45,22 @@ const isValidContext = (context: unknown): boolean => {
 const isValidTimestamp = (timestamp: number): boolean => {
   const now = Date.now();
   return timestamp > now - MAX_TIMESTAMP_SKEW_MS && timestamp < now + MAX_TIMESTAMP_SKEW_MS;
+};
+
+const isValidSessionId = (value: unknown): boolean => {
+  return (
+    value === undefined ||
+    (typeof value === "string" &&
+      value.length <= MAX_SESSION_ID_LENGTH &&
+      SESSION_ID_PATTERN.test(value))
+  );
+};
+
+const isValidCount = (value: unknown): boolean => {
+  return (
+    value === undefined ||
+    (Number.isInteger(value) && (value as number) >= 1 && (value as number) <= MAX_ENTRY_COUNT)
+  );
 };
 
 const isValidEntry = (entry: unknown): entry is ClientLogEntry => {
@@ -62,28 +77,22 @@ const isValidEntry = (entry: unknown): entry is ClientLogEntry => {
     e.message.length <= MAX_MESSAGE_LENGTH &&
     typeof e.timestamp === "number" &&
     isValidTimestamp(e.timestamp) &&
-    (e.sessionId === undefined ||
-      (typeof e.sessionId === "string" &&
-        e.sessionId.length <= MAX_SESSION_ID_LENGTH &&
-        SESSION_ID_PATTERN.test(e.sessionId))) &&
-    (e.count === undefined ||
-      (Number.isInteger(e.count) &&
-        (e.count as number) >= 1 &&
-        (e.count as number) <= MAX_ENTRY_COUNT)) &&
+    isValidSessionId(e.sessionId) &&
+    isValidCount(e.count) &&
     (e.context === undefined || isValidContext(e.context))
   );
 };
 
-// Removes newlines and control chars to prevent log injection in line-based viewers
-const sanitizeMessage = (message: string): string =>
-  message.replace(/[\x00-\x1F\x7F]/g, " ").trim();
+// Removes newlines and control chars to help prevent log injection
+const sanitizeMessage = (message: string): string => {
+  return message.replace(/[\x00-\x1F\x7F]/g, " ").trim();
+};
 
 const formatEntry = (entry: ClientLogEntry): string => {
-  // Adding a sessionId helps to identify the issue and what led up to the issue
-  const sid = entry.sessionId ? `[${entry.sessionId}] ` : "";
-  const count = entry.count && entry.count > 1 ? ` (x${entry.count})` : "";
-  const context = entry.context ? ` ${JSON.stringify(entry.context)}` : "";
-  return `[CLIENT] ${sid}${sanitizeMessage(entry.message)}${count}${context}`;
+  const count = entry.count && entry.count > 1 ? `(x${entry.count})` : "";
+  const context = entry.context ? JSON.stringify(entry.context) : "";
+  const message = sanitizeMessage(entry.message);
+  return `[CLIENT] ${entry.sessionId}} ${message} ${count} ${context}`;
 };
 
 // Avoids a nested try-catch in the handler; returns null on parse failure
@@ -112,6 +121,11 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
       // TODO: are we OK with IPs in the error logs? -- currently done in audit logs but not sure the context of an error log is OK
       logMessage.warn(`Client log rate limit exceeded: ${ip}`);
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
+    const contentLength = Number(req.headers.get("content-length") ?? 0);
+    if (contentLength > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: "Payload too large" }, { status: 413 });
     }
 
     // Reject non-JSON before attempting to parse

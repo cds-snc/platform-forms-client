@@ -22,7 +22,7 @@ const generateSessionId = (): string => {
 class ClientLogger {
   private buffer: ClientLogEntry[] = [];
   private timer: ReturnType<typeof setTimeout> | null = null;
-  // Identifies all logs from a single browser session for CloudWatch correlation
+  // helps to identify the issue and what led up to the issue (CloudWatch correlation)
   private readonly sessionId = generateSessionId();
 
   constructor() {
@@ -61,7 +61,7 @@ class ClientLogger {
     message: string,
     context?: LogContext
   ): boolean {
-    // Copy objects to string values for strict comparison (by ref would fail since objects)
+    // Serialize context to compare by value — object === would compare by reference
     const contextsMatch = JSON.stringify(entry.context ?? "") === JSON.stringify(context ?? "");
     return entry.level === level && entry.message === message && contextsMatch;
   }
@@ -95,7 +95,7 @@ class ClientLogger {
     }, FLUSH_INTERVAL_MS);
   }
 
-  // Shared by flush() and flushBeacon() — clears the buffer and cancels the pending timer
+  // Clears the buffer and cancels the pending timer
   private drainEntries(): ClientLogEntry[] {
     const entries = this.buffer.splice(0);
     if (this.timer !== null) {
@@ -115,7 +115,7 @@ class ClientLogger {
         body: JSON.stringify({ entries }),
         keepalive: true,
       }).catch(() => {
-        // Logs are best-effort — swallow network failures silently
+        // Logs are best-effort — network errors fail silently
       });
     } catch {
       // Serialization failure — nothing recoverable to do
