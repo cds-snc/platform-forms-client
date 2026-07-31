@@ -8,14 +8,13 @@ const FLUSH_INTERVAL_MS = 5000;
 const MAX_BUFFER_SIZE = 10;
 const LOG_ENDPOINT = "/api/log";
 
-// Falls back to Math.random in non-secure contexts (e.g. http dev environments)
+// Falls back to a timestamp-based ID in non-secure contexts (e.g. http dev) where crypto.randomUUID is unavailable
+let _devSessionCounter = 0;
 const generateSessionId = (): string => {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
     return crypto.randomUUID();
   }
-  const BASE_36_RADIX = 36;
-  const LEADING_CHARS_TO_DROP = 2;
-  return Math.random().toString(BASE_36_RADIX).slice(LEADING_CHARS_TO_DROP);
+  return `devSession-${Date.now()}-${_devSessionCounter++}`;
 };
 
 // Note: Class used to make it easier to pass the state around and also enforce a singleton pattern -- TODO probably remove this comment, kind of obvious..
