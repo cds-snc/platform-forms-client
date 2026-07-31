@@ -95,16 +95,19 @@ class ClientLogger {
     }, FLUSH_INTERVAL_MS);
   }
 
-  flush(): void {
-    if (this.buffer.length === 0) return;
-
+  // Shared by flush() and flushBeacon() — clears the buffer and cancels the pending timer
+  private drainEntries(): ClientLogEntry[] {
     const entries = this.buffer.splice(0);
-
     if (this.timer !== null) {
       clearTimeout(this.timer);
       this.timer = null;
     }
+    return entries;
+  }
 
+  flush(): void {
+    if (this.buffer.length === 0) return;
+    const entries = this.drainEntries();
     try {
       fetch(LOG_ENDPOINT, {
         method: "POST",
@@ -122,14 +125,7 @@ class ClientLogger {
   // Used on page unload via visibilitychange
   private flushBeacon(): void {
     if (this.buffer.length === 0) return;
-
-    const entries = this.buffer.splice(0);
-
-    if (this.timer !== null) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
-
+    const entries = this.drainEntries();
     try {
       // Use the sendBeacon API to ensure even a tab/window close will sent by being passed to the browser's background queue.
       // Note: sendBeacon returns false (not throw) when the browser rejects the payload (e.g. too large)

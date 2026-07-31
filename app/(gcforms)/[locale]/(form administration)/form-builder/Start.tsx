@@ -15,12 +15,23 @@ import { transformFormProperties } from "@lib/store/helpers/elements/transformFo
 import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/betaCheck";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { setImportedTemplate } from "@lib/store/importBuffer";
+import { useClientLogger } from "@lib/hooks/useClientLogger";
 
 export const Start = () => {
   const {
     t,
     i18n: { language },
   } = useTranslation("form-builder");
+
+  const { info } = useClientLogger({ component: "Start" });
+
+  info("~~~~~~~~~~~~~~~~~~~~~~~~~Start component rendered", { language });
+  // info("~~~~~~~~~~~~~~~~~~~~~~~~~Start component rendered", { language });
+  // info("~~~~~~~~~~~~~~~~~~~~~~~~~Start component rendered", { language });
+  // info("~~~~~~~~~~~~~~~~~~~~~~~~~Start component rendered", { language });
+  // info("~~~~~~~~~~~~~~~~~~~~~~~~~Start component rendered", { language });
+  // info("~~~~~~~~~~~~~~~~~~~~~~~~~Start component rendered", { language });
+  // info("~~~~~~~~~~~~~~~~~~~~~~~~~Start component rendered", { language });
 
   const router = useRouter();
   const { initialize } = useTemplateStore((s) => ({
