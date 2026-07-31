@@ -13,6 +13,10 @@ const MAX_CONTEXT_KEY_LENGTH = 100;
 const MAX_CONTEXT_VALUE_LENGTH = 200;
 // Stricly UUID length - always 36 chars
 const MAX_SESSION_ID_LENGTH = 36;
+// Upper bound on de-duplicated occurrences within one buffer flush window
+const MAX_ENTRY_COUNT = 10000;
+// Allows UUID format and the Math.random fallback ID used in non-secure (http) contexts
+const SESSION_ID_PATTERN = /^[a-zA-Z0-9-]+$/;
 // Allows for logs that sat in the buffer a while, and for client clocks that are slightly off
 const MAX_TIMESTAMP_SKEW_MS = 10 * 60 * 1000;
 // In the future we may want to only alllow warn and error if e.g. debug gets too "noisy"
@@ -59,7 +63,13 @@ const isValidEntry = (entry: unknown): entry is ClientLogEntry => {
     typeof e.timestamp === "number" &&
     isValidTimestamp(e.timestamp) &&
     (e.sessionId === undefined ||
-      (typeof e.sessionId === "string" && e.sessionId.length <= MAX_SESSION_ID_LENGTH)) &&
+      (typeof e.sessionId === "string" &&
+        e.sessionId.length <= MAX_SESSION_ID_LENGTH &&
+        SESSION_ID_PATTERN.test(e.sessionId))) &&
+    (e.count === undefined ||
+      (Number.isInteger(e.count) &&
+        (e.count as number) >= 1 &&
+        (e.count as number) <= MAX_ENTRY_COUNT)) &&
     (e.context === undefined || isValidContext(e.context))
   );
 };
@@ -99,14 +109,14 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
 
     const withinLimit = await checkClientLogRateLimit(ip);
     if (!withinLimit) {
-      // TODO: are we OK with IPs in the error logs? -- not sure if we do this anywhere else, if not, this should be removed.
+      // TODO: are we OK with IPs in the error logs? -- currently done in audit logs but not sure the context of an error log is OK
       logMessage.warn(`Client log rate limit exceeded: ${ip}`);
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
 
     // Reject non-JSON before attempting to parse
     if (!req.headers.get("content-type")?.includes("application/json")) {
-      // TODO or would we rather keep the error more vague?
+      // TODO or would we rather keep the error more vague? -- is used in other examples so probably a common practice
       return NextResponse.json({ error: "Unsupported content type" }, { status: 415 });
     }
 
@@ -118,10 +128,7 @@ export const POST = async (req: NextRequest): Promise<NextResponse> => {
     const { entries } = body as ClientLogBatch;
 
     if (entries.length > MAX_ENTRIES_PER_BATCH) {
-      return NextResponse.json(
-        { error: `Batch exceeds maximum of ${MAX_ENTRIES_PER_BATCH} entries` },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Batch too large" }, { status: 400 });
     }
 
     for (const entry of entries) {
