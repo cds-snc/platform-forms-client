@@ -3,6 +3,7 @@
   "formTimer": false,
   "hCaptcha": false,
   "notification": false,
+  "pluginArchitecture": false,
   "templateVersioning": false,
   "topBanner": false,
   "responsesPilot": false,

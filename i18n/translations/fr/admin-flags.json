@@ -45,6 +45,10 @@
     "notification": {
       "title": "Système de notification",
       "description": "Activer l'envoi de courriels immédiats ou différés via le système de notification. Si cette option est désactivée, les courriels seront envoyés directement à GC Notify."
+    },
+    "pluginArchitecture": {
+      "title": "[FR]Plugin Architecture",
+      "description": "[FR]Enable the plugin-based form element system (experimental)"
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",

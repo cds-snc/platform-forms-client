@@ -45,6 +45,10 @@
     "notification": {
       "title": "Notification",
       "description": "Enable sending emails immediately or deferred using the Notification flow. Disabling this will send emails directly to GC Notify."
+    },
+    "pluginArchitecture": {
+      "title": "Plugin Architecture",
+      "description": "Enable the plugin-based form element system (experimental)"
     }
   },
   "addFlag": "Add user feature flag",

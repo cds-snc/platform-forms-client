@@ -2,6 +2,9 @@
 import React from "react";
 import { FormElementTypes, ValidationInputType } from "@lib/types";
 import { useTranslation } from "@i18n/client";
+import { getPlugin } from "@lib/form-elements";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
@@ -90,9 +93,23 @@ export const SelectedElement = ({
   formId: string;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { getFlag } = useFeatureFlags();
   let element = null;
 
   const selected = useGetSelectedOption(item);
+
+  // When pluginArchitecture flag is on, dispatch to the plugin's BuilderComponent if registered
+  if (getFlag(FeatureFlags.pluginArchitecture)) {
+    const plugin = getPlugin(item.type);
+    if (plugin) {
+      return (
+        <>
+          <plugin.BuilderComponent item={item} elIndex={elIndex} formId={formId} />
+          <ConditionalIndicator item={item} />
+        </>
+      );
+    }
+  }
 
   switch (selected.id) {
     case "textField":
