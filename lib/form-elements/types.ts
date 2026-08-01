@@ -1,6 +1,7 @@
 import type React from "react";
 import type { FormElement, FormElementTypes, Response } from "@lib/types";
 import type { FormElementWithIndex, Language } from "@lib/types/form-builder-types";
+import type { FormItem } from "@clientComponents/forms/Review/helpers";
 
 export interface ViewerProps {
   element: FormElement;
@@ -12,6 +13,16 @@ export interface BuilderProps {
   // Defined when the element is a sub-element inside a dynamicRow -- Note: needs testing
   elIndex?: number;
   formId?: string;
+}
+
+export interface MoreDialogProps {
+  item: FormElement;
+  setItem: (item: FormElement) => void;
+}
+
+export interface ReviewProps {
+  formItem: FormItem;
+  language: Language;
 }
 
 /**
@@ -49,10 +60,22 @@ export interface FormElementPlugin {
   // Renders the editing panel in the form builder. Must be a client component
   BuilderComponent: React.ComponentType<BuilderProps>;
 
+  // Optional: renders element-specific settings in the "More" dialog
+  MoreDialogComponent?: React.ComponentType<MoreDialogProps>;
+
+  // Optional: renders the answer in the form review step; falls back to FormItemFactory switch if absent
+  ReviewComponent?: React.ComponentType<ReviewProps>;
+
   // -------  Data -------
 
   defaultProperties: Partial<FormElement["properties"]>;
 
   // Initial Formik value for a blank element of this type
   initialValue: Response | (() => Response);
+
+  // Optional: serialises a raw string answer for all download formats (CSV, HTML row/col/aggregated)
+  formatResponse?: (rawAnswer: string) => string;
+
+  // Set true to hide title/description translation fields in TranslateWithGroups
+  noTitleTranslation?: boolean;
 }

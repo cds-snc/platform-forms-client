@@ -23,7 +23,7 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 import { Group } from "@gcforms/types";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
-
+import { getPlugin } from "@lib/form-elements";
 import { ExitUrl } from "./ExitUrl";
 
 const GroupSection = ({
@@ -142,6 +142,10 @@ const Element = ({
     FormElementTypes.fileInput,
   ];
 
+  const plugin = getPlugin(element.type);
+  // Plugin-registered elements show title/description fields unless the plugin opts out
+  const isPluginWithTitle = plugin !== null && !plugin.noTitleTranslation;
+
   if (element.type === FormElementTypes.dynamicRow) {
     subElements = element.properties.subElements?.map((subElement) => {
       return (
@@ -178,7 +182,7 @@ const Element = ({
         </>
       )}
 
-      {elementsWithText.includes(element.type) && (
+      {(elementsWithText.includes(element.type) || isPluginWithTitle) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (

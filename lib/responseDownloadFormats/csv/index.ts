@@ -3,6 +3,7 @@ import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
 import { sortByLayout } from "@lib/utils/form-builder";
+import { getPlugin } from "@lib/form-elements";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -64,6 +65,11 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
           )
           .join("\n");
       }
+      const plugin = getPlugin(element.type);
+      if (plugin?.formatResponse && typeof answer.answer === "string") {
+        return plugin.formatResponse(answer.answer);
+      }
+
       let answerText = answer.answer;
       if (
         typeof answerText === "string" &&
