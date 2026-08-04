@@ -103,7 +103,11 @@
         "postalCode": "Code postal",
         "postalCodeOrZip": "Code postal ou zip",
         "country": "Pays"
-      }
+      },
+      "apiKeyMissing": "La recherche d'adresses est indisponible car la clé API n'est pas configurée.",
+      "apiKeyInvalid": "La recherche d'adresses a échoué en raison d'une clé API invalide. Veuillez vérifier la configuration.",
+      "serviceUnavailable": "La recherche d'adresses est temporairement indisponible. Veuillez réessayer plus tard.",
+      "networkError": "Une erreur réseau est survenue lors de la recherche d'adresses. Vérifiez votre connexion et réessayez."
     },
     "allRequired": "toutes obligatoires",
     "answer": "Réponse...",

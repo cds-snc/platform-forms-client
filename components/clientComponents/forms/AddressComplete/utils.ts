@@ -1,122 +1,73 @@
 import { FormElement, FormElementTypes } from "@lib/types";
-import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
+import type { AddressValidationError } from "@gcforms/core";
+import enReview from "@i18n/translations/en/review.json";
+import frReview from "@i18n/translations/fr/review.json";
+import { AddressElements } from "./types";
 import { Answer } from "@lib/responseDownloadFormats/types";
 
-const autoCompleteUrl =
-  "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
-const retriveAddressUrl =
-  "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws";
+type AddressFieldKey = keyof AddressValidationError["fields"];
 
-// Function returns address complete list of choices.
-export const getAddressCompleteChoices = async (
-  addressCompleteKey: string,
-  query: string,
-  countryCode: string
-) => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&SearchTerm=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
+const getNestedTranslation = (source: unknown, path: string): string | undefined => {
+  const value = path.split(".").reduce<unknown>((currentValue, segment) => {
+    if (!currentValue || typeof currentValue !== "object") return undefined;
+    return (currentValue as Record<string, unknown>)[segment];
+  }, source);
 
-  const response = await fetch(autoCompleteUrl + params, {
-    headers: { "content-Type": "application/x-www-form-urlencoded" },
-    method: "POST",
-  });
-
-  const responseData = await response.json(); //Todo #4341  - Error Handling
-
-  return responseData.Items as AddressCompleteChoice[];
+  return typeof value === "string" ? value : undefined;
 };
 
-// Functions returns the selected address.
-export const getSelectedAddress = async (
-  addressCompleteKey: string,
-  value: string,
-  countryCode: string,
+export const addressErrorSummaryFields = {
+  streetAddress: {
+    anchorSuffix: "streetAddress",
+    labelPath: "addressComponents.streetName",
+  },
+  city: {
+    anchorSuffix: "city",
+    labelPath: "addressComponents.city",
+  },
+  province: {
+    anchorSuffix: "province",
+    labelPath: "addressComponents.provinceOrState",
+  },
+  postalCode: {
+    anchorSuffix: "postal",
+    labelPath: "addressComponents.postalCode",
+  },
+} satisfies Record<AddressFieldKey, { anchorSuffix: string; labelPath: string }>;
+
+const addressErrorSummaryLabels = Object.fromEntries(
+  (
+    Object.entries(addressErrorSummaryFields) as Array<
+      [AddressFieldKey, (typeof addressErrorSummaryFields)[AddressFieldKey]]
+    >
+  ).map(([fieldKey, config]) => [
+    fieldKey,
+    {
+      en: getNestedTranslation(enReview, config.labelPath) ?? fieldKey,
+      fr: getNestedTranslation(frReview, config.labelPath) ?? fieldKey,
+    },
+  ])
+) as Record<AddressFieldKey, { en: string; fr: string }>;
+
+export const isAddressValidationError = (value: unknown): value is AddressValidationError => {
+  return Boolean(
+    value &&
+    typeof value === "object" &&
+    "fields" in (value as Record<string, unknown>) &&
+    (value as AddressValidationError).fields
+  );
+};
+
+export const getAddressFieldLabel = (
+  fieldKey: keyof typeof addressErrorSummaryFields,
   language: string
-) => {
-  const selectedResult = value;
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&Id=" + encodeURIComponent(selectedResult);
-  params += "&Country=" + encodeURIComponent(countryCode);
-
-  const response = await fetch(retriveAddressUrl + params, {
-    headers: { "content-Type": "application/x-www-form-urlencoded" },
-    method: "POST",
-  });
-
-  const responseData = await response.json(); //Todo #4341 - Error Handling
-
-  const addressData = responseData.Items as AddressCompleteResult[];
-
-  const addressComponents = await getAddressComponents(addressData, language);
-
-  return addressComponents;
+): string => {
+  return language === "fr"
+    ? addressErrorSummaryLabels[fieldKey].fr
+    : addressErrorSummaryLabels[fieldKey].en;
 };
 
-// Function returns the address set from a retreive.
-export const getAddressCompleteRetrieve = async (
-  addressCompleteKey: string,
-  query: string,
-  countryCode: string
-) => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&LastId=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
-
-  const response = await fetch(autoCompleteUrl + params, {
-    headers: { "content-Type": "application/x-www-form-urlencoded" },
-    method: "POST",
-  });
-
-  const responseData = await response.json(); //Todo #4341  - Error Handling
-
-  return responseData.Items as AddressCompleteChoice[];
-};
-
-// Helper function combines API component results into single address object.
-export const getAddressComponents = async (
-  addressCompleteResult: AddressCompleteResult[],
-  language: string
-) => {
-  const englishResult = addressCompleteResult.find((result) => result.Language === "ENG");
-  const frenchResult = addressCompleteResult.find((result) => result.Language === "FRE");
-
-  // Pick ENG or FRE based on language. (en vs fr)
-  let resultData = language === "en" ? englishResult : frenchResult;
-  if (resultData === undefined) {
-    resultData = addressCompleteResult[0];
-  }
-
-  let streetAddress =
-    (resultData.POBoxNumber ? resultData.Line1 : "") +
-    (resultData?.SubBuilding ? resultData?.SubBuilding + "-" : "") +
-    resultData?.BuildingNumber +
-    " " +
-    resultData?.Street;
-
-  if (streetAddress.trim() === "") {
-    streetAddress = resultData.Line1; // If we have no address, try line1. (eg: Rural Route 4)
-  }
-
-  if (streetAddress.trim() === "") {
-    streetAddress = resultData.Line2; // If we still have no address, try line2. (eg: 12 De Octubre in Managua, Nicaragua)
-  }
-
-  const address = {
-    streetAddress: streetAddress,
-    city: resultData?.City,
-    province: resultData?.ProvinceName,
-    postalCode: resultData?.PostalCode,
-    country: resultData?.CountryName,
-  };
-
-  return address as AddressElements;
-};
-
-export const getAddressAsString = (address: AddressElements) => {
+export const getAddressAsString = (address: AddressElements): string => {
   return `${address.streetAddress}, ${address.city}, ${address.province} ${address.postalCode} ${address.country}`;
 };
 

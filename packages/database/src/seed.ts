@@ -135,23 +135,6 @@ async function createSecurityQuestions() {
   });
 }
 
-// Can be removed once migration ran in Production
-async function migrateLegacyFormPurpose() {
-  console.log("Start migrating forms by setting formPurpose to 'n/a'");
-
-  const migrationResult = await prisma.template.updateMany({
-    where: {
-      isPublished: true,
-      formPurpose: "",
-    },
-    data: {
-      formPurpose: "n/a",
-    },
-  });
-
-  console.log(`${migrationResult.count} forms were migrated for formPurpose`);
-}
-
 async function main() {
   const {
     values: { environment = "development" },
@@ -187,9 +170,6 @@ async function main() {
         },
       });
     }
-
-    console.log("Running formPurpose database migration");
-    await migrateLegacyFormPurpose();
   } catch (e) {
     console.error(e);
     process.exit(1);

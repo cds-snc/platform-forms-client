@@ -48,3 +48,5 @@ export type TemplateRecordForParsing = {
   notificationsInterval?: number | null;
   ttl?: Date | null;
 };
+
+export type PublicTemplateMode = "published" | "draft";

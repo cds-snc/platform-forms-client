@@ -6,13 +6,14 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
 import { cn } from "@lib/utils";
 
-interface ManagedComboboxProps extends InputFieldProps {
+export interface ManagedComboboxProps extends InputFieldProps {
   choices?: string[];
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSetValue?: (value: string) => void;
   baseValue?: string;
   useFilter?: boolean;
   placeholderText?: string;
+  overrideError?: string | null;
 }
 
 export const ManagedCombobox = React.forwardRef(
@@ -27,6 +28,7 @@ export const ManagedCombobox = React.forwardRef(
       baseValue = "",
       useFilter = true,
       placeholderText = "",
+      overrideError,
     } = props;
     const classes = cn("gc-combobox gcds-input-wrapper relative", className);
 
@@ -90,7 +92,9 @@ export const ManagedCombobox = React.forwardRef(
 
     return (
       <div className={classes} data-testid="combobox">
-        {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+        {(overrideError || meta.error) && (
+          <ErrorMessage id={"errorMessage" + id}>{overrideError ?? meta.error}</ErrorMessage>
+        )}
 
         <input
           {...getInputProps({

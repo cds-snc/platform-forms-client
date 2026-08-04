@@ -14,6 +14,7 @@ export const FormCaptcha = ({
   lang,
   dataTestId = "",
   isPublished = true,
+  isPreview = false,
   captchaTokenRef,
   resetCaptchaRef,
   ...rest
@@ -23,12 +24,13 @@ export const FormCaptcha = ({
   lang: string;
   dataTestId?: string;
   isPublished?: boolean;
+  isPreview?: boolean;
   captchaTokenRef: React.RefObject<string> | undefined;
   resetCaptchaRef?: React.RefObject<{ resetToken: () => void }>;
 } & React.FormHTMLAttributes<HTMLFormElement>) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<SubmitEvent<HTMLFormElement>>(null);
-  const doHCaptchaFlow = shouldCheckCaptcha(isPublished);
+  const doHCaptchaFlow = shouldCheckCaptcha(isPublished, isPreview);
 
   const { setToken, resetToken } = useCaptchaToken(captchaTokenRef, hCaptchaRef);
  
