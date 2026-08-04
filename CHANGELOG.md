@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.1](https://github.com/cds-snc/platform-forms-client/compare/v4.21.0...v4.21.1) (2026-08-04)
+
+
+### Bug Fixes
+
+* Extra spacing before province on review page [AddressComplete]  [#7437](https://github.com/cds-snc/platform-forms-client/issues/7437) ([#7612](https://github.com/cds-snc/platform-forms-client/issues/7612)) ([e3f0015](https://github.com/cds-snc/platform-forms-client/commit/e3f001588127ffd247254973d0e55126bbf71a0f))
+* Instructional text embedded in field cuts off on mobile [AddressComplete] ([#7613](https://github.com/cds-snc/platform-forms-client/issues/7613)) ([f22fffb](https://github.com/cds-snc/platform-forms-client/commit/f22fffb3f951a355d3e1ab815ad3b252b056b5d6))
+* nest legend reset ([#7615](https://github.com/cds-snc/platform-forms-client/issues/7615)) ([3446028](https://github.com/cds-snc/platform-forms-client/commit/344602869a53e223438674b5a2d231c2fc64838d))
+
+
+### Miscellaneous Chores
+
+* add granular validation for address complete each field  [AddressComplete] ([#7620](https://github.com/cds-snc/platform-forms-client/issues/7620)) ([ffd1776](https://github.com/cds-snc/platform-forms-client/commit/ffd1776d8f83c15d9d64e01f2991bdb728cd38fc))
+* Add login "soft transition" migrate panel ([#7562](https://github.com/cds-snc/platform-forms-client/issues/7562)) ([3e68729](https://github.com/cds-snc/platform-forms-client/commit/3e687295029f199b254af61a74cf8b6e11921fe0))
+* fix address complete validation [AddressComplete]   ([#7616](https://github.com/cds-snc/platform-forms-client/issues/7616)) ([fa7fd97](https://github.com/cds-snc/platform-forms-client/commit/fa7fd97b30a433ead0536c81f3b4649df69e3e7e))
+* handle fetch error for address complete [AddressComplete]  ([#7621](https://github.com/cds-snc/platform-forms-client/issues/7621)) ([def0881](https://github.com/cds-snc/platform-forms-client/commit/def0881b69d42caaa4ed8e4c765af7812bdf2c4c))
+* Limit default of form element to verifying Canadian addresses only [AddressComplete]  ([#7614](https://github.com/cds-snc/platform-forms-client/issues/7614)) ([58af7ad](https://github.com/cds-snc/platform-forms-client/commit/58af7add32c0d864e59bc75907c45310858a64b0))
+* move address complete validation to helper [AddressComplete] ([#7617](https://github.com/cds-snc/platform-forms-client/issues/7617)) ([071ea51](https://github.com/cds-snc/platform-forms-client/commit/071ea51c9b879e127046a8edeb7f4f52f4612812))
+* Remove unnecessary warning to reduce noise ([#7627](https://github.com/cds-snc/platform-forms-client/issues/7627)) ([140824d](https://github.com/cds-snc/platform-forms-client/commit/140824d4a70334f75d3bcd2ec610702da3088dce))
+* Update fieldset styles ([#7607](https://github.com/cds-snc/platform-forms-client/issues/7607)) ([1dd38fd](https://github.com/cds-snc/platform-forms-client/commit/1dd38fdca92a0da05a60dfe6ed01542354335e90))
+
 ## [4.21.0](https://github.com/cds-snc/platform-forms-client/compare/v4.20.0...v4.21.0) (2026-07-30)
 
 
