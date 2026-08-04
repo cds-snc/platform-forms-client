@@ -10,7 +10,7 @@ const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
 const retriveAddressUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws";
-const addressCompleteKey = process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY || "";
+const addressCompleteKey = process.env.ADDRESSCOMPLETE_API_KEY || "";
 
 // Helper: inspect response.Items[0] for the documented 4-column error table.
 const hasItems0Error = (responseData: unknown): boolean => {
