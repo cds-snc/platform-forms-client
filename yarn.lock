@@ -7864,7 +7864,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"downshift@npm:^9.3.6":
+"downshift@npm:^9.4.0":
   version: 9.4.0
   resolution: "downshift@npm:9.4.0"
   dependencies:
@@ -9168,7 +9168,7 @@ __metadata:
     d3-hierarchy: "npm:^3.1.2"
     date-fns: "npm:^4.4.0"
     date-fns-tz: "npm:^3.2.0"
-    downshift: "npm:^9.3.6"
+    downshift: "npm:^9.4.0"
     eslint: "npm:10.8.0"
     eslint-config-next: "npm:16.3.0"
     eslint-config-prettier: "npm:^10.1.8"
