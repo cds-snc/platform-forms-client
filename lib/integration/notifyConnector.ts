@@ -75,18 +75,14 @@ async function sendEmail(
         to.map((emailAddress) =>
           gcNotifyConnector.sendEmail(emailAddress, content).catch((error) => {
             logMessage.warn(
-              `Failed to send email to ${emailAddress} through GC Notify. Reason: ${
-                (error as Error).message
-              }`
+              `Failed to send email to ${emailAddress} through GC Notify. Reason: ${(error as Error).message}`
             );
           })
         )
       );
     } catch (error) {
       logMessage.error(
-        `Failed to send email to ${to.join(", ")} through GC Notify. Reason: ${
-          (error as Error).message
-        }`
+        `Failed to send email to ${to.join(", ")} through GC Notify. Reason: ${(error as Error).message}`
       );
 
       throw error;
