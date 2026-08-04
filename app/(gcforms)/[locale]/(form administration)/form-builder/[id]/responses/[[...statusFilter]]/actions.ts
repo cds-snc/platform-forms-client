@@ -181,9 +181,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         // was requested. This covers the case where responses were collected
         // before any versions were created and the UI requests version 1.
         if (fullFormTemplate === null && templateVersioningEnabled && templateVersionNumber === 1) {
-          logMessage.warn(
-            `Requested template version ${templateVersionNumber} not found for form ${formID}, attempting non-versioned fallback to version 1`
-          );
           fullFormTemplate = await getFullTemplateByID(formID);
         }
 
