@@ -10,6 +10,7 @@ import {
   getSelectedAddress,
   getAddressCompleteRetrieve,
 } from "./actions";
+import { mapAddressCompleteError } from "./errorHelpers";
 import { matchesAddressPattern } from "./utils";
 import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";
 import { useState, useEffect, useRef } from "react";
@@ -41,6 +42,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   };
 
   const comboboxRef = useRef<ManagedComboboxRef>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const countryError = getAddressSubFieldError(meta.error, "country");
   const streetError = getAddressSubFieldError(meta.error, "streetAddress");
@@ -120,9 +122,22 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       return;
     } // Abandon, don't search on nested addresses.
 
-    const responseData = await getAddressCompleteChoices(query, addressObject?.country || "CAN");
-
-    handleAddressComplete(responseData);
+    try {
+      const response = await getAddressCompleteChoices(query, addressObject?.country || "CAN");
+      if (response.error) {
+        // Map server error codes to friendly/localized messages
+        setApiError(mapAddressCompleteError(response.error, t));
+        setChoices([]);
+        setAddressResultCache([]);
+      } else {
+        setApiError(null);
+        handleAddressComplete(response.items);
+      }
+    } catch (err: unknown) {
+      setApiError(t("addElementDialog.addressComplete.serviceUnavailable"));
+      setChoices([]);
+      setAddressResultCache([]);
+    }
   };
 
   const onAddressSet = async (value: string) => {
@@ -149,30 +164,47 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
       // Handle the Next value.
       if (nextValue == AddressCompleNext.Retrieve) {
-        const responseData = await getSelectedAddress(
-          selectedResult.Id,
-          addressObject?.country || "CAN",
-          i18n.language as Language
-        );
-        if (responseData) {
-          const results = responseData;
-          setAddressObject(results);
-          if (comboboxRef.current) {
-            comboboxRef.current.changeInputValue(results.streetAddress, false);
+        try {
+          const response = await getSelectedAddress(
+            selectedResult.Id,
+            addressObject?.country || "CAN",
+            i18n.language as Language
+          );
+          if (response.error) {
+            setApiError(mapAddressCompleteError(response.error, t));
+          } else if (response.address) {
+            setAddressObject(response.address);
+            if (comboboxRef.current) {
+              comboboxRef.current.changeInputValue(response.address.streetAddress, false);
+            }
+            setApiError(null);
           }
+        } catch (err: unknown) {
+          setApiError(t("addElementDialog.addressComplete.serviceUnavailable"));
         }
       } else if (nextValue == AddressCompleNext.Find) {
         // Do another lookup for the address.
-        const responseData = await getAddressCompleteRetrieve(
-          selectedResult.Id,
-          addressObject?.country || "CAN"
-        );
+        try {
+          const response = await getAddressCompleteRetrieve(
+            selectedResult.Id,
+            addressObject?.country || "CAN"
+          );
 
-        if (comboboxRef.current) {
-          comboboxRef.current.changeInputValue("", true);
+          if (response.error) {
+            setApiError(mapAddressCompleteError(response.error, t));
+            setChoices([]);
+          } else {
+            if (comboboxRef.current) {
+              comboboxRef.current.changeInputValue("", true);
+            }
+
+            handleAddressComplete(response.items);
+            setApiError(null);
+          }
+        } catch (err: unknown) {
+          setApiError(t("addElementDialog.addressComplete.serviceUnavailable"));
+          setChoices([]);
         }
-
-        handleAddressComplete(responseData);
       }
     }
   };
@@ -242,6 +274,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset size-h3"}>
           {label}
         </legend>
+
+        {apiError && (
+          <div className="mb-4">
+            <ErrorMessage id={`${id}-api-error`}>{apiError}</ErrorMessage>
+          </div>
+        )}
 
         {ariaDescribedBy && <Description id={`${id}`}>{ariaDescribedBy}</Description>}
 
