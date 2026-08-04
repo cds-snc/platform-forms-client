@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.23] - 2026-08-04
+
+- Update address complete validation
+
 ## [2.2.22] - 2026-07-31
 
 - Move address complete validation to helper

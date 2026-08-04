@@ -2,6 +2,11 @@ import React, { type JSX } from "react";
 import { FormElement, Responses, PublicFormRecord } from "@gcforms/types";
 import { FormikProps } from "formik";
 import { ErrorListItem } from "@clientComponents/forms";
+import {
+  addressErrorSummaryFields,
+  getAddressFieldLabel,
+  isAddressValidationError,
+} from "@clientComponents/forms/AddressComplete/utils";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
@@ -76,18 +81,43 @@ export const getErrorList = (
               )
             : false;
         });
+      } else if (isAddressValidationError(formElementErrorValue)) {
+        return (
+          Object.entries(addressErrorSummaryFields) as Array<
+            [
+              keyof typeof addressErrorSummaryFields,
+              (typeof addressErrorSummaryFields)[keyof typeof addressErrorSummaryFields],
+            ]
+          >
+        )
+          .filter(([fieldKey]) => Boolean(formElementErrorValue.fields[fieldKey]))
+          .map(([fieldKey, config]) => {
+            const fieldError = formElementErrorValue.fields[fieldKey];
+            const fieldLabel = getAddressFieldLabel(fieldKey, props.language || "en");
+            const value = `${String(fieldError)}: ${fieldLabel}`;
+
+            return (
+              <ErrorListItem
+                key={`error-${formElementKey}-${String(fieldKey)}`}
+                errorKey={`${String(formElementKey)}-${config.anchorSuffix}`}
+                value={value}
+              >
+                {value}
+              </ErrorListItem>
+            );
+          });
       } else {
         return (
           <ErrorListItem
             key={`error-${formElementKey}`}
-            errorKey={`${formElementKey}`}
-            value={`${formElementErrorValue}`}
+            errorKey={String(formElementKey)}
+            value={String(formElementErrorValue)}
           >
             <ErrorListMessage
               language={props.language || "en"}
               id={formElementKey}
               elements={props.formRecord.form.elements}
-              defaultValue={formElementErrorValue}
+              defaultValue={String(formElementErrorValue)}
             />
           </ErrorListItem>
         );
