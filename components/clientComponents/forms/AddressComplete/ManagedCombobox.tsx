@@ -103,6 +103,7 @@ export const ManagedCombobox = React.forwardRef(
             required,
             "aria-describedby": ariaDescribedBy,
             onFocus: () => setIsOpen(true),
+            onBlur: () => setIsOpen(false),
             onChange: (e) => {
               setInputValue((e.target as HTMLInputElement).value);
             },
