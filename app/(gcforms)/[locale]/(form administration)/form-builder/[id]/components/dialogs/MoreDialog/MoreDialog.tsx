@@ -79,7 +79,7 @@ export const MoreDialog = () => {
   if (!item) return null;
 
   const plugin = getPlugin(item.type);
-  // Narrows out undefined from the useState setter for MoreDialogProps compatibility
+  // Plugin props expect (item: FormElement) => void, not the full useState setter
   const setItemDefined = (updated: FormElement) => setItem(updated);
 
   const handleClose = () => {
