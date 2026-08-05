@@ -15,5 +15,11 @@ export const submission = {
 };
 
 export const result = {
-  "1": '{"streetAddress":"555 A street","city":"Ottawa","province":"Ontario","postalCode":"K2P 1P4","country":"Canada"}',
+  "1": {
+    streetAddress: "555 A street",
+    city: "Ottawa",
+    province: "Ontario",
+    postalCode: "K2P 1P4",
+    country: "Canada",
+  },
 };
