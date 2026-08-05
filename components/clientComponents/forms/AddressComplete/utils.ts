@@ -4,6 +4,7 @@ import enReview from "@i18n/translations/en/review.json";
 import frReview from "@i18n/translations/fr/review.json";
 import { AddressElements } from "./types";
 import { Answer } from "@lib/responseDownloadFormats/types";
+import { sanitizeField, truncateField } from "@gcforms/core";
 
 type AddressFieldKey = keyof AddressValidationError["fields"];
 
@@ -127,3 +128,23 @@ export function matchesAddressPattern(input: string): boolean {
   const pattern = /\s+-\s+\d+\s+Addresses$/i;
   return pattern.test(input);
 }
+
+export const MAX_ADDRESS_FIELD_LENGTH = 200;
+export const sanitizeAddressField = (value: string): string => {
+  return truncateField(sanitizeField(value), MAX_ADDRESS_FIELD_LENGTH);
+};
+
+export const MAX_SEARCH_QUERY_LENGTH = 200;
+export const sanitizeQuery = (value: string): string => {
+  return truncateField(sanitizeField(value), MAX_SEARCH_QUERY_LENGTH);
+};
+
+const MAX_COUNTRY_CODE_LENGTH = 3;
+export const sanitizeCountryCode = (value: string): string => {
+  return truncateField(sanitizeField(value), MAX_COUNTRY_CODE_LENGTH);
+};
+
+export const MAX_POSTAL_CODE_LENGTH = 20;
+export const sanitizePostalCode = (value: string): string => {
+  return truncateField(sanitizeField(value), MAX_POSTAL_CODE_LENGTH);
+};

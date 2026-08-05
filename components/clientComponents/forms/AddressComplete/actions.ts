@@ -5,12 +5,8 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
-import {
-  isValidCanadaPostId,
-  sanitizeAddressField,
-  sanitizeCountryCode,
-  sanitizeQuery,
-} from "./validation";
+import { isValidCanadaPostId } from "./validation";
+import { sanitizeAddressField, sanitizeCountryCode, sanitizeQuery } from "./utils";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";

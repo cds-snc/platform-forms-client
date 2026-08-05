@@ -16,7 +16,7 @@ import {
   MAX_POSTAL_CODE_LENGTH,
   sanitizeAddressField,
   sanitizePostalCode,
-} from "./validation";
+} from "./utils";
 import { mapAddressCompleteError } from "./errorHelpers";
 import { matchesAddressPattern } from "./utils";
 import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";

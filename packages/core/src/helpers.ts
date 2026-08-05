@@ -316,3 +316,11 @@ export const getElementsUsingChoiceIdParent = ({
 
   return elements;
 };
+
+export const sanitizeField = (value: string | unknown): string => {
+  return String(value ?? "").trim();
+};
+
+export const truncateField = (value: string, maxLength: number): string => {
+  return value.length > maxLength ? value.slice(0, maxLength) : value;
+};

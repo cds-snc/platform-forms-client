@@ -1,4 +1,5 @@
 import { ValidationProperties } from "@gcforms/types";
+import { sanitizeField } from "../helpers";
 
 export type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 
@@ -23,10 +24,10 @@ export const isValidAddress = (
       const parsed: unknown = JSON.parse(String(value));
       if (parsed && typeof parsed === "object") {
         const record = parsed as Record<string, unknown>;
-        const street = String(record.streetAddress ?? "").trim();
-        const city = String(record.city ?? "").trim();
-        const province = String(record.province ?? "").trim();
-        const postal = String(record.postalCode ?? "").trim();
+        const street = sanitizeField(record.streetAddress);
+        const city = sanitizeField(record.city);
+        const province = sanitizeField(record.province);
+        const postal = sanitizeField(record.postalCode);
 
         const fields = {
           streetAddress: street ? null : t("input-validation.required"),
