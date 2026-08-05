@@ -104,8 +104,8 @@ export const ManagedCombobox = React.forwardRef(
       // https://github.com/downshift-js/downshift/issues/1108
       // Downshift won't be updated to fix this issue, so we need to handle it ourselves
     });
-    // Use the for-id label-input association over aria-labeledby but downshift only allows nulling it that
-    // that keeps an empty `aria-labelledby=""`, not ideal. So just delete the property manually..
+    // Use the for-id label-input association over aria-labeledby but downshift only allows nulling it.
+    // That keeps an empty `aria-labelledby=""`, not ideal. So just delete the property manually..
     delete inputProps["aria-labelledby"];
 
     return (
@@ -118,7 +118,6 @@ export const ManagedCombobox = React.forwardRef(
 
         <ul
           className={cn({ hidden: !isOpen || items.length === 0 })}
-          // {...getMenuProps({ "aria-labelledby": `label-${id}` })}
           {...getMenuProps()}
           data-testid="combobox-listbox"
         >
