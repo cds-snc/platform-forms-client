@@ -2,8 +2,9 @@ import { FormElement, FormElementTypes } from "@lib/types";
 import type { AddressValidationError } from "@gcforms/core";
 import enReview from "@i18n/translations/en/review.json";
 import frReview from "@i18n/translations/fr/review.json";
+import enResponses from "@i18n/translations/en/form-builder-responses.json";
+import frResponses from "@i18n/translations/fr/form-builder-responses.json";
 import { AddressElements } from "./types";
-import { Answer } from "@lib/responseDownloadFormats/types";
 
 type AddressFieldKey = keyof AddressValidationError["fields"];
 
@@ -67,7 +68,14 @@ export const getAddressFieldLabel = (
     : addressErrorSummaryLabels[fieldKey].en;
 };
 
-export const getAddressAsString = (address: AddressElements): string => {
+export const getAddressAsString = (address: AddressElements, split?: boolean): string => {
+  if (split) {
+    let addressString = "";
+    for (const key in address) {
+      addressString += `${getNestedTranslation(enResponses, `addressComponents.${key}`) ?? key}\n${getNestedTranslation(frResponses, `addressComponents.${key}`) ?? key}: ${address[key as keyof AddressElements]}\n`;
+    }
+    return addressString;
+  }
   return `${address.streetAddress}, ${address.city}, ${address.province} ${address.postalCode} ${address.country}`;
 };
 
@@ -87,26 +95,6 @@ export const getAddressAsReviewElements = (
     });
   }
   return returnArray;
-};
-
-export const getAddressAsAnswerElements = (
-  question: FormElement,
-  address: AddressElements,
-  extraTranslations: { [key: string]: { en: string; fr: string } }
-): Answer[] => {
-  const answerArray = [];
-  for (const key in address) {
-    const answerObj: Answer = {
-      questionId: question.id,
-      questionEn: extraTranslations[key as keyof AddressElements].en,
-      questionFr: extraTranslations[key as keyof AddressElements].fr,
-      answer: address[key as keyof AddressElements],
-    };
-
-    answerArray.push(answerObj);
-  }
-
-  return answerArray;
 };
 
 // This regex is an attempt to correct that until the API is updated.
