@@ -1715,5 +1715,6 @@
     "button": "Mettre à jour"
   },
   "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
-  "formActions": "[FR]Form actions"
+  "formActions": "Actions liées au formulaire"
+ "
 }
