@@ -15,13 +15,7 @@ import {
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
-import {
-  AddressComponents,
-  FormElement,
-  FormElementTypes,
-  StartFromExclusiveResponse,
-  VaultStatus,
-} from "@lib/types";
+import { FormElement, FormElementTypes, StartFromExclusiveResponse, VaultStatus } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
   confirmResponses,
@@ -47,11 +41,7 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
 import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
-import {
-  getAddressAsAnswerElements,
-  getAddressAsString,
-} from "@clientComponents/forms/AddressComplete/utils";
-import { serverTranslation } from "@i18n";
+import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 import { traceFunction } from "@lib/otel";
 import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
 
@@ -156,9 +146,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
   > => {
     return traceFunction("generateSubmissionResponseFormats", async () => {
       try {
-        const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
-        const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
-
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
         const templateVersioningEnabled = await isTemplateVersioningEnabled();
@@ -275,59 +262,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                         }
                       });
                     }),
-                  } as Answer;
-                }
-
-                // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
-                if (
-                  question?.type === FormElementTypes.addressComplete &&
-                  question.properties.addressComponents?.splitAddress === true
-                ) {
-                  const addressObject = JSON.parse(answer as string) as AddressElements;
-
-                  const questionComponents = question.properties
-                    .addressComponents as AddressComponents;
-                  if (questionComponents.canadianOnly) {
-                    addressObject.country = "CAN";
-                  }
-
-                  const extraTranslations = {
-                    streetAddress: {
-                      en: tEn("addressComponents.streetAddress"),
-                      fr: tFr("addressComponents.streetAddress"),
-                    },
-                    city: {
-                      en: tEn("addressComponents.city"),
-                      fr: tFr("addressComponents.city"),
-                    },
-                    province: {
-                      en: tEn("addressComponents.province"),
-                      fr: tFr("addressComponents.province"),
-                    },
-                    postalCode: {
-                      en: tEn("addressComponents.postalCode"),
-                      fr: tFr("addressComponents.postalCode"),
-                    },
-                    country: {
-                      en: tEn("addressComponents.country"),
-                      fr: tFr("addressComponents.country"),
-                    },
-                  };
-
-                  const reviewElements = getAddressAsAnswerElements(
-                    question,
-                    addressObject,
-                    extraTranslations
-                  );
-
-                  const addressElements = [reviewElements];
-
-                  return {
-                    questionId: question.id,
-                    type: FormElementTypes.address,
-                    questionEn: question?.properties.titleEn,
-                    questionFr: question?.properties.titleFr,
-                    answer: addressElements,
                   } as Answer;
                 }
 
@@ -530,13 +464,19 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       return "";
     }
 
-    if (question.properties.addressComponents?.splitAddress === true) {
-      return answer as string; //Address was split, return as is.
-    }
-
     try {
-      const addressObject = JSON.parse(answer as string) as AddressElements;
-      return getAddressAsString(addressObject);
+      let addressObject: AddressElements;
+
+      if (typeof answer === "string") {
+        addressObject = JSON.parse(answer) as AddressElements;
+        return getAddressAsString(
+          addressObject,
+          question.properties.addressComponents?.splitAddress
+        );
+      }
+
+      addressObject = answer as AddressElements;
+      return getAddressAsString(addressObject, question.properties.addressComponents?.splitAddress);
     } catch (e) {
       // If the answer is somehow not parseable as JSON, return it as is
       return answer as string;
