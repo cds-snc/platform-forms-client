@@ -38,7 +38,16 @@ const hasItems0Error = (responseData: unknown): boolean => {
       Object.prototype.hasOwnProperty.call(first, "Resolution");
 
     if (hasErrorKey || hasCauseAndResolution) {
+      const errorCode = Number(first.Error);
+
       logMessage.info(`AddressComplete API returned item-level error: ${JSON.stringify(first)}`);
+
+      // Ignore "Response Errors"
+      // 1001 - The SearchTerm or LastId parameters were not supplied includes "" (empty string)
+      if (errorCode === 1001) {
+        return false;
+      }
+
       return true;
     }
 
