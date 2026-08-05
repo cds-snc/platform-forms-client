@@ -72,6 +72,11 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
+  // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
+  if (!query || query.trim() === "") {
+    return { items: [], error: null };
+  }
+
   try {
     const response = await fetch(autoCompleteUrl + params, {
       headers: { "content-Type": "application/x-www-form-urlencoded" },
@@ -82,7 +87,7 @@ export const getAddressCompleteChoices = async (
       return { items: [], error: "SERVICE_UNAVAILABLE" };
     }
 
-    const responseData = await response.json(); //Todo #4341  - Error Handling
+    const responseData = await response.json();
 
     if (hasItems0Error(responseData)) {
       return { items: [], error: "SERVICE_UNAVAILABLE" };
