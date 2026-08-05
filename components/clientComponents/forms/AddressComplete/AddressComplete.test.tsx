@@ -205,26 +205,29 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
-      {
-        Id: "1",
-        Text: "123 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-      {
-        Id: "2",
-        Text: "123 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-      {
-        Id: "3",
-        Text: "124 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-    ], error: null });
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "1",
+          Text: "123 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+        {
+          Id: "2",
+          Text: "123 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+        {
+          Id: "3",
+          Text: "124 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
 
     renderComponent();
 
@@ -247,21 +250,27 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
-      {
-        Id: "id-retrieve-1",
-        Text: "100 Queen St",
-        Description: "Toronto",
-        Next: "Retrieve",
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "id-retrieve-1",
+          Text: "100 Queen St",
+          Description: "Toronto",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
+    getSelectedAddressMock.mockResolvedValue({
+      address: {
+        streetAddress: "100 Queen St",
+        city: "Toronto",
+        province: "Ontario",
+        postalCode: "M5H 2N2",
+        country: "CAN",
       },
-    ], error: null });
-    getSelectedAddressMock.mockResolvedValue({ address: {
-      streetAddress: "100 Queen St",
-      city: "Toronto",
-      province: "Ontario",
-      postalCode: "M5H 2N2",
-      country: "CAN",
-    }, error: null });
+      error: null,
+    });
 
     renderComponent();
 
@@ -297,22 +306,28 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
-      {
-        Id: "nested-id-1",
-        Text: "King St W",
-        Description: "Toronto - 15489 Addresses",
-        Next: "Find",
-      },
-    ], error: null });
-    getAddressCompleteRetrieveMock.mockResolvedValue({ items: [
-      {
-        Id: "nested-id-2",
-        Text: "123 King St W",
-        Description: "Toronto",
-        Next: "Retrieve",
-      },
-    ], error: null });
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-1",
+          Text: "King St W",
+          Description: "Toronto - 15489 Addresses",
+          Next: "Find",
+        },
+      ],
+      error: null,
+    });
+    getAddressCompleteRetrieveMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-2",
+          Text: "123 King St W",
+          Description: "Toronto",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
 
     renderComponent();
 
@@ -363,14 +378,17 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
-      {
-        Id: "nested-id-fr-1",
-        Text: "222 King St E",
-        Description: "Bowmanville ON L1C P6 - 27 Addresses",
-        Next: "Find",
-      },
-    ], error: null });
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-fr-1",
+          Text: "222 King St E",
+          Description: "Bowmanville ON L1C P6 - 27 Addresses",
+          Next: "Find",
+        },
+      ],
+      error: null,
+    });
 
     renderComponent({ lang: "fr" });
 
