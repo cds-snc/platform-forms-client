@@ -323,6 +323,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <div className="mt-4 mb-6">
             <Label
               htmlFor={`${name}-country`}
+              id={`label-${name}-country`}
               className={props.required ? "gcds-label required" : "gcds-label"}
               required={props.required}
               lang={lang}
@@ -349,6 +350,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         <div className="mb-6">
           <Label
             htmlFor={`${name}-streetAddress`}
+            id={`label-${name}-streetAddress`}
             className={props.required ? "gcds-label required" : "gcds-label"}
             required={props.required}
             lang={lang}
