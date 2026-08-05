@@ -33,15 +33,19 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
   const { t, i18n } = useTranslation("form-builder", { lng: lang });
 
+  const addressLabels = {
+    en: t("addElementDialog.addressComplete.multipleAddresses", { lng: "en" }),
+    fr: t("addElementDialog.addressComplete.multipleAddresses", { lng: "fr" }),
+    current: t("addElementDialog.addressComplete.multipleAddresses"),
+  };
+
   //Address Complete elements
   const [choices, setChoices] = useState<string[]>([]);
   const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
 
   const toFullAddress = (address: AddressCompleteChoice): string => {
     return (
-      address.Text +
-      ", " +
-      localizeAddressCompleteDescription(address.Description, i18n.language as Language)
+      address.Text + ", " + localizeAddressCompleteDescription(address.Description, addressLabels)
     );
   };
 

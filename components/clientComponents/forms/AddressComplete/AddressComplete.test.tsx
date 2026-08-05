@@ -79,10 +79,12 @@ vi.mock("./actions", () => ({
 
 vi.mock("./utils", () => ({
   matchesAddressPattern: matchesAddressPatternMock,
-  localizeAddressCompleteDescription: vi.fn((description: string, language: string) =>
-    language === "fr"
-      ? description.replace(/\s+-\s+(\d+)\s+Addresses$/i, " - $1 Adresses")
-      : description
+  localizeAddressCompleteDescription: vi.fn(
+    (description: string, labels: { en: string; fr: string; current: string }) =>
+    description.replace(
+      /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
+      (_match: string, count: string) => ` - ${count} ${labels.current}`
+    )
   ),
 }));
 
@@ -401,7 +403,7 @@ describe("AddressComplete", () => {
 
     expect(localizeAddressCompleteDescription).toHaveBeenCalledWith(
       "Bowmanville ON L1C P6 - 27 Addresses",
-      "fr"
+      { en: "Addresses", fr: "Adresses", current: "Adresses" }
     );
     expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent(
       "222 King St E, Bowmanville ON L1C P6 - 27 Adresses"

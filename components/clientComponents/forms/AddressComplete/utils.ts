@@ -4,7 +4,6 @@ import enReview from "@i18n/translations/en/review.json";
 import frReview from "@i18n/translations/fr/review.json";
 import { AddressElements } from "./types";
 import { Answer } from "@lib/responseDownloadFormats/types";
-import { Language } from "@lib/types/form-builder-types";
 
 type AddressFieldKey = keyof AddressValidationError["fields"];
 
@@ -119,9 +118,15 @@ export const getAddressAsAnswerElements = (
 // i - Makes the pattern case insensitive.
 const nestedAddressPattern = /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i;
 
+interface AddressCompleteLabels {
+  en: string;
+  fr: string;
+  current: string;
+}
+
 export function localizeAddressCompleteDescription(
   description: string,
-  language: Language
+  labels: AddressCompleteLabels
 ): string {
   const match = description.match(nestedAddressPattern);
 
@@ -130,10 +135,8 @@ export function localizeAddressCompleteDescription(
   }
 
   const [, count] = match;
-  return description.replace(
-    nestedAddressPattern,
-    ` - ${count} ${language === "fr" ? "Adresses" : "Addresses"}`
-  );
+
+  return description.replace(nestedAddressPattern, ` - ${count} ${labels.current}`);
 }
 
 // Helper function to test if the address has multiple results.

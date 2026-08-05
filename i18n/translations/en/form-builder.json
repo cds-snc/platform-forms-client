@@ -92,6 +92,7 @@
       "splitAddress": "Address split into parts",
       "splitAddressDesc": "Data separated in multiple lines.",
       "customize": "Customize format",
+      "multipleAddresses": "Addresses",
       "startTyping": "Start typing an address to search",
       "canadianOnly": "Canadian addresses only",
       "components": {
