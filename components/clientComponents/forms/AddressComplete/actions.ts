@@ -81,10 +81,6 @@ export const getAddressCompleteChoices = async (
       return { items: [], error: "SERVICE_UNAVAILABLE" };
     }
 
-    logMessage.info(
-      `AddressComplete API returned item-level error: ${JSON.stringify(responseData?.Items)}`
-    );
-
     return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
   } catch (err: unknown) {
     return { items: [], error: "NETWORK_ERROR" };
