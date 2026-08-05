@@ -52,12 +52,14 @@ const hasItems0Error = (responseData: unknown): boolean => {
 // Function returns address complete list of choices.
 export const getAddressCompleteChoices = async (
   query: string,
-  countryCode: string
+  countryCode: string,
+  language: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&SearchTerm=" + encodeURIComponent(query);
   params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
@@ -79,6 +81,10 @@ export const getAddressCompleteChoices = async (
       return { items: [], error: "SERVICE_UNAVAILABLE" };
     }
 
+    logMessage.info(
+      `AddressComplete API returned item-level error: ${JSON.stringify(responseData?.Items)}`
+    );
+
     return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
   } catch (err: unknown) {
     return { items: [], error: "NETWORK_ERROR" };
@@ -96,6 +102,7 @@ export const getSelectedAddress = async (
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&Id=" + encodeURIComponent(selectedResult);
   params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
   }
@@ -129,12 +136,14 @@ export const getSelectedAddress = async (
 // Function returns the address set from a retreive.
 export const getAddressCompleteRetrieve = async (
   query: string,
-  countryCode: string
+  countryCode: string,
+  language: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&LastId=" + encodeURIComponent(query);
   params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
@@ -226,21 +235,15 @@ export const getAddressAsAnswerElements = async (
   return answerArray;
 };
 
+const nestedAddressPattern = /\s+-\s+\d+\s+(Addresses|Adresses)$/i;
+
 // Helper function to test if the address has multiple results.
 // -- ref: Issue #4464, Issue #4417
 // This helper exists because the AddressComplete API has arbitrary returning of if an Address is Nested or not.
 // This is usually determined by the
 //    Next: AddressCompleNext;
 //    Retrieve for a regular address or Find for a Nested.
-// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested Addresses.
-// This regex is an attempt to correct that until the API is updated.
-//
-// Breakdown of the regex:
-// \s+-\s+ - Matches the " - " part with optional spaces around the hyphen.
-// \d+ - Matches one or more digits.
-// \s+Addresses$ - Matches the word "Addresses" with a space before it, ensuring it is at the end of the string.
-// i - Makes the pattern case insensitive.
+// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested addresses.
 export async function matchesAddressPattern(input: string): Promise<boolean> {
-  const pattern = /\s+-\s+\d+\s+Addresses$/i;
-  return pattern.test(input);
+  return nestedAddressPattern.test(input);
 }

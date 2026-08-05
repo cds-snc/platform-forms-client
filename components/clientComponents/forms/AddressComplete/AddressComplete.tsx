@@ -11,7 +11,7 @@ import {
   getAddressCompleteRetrieve,
 } from "./actions";
 import { mapAddressCompleteError } from "./errorHelpers";
-import { matchesAddressPattern } from "./utils";
+import { localizeAddressCompleteDescription, matchesAddressPattern } from "./utils";
 import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
@@ -38,7 +38,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
 
   const toFullAddress = (address: AddressCompleteChoice): string => {
-    return address.Text + ", " + address.Description;
+    return (
+      address.Text +
+      ", " +
+      localizeAddressCompleteDescription(address.Description, i18n.language as Language)
+    );
   };
 
   const comboboxRef = useRef<ManagedComboboxRef>(null);
@@ -123,7 +127,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     } // Abandon, don't search on nested addresses.
 
     try {
-      const response = await getAddressCompleteChoices(query, addressObject?.country || "CAN");
+      const response = await getAddressCompleteChoices(
+        query,
+        addressObject?.country || "CAN",
+        i18n.language as Language
+      );
       if (response.error) {
         // Map server error codes to friendly/localized messages
         setApiError(mapAddressCompleteError(response.error, t));
@@ -187,7 +195,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         try {
           const response = await getAddressCompleteRetrieve(
             selectedResult.Id,
-            addressObject?.country || "CAN"
+            addressObject?.country || "CAN",
+            i18n.language as Language
           );
 
           if (response.error) {
