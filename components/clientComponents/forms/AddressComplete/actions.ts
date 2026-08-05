@@ -38,7 +38,20 @@ const hasItems0Error = (responseData: unknown): boolean => {
       Object.prototype.hasOwnProperty.call(first, "Resolution");
 
     if (hasErrorKey || hasCauseAndResolution) {
-      logMessage.info(`AddressComplete API returned item-level error: ${JSON.stringify(first)}`);
+      const errorCode = Number(first.Error);
+
+      // Ignore "Response Errors"
+      // 1001 - The SearchTerm or LastId parameters were not supplied includes "" (empty string)
+      if (errorCode === 1001) {
+        return false;
+      }
+
+      if (errorCode >= 2 && errorCode <= 23) {
+        logMessage.warn(`AddressComplete API returned error: ${JSON.stringify(first)}`);
+      } else {
+        logMessage.info(`AddressComplete API returned error: ${JSON.stringify(first)}`);
+      }
+
       return true;
     }
 
@@ -63,6 +76,11 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
+  // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
+  if (!query || query.trim() === "") {
+    return { items: [], error: null };
+  }
+
   try {
     const response = await fetch(autoCompleteUrl + params, {
       headers: { "content-Type": "application/x-www-form-urlencoded" },
@@ -73,7 +91,7 @@ export const getAddressCompleteChoices = async (
       return { items: [], error: "SERVICE_UNAVAILABLE" };
     }
 
-    const responseData = await response.json(); //Todo #4341  - Error Handling
+    const responseData = await response.json();
 
     if (hasItems0Error(responseData)) {
       return { items: [], error: "SERVICE_UNAVAILABLE" };
