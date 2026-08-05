@@ -1715,5 +1715,6 @@
     "description": "Modifier un formulaire déjà en production",
     "button": "Mettre à jour"
   },
-  "formDownloadFailed": "Le téléchargement du formulaire a échoué."
+  "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
+  "formActions": "Actions liées au formulaire"
 }

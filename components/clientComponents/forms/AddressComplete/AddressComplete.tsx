@@ -323,6 +323,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <div className="mt-4 mb-6">
             <Label
               htmlFor={`${name}-country`}
+              id={`label-${name}-country`}
               className={props.required ? "gcds-label required" : "gcds-label"}
               required={props.required}
               lang={lang}
@@ -349,6 +350,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         <div className="mb-6">
           <Label
             htmlFor={`${name}-streetAddress`}
+            id={`label-${name}-streetAddress`}
             className={props.required ? "gcds-label required" : "gcds-label"}
             required={props.required}
             lang={lang}
@@ -360,7 +362,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </Description>
           {addressObject.country === "CAN" ? (
             <>
-              <Description>{searchHintText}</Description>
+              <Description id={`${name}-streetDesc-2`}>{searchHintText}</Description>
               <ManagedCombobox
                 ref={comboboxRef}
                 choices={choices}
@@ -371,7 +373,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
                 onSetValue={onAddressSet}
                 baseValue={addressObject.streetAddress}
                 required={props.required}
-                ariaDescribedBy={`${name}-streetDesc`}
+                ariaDescribedBy={`${name}-streetDesc ${name}-streetDesc-2`}
                 className={cn(
                   isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
                 )}
