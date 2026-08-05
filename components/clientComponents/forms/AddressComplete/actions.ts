@@ -5,6 +5,12 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
+import {
+  isValidCanadaPostId,
+  sanitizeAddressField,
+  sanitizeCountryCode,
+  sanitizeQuery,
+} from "./validation";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -56,8 +62,8 @@ export const getAddressCompleteChoices = async (
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&SearchTerm=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&SearchTerm=" + encodeURIComponent(sanitizeQuery(query));
+  params += "&Country=" + encodeURIComponent(sanitizeCountryCode(countryCode));
 
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
@@ -91,11 +97,15 @@ export const getSelectedAddress = async (
   countryCode: string,
   language: Language
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
-  const selectedResult = value;
+  const sanitizedValue = sanitizeAddressField(value);
+  if (!isValidCanadaPostId(sanitizedValue)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+  // const selectedResult = sanitizedValue;
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&Id=" + encodeURIComponent(selectedResult);
-  params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&Id=" + encodeURIComponent(sanitizedValue);
+  params += "&Country=" + encodeURIComponent(sanitizeCountryCode(countryCode));
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
   }
@@ -131,10 +141,14 @@ export const getAddressCompleteRetrieve = async (
   query: string,
   countryCode: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
+  const sanitizedQuery = sanitizeQuery(query);
+  if (!isValidCanadaPostId(sanitizedQuery)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&LastId=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&LastId=" + encodeURIComponent(sanitizedQuery);
+  params += "&Country=" + encodeURIComponent(sanitizeCountryCode(countryCode));
 
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };

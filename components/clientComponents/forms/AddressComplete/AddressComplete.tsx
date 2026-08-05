@@ -10,6 +10,13 @@ import {
   getSelectedAddress,
   getAddressCompleteRetrieve,
 } from "./actions";
+import {
+  MAX_SEARCH_QUERY_LENGTH,
+  MAX_ADDRESS_FIELD_LENGTH,
+  MAX_POSTAL_CODE_LENGTH,
+  sanitizeAddressField,
+  sanitizePostalCode,
+} from "./validation";
 import { mapAddressCompleteError } from "./errorHelpers";
 import { matchesAddressPattern } from "./utils";
 import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";
@@ -226,7 +233,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
     for (const internalKey in baseAddressObject) {
       if (key === internalKey) {
-        const newAddressObject = { ...baseAddressObject, [key]: value };
+        const sanitizedValue =
+          key === "postalCode" ? sanitizePostalCode(value) : sanitizeAddressField(value);
+        const newAddressObject = { ...baseAddressObject, [key]: sanitizedValue };
         setAddressObject(newAddressObject as AddressElements);
       }
     }
@@ -340,6 +349,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               baseValue={addressObject.streetAddress}
               required={props.required}
               ariaDescribedBy={`${name}-streetDesc`}
+              maxLength={MAX_SEARCH_QUERY_LENGTH}
               className={cn(
                 isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
               )}
@@ -367,6 +377,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               isValidAddressSubFieldInvalid(meta.error, "city") && "gc-error-input"
             )}
             required={props.required}
+            maxLength={MAX_ADDRESS_FIELD_LENGTH}
             data-testid="addresscomplete-input-city"
           />
         </div>
@@ -391,6 +402,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               isValidAddressSubFieldInvalid(meta.error, "province") && "gc-error-input"
             )}
             required={required}
+            maxLength={MAX_ADDRESS_FIELD_LENGTH}
             data-testid="addresscomplete-input-province"
           />
         </div>
@@ -415,6 +427,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               isValidAddressSubFieldInvalid(meta.error, "postalCode") && "gc-error-input"
             )}
             required={required}
+            maxLength={MAX_POSTAL_CODE_LENGTH}
             data-testid="addresscomplete-input-postalCode"
           />
         </div>
