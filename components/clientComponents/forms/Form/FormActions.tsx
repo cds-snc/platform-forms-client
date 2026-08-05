@@ -23,10 +23,9 @@ export const FormActions = ({
     return children;
   }
 
-  // Z-index added as a precaution to ensure stack context when "floating" - this should also remain on top of any future "floating" content
   return (
     <div
-      className="border-gcds-blue-muted bg-gcds-blue-100 sticky bottom-0 z-10 -mx-5 mt-10 flex p-4"
+      className="border-gcds-blue-muted bg-gcds-blue-100 sticky bottom-0 -mx-5 mt-10 flex p-4"
       role="region"
       aria-label={t("formActions")}
     >
