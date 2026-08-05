@@ -94,7 +94,7 @@ export const ManagedCombobox = React.forwardRef(
       id,
       name,
       required,
-      "aria-describedby": `desc-${ariaDescribedBy}`,
+      ...(ariaDescribedBy && { "aria-describedby": `desc-${ariaDescribedBy}` }),
       onFocus: () => setIsOpen(true),
       onBlur: () => setIsOpen(false),
       onChange: (e) => {

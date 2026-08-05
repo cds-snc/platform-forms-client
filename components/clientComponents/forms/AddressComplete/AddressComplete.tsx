@@ -360,7 +360,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Description id={`${name}-streetDesc`}>
             {t("addElementDialog.addressComplete.street.description")}
           </Description>
-          <Description>{searchHintText}</Description>
+          <Description id={`${name}-streetDesc-2`}>{searchHintText}</Description>
           {
             <ManagedCombobox
               ref={comboboxRef}
@@ -372,7 +372,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onSetValue={onAddressSet}
               baseValue={addressObject.streetAddress}
               required={props.required}
-              ariaDescribedBy={`${name}-streetDesc`}
+              ariaDescribedBy={`${name}-streetDesc ${name}-streetDesc-2`}
               className={cn(
                 isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
               )}
