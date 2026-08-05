@@ -52,6 +52,8 @@ const hasItems0Error = (responseData: unknown): boolean => {
         logMessage.info(`AddressComplete API returned error: ${JSON.stringify(first)}`);
       }
 
+      logMessage.info(process.env.ADDRESSCOMPLETE_API_KEY ?? "No API key set for AddressComplete");
+
       return true;
     }
 

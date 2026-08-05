@@ -1,6 +1,6 @@
 "use client";
 import { useTranslation } from "@i18n/client";
-import { Checkbox, Radio } from "@formBuilder/components/shared/MultipleChoice";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { AddressComponents, FormElementTypes, FormElement } from "@lib/types";
 
 export const AddressCompleteOptions = ({
@@ -45,16 +45,26 @@ export const AddressCompleteOptions = ({
     <section className="mb-4">
       <h3>{t("addElementDialog.addressComplete.options")}</h3>
 
-      <Checkbox
+      <Radio
         id={`addressComponent-${item.id}-id-canadianOnly`}
-        value={`addressComponent-${item.id}-value-canadianOnly-` + isCanadianOnly}
+        value={true}
         key={`addressComponent-${item.id}-canadianOnly-` + isCanadianOnly}
         checked={isCanadianOnly}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           updateAddressComponents({ canadianOnly: e.target.checked });
         }}
         label={t("addElementDialog.addressComplete.canadianOnly")}
-      ></Checkbox>
+      ></Radio>
+      <Radio
+        id={`addressComponent-${item.id}-id-international`}
+        value={false}
+        key={`addressComponent-${item.id}-international-` + !isCanadianOnly}
+        checked={!isCanadianOnly}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          updateAddressComponents({ canadianOnly: !e.target.checked });
+        }}
+        label={t("addElementDialog.addressComplete.international")}
+      ></Radio>
 
       <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
       <p className="mt-2 mb-4">{t("addElementDialog.addressComplete.fieldsDesc")}</p>

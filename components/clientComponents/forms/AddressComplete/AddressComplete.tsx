@@ -358,25 +358,41 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Description id={`${name}-streetDesc`}>
             {t("addElementDialog.addressComplete.street.description")}
           </Description>
-          <Description>{searchHintText}</Description>
-          {
-            <ManagedCombobox
-              ref={comboboxRef}
-              choices={choices}
-              key={`${name}-streetAddress`}
+          {addressObject.country === "CAN" ? (
+            <>
+              <Description>{searchHintText}</Description>
+              <ManagedCombobox
+                ref={comboboxRef}
+                choices={choices}
+                key={`${name}-streetAddress`}
+                id={`${name}-streetAddress`}
+                name={`${name}-streetAddress`}
+                onChange={onAddressSearch}
+                onSetValue={onAddressSet}
+                baseValue={addressObject.streetAddress}
+                required={props.required}
+                ariaDescribedBy={`${name}-streetDesc`}
+                className={cn(
+                  isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+                )}
+                overrideError={streetError}
+              />
+            </>
+          ) : (
+            <input
+              type="text"
               id={`${name}-streetAddress`}
               name={`${name}-streetAddress`}
-              onChange={onAddressSearch}
-              onSetValue={onAddressSet}
-              baseValue={addressObject.streetAddress}
-              required={props.required}
-              ariaDescribedBy={`${name}-streetDesc`}
+              value={addressObject.streetAddress}
+              onChange={(e) => setAddressData("streetAddress", e.target.value)}
               className={cn(
+                "gc-input-text",
                 isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
               )}
-              overrideError={streetError}
+              required={props.required}
+              data-testid="addresscomplete-input-streetAddress"
             />
-          }
+          )}
           <input type="hidden" {...field} />
         </div>
 
