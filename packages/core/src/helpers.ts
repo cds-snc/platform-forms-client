@@ -321,6 +321,7 @@ export const sanitizeField = (value: string | unknown): string => {
   return String(value ?? "").trim();
 };
 
-export const truncateField = (value: string, maxLength: number): string => {
-  return value.length > maxLength ? value.slice(0, maxLength) : value;
+export const truncateField = (value: string | unknown, maxLength: number): string => {
+  const str = String(value ?? "");
+  return str.length > maxLength ? str.slice(0, maxLength) : str;
 };
