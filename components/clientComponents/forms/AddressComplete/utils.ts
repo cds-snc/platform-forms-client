@@ -109,13 +109,6 @@ export const getAddressAsAnswerElements = (
   return answerArray;
 };
 
-// Helper function to test if the address has multiple results.
-// -- ref: Issue #4464, Issue #4417
-// This helper exists because the AddressComplete API has arbitrary returning of if an Address is Nested or not.
-// This is usually determined by the
-//    Next: AddressCompleNext;
-//    Retrieve for a regular address or Find for a Nested.
-// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested Addresses.
 // This regex is an attempt to correct that until the API is updated.
 //
 // Breakdown of the regex:
@@ -123,7 +116,36 @@ export const getAddressAsAnswerElements = (
 // \d+ - Matches one or more digits.
 // \s+Addresses$ - Matches the word "Addresses" with a space before it, ensuring it is at the end of the string.
 // i - Makes the pattern case insensitive.
+const nestedAddressPattern = /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i;
+
+interface AddressCompleteLabels {
+  en: string;
+  fr: string;
+  current: string;
+}
+
+export function localizeAddressCompleteDescription(
+  description: string,
+  labels: AddressCompleteLabels
+): string {
+  const match = description.match(nestedAddressPattern);
+
+  if (!match) {
+    return description;
+  }
+
+  const [, count] = match;
+
+  return description.replace(nestedAddressPattern, ` - ${count} ${labels.current}`);
+}
+
+// Helper function to test if the address has multiple results.
+// -- ref: Issue #4464, Issue #4417
+// This helper exists because the AddressComplete API has arbitrary returning of if an Address is Nested or not.
+// This is usually determined by the
+//    Next: AddressCompleNext;
+//    Retrieve for a regular address or Find for a Nested.
+// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested addresses.
 export function matchesAddressPattern(input: string): boolean {
-  const pattern = /\s+-\s+\d+\s+Addresses$/i;
-  return pattern.test(input);
+  return nestedAddressPattern.test(input);
 }

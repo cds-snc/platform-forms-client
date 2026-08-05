@@ -8,6 +8,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AddressComplete } from "./AddressComplete";
 import type { AddressCompleteProps } from "./types";
 import type { ManagedComboboxProps } from "./ManagedCombobox";
+import { localizeAddressCompleteDescription } from "./utils";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string, keepOpen: boolean) => void;
@@ -78,6 +79,13 @@ vi.mock("./actions", () => ({
 
 vi.mock("./utils", () => ({
   matchesAddressPattern: matchesAddressPatternMock,
+  localizeAddressCompleteDescription: vi.fn(
+    (description: string, labels: { en: string; fr: string; current: string }) =>
+    description.replace(
+      /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
+      (_match: string, count: string) => ` - ${count} ${labels.current}`
+    )
+  ),
 }));
 
 vi.mock("@clientComponents/forms", () => {
@@ -199,26 +207,29 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
-      {
-        Id: "1",
-        Text: "123 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-      {
-        Id: "2",
-        Text: "123 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-      {
-        Id: "3",
-        Text: "124 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-    ], error: null });
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "1",
+          Text: "123 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+        {
+          Id: "2",
+          Text: "123 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+        {
+          Id: "3",
+          Text: "124 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
 
     renderComponent();
 
@@ -227,7 +238,7 @@ describe("AddressComplete", () => {
     await user.type(streetInput, "123 Main");
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN");
+      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN", "en");
     });
 
     await waitFor(() => {
@@ -241,21 +252,27 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
-      {
-        Id: "id-retrieve-1",
-        Text: "100 Queen St",
-        Description: "Toronto",
-        Next: "Retrieve",
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "id-retrieve-1",
+          Text: "100 Queen St",
+          Description: "Toronto",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
+    getSelectedAddressMock.mockResolvedValue({
+      address: {
+        streetAddress: "100 Queen St",
+        city: "Toronto",
+        province: "Ontario",
+        postalCode: "M5H 2N2",
+        country: "CAN",
       },
-    ], error: null });
-    getSelectedAddressMock.mockResolvedValue({ address: {
-      streetAddress: "100 Queen St",
-      city: "Toronto",
-      province: "Ontario",
-      postalCode: "M5H 2N2",
-      country: "CAN",
-    }, error: null });
+      error: null,
+    });
 
     renderComponent();
 
@@ -291,22 +308,28 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue({ items: [
-      {
-        Id: "nested-id-1",
-        Text: "King St W",
-        Description: "Toronto - 15489 Addresses",
-        Next: "Find",
-      },
-    ], error: null });
-    getAddressCompleteRetrieveMock.mockResolvedValue({ items: [
-      {
-        Id: "nested-id-2",
-        Text: "123 King St W",
-        Description: "Toronto",
-        Next: "Retrieve",
-      },
-    ], error: null });
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-1",
+          Text: "King St W",
+          Description: "Toronto - 15489 Addresses",
+          Next: "Find",
+        },
+      ],
+      error: null,
+    });
+    getAddressCompleteRetrieveMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-2",
+          Text: "123 King St W",
+          Description: "Toronto",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
 
     renderComponent();
 
@@ -315,7 +338,7 @@ describe("AddressComplete", () => {
     await user.click(screen.getByTestId("address-streetAddress-set-first"));
 
     await waitFor(() => {
-      expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("nested-id-1", "CAN");
+      expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("nested-id-1", "CAN", "en");
     });
 
     expect(changeInputValueMock).toHaveBeenCalledWith("", true);
@@ -349,8 +372,42 @@ describe("AddressComplete", () => {
     await user.type(screen.getByTestId("address-streetAddress-input"), "10 Rue");
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("10 Rue", "FRA");
+      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("10 Rue", "FRA", "en");
     });
+  });
+
+  it("localizes nested address descriptions in French", async () => {
+    const user = userEvent.setup();
+
+    getFlagMock.mockReturnValue(true);
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-fr-1",
+          Text: "222 King St E",
+          Description: "Bowmanville ON L1C P6 - 27 Addresses",
+          Next: "Find",
+        },
+      ],
+      error: null,
+    });
+
+    renderComponent({ lang: "fr" });
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    await user.type(streetInput, "222 King");
+
+    await waitFor(() => {
+      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("222 King", "CAN", "fr");
+    });
+
+    expect(localizeAddressCompleteDescription).toHaveBeenCalledWith(
+      "Bowmanville ON L1C P6 - 27 Addresses",
+      { en: "Addresses", fr: "Adresses", current: "Adresses" }
+    );
+    expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent(
+      "222 King St E, Bowmanville ON L1C P6 - 27 Adresses"
+    );
   });
 
   it("does not call AddressComplete APIs when feature flag is disabled", async () => {
