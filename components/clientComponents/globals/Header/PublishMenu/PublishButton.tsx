@@ -145,7 +145,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const showPublishAction = allChecksPass;
   const isTemplateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
   const showPublishedView = isTemplateVersioningEnabled
-    ? Boolean(currentPublishedVersionId && !currentDraftVersionId)
+    ? Boolean(isPublished && !currentDraftVersionId)
     : isPublished;
   const triggerLabel = showPublishedView ? t("published") : t("publish");
   const isPublishReady = !showPublishedView && allChecksPass && !!userCanPublish;
@@ -165,11 +165,6 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     inset: "auto",
     marginTop: "1rem",
   } as CSSProperties;
-
-  useEffect(() => {
-    setPublishing(false);
-    setError(false);
-  }, [formId, isPublished, currentPublishedVersionId, currentDraftVersionId]);
 
   const triggerClassName = isPublishReady
     ? "publish-menu-trigger hover:text-slate-900 focus:text-slate-900 flex cursor-pointer items-center gap-2 rounded border-1 border-emerald-700 bg-emerald-50 px-3 py-1 hover:bg-emerald-100 focus:bg-emerald-100"

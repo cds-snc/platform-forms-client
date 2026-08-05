@@ -103,7 +103,11 @@
         "postalCode": "Postal code",
         "postalCodeOrZip": "Postal or zip code",
         "country": "Country"
-      }
+      },
+      "apiKeyMissing": "Address lookup is unavailable because the API key is not configured.",
+      "apiKeyInvalid": "Address lookup failed due to an invalid API key. Please check configuration.",
+      "serviceUnavailable": "Address lookup is temporarily unavailable. Please try again later.",
+      "networkError": "A network error occurred while looking up addresses. Check your connection and try again."
     },
     "allRequired": "All required",
     "answer": "Answer...",
@@ -854,8 +858,8 @@
         "listitem2": "Revise lists and spreadsheets for organizing responses.",
         "listitem3": "Update your API integration.",
         "agree": {
-          "label": "To continue, enter AGREE",
-          "required": "required",
+          "label": "To continue, enter ",
+          "required": "(required)",
           "placeholder": "AGREE"
         }
       }
@@ -1698,8 +1702,8 @@
     "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
   },
   "publishViewEdit": {
-    "title": "Edit and re-publish",
-    "description": "Make an edit to your form while it is published",
+    "title": "Update a published form",
+    "description": "Change a form that's already live",
     "button": "Edit form"
   },
   "formDownloadFailed": "Failed to download the form."

@@ -6,6 +6,5 @@
   "templateVersioning": false,
   "topBanner": false,
   "responsesPilot": false,
-  "userSideAuditLogs": false,
   "zitadelLogin": false
 }

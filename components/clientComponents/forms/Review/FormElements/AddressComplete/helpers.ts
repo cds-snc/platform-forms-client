@@ -41,11 +41,8 @@ export const getSplitAddressAsFormItem = (
   const titleSet = {
     streetAddress: `${addressCompleteStrings.streetAddress}`,
     city: `${addressCompleteStrings.city}`,
-    province: `
-      ${canadaOnly ? addressCompleteStrings.province : addressCompleteStrings.provinceOrState}`,
-    postalCode: `${
-      canadaOnly ? addressCompleteStrings.postalCode : addressCompleteStrings.postalCodeOrZip
-    }`,
+    province: `${canadaOnly ? addressCompleteStrings.province : addressCompleteStrings.provinceOrState}`,
+    postalCode: `${canadaOnly ? addressCompleteStrings.postalCode : addressCompleteStrings.postalCodeOrZip}`,
     country: `${addressCompleteStrings.country}`,
   };
 

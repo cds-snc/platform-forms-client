@@ -122,13 +122,20 @@ export const Menu = ({
   const unfilteredMenuItemList = useMemo(
     () => [
       {
-        filtered: isPublished ? false : true || (ttl ? true : false),
+        filtered:
+          status !== TAB_STATUS.ARCHIVED && isPublished ? false : true || (ttl ? true : false),
         title: t("card.menu.copyLink"),
         callback: copyLinkCallback,
       },
       {
         filtered:
-          templateVersioningEnabled && !isEmailDelivery && isPublished && !hasDraft ? false : true,
+          templateVersioningEnabled &&
+          !isEmailDelivery &&
+          status !== TAB_STATUS.ARCHIVED &&
+          isPublished &&
+          !hasDraft
+            ? false
+            : true,
         title: t("card.menu.createDraftVersion"),
         callback: () => {
           try {

@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.2.23] - 2026-08-04
+
+- Update address complete validation
+
+## [2.2.22] - 2026-07-31
+
+- Move address complete validation to helper
+
+## [2.2.21] - 2026-07-31
+
+- Update validation for address complete
+
+## [2.2.20] - 2026-07-30
+
+- Fixes legend reset nesting to apply only to fieldset
+
+## [2.2.18] - 2026-07-22
+
+- Republish package following failed NPM publication
+
+## [2.2.17] - 2026-07-21
+
+- Republish package following failed NPM publication
+
 ## [2.2.14] - 2026-06-15
 
 - Replaced the self-import from @gcforms/core with a local import

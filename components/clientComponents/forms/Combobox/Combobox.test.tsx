@@ -6,6 +6,8 @@ import { cleanup, render, screen, within, waitFor } from "@testing-library/react
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { GenerateElement } from "@lib/formBuilder";
+import { Combobox } from "./Combobox";
+import { useField } from "formik";
 import type { FormElement } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 
@@ -93,3 +95,155 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang
     expect(firstOptionText.length).toBeGreaterThan(0);
   });
 });
+
+describe("Combobox language switch", () => {
+  afterEach(() => cleanup());
+
+  it("syncs value from French to English when mounted with opposite language", async () => {
+    const setValueMock = vi.fn();
+    const setErrorMock = vi.fn();
+
+    // Intercept useField that Comboox uses and provide with a default French choice
+    vi.mocked(useField).mockReturnValueOnce(
+      [
+        {
+          value: "Colombie-Britannique",
+          name: "province",
+          onBlur: undefined,
+        },
+        { touched: null, error: null },
+        { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
+      ] as unknown as ReturnType<typeof useField>
+    );
+
+    const englishChoices = ["British Columbia", "Alberta", "Ontario"];
+    const bilingualChoices = [
+      { en: "British Columbia", fr: "Colombie-Britannique" },
+      { en: "Alberta", fr: "Alberta" },
+      { en: "New Brunswick", fr: "Nouveau-Brunswick" },
+    ];
+
+    // Combobox is mounted with English value using above mock but overriden with above English choices.
+    // Note: same pattern for below tests
+    render(
+      <Combobox
+        id="test-combobox"
+        name="province"
+        lang="en"
+        choices={englishChoices}
+        allChoices={bilingualChoices}
+      />
+    );
+
+    // Wait for useLayoutEffect to run and sync the value
+    await waitFor(() => {
+      expect(setValueMock).toHaveBeenCalledWith("British Columbia");
+    });
+  });
+
+  it("syncs value from English to French when mounted with opposite language", async () => {
+    const setValueMock = vi.fn();
+    const setErrorMock = vi.fn();
+
+    vi.mocked(useField).mockReturnValueOnce(
+      [
+        {
+          value: "British Columbia",
+          name: "province",
+          onBlur: undefined,
+        },
+        { touched: null, error: null },
+        { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
+      ] as unknown as ReturnType<typeof useField>
+    );
+
+    const frenchChoices = ["Colombie-Britannique", "Alberta", "Ontario"];
+    const bilingualChoices = [
+      { en: "British Columbia", fr: "Colombie-Britannique" },
+      { en: "Alberta", fr: "Alberta" },
+      { en: "New Brunswick", fr: "Nouveau-Brunswick" },
+    ];
+
+    render(
+      <Combobox
+        id="test-combobox"
+        name="province"
+        lang="fr"
+        choices={frenchChoices}
+        allChoices={bilingualChoices}
+      />
+    );
+
+    await waitFor(() => {
+      expect(setValueMock).toHaveBeenCalledWith("Colombie-Britannique");
+    });
+  });
+
+  it("does not sync value when it already exists in current language choices", async () => {
+    const setValueMock = vi.fn();
+    const setErrorMock = vi.fn();
+
+    vi.mocked(useField).mockReturnValueOnce(
+      [
+        {
+          value: "British Columbia",
+          name: "province",
+          onBlur: undefined,
+        },
+        { touched: null, error: null },
+        { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
+      ] as unknown as ReturnType<typeof useField>
+    );
+
+    const englishChoices = ["British Columbia", "Alberta", "Ontario"];
+    const bilingualChoices = [
+      { en: "British Columbia", fr: "Colombie-Britannique" },
+      { en: "Alberta", fr: "Alberta" },
+      { en: "New Brunswick", fr: "Nouveau-Brunswick" },
+    ];
+
+    render(
+      <Combobox
+        id="test-combobox"
+        name="province"
+        lang="en"
+        choices={englishChoices}
+        allChoices={bilingualChoices}
+      />
+    );
+
+    expect(setValueMock).not.toHaveBeenCalled();
+  });
+
+  it("does not sync value when allChoices is not provided", async () => {
+    const setValueMock = vi.fn();
+    const setErrorMock = vi.fn();
+
+    vi.mocked(useField).mockReturnValueOnce(
+      [
+        {
+          value: "Some Value",
+          name: "field",
+          onBlur: undefined,
+        },
+        { touched: null, error: null },
+        { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
+      ] as unknown as ReturnType<typeof useField>
+    );
+
+    const choices = ["Some Value", "Other Value"];
+
+    render(
+      <Combobox
+        id="test-combobox"
+        name="field"
+        lang="en"
+        choices={choices}
+      />
+    );
+
+    // setValue should NOT be called without allChoices
+    expect(setValueMock).not.toHaveBeenCalled();
+  });
+});
+
