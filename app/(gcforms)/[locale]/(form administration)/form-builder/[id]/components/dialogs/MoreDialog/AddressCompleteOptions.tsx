@@ -24,25 +24,6 @@ export const AddressCompleteOptions = ({
       <h3>{t("addElementDialog.addressComplete.options")}</h3>
 
       <Radio
-        id={`addressComponent-${item.id}-id-canadianOnly`}
-        value={true}
-        checked={isCanadianOnly}
-        name={`addressComponent-${item.id}-name-canadianOnly`}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setItem({
-            ...item,
-            properties: {
-              ...item.properties,
-              addressComponents: {
-                ...item.properties.addressComponents,
-                canadianOnly: e.target.checked,
-              },
-            },
-          });
-        }}
-        label={t("addElementDialog.addressComplete.canadianOnly")}
-      ></Radio>
-      <Radio
         id={`addressComponent-${item.id}-id-international`}
         value={false}
         checked={!isCanadianOnly}
@@ -60,6 +41,25 @@ export const AddressCompleteOptions = ({
           });
         }}
         label={t("addElementDialog.addressComplete.allowInternational")}
+      ></Radio>
+      <Radio
+        id={`addressComponent-${item.id}-id-canadianOnly`}
+        value={true}
+        checked={isCanadianOnly}
+        name={`addressComponent-${item.id}-name-canadianOnly`}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                canadianOnly: e.target.checked,
+              },
+            },
+          });
+        }}
+        label={t("addElementDialog.addressComplete.canadianOnly")}
       ></Radio>
 
       <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
