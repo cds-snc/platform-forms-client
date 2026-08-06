@@ -77,16 +77,20 @@ vi.mock("./actions", () => ({
   getAddressCompleteRetrieve: getAddressCompleteRetrieveMock,
 }));
 
-vi.mock("./utils", () => ({
-  matchesAddressPattern: matchesAddressPatternMock,
-  localizeAddressCompleteDescription: vi.fn(
-    (description: string, labels: { en: string; fr: string; current: string }) =>
-    description.replace(
-      /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
-      (_match: string, count: string) => ` - ${count} ${labels.current}`
+vi.mock("./utils", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./utils")>();
+  return {
+    ...actual,
+    matchesAddressPattern: matchesAddressPatternMock,
+    localizeAddressCompleteDescription: vi.fn(
+      (description: string, labels: { en: string; fr: string; current: string }) =>
+      description.replace(
+        /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
+        (_match: string, count: string) => ` - ${count} ${labels.current}`
+      )
     )
-  ),
-}));
+  };
+});
 
 vi.mock("@clientComponents/forms", () => {
   const ManagedCombobox = React.forwardRef<ManagedComboboxRef, ManagedComboboxMockProps>(
@@ -156,6 +160,7 @@ const baseProps: AddressCompleteProps = {
   ariaDescribedBy: "Address help text",
   label: "Mailing Address",
   lang: "en",
+  formId: "form-123",
 };
 
 const renderComponent = (props?: Partial<AddressCompleteProps>) => {
@@ -238,7 +243,7 @@ describe("AddressComplete", () => {
     await user.type(streetInput, "123 Main");
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN", "en");
+      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN", "en", "form-123", "");
     });
 
     await waitFor(() => {
@@ -283,7 +288,7 @@ describe("AddressComplete", () => {
     await user.click(setFirst);
 
     await waitFor(() => {
-      expect(getSelectedAddressMock).toHaveBeenCalledWith("id-retrieve-1", "CAN", "en");
+      expect(getSelectedAddressMock).toHaveBeenCalledWith("id-retrieve-1", "CAN", "en", "form-123", "");
     });
 
     await waitFor(() => {
@@ -338,7 +343,7 @@ describe("AddressComplete", () => {
     await user.click(screen.getByTestId("address-streetAddress-set-first"));
 
     await waitFor(() => {
-      expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("nested-id-1", "CAN", "en");
+      expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("nested-id-1", "CAN", "en", "form-123", "");
     });
 
     expect(changeInputValueMock).toHaveBeenCalledWith("", true);
@@ -372,7 +377,7 @@ describe("AddressComplete", () => {
     await user.type(screen.getByTestId("address-streetAddress-input"), "10 Rue");
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("10 Rue", "FRA", "en");
+      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("10 Rue", "FRA", "en", "form-123", "");
     });
   });
 
@@ -398,7 +403,7 @@ describe("AddressComplete", () => {
     await user.type(streetInput, "222 King");
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("222 King", "CAN", "fr");
+      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("222 King", "CAN", "fr", "form-123", "");
     });
 
     expect(localizeAddressCompleteDescription).toHaveBeenCalledWith(
