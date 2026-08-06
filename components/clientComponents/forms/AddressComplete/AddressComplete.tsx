@@ -48,16 +48,13 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     [t]
   );
 
-  const toFullAddressMemo = useCallback(
+  const toFullAddress = useCallback(
     (address: AddressCompleteChoice) =>
       address.Text +
       ", " +
       localizeAddressCompleteDescription(address.Description, addressLabelsMemo),
     [addressLabelsMemo]
   );
-
-  // Backwards-compatible alias used by the rest of the component
-  const toFullAddress = toFullAddressMemo;
 
   const comboboxRef = useRef<ManagedComboboxRef>(null);
   const [apiError, setApiError] = useState<string | null>(null);
