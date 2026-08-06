@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { languages } from "@i18n/settings";
 import { Noto_Sans, Lato } from "next/font/google";
 import { googleTagManager } from "@lib/cspScripts";
+import { generateLogToken } from "@lib/clientLogging/logToken";
 import { headers } from "next/headers";
 import { auth } from "@lib/auth";
 import ServiceWorker from "@clientComponents/globals/ServiceWorker";
@@ -47,6 +48,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const nonce = headerSet.get("x-nonce") ?? "";
   const cryptoKey = headerSet.get("x-crypto-key");
   const session = await auth();
+  const logToken = generateLogToken();
 
   return (
     <html lang={locale} dir={dir(locale)} className={`${notoSans.variable} ${lato.variable}`}>
@@ -55,6 +57,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
         <meta name="authenticated" content={session ? "true" : "false"} />
+        {logToken && <meta name="x-log-token" content={logToken} />}
         {cryptoKey && <meta name="crypto-key" content={cryptoKey} />}
 
         {/* Currently wrapped in a suspense element because react does not handle SSR well when
