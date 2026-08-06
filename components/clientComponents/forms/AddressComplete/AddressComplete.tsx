@@ -175,6 +175,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           if (response.error) {
             setApiError(mapAddressCompleteError(response.error, t));
           } else if (response.address) {
+            response.address.country = "CAN";
             setAddressObject(response.address);
             if (comboboxRef.current) {
               comboboxRef.current.changeInputValue(response.address.streetAddress, false);
