@@ -105,6 +105,17 @@ vi.mock("@root/i18n/client", () => createTranslationMocks());
 
 vi.mock("axios");
 
+// Ensure debounce runs immediately in tests to avoid timing flakes
+vi.mock("lodash/debounce", () => ({
+  __esModule: true,
+  default: <Args extends unknown[], R>(fn: (...args: Args) => R) => {
+    const wrapped = (...args: Args): R => fn(...args);
+    // attach a cancel method compatible with debounce's API
+    (wrapped as unknown as { cancel?: () => void }).cancel = () => {};
+    return wrapped as ((...args: Args) => R) & { cancel?: () => void };
+  },
+}));
+
 vi.mock("@lib/auth/nextAuth", () => ({
   __esModule: true,
   auth: vi.fn(async () => null),
