@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.24] - 2026-08-05
+
+- Update address complete validation and sanitization
+
 ## [2.2.23] - 2026-08-04
 
 - Update address complete validation
