@@ -106,6 +106,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     const handleToggle = (event: Event) => {
       const open = (event as ToggleEvent).newState === "open";
       setIsOpen(open);
+      setPublishing(false);
 
       if (open) {
         const firstFocusable = popover.querySelector<HTMLElement>(
