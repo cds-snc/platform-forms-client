@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.2](https://github.com/cds-snc/platform-forms-client/compare/v4.21.1...v4.21.2) (2026-08-06)
+
+
+### Bug Fixes
+
+* a11y address complete updates ([#7643](https://github.com/cds-snc/platform-forms-client/issues/7643)) ([a52dc28](https://github.com/cds-snc/platform-forms-client/commit/a52dc287590ff1950b56ead7ecec54b48e7e4468))
+* add save draft before opening dialog ([#7653](https://github.com/cds-snc/platform-forms-client/issues/7653)) ([1f5b5c4](https://github.com/cds-snc/platform-forms-client/commit/1f5b5c462096a42cdfd7cf9ac022b77145f7b116))
+* downshift update ([#7629](https://github.com/cds-snc/platform-forms-client/issues/7629)) ([6c7b255](https://github.com/cds-snc/platform-forms-client/commit/6c7b255ffcf40433b6ca8306bd7179aeea7c4988))
+* form-filler sticky bar a11y update ([#7641](https://github.com/cds-snc/platform-forms-client/issues/7641)) ([fce98a5](https://github.com/cds-snc/platform-forms-client/commit/fce98a5b114fab1d6620b02b42de967559f62015))
+* publishing state ([#7654](https://github.com/cds-snc/platform-forms-client/issues/7654)) ([d8169c9](https://github.com/cds-snc/platform-forms-client/commit/d8169c973471f4abc5e415cb00b18ff622c5e900))
+
+
+### Miscellaneous Chores
+
+* Add code to re-load country for address complete ([#7630](https://github.com/cds-snc/platform-forms-client/issues/7630)) ([e546fbc](https://github.com/cds-snc/platform-forms-client/commit/e546fbcd6bbb43e413da09753fd299ed0e17262e))
+* bump next js to 16.3.0 ([#7628](https://github.com/cds-snc/platform-forms-client/issues/7628)) ([573d122](https://github.com/cds-snc/platform-forms-client/commit/573d1224eabf00d50d9a86ca241d2374fadc0097))
+* handle empty search for address complete  ([#7634](https://github.com/cds-snc/platform-forms-client/issues/7634)) ([dee8735](https://github.com/cds-snc/platform-forms-client/commit/dee873508b5bb3c0a2e32f740de17992137b77e3))
+* handle multiple localization  ([#7635](https://github.com/cds-snc/platform-forms-client/issues/7635)) ([5710285](https://github.com/cds-snc/platform-forms-client/commit/5710285dc265cb7f30f317c06ead529ea1a5e530))
+* pass reason through Error message for Notification module in Connectors package ([#7633](https://github.com/cds-snc/platform-forms-client/issues/7633)) ([6989e1e](https://github.com/cds-snc/platform-forms-client/commit/6989e1ea6b33a4576144dcc6bf8463ae648d308a))
+* Remove address complete API Keys from docker. ([#7632](https://github.com/cds-snc/platform-forms-client/issues/7632)) ([3052b93](https://github.com/cds-snc/platform-forms-client/commit/3052b93eba4fb899db504be9d02d625a38f9af8b))
+* Store addressComplete as JSON object and refactor rendering code ([#7642](https://github.com/cds-snc/platform-forms-client/issues/7642)) ([7584394](https://github.com/cds-snc/platform-forms-client/commit/75843943c8c98408352578903204a5c5766852fa))
+* update otel packages ([#7637](https://github.com/cds-snc/platform-forms-client/issues/7637)) ([40037c4](https://github.com/cds-snc/platform-forms-client/commit/40037c443baf74c781138205c20f1de9d7f4d24f))
+
 ## [4.21.1](https://github.com/cds-snc/platform-forms-client/compare/v4.21.0...v4.21.1) (2026-08-04)
 
 
