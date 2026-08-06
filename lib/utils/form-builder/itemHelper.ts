@@ -1,6 +1,7 @@
 import { FormElement, FormElementTypes, ValidationInputType } from "@lib/types";
 import { Language, LocalizedElementProperties } from "../../types/form-builder-types";
 import { isValidatedTextType, isAutoCompleteField } from "@lib/utils/form-builder";
+import { addressCompleteDefaultElementProperties } from "@clientComponents/forms/AddressComplete/defaults";
 
 type ElementType =
   | keyof typeof FormElementTypes
@@ -136,6 +137,13 @@ export const createElement = (element: FormElement, type: string) => {
     newElement.properties.validation = {
       required: true,
       all: true,
+    };
+  }
+
+  if (type === FormElementTypes.addressComplete) {
+    newElement.properties = {
+      ...newElement.properties,
+      ...addressCompleteDefaultElementProperties,
     };
   }
 
