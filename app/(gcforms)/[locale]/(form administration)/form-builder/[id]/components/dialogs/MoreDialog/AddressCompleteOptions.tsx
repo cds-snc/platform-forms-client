@@ -1,7 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import { Radio } from "@formBuilder/components/shared/MultipleChoice";
-import { AddressComponents, FormElementTypes, FormElement } from "@lib/types";
+import { FormElementTypes, FormElement } from "@lib/types";
 
 export const AddressCompleteOptions = ({
   item,
@@ -17,29 +17,7 @@ export const AddressCompleteOptions = ({
   }
 
   const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
-
-  const updateAddressComponents = (props: AddressComponents) => {
-    // check if the addresscomponent exists, if it doesn't make it.
-    if (item.properties.addressComponents == undefined) {
-      const baseAddress = {} as AddressComponents;
-      const addressComponent = Object.assign({}, baseAddress, props);
-      setItem({
-        ...item,
-        properties: { ...item.properties, addressComponents: addressComponent },
-      });
-    } else {
-      // clone the existing properties so that we don't overwrite other keys in "validation"
-      const addressComponent = Object.assign(
-        {},
-        item.properties.addressComponents,
-        props
-      ) as AddressComponents;
-      setItem({
-        ...item,
-        properties: { ...item.properties, addressComponents: addressComponent },
-      });
-    }
-  };
+  const isSplitAddress = item.properties.addressComponents?.splitAddress ?? false;
 
   return (
     <section className="mb-4">
@@ -48,22 +26,40 @@ export const AddressCompleteOptions = ({
       <Radio
         id={`addressComponent-${item.id}-id-canadianOnly`}
         value={true}
-        key={`addressComponent-${item.id}-canadianOnly-` + isCanadianOnly}
         checked={isCanadianOnly}
+        name={`addressComponent-${item.id}-name-canadianOnly`}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ canadianOnly: e.target.checked });
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                canadianOnly: e.target.checked,
+              },
+            },
+          });
         }}
         label={t("addElementDialog.addressComplete.canadianOnly")}
       ></Radio>
       <Radio
         id={`addressComponent-${item.id}-id-international`}
         value={false}
-        key={`addressComponent-${item.id}-international-` + !isCanadianOnly}
         checked={!isCanadianOnly}
+        name={`addressComponent-${item.id}-name-canadianOnly`}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ canadianOnly: !e.target.checked });
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                canadianOnly: !e.target.checked,
+              },
+            },
+          });
         }}
-        label={t("addElementDialog.addressComplete.international")}
+        label={t("addElementDialog.addressComplete.allowInternational")}
       ></Radio>
 
       <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
@@ -71,16 +67,22 @@ export const AddressCompleteOptions = ({
 
       <Radio
         className="mt-2"
-        name="addressType"
+        name={`addressType-${item.id}`}
         id="addressType-full"
         label={t("addElementDialog.addressComplete.fullAddress")}
-        value="addressType-full"
-        checked={
-          item.properties.addressComponents?.splitAddress === false ||
-          item.properties.addressComponents?.splitAddress === undefined
-        }
+        value={false}
+        checked={!isSplitAddress}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ splitAddress: !e.target.checked });
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                splitAddress: !e.target.checked,
+              },
+            },
+          });
         }}
       />
       <div className="mb-4 ml-12 text-sm">
@@ -88,13 +90,22 @@ export const AddressCompleteOptions = ({
       </div>
       <Radio
         className="mt-2"
-        name="addressType"
+        name={`addressType-${item.id}`}
         id="addressType-split"
         label={t("addElementDialog.addressComplete.splitAddress")}
-        value="addressType-split"
-        checked={item.properties.addressComponents?.splitAddress === true}
+        value={true}
+        checked={isSplitAddress}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ splitAddress: e.target.checked });
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                splitAddress: e.target.checked,
+              },
+            },
+          });
         }}
       />
       <div className="mb-4 ml-12 text-sm">
