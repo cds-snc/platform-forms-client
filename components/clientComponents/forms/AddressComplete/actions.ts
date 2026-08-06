@@ -5,10 +5,16 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
-import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
+import {
+  isValidCanadaPostId,
+  isValidCountryCode,
+  isValidFormId,
+  isValidLanguage,
+} from "./validation";
 import { sanitizeAddressField, sanitizeCountryCode, sanitizeQuery } from "./utils";
 import { getClientIp } from "@lib/ip";
 import { getRedisInstance } from "@lib/integration/redisConnector";
+import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -37,6 +43,21 @@ const isRateLimited = async (ip: string): Promise<boolean> => {
     const results = await pipeline.exec();
     const count = results?.[0]?.[1] as number;
     return count > RATE_LIMIT_MAX;
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * This adds another layer of validation. An attacker calling the server action directly must supply a valid
+ * formId in the system, or the call is rejected before making a request the Canada Post API.
+ * @param formId
+ * @returns true when the formId corresponds to a real, non-deleted form in the system.
+ */
+const isKnownForm = async (formId: string): Promise<boolean> => {
+  try {
+    const form = await getPublicTemplateByID(formId);
+    return form !== null;
   } catch {
     return false;
   }
@@ -96,7 +117,8 @@ const hasItems0Error = (responseData: unknown): boolean => {
 export const getAddressCompleteChoices = async (
   query: string,
   countryCode: string,
-  language: string
+  language: string,
+  formId: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
   if (!isValidLanguage(language)) {
     return { items: [], error: "INVALID_INPUT" };
@@ -104,6 +126,10 @@ export const getAddressCompleteChoices = async (
 
   const sanitizedCountryCode = sanitizeCountryCode(countryCode);
   if (!isValidCountryCode(sanitizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (!isValidFormId(formId) || !(await isKnownForm(formId))) {
     return { items: [], error: "INVALID_INPUT" };
   }
 
@@ -152,7 +178,8 @@ export const getAddressCompleteChoices = async (
 export const getSelectedAddress = async (
   value: string,
   countryCode: string,
-  language: Language
+  language: Language,
+  formId: string
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
   if (!isValidLanguage(language)) {
     return { address: null, error: "INVALID_INPUT" };
@@ -160,6 +187,10 @@ export const getSelectedAddress = async (
 
   const sanitizedCountryCode = sanitizeCountryCode(countryCode);
   if (!isValidCountryCode(sanitizedCountryCode)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (!isValidFormId(formId) || !(await isKnownForm(formId))) {
     return { address: null, error: "INVALID_INPUT" };
   }
 
@@ -212,7 +243,8 @@ export const getSelectedAddress = async (
 export const getAddressCompleteRetrieve = async (
   query: string,
   countryCode: string,
-  language: string
+  language: string,
+  formId: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
   if (!isValidLanguage(language)) {
     return { items: [], error: "INVALID_INPUT" };
@@ -220,6 +252,10 @@ export const getAddressCompleteRetrieve = async (
 
   const sanitizedCountryCode = sanitizeCountryCode(countryCode);
   if (!isValidCountryCode(sanitizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (!isValidFormId(formId) || !(await isKnownForm(formId))) {
     return { items: [], error: "INVALID_INPUT" };
   }
 
