@@ -4,3 +4,14 @@ export const MAX_CANADA_POST_ID_LENGTH = 64;
 export const isValidCanadaPostId = (id: string): boolean => {
   return id.length > 0 && id.length <= MAX_CANADA_POST_ID_LENGTH && CANADA_POST_ID_PATTERN.test(id);
 };
+
+// ISO 3166-1 alpha-2 or alpha-3 country codes (uppercase letters only)
+const COUNTRY_CODE_PATTERN = /^[A-Z]{2,3}$/;
+export const isValidCountryCode = (code: string): boolean => {
+  return COUNTRY_CODE_PATTERN.test(code);
+};
+
+const ALLOWED_LANGUAGES = ["en", "fr"] as const;
+export const isValidLanguage = (lang: string): boolean => {
+  return (ALLOWED_LANGUAGES as readonly string[]).includes(lang);
+};

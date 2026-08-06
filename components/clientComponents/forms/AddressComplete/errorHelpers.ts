@@ -10,6 +10,8 @@ export function mapAddressCompleteError(
       return t("addElementDialog.addressComplete.apiKeyMissing");
     case "API_KEY_INVALID":
       return t("addElementDialog.addressComplete.apiKeyInvalid");
+    case "RATE_LIMITED":
+      return t("addElementDialog.addressComplete.serviceUnavailable");
     case "NETWORK_ERROR":
       return t("addElementDialog.addressComplete.networkError");
     default:
