@@ -1,6 +1,6 @@
 export const addressCompleteDefaultElementProperties = {
   addressComponents: {
-    canadianOnly: true,
+    canadianOnly: false,
     splitAddress: false,
   },
 };
