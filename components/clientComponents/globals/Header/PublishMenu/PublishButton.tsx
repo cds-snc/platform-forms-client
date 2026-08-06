@@ -20,6 +20,7 @@ import { PopoverUnauthenticatedView } from "./PopoverUnauthenticatedView";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { UpdateTemplateAction } from "@lib/templates/types";
+import { useTemplateContext } from "@root/lib/hooks/form-builder/useTemplateContext";
 
 const ChevronDownIcon = () => (
   <svg
@@ -71,6 +72,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   }));
 
   const setGroupId = useGroupStore((state) => state.setId);
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const {
     userCanPublish,
@@ -183,7 +185,8 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     }
   };
 
-  const handleOpenPrePublish = () => {
+  const handleOpenPrePublish = async () => {
+    await saveDraftIfNeeded();
     setShowPrePublishDialog(true);
   };
 
