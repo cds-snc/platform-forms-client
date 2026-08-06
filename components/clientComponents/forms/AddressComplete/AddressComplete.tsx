@@ -13,7 +13,8 @@ import {
 import { mapAddressCompleteError } from "./errorHelpers";
 import { localizeAddressCompleteDescription, matchesAddressPattern } from "./utils";
 import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import debounce from "lodash/debounce";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
 import { cn } from "@lib/utils";
@@ -33,21 +34,27 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
   const { t, i18n } = useTranslation("form-builder", { lng: lang });
 
-  const addressLabels = {
-    en: t("addElementDialog.addressComplete.multipleAddresses", { lng: "en" }),
-    fr: t("addElementDialog.addressComplete.multipleAddresses", { lng: "fr" }),
-    current: t("addElementDialog.addressComplete.multipleAddresses"),
-  };
-
   //Address Complete elements
   const [choices, setChoices] = useState<string[]>([]);
   const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
 
-  const toFullAddress = (address: AddressCompleteChoice): string => {
-    return (
-      address.Text + ", " + localizeAddressCompleteDescription(address.Description, addressLabels)
-    );
-  };
+  // Memoize addressLabels and toFullAddress so callbacks can be stable
+  const addressLabelsMemo = useMemo(
+    () => ({
+      en: t("addElementDialog.addressComplete.multipleAddresses", { lng: "en" }),
+      fr: t("addElementDialog.addressComplete.multipleAddresses", { lng: "fr" }),
+      current: t("addElementDialog.addressComplete.multipleAddresses"),
+    }),
+    [t]
+  );
+
+  const toFullAddress = useCallback(
+    (address: AddressCompleteChoice) =>
+      address.Text +
+      ", " +
+      localizeAddressCompleteDescription(address.Description, addressLabelsMemo),
+    [addressLabelsMemo]
+  );
 
   const comboboxRef = useRef<ManagedComboboxRef>(null);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -86,34 +93,34 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     helpers.setValue(newValue);
   }, [addressObject, helpers]);
 
-  const handleAddressComplete = async (choices: AddressCompleteChoice[]) => {
-    //loop through the responseData and add it to the addressResultsCache
-    const newElements: AddressCompleteChoice[] = [];
+  // Keep a ref to the latest addressObject so the debounced function can read current values
+  const addressObjectRef = useRef<AddressElements | null>(addressObject);
+  useEffect(() => {
+    addressObjectRef.current = addressObject;
+  }, [addressObject]);
 
-    for (let i = 0; i < choices.length; i++) {
-      // Check key doesn't already exist.
-      if (!addressResultCache.find((item: AddressCompleteChoice) => item.Id === choices[i].Id)) {
-        newElements.push(choices[i]);
-      }
-    }
+  // Debounced search ref will be initialized after handleAddressComplete is defined
+  const debouncedSearchRef = useRef<(((q: string) => void) & { cancel?: () => void }) | null>(null);
 
-    if (newElements.length > 0) {
-      setAddressResultCache((prevCache) => [...prevCache, ...newElements]);
-    }
+  const handleAddressComplete = useCallback(
+    async (choices: AddressCompleteChoice[]) => {
+      // Add new results to the cache using functional update to avoid stale reads
+      setAddressResultCache((prevCache) => {
+        const newElements = choices.filter((c) => !prevCache.find((p) => p.Id === c.Id));
+        return newElements.length > 0 ? [...prevCache, ...newElements] : prevCache;
+      });
 
-    // Filter the results to avoid duplicate entry
-    const uniqueResults = choices.filter(
-      (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
-        index ===
-        self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
-    );
+      // Filter the results to avoid duplicate entry
+      const uniqueResults = choices.filter(
+        (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
+          index ===
+          self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
+      );
 
-    setChoices(
-      uniqueResults.map((item: AddressCompleteChoice) => {
-        return toFullAddress(item);
-      })
-    );
-  };
+      setChoices(uniqueResults.map((item: AddressCompleteChoice) => toFullAddress(item)));
+    },
+    [setAddressResultCache, setChoices, toFullAddress]
+  );
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressData("streetAddress", e.target.value); // Update the street address in the address object
@@ -130,26 +137,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       return;
     } // Abandon, don't search on nested addresses.
 
-    try {
-      const response = await getAddressCompleteChoices(
-        query,
-        addressObject?.country || "CAN",
-        i18n.language as Language
-      );
-      if (response.error) {
-        // Map server error codes to friendly/localized messages
-        setApiError(mapAddressCompleteError(response.error, t));
-        setChoices([]);
-        setAddressResultCache([]);
-      } else {
-        setApiError(null);
-        handleAddressComplete(response.items);
-      }
-    } catch (err: unknown) {
-      setApiError(t("addElementDialog.addressComplete.serviceUnavailable"));
-      setChoices([]);
-      setAddressResultCache([]);
-    }
+    // Debounced search to avoid calling the API on every keystroke
+    debouncedSearchRef.current?.(query);
+    return;
   };
 
   const onAddressSet = async (value: string) => {
@@ -221,6 +211,38 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       }
     }
   };
+
+  // Initialize debounced search after handler is defined, and recreate when language or handler changes
+  useEffect(() => {
+    debouncedSearchRef.current = debounce(async (query: string) => {
+      try {
+        const response = await getAddressCompleteChoices(
+          query,
+          addressObjectRef.current?.country || "CAN",
+          i18n.language as Language
+        );
+        if (response.error) {
+          setApiError(mapAddressCompleteError(response.error, t));
+          setChoices([]);
+          setAddressResultCache([]);
+        } else {
+          setApiError(null);
+          handleAddressComplete(response.items);
+        }
+      } catch (err: unknown) {
+        setApiError(t("addElementDialog.addressComplete.serviceUnavailable"));
+        setChoices([]);
+        setAddressResultCache([]);
+      }
+    }, 300);
+
+    return () => {
+      if (debouncedSearchRef.current && debouncedSearchRef.current.cancel) {
+        debouncedSearchRef.current?.cancel();
+        debouncedSearchRef.current = null;
+      }
+    };
+  }, [i18n.language, t, handleAddressComplete]);
 
   const setAddressData = (key: string, value: string) => {
     let baseAddressObject = {};
