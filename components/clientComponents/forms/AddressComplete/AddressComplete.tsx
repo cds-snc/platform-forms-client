@@ -414,7 +414,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
                 isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
               )}
               required={props.required}
-              data-testid="addresscomplete-input-streetAddress"
+              data-testid="addresscomplete-streetAddress-input"
             />
           )}
           <input type="hidden" {...field} />
