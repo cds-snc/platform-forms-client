@@ -38,6 +38,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
   const [field, meta, helpers] = useField(props);
 
+  const [addressToken] = useState(() =>
+    typeof document !== "undefined"
+      ? (document.querySelector<HTMLMetaElement>("meta[name='x-address-token']")?.content ?? "")
+      : ""
+  );
+
   const { t, i18n } = useTranslation("form-builder", { lng: lang });
 
   const addressLabels = {
@@ -142,7 +148,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         query,
         addressObject?.country || "CAN",
         i18n.language as Language,
-        formId
+        formId,
+        addressToken
       );
       if (response.error) {
         // Map server error codes to friendly/localized messages
@@ -189,7 +196,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             selectedResult.Id,
             addressObject?.country || "CAN",
             i18n.language as Language,
-            formId
+            formId,
+            addressToken
           );
           if (response.error) {
             setApiError(mapAddressCompleteError(response.error, t));
@@ -210,7 +218,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             selectedResult.Id,
             addressObject?.country || "CAN",
             i18n.language as Language,
-            formId
+            formId,
+            addressToken
           );
 
           if (response.error) {
