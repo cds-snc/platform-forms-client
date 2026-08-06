@@ -27,6 +27,10 @@ describe("<AddressCompleteOptions />", () => {
       descriptionFr: "",
       placeholderEn: "",
       placeholderFr: "",
+      addressComponents: {
+        canadianOnly: true,
+        splitAddress: false,
+      },
     },
     index: 0,
     questionNumber: 0,
@@ -37,8 +41,8 @@ describe("<AddressCompleteOptions />", () => {
 
     await render(<AddressCompleteOptions item={item} setItem={setItemSpy} />);
 
-    // Verify the component renders with checkboxes
-    const checkbox = page.getByRole("checkbox");
-    await expect.element(checkbox).toBeVisible();
+    // Verify the component renders with radios
+    const radio = page.getByRole("radio");
+    await expect.element(radio).toBeVisible();
   });
 });
