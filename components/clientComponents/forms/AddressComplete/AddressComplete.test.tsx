@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import React, { useImperativeHandle, useState } from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AddressComplete } from "./AddressComplete";
@@ -81,10 +81,10 @@ vi.mock("./utils", () => ({
   matchesAddressPattern: matchesAddressPatternMock,
   localizeAddressCompleteDescription: vi.fn(
     (description: string, labels: { en: string; fr: string; current: string }) =>
-    description.replace(
-      /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
-      (_match: string, count: string) => ` - ${count} ${labels.current}`
-    )
+      description.replace(
+        /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
+        (_match: string, count: string) => ` - ${count} ${labels.current}`
+      )
   ),
 }));
 
@@ -347,7 +347,7 @@ describe("AddressComplete", () => {
     );
   });
 
-  it("resets address fields when country changes and uses selected country for lookup", async () => {
+  it("resets address fields when country changes and uses manual street input for non-CAN", async () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
@@ -369,11 +369,26 @@ describe("AddressComplete", () => {
       expect(screen.getByTestId("addresscomplete-input-postalCode")).toHaveValue("");
     });
 
-    await user.type(screen.getByTestId("address-streetAddress-input"), "10 Rue");
+    await user.type(screen.getByTestId("addresscomplete-streetAddress-input"), "10 Rue");
+
+    expect(getAddressCompleteChoicesMock).not.toHaveBeenCalled();
+  });
+
+  it("searches using the latest typed query for Canadian addresses", async () => {
+    getFlagMock.mockReturnValue(true);
+    getAddressCompleteChoicesMock.mockResolvedValue({ items: [], error: null });
+
+    renderComponent();
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    fireEvent.change(streetInput, { target: { value: "1" } });
+    fireEvent.change(streetInput, { target: { value: "12" } });
+    fireEvent.change(streetInput, { target: { value: "123 Main" } });
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("10 Rue", "FRA", "en");
+      expect(getAddressCompleteChoicesMock).toHaveBeenCalled();
     });
+    expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN", "en");
   });
 
   it("localizes nested address descriptions in French", async () => {

@@ -271,18 +271,15 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     return country[i18n.language as Language];
   });
 
-  // Determine the localized display value for the current country code or name
   const countryBaseValue = (() => {
     try {
       const stored = addressObject?.country;
       if (!stored) return "Canada";
-      // Match only by localized display keys `en` and `fr` (case-insensitive)
-      const lowered = String(stored).toLowerCase();
-      const byEnFr = countries.all.find((c) => {
-        const candidates = [c.en, c.fr].filter(Boolean) as string[];
-        return candidates.some((n) => String(n).toLowerCase() === lowered);
-      });
-      if (byEnFr) return byEnFr[i18n.language as Language];
+
+      const country = countries.all.find((c) => c.id === stored);
+      if (country) {
+        return country[i18n.language as Language];
+      }
     } catch (e) {
       // fall through to default
     }
@@ -382,25 +379,41 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Description id={`${name}-streetDesc`}>
             {t("addElementDialog.addressComplete.street.description")}
           </Description>
-          <Description id={`${name}-streetDesc-2`}>{searchHintText}</Description>
-          {
-            <ManagedCombobox
-              ref={comboboxRef}
-              choices={choices}
-              key={`${name}-streetAddress`}
+          {addressObject.country === "CAN" ? (
+            <>
+              <Description id={`${name}-streetDesc-2`}>{searchHintText}</Description>
+              <ManagedCombobox
+                ref={comboboxRef}
+                choices={choices}
+                key={`${name}-streetAddress`}
+                id={`${name}-streetAddress`}
+                name={`${name}-streetAddress`}
+                onChange={onAddressSearch}
+                onSetValue={onAddressSet}
+                baseValue={addressObject.streetAddress}
+                required={props.required}
+                ariaDescribedBy={`${name}-streetDesc ${name}-streetDesc-2`}
+                className={cn(
+                  isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+                )}
+                overrideError={streetError}
+              />
+            </>
+          ) : (
+            <input
+              type="text"
               id={`${name}-streetAddress`}
               name={`${name}-streetAddress`}
-              onChange={onAddressSearch}
-              onSetValue={onAddressSet}
-              baseValue={addressObject.streetAddress}
-              required={props.required}
-              ariaDescribedBy={`${name}-streetDesc ${name}-streetDesc-2`}
+              value={addressObject.streetAddress}
+              onChange={(e) => setAddressData("streetAddress", e.target.value)}
               className={cn(
+                "gc-input-text",
                 isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
               )}
-              overrideError={streetError}
+              required={props.required}
+              data-testid="addresscomplete-streetAddress-input"
             />
-          }
+          )}
           <input type="hidden" {...field} />
         </div>
 
