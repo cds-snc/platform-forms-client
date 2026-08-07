@@ -1,4 +1,6 @@
 import { StarRatingObject } from "@lib/types";
+import { FormElementTypes } from "@lib/types";
+import { Answer } from "@root/lib/responseDownloadFormats/types";
 
 export const parseStarRatingAnswer = (answer: unknown): StarRatingObject | undefined => {
   if (
@@ -29,4 +31,12 @@ export const formatStarRating = (
 export const formatStarRatingAnswer = (rawAnswer: unknown): string => {
   const parsed = parseStarRatingAnswer(rawAnswer);
   return parsed ? formatStarRating(parsed.value, parsed.numberOfStars) : "-";
+};
+
+export const checkAndformatStarRatingAnswer = (item: Answer): string | undefined => {
+  if (item.type !== FormElementTypes.starRating) {
+    return undefined;
+  }
+
+  return formatStarRatingAnswer(item.answer);
 };

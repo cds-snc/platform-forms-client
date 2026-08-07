@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-
-import { checkAndformatStarRatingAnswer } from "./checkAndformatStarRatingAnswer";
+import { checkAndformatStarRatingAnswer } from "./utils";
 import { FormElementTypes } from "@lib/types";
+
 
 describe("formatStarRatingAnswer", () => {
   it("returns undefined for non-starRating element types", () => {

@@ -8,7 +8,7 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
-import { checkAndformatStarRatingAnswer } from "@root/lib/responseDownloadFormats/utils/checkAndformatStarRatingAnswer";
+import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
 
 /*
  ⚡ NOTE: CSS is compiled 

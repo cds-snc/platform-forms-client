@@ -3,7 +3,7 @@ import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
 import { sortByLayout } from "@lib/utils/form-builder";
-import { checkAndformatStarRatingAnswer } from "../utils/checkAndformatStarRatingAnswer";
+import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
 
