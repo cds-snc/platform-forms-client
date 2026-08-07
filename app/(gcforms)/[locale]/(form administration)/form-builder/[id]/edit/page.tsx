@@ -5,6 +5,7 @@ import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDial
 import { MoreDialog } from "../components/dialogs/MoreDialog/MoreDialog";
 import { RulesDialog } from "../components/dialogs/RulesDialog/RulesDialog";
 import { getTemplateVersionState } from "@lib/templates/versioning/queries/getTemplateVersionState";
+import { generateAddressToken } from "@root/lib/addressComplete/formToken";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -26,8 +27,11 @@ export default async function Page(props: { params: Promise<{ id: string; locale
 
   const templateVersionState = await getTemplateVersionState(id);
 
+  const addressToken = generateAddressToken(id);
+
   return (
     <>
+      {addressToken && <meta name="x-address-token" content={addressToken} />}
       <EditWithGroups
         id={id}
         hasDraft={!!templateVersionState?.currentDraftVersionId}

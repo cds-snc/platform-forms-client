@@ -10,6 +10,7 @@ import { PreviewClosed } from "./PreviewClosed";
 import { Language } from "@lib/types/form-builder-types";
 import { getTemplateVersionState } from "@lib/templates/versioning/queries/getTemplateVersionState";
 import { PublishedPreview } from "./PublishedPreview";
+import { generateAddressToken } from "@root/lib/addressComplete/formToken";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -59,5 +60,12 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     return <PreviewClosed closedDetails={closedDetails.closedDetails as ClosedDetails} />;
   }
 
-  return <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />;
+  const addressToken = generateAddressToken(formID);
+
+  return (
+    <>
+      {addressToken && <meta name="x-address-token" content={addressToken} />}
+      <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
+    </>
+  );
 }
