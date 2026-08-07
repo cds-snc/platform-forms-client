@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.24] - 2026-07-30
+
+- Add new Star Rating input validation type
+
 ## [2.2.23] - 2026-08-04
 
 - Update address complete validation

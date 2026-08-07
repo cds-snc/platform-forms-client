@@ -31,6 +31,7 @@ import {
   FileInput,
   NextActionRule,
   ValidationInputType,
+  StarRatingObject,
 } from "./form-types";
 
 export type {
@@ -92,3 +93,5 @@ export type {
 
 export type { FileInput };
 export type { ValidationInputType };
+
+export type { StarRatingObject };

@@ -9,6 +9,7 @@ import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
+import { formatStarRatingAnswer } from "@clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -250,6 +251,12 @@ export const getRow = ({
         .join("\n");
     }
     let answerText = mappedAnswer.answer;
+
+    // Star rating: format as fraction (e.g. "3/5")
+    if (element.type === FormElementTypes.starRating) {
+      return formatStarRatingAnswer(answerText);
+    }
+
     if (
       typeof answerText === "string" &&
       specialChars.some((char) => answerText.startsWith(char))

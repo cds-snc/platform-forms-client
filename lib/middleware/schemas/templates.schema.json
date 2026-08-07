@@ -236,7 +236,8 @@
             "combobox",
             "addressComplete",
             "formattedDate",
-            "numberInput"
+            "numberInput",
+            "starRating"
           ]
         },
         "properties": {
@@ -368,6 +369,16 @@
             },
             "useThousandsSeparator": {
               "description": "If set to true, the number input will format numbers with a thousands separator.",
+              "type": "boolean"
+            },
+            "numberOfStars": {
+              "description": "The number of stars to display in a star rating element.",
+              "type": "integer",
+              "minimum": 3,
+              "maximum": 10
+            },
+            "sparkleOnSelect": {
+              "description": "If true, a sparkle animation plays when a star is selected.",
               "type": "boolean"
             },
             "validation": {

@@ -19,6 +19,7 @@ export type {
   AddressComponents,
   BrandProperties,
   ClosedDetails,
+  StarRatingObject,
 } from "@gcforms/types";
 
 import { FormikErrors } from "formik";
