@@ -42,8 +42,9 @@ describe("<AddressCompleteOptions />", () => {
     await render(<AddressCompleteOptions item={item} setItem={setItemSpy} />);
 
     // Verify the component renders both radio groups
-    await expect.element(page.getByRole("radio")).toHaveCount(4);
+    await expect.element(page.getByLabel("Allow international addresses")).toBeVisible();
     await expect.element(page.getByLabel("Canadian addresses only")).toBeChecked();
+    await expect.element(page.getByLabel("Address split into parts")).toBeVisible();
     await expect.element(page.getByLabel("Entire address combined")).toBeChecked();
   });
 });
