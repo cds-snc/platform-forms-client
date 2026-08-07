@@ -7,6 +7,5 @@ export const checkAndformatStarRatingAnswer = (item: Answer): string | undefined
     return undefined;
   }
 
-  const rawAnswer = String(item.answer);
-  return formatStarRatingAnswer(rawAnswer);
+  return formatStarRatingAnswer(item.answer);
 };

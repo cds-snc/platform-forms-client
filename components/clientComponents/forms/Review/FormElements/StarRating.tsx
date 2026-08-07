@@ -11,7 +11,7 @@ export const StarRating = ({
     return <></>;
   }
 
-  const starRatingAnswer = formatStarRatingAnswer(formItem.values as string);
+  const starRatingAnswer = formatStarRatingAnswer(formItem.values);
 
   if (!starRatingAnswer) {
     return <BaseElement formItem={formItem} />;

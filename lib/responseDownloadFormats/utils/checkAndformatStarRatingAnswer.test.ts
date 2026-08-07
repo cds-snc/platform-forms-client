@@ -45,7 +45,7 @@ describe("formatStarRatingAnswer", () => {
         questionId: 42,
         questionEn: "Rating",
         questionFr: "Évaluation",
-        answer: JSON.stringify({ value: 3, numberOfStars: 5 }),
+        answer: { value: 3, numberOfStars: 5 },
         type: FormElementTypes.starRating,
       });
 
@@ -58,7 +58,7 @@ describe("formatStarRatingAnswer", () => {
         questionId: 5,
         questionEn: "Rating",
         questionFr: "Évaluation",
-        answer: JSON.stringify({ value: 7, numberOfStars: 10 }),
+        answer: { value: 7, numberOfStars: 10 },
         type: FormElementTypes.starRating,
       }
     );

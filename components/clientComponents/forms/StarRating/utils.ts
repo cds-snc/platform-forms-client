@@ -1,19 +1,13 @@
 import { StarRatingObject } from "@lib/types";
 
-// Note: The answer is stored as a JSON object e.g. `{"value":3,"numberOfStars":5}`.
-export const parseStarRatingAnswer = (answer: string): StarRatingObject | undefined => {
-  try {
-    const parsed: StarRatingObject = JSON.parse(answer);
-    if (
-      parsed !== null &&
-      typeof parsed === "object" &&
-      "value" in parsed &&
-      "numberOfStars" in parsed
-    ) {
-      return parsed;
-    }
-  } catch {
-    // Not a valid star rating JSON object
+export const parseStarRatingAnswer = (answer: unknown): StarRatingObject | undefined => {
+  if (
+    answer !== null &&
+    typeof answer === "object" &&
+    "value" in answer &&
+    "numberOfStars" in answer
+  ) {
+    return answer as StarRatingObject;
   }
 };
 
@@ -30,9 +24,9 @@ export const formatStarRating = (
 
 /**
  * Formats a star rating answer as a fraction string (e.g. "3/5").
- * Returns the raw answer unchanged if unparseable, or "-" if empty.
+ * Returns "-" if the answer is not a valid StarRatingObject.
  */
-export const formatStarRatingAnswer = (rawAnswer: string): string => {
+export const formatStarRatingAnswer = (rawAnswer: unknown): string => {
   const parsed = parseStarRatingAnswer(rawAnswer);
-  return parsed ? formatStarRating(parsed.value, parsed.numberOfStars) : rawAnswer || "-";
+  return parsed ? formatStarRating(parsed.value, parsed.numberOfStars) : "-";
 };

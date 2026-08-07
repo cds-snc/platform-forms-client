@@ -254,8 +254,7 @@ export const getRow = ({
 
     // Star rating: format as fraction (e.g. "3/5")
     if (element.type === FormElementTypes.starRating) {
-      const rawAnswer = String(answerText);
-      return formatStarRatingAnswer(rawAnswer);
+      return formatStarRatingAnswer(answerText);
     }
 
     if (
