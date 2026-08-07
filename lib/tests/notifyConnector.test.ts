@@ -65,6 +65,7 @@ describe("sendDefaultEmail", () => {
 
     it("routes to sendImmediate when the notification flag is on and there is no file attachment", async () => {
       mocks.checkOne.mockResolvedValue(true);
+      mocks.notificationSendImmediate.mockResolvedValueOnce({});
 
       await sendDefaultEmail({
         to: ["user@example.com"],
@@ -111,7 +112,7 @@ describe("sendDefaultEmail", () => {
       expect(mocks.gcNotifySendEmail).not.toHaveBeenCalled();
     });
 
-    it("falls back to GC Notify when the notification flag is off", async () => {
+    it("falls back to direct GC Notify call when the notification flag is off", async () => {
       mocks.checkOne.mockResolvedValue(false);
 
       await sendDefaultEmail({ to: ["user@example.com"], subject: "", body: "" });
@@ -125,7 +126,7 @@ describe("sendDefaultEmail", () => {
       expect(mocks.notificationSendImmediate).not.toHaveBeenCalled();
     });
 
-    it("falls back to GC Notify when bypassNotificationPipeline is true, even if the flag is on", async () => {
+    it("falls back to direct GC Notify call when bypassNotificationPipeline is true, even if the flag is on", async () => {
       mocks.checkOne.mockResolvedValue(true);
 
       await sendDefaultEmail({
@@ -139,6 +140,19 @@ describe("sendDefaultEmail", () => {
 
       expect(mocks.gcNotifySendEmail).toHaveBeenCalledWith("user@example.com", expect.any(Object));
       expect(mocks.notificationSendImmediate).not.toHaveBeenCalled();
+    });
+
+    it("falls back to direct GC Notify call when use of sendImmediate throws an error", async () => {
+      mocks.checkOne.mockResolvedValue(true);
+      mocks.notificationSendImmediate.mockRejectedValueOnce(new Error("Something wrong happened"));
+
+      await sendDefaultEmail({
+        to: ["user@example.com"],
+        subject: "",
+        body: "",
+      });
+
+      expect(mocks.gcNotifySendEmail).toHaveBeenCalledWith("user@example.com", expect.any(Object));
     });
 
     it("sends to all addresses when an array of emails is provided", async () => {
@@ -170,7 +184,7 @@ describe("sendDefaultEmail", () => {
       await sendDefaultEmail({ to: ["user@example.com"], subject: "", body: "" });
 
       expect(mocks.logWarn).toHaveBeenCalledWith(
-        "Failed to send email to user@example.com through GC Notify. Reason: Notify API unavailable"
+        "Failed to send email to user@example.com from the application to GC Notify. Reason: Notify API unavailable"
       );
     });
   });
