@@ -175,7 +175,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           if (response.error) {
             setApiError(mapAddressCompleteError(response.error, t));
           } else if (response.address) {
-            response.address.country = "CAN";
             setAddressObject(response.address);
             if (comboboxRef.current) {
               comboboxRef.current.changeInputValue(response.address.streetAddress, false);
@@ -272,18 +271,15 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     return country[i18n.language as Language];
   });
 
-  // Determine the localized display value for the current country code or name
   const countryBaseValue = (() => {
     try {
       const stored = addressObject?.country;
       if (!stored) return "Canada";
-      // Match only by localized display keys `en` and `fr` (case-insensitive)
-      const lowered = String(stored).toLowerCase();
-      const byEnFr = countries.all.find((c) => {
-        const candidates = [c.en, c.fr].filter(Boolean) as string[];
-        return candidates.some((n) => String(n).toLowerCase() === lowered);
-      });
-      if (byEnFr) return byEnFr[i18n.language as Language];
+
+      const country = countries.all.find((c) => c.id === stored);
+      if (country) {
+        return country[i18n.language as Language];
+      }
     } catch (e) {
       // fall through to default
     }
