@@ -62,6 +62,7 @@ export interface AddressCompleteResult {
 export interface AddressCompleteProps extends InputFieldProps {
   canadianOnly?: boolean;
   splitAddress?: boolean;
+  formId: string;
 }
 
 // Address Elements for the AddressComplete component

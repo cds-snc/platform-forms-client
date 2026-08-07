@@ -22,15 +22,28 @@ import { Language } from "@lib/types/form-builder-types";
 import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { isValidAddressSubFieldInvalid, getAddressSubFieldError } from "@gcforms/core";
+import {
+  MAX_SEARCH_QUERY_LENGTH,
+  MAX_ADDRESS_FIELD_LENGTH,
+  MAX_POSTAL_CODE_LENGTH,
+  sanitizeAddressField,
+  sanitizePostalCode,
+} from "./utils";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string, keepOpen: boolean) => void;
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
-  const { id, name, required, ariaDescribedBy, label, lang } = props;
+  const { id, name, required, ariaDescribedBy, label, lang, formId } = props;
 
   const [field, meta, helpers] = useField(props);
+
+  const [addressToken] = useState(() =>
+    typeof document !== "undefined"
+      ? (document.querySelector<HTMLMetaElement>("meta[name='x-address-token']")?.content ?? "")
+      : ""
+  );
 
   const { t, i18n } = useTranslation("form-builder", { lng: lang });
 
@@ -170,7 +183,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           const response = await getSelectedAddress(
             selectedResult.Id,
             addressObject?.country || "CAN",
-            i18n.language as Language
+            i18n.language as Language,
+            formId,
+            addressToken
           );
           if (response.error) {
             setApiError(mapAddressCompleteError(response.error, t));
@@ -190,7 +205,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           const response = await getAddressCompleteRetrieve(
             selectedResult.Id,
             addressObject?.country || "CAN",
-            i18n.language as Language
+            i18n.language as Language,
+            formId,
+            addressToken
           );
 
           if (response.error) {
@@ -219,7 +236,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         const response = await getAddressCompleteChoices(
           query,
           addressObjectRef.current?.country || "CAN",
-          i18n.language as Language
+          i18n.language as Language,
+          formId,
+          addressToken
         );
         if (response.error) {
           setApiError(mapAddressCompleteError(response.error, t));
@@ -242,7 +261,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         debouncedSearchRef.current = null;
       }
     };
-  }, [i18n.language, t, handleAddressComplete]);
+  }, [i18n.language, t, handleAddressComplete, formId, addressToken]);
 
   const setAddressData = (key: string, value: string) => {
     let baseAddressObject = {};
@@ -261,7 +280,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
     for (const internalKey in baseAddressObject) {
       if (key === internalKey) {
-        const newAddressObject = { ...baseAddressObject, [key]: value };
+        const sanitizedValue =
+          key === "postalCode" ? sanitizePostalCode(value) : sanitizeAddressField(value);
+        const newAddressObject = { ...baseAddressObject, [key]: sanitizedValue };
         setAddressObject(newAddressObject as AddressElements);
       }
     }
@@ -395,6 +416,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               baseValue={addressObject.streetAddress}
               required={props.required}
               ariaDescribedBy={`${name}-streetDesc ${name}-streetDesc-2`}
+              maxLength={MAX_SEARCH_QUERY_LENGTH}
               className={cn(
                 isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
               )}
@@ -422,6 +444,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               isValidAddressSubFieldInvalid(meta.error, "city") && "gc-error-input"
             )}
             required={props.required}
+            maxLength={MAX_ADDRESS_FIELD_LENGTH}
             data-testid="addresscomplete-input-city"
           />
         </div>
@@ -446,6 +469,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               isValidAddressSubFieldInvalid(meta.error, "province") && "gc-error-input"
             )}
             required={required}
+            maxLength={MAX_ADDRESS_FIELD_LENGTH}
             data-testid="addresscomplete-input-province"
           />
         </div>
@@ -470,6 +494,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               isValidAddressSubFieldInvalid(meta.error, "postalCode") && "gc-error-input"
             )}
             required={required}
+            maxLength={MAX_POSTAL_CODE_LENGTH}
             data-testid="addresscomplete-input-postalCode"
           />
         </div>

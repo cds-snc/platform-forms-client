@@ -5,12 +5,48 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
+import {
+  isValidCanadaPostId,
+  isValidCountryCode,
+  isValidFormId,
+  isValidLanguage,
+} from "./validation";
+import { sanitizeAddressField, sanitizeCountryCode, sanitizeQuery } from "./utils";
+import { getClientIp } from "@lib/ip";
+import { getRedisInstance } from "@lib/integration/redisConnector";
+import { validateAddressToken } from "@lib/addressComplete/formToken";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
 const retriveAddressUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws";
 const addressCompleteKey = process.env.ADDRESSCOMPLETE_API_KEY || "";
+
+// Note: 60 requests per minute across all three actions combined, since they all consume
+// Canada Post API quota. The requests will bypass Redis if it goes down to not break the form.
+const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
+const RATE_LIMIT_MAX = 60;
+const RATE_LIMIT_WINDOW_SECONDS = 60;
+
+// Returns true when the IP has exceeded the per-minute request budget.
+const isRateLimited = async (ip: string): Promise<boolean> => {
+  try {
+    const redis = await getRedisInstance();
+    const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
+
+    // Increment the related IPs count
+    const pipeline = redis.pipeline();
+    pipeline.incr(key);
+    pipeline.expire(key, RATE_LIMIT_WINDOW_SECONDS);
+
+    // Check whether that IP is beyond the threshold
+    const results = await pipeline.exec();
+    const count = results?.[0]?.[1] as number;
+    return count > RATE_LIMIT_MAX;
+  } catch {
+    return false;
+  }
+};
 
 // Helper: inspect response.Items[0] for the documented 4-column error table.
 const hasItems0Error = (responseData: unknown): boolean => {
@@ -66,13 +102,26 @@ const hasItems0Error = (responseData: unknown): boolean => {
 export const getAddressCompleteChoices = async (
   query: string,
   countryCode: string,
-  language: string
+  language: string,
+  formId: string,
+  formToken: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&SearchTerm=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
-  params += "&LanguagePreference=" + encodeURIComponent(language);
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  const sanitizedCountryCode = sanitizeCountryCode(countryCode);
+  if (!isValidCountryCode(sanitizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (!isValidFormId(formId) || !validateAddressToken(formId, formToken)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await isRateLimited(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
 
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
@@ -82,6 +131,12 @@ export const getAddressCompleteChoices = async (
   if (!query || query.trim() === "") {
     return { items: [], error: null };
   }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&SearchTerm=" + encodeURIComponent(sanitizeQuery(query));
+  params += "&Country=" + encodeURIComponent(sanitizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(autoCompleteUrl + params, {
@@ -109,13 +164,37 @@ export const getAddressCompleteChoices = async (
 export const getSelectedAddress = async (
   value: string,
   countryCode: string,
-  language: Language
+  language: Language,
+  formId: string,
+  formToken: string
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
-  const selectedResult = value;
+  if (!isValidLanguage(language)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  const sanitizedCountryCode = sanitizeCountryCode(countryCode);
+  if (!isValidCountryCode(sanitizedCountryCode)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (!isValidFormId(formId) || !validateAddressToken(formId, formToken)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (await isRateLimited(await getClientIp())) {
+    return { address: null, error: "RATE_LIMITED" };
+  }
+
+  const sanitizedValue = sanitizeAddressField(value);
+
+  if (!isValidCanadaPostId(sanitizedValue)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&Id=" + encodeURIComponent(selectedResult);
-  params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&Id=" + encodeURIComponent(sanitizedValue);
+  params += "&Country=" + encodeURIComponent(sanitizedCountryCode);
   params += "&LanguagePreference=" + encodeURIComponent(language);
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
@@ -151,12 +230,37 @@ export const getSelectedAddress = async (
 export const getAddressCompleteRetrieve = async (
   query: string,
   countryCode: string,
-  language: string
+  language: string,
+  formId: string,
+  formToken: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  const sanitizedCountryCode = sanitizeCountryCode(countryCode);
+  if (!isValidCountryCode(sanitizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (!isValidFormId(formId) || !validateAddressToken(formId, formToken)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await isRateLimited(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
+  const sanitizedQuery = sanitizeQuery(query);
+
+  if (!isValidCanadaPostId(sanitizedQuery)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&LastId=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&LastId=" + encodeURIComponent(sanitizedQuery);
+  params += "&Country=" + encodeURIComponent(sanitizedCountryCode);
   params += "&LanguagePreference=" + encodeURIComponent(language);
 
   if (!addressCompleteKey) {
