@@ -7,6 +7,7 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
+import { getPlugin } from "@lib/form-elements";
 
 const QuestionRows = ({
   submission,
@@ -20,6 +21,12 @@ const QuestionRows = ({
   const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: Language, item: Answer, subItem = false) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
+    // Answer's index signature widens item.type — cast is safe since it's always a FormElementTypes value
+    const plugin = item.type ? getPlugin(item.type as never) : null;
+    const pluginFormattedValue =
+      plugin?.formatResponse && typeof item.answer === "string"
+        ? plugin.formatResponse(item.answer)
+        : undefined;
     return (
       <div
         key={`row-${index}`}
@@ -43,6 +50,8 @@ const QuestionRows = ({
         <dd className="p-4">
           {item.type === FormElementTypes.numberInput ? (
             <p>{numberInputValue}</p>
+          ) : pluginFormattedValue !== undefined ? (
+            <p>{pluginFormattedValue}</p>
           ) : (
             <p dangerouslySetInnerHTML={{ __html: formatUserInput(String(item.answer)) }}></p>
           )}

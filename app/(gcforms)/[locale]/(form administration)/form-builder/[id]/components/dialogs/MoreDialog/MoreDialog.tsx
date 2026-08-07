@@ -25,6 +25,7 @@ import { NumberFieldOptions } from "./NumberFieldOptions";
 
 import { CopyItem } from "./CopyItem";
 import { CustomRegexOptions } from "./CustomRegexOptions";
+import { getPlugin } from "@lib/form-elements";
 
 // Will re-enable after some futher discussion about crown corp managed data
 // import { ManagedDataOptions } from "./ManagedDataOptions";
@@ -76,6 +77,10 @@ export const MoreDialog = () => {
   });
 
   if (!item) return null;
+
+  const plugin = getPlugin(item.type);
+  // Plugin props expect (item: FormElement) => void, not the full useState setter
+  const setItemDefined = (updated: FormElement) => setItem(updated);
 
   const handleClose = () => {
     dialog.current?.close();
@@ -150,6 +155,9 @@ export const MoreDialog = () => {
                 item={item}
                 setItem={setItem}
               />
+              {plugin?.MoreDialogComponent && (
+                <plugin.MoreDialogComponent item={item} setItem={setItemDefined} />
+              )}
 
               {item.type !== "dynamicRow" && (
                 <InfoDetails

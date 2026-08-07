@@ -32,6 +32,10 @@ import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 import { isNumberInput } from "@gcforms/core";
+import { getPlugin } from "@lib/form-elements";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
+import type { Language } from "@lib/types/form-builder-types";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -418,6 +422,12 @@ export const getRenderedForm = (formRecord: PublicFormRecord, language: string) 
  * @param language
  */
 const _getElementInitialValue = (element: FormElement, language: string): Response => {
+  // Delegate to the plugin when one is registered — avoids the per-type switch case below
+  const plugin = getPlugin(element.type);
+  if (plugin) {
+    return typeof plugin.initialValue === "function" ? plugin.initialValue() : plugin.initialValue;
+  }
+
   switch (element.type) {
     // Radio and dropdown resolve to string values
     case FormElementTypes.radio:
@@ -505,7 +515,13 @@ type GenerateElementProps = {
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
   const { element, language } = props;
-  const generatedElement = _buildForm(element, language);
+  const { getFlag } = useFeatureFlags();
+  const plugin = getFlag(FeatureFlags.pluginArchitecture) ? getPlugin(element.type) : null;
+  const generatedElement = plugin ? (
+    <plugin.ViewerComponent element={element} language={language as Language} />
+  ) : (
+    _buildForm(element, language)
+  );
   return (
     <ConditionalWrapper
       element={element}

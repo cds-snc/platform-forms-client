@@ -9,6 +9,7 @@ import { FileInput } from "./FormElements/FileInput";
 import { DynamicRow } from "./FormElements/DyanmicRow/DynamicRow";
 import { RichText } from "./FormElements/RichText";
 import { NumberInput } from "./FormElements/NumberInput";
+import { getPlugin } from "@lib/form-elements";
 
 export const FormItemFactory = ({
   formItem,
@@ -25,6 +26,11 @@ export const FormItemFactory = ({
   // Overides with fileInput type to print the custom element below (vs. as an Input)
   if ((formItem.values as FileInputResponse)?.content !== undefined) {
     itemType = FormElementTypes.fileInput;
+  }
+
+  const plugin = getPlugin(itemType);
+  if (plugin?.ReviewComponent) {
+    return <plugin.ReviewComponent formItem={formItem} language={language} />;
   }
 
   // Note: order matters, from more specific to more generic
