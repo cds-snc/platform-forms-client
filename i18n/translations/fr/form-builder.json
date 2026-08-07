@@ -93,6 +93,7 @@
       "splitAddress": "Adresse fractionnée en parties",
       "splitAddressDesc": "Données divisées en plusieurs lignes.",
       "customize": "Adapter le format",
+      "multipleAddresses": "Adresses",
       "startTyping": "Commencez à taper l'adresse à rechercher",
       "canadianOnly": "Adresses canadiennes seulement",
       "components": {
@@ -104,7 +105,11 @@
         "postalCode": "Code postal",
         "postalCodeOrZip": "Code postal ou zip",
         "country": "Pays"
-      }
+      },
+      "apiKeyMissing": "La recherche d'adresses est indisponible car la clé API n'est pas configurée.",
+      "apiKeyInvalid": "La recherche d'adresses a échoué en raison d'une clé API invalide. Veuillez vérifier la configuration.",
+      "serviceUnavailable": "La recherche d'adresses est temporairement indisponible. Veuillez réessayer plus tard.",
+      "networkError": "Une erreur réseau est survenue lors de la recherche d'adresses. Vérifiez votre connexion et réessayez."
     },
     "allRequired": "toutes obligatoires",
     "answer": "Réponse...",
@@ -1722,5 +1727,6 @@
     "description": "Modifier un formulaire déjà en production",
     "button": "Mettre à jour"
   },
-  "formDownloadFailed": "Le téléchargement du formulaire a échoué."
+  "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
+  "formActions": "Actions liées au formulaire"
 }
