@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.3](https://github.com/cds-snc/platform-forms-client/compare/v4.21.2...v4.21.3) (2026-08-07)
+
+
+### Bug Fixes
+
+* add fallback solution for when an email fails to be sent through the Notification pipeline ([#7661](https://github.com/cds-snc/platform-forms-client/issues/7661)) ([d9ef731](https://github.com/cds-snc/platform-forms-client/commit/d9ef7314b7ebbf155279fa2d0f677cd5e474d0fb))
+
+
+### Miscellaneous Chores
+
+* Add component property defaults for FormattedDate ([#7662](https://github.com/cds-snc/platform-forms-client/issues/7662)) ([ba6ceb3](https://github.com/cds-snc/platform-forms-client/commit/ba6ceb39d7c8faf38f3da0b9291fd85a663c7e11))
+* add debounce for address complete ([#7657](https://github.com/cds-snc/platform-forms-client/issues/7657)) ([4c151c2](https://github.com/cds-snc/platform-forms-client/commit/4c151c2014151ca4133031ccfcfa18d1c3c153de))
+
 ## [4.21.2](https://github.com/cds-snc/platform-forms-client/compare/v4.21.1...v4.21.2) (2026-08-06)
 
 
