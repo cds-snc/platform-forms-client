@@ -95,6 +95,7 @@
       "multipleAddresses": "Addresses",
       "startTyping": "Start typing an address to search",
       "canadianOnly": "Canadian addresses only",
+      "allowInternational": "Allow international addresses",
       "components": {
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
