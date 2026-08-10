@@ -91,6 +91,10 @@ export const checkboxFiller = (value: Response): string[] => {
   return value.filter((item): item is string => typeof item === "string");
 };
 
+function escapeMarkdownLinks(text: string): string {
+  return text.replace(/\[([^\]]*)\]\(([^)]*)\)/g, "\\[$1\\]($2)");
+}
+
 /*
  * Centralized filling logic for form elements.
  * This function takes a response value and an element,
@@ -106,6 +110,9 @@ export const fillData = (
 
   try {
     switch (element.type) {
+      case FormElementTypes.textArea:
+      case FormElementTypes.textField:
+        return escapeMarkdownLinks(value as string);
       case FormElementTypes.dynamicRow:
         return dynamicRowFiller(
           Array.isArray(value) ? (value as Responses[]) : ([] as Responses[]),
