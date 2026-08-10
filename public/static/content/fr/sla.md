@@ -79,7 +79,6 @@ Dans certains cas, les fonctionnalités fournies par Formulaires GC peuvent devo
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-
 Formulaires GC utilise d’autres services pour l’infrastructure et les fonctionnalités du produit, y compris les services infonuagiques Amazon, [hCaptcha](https://www.hcaptcha.com/) pour détecter les pourriels potentiels et les fichiers malveillants, et [Notification GC](https://notification.canada.ca/) pour soumettre des réponses aux adresses de courriel gouvernementales pour les formulaires publiés avant le 11 juin 2025.
  
 ### Formulaires GC n’est pas responsable des aspects suivants :
