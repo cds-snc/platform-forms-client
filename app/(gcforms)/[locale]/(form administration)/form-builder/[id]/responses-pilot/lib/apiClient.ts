@@ -90,6 +90,7 @@ export class GCFormsApiClient {
     }
 
     const endpoint = `/forms/${this.formId}/template?version=${selectedVersion}`;
+
     return this.httpClient
       .get<FormProperties>(endpoint)
       .then((response) => {

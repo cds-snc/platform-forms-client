@@ -56,3 +56,8 @@ export {
 export { isSafeRegex } from "./validation/regex";
 export { isValidRegex } from "./validation/regex";
 export { isNumberInput } from "./utils/isNumberInput";
+export type { AddressValidationError } from "./validation/isValidAddress";
+export {
+  isValidAddressSubFieldInvalid,
+  getAddressSubFieldError,
+} from "./validation/isValidAddress";
