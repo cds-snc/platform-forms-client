@@ -5,6 +5,8 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
+import { validateAddressToken } from "@root/lib/formToken";
+import { isValidFormId } from "./validation";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -66,8 +68,14 @@ const hasItems0Error = (responseData: unknown): boolean => {
 export const getAddressCompleteChoices = async (
   query: string,
   countryCode: string,
-  language: string
+  language: string,
+  formId: string,
+  formToken: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
+  if (!isValidFormId(formId) || !validateAddressToken(formId, formToken)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&SearchTerm=" + encodeURIComponent(query);
@@ -109,8 +117,14 @@ export const getAddressCompleteChoices = async (
 export const getSelectedAddress = async (
   value: string,
   countryCode: string,
-  language: Language
+  language: Language,
+  formId: string,
+  formToken: string
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
+  if (!isValidFormId(formId) || !validateAddressToken(formId, formToken)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
   const selectedResult = value;
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
@@ -151,8 +165,14 @@ export const getSelectedAddress = async (
 export const getAddressCompleteRetrieve = async (
   query: string,
   countryCode: string,
-  language: string
+  language: string,
+  formId: string,
+  formToken: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
+  if (!isValidFormId(formId) || !validateAddressToken(formId, formToken)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&LastId=" + encodeURIComponent(query);

@@ -32,11 +32,17 @@ interface ManagedComboboxRef {
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
-  const { id, name, required, ariaDescribedBy, label, lang } = props;
+  const { id, name, required, ariaDescribedBy, label, lang, formId } = props;
 
   const [field, meta, helpers] = useField(props);
 
   const { t, i18n } = useTranslation("form-builder", { lng: lang });
+
+  const [addressToken] = useState(() =>
+    typeof document !== "undefined"
+      ? (document.querySelector<HTMLMetaElement>("meta[name='x-address-token']")?.content ?? "")
+      : ""
+  );
 
   //Address Complete elements
   const [choices, setChoices] = useState<string[]>([]);
@@ -174,7 +180,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           const response = await getSelectedAddress(
             selectedResult.Id,
             getCountryCodeFromName(addressObject?.country),
-            i18n.language as Language
+            i18n.language as Language,
+            formId,
+            addressToken
           );
           if (response.error) {
             setApiError(true);
@@ -197,7 +205,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           const response = await getAddressCompleteRetrieve(
             selectedResult.Id,
             getCountryCodeFromName(addressObject?.country),
-            i18n.language as Language
+            i18n.language as Language,
+            formId,
+            addressToken
           );
 
           if (response.error) {
@@ -226,7 +236,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         const response = await getAddressCompleteChoices(
           query,
           getCountryCodeFromName(addressObjectRef.current?.country),
-          i18n.language as Language
+          i18n.language as Language,
+          formId,
+          addressToken
         );
         if (response.error) {
           setApiError(true);
@@ -249,7 +261,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         debouncedSearchRef.current = null;
       }
     };
-  }, [i18n.language, t, handleAddressComplete]);
+  }, [i18n.language, t, handleAddressComplete, formId, addressToken]);
 
   const setAddressData = (key: string, value: string) => {
     let baseAddressObject = {};

@@ -5,9 +5,14 @@ import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { AddressComplete as AddressCompleteComponent } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import Image from "next/image";
+import { useTemplateStore } from "@root/lib/store/useTemplateStore";
 
 export const AddressComplete = () => {
   const { t } = useTranslation("form-builder");
+  const { getId } = useTemplateStore((s) => ({
+    getId: s.getId,
+  }));
+  const formId = getId();
 
   return (
     <div>
@@ -32,7 +37,12 @@ export const AddressComplete = () => {
       <ExampleWrapper>
         <h4 className="mb-4">{t("addElementDialog.addressComplete.whatIsYourAddress")}</h4>
         <div>
-          <AddressCompleteComponent id="test-address" name="test-address" canadianOnly={true} />
+          <AddressCompleteComponent
+            id="test-address"
+            name="test-address"
+            canadianOnly={true}
+            formId={formId}
+          />
         </div>
       </ExampleWrapper>
     </div>

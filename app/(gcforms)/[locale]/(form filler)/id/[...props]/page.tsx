@@ -11,6 +11,7 @@ import { serverTranslation } from "@i18n";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Suspense } from "react";
+import { generateAddressToken } from "@root/lib/formToken";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -69,6 +70,8 @@ export default async function Page(props0: {
 
   const saveAndResume = formRecord?.saveAndResume || false;
 
+  const addressToken = generateAddressToken(formId);
+
   const footer = (
     <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
   );
@@ -77,6 +80,7 @@ export default async function Page(props0: {
     <Suspense>
       {/* Add meta data to the page to not store in BFCache */}
       <meta httpEquiv="Cache-Control" content="no-store" />
+      {addressToken && <meta name="x-address-token" content={addressToken} />}
       <FormDisplayLayout
         pathname={pathname}
         language={language}
