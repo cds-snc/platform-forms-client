@@ -5,6 +5,108 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.2](https://github.com/cds-snc/platform-forms-client/compare/v4.21.1...v4.21.2) (2026-08-06)
+
+
+### Bug Fixes
+
+* a11y address complete updates ([#7643](https://github.com/cds-snc/platform-forms-client/issues/7643)) ([a52dc28](https://github.com/cds-snc/platform-forms-client/commit/a52dc287590ff1950b56ead7ecec54b48e7e4468))
+* add save draft before opening dialog ([#7653](https://github.com/cds-snc/platform-forms-client/issues/7653)) ([1f5b5c4](https://github.com/cds-snc/platform-forms-client/commit/1f5b5c462096a42cdfd7cf9ac022b77145f7b116))
+* downshift update ([#7629](https://github.com/cds-snc/platform-forms-client/issues/7629)) ([6c7b255](https://github.com/cds-snc/platform-forms-client/commit/6c7b255ffcf40433b6ca8306bd7179aeea7c4988))
+* form-filler sticky bar a11y update ([#7641](https://github.com/cds-snc/platform-forms-client/issues/7641)) ([fce98a5](https://github.com/cds-snc/platform-forms-client/commit/fce98a5b114fab1d6620b02b42de967559f62015))
+* publishing state ([#7654](https://github.com/cds-snc/platform-forms-client/issues/7654)) ([d8169c9](https://github.com/cds-snc/platform-forms-client/commit/d8169c973471f4abc5e415cb00b18ff622c5e900))
+
+
+### Miscellaneous Chores
+
+* Add code to re-load country for address complete ([#7630](https://github.com/cds-snc/platform-forms-client/issues/7630)) ([e546fbc](https://github.com/cds-snc/platform-forms-client/commit/e546fbcd6bbb43e413da09753fd299ed0e17262e))
+* bump next js to 16.3.0 ([#7628](https://github.com/cds-snc/platform-forms-client/issues/7628)) ([573d122](https://github.com/cds-snc/platform-forms-client/commit/573d1224eabf00d50d9a86ca241d2374fadc0097))
+* handle empty search for address complete  ([#7634](https://github.com/cds-snc/platform-forms-client/issues/7634)) ([dee8735](https://github.com/cds-snc/platform-forms-client/commit/dee873508b5bb3c0a2e32f740de17992137b77e3))
+* handle multiple localization  ([#7635](https://github.com/cds-snc/platform-forms-client/issues/7635)) ([5710285](https://github.com/cds-snc/platform-forms-client/commit/5710285dc265cb7f30f317c06ead529ea1a5e530))
+* pass reason through Error message for Notification module in Connectors package ([#7633](https://github.com/cds-snc/platform-forms-client/issues/7633)) ([6989e1e](https://github.com/cds-snc/platform-forms-client/commit/6989e1ea6b33a4576144dcc6bf8463ae648d308a))
+* Remove address complete API Keys from docker. ([#7632](https://github.com/cds-snc/platform-forms-client/issues/7632)) ([3052b93](https://github.com/cds-snc/platform-forms-client/commit/3052b93eba4fb899db504be9d02d625a38f9af8b))
+* Store addressComplete as JSON object and refactor rendering code ([#7642](https://github.com/cds-snc/platform-forms-client/issues/7642)) ([7584394](https://github.com/cds-snc/platform-forms-client/commit/75843943c8c98408352578903204a5c5766852fa))
+* update otel packages ([#7637](https://github.com/cds-snc/platform-forms-client/issues/7637)) ([40037c4](https://github.com/cds-snc/platform-forms-client/commit/40037c443baf74c781138205c20f1de9d7f4d24f))
+
+## [4.21.1](https://github.com/cds-snc/platform-forms-client/compare/v4.21.0...v4.21.1) (2026-08-04)
+
+
+### Bug Fixes
+
+* Extra spacing before province on review page [AddressComplete]  [#7437](https://github.com/cds-snc/platform-forms-client/issues/7437) ([#7612](https://github.com/cds-snc/platform-forms-client/issues/7612)) ([e3f0015](https://github.com/cds-snc/platform-forms-client/commit/e3f001588127ffd247254973d0e55126bbf71a0f))
+* Instructional text embedded in field cuts off on mobile [AddressComplete] ([#7613](https://github.com/cds-snc/platform-forms-client/issues/7613)) ([f22fffb](https://github.com/cds-snc/platform-forms-client/commit/f22fffb3f951a355d3e1ab815ad3b252b056b5d6))
+* nest legend reset ([#7615](https://github.com/cds-snc/platform-forms-client/issues/7615)) ([3446028](https://github.com/cds-snc/platform-forms-client/commit/344602869a53e223438674b5a2d231c2fc64838d))
+
+
+### Miscellaneous Chores
+
+* add granular validation for address complete each field  [AddressComplete] ([#7620](https://github.com/cds-snc/platform-forms-client/issues/7620)) ([ffd1776](https://github.com/cds-snc/platform-forms-client/commit/ffd1776d8f83c15d9d64e01f2991bdb728cd38fc))
+* Add login "soft transition" migrate panel ([#7562](https://github.com/cds-snc/platform-forms-client/issues/7562)) ([3e68729](https://github.com/cds-snc/platform-forms-client/commit/3e687295029f199b254af61a74cf8b6e11921fe0))
+* fix address complete validation [AddressComplete]   ([#7616](https://github.com/cds-snc/platform-forms-client/issues/7616)) ([fa7fd97](https://github.com/cds-snc/platform-forms-client/commit/fa7fd97b30a433ead0536c81f3b4649df69e3e7e))
+* handle fetch error for address complete [AddressComplete]  ([#7621](https://github.com/cds-snc/platform-forms-client/issues/7621)) ([def0881](https://github.com/cds-snc/platform-forms-client/commit/def0881b69d42caaa4ed8e4c765af7812bdf2c4c))
+* Limit default of form element to verifying Canadian addresses only [AddressComplete]  ([#7614](https://github.com/cds-snc/platform-forms-client/issues/7614)) ([58af7ad](https://github.com/cds-snc/platform-forms-client/commit/58af7add32c0d864e59bc75907c45310858a64b0))
+* move address complete validation to helper [AddressComplete] ([#7617](https://github.com/cds-snc/platform-forms-client/issues/7617)) ([071ea51](https://github.com/cds-snc/platform-forms-client/commit/071ea51c9b879e127046a8edeb7f4f52f4612812))
+* Remove unnecessary warning to reduce noise ([#7627](https://github.com/cds-snc/platform-forms-client/issues/7627)) ([140824d](https://github.com/cds-snc/platform-forms-client/commit/140824d4a70334f75d3bcd2ec610702da3088dce))
+* Update fieldset styles ([#7607](https://github.com/cds-snc/platform-forms-client/issues/7607)) ([1dd38fd](https://github.com/cds-snc/platform-forms-client/commit/1dd38fdca92a0da05a60dfe6ed01542354335e90))
+
+## [4.21.0](https://github.com/cds-snc/platform-forms-client/compare/v4.20.0...v4.21.0) (2026-07-30)
+
+
+### Features
+
+* AddressComplete Server Side ([#7591](https://github.com/cds-snc/platform-forms-client/issues/7591)) ([2456cab](https://github.com/cds-snc/platform-forms-client/commit/2456cabaa2f893689654ab5952aad3231877ab3c))
+
+
+### Bug Fixes
+
+* Adds session check for edit-lock polling ([#7606](https://github.com/cds-snc/platform-forms-client/issues/7606)) ([d6bf1c7](https://github.com/cds-snc/platform-forms-client/commit/d6bf1c7c822fc7b98bef36b8fe40d95ab741d494))
+* versioning content ([#7599](https://github.com/cds-snc/platform-forms-client/issues/7599)) ([9d52115](https://github.com/cds-snc/platform-forms-client/commit/9d52115d51aea297c5e3513494205dd2b896f355))
+
+
+### Miscellaneous Chores
+
+* remove formPurpose database migration script ([#7600](https://github.com/cds-snc/platform-forms-client/issues/7600)) ([0b57d85](https://github.com/cds-snc/platform-forms-client/commit/0b57d85256b92fa601c8b9d5e2947e8f1212d066))
+* remove reference to old StatusCreatedAt index ([#7602](https://github.com/cds-snc/platform-forms-client/issues/7602)) ([fe79bba](https://github.com/cds-snc/platform-forms-client/commit/fe79bba3a0c4e8ac5fa1aa5c57eeeac4ad8880ac))
+* update archive card ([#7605](https://github.com/cds-snc/platform-forms-client/issues/7605)) ([b466c40](https://github.com/cds-snc/platform-forms-client/commit/b466c404b7f0661681cc5cdb7999f96bb359bf37))
+
+## [4.20.0](https://github.com/cds-snc/platform-forms-client/compare/v4.19.0...v4.20.0) (2026-07-29)
+
+
+### Features
+
+* add Agriculture Canada branding ([#7523](https://github.com/cds-snc/platform-forms-client/issues/7523)) ([348635d](https://github.com/cds-snc/platform-forms-client/commit/348635da35f4673f49a6e6994041929a0b2e32e3))
+* add NSERC branding ([#7506](https://github.com/cds-snc/platform-forms-client/issues/7506)) ([9b5792c](https://github.com/cds-snc/platform-forms-client/commit/9b5792ced68ab4d41045900b41356ba6e79d3846))
+* service worker ([#6876](https://github.com/cds-snc/platform-forms-client/issues/6876)) ([13e7595](https://github.com/cds-snc/platform-forms-client/commit/13e7595b3ac94eb15004717524c135a5c998daa1))
+
+
+### Bug Fixes
+
+* Allow draft forms to be submitted in Preview ([#7595](https://github.com/cds-snc/platform-forms-client/issues/7595)) ([6a11c17](https://github.com/cds-snc/platform-forms-client/commit/6a11c17e865b1b8c1e490a615d8daeadb696f6e5))
+* fix publish button set state ([#7598](https://github.com/cds-snc/platform-forms-client/issues/7598)) ([2829994](https://github.com/cds-snc/platform-forms-client/commit/2829994521daee1c6460c5caa9e35602d4c0b7c6))
+* fixes re-publish set reason ([#7580](https://github.com/cds-snc/platform-forms-client/issues/7580)) ([aedcefa](https://github.com/cds-snc/platform-forms-client/commit/aedcefa70df726bd0049a4f7849c2a525e620a3e))
+* make sure user is defined before accessing user attributes ([#7594](https://github.com/cds-snc/platform-forms-client/issues/7594)) ([fbeecf8](https://github.com/cds-snc/platform-forms-client/commit/fbeecf886d4724c98acfc1625c2950c9b7c279fd))
+* publish button useEffect set state ([#7584](https://github.com/cds-snc/platform-forms-client/issues/7584)) ([fb2595d](https://github.com/cds-snc/platform-forms-client/commit/fb2595d317a14ab17a7fa5508412d8e962db5a7d))
+* publish status dropdown ([#7589](https://github.com/cds-snc/platform-forms-client/issues/7589)) ([a4fb56f](https://github.com/cds-snc/platform-forms-client/commit/a4fb56fb6b2728133ad54fe67f77e863b681a732))
+* Re-add a previous change from 7483 that was lost ([#7592](https://github.com/cds-snc/platform-forms-client/issues/7592)) ([ff1e29e](https://github.com/cds-snc/platform-forms-client/commit/ff1e29ee1846684fb3a4952a9f3aaf61bd62e04d))
+* update department list to handle app language changes ([#7563](https://github.com/cds-snc/platform-forms-client/issues/7563)) ([f6394c5](https://github.com/cds-snc/platform-forms-client/commit/f6394c54aa788bbba2cf4e6547d95c1a95e97837))
+
+
+### Miscellaneous Chores
+
+* add feature alert - publish update ([#7561](https://github.com/cds-snc/platform-forms-client/issues/7561)) ([d3fcba1](https://github.com/cds-snc/platform-forms-client/commit/d3fcba115cc1d1ba903e58134a84443df1bcbb26))
+* added formPurpose migration process for legacy forms ([#7590](https://github.com/cds-snc/platform-forms-client/issues/7590)) ([3c80a89](https://github.com/cds-snc/platform-forms-client/commit/3c80a892e86bbec53d113a79f46a4f962d3c3bb7))
+* bump next js 16.2.11 ([#7540](https://github.com/cds-snc/platform-forms-client/issues/7540)) ([7821165](https://github.com/cds-snc/platform-forms-client/commit/78211650f7d00276f0068514ff9074b6ac906a4c))
+* Content for French banner ([#7537](https://github.com/cds-snc/platform-forms-client/issues/7537)) ([2f654e2](https://github.com/cds-snc/platform-forms-client/commit/2f654e2928c603ba644a4e5a5876992f15192f31))
+* Fix redundancy in content ([#7566](https://github.com/cds-snc/platform-forms-client/issues/7566)) ([ed5a743](https://github.com/cds-snc/platform-forms-client/commit/ed5a74320b77c1fd981a99cf0bcf9df90de963f3))
+* missing api pilot french string ([#7575](https://github.com/cds-snc/platform-forms-client/issues/7575)) ([967d603](https://github.com/cds-snc/platform-forms-client/commit/967d603a1ebf5c31a1525c69a9ad112a238b4a17))
+* recreate Yarn lock file ([#7542](https://github.com/cds-snc/platform-forms-client/issues/7542)) ([28ad053](https://github.com/cds-snc/platform-forms-client/commit/28ad05305d57ccf9c422873f6c9eb9fbcd57020f))
+* Remove feature flag for audit logs. (Always On Now) ([#7549](https://github.com/cds-snc/platform-forms-client/issues/7549)) ([ce3c2ac](https://github.com/cds-snc/platform-forms-client/commit/ce3c2ac536c319e8c05b24a7178f1dede3bc0724))
+* reorder translation file for corresponding string ([#7559](https://github.com/cds-snc/platform-forms-client/issues/7559)) ([e69adb4](https://github.com/cds-snc/platform-forms-client/commit/e69adb432bca746eab4b28d373ae045fdd56f5c3))
+* update all unreleased GC Forms packages ([#7543](https://github.com/cds-snc/platform-forms-client/issues/7543)) ([76be506](https://github.com/cds-snc/platform-forms-client/commit/76be506adb79394e6db9d2fe0f93669d48a671d1))
+* update all unreleased GC Forms packages (second attempt) ([#7544](https://github.com/cds-snc/platform-forms-client/issues/7544)) ([5531be1](https://github.com/cds-snc/platform-forms-client/commit/5531be1a32e445a1748d21e5a2e3ee0be84b18da))
+* update roadmap link ([#7596](https://github.com/cds-snc/platform-forms-client/issues/7596)) ([2d84384](https://github.com/cds-snc/platform-forms-client/commit/2d84384c8a817a5c93d9721de903707e25d9e2a9))
+* Update version indicator content ([#7536](https://github.com/cds-snc/platform-forms-client/issues/7536)) ([5c32793](https://github.com/cds-snc/platform-forms-client/commit/5c327931a380c538e4aa80e864b46e473978718b))
+
 ## [4.19.0](https://github.com/cds-snc/platform-forms-client/compare/v4.18.1...v4.19.0) (2026-07-21)
 
 

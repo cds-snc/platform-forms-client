@@ -16,6 +16,8 @@ export const AddressCompleteOptions = ({
     return null;
   }
 
+  const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
+
   const updateAddressComponents = (props: AddressComponents) => {
     // check if the addresscomponent exists, if it doesn't make it.
     if (item.properties.addressComponents == undefined) {
@@ -45,15 +47,9 @@ export const AddressCompleteOptions = ({
 
       <Checkbox
         id={`addressComponent-${item.id}-id-canadianOnly`}
-        value={
-          `addressComponent-${item.id}-value-canadianOnly-` +
-          item.properties.addressComponents?.canadianOnly
-        }
-        key={
-          `addressComponent-${item.id}-canadianOnly-` +
-          item.properties.addressComponents?.canadianOnly
-        }
-        defaultChecked={item.properties.addressComponents?.canadianOnly}
+        value={`addressComponent-${item.id}-value-canadianOnly-` + isCanadianOnly}
+        key={`addressComponent-${item.id}-canadianOnly-` + isCanadianOnly}
+        checked={isCanadianOnly}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           updateAddressComponents({ canadianOnly: e.target.checked });
         }}
@@ -61,7 +57,7 @@ export const AddressCompleteOptions = ({
       ></Checkbox>
 
       <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
-      <p className="mb-4 mt-2">{t("addElementDialog.addressComplete.fieldsDesc")}</p>
+      <p className="mt-2 mb-4">{t("addElementDialog.addressComplete.fieldsDesc")}</p>
 
       <Radio
         className="mt-2"

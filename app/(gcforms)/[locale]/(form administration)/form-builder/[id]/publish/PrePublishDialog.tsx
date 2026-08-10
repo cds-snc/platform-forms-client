@@ -57,39 +57,55 @@ export const PrePublishDialog = ({
       ? t("continue")
       : t("publish");
 
-  async function ContinuePublishSteps() {
-    setError(false);
+  async function handleInitialPublishContinue() {
+    // 1 => initial publish flow: Reason -> FormTypeAndDescription -> Confirm
     if (prePublishStep === PrePublishSteps.ReasonForPublish) {
-      // This step is confirmation for republish, or first step (reason) for initial publish
-      if (hasCurrentlyPublishedVersion) {
-        if (!agreed) {
-          setError(true);
-          return;
-        }
-        handleConfirm();
-        return;
-      } else {
-        if (reasonForPublish === "") {
-          setError(true);
-          return;
-        }
-        setPrePublishStep(PrePublishSteps.FormTypeAndDescription);
-        return;
-      }
-    } else {
-      // Form type (+ description for initial publish)
-      if (formType === "" || (!hasCurrentlyPublishedVersion && description === "")) {
+      if (reasonForPublish === "") {
         setError(true);
         return;
       }
-      if (hasCurrentlyPublishedVersion) {
-        // move to confirmation step (agree)
-        setPrePublishStep(PrePublishSteps.ReasonForPublish);
+      setPrePublishStep(PrePublishSteps.FormTypeAndDescription);
+      return;
+    }
+
+    // 2 => Form type (+ description required)
+    if (formType === "" || description === "") {
+      setError(true);
+      return;
+    }
+
+    // 3 => finalise initial publish
+    handleConfirm();
+  }
+
+  async function handleRepublishContinue() {
+    // republish flow: reasonForPublish -> Reason(agreement) -> Confirm
+    if (prePublishStep === PrePublishSteps.FormTypeAndDescription) {
+      // 1 => require reason selection
+      if (reasonForPublish === "") {
+        setError(true);
         return;
       }
-      // initial publish finalise
-      handleConfirm();
+      // move to agreement/confirmation step
+      setPrePublishStep(PrePublishSteps.ReasonForPublish);
       return;
+    }
+
+    // 2 => confirmation (agreement) step
+    if (!agreed) {
+      setError(true);
+      return;
+    }
+
+    handleConfirm();
+  }
+
+  async function ContinuePublishSteps() {
+    setError(false);
+    if (hasCurrentlyPublishedVersion) {
+      await handleRepublishContinue();
+    } else {
+      await handleInitialPublishContinue();
     }
   }
 
@@ -101,10 +117,6 @@ export const PrePublishDialog = ({
     if (event != null) {
       setFormType(event.target.value);
     }
-  }
-
-  async function onFormTypeRadioChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setFormType(event.target.value);
   }
 
   async function onReasonForPublishChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -127,7 +139,7 @@ export const PrePublishDialog = ({
     { label: t("prePublishFormDialog.formtypes.Other"), value: "Other" },
   ];
 
-  const templateCategoryOptions = [
+  const reasonForPublishOptions = [
     { label: t("prePublishFormDialog.readyForPublicUse"), value: "public-use" },
     { label: t("prePublishFormDialog.readyForInternalUse"), value: "internal-use" },
     { label: t("prePublishFormDialog.sharingForFeedback"), value: "feedback-use" },
@@ -199,7 +211,7 @@ export const PrePublishDialog = ({
               {/* For initial publish show reason radios; for republish this step is confirmation */}
               {!hasCurrentlyPublishedVersion && (
                 <>
-                  {templateCategoryOptions.map((opt) => (
+                  {reasonForPublishOptions.map((opt) => (
                     <Radio
                       key={opt.value}
                       onChange={onReasonForPublishChange}
@@ -260,10 +272,10 @@ export const PrePublishDialog = ({
             <div className="mb-1">
               {hasCurrentlyPublishedVersion ? (
                 <div className="flex flex-col gap-3">
-                  {templateCategoryOptions.map((option) => (
+                  {reasonForPublishOptions.map((option) => (
                     <Radio
                       key={option.value}
-                      onChange={onFormTypeRadioChange}
+                      onChange={onReasonForPublishChange}
                       id={`formtype-${option.value}`}
                       name="template-category"
                       value={option.value}

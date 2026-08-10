@@ -57,6 +57,7 @@ export const PanelBody = ({
     properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
 
   const describedById = description ? `item${item.id}-describedby` : undefined;
+  const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
 
   const isInvalid = isFileUpload && !hasApiKeyId;
 
@@ -124,7 +125,7 @@ export const PanelBody = ({
               {isAddressComplete && (
                 <div>
                   <div>
-                    {!item.properties.addressComponents?.canadianOnly && (
+                    {!isCanadianOnly && (
                       <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
                         {t("addElementDialog.addressComplete.country")}
                       </div>
@@ -136,15 +137,14 @@ export const PanelBody = ({
                       {t("addElementDialog.addressComplete.city")}
                     </div>
                     <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                      {item.properties.addressComponents?.canadianOnly &&
-                        t("addElementDialog.addressComplete.components.province")}
-                      {!item.properties.addressComponents?.canadianOnly &&
+                      {isCanadianOnly && t("addElementDialog.addressComplete.components.province")}
+                      {!isCanadianOnly &&
                         t("addElementDialog.addressComplete.components.provinceOrState")}
                     </div>
                     <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                      {item.properties.addressComponents?.canadianOnly &&
+                      {isCanadianOnly &&
                         t("addElementDialog.addressComplete.components.postalCode")}
-                      {!item.properties.addressComponents?.canadianOnly &&
+                      {!isCanadianOnly &&
                         t("addElementDialog.addressComplete.components.postalCodeOrZip")}
                     </div>
                   </div>

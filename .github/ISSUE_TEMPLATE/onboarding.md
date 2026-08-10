@@ -13,7 +13,7 @@ assignees: ''
     - [ ] [Product Overview](https://docs.google.com/document/d/13XU8m-7Az2MHil-bqAimIAJMYSkiJzBUZGnJEXU2RS0/edit?tab=t.0#heading=h.yp9lldruzgrx)
     - [ ] [GC Forms Context and History](https://docs.google.com/presentation/d/1ygRMbyhGjuwCRv6_C8xEypSi0zuzAXjBgIUzz_DX498/edit?slide=id.g4e9b57e4d8_0_178#slide=id.g4e9b57e4d8_0_178)
     - [ ] [Exemplar Forms](https://docs.google.com/document/d/1LpBehnBWWBjfoJX9-ruttwdD1M0_Ul2QV2nN5nr4H3g/edit?tab=t.0#heading=h.auwtug3rp529)
-    - [ ] [Strategic Roadmap](https://trello.com/b/napn8wCR/gc-forms-strategic-roadmap-en)
+    - [ ] [Strategic Roadmap](https://articles.alpha.canada.ca/forms-formulaires/roadmap/)
     - [ ] [GC Forms OKRs for 2026-27](https://docs.google.com/document/d/16m0RQYR6An32kVzIq44MERcfP3U_WxeryLRMXFEPuDw/edit?tab=t.0)
     - [ ] [Sprint Goals](https://docs.google.com/document/d/1HxnnPBMZKNL8pmI_Ylz7Bl35teFbJZ6S0rtHmD31N1A/edit?tab=t.0#heading=h.6m6rslpk8tyy)
 - [ ] Review objectives and roadmap with product manager

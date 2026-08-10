@@ -27,7 +27,7 @@ const run = (command, args) => {
 const binPath = (name) => path.join(workspaceRoot, "node_modules", ".bin", name);
 
 mkdirSync(distStylesDir, { recursive: true });
-rmSync(packageStylesDir, { recursive: true, force: true });
+mkdirSync(packageStylesDir, { recursive: true });
 cpSync(sourceDir, packageStylesDir, { recursive: true });
 
 for (const entry of entries) {

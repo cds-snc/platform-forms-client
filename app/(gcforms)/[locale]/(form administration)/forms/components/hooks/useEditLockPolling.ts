@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
 import { FormsTemplateWithLockInfo, EditLocksResponse } from "../types";
-import { logMessage } from "@root/lib/logger";
 import { POLLING_TEMPLATE_CAP } from "../constants";
 
 const PROGRESSIVE_BACKOFF = {
@@ -39,7 +38,7 @@ export function useEditLockPolling({
   const abortControllerRef = useRef<AbortController | null>(null);
   const fetchInProgressRef = useRef(false);
   const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastActivityAtRef = useRef<number>(Date.now());
+  const lastActivityAtRef = useRef<number>(0);
 
   // Keep refs in sync with state
   useEffect(() => {
@@ -78,26 +77,10 @@ export function useEditLockPolling({
       });
 
       if (!response.ok) {
-        // Handle permission errors by filtering out "invalid" templates we don't have access to.
-        // This seems to happen mainly with some Archived forms. This seems strange because the initial
-        // templates were pulled on page load without error. Regardless this helps handle invalid
-        // template cases where one invalid template will cause the remaining to fail.
-        if (response.status === 403) {
-          // Remove all templates from the failed batch to stop infinite 403 loop
-          // Note: The authorization check is all-or-nothing, so if ANY template is
-          // inaccessible, the entire batch fails. We remove all to be safe.
-          onUpdate((prevTemplates) => {
-            const failedTemplateIds = new Set(templateIds);
-            const filtered = prevTemplates.filter((t) => !failedTemplateIds.has(t.id));
-
-            if (filtered.length !== prevTemplates.length) {
-              logMessage.info(
-                `[useEditLockPolling] Removed ${prevTemplates.length - filtered.length} templates after 403 error. IDs: ${templateIds.join(", ")}`
-              );
-            }
-
-            return filtered;
-          });
+        // We only care about successful responses - stop any further polling
+        if (timeoutIdRef.current) {
+          clearTimeout(timeoutIdRef.current);
+          timeoutIdRef.current = null;
         }
         return;
       }
@@ -202,6 +185,8 @@ export function useEditLockPolling({
     }
   }, []);
 
+  const scheduleNextPollRef = useRef<() => void>(() => undefined);
+
   const scheduleNextPoll = useCallback(() => {
     clearScheduledPoll();
 
@@ -211,9 +196,13 @@ export function useEditLockPolling({
 
     timeoutIdRef.current = setTimeout(() => {
       void fetchEditLockUpdates();
-      scheduleNextPoll();
+      scheduleNextPollRef.current();
     }, getDynamicPollIntervalMs());
   }, [clearScheduledPoll, fetchEditLockUpdates, getDynamicPollIntervalMs]);
+
+  useEffect(() => {
+    scheduleNextPollRef.current = scheduleNextPoll;
+  }, [scheduleNextPoll]);
 
   const markActivity = useCallback(() => {
     lastActivityAtRef.current = Date.now();
@@ -223,6 +212,7 @@ export function useEditLockPolling({
   // Poll for edit lock updates with progressive backoff based on inactivity.
   // Also pause/resume polling based on tab visibility.
   useEffect(() => {
+    lastActivityAtRef.current = Date.now();
     const startPolling = () => {
       if (document.hidden || !enabled) {
         return;

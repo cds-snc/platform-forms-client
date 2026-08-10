@@ -274,13 +274,13 @@
     "more": "Plus",
     "cancel": "Annuler",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
-    "formUpdatedWarning": {
-      "title": "Nous avons mis à jour ce formulaire",
-      "message": "Vos réponses enregistrées pourraient ne plus s’appliquer. Confirmez vos réponses avant de soumettre le formulaire."
-    },
     "formRestoredWarning": {
       "title": "Vérifiez attentivement vos réponses",
       "message": "Vos réponses sauvegardées proviennent d'un autre formulaire d'origine. Vérifiez-les attentivement avant de les soumettre."
+    },
+    "formUpdatedWarning": {
+      "title": "Nous avons mis à jour ce formulaire",
+      "message": "Vos réponses enregistrées pourraient ne plus s’appliquer. Confirmez vos réponses avant de soumettre le formulaire."
     },
     "resumeUploadError": {
       "title": "Problème de téléversement",
