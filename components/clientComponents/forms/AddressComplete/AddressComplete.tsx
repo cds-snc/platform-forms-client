@@ -10,7 +10,6 @@ import {
   getSelectedAddress,
   getAddressCompleteRetrieve,
 } from "./actions";
-import { mapAddressCompleteError } from "./errorHelpers";
 import {
   localizeAddressCompleteDescription,
   matchesAddressPattern,
@@ -62,7 +61,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   );
 
   const comboboxRef = useRef<ManagedComboboxRef>(null);
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState(false);
 
   const countryError = getAddressSubFieldError(meta.error, "country");
   const streetError = getAddressSubFieldError(meta.error, "streetAddress");
@@ -178,7 +177,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             i18n.language as Language
           );
           if (response.error) {
-            setApiError(mapAddressCompleteError(response.error, t));
+            setApiError(true);
           } else if (response.address) {
             setAddressObject({
               ...response.address,
@@ -187,10 +186,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             if (comboboxRef.current) {
               comboboxRef.current.changeInputValue(response.address.streetAddress, false);
             }
-            setApiError(null);
+            setApiError(false);
           }
         } catch (err: unknown) {
-          setApiError(t("addElementDialog.addressComplete.serviceUnavailable"));
+          setApiError(true);
         }
       } else if (nextValue == AddressCompleNext.Find) {
         // Do another lookup for the address.
@@ -202,7 +201,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           );
 
           if (response.error) {
-            setApiError(mapAddressCompleteError(response.error, t));
+            setApiError(true);
             setChoices([]);
           } else {
             if (comboboxRef.current) {
@@ -210,10 +209,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             }
 
             handleAddressComplete(response.items);
-            setApiError(null);
+            setApiError(false);
           }
         } catch (err: unknown) {
-          setApiError(t("addElementDialog.addressComplete.serviceUnavailable"));
+          setApiError(true);
           setChoices([]);
         }
       }
@@ -230,15 +229,15 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           i18n.language as Language
         );
         if (response.error) {
-          setApiError(mapAddressCompleteError(response.error, t));
+          setApiError(true);
           setChoices([]);
           setAddressResultCache([]);
         } else {
-          setApiError(null);
+          setApiError(false);
           handleAddressComplete(response.items);
         }
       } catch (err: unknown) {
-        setApiError(t("addElementDialog.addressComplete.serviceUnavailable"));
+        setApiError(true);
         setChoices([]);
         setAddressResultCache([]);
       }
@@ -329,12 +328,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           {label}
         </legend>
 
-        {apiError && (
-          <div className="mb-4">
-            <ErrorMessage id={`${id}-api-error`}>{apiError}</ErrorMessage>
-          </div>
-        )}
-
         {ariaDescribedBy && <Description id={`${id}`}>{ariaDescribedBy}</Description>}
 
         {props.canadianOnly && (
@@ -385,7 +378,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </Description>
           {getCountryCodeFromName(addressObject.country) === "CAN" ? (
             <>
-              <Description id={`${name}-streetDesc-2`}>{searchHintText}</Description>
+              {/* If we have an API error don't show search hint text as there will be no auto-complete */}
+              {!apiError && <Description id={`${name}-streetDesc-2`}>{searchHintText}</Description>}
+
               <ManagedCombobox
                 ref={comboboxRef}
                 choices={choices}
