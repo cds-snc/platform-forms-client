@@ -86,6 +86,18 @@ vi.mock("./utils", () => ({
         (_match: string, count: string) => ` - ${count} ${labels.current}`
       )
   ),
+  getCountryCodeFromStoredValue: vi.fn((value?: string) => {
+    if (!value) return "CAN";
+    const lowered = value.toLowerCase();
+    if (lowered === "canada" || lowered === "can") return "CAN";
+    if (lowered === "france" || lowered === "fra") return "FRA";
+    return value;
+  }),
+  getCountryNameFromStoredValue: vi.fn((value?: string) => {
+    if (!value) return "Canada";
+    if (value.toLowerCase() === "can") return "Canada";
+    return value;
+  }),
 }));
 
 vi.mock("@clientComponents/forms", () => {
@@ -299,7 +311,7 @@ describe("AddressComplete", () => {
         city: "Toronto",
         province: "Ontario",
         postalCode: "M5H 2N2",
-        country: "CAN",
+        country: "Canada",
       })
     );
   });

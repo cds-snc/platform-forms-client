@@ -11,7 +11,12 @@ import {
   getAddressCompleteRetrieve,
 } from "./actions";
 import { mapAddressCompleteError } from "./errorHelpers";
-import { localizeAddressCompleteDescription, matchesAddressPattern } from "./utils";
+import {
+  localizeAddressCompleteDescription,
+  matchesAddressPattern,
+  getCountryCodeFromName,
+  getCountryNameFromCode,
+} from "./utils";
 import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import debounce from "lodash/debounce";
@@ -83,7 +88,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           // Make sure the initial default is CAN to avoid null cases when:
           // - the address is "Canada only"
           // - the address is not "Canada only" and the country drop down was not interacted with
-          country: "CAN",
+          country: "Canada",
         }
   );
 
@@ -169,13 +174,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         try {
           const response = await getSelectedAddress(
             selectedResult.Id,
-            addressObject?.country || "CAN",
+            getCountryCodeFromName(addressObject?.country),
             i18n.language as Language
           );
           if (response.error) {
             setApiError(mapAddressCompleteError(response.error, t));
           } else if (response.address) {
-            setAddressObject(response.address);
+            setAddressObject({
+              ...response.address,
+              country: getCountryNameFromCode(response.address.country, i18n.language as Language),
+            });
             if (comboboxRef.current) {
               comboboxRef.current.changeInputValue(response.address.streetAddress, false);
             }
@@ -189,7 +197,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         try {
           const response = await getAddressCompleteRetrieve(
             selectedResult.Id,
-            addressObject?.country || "CAN",
+            getCountryCodeFromName(addressObject?.country),
             i18n.language as Language
           );
 
@@ -218,7 +226,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       try {
         const response = await getAddressCompleteChoices(
           query,
-          addressObjectRef.current?.country || "CAN",
+          getCountryCodeFromName(addressObjectRef.current?.country),
           i18n.language as Language
         );
         if (response.error) {
@@ -253,7 +261,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         city: "",
         province: "",
         postalCode: "",
-        country: "CAN",
+        country: "Canada",
       };
     } else {
       baseAddressObject = addressObject;
@@ -271,15 +279,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     return country[i18n.language as Language];
   });
 
+  // Determine the localized display value for the current country code or name
   const countryBaseValue = (() => {
     try {
       const stored = addressObject?.country;
-      if (!stored) return "Canada";
-
-      const country = countries.all.find((c) => c.id === stored);
-      if (country) {
-        return country[i18n.language as Language];
-      }
+      return getCountryNameFromCode(stored, i18n.language as Language);
     } catch (e) {
       // fall through to default
     }
@@ -298,7 +302,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         city: "",
         province: "",
         postalCode: "",
-        country: country.id,
+        country: country[i18n.language as Language],
       });
       if (comboboxRef.current) {
         comboboxRef.current.changeInputValue("", false);
@@ -379,7 +383,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Description id={`${name}-streetDesc`}>
             {t("addElementDialog.addressComplete.street.description")}
           </Description>
-          {addressObject.country === "CAN" ? (
+          {getCountryCodeFromName(addressObject.country) === "CAN" ? (
             <>
               <Description id={`${name}-streetDesc-2`}>{searchHintText}</Description>
               <ManagedCombobox
