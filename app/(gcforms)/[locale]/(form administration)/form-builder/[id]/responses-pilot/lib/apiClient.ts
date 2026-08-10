@@ -89,11 +89,7 @@ export class GCFormsApiClient {
       return Promise.resolve(this.cachedFormTemplate);
     }
 
-    let endpoint = `/forms/${this.formId}/template`;
-
-    if (selectedVersion > 1) {
-      endpoint += `?version=${selectedVersion}`;
-    }
+    const endpoint = `/forms/${this.formId}/template?version=${selectedVersion}`;
 
     return this.httpClient
       .get<FormProperties>(endpoint)
