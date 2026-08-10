@@ -27,21 +27,6 @@ Formulaires GC est un service infonuagique créé et exploité par le Service nu
 
 Le SNC peut suspendre le service à tout moment en cas d’utilisation jugée inappropriée. Des avis de déconnexion justifiés seront fournis lorsque nécessaire.
 
-### Les fournisseurs d’infrastructure de Formulaires GC sont responsables :
-
-- d’envoyer des courriels comprenant les données des utilisateurs finaux et utilisatrices finales aux adresses courriel gouvernementales fournies, si les formulaires ont été publiés avant le 11 juin 2025.
-- d'analyser des fichiers joints aux soumissions afin de détecter du contenu malveillant.
-- de fournir l’infrastructure infonuagique d’AWS.
-- de faire appliquer les [conditions de service d'AWS](https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_2022-10-14.pdf).
--  Fournir hCaptcha pour aider à détecter et à bloquer le spam et les abus automatisés ou les menaces des robots.
-- Appliquer les [conditions de service](https://www.hcaptcha.com/terms) de hCaptcha.
-
-Le SNC n’est pas responsable des problèmes ou des interruptions de service de l’infrastructure AWS pouvant avoir des conséquences sur le temps de fonctionnement et la disponibilité du système. Le SNC n’est pas non plus responsable des défaillances de l’infrastructure d’Amazon, d’AWS ou d’Amazon Simple Email Service (SES). Le SNC est tenu de transmettre à la clientèle toute information relative à une interruption du service AWS.
-
-Le SNC ne fournira pas d'assistance supplémentaire pour les fichiers malveillants. Nous pouvons uniquement indiquer si un fichier est marqué sûr ou non, sur la base des résultats du service d'analyse des fichiers. Nous ne pouvons garantir la sécurité, car aucune technologie n'est parfaite pour détecter les menaces.
-
-Le SNC n'est pas responsable des problèmes ou des pannes de hCaptcha qui peuvent avoir une incidence sur la disponibilité du système.
-
 ## Garantie sur le temps de fonctionnement
 
 Le SNC garantit que chaque année, le système Formulaires GC fonctionnera 99,0 % du temps et ne sera pas immobilisé plus de 1 % du temps durant les heures normales d’ouverture.
@@ -94,4 +79,13 @@ Dans certains cas, les fonctionnalités fournies par Formulaires GC peuvent devo
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Dernière mise à jour :** 12 novembre 2025
+
+Formulaires GC utilise d’autres services pour l’infrastructure et les fonctionnalités du produit, y compris les services infonuagiques Amazon, [hCaptcha](https://www.hcaptcha.com/) pour détecter les pourriels potentiels et les fichiers malveillants, et [Notification GC](https://notification.canada.ca/) pour soumettre des réponses aux adresses de courriel gouvernementales pour les formulaires publiés avant le 11 juin 2025.
+ 
+### Formulaires GC n’est pas responsable des aspects suivants :
+- Les problèmes, défaillances ou pannes d’autres services, y compris les services Amazon, [hCaptcha](https://www.hcaptcha.com/terms), le balayage de fichiers et [Notification GC](https://notification.canada.ca/conditions-dutilisation).
+- La mise en application des conditions de service d’autres services, y compris les services Amazon, HCaptcha, et Notification GC.
+- La disponibilité ou la validité garantie des renseignements AdresseComplète de Postes Canada. Les remplisseurs de formulaire peuvent modifier les renseignements saisis à l’aide d’AddressComplète.
+
+
+**Dernière mise à jour :** 10 août 2026
