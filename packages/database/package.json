@@ -30,12 +30,15 @@
     "clean": "rm -fr ./src/generated && rm -fr ./dist",
     "prebuild": "yarn clean && yarn db:generate",
     "build": "yarn prebuild && tsdown",
-    "prepack": "yarn build"
+    "prepack": "yarn build",
+    "migrate": "tsx src/migration.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-rds-data": "^3.1106.0",
     "@aws-sdk/client-secrets-manager": "^3.1068.0",
     "@prisma/adapter-pg": "7.8.0",
     "@prisma/client": "7.8.0",
+    "data-api-client": "^2.4.0",
     "pg": "8.20.0"
   },
   "devDependencies": {

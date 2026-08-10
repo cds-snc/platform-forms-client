@@ -1,23 +1,32 @@
 import { PrismaClient, Prisma } from "./generated/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { getConnectionUrl } from "./connection";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import fs from "node:fs";
+// import { PrismaPg } from "@prisma/adapter-pg";
+// import { getConnectionUrl } from "./connection";
+// import path from "node:path";
+// import { fileURLToPath } from "node:url";
+// import fs from "node:fs";
+import { createPrismaPgAdapter } from "data-api-client/compat/prisma";
 
-const certPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "global-bundle.pem");
-const connectionUrl = getConnectionUrl();
+// const certPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "global-bundle.pem");
+// const connectionUrl = getConnectionUrl();
 
-const adapter = new PrismaPg({
-  connectionString: connectionUrl,
-  // Test environment does not support SSL
-  ...(/\.ca-central-1\.rds\.amazonaws\.com:5432/i.test(connectionUrl) && {
-    ssl: {
-      rejectUnauthorized: true,
-      ca: fs.readFileSync(certPath),
-    },
-  }),
+// LOCAL env
+const adapter = createPrismaPgAdapter({
+  secretArn: "arn:aws:secretsmanager:ca-central-1:211125634918:secret:rds-connector-8krQ5A",
+  resourceArn: "arn:aws:rds:ca-central-1:211125634918:cluster:forms-db-cluster",
+  region: "ca-central-1",
+  database: "forms",
 });
+
+// const adapter = new PrismaPg({
+//   connectionString: connectionUrl,
+//   // Test environment does not support SSL
+//   ...(/\.ca-central-1\.rds\.amazonaws\.com:5432/i.test(connectionUrl) && {
+//     ssl: {
+//       rejectUnauthorized: true,
+//       ca: fs.readFileSync(certPath),
+//     },
+//   }),
+// });
 
 // Instantiate the extended Prisma client to infer its type
 const extendedPrisma = new PrismaClient({ adapter }).$extends({
