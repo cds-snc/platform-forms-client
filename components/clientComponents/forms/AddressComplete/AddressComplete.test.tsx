@@ -86,14 +86,14 @@ vi.mock("./utils", () => ({
         (_match: string, count: string) => ` - ${count} ${labels.current}`
       )
   ),
-  getCountryCodeFromStoredValue: vi.fn((value?: string) => {
+  getCountryCodeFromName: vi.fn((value?: string) => {
     if (!value) return "CAN";
     const lowered = value.toLowerCase();
     if (lowered === "canada" || lowered === "can") return "CAN";
     if (lowered === "france" || lowered === "fra") return "FRA";
     return value;
   }),
-  getCountryNameFromStoredValue: vi.fn((value?: string) => {
+  getCountryNameFromCode: vi.fn((value?: string, _language?: string) => {
     if (!value) return "Canada";
     if (value.toLowerCase() === "can") return "Canada";
     return value;
