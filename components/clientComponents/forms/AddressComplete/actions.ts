@@ -5,6 +5,8 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
+import { getRedisInstance } from "@root/lib/integration/redisConnector";
+import { getClientIp } from "@root/lib/ip";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -83,6 +85,10 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: null };
   }
 
+  if (await isRateLimited(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
   try {
     const response = await fetch(autoCompleteUrl + params, {
       headers: { "content-Type": "application/x-www-form-urlencoded" },
@@ -119,6 +125,10 @@ export const getSelectedAddress = async (
   params += "&LanguagePreference=" + encodeURIComponent(language);
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
+  }
+
+  if (await isRateLimited(await getClientIp())) {
+    return { address: null, error: "RATE_LIMITED" };
   }
 
   try {
@@ -161,6 +171,10 @@ export const getAddressCompleteRetrieve = async (
 
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
+  }
+
+  if (await isRateLimited(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
   }
 
   try {
@@ -261,3 +275,33 @@ const nestedAddressPattern = /\s+-\s+\d+\s+(Addresses|Adresses)$/i;
 export async function matchesAddressPattern(input: string): Promise<boolean> {
   return nestedAddressPattern.test(input);
 }
+
+const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
+const RATE_LIMIT_MAX = 200; // CanadaPost API quota may be 60? but 200 seems safer given shared IPs
+const RATE_LIMIT_WINDOW_SECONDS = 60;
+
+// Returns true when the IP has exceeded the per-minute request "budget"
+const isRateLimited = async (ip: string): Promise<boolean> => {
+  try {
+    const redis = await getRedisInstance();
+    const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
+
+    // Increment the related IPs count
+    const pipeline = redis.pipeline();
+    pipeline.incr(key);
+    pipeline.expire(key, RATE_LIMIT_WINDOW_SECONDS);
+
+    // Check whether that IP is beyond the threshold
+    const results = await pipeline.exec();
+
+    // pipeline results are [error, value] tuples; index 0 is the incr result
+    const incrResult = results?.[0];
+
+    const count = (incrResult?.[1] ?? 0) as number;
+
+    return count > RATE_LIMIT_MAX;
+  } catch {
+    // Most likely case is Redis is down, just pass through to avoid breaking the form UX
+    return false;
+  }
+};
