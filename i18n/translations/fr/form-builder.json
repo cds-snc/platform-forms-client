@@ -95,7 +95,7 @@
       "multipleAddresses": "Adresses",
       "startTyping": "Commencez à taper l'adresse à rechercher",
       "canadianOnly": "Adresses canadiennes seulement",
-      "allowInternational": "Permettre les adresses internationales",
+      "allowInternational": "Autoriser les adresses internationales",
       "components": {
         "unitNumber": "Numéro de l’unité",
         "civicNumber": "Numéro civique",
