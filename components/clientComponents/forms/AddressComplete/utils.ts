@@ -4,7 +4,10 @@ import enReview from "@i18n/translations/en/review.json";
 import frReview from "@i18n/translations/fr/review.json";
 import enResponses from "@i18n/translations/en/form-builder-responses.json";
 import frResponses from "@i18n/translations/fr/form-builder-responses.json";
+import { countries } from "@lib/managedData/countries";
+import { Language } from "@lib/types/form-builder-types";
 import { AddressElements } from "./types";
+import { normalizeString, truncateField } from "@gcforms/core";
 
 type AddressFieldKey = keyof AddressValidationError["fields"];
 
@@ -137,3 +140,71 @@ export function localizeAddressCompleteDescription(
 export function matchesAddressPattern(input: string): boolean {
   return nestedAddressPattern.test(input);
 }
+
+export function getCountryNameFromCode(value: string | undefined, language: Language): string {
+  if (!value) {
+    return "Canada";
+  }
+
+  const trimmed = String(value).trim();
+  const lowered = trimmed.toLowerCase();
+
+  const byCode = countries.all.find((country) => String(country.id).toLowerCase() === lowered);
+  if (byCode) {
+    return String(byCode[language] || trimmed);
+  }
+
+  const byName = countries.all.find((country) => {
+    const candidates = [country.en, country.fr].filter(Boolean) as string[];
+    return candidates.some((name) => String(name).toLowerCase() === lowered);
+  });
+  if (byName) {
+    return String(byName[language] || trimmed);
+  }
+
+  return trimmed;
+}
+
+export function getCountryCodeFromName(value?: string): string {
+  if (!value) {
+    return "CAN";
+  }
+
+  const trimmed = String(value).trim();
+  const lowered = trimmed.toLowerCase();
+
+  const byCode = countries.all.find((country) => String(country.id).toLowerCase() === lowered);
+  if (byCode) {
+    return String(byCode.id);
+  }
+
+  const byName = countries.all.find((country) => {
+    const candidates = [country.en, country.fr].filter(Boolean) as string[];
+    return candidates.some((name) => String(name).toLowerCase() === lowered);
+  });
+  if (byName) {
+    return String(byName.id);
+  }
+
+  return trimmed;
+}
+
+export const MAX_ADDRESS_FIELD_LENGTH = 200;
+export const normalizeAddressField = (value: string): string => {
+  return truncateField(normalizeString(value), MAX_ADDRESS_FIELD_LENGTH);
+};
+
+export const MAX_SEARCH_QUERY_LENGTH = 200;
+export const normalizeQuery = (value: string): string => {
+  return truncateField(normalizeString(value), MAX_SEARCH_QUERY_LENGTH);
+};
+
+const MAX_COUNTRY_CODE_LENGTH = 3;
+export const normalizeCountryCode = (value: string): string => {
+  return truncateField(normalizeString(value), MAX_COUNTRY_CODE_LENGTH);
+};
+
+export const MAX_POSTAL_CODE_LENGTH = 20;
+export const normalizePostalCode = (value: string): string => {
+  return truncateField(normalizeString(value), MAX_POSTAL_CODE_LENGTH);
+};
