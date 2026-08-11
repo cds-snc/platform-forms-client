@@ -51,6 +51,8 @@ export {
   findGroupByElementId,
   ensureChoiceId,
   getElementsUsingChoiceId,
+  normalizeString,
+  truncateField,
 } from "./helpers";
 
 export { isSafeRegex } from "./validation/regex";

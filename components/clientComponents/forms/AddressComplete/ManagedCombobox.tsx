@@ -14,6 +14,7 @@ export interface ManagedComboboxProps extends InputFieldProps {
   useFilter?: boolean;
   placeholderText?: string;
   overrideError?: string | null;
+  maxLength?: number;
 }
 
 export const ManagedCombobox = React.forwardRef(
@@ -29,6 +30,7 @@ export const ManagedCombobox = React.forwardRef(
       useFilter = true,
       placeholderText = "",
       overrideError,
+      maxLength,
     } = props;
     const classes = cn("gc-combobox gcds-input-wrapper relative", className);
 
@@ -94,6 +96,7 @@ export const ManagedCombobox = React.forwardRef(
       id,
       name,
       required,
+      maxLength,
       ...(ariaDescribedBy && { "aria-describedby": `desc-${ariaDescribedBy}` }),
       onFocus: () => setIsOpen(true),
       onBlur: () => setIsOpen(false),
