@@ -82,7 +82,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     addressComplete: getFlag("addressComplete"),
   };
 
-  const isNoAuthPreviewMode = useMemo(() => window.location.href.includes("0000/preview"), []);
+  const isNoAuthPreviewMode = useMemo(() => window.location.href.includes("/0000/"), []);
 
   const allowAddressComplete = featureFlags.addressComplete && !isNoAuthPreviewMode;
 
