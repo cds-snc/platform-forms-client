@@ -92,7 +92,7 @@ export const checkboxFiller = (value: Response): string[] => {
 };
 
 function escapeMarkdownLinks(text: string): string {
-  return text.replace(/\[([^\]]*)\]\(([^)]*)\)/g, "\\[$1\\]($2)");
+  return text.replace(/\[([^\]]*)\]\(([^)]*)\)/g, "`[$1]($2)`");
 }
 
 /*
