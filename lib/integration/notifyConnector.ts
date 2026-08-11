@@ -63,7 +63,12 @@ async function sendEmail(
             content,
           });
         } else {
-          await sendImmediate({ emails: to, content });
+          await sendImmediate({ emails: to, content }).catch((error) => {
+            logMessage.warn(
+              `Failed to send immediate email to ${to.join(", ")} through Notification pipeline. Will try to send it directly from the application. Reason: ${(error as Error).message}`
+            );
+            return sendEmailDirectlyFromApp(to, content);
+          });
         }
 
         return;
@@ -71,25 +76,25 @@ async function sendEmail(
 
       logMessage.debug("Sending email directly through GC Notify");
 
-      await Promise.all(
-        to.map((emailAddress) =>
-          gcNotifyConnector.sendEmail(emailAddress, content).catch((error) => {
-            logMessage.warn(
-              `Failed to send email to ${emailAddress} through GC Notify. Reason: ${
-                (error as Error).message
-              }`
-            );
-          })
-        )
-      );
+      await sendEmailDirectlyFromApp(to, content);
     } catch (error) {
       logMessage.error(
-        `Failed to send email to ${to.join(", ")} through GC Notify. Reason: ${
-          (error as Error).message
-        }`
+        `Failed to send email to ${to.join(", ")}. Reason: ${(error as Error).message}`
       );
 
       throw error;
     }
   });
+}
+
+async function sendEmailDirectlyFromApp(to: string[], content: EmailContent): Promise<void[]> {
+  return Promise.all(
+    to.map((emailAddress) =>
+      gcNotifyConnector.sendEmail(emailAddress, content).catch((error) => {
+        logMessage.warn(
+          `Failed to send email to ${emailAddress} from the application to GC Notify. Reason: ${(error as Error).message}`
+        );
+      })
+    )
+  );
 }

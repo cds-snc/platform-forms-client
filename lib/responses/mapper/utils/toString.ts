@@ -61,13 +61,9 @@ export const getAnswerAsString = (
       return "";
     }
 
-    if (question.properties.addressComponents?.splitAddress === true) {
-      return answer as string; //Address was split, return as is.
-    }
-
     try {
-      const addressObject = JSON.parse(answer as string) as AddressElements;
-      return getAddressAsString(addressObject);
+      const addressObject = answer as AddressElements;
+      return getAddressAsString(addressObject, question.properties.addressComponents?.splitAddress);
     } catch (e) {
       // If the answer is somehow not parseable as JSON, return it as is
       return answer as string;

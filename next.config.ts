@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   reactCompiler: {
     compilationMode: "annotation",
   },
+  cacheComponents: false,
   sassOptions: {
     includePaths: ["./styles"],
   },
@@ -70,7 +71,6 @@ const nextConfig: NextConfig = {
       // Note: this matches values in constants.ts
       bodySizeLimit: "10mb",
     },
-    viewTransition: true,
   },
   typedRoutes: true,
   turbopack: {

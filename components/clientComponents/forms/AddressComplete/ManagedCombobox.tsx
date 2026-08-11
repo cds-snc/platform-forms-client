@@ -14,6 +14,7 @@ export interface ManagedComboboxProps extends InputFieldProps {
   useFilter?: boolean;
   placeholderText?: string;
   overrideError?: string | null;
+  maxLength?: number;
 }
 
 export const ManagedCombobox = React.forwardRef(
@@ -29,6 +30,7 @@ export const ManagedCombobox = React.forwardRef(
       useFilter = true,
       placeholderText = "",
       overrideError,
+      maxLength,
     } = props;
     const classes = cn("gc-combobox gcds-input-wrapper relative", className);
 
@@ -90,29 +92,32 @@ export const ManagedCombobox = React.forwardRef(
         performChangeInputValue(value, keepOpen),
     }));
 
+    const inputProps = getInputProps({
+      id,
+      name,
+      required,
+      maxLength,
+      ...(ariaDescribedBy && { "aria-describedby": `desc-${ariaDescribedBy}` }),
+      onFocus: () => setIsOpen(true),
+      onBlur: () => setIsOpen(false),
+      onChange: (e) => {
+        setInputValue((e.target as HTMLInputElement).value);
+      },
+      // Prevents a double input refresh from being fired, this is a workaround for a downshift bug
+      // https://github.com/downshift-js/downshift/issues/1108
+      // Downshift won't be updated to fix this issue, so we need to handle it ourselves
+    });
+    // Use the for-id label-input association over aria-labeledby but downshift only allows nulling it.
+    // That keeps an empty `aria-labelledby=""`, not ideal. So just delete the property manually..
+    delete inputProps["aria-labelledby"];
+
     return (
       <div className={classes} data-testid="combobox">
         {(overrideError || meta.error) && (
           <ErrorMessage id={"errorMessage" + id}>{overrideError ?? meta.error}</ErrorMessage>
         )}
 
-        <input
-          {...getInputProps({
-            id,
-            name,
-            required,
-            "aria-describedby": ariaDescribedBy,
-            onFocus: () => setIsOpen(true),
-            onChange: (e) => {
-              setInputValue((e.target as HTMLInputElement).value);
-            },
-            // Prevents a double input refresh from being fired, this is a workaround for a downshift bug
-            // https://github.com/downshift-js/downshift/issues/1108
-            // Downshift won't be updated to fix this issue, so we need to handle it ourselves
-          })}
-          data-testid="combobox-input"
-          placeholder={placeholderText}
-        />
+        <input {...inputProps} data-testid="combobox-input" placeholder={placeholderText} />
 
         <ul
           className={cn({ hidden: !isOpen || items.length === 0 })}
