@@ -30,8 +30,8 @@ import {
   MAX_SEARCH_QUERY_LENGTH,
   MAX_ADDRESS_FIELD_LENGTH,
   MAX_POSTAL_CODE_LENGTH,
-  sanitizeAddressField,
-  sanitizePostalCode,
+  normalizeAddressField,
+  normalizePostalCode,
 } from "./utils";
 
 interface ManagedComboboxRef {
@@ -276,7 +276,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     for (const internalKey in baseAddressObject) {
       if (key === internalKey) {
         const sanitizedValue =
-          key === "postalCode" ? sanitizePostalCode(value) : sanitizeAddressField(value);
+          key === "postalCode" ? normalizePostalCode(value) : normalizeAddressField(value);
         const newAddressObject = { ...baseAddressObject, [key]: sanitizedValue };
         setAddressObject(newAddressObject as AddressElements);
       }

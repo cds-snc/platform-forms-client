@@ -190,21 +190,21 @@ export function getCountryCodeFromName(value?: string): string {
 }
 
 export const MAX_ADDRESS_FIELD_LENGTH = 200;
-export const sanitizeAddressField = (value: string): string => {
+export const normalizeAddressField = (value: string): string => {
   return truncateField(normalizeString(value), MAX_ADDRESS_FIELD_LENGTH);
 };
 
 export const MAX_SEARCH_QUERY_LENGTH = 200;
-export const sanitizeQuery = (value: string): string => {
+export const normalizeQuery = (value: string): string => {
   return truncateField(normalizeString(value), MAX_SEARCH_QUERY_LENGTH);
 };
 
 const MAX_COUNTRY_CODE_LENGTH = 3;
-export const sanitizeCountryCode = (value: string): string => {
+export const normalizeCountryCode = (value: string): string => {
   return truncateField(normalizeString(value), MAX_COUNTRY_CODE_LENGTH);
 };
 
 export const MAX_POSTAL_CODE_LENGTH = 20;
-export const sanitizePostalCode = (value: string): string => {
+export const normalizePostalCode = (value: string): string => {
   return truncateField(normalizeString(value), MAX_POSTAL_CODE_LENGTH);
 };

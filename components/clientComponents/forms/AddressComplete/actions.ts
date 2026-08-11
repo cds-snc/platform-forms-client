@@ -6,7 +6,7 @@ import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
 import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
-import { sanitizeAddressField, sanitizeCountryCode, sanitizeQuery } from "./utils";
+import { normalizeAddressField, normalizeCountryCode, normalizeQuery } from "./utils";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -75,25 +75,25 @@ export const getAddressCompleteChoices = async (
   }
 
   // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
-  const sanitizedQuery = sanitizeQuery(query);
-  if (!sanitizedQuery || sanitizedQuery === "") {
+  const normalizedQuery = normalizeQuery(query);
+  if (!normalizedQuery || normalizedQuery === "") {
     return { items: [], error: null };
   }
 
-  const sanitizedCountryCode = sanitizeCountryCode(countryCode);
-  if (!isValidCountryCode(sanitizedCountryCode)) {
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
     return { items: [], error: "INVALID_INPUT" };
   }
 
-  // No need to sanitize language since the client should send exactly "en" or "fr"
+  // No need to normalize language since the client should send exactly "en" or "fr"
   if (!isValidLanguage(language)) {
     return { items: [], error: "INVALID_INPUT" };
   }
 
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&SearchTerm=" + encodeURIComponent(sanitizedQuery);
-  params += "&Country=" + encodeURIComponent(sanitizedCountryCode);
+  params += "&SearchTerm=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
   params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
@@ -128,13 +128,13 @@ export const getSelectedAddress = async (
     return { address: null, error: "API_KEY_MISSING" };
   }
 
-  const sanitizedCanadaPostId = sanitizeAddressField(value);
-  if (!isValidCanadaPostId(sanitizedCanadaPostId)) {
+  const normalizedCanadaPostId = normalizeAddressField(value);
+  if (!isValidCanadaPostId(normalizedCanadaPostId)) {
     return { address: null, error: "INVALID_INPUT" };
   }
 
-  const sanitizedCountryCode = sanitizeCountryCode(countryCode);
-  if (!isValidCountryCode(sanitizedCountryCode)) {
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
     return { address: null, error: "INVALID_INPUT" };
   }
 
@@ -144,8 +144,8 @@ export const getSelectedAddress = async (
 
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&Id=" + encodeURIComponent(sanitizedCanadaPostId);
-  params += "&Country=" + encodeURIComponent(sanitizedCountryCode);
+  params += "&Id=" + encodeURIComponent(normalizedCanadaPostId);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
   params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
@@ -184,13 +184,13 @@ export const getAddressCompleteRetrieve = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
-  const sanitizedQuery = sanitizeQuery(query);
-  if (!isValidCanadaPostId(sanitizedQuery)) {
+  const normalizedQuery = normalizeQuery(query);
+  if (!isValidCanadaPostId(normalizedQuery)) {
     return { items: [], error: "INVALID_INPUT" };
   }
 
-  const sanitizedCountryCode = sanitizeCountryCode(countryCode);
-  if (!isValidCountryCode(sanitizedCountryCode)) {
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
     return { items: [], error: "INVALID_INPUT" };
   }
 
@@ -200,8 +200,8 @@ export const getAddressCompleteRetrieve = async (
 
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&LastId=" + encodeURIComponent(sanitizedQuery);
-  params += "&Country=" + encodeURIComponent(sanitizedCountryCode);
+  params += "&LastId=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
   params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
