@@ -5,6 +5,7 @@ import { ServerActionError } from "@lib/types/form-builder-types";
 import { logMessage } from "@root/lib/logger";
 import { prisma, prismaErrors } from "@gcforms/database";
 import { AuditLogDetails, logEvent, AuditLogEvent } from "@root/lib/auditLogs";
+import { authorization } from "@root/lib/privileges";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -15,6 +16,10 @@ export const updateNotificationsUser = AuthenticatedAction(
         logMessage.warn("No user provided for notifications settings update");
         throw new Error();
       }
+
+      await authorization.canEditForm(formId).catch((e) => {
+        throw e;
+      });
 
       await prisma.template
         .update({
