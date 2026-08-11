@@ -317,11 +317,11 @@ export const getElementsUsingChoiceIdParent = ({
   return elements;
 };
 
-export const sanitizeField = (value: string | unknown): string => {
+export const normalizeString = (value: string | unknown): string => {
   return String(value ?? "").trim();
 };
 
 export const truncateField = (value: string | unknown, maxLength: number): string => {
-  const str = String(value ?? "");
+  const str = normalizeString(value);
   return str.length > maxLength ? str.slice(0, maxLength) : str;
 };

@@ -51,7 +51,7 @@ export {
   findGroupByElementId,
   ensureChoiceId,
   getElementsUsingChoiceId,
-  sanitizeField,
+  normalizeString,
   truncateField,
 } from "./helpers";
 
