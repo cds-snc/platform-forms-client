@@ -8,6 +8,8 @@ import { type Language } from "@lib/types/form-builder-types";
 import { getRedisInstance } from "@root/lib/integration/redisConnector";
 import { getClientIp } from "@root/lib/ip";
 import { getAppSetting } from "@root/lib/appSettings";
+import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
+import { normalizeAddressField, normalizeCountryCode, normalizeQuery } from "./utils";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -71,24 +73,35 @@ export const getAddressCompleteChoices = async (
   countryCode: string,
   language: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&SearchTerm=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
-  params += "&LanguagePreference=" + encodeURIComponent(language);
-
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
-  }
-
-  // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
-  if (!query || query.trim() === "") {
-    return { items: [], error: null };
   }
 
   if (await isRateLimited(await getClientIp())) {
     return { items: [], error: "RATE_LIMITED" };
   }
+  
+  // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
+  const normalizedQuery = normalizeQuery(query);
+  if (!normalizedQuery || normalizedQuery === "") {
+    return { items: [], error: null };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  // No need to normalize language since the client should send exactly "en" or "fr"
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&SearchTerm=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(autoCompleteUrl + params, {
@@ -118,12 +131,6 @@ export const getSelectedAddress = async (
   countryCode: string,
   language: Language
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
-  const selectedResult = value;
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&Id=" + encodeURIComponent(selectedResult);
-  params += "&Country=" + encodeURIComponent(countryCode);
-  params += "&LanguagePreference=" + encodeURIComponent(language);
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
   }
@@ -131,6 +138,26 @@ export const getSelectedAddress = async (
   if (await isRateLimited(await getClientIp())) {
     return { address: null, error: "RATE_LIMITED" };
   }
+
+  const normalizedCanadaPostId = normalizeAddressField(value);
+  if (!isValidCanadaPostId(normalizedCanadaPostId)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (!isValidLanguage(language)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&Id=" + encodeURIComponent(normalizedCanadaPostId);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(retriveAddressUrl + params, {
@@ -164,12 +191,6 @@ export const getAddressCompleteRetrieve = async (
   countryCode: string,
   language: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&LastId=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
-  params += "&LanguagePreference=" + encodeURIComponent(language);
-
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
   }
@@ -177,6 +198,26 @@ export const getAddressCompleteRetrieve = async (
   if (await isRateLimited(await getClientIp())) {
     return { items: [], error: "RATE_LIMITED" };
   }
+
+  const normalizedQuery = normalizeQuery(query);
+  if (!isValidCanadaPostId(normalizedQuery)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&LastId=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(autoCompleteUrl + params, {

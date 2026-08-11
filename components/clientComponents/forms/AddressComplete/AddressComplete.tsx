@@ -26,6 +26,13 @@ import { Language } from "@lib/types/form-builder-types";
 import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { isValidAddressSubFieldInvalid, getAddressSubFieldError } from "@gcforms/core";
+import {
+  MAX_SEARCH_QUERY_LENGTH,
+  MAX_ADDRESS_FIELD_LENGTH,
+  MAX_POSTAL_CODE_LENGTH,
+  normalizeAddressField,
+  normalizePostalCode,
+} from "./utils";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string, keepOpen: boolean) => void;
@@ -268,7 +275,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
     for (const internalKey in baseAddressObject) {
       if (key === internalKey) {
-        const newAddressObject = { ...baseAddressObject, [key]: value };
+        const sanitizedValue =
+          key === "postalCode" ? normalizePostalCode(value) : normalizeAddressField(value);
+        const newAddressObject = { ...baseAddressObject, [key]: sanitizedValue };
         setAddressObject(newAddressObject as AddressElements);
       }
     }
@@ -392,6 +401,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
                 baseValue={addressObject.streetAddress}
                 required={props.required}
                 ariaDescribedBy={`${name}-streetDesc ${name}-streetDesc-2`}
+                maxLength={MAX_SEARCH_QUERY_LENGTH}
                 className={cn(
                   isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
                 )}
@@ -405,6 +415,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               name={`${name}-streetAddress`}
               value={addressObject.streetAddress}
               onChange={(e) => setAddressData("streetAddress", e.target.value)}
+              maxLength={MAX_ADDRESS_FIELD_LENGTH}
               className={cn(
                 "gc-input-text",
                 isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
@@ -429,6 +440,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             name={`${name}-city`}
             value={addressObject.city}
             onChange={(e) => setAddressData("city", e.target.value)}
+            maxLength={MAX_ADDRESS_FIELD_LENGTH}
             className={cn(
               "gc-input-text",
               isValidAddressSubFieldInvalid(meta.error, "city") && "gc-error-input"
@@ -453,6 +465,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             name={`${name}-province`}
             value={addressObject.province}
             onChange={(e) => setAddressData("province", e.target.value)}
+            maxLength={MAX_ADDRESS_FIELD_LENGTH}
             className={cn(
               "gc-input-text",
               isValidAddressSubFieldInvalid(meta.error, "province") && "gc-error-input"
@@ -477,6 +490,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             name={`${name}-postal`}
             value={addressObject.postalCode}
             onChange={(e) => setAddressData("postalCode", e.target.value)}
+            maxLength={MAX_POSTAL_CODE_LENGTH}
             className={cn(
               "gc-input-text",
               isValidAddressSubFieldInvalid(meta.error, "postalCode") && "gc-error-input"
