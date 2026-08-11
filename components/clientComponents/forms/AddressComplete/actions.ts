@@ -77,10 +77,10 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
-  if (await isRateLimited(await getClientIp())) {
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
     return { items: [], error: "RATE_LIMITED" };
   }
-  
+
   // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
   const normalizedQuery = normalizeQuery(query);
   if (!normalizedQuery || normalizedQuery === "") {
@@ -135,7 +135,7 @@ export const getSelectedAddress = async (
     return { address: null, error: "API_KEY_MISSING" };
   }
 
-  if (await isRateLimited(await getClientIp())) {
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
     return { address: null, error: "RATE_LIMITED" };
   }
 
@@ -195,7 +195,7 @@ export const getAddressCompleteRetrieve = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
-  if (await isRateLimited(await getClientIp())) {
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
     return { items: [], error: "RATE_LIMITED" };
   }
 
@@ -321,7 +321,7 @@ export async function matchesAddressPattern(input: string): Promise<boolean> {
 const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
 
 // Returns true when the IP has exceeded the per-minute request "budget"
-const isRateLimited = async (ip: string): Promise<boolean> => {
+const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
   try {
     const rateLimitMax = Number(await getAppSetting("addressCompleteRateLimitMax"));
     const rateLimitWindowSeconds = Number(
