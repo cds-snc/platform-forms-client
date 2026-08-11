@@ -76,6 +76,28 @@ const editLockRedirectIdleMs: Setting = {
   value: "1800000",
 };
 
+const addressCompleteRateLimitMax: Setting = {
+  internalId: "addressCompleteRateLimitMax",
+  nameEn: "Address Complete Rate Limit Max (count)",
+  nameFr: "Limite maximale du taux de complétion d'adresse (nombre)",
+  descriptionEn:
+    "The maximim number of requests (within the threshold) before the user is rate limited.",
+  descriptionFr:
+    "Le nombre maximal de requêtes (dans la limite du seuil) avant que l'utilisateur ne soit soumis à une limitation de débit.",
+  value: "200",
+};
+
+const addressCompleteRateLimitWindowSeconds: Setting = {
+  internalId: "addressCompleteRateLimitWindowSeconds",
+  nameEn: "Address Complete Rate Limit Window (seconds)",
+  nameFr: "Fenêtre de limitation de débit complète de l'adresse (secondes)",
+  descriptionEn:
+    "The window. of time that as user is rate limited. e.g. 200 requests per 60 seconds.",
+  descriptionFr:
+    "La fenêtre temporelle durant laquelle l'utilisateur est soumis à une limitation de débit (par exemple, 300 requêtes par tranche de 60 secondes).",
+  value: "60",
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -84,6 +106,8 @@ const allSettings = [
   nagwarePhaseEscalated,
   responseDownloadLimit,
   editLockRedirectIdleMs,
+  addressCompleteRateLimitMax,
+  addressCompleteRateLimitWindowSeconds,
 ];
 
 export default {

@@ -7,6 +7,7 @@ import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
 import { getRedisInstance } from "@root/lib/integration/redisConnector";
 import { getClientIp } from "@root/lib/ip";
+import { getAppSetting } from "@root/lib/appSettings";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -277,19 +278,22 @@ export async function matchesAddressPattern(input: string): Promise<boolean> {
 }
 
 const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
-const RATE_LIMIT_MAX = 200; // CanadaPost API quota may be 60? but 200 seems safer given shared IPs
-const RATE_LIMIT_WINDOW_SECONDS = 60;
 
 // Returns true when the IP has exceeded the per-minute request "budget"
 const isRateLimited = async (ip: string): Promise<boolean> => {
   try {
+    const rateLimitMax = Number(await getAppSetting("addressCompleteRateLimitMax"));
+    const rateLimitWindowSeconds = Number(
+      await getAppSetting("addressCompleteRateLimitWindowSeconds")
+    );
+
     const redis = await getRedisInstance();
     const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
 
     // Increment the related IPs count
     const pipeline = redis.pipeline();
     pipeline.incr(key);
-    pipeline.expire(key, RATE_LIMIT_WINDOW_SECONDS);
+    pipeline.expire(key, rateLimitWindowSeconds);
 
     // Check whether that IP is beyond the threshold
     const results = await pipeline.exec();
@@ -299,7 +303,7 @@ const isRateLimited = async (ip: string): Promise<boolean> => {
 
     const count = (incrResult?.[1] ?? 0) as number;
 
-    return count > RATE_LIMIT_MAX;
+    return count > rateLimitMax;
   } catch {
     // Most likely case is Redis is down, just pass through to avoid breaking the form UX
     return false;
