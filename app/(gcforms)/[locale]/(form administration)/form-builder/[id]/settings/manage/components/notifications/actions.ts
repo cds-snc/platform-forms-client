@@ -2,22 +2,27 @@
 
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
-import { logMessage } from "@root/lib/logger";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { AuditLogDetails, logEvent, AuditLogEvent } from "@root/lib/auditLogs";
+import {
+  AuditLogDetails,
+  logEvent,
+  AuditLogEvent,
+  AuditLogAccessDeniedDetails,
+} from "@root/lib/auditLogs";
 import { authorization } from "@root/lib/privileges";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const updateNotificationsUser = AuthenticatedAction(
-  async (session, formId: string, user: { id: string; email: string; enabled: boolean } | null) => {
+  async (session, formId: string, enabled: boolean) => {
     try {
-      if (!user || !user.id) {
-        logMessage.warn("No user provided for notifications settings update");
-        throw new Error();
-      }
-
       await authorization.canEditForm(formId).catch((e) => {
+        logEvent(
+          e.user.id,
+          { type: "Form", id: formId },
+          "AccessDenied",
+          AuditLogAccessDeniedDetails.AccessDenied_AttemptToUpdateEmailNotifications
+        );
         throw e;
       });
 
@@ -28,9 +33,9 @@ export const updateNotificationsUser = AuthenticatedAction(
           },
           data: {
             notificationsUsers: {
-              ...(user.enabled
-                ? { connect: { id: user.id, email: user.email } }
-                : { disconnect: { id: user.id } }),
+              ...(enabled
+                ? { connect: { id: session.user.id } }
+                : { disconnect: { id: session.user.id } }),
             },
           },
         })
@@ -44,8 +49,8 @@ export const updateNotificationsUser = AuthenticatedAction(
         {
           userId: session.user.id,
           formId,
-          enabled: user.enabled ? "enabled" : "disabled",
-          userEmail: user.email,
+          enabled: enabled ? "enabled" : "disabled",
+          userEmail: session.user.email,
         }
       );
     } catch (_) {
