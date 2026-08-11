@@ -73,16 +73,6 @@ export default defineConfig({
         ? [
             {
               extends: true,
-              resolve: {
-                alias: {
-                  ...sharedAliases,
-                  // Redis is node only - for any component that indirectly (action) uses, redirect to a stub for browser tests
-                  "@root/lib/integration/redisConnector": path.resolve(
-                    __dirname,
-                    "./tests/helpers/redisConnector.ts"
-                  ),
-                },
-              },
               test: {
                 name: "browser",
                 include: [
