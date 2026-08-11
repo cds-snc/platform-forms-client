@@ -5,6 +5,9 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
+import { getRedisInstance } from "@root/lib/integration/redisConnector";
+import { getClientIp } from "@root/lib/ip";
+import { getAppSetting } from "@root/lib/appSettings";
 import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
 import { normalizeAddressField, normalizeCountryCode, normalizeQuery } from "./utils";
 
@@ -74,6 +77,10 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
   // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
   const normalizedQuery = normalizeQuery(query);
   if (!normalizedQuery || normalizedQuery === "") {
@@ -126,6 +133,10 @@ export const getSelectedAddress = async (
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { address: null, error: "RATE_LIMITED" };
   }
 
   const normalizedCanadaPostId = normalizeAddressField(value);
@@ -182,6 +193,10 @@ export const getAddressCompleteRetrieve = async (
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
   }
 
   const normalizedQuery = normalizeQuery(query);
@@ -302,3 +317,36 @@ const nestedAddressPattern = /\s+-\s+\d+\s+(Addresses|Adresses)$/i;
 export async function matchesAddressPattern(input: string): Promise<boolean> {
   return nestedAddressPattern.test(input);
 }
+
+const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
+
+// Returns true when the IP has exceeded the per-minute request "budget"
+const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
+  try {
+    const rateLimitMax = Number(await getAppSetting("addressCompleteRateLimitMax"));
+    const rateLimitWindowSeconds = Number(
+      await getAppSetting("addressCompleteRateLimitWindowSeconds")
+    );
+
+    const redis = await getRedisInstance();
+    const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
+
+    // Increment the related IPs count
+    const pipeline = redis.pipeline();
+    pipeline.incr(key);
+    pipeline.expire(key, rateLimitWindowSeconds);
+
+    // Check whether that IP is beyond the threshold
+    const results = await pipeline.exec();
+
+    // pipeline results are [error, value] tuples; index 0 is the incr result
+    const incrResult = results?.[0];
+
+    const count = (incrResult?.[1] ?? 0) as number;
+
+    return count > rateLimitMax;
+  } catch {
+    // Most likely case is Redis is down, just pass through to avoid breaking the form UX
+    return false;
+  }
+};
