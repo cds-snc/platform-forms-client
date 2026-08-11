@@ -18,7 +18,7 @@ export const NotificationsUserSetting = ({
       <h3 className="text-base font-bold">{t("settings.notifications.sessionUser.title")}</h3>
       <p className="mb-4">{t("settings.notifications.sessionUser.description")}</p>
       <NotificationsToggle
-        className="mb-4"
+        className="mb-4 inline-block"
         userHasNotificationsEnabled={userHasNotificationsEnabled}
         toggleChecked={onToggle}
         onLabel={t("settings.notifications.sessionUser.toggle.off")}
