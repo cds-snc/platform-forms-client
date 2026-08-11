@@ -79,7 +79,7 @@ In some cases, features provided by GC Forms may need to be depreciated. If a fe
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-GC Forms uses other services for product infrastructure and features, including Amazon cloud services, [hCaptcha[(https://www.hcaptcha.com/terms) to detect potential spam and malicious files, and [GC Notify](https://notification.canada.ca) to submit responses to government email addresses for forms published before June 11, 2025.
+GC Forms uses other services for product infrastructure and features, including Amazon cloud services, [hCaptcha](https://www.hcaptcha.com/terms) to detect potential spam and malicious files, and [GC Notify](https://notification.canada.ca) to submit responses to government email addresses for forms published before June 11, 2025.
 
 ### GC Forms is not responsible for:
 - Problems, failures or outages of other services, including Amazon services, hCaptcha, file scanning, and GC Notify.
