@@ -7,6 +7,7 @@ import frResponses from "@i18n/translations/fr/form-builder-responses.json";
 import { countries } from "@lib/managedData/countries";
 import { Language } from "@lib/types/form-builder-types";
 import { AddressElements } from "./types";
+import { normalizeString, truncateField } from "@gcforms/core";
 
 type AddressFieldKey = keyof AddressValidationError["fields"];
 
@@ -187,3 +188,23 @@ export function getCountryCodeFromName(value?: string): string {
 
   return trimmed;
 }
+
+export const MAX_ADDRESS_FIELD_LENGTH = 200;
+export const normalizeAddressField = (value: string): string => {
+  return truncateField(normalizeString(value), MAX_ADDRESS_FIELD_LENGTH);
+};
+
+export const MAX_SEARCH_QUERY_LENGTH = 200;
+export const normalizeQuery = (value: string): string => {
+  return truncateField(normalizeString(value), MAX_SEARCH_QUERY_LENGTH);
+};
+
+const MAX_COUNTRY_CODE_LENGTH = 3;
+export const normalizeCountryCode = (value: string): string => {
+  return truncateField(normalizeString(value), MAX_COUNTRY_CODE_LENGTH);
+};
+
+export const MAX_POSTAL_CODE_LENGTH = 20;
+export const normalizePostalCode = (value: string): string => {
+  return truncateField(normalizeString(value), MAX_POSTAL_CODE_LENGTH);
+};
