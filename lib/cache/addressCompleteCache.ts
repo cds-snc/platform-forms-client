@@ -39,7 +39,6 @@ export const setAddressCompleteCache = async (
   try {
     const redis = await getRedisInstance();
     await redis.setex(modifyParameter, cacheExpiry, JSON.stringify(choice));
-    logMessage.debug(`Updating Cached Complete Address for ${modifyParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");
