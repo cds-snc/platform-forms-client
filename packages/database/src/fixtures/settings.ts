@@ -92,7 +92,7 @@ const addressCompleteRateLimitWindowSeconds: Setting = {
   nameEn: "Address Complete Rate Limit Window (seconds)",
   nameFr: "Fenêtre de limitation de débit complète de l'adresse (secondes)",
   descriptionEn:
-    "The window. of time that as user is rate limited. e.g. 200 requests per 60 seconds.",
+    "The window of time that as user is rate limited e.g. 200 requests per 60 seconds.",
   descriptionFr:
     "La fenêtre temporelle durant laquelle l'utilisateur est soumis à une limitation de débit (par exemple, 300 requêtes par tranche de 60 secondes).",
   value: "60",
