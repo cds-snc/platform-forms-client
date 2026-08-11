@@ -27,21 +27,6 @@ GC Forms is a cloud-based service that is owned and operated by the Canadian Dig
 
 CDS can suspend a service at any time for anything deemed as inappropriate use. Notices of disconnect with a rationale will be provided when necessary.
 
-### GC Forms infrastructure providers are responsible for:
-
-- Delivering emails with end-user data to the provided government email addresses, if forms were published forms prior to June 11, 2025.
-- Scanning files attached to submissions for malicious content.
-- Providing AWS service cloud infrastructure.
-- Enforcing the [AWS terms of service](https://aws.amazon.com/service-terms/).
-- Providing hCaptcha to help detect and block spam and automated abuse or threats from bots.
-- Enforcing the hCaptcha [terms of service](https://www.hcaptcha.com/terms).
-
-CDS is not responsible for issues or outages with AWS infrastructure that may impact system uptime and availability. CDS is also not responsible for Amazon infrastructure failure, AWS, or Simple Email Service (SES). CDS is responsible for updating clients on any information pertaining to an AWS outage.
-
-CDS  will not be providing additional support for malicious files, beyond telling the client if a file is safe or not, based on the output of the file scanning service.
-
-CDS is not responsible for issues or outages with hCaptcha that may impact system availability.
-
 ## Uptime guarantee
 
 CDS guarantees that the GC Forms system shall have 99.0% uptime with no more than 1% downtime during regular business hours in a year.
@@ -94,4 +79,12 @@ In some cases, features provided by GC Forms may need to be depreciated. If a fe
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** November 12, 2025
+GC Forms uses other services for product infrastructure and features, including Amazon cloud services, [hCaptcha](https://www.hcaptcha.com/terms) to detect potential spam and malicious files, and [GC Notify](https://notification.canada.ca) to submit responses to government email addresses for forms published before June 11, 2025.
+
+### GC Forms is not responsible for:
+- Problems, failures or outages of other services, including Amazon services, hCaptcha, file scanning, and GC Notify.
+- Enforcing the terms of service of other services, including Amazon services, [hCaptcha](https://www.hcaptcha.com/terms), and [GC Notify](https://notification.canada.ca/terms).
+- Guaranteeing the availability or validity of Canada Post AddressComplete information. Form fillers can change information entered using AddressComplete.
+
+
+**Last update:** August 10, 2026
