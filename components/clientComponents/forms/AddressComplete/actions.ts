@@ -83,7 +83,8 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
-  // Avoid upstream calls for empty or very short queries that are unlikely to produce useful results.
+  // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
+  // Also avoid upstream calls for short queries that are unlikely to produce useful results.
   const normalizedQuery = normalizeQuery(query);
   if (normalizedQuery.length < MIN_ADDRESS_SEARCH_LENGTH) {
     return { items: [], error: null };
