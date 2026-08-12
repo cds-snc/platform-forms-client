@@ -91,7 +91,6 @@
       "fullAddressDesc": "Displays as one line.",
       "splitAddress": "Address split into parts",
       "splitAddressDesc": "Separated in multiple lines.",
-      "customize": "API users: Customize data",
       "multipleAddresses": "Addresses",
       "startTyping": "Start typing an address to search",
       "canadianOnly": "Canadian addresses only",
