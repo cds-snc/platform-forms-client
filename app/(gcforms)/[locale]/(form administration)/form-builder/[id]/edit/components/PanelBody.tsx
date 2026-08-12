@@ -148,16 +148,6 @@ export const PanelBody = ({
                         t("addElementDialog.addressComplete.components.postalCodeOrZip")}
                     </div>
                   </div>
-                  <div className="my-4 self-end">
-                    <Button
-                      theme="secondary"
-                      onClick={() => {
-                        Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
-                      }}
-                    >
-                      {t("addElementDialog.addressComplete.customize")}
-                    </Button>
-                  </div>
                 </div>
               )}
             </div>
