@@ -126,7 +126,13 @@ export const getAddressCompleteChoices = async (
   }
 };
 
-const allowedOrigins = new Set(["https://canada.ca"]);
+// This should probably come from an environment variable so we can add
+// localhost when testing locally, and we'd need to figure out how to
+// add review environment urls.
+const allowedOrigins = new Set([
+  "https://forms-formulaires.alpha.canada.ca/",
+  "https://forms-staging.cdssandbox.xyz/",
+]);
 
 // Functions returns the selected address.
 export const getSelectedAddress = async (
