@@ -10,6 +10,7 @@ import { getClientIp } from "@root/lib/ip";
 import { getAppSetting } from "@root/lib/appSettings";
 import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
 import { normalizeAddressField, normalizeCountryCode, normalizeQuery } from "./utils";
+import { headers } from "next/headers";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -125,12 +126,21 @@ export const getAddressCompleteChoices = async (
   }
 };
 
+const allowedOrigins = new Set(["https://canada.ca"]);
+
 // Functions returns the selected address.
 export const getSelectedAddress = async (
   value: string,
   countryCode: string,
   language: Language
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
+  const requestHeaders = await headers();
+  const origin = requestHeaders.get("origin");
+
+  if (!origin || !allowedOrigins.has(origin)) {
+    return { address: null, error: "FORBIDDEN_ORIGIN" };
+  }
+
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
   }
