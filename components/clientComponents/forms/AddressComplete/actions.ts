@@ -9,7 +9,13 @@ import { getRedisInstance } from "@root/lib/integration/redisConnector";
 import { getClientIp } from "@root/lib/ip";
 import { getAppSetting } from "@root/lib/appSettings";
 import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
-import { normalizeAddressField, normalizeCountryCode, normalizeQuery } from "./utils";
+import {
+  isPositiveSafeInteger,
+  MIN_ADDRESS_SEARCH_LENGTH,
+  normalizeAddressField,
+  normalizeCountryCode,
+  normalizeQuery,
+} from "./utils";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -77,13 +83,9 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
-    return { items: [], error: "RATE_LIMITED" };
-  }
-
-  // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
+  // Avoid upstream calls for empty or very short queries that are unlikely to produce useful results.
   const normalizedQuery = normalizeQuery(query);
-  if (!normalizedQuery || normalizedQuery === "") {
+  if (normalizedQuery.length < MIN_ADDRESS_SEARCH_LENGTH) {
     return { items: [], error: null };
   }
 
@@ -95,6 +97,10 @@ export const getAddressCompleteChoices = async (
   // No need to normalize language since the client should send exactly "en" or "fr"
   if (!isValidLanguage(language)) {
     return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
   }
 
   let params = "?";
@@ -135,10 +141,6 @@ export const getSelectedAddress = async (
     return { address: null, error: "API_KEY_MISSING" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
-    return { address: null, error: "RATE_LIMITED" };
-  }
-
   const normalizedCanadaPostId = normalizeAddressField(value);
   if (!isValidCanadaPostId(normalizedCanadaPostId)) {
     return { address: null, error: "INVALID_INPUT" };
@@ -151,6 +153,10 @@ export const getSelectedAddress = async (
 
   if (!isValidLanguage(language)) {
     return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { address: null, error: "RATE_LIMITED" };
   }
 
   let params = "?";
@@ -195,10 +201,6 @@ export const getAddressCompleteRetrieve = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
-    return { items: [], error: "RATE_LIMITED" };
-  }
-
   const normalizedQuery = normalizeQuery(query);
   if (!isValidCanadaPostId(normalizedQuery)) {
     return { items: [], error: "INVALID_INPUT" };
@@ -211,6 +213,10 @@ export const getAddressCompleteRetrieve = async (
 
   if (!isValidLanguage(language)) {
     return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
   }
 
   let params = "?";
@@ -327,6 +333,11 @@ const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
     const rateLimitWindowSeconds = Number(
       await getAppSetting("addressCompleteRateLimitWindowSeconds")
     );
+
+    if (!isPositiveSafeInteger(rateLimitMax) || !isPositiveSafeInteger(rateLimitWindowSeconds)) {
+      logMessage.error(new Error("Invalid AddressComplete rate limit configuration"));
+      return false;
+    }
 
     const redis = await getRedisInstance();
     const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
