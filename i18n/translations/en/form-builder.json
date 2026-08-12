@@ -60,7 +60,7 @@
       "whatIsYourAddress": "What is your address?",
       "city": "City, town, or community",
       "country": "Country",
-      "description": "A pattern to collect a Canadian address, including fields for address, city, province, and postal code.,<br>Canada Post can find and verify Canadian addresses.",
+      "description": "A pattern to collect a Canadian address, including fields for address, city, province, and postal code.",
       "label": "Address",
       "postal": "Postal code",
       "province": "Province or territory",
@@ -71,10 +71,10 @@
       "title": "Address"
     },
     "addressComplete": {
-      "whatIsYourAddress": "Mailing address",
+      "whatIsYourAddress": "Address",
       "city": "City, town, or community",
       "country": "Country",
-      "description": "A pattern to collect a Canadian address, including fields for address, city, province, and postal code.,<br>Canada Post can find and verify Canadian addresses.",
+      "description": "<span>A pattern to collect a Canadian address, including fields for address, city, province, and postal code.</span><span>Canada Post can find and verify Canadian addresses.</span>",
       "label": "Address",
       "postal": "Postal or zip code",
       "province": "Province, territory, or state",
@@ -84,18 +84,10 @@
       },
       "title": "Address",
       "select": "Select which component parts of the address to include.",
-      "options": "Country options",
       "fields": "Format",
       "fieldsDesc": "Decide how addresses appear in responses.",
-      "fullAddress": "Entire address combined",
-      "fullAddressDesc": "Displays as one line.",
-      "splitAddress": "Address split into parts",
-      "splitAddressDesc": "Separated in multiple lines.",
-      "customize": "API users: Customize data",
       "multipleAddresses": "Addresses",
       "startTyping": "Start typing an address to search",
-      "canadianOnly": "Canadian addresses only",
-      "allowInternational": "Allow international addresses",
       "components": {
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
@@ -757,6 +749,17 @@
       "infoBox": "Which date format should you use?",
       "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
       "infoLine2": "For example, when asking for a date exactly as it’s shown on a passport, card or other document, make the fields match the format of the original. This makes it easier for users to copy the date across accurately."
+    },
+    "addressComplete": {
+      "addressOptions": "Address options",
+      "typeOfAddress": "What type of addresses are being collected?",
+      "allowInternational": "Allow international addresses",
+      "canadianOnly": "Canadian addresses only",
+      "format": "Select a format for the address",
+      "fullAddress": "Entire address combined",
+      "fullAddressDesc": "Displays as one line.",
+      "splitAddress": "Address split into parts",
+      "splitAddressDesc": "Separated in multiple lines."
     },
     "apiOptionsSection": {
       "title": "Customize API data attributes",

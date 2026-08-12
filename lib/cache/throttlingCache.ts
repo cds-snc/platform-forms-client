@@ -15,6 +15,8 @@ export type ThrottleSetting = keyof typeof THROTTLE_SETTING; // For completeness
 export const getThrottling = async (
   formId: string
 ): Promise<{ rate: string | null; expires: number }> => {
+  await authorization.canViewForm(formId);
+
   const getParameter = `${REDIS_RATE_LIMIT_KEY_PREFIX}:${formId}`;
   try {
     const redis = await getRedisInstance();

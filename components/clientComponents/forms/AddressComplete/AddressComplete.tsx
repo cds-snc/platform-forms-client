@@ -82,6 +82,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     addressComplete: getFlag("addressComplete"),
   };
 
+  const isNoAuthPreviewMode = useMemo(() => window.location.href.includes("/0000/"), []);
+
+  const allowAddressComplete = featureFlags.addressComplete && !isNoAuthPreviewMode;
+
   //Form fillers address elements
   const [addressObject, setAddressObject] = useState<AddressElements>(
     field.value
@@ -137,7 +141,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     setAddressData("streetAddress", e.target.value); // Update the street address in the address object
     // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
 
-    if (!featureFlags.addressComplete) {
+    if (!allowAddressComplete) {
       return;
     } // Abandon if addressComplete is disabled.
 
@@ -154,7 +158,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   };
 
   const onAddressSet = async (value: string) => {
-    if (!featureFlags.addressComplete) {
+    if (!allowAddressComplete) {
       return;
     } // Abandon if addressComplete is disabled.
 
@@ -409,20 +413,25 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               />
             </>
           ) : (
-            <input
-              type="text"
-              id={`${name}-streetAddress`}
-              name={`${name}-streetAddress`}
-              value={addressObject.streetAddress}
-              onChange={(e) => setAddressData("streetAddress", e.target.value)}
-              maxLength={MAX_ADDRESS_FIELD_LENGTH}
-              className={cn(
-                "gc-input-text",
-                isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+            <>
+              {isValidAddressSubFieldInvalid(meta.error, "streetAddress") && (
+                <ErrorMessage id={"errorMessage" + `${name}-city`}>{streetError}</ErrorMessage>
               )}
-              required={props.required}
-              data-testid="addresscomplete-streetAddress-input"
-            />
+              <input
+                type="text"
+                id={`${name}-streetAddress`}
+                name={`${name}-streetAddress`}
+                value={addressObject.streetAddress}
+                onChange={(e) => setAddressData("streetAddress", e.target.value)}
+                maxLength={MAX_ADDRESS_FIELD_LENGTH}
+                className={cn(
+                  "gc-input-text",
+                  isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+                )}
+                required={props.required}
+                data-testid="addresscomplete-streetAddress-input"
+              />
+            </>
           )}
           <input type="hidden" {...field} />
         </div>
