@@ -68,7 +68,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   );
 
   const comboboxRef = useRef<ManagedComboboxRef>(null);
-  const [apiError, setApiError] = useState(false);
 
   const countryError = getAddressSubFieldError(meta.error, "country");
   const streetError = getAddressSubFieldError(meta.error, "streetAddress");
@@ -188,7 +187,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             i18n.language as Language
           );
           if (response.error) {
-            setApiError(true);
+            // no-op - we log server side, but don't want to show the user an error for this.
           } else if (response.address) {
             setAddressObject({
               ...response.address,
@@ -197,10 +196,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             if (comboboxRef.current) {
               comboboxRef.current.changeInputValue(response.address.streetAddress, false);
             }
-            setApiError(false);
           }
         } catch (err: unknown) {
-          setApiError(true);
+          // no-op
         }
       } else if (nextValue == AddressCompleNext.Find) {
         // Do another lookup for the address.
@@ -212,7 +210,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           );
 
           if (response.error) {
-            setApiError(true);
             setChoices([]);
           } else {
             if (comboboxRef.current) {
@@ -220,10 +217,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             }
 
             handleAddressComplete(response.items);
-            setApiError(false);
           }
         } catch (err: unknown) {
-          setApiError(true);
           setChoices([]);
         }
       }
@@ -240,15 +235,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           i18n.language as Language
         );
         if (response.error) {
-          setApiError(true);
           setChoices([]);
           setAddressResultCache([]);
         } else {
-          setApiError(false);
           handleAddressComplete(response.items);
         }
       } catch (err: unknown) {
-        setApiError(true);
         setChoices([]);
         setAddressResultCache([]);
       }
@@ -325,10 +317,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     }
   };
 
-  const searchHintText = featureFlags.addressComplete
-    ? `${t("addElementDialog.addressComplete.startTyping")}.`
-    : "";
-
   return (
     <>
       <fieldset
@@ -393,9 +381,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </Description>
           {getCountryCodeFromName(addressObject.country) === "CAN" ? (
             <>
-              {/* If we have an API error don't show search hint text as there will be no auto-complete */}
-              {!apiError && <Description id={`${name}-streetDesc-2`}>{searchHintText}</Description>}
-
               <ManagedCombobox
                 ref={comboboxRef}
                 choices={choices}
