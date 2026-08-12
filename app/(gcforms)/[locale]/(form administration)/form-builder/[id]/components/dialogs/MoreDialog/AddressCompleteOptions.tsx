@@ -21,9 +21,11 @@ export const AddressCompleteOptions = ({
 
   return (
     <section className="mb-4">
-      <h3>{t("addElementDialog.addressComplete.options")}</h3>
+      <h3>{t("moreDialog.addressComplete.addressOptions")}</h3>
+      <p className="mt-4 font-semibold">{t("moreDialog.addressComplete.typeOfAddress")}</p>
 
       <Radio
+        className="mt-2"
         id={`addressComponent-${item.id}-id-international`}
         value={false}
         checked={!isCanadianOnly}
@@ -40,9 +42,10 @@ export const AddressCompleteOptions = ({
             },
           });
         }}
-        label={t("addElementDialog.addressComplete.allowInternational")}
+        label={t("moreDialog.addressComplete.allowInternational")}
       ></Radio>
       <Radio
+        className="mt-2"
         id={`addressComponent-${item.id}-id-canadianOnly`}
         value={true}
         checked={isCanadianOnly}
@@ -59,17 +62,16 @@ export const AddressCompleteOptions = ({
             },
           });
         }}
-        label={t("addElementDialog.addressComplete.canadianOnly")}
+        label={t("moreDialog.addressComplete.canadianOnly")}
       ></Radio>
 
-      <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
-      <p className="mt-2 mb-4">{t("addElementDialog.addressComplete.fieldsDesc")}</p>
+      <h4 className="mt-4">{t("moreDialog.addressComplete.format")}</h4>
 
       <Radio
         className="mt-2"
         name={`addressType-${item.id}`}
         id="addressType-full"
-        label={t("addElementDialog.addressComplete.fullAddress")}
+        label={t("moreDialog.addressComplete.fullAddress")}
         value={false}
         checked={!isSplitAddress}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,14 +87,12 @@ export const AddressCompleteOptions = ({
           });
         }}
       />
-      <div className="mb-4 ml-12 text-sm">
-        {t("addElementDialog.addressComplete.fullAddressDesc")}
-      </div>
+      <div className="mb-4 ml-12 text-sm">{t("moreDialog.addressComplete.fullAddressDesc")}</div>
       <Radio
         className="mt-2"
         name={`addressType-${item.id}`}
         id="addressType-split"
-        label={t("addElementDialog.addressComplete.splitAddress")}
+        label={t("moreDialog.addressComplete.splitAddress")}
         value={true}
         checked={isSplitAddress}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,9 +108,7 @@ export const AddressCompleteOptions = ({
           });
         }}
       />
-      <div className="mb-4 ml-12 text-sm">
-        {t("addElementDialog.addressComplete.splitAddressDesc")}
-      </div>
+      <div className="mb-4 ml-12 text-sm">{t("moreDialog.addressComplete.splitAddressDesc")}</div>
     </section>
   );
 };
