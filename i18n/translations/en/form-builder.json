@@ -87,7 +87,6 @@
       "fields": "Format",
       "fieldsDesc": "Decide how addresses appear in responses.",
       "multipleAddresses": "Addresses",
-      "startTyping": "Start typing an address to search",
       "components": {
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
