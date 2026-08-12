@@ -27,6 +27,10 @@ import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { isValidAddressSubFieldInvalid, getAddressSubFieldError } from "@gcforms/core";
 import {
+  setAddressCompleteCache,
+  checkAddressCompleteCache,
+} from "@lib/cache/addressCompleteCache";
+import {
   MAX_SEARCH_QUERY_LENGTH,
   MAX_ADDRESS_FIELD_LENGTH,
   MAX_POSTAL_CODE_LENGTH,
@@ -47,7 +51,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
   //Address Complete elements
   const [choices, setChoices] = useState<string[]>([]);
-  const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
+  const [rawChoices, setRawChoices] = useState<AddressCompleteChoice[]>([]);
 
   // Memoize addressLabels and toFullAddress so callbacks can be stable
   const addressLabelsMemo = useMemo(
@@ -118,13 +122,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const debouncedSearchRef = useRef<(((q: string) => void) & { cancel?: () => void }) | null>(null);
 
   const handleAddressComplete = useCallback(
-    async (choices: AddressCompleteChoice[]) => {
-      // Add new results to the cache using functional update to avoid stale reads
-      setAddressResultCache((prevCache) => {
-        const newElements = choices.filter((c) => !prevCache.find((p) => p.Id === c.Id));
-        return newElements.length > 0 ? [...prevCache, ...newElements] : prevCache;
-      });
-
+    (input: string, choices: AddressCompleteChoice[], skipCache = false) => {
       // Filter the results to avoid duplicate entry
       const uniqueResults = choices.filter(
         (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
@@ -132,9 +130,18 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
       );
 
+      setRawChoices(uniqueResults);
       setChoices(uniqueResults.map((item: AddressCompleteChoice) => toFullAddress(item)));
+
+      // Cache each choice individually, keyed by its display text, so onAddressSet can look them up.
+      // Nested results (from a drill-down Find) are not cached since they're transient.
+      if (!skipCache) {
+        for (const item of uniqueResults) {
+          setAddressCompleteCache(toFullAddress(item), item);
+        }
+      }
     },
-    [setAddressResultCache, setChoices, toFullAddress]
+    [setChoices, toFullAddress]
   );
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,11 +169,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       return;
     } // Abandon if addressComplete is disabled.
 
-    const selectedResult = addressResultCache.find(
-      (item: AddressCompleteChoice) => toFullAddress(item) === value
-    );
+    // Look up the choice object from currently displayed choices first, then fall back to cache.
+    // Local state covers nested results (which are not cached).
+    let selectedResult: AddressCompleteChoice | null =
+      rawChoices.find((c) => toFullAddress(c) === value) ?? null;
 
-    if (selectedResult === undefined) {
+    if (!selectedResult) {
+      selectedResult = await checkAddressCompleteCache(value);
+    }
+
+    if (!selectedResult) {
       return; // Do nothing, this is not found in the AddressComplete API.
     } else {
       // Perform regex test against the selectedResult.Next value.
@@ -219,7 +231,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               comboboxRef.current.changeInputValue("", true);
             }
 
-            handleAddressComplete(response.items);
+            handleAddressComplete(value, response.items, true); // skip cache for nested results
             setApiError(false);
           }
         } catch (err: unknown) {
@@ -242,15 +254,13 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         if (response.error) {
           setApiError(true);
           setChoices([]);
-          setAddressResultCache([]);
         } else {
           setApiError(false);
-          handleAddressComplete(response.items);
+          handleAddressComplete(query, response.items);
         }
       } catch (err: unknown) {
         setApiError(true);
         setChoices([]);
-        setAddressResultCache([]);
       }
     }, 300);
 
@@ -319,7 +329,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       if (comboboxRef.current) {
         comboboxRef.current.changeInputValue("", false);
       }
-      setAddressResultCache([]); // Clear the cache.
     }
   };
 

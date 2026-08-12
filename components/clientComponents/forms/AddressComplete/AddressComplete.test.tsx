@@ -26,6 +26,8 @@ const {
   getSelectedAddressMock,
   getAddressCompleteRetrieveMock,
   matchesAddressPatternMock,
+  setAddressCompleteCacheMock,
+  checkAddressCompleteCacheMock,
   formikState,
 } = vi.hoisted(() => ({
   getFlagMock: vi.fn(() => false),
@@ -35,6 +37,8 @@ const {
   getSelectedAddressMock: vi.fn(),
   getAddressCompleteRetrieveMock: vi.fn(),
   matchesAddressPatternMock: vi.fn(() => false),
+  setAddressCompleteCacheMock: vi.fn(() => Promise.resolve()),
+  checkAddressCompleteCacheMock: vi.fn(() => Promise.resolve(null)),
   formikState: {
     value: "",
     error: undefined as string | undefined,
@@ -75,6 +79,11 @@ vi.mock("./actions", () => ({
   getAddressCompleteChoices: getAddressCompleteChoicesMock,
   getSelectedAddress: getSelectedAddressMock,
   getAddressCompleteRetrieve: getAddressCompleteRetrieveMock,
+}));
+
+vi.mock("@lib/cache/addressCompleteCache", () => ({
+  setAddressCompleteCache: setAddressCompleteCacheMock,
+  checkAddressCompleteCache: checkAddressCompleteCacheMock,
 }));
 
 vi.mock("./utils", async (importActual) => {
@@ -186,6 +195,8 @@ describe("AddressComplete", () => {
     getAddressCompleteChoicesMock.mockResolvedValue({ items: [], error: null });
     getSelectedAddressMock.mockResolvedValue({ address: null, error: null });
     getAddressCompleteRetrieveMock.mockResolvedValue({ items: [], error: null });
+    setAddressCompleteCacheMock.mockResolvedValue(undefined);
+    checkAddressCompleteCacheMock.mockResolvedValue(null);
     formikState.value = "";
     formikState.error = undefined;
   });
@@ -361,6 +372,144 @@ describe("AddressComplete", () => {
     expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent(
       "123 King St W, Toronto"
     );
+  });
+
+  it("selects a specific address from expanded nested results", async () => {
+    const user = userEvent.setup();
+
+    getFlagMock.mockReturnValue(true);
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-parent-id",
+          Text: "King St W",
+          Description: "Toronto - 15489 Addresses",
+          Next: "Find",
+        },
+      ],
+      error: null,
+    });
+    getAddressCompleteRetrieveMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-child-id",
+          Text: "123 King St W",
+          Description: "Toronto",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
+    getSelectedAddressMock.mockResolvedValue({
+      address: {
+        streetAddress: "123 King St W",
+        city: "Toronto",
+        province: "Ontario",
+        postalCode: "M5V 1J1",
+        country: "CAN",
+      },
+      error: null,
+    });
+
+    renderComponent();
+
+    // First selection: pick the nested (Find) choice to expand it
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    await user.type(streetInput, "King");
+    await user.click(screen.getByTestId("address-streetAddress-set-first"));
+
+    await waitFor(() => {
+      expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("nested-parent-id", "CAN", "en");
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent(
+        "123 King St W, Toronto"
+      );
+    });
+
+    // Second selection: pick a real (Retrieve) address from the expanded list
+    await user.click(screen.getByTestId("address-streetAddress-set-first"));
+
+    await waitFor(() => {
+      expect(getSelectedAddressMock).toHaveBeenCalledWith("nested-child-id", "CAN", "en");
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("addresscomplete-input-city")).toHaveValue("Toronto");
+      expect(screen.getByTestId("addresscomplete-input-province")).toHaveValue("Ontario");
+      expect(screen.getByTestId("addresscomplete-input-postalCode")).toHaveValue("M5V 1J1");
+    });
+  });
+
+  it("caches individual choices by display text, not the whole array", async () => {
+    getFlagMock.mockReturnValue(true);
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        { Id: "id-1", Text: "100 Queen St", Description: "Toronto", Next: "Retrieve" },
+        { Id: "id-2", Text: "200 Queen St", Description: "Ottawa", Next: "Retrieve" },
+      ],
+      error: null,
+    });
+
+    renderComponent();
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    fireEvent.change(streetInput, { target: { value: "Queen" } });
+
+    await waitFor(() => {
+      expect(setAddressCompleteCacheMock).toHaveBeenCalledWith(
+        "100 Queen St, Toronto",
+        expect.objectContaining({ Id: "id-1" })
+      );
+    });
+
+    expect(setAddressCompleteCacheMock).toHaveBeenCalledWith(
+      "200 Queen St, Ottawa",
+      expect.objectContaining({ Id: "id-2" })
+    );
+  });
+
+  it("does not cache nested expansion results", async () => {
+    const user = userEvent.setup();
+
+    getFlagMock.mockReturnValue(true);
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [{ Id: "nested-id", Text: "King St W", Description: "Toronto - 5 Addresses", Next: "Find" }],
+      error: null,
+    });
+    getAddressCompleteRetrieveMock.mockResolvedValue({
+      items: [{ Id: "child-id", Text: "10 King St W", Description: "Toronto", Next: "Retrieve" }],
+      error: null,
+    });
+
+    renderComponent();
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    fireEvent.change(streetInput, { target: { value: "King" } });
+
+    // The initial search caches the nested parent choice
+    await waitFor(() => {
+      expect(setAddressCompleteCacheMock).toHaveBeenCalledWith(
+        "King St W, Toronto - 5 Addresses",
+        expect.objectContaining({ Id: "nested-id" })
+      );
+    });
+
+    const callCountAfterSearch = setAddressCompleteCacheMock.mock.calls.length;
+
+    // Select the nested choice to trigger the Find drill-down
+    await user.click(screen.getByTestId("address-streetAddress-set-first"));
+
+    await waitFor(() => {
+      expect(getAddressCompleteRetrieveMock).toHaveBeenCalled();
+    });
+
+    // Expanded results from the nested lookup must NOT be cached
+    await waitFor(() => {
+      expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent("10 King St W, Toronto");
+    });
+    expect(setAddressCompleteCacheMock.mock.calls.length).toBe(callCountAfterSearch);
   });
 
   it("resets address fields when country changes and uses manual street input for non-CAN", async () => {

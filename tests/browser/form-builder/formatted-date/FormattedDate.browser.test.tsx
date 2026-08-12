@@ -8,6 +8,11 @@ import { setupFonts } from "../../helpers/setupFonts";
 
 import "@root/styles/app.css";
 
+vi.mock("@lib/cache/addressCompleteCache", () => ({
+  setAddressCompleteCache: vi.fn(),
+  checkAddressCompleteCache: vi.fn(),
+}));
+
 describe("<FormattedDate />", () => {
   beforeAll(() => {
     setupFonts();

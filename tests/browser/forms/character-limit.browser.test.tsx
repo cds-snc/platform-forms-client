@@ -8,6 +8,12 @@ import { setupFonts } from "../helpers/setupFonts";
 import "@root/styles/app.css";
 import "@root/i18n/client";
 
+vi.mock("@lib/cache/addressCompleteCache", () => ({
+  setAddressCompleteCache: vi.fn(),
+  checkAddressCompleteCache: vi.fn(),
+}));
+
+
 describe("<TextInput />", () => {
   beforeAll(() => {
     setupFonts();
