@@ -71,7 +71,7 @@
       "title": "Adresse"
     },
     "addressComplete": {
-      "whatIsYourAddress": "Adresse postale",
+      "whatIsYourAddress": "Adresse",
       "city": "Ville ou communauté",
       "country": "Pays",
       "description": "Un modèle pour la collecte d’adresses, y compris la ville, la province et le code postal.<br>Postes Canada peut trouver et vérifier les adresses au Canada.",

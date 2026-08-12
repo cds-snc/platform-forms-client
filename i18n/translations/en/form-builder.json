@@ -71,7 +71,7 @@
       "title": "Address"
     },
     "addressComplete": {
-      "whatIsYourAddress": "Mailing address",
+      "whatIsYourAddress": "Address",
       "city": "City, town, or community",
       "country": "Country",
       "description": "A pattern to collect a Canadian address, including fields for address, city, province, and postal code.,<br>Canada Post can find and verify Canadian addresses.",
