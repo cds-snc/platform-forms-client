@@ -87,6 +87,7 @@ export default defineConfig({
                   headless: process.env.CI === "true",
                   viewport: { width: 768, height: 1024 },
                 },
+                setupFiles: ["./tests/browser/setup.ts"],
               },
             },
           ]

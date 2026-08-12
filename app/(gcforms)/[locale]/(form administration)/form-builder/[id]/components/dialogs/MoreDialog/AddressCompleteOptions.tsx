@@ -1,7 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
-import { Checkbox, Radio } from "@formBuilder/components/shared/MultipleChoice";
-import { AddressComponents, FormElementTypes, FormElement } from "@lib/types";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
+import { FormElementTypes, FormElement } from "@lib/types";
 
 export const AddressCompleteOptions = ({
   item,
@@ -16,84 +16,99 @@ export const AddressCompleteOptions = ({
     return null;
   }
 
-  const updateAddressComponents = (props: AddressComponents) => {
-    // check if the addresscomponent exists, if it doesn't make it.
-    if (item.properties.addressComponents == undefined) {
-      const baseAddress = {} as AddressComponents;
-      const addressComponent = Object.assign({}, baseAddress, props);
-      setItem({
-        ...item,
-        properties: { ...item.properties, addressComponents: addressComponent },
-      });
-    } else {
-      // clone the existing properties so that we don't overwrite other keys in "validation"
-      const addressComponent = Object.assign(
-        {},
-        item.properties.addressComponents,
-        props
-      ) as AddressComponents;
-      setItem({
-        ...item,
-        properties: { ...item.properties, addressComponents: addressComponent },
-      });
-    }
-  };
+  const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
+  const isSplitAddress = item.properties.addressComponents?.splitAddress ?? false;
 
   return (
     <section className="mb-4">
-      <h3>{t("addElementDialog.addressComplete.options")}</h3>
+      <h3>{t("moreDialog.addressComplete.addressOptions")}</h3>
+      <p className="mt-4 font-semibold">{t("moreDialog.addressComplete.typeOfAddress")}</p>
 
-      <Checkbox
+      <Radio
+        className="mt-2"
+        id={`addressComponent-${item.id}-id-international`}
+        value={false}
+        checked={!isCanadianOnly}
+        name={`addressComponent-${item.id}-name-canadianOnly`}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                canadianOnly: !e.target.checked,
+              },
+            },
+          });
+        }}
+        label={t("moreDialog.addressComplete.allowInternational")}
+      ></Radio>
+      <Radio
+        className="mt-2"
         id={`addressComponent-${item.id}-id-canadianOnly`}
-        value={
-          `addressComponent-${item.id}-value-canadianOnly-` +
-          item.properties.addressComponents?.canadianOnly
-        }
-        key={
-          `addressComponent-${item.id}-canadianOnly-` +
-          item.properties.addressComponents?.canadianOnly
-        }
-        defaultChecked={item.properties.addressComponents?.canadianOnly}
+        value={true}
+        checked={isCanadianOnly}
+        name={`addressComponent-${item.id}-name-canadianOnly`}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ canadianOnly: e.target.checked });
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                canadianOnly: e.target.checked,
+              },
+            },
+          });
         }}
-        label={t("addElementDialog.addressComplete.canadianOnly")}
-      ></Checkbox>
+        label={t("moreDialog.addressComplete.canadianOnly")}
+      ></Radio>
 
-      <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
-      <p className="mb-4 mt-2">{t("addElementDialog.addressComplete.fieldsDesc")}</p>
+      <h4 className="mt-4">{t("moreDialog.addressComplete.format")}</h4>
 
       <Radio
         className="mt-2"
-        name="addressType"
+        name={`addressType-${item.id}`}
         id="addressType-full"
-        label={t("addElementDialog.addressComplete.fullAddress")}
-        value="addressType-full"
-        checked={
-          item.properties.addressComponents?.splitAddress === false ||
-          item.properties.addressComponents?.splitAddress === undefined
-        }
+        label={t("moreDialog.addressComplete.fullAddress")}
+        value={false}
+        checked={!isSplitAddress}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ splitAddress: !e.target.checked });
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                splitAddress: !e.target.checked,
+              },
+            },
+          });
         }}
       />
-      <div className="mb-4 ml-12 text-sm">
-        {t("addElementDialog.addressComplete.fullAddressDesc")}
-      </div>
+      <div className="mb-4 ml-12 text-sm">{t("moreDialog.addressComplete.fullAddressDesc")}</div>
       <Radio
         className="mt-2"
-        name="addressType"
+        name={`addressType-${item.id}`}
         id="addressType-split"
-        label={t("addElementDialog.addressComplete.splitAddress")}
-        value="addressType-split"
-        checked={item.properties.addressComponents?.splitAddress === true}
+        label={t("moreDialog.addressComplete.splitAddress")}
+        value={true}
+        checked={isSplitAddress}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ splitAddress: e.target.checked });
+          setItem({
+            ...item,
+            properties: {
+              ...item.properties,
+              addressComponents: {
+                ...item.properties.addressComponents,
+                splitAddress: e.target.checked,
+              },
+            },
+          });
         }}
       />
-      <div className="mb-4 ml-12 text-sm">
-        {t("addElementDialog.addressComplete.splitAddressDesc")}
-      </div>
+      <div className="mb-4 ml-12 text-sm">{t("moreDialog.addressComplete.splitAddressDesc")}</div>
     </section>
   );
 };
