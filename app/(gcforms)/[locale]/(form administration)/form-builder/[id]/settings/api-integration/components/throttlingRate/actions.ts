@@ -9,13 +9,17 @@ import {
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { authorization } from "@lib/privileges";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const getCurrentThrottlingRate = AuthenticatedAction(async (_, formId: string) => {
-  return getThrottling(formId).catch(() => {
+  try {
+    await authorization.canViewForm(formId);
+    return await getThrottling(formId);
+  } catch (_) {
     return { error: "There was an error. Please try again later." } as ServerActionError;
-  });
+  }
 });
 
 export const temporarilyIncreaseThrottlingRate = AuthenticatedAction(
