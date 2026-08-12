@@ -296,9 +296,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     }
   };
 
-  const countryChoices = countries.all?.map((country) => {
-    return country[i18n.language as Language];
-  });
+  const countryChoices = countries.all
+    ?.map((country) => country[i18n.language as Language])
+    .sort((firstCountry, secondCountry) =>
+      firstCountry.localeCompare(secondCountry, i18n.language as Language)
+    );
 
   // Determine the localized display value for the current country code or name
   const countryBaseValue = (() => {
@@ -422,20 +424,25 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               />
             </>
           ) : (
-            <input
-              type="text"
-              id={`${name}-streetAddress`}
-              name={`${name}-streetAddress`}
-              value={addressObject.streetAddress}
-              onChange={(e) => setAddressData("streetAddress", e.target.value)}
-              maxLength={MAX_ADDRESS_FIELD_LENGTH}
-              className={cn(
-                "gc-input-text",
-                isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+            <>
+              {isValidAddressSubFieldInvalid(meta.error, "streetAddress") && (
+                <ErrorMessage id={"errorMessage" + `${name}-city`}>{streetError}</ErrorMessage>
               )}
-              required={props.required}
-              data-testid="addresscomplete-streetAddress-input"
-            />
+              <input
+                type="text"
+                id={`${name}-streetAddress`}
+                name={`${name}-streetAddress`}
+                value={addressObject.streetAddress}
+                onChange={(e) => setAddressData("streetAddress", e.target.value)}
+                maxLength={MAX_ADDRESS_FIELD_LENGTH}
+                className={cn(
+                  "gc-input-text",
+                  isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+                )}
+                required={props.required}
+                data-testid="addresscomplete-streetAddress-input"
+              />
+            </>
           )}
           <input type="hidden" {...field} />
         </div>
