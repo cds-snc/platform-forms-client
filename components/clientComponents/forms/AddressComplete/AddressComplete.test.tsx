@@ -414,7 +414,7 @@ describe("AddressComplete", () => {
     renderComponent();
 
     const streetInput = await screen.findByTestId("address-streetAddress-input");
-    await user.type(streetInput, "12");
+    await user.type(streetInput, "1");
 
     expect(getAddressCompleteChoicesMock).not.toHaveBeenCalled();
     expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent("");

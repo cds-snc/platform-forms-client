@@ -99,7 +99,7 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "INVALID_INPUT" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
     return { items: [], error: "RATE_LIMITED" };
   }
 
@@ -155,7 +155,7 @@ export const getSelectedAddress = async (
     return { address: null, error: "INVALID_INPUT" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.retrieve)) {
     return { address: null, error: "RATE_LIMITED" };
   }
 
@@ -215,7 +215,7 @@ export const getAddressCompleteRetrieve = async (
     return { items: [], error: "INVALID_INPUT" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
     return { items: [], error: "RATE_LIMITED" };
   }
 
@@ -324,12 +324,26 @@ export async function matchesAddressPattern(input: string): Promise<boolean> {
   return nestedAddressPattern.test(input);
 }
 
-const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
+const RATE_LIMIT_KEY_PREFIX = "address-complete";
+const RATE_LIMIT_SCOPE = {
+  find: "find",
+  retrieve: "retrieve",
+} as const;
+type RateLimitScope = (typeof RATE_LIMIT_SCOPE)[keyof typeof RATE_LIMIT_SCOPE];
+
+const RATE_LIMIT_MAX_SETTING = {
+  [RATE_LIMIT_SCOPE.find]: "addressCompleteFindRateLimitMax",
+  [RATE_LIMIT_SCOPE.retrieve]: "addressCompleteRetrieveRateLimitMax",
+} as const;
 
 // Returns true when the IP has exceeded the per-minute request "budget"
-const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
+const incrementAndCheckRateLimiting = async (
+  ip: string,
+  scope: RateLimitScope
+): Promise<boolean> => {
   try {
-    const rateLimitMax = Number(await getAppSetting("addressCompleteRateLimitMax"));
+    const rateLimitMax = Number(await getAppSetting(RATE_LIMIT_MAX_SETTING[scope]));
+
     const rateLimitWindowSeconds = Number(
       await getAppSetting("addressCompleteRateLimitWindowSeconds")
     );
@@ -340,22 +354,30 @@ const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
     }
 
     const redis = await getRedisInstance();
-    const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
+    const key = `${RATE_LIMIT_KEY_PREFIX}:${scope}:${ip}`;
 
     // Increment the related IPs count
     const pipeline = redis.pipeline();
     pipeline.incr(key);
     pipeline.expire(key, rateLimitWindowSeconds);
 
-    // Check whether that IP is beyond the threshold
     const results = await pipeline.exec();
 
-    // pipeline results are [error, value] tuples; index 0 is the incr result
+    // If there was an error incrementing ([error, value] tuple), just return false to avoid breaking the form UX
     const incrResult = results?.[0];
+    if (incrResult?.[0]) {
+      return false;
+    }
 
-    const count = (incrResult?.[1] ?? 0) as number;
-
-    return count > rateLimitMax;
+    // Check whether that IP is beyond the threshold and should be rate limited
+    const count = incrResult?.[1] as number;
+    const isRateLimited = count > rateLimitMax;
+    if (isRateLimited) {
+      logMessage.warn(
+        `AddressComplete user rate limited on ${scope} operation because they hit ${count}/${rateLimitMax} within ${rateLimitWindowSeconds}s.`
+      );
+    }
+    return isRateLimited;
   } catch {
     // Most likely case is Redis is down, just pass through to avoid breaking the form UX
     return false;
