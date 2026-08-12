@@ -287,9 +287,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     }
   };
 
-  const countryChoices = countries.all?.map((country) => {
-    return country[i18n.language as Language];
-  });
+  const countryChoices = countries.all
+    ?.map((country) => country[i18n.language as Language])
+    .sort((firstCountry, secondCountry) =>
+      firstCountry.localeCompare(secondCountry, i18n.language as Language)
+    );
 
   // Determine the localized display value for the current country code or name
   const countryBaseValue = (() => {
