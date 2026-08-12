@@ -13,11 +13,9 @@ import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const getCurrentThrottlingRate = AuthenticatedAction(async (_, formId: string) => {
-  try {
-    return await getThrottling(formId);
-  } catch (_) {
+  return getThrottling(formId).catch(() => {
     return { error: "There was an error. Please try again later." } as ServerActionError;
-  }
+  });
 });
 
 export const temporarilyIncreaseThrottlingRate = AuthenticatedAction(
