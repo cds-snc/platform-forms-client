@@ -353,14 +353,11 @@ const incrementAndCheckRateLimiting = async (
 ): Promise<boolean> => {
   try {
     const rateLimitMax = Number(await getAppSetting(RATE_LIMIT_MAX_SETTING[scope]));
-
     const rateLimitWindowSeconds = Number(
       await getAppSetting("addressCompleteRateLimitWindowSeconds")
     );
-
     if (!isPositiveSafeInteger(rateLimitMax) || !isPositiveSafeInteger(rateLimitWindowSeconds)) {
-      logMessage.error(new Error("Invalid AddressComplete rate limit configuration"));
-      return false;
+      throw new Error("Invalid configuration");
     }
 
     const redis = await getRedisInstance();
@@ -388,7 +385,10 @@ const incrementAndCheckRateLimiting = async (
       );
     }
     return isRateLimited;
-  } catch {
+  } catch (err) {
+    logMessage.error(
+      `AddressComplete rate limiting failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     // Most likely case is Redis is down, just pass through to avoid breaking the form UX
     return false;
   }
