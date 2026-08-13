@@ -10,8 +10,7 @@ import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTempla
 import { UpdateTemplateAction } from "@root/lib/templates/types";
 import { FormProperties } from "@lib/types";
 import { useAppUpdate } from "../useAppUpdate";
-import { autoFlowAllNextActions, groupsHaveCustomRules } from "@lib/groups/utils/setNextAction";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -42,25 +41,6 @@ const defaultTemplateApi: TemplateApiType = {
 type TrackedTemplateState = [form: FormProperties];
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
-
-const autoFlowFormIfPossible = (formConfig: FormProperties): FormProperties => {
-  const groups = formConfig.groups;
-
-  if (!groups || !formConfig.groupsLayout?.length || groupsHaveCustomRules(Object.values(groups))) {
-    return formConfig;
-  }
-
-  const orderedGroups = orderGroups(groups, formConfig.groupsLayout);
-
-  if (!orderedGroups) {
-    return formConfig;
-  }
-
-  return {
-    ...formConfig,
-    groups: autoFlowAllNextActions({ ...orderedGroups }, true),
-  };
-};
 
 export function SaveTemplateProvider({ children }: { children: React.ReactNode }) {
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
