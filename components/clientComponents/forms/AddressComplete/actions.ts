@@ -87,7 +87,7 @@ export const getAddressCompleteChoices = async (
   // Also avoid upstream calls for short queries that are unlikely to produce useful results.
   const normalizedQuery = normalizeQuery(query);
   if (normalizedQuery.length < MIN_ADDRESS_SEARCH_LENGTH) {
-    return { items: [], error: null };
+    return { items: [], error: "INVALID_INPUT" };
   }
 
   const normalizedCountryCode = normalizeCountryCode(countryCode);
@@ -117,7 +117,7 @@ export const getAddressCompleteChoices = async (
     });
 
     if (!response.ok) {
-      return { items: [], error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json();
@@ -128,6 +128,9 @@ export const getAddressCompleteChoices = async (
 
     return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { items: [], error: "NETWORK_ERROR" };
   }
 };
@@ -173,7 +176,7 @@ export const getSelectedAddress = async (
     });
 
     if (!response.ok) {
-      return { address: null, error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json();
@@ -188,6 +191,9 @@ export const getSelectedAddress = async (
 
     return { address: addressComponents, error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { address: null, error: "NETWORK_ERROR" };
   }
 };
@@ -233,7 +239,7 @@ export const getAddressCompleteRetrieve = async (
     });
 
     if (!response.ok) {
-      return { items: [], error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json(); //Todo #4341  - Error Handling
@@ -244,6 +250,9 @@ export const getAddressCompleteRetrieve = async (
 
     return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { items: [], error: "NETWORK_ERROR" };
   }
 };
