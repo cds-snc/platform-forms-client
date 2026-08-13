@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import React, { useImperativeHandle, useState } from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AddressComplete } from "./AddressComplete";
@@ -77,16 +77,32 @@ vi.mock("./actions", () => ({
   getAddressCompleteRetrieve: getAddressCompleteRetrieveMock,
 }));
 
-vi.mock("./utils", () => ({
-  matchesAddressPattern: matchesAddressPatternMock,
-  localizeAddressCompleteDescription: vi.fn(
-    (description: string, labels: { en: string; fr: string; current: string }) =>
-    description.replace(
-      /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
-      (_match: string, count: string) => ` - ${count} ${labels.current}`
-    )
-  ),
-}));
+vi.mock("./utils", async (importActual) => {
+  const actual = await importActual<typeof import("./utils")>();
+  return {
+    ...actual,
+    matchesAddressPattern: matchesAddressPatternMock,
+    localizeAddressCompleteDescription: vi.fn(
+      (description: string, labels: { en: string; fr: string; current: string }) =>
+        description.replace(
+          /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
+          (_match: string, count: string) => ` - ${count} ${labels.current}`
+        )
+    ),
+    getCountryCodeFromName: vi.fn((value?: string) => {
+      if (!value) return "CAN";
+      const lowered = value.toLowerCase();
+      if (lowered === "canada" || lowered === "can") return "CAN";
+      if (lowered === "france" || lowered === "fra") return "FRA";
+      return value;
+    }),
+    getCountryNameFromCode: vi.fn((value?: string, _language?: string) => {
+      if (!value) return "Canada";
+      if (value.toLowerCase() === "can") return "Canada";
+      return value;
+    }),
+  };
+});
 
 vi.mock("@clientComponents/forms", () => {
   const ManagedCombobox = React.forwardRef<ManagedComboboxRef, ManagedComboboxMockProps>(
@@ -299,7 +315,7 @@ describe("AddressComplete", () => {
         city: "Toronto",
         province: "Ontario",
         postalCode: "M5H 2N2",
-        country: "CAN",
+        country: "Canada",
       })
     );
   });
@@ -347,7 +363,7 @@ describe("AddressComplete", () => {
     );
   });
 
-  it("resets address fields when country changes and uses selected country for lookup", async () => {
+  it("resets address fields when country changes and uses manual street input for non-CAN", async () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
@@ -369,11 +385,39 @@ describe("AddressComplete", () => {
       expect(screen.getByTestId("addresscomplete-input-postalCode")).toHaveValue("");
     });
 
-    await user.type(screen.getByTestId("address-streetAddress-input"), "10 Rue");
+    await user.type(screen.getByTestId("addresscomplete-streetAddress-input"), "10 Rue");
+
+    expect(getAddressCompleteChoicesMock).not.toHaveBeenCalled();
+  });
+
+  it("searches using the latest typed query for Canadian addresses", async () => {
+    getFlagMock.mockReturnValue(true);
+    getAddressCompleteChoicesMock.mockResolvedValue({ items: [], error: null });
+
+    renderComponent();
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    fireEvent.change(streetInput, { target: { value: "1" } });
+    fireEvent.change(streetInput, { target: { value: "12" } });
+    fireEvent.change(streetInput, { target: { value: "123 Main" } });
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("10 Rue", "FRA", "en");
+      expect(getAddressCompleteChoicesMock).toHaveBeenCalled();
     });
+    expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN", "en");
+  });
+
+  it("does not search when the normalized query is shorter than the minimum", async () => {
+    const user = userEvent.setup();
+
+    getFlagMock.mockReturnValue(true);
+    renderComponent();
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    await user.type(streetInput, "1");
+
+    expect(getAddressCompleteChoicesMock).not.toHaveBeenCalled();
+    expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent("");
   });
 
   it("localizes nested address descriptions in French", async () => {

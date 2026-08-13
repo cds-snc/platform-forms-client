@@ -5,6 +5,17 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
+import { getRedisInstance } from "@root/lib/integration/redisConnector";
+import { getClientIp } from "@root/lib/ip";
+import { getAppSetting } from "@root/lib/appSettings";
+import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
+import {
+  isPositiveSafeInteger,
+  MIN_ADDRESS_SEARCH_LENGTH,
+  normalizeAddressField,
+  normalizeCountryCode,
+  normalizeQuery,
+} from "./utils";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -68,20 +79,36 @@ export const getAddressCompleteChoices = async (
   countryCode: string,
   language: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&SearchTerm=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
-  params += "&LanguagePreference=" + encodeURIComponent(language);
-
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
   }
 
   // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
-  if (!query || query.trim() === "") {
-    return { items: [], error: null };
+  // Also avoid upstream calls for short queries that are unlikely to produce useful results.
+  const normalizedQuery = normalizeQuery(query);
+  if (normalizedQuery.length < MIN_ADDRESS_SEARCH_LENGTH) {
+    return { items: [], error: "INVALID_INPUT" };
   }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  // No need to normalize language since the client should send exactly "en" or "fr"
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&SearchTerm=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(autoCompleteUrl + params, {
@@ -90,7 +117,7 @@ export const getAddressCompleteChoices = async (
     });
 
     if (!response.ok) {
-      return { items: [], error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json();
@@ -101,6 +128,9 @@ export const getAddressCompleteChoices = async (
 
     return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { items: [], error: "NETWORK_ERROR" };
   }
 };
@@ -111,15 +141,33 @@ export const getSelectedAddress = async (
   countryCode: string,
   language: Language
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
-  const selectedResult = value;
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&Id=" + encodeURIComponent(selectedResult);
-  params += "&Country=" + encodeURIComponent(countryCode);
-  params += "&LanguagePreference=" + encodeURIComponent(language);
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
   }
+
+  const normalizedCanadaPostId = normalizeAddressField(value);
+  if (!isValidCanadaPostId(normalizedCanadaPostId)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (!isValidLanguage(language)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.retrieve)) {
+    return { address: null, error: "RATE_LIMITED" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&Id=" + encodeURIComponent(normalizedCanadaPostId);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(retriveAddressUrl + params, {
@@ -128,7 +176,7 @@ export const getSelectedAddress = async (
     });
 
     if (!response.ok) {
-      return { address: null, error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json();
@@ -143,6 +191,9 @@ export const getSelectedAddress = async (
 
     return { address: addressComponents, error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { address: null, error: "NETWORK_ERROR" };
   }
 };
@@ -153,15 +204,33 @@ export const getAddressCompleteRetrieve = async (
   countryCode: string,
   language: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&LastId=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
-  params += "&LanguagePreference=" + encodeURIComponent(language);
-
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
   }
+
+  const normalizedQuery = normalizeQuery(query);
+  if (!isValidCanadaPostId(normalizedQuery)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&LastId=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(autoCompleteUrl + params, {
@@ -170,7 +239,7 @@ export const getAddressCompleteRetrieve = async (
     });
 
     if (!response.ok) {
-      return { items: [], error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json(); //Todo #4341  - Error Handling
@@ -181,6 +250,9 @@ export const getAddressCompleteRetrieve = async (
 
     return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { items: [], error: "NETWORK_ERROR" };
   }
 };
@@ -261,3 +333,63 @@ const nestedAddressPattern = /\s+-\s+\d+\s+(Addresses|Adresses)$/i;
 export async function matchesAddressPattern(input: string): Promise<boolean> {
   return nestedAddressPattern.test(input);
 }
+
+const RATE_LIMIT_KEY_PREFIX = "address-complete";
+const RATE_LIMIT_SCOPE = {
+  find: "find",
+  retrieve: "retrieve",
+} as const;
+type RateLimitScope = (typeof RATE_LIMIT_SCOPE)[keyof typeof RATE_LIMIT_SCOPE];
+
+const RATE_LIMIT_MAX_SETTING = {
+  [RATE_LIMIT_SCOPE.find]: "addressCompleteFindRateLimitMax",
+  [RATE_LIMIT_SCOPE.retrieve]: "addressCompleteRetrieveRateLimitMax",
+} as const;
+
+// Returns true when the IP has exceeded the per-minute request "budget"
+const incrementAndCheckRateLimiting = async (
+  ip: string,
+  scope: RateLimitScope
+): Promise<boolean> => {
+  try {
+    const rateLimitMax = Number(await getAppSetting(RATE_LIMIT_MAX_SETTING[scope]));
+    const rateLimitWindowSeconds = Number(
+      await getAppSetting("addressCompleteRateLimitWindowSeconds")
+    );
+    if (!isPositiveSafeInteger(rateLimitMax) || !isPositiveSafeInteger(rateLimitWindowSeconds)) {
+      throw new Error("Invalid configuration");
+    }
+
+    const redis = await getRedisInstance();
+    const key = `${RATE_LIMIT_KEY_PREFIX}:${scope}:${ip}`;
+
+    // Increment the related IPs count
+    const pipeline = redis.pipeline();
+    pipeline.incr(key);
+    pipeline.expire(key, rateLimitWindowSeconds);
+
+    const results = await pipeline.exec();
+
+    // If there was an error incrementing ([error, value] tuple), just return false to avoid breaking the form UX
+    const incrResult = results?.[0];
+    if (incrResult?.[0]) {
+      return false;
+    }
+
+    // Check whether that IP is beyond the threshold and should be rate limited
+    const count = incrResult?.[1] as number;
+    const isRateLimited = count > rateLimitMax;
+    if (isRateLimited) {
+      logMessage.warn(
+        `AddressComplete user rate limited on ${scope} operation because they hit ${count}/${rateLimitMax} within ${rateLimitWindowSeconds}s.`
+      );
+    }
+    return isRateLimited;
+  } catch (err) {
+    logMessage.error(
+      `AddressComplete rate limiting failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
+    // Most likely case is Redis is down, just pass through to avoid breaking the form UX
+    return false;
+  }
+};
