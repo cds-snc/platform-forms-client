@@ -189,9 +189,7 @@ export function getCountryCodeFromName(value?: string): string {
   return trimmed;
 }
 
-// 2 characters preserves early typeahead behavior while avoiding some noise.
-// e.g. 1 would be very broad (noisy) while 3 would delay useful results for short addresses.
-export const MIN_ADDRESS_SEARCH_LENGTH = 2;
+export const MIN_ADDRESS_SEARCH_LENGTH = 3;
 
 export const MAX_ADDRESS_FIELD_LENGTH = 200;
 export const normalizeAddressField = (value: string): string => {
