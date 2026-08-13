@@ -35,6 +35,7 @@ import {
   TemplateEditLockedError,
 } from "@lib/editLocks";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
+import { authorization } from "@lib/privileges";
 
 const assertTemplateEditLockIfEnabled = async ({
   templateId,
@@ -43,6 +44,8 @@ const assertTemplateEditLockIfEnabled = async ({
   templateId: string;
   userId: string;
 }) => {
+  await authorization.canEditForm(templateId);
+
   if (
     process.env.APP_ENV === "test" ||
     !(await shouldEnforceTemplateEditLockWithVerifiedUserCount(templateId, userId))

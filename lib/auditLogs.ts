@@ -300,6 +300,7 @@ export const AuditLogAccessDeniedDetails = {
   AccessDenied_AttemptToGetFormJson: "Attempted to get form jsonConfig",
   AccessDenied_AttemptToUpdateSecurityAttribute: "Attempted to update security attribute",
   AccessDenied_AttemptToUpdateClosingDate: "Attempted to update closing date for Form",
+  AccessDenied_AttemptToUpdateEmailNotifications: "Attempted to update email notifications",
   AccessDenied_AttemptToCloneFormNoEdit: "Attempted to clone Form - missing edit permission",
   AccessDenied_AttemptToCloneFormNoCreate: "Attempted to clone Form - missing create permission",
   AccessDenied_AttemptToSetDeliveryToVault: "Attempted to set Delivery Option to the Vault",
@@ -569,8 +570,7 @@ export const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => 
       );
 
       const unprocessedKeys = data.UnprocessedKeys?.AuditLogs?.Keys as
-        | Array<{ UserID: string; "Event#SubjectID#TimeStamp": string }>
-        | undefined;
+        Array<{ UserID: string; "Event#SubjectID#TimeStamp": string }> | undefined;
 
       if (!unprocessedKeys || unprocessedKeys.length === 0) {
         break;

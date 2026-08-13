@@ -50,7 +50,7 @@ export const NotificationsToggle = ({
         }
       }}
     >
-      <div className={`whitespace-nowrap`}>
+      <div className="cursor-pointer whitespace-nowrap">
         <span className="sr-only">{description}</span>
         <span
           id="notifications-switch-on"

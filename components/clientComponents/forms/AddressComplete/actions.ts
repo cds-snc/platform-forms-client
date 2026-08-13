@@ -5,6 +5,11 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
+import { getRedisInstance } from "@root/lib/integration/redisConnector";
+import { getClientIp } from "@root/lib/ip";
+import { getAppSetting } from "@root/lib/appSettings";
+import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
+import { normalizeAddressField, normalizeCountryCode, normalizeQuery } from "./utils";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -38,7 +43,20 @@ const hasItems0Error = (responseData: unknown): boolean => {
       Object.prototype.hasOwnProperty.call(first, "Resolution");
 
     if (hasErrorKey || hasCauseAndResolution) {
-      logMessage.info(`AddressComplete API returned item-level error: ${JSON.stringify(first)}`);
+      const errorCode = Number(first.Error);
+
+      // Ignore "Response Errors"
+      // 1001 - The SearchTerm or LastId parameters were not supplied includes "" (empty string)
+      if (errorCode === 1001) {
+        return false;
+      }
+
+      if (errorCode >= 2 && errorCode <= 23) {
+        logMessage.warn(`AddressComplete API returned error: ${JSON.stringify(first)}`);
+      } else {
+        logMessage.info(`AddressComplete API returned error: ${JSON.stringify(first)}`);
+      }
+
       return true;
     }
 
@@ -52,16 +70,38 @@ const hasItems0Error = (responseData: unknown): boolean => {
 // Function returns address complete list of choices.
 export const getAddressCompleteChoices = async (
   query: string,
-  countryCode: string
+  countryCode: string,
+  language: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&SearchTerm=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
-
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
   }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
+  // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
+  const normalizedQuery = normalizeQuery(query);
+  if (!normalizedQuery || normalizedQuery === "") {
+    return { items: [], error: null };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  // No need to normalize language since the client should send exactly "en" or "fr"
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&SearchTerm=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(autoCompleteUrl + params, {
@@ -73,7 +113,7 @@ export const getAddressCompleteChoices = async (
       return { items: [], error: "SERVICE_UNAVAILABLE" };
     }
 
-    const responseData = await response.json(); //Todo #4341  - Error Handling
+    const responseData = await response.json();
 
     if (hasItems0Error(responseData)) {
       return { items: [], error: "SERVICE_UNAVAILABLE" };
@@ -91,14 +131,33 @@ export const getSelectedAddress = async (
   countryCode: string,
   language: Language
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
-  const selectedResult = value;
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&Id=" + encodeURIComponent(selectedResult);
-  params += "&Country=" + encodeURIComponent(countryCode);
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
   }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { address: null, error: "RATE_LIMITED" };
+  }
+
+  const normalizedCanadaPostId = normalizeAddressField(value);
+  if (!isValidCanadaPostId(normalizedCanadaPostId)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (!isValidLanguage(language)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&Id=" + encodeURIComponent(normalizedCanadaPostId);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(retriveAddressUrl + params, {
@@ -129,16 +188,36 @@ export const getSelectedAddress = async (
 // Function returns the address set from a retreive.
 export const getAddressCompleteRetrieve = async (
   query: string,
-  countryCode: string
+  countryCode: string,
+  language: string
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
-  let params = "?";
-  params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&LastId=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
-
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
   }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
+  const normalizedQuery = normalizeQuery(query);
+  if (!isValidCanadaPostId(normalizedQuery)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&LastId=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
   try {
     const response = await fetch(autoCompleteUrl + params, {
@@ -226,21 +305,48 @@ export const getAddressAsAnswerElements = async (
   return answerArray;
 };
 
+const nestedAddressPattern = /\s+-\s+\d+\s+(Addresses|Adresses)$/i;
+
 // Helper function to test if the address has multiple results.
 // -- ref: Issue #4464, Issue #4417
 // This helper exists because the AddressComplete API has arbitrary returning of if an Address is Nested or not.
 // This is usually determined by the
 //    Next: AddressCompleNext;
 //    Retrieve for a regular address or Find for a Nested.
-// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested Addresses.
-// This regex is an attempt to correct that until the API is updated.
-//
-// Breakdown of the regex:
-// \s+-\s+ - Matches the " - " part with optional spaces around the hyphen.
-// \d+ - Matches one or more digits.
-// \s+Addresses$ - Matches the word "Addresses" with a space before it, ensuring it is at the end of the string.
-// i - Makes the pattern case insensitive.
+// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested addresses.
 export async function matchesAddressPattern(input: string): Promise<boolean> {
-  const pattern = /\s+-\s+\d+\s+Addresses$/i;
-  return pattern.test(input);
+  return nestedAddressPattern.test(input);
 }
+
+const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
+
+// Returns true when the IP has exceeded the per-minute request "budget"
+const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
+  try {
+    const rateLimitMax = Number(await getAppSetting("addressCompleteRateLimitMax"));
+    const rateLimitWindowSeconds = Number(
+      await getAppSetting("addressCompleteRateLimitWindowSeconds")
+    );
+
+    const redis = await getRedisInstance();
+    const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
+
+    // Increment the related IPs count
+    const pipeline = redis.pipeline();
+    pipeline.incr(key);
+    pipeline.expire(key, rateLimitWindowSeconds);
+
+    // Check whether that IP is beyond the threshold
+    const results = await pipeline.exec();
+
+    // pipeline results are [error, value] tuples; index 0 is the incr result
+    const incrResult = results?.[0];
+
+    const count = (incrResult?.[1] ?? 0) as number;
+
+    return count > rateLimitMax;
+  } catch {
+    // Most likely case is Redis is down, just pass through to avoid breaking the form UX
+    return false;
+  }
+};
