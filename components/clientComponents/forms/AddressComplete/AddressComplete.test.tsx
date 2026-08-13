@@ -407,6 +407,19 @@ describe("AddressComplete", () => {
     expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN", "en");
   });
 
+  it("does not search when the normalized query is shorter than the minimum", async () => {
+    const user = userEvent.setup();
+
+    getFlagMock.mockReturnValue(true);
+    renderComponent();
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    await user.type(streetInput, "1");
+
+    expect(getAddressCompleteChoicesMock).not.toHaveBeenCalled();
+    expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent("");
+  });
+
   it("localizes nested address descriptions in French", async () => {
     const user = userEvent.setup();
 

@@ -27,10 +27,12 @@ import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { isValidAddressSubFieldInvalid, getAddressSubFieldError } from "@gcforms/core";
 import {
+  MIN_ADDRESS_SEARCH_LENGTH,
   MAX_SEARCH_QUERY_LENGTH,
   MAX_ADDRESS_FIELD_LENGTH,
   MAX_POSTAL_CODE_LENGTH,
   normalizeAddressField,
+  normalizeQuery,
   normalizePostalCode,
 } from "./utils";
 
@@ -145,6 +147,13 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     } // Abandon if addressComplete is disabled.
 
     const query = e.target.value;
+
+    if (normalizeQuery(query).length < MIN_ADDRESS_SEARCH_LENGTH) {
+      debouncedSearchRef.current?.cancel?.();
+      setChoices([]);
+      setAddressResultCache([]);
+      return;
+    }
 
     if (matchesAddressPattern(query)) {
       await onAddressSet(query); // Do Search for Nested Address via ID instead of Query.
