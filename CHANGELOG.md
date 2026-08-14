@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.5](https://github.com/cds-snc/platform-forms-client/compare/v4.21.4...v4.21.5) (2026-08-14)
+
+
+### Miscellaneous Chores
+
+* Remove groups check in form initialization ([#7730](https://github.com/cds-snc/platform-forms-client/issues/7730)) ([c34761a](https://github.com/cds-snc/platform-forms-client/commit/c34761a491adfd520192981b9b89c3c092d6effc))
+* Remove more instances of AllowGroups checks and ensure defaults true ([#7732](https://github.com/cds-snc/platform-forms-client/issues/7732)) ([85339e0](https://github.com/cds-snc/platform-forms-client/commit/85339e068e63dd371c19977d915cfb1d0d70cc2a))
+
 ## [4.21.4](https://github.com/cds-snc/platform-forms-client/compare/v4.21.3...v4.21.4) (2026-08-13)
 
 
