@@ -308,5 +308,3 @@ export interface FileInput extends FileInputResponse {
   size: number;
   content: ArrayBuffer;
 }
-
-export type StarRatingObject = { value: number; numberOfStars: number };

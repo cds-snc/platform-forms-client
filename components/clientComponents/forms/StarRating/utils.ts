@@ -1,6 +1,6 @@
-import { StarRatingObject } from "@lib/types";
 import { FormElementTypes } from "@lib/types";
 import { Answer } from "@root/lib/responseDownloadFormats/types";
+import type { StarRatingObject } from "./types";
 
 export const parseStarRatingAnswer = (answer: string): StarRatingObject | undefined => {
   try {
@@ -16,6 +16,10 @@ export const parseStarRatingAnswer = (answer: string): StarRatingObject | undefi
   } catch {
     // Not a valid star rating JSON object
   }
+};
+
+export const getStarRatingAsString = (rating: StarRatingObject): string => {
+  return `${rating.value}/${rating.numberOfStars}`;
 };
 
 export const formatStarRating = (
