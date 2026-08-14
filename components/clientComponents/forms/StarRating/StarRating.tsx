@@ -31,11 +31,11 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
     () => false
   );
 
-  const parseStoredValue = (raw: StarRatingObject | string): number => {
+  const parseStoredValue = (raw: string): number => {
     if (!raw) return 0;
-    if (typeof raw === "object") return raw.value ?? 0;
     try {
-      return (JSON.parse(raw) as StarRatingObject).value ?? 0;
+      const parsed = JSON.parse(raw) as StarRatingObject;
+      return parsed?.value ?? 0;
     } catch {
       return 0;
     }
@@ -114,7 +114,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
             sparkle={sparkleStar === starValue}
             onSparkleEnd={() => setSparkleStar(null)}
             onChange={() => {
-              helpers.setValue({ value: starValue, numberOfStars });
+              helpers.setValue(JSON.stringify({ value: starValue, numberOfStars }));
               if (sparkleOnSelect) setSparkleStar(starValue);
             }}
             onFocus={(e) => {

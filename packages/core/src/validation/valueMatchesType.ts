@@ -109,17 +109,6 @@ export const valueMatches = (
       }
       return false;
     }
-    case FormElementTypes.starRating: {
-      if (
-        value !== null &&
-        typeof value === "object" &&
-        "value" in value &&
-        "numberOfStars" in value
-      ) {
-        return true;
-      }
-      return false;
-    }
     case FormElementTypes.dynamicRow: {
       if (!Array.isArray(value)) {
         return false;

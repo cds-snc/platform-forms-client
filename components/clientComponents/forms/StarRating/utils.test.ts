@@ -8,17 +8,17 @@ import {
 import { FormElementTypes } from "@lib/types";
 
 describe("parseStarRatingAnswer", () => {
-  it("returns the object when both value and numberOfStars are present", () => {
-    const answer = { value: 3, numberOfStars: 5 };
-    expect(parseStarRatingAnswer(answer)).toEqual(answer);
+  it("returns the object when a JSON string contains value and numberOfStars", () => {
+    const answer = JSON.stringify({ value: 3, numberOfStars: 5 });
+    expect(parseStarRatingAnswer(answer)).toEqual({ value: 3, numberOfStars: 5 });
   });
 
   it("returns undefined for null", () => {
-    expect(parseStarRatingAnswer(null)).toBeUndefined();
+    expect(parseStarRatingAnswer(null as unknown as string)).toBeUndefined();
   });
 
   it("returns undefined for undefined", () => {
-    expect(parseStarRatingAnswer(undefined)).toBeUndefined();
+    expect(parseStarRatingAnswer(undefined as unknown as string)).toBeUndefined();
   });
 
   it("returns undefined for a plain string", () => {
@@ -26,11 +26,11 @@ describe("parseStarRatingAnswer", () => {
   });
 
   it("returns undefined when value is missing", () => {
-    expect(parseStarRatingAnswer({ numberOfStars: 5 })).toBeUndefined();
+    expect(parseStarRatingAnswer(JSON.stringify({ numberOfStars: 5 }))).toBeUndefined();
   });
 
   it("returns undefined when numberOfStars is missing", () => {
-    expect(parseStarRatingAnswer({ value: 3 })).toBeUndefined();
+    expect(parseStarRatingAnswer(JSON.stringify({ value: 3 }))).toBeUndefined();
   });
 });
 
@@ -57,99 +57,98 @@ describe("formatStarRating", () => {
 });
 
 describe("formatStarRatingAnswer", () => {
-  it("formats a valid StarRatingObject as a fraction", () => {
-    expect(formatStarRatingAnswer({ value: 4, numberOfStars: 5 })).toBe("4/5");
+  it("formats a valid JSON star rating as a fraction", () => {
+    expect(formatStarRatingAnswer(JSON.stringify({ value: 4, numberOfStars: 5 }))).toBe("4/5");
   });
 
   it("returns '-' for null", () => {
-    expect(formatStarRatingAnswer(null)).toBe("-");
+    expect(formatStarRatingAnswer(null as unknown as string)).toBe("-");
   });
 
   it("returns '-' for undefined", () => {
-    expect(formatStarRatingAnswer(undefined)).toBe("-");
+    expect(formatStarRatingAnswer(undefined as unknown as string)).toBe("-");
   });
 
-  it("returns '-' for a plain string", () => {
-    expect(formatStarRatingAnswer("3")).toBe("-");
+  it("returns an unparseable string unchanged", () => {
+    expect(formatStarRatingAnswer("3")).toBe("3");
   });
 
-  it("returns '-' for an object missing required properties", () => {
-    expect(formatStarRatingAnswer({ value: 3 })).toBe("-");
+  it("returns JSON with missing required properties unchanged", () => {
+    const answer = JSON.stringify({ value: 3 });
+    expect(formatStarRatingAnswer(answer)).toBe(answer);
   });
 
   it("formats a minimum rating of 1", () => {
-    expect(formatStarRatingAnswer({ value: 1, numberOfStars: 5 })).toBe("1/5");
+    expect(formatStarRatingAnswer(JSON.stringify({ value: 1, numberOfStars: 5 }))).toBe("1/5");
   });
 
   it("formats a rating equal to numberOfStars", () => {
-    expect(formatStarRatingAnswer({ value: 5, numberOfStars: 5 })).toBe("5/5");
+    expect(formatStarRatingAnswer(JSON.stringify({ value: 5, numberOfStars: 5 }))).toBe("5/5");
   });
 });
 
 describe("formatStarRatingAnswer", () => {
   it("returns undefined for non-starRating element types", () => {
     const result = checkAndformatStarRatingAnswer({
-        questionId: 1,
-        questionEn: "Question",
-        questionFr: "Question",
-        answer: "3",
-        type: FormElementTypes.radio,
-      });
+      questionId: 1,
+      questionEn: "Question",
+      questionFr: "Question",
+      answer: "3",
+      type: FormElementTypes.radio,
+    });
 
     expect(result).toBeUndefined();
   });
 
   it("passes through a placeholder '-' answer unchanged", () => {
     const result = checkAndformatStarRatingAnswer({
-        questionId: 1,
-        questionEn: "Rating",
-        questionFr: "Évaluation",
-        answer: "-",
-        type: FormElementTypes.starRating,
-      });
+      questionId: 1,
+      questionEn: "Rating",
+      questionFr: "Évaluation",
+      answer: "-",
+      type: FormElementTypes.starRating,
+    });
 
     expect(result).toBe("-");
   });
 
   it("returns '-' for an empty answer", () => {
     const result = checkAndformatStarRatingAnswer({
-        questionId: 1,
-        questionEn: "Rating",
-        questionFr: "Évaluation",
-        answer: "",
-        type: FormElementTypes.starRating,
-      });
+      questionId: 1,
+      questionEn: "Rating",
+      questionFr: "Évaluation",
+      answer: "",
+      type: FormElementTypes.starRating,
+    });
 
     expect(result).toBe("-");
   });
 
-  it("formats the answer from a JSON object with value and numberOfStars", () => {
+  it("formats the answer from a JSON string with value and numberOfStars", () => {
     const result = checkAndformatStarRatingAnswer({
-        questionId: 42,
-        questionEn: "Rating",
-        questionFr: "Évaluation",
-        answer: { value: 3, numberOfStars: 5 } as unknown as string,
-        type: FormElementTypes.starRating,
-      });
+      questionId: 42,
+      questionEn: "Rating",
+      questionFr: "Évaluation",
+      answer: JSON.stringify({ value: 3, numberOfStars: 5 }),
+      type: FormElementTypes.starRating,
+    });
 
     expect(result).toBe("3/5");
   });
 
   it("formats with a non-default star count from JSON", () => {
-    const result = checkAndformatStarRatingAnswer(
-      {
-        questionId: 5,
-        questionEn: "Rating",
-        questionFr: "Évaluation",
-        answer: { value: 7, numberOfStars: 10 } as unknown as string,
-        type: FormElementTypes.starRating,
-      }
-    );
+    const result = checkAndformatStarRatingAnswer({
+      questionId: 5,
+      questionEn: "Rating",
+      questionFr: "Évaluation",
+      answer: JSON.stringify({ value: 7, numberOfStars: 10 }),
+      type: FormElementTypes.starRating,
+    });
 
     expect(result).toBe("7/10");
   });
 
-  it("returns '-' for a null answer", () => {
+  it("returns the string representation of a null answer", () => {
     const result = checkAndformatStarRatingAnswer({
       questionId: 1,
       questionEn: "Rating",
@@ -158,6 +157,6 @@ describe("formatStarRatingAnswer", () => {
       type: FormElementTypes.starRating,
     });
 
-    expect(result).toBe("-");
+    expect(result).toBe("null");
   });
 });
