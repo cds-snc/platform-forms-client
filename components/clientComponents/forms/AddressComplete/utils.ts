@@ -189,6 +189,8 @@ export function getCountryCodeFromName(value?: string): string {
   return trimmed;
 }
 
+export const MIN_ADDRESS_SEARCH_LENGTH = 2;
+
 export const MAX_ADDRESS_FIELD_LENGTH = 200;
 export const normalizeAddressField = (value: string): string => {
   return truncateField(normalizeString(value), MAX_ADDRESS_FIELD_LENGTH);
@@ -207,4 +209,8 @@ export const normalizeCountryCode = (value: string): string => {
 export const MAX_POSTAL_CODE_LENGTH = 20;
 export const normalizePostalCode = (value: string): string => {
   return truncateField(normalizeString(value), MAX_POSTAL_CODE_LENGTH);
+};
+
+export const isPositiveSafeInteger = (value: number): boolean => {
+  return Number.isSafeInteger(value) && value > 0;
 };
