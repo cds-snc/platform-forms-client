@@ -5,8 +5,8 @@ import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headle
 export const initializeGroups = (form: FormProperties, allowGroups: boolean): FormProperties => {
   // Clean and remove any existing groups
   if (!allowGroups) {
-    form.groups = {};
-    return form;
+    // form.groups = {};
+    // return form;
   }
 
   if (!form.groups) {
