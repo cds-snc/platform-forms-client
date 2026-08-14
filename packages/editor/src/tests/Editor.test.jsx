@@ -18,7 +18,12 @@ describe("Lexical Editor", () => {
   it("Renders the Lexical Editor", async () => {
     //
     const rendered = render(
-      <Editor ariaLabel="AriaLabel" ariaDescribedBy="AriaDescribedBy" id="editor-test" content="Here is some test content" />
+      <Editor
+        ariaLabel="AriaLabel"
+        ariaDescribedBy="AriaDescribedBy"
+        id="editor-test"
+        content="Here is some test content"
+      />
     );
 
     await act(async () => {
@@ -45,8 +50,12 @@ describe("Lexical Editor", () => {
     // Toolbar has aria-controls attribute
     expect(toolbar).toHaveAttribute("aria-controls", contentArea.id);
 
-    // Toolbar contains 9 formatting buttons
-    expect(toolbarButtons).toHaveLength(9);
+    // Toolbar contains 10 formatting buttons, including collapsible content
+    expect(toolbarButtons).toHaveLength(10);
+    expect(within(toolbar).getByTestId("collapsible-button")).toHaveAttribute(
+      "aria-label",
+      "Insert collapsible container"
+    );
 
     // Content area has default content and attributes
     expect(contentArea).toHaveAttribute("aria-label", "AriaLabel");
@@ -59,7 +68,13 @@ describe("Lexical Editor", () => {
 
   it("can keyboard navigate the RichTextEditor", async () => {
     render(
-        <div><Editor ariaLabel="AriaLabel" ariaDescribedBy="AriaDescribedBy" content="Here is some test content" /></div>
+      <div>
+        <Editor
+          ariaLabel="AriaLabel"
+          ariaDescribedBy="AriaDescribedBy"
+          content="Here is some test content"
+        />
+      </div>
     );
 
     await act(async () => {

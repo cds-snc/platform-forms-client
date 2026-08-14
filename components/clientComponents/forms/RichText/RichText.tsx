@@ -34,7 +34,7 @@ const A = ({ children, ...props }: { children: React.ReactElement }) => {
 
 const Table = ({ children, ...props }: { children: React.ReactElement }) => {
   return (
-    <table {...props} className="border-1 border-black-default">
+    <table {...props} className="border-black-default border-1">
       {children}
     </table>
   );
@@ -42,7 +42,7 @@ const Table = ({ children, ...props }: { children: React.ReactElement }) => {
 
 const TableTH = ({ children, ...props }: { children: React.ReactElement }) => {
   return (
-    <th {...props} className="border-1 border-black-default p-2">
+    <th {...props} className="border-black-default border-1 p-2">
       {children}
     </th>
   );
@@ -50,10 +50,34 @@ const TableTH = ({ children, ...props }: { children: React.ReactElement }) => {
 
 const TableTD = ({ children, ...props }: { children: React.ReactElement }) => {
   return (
-    <td {...props} className="border-1 border-black-default p-2">
+    <td {...props} className="border-black-default border-1 p-2">
       {children}
     </td>
   );
+};
+
+const escapeHtml = (value: string) =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");
+
+const renderCollapsibleMarkdown = (value: string) => {
+  const details: string[] = [];
+  const marker = value.replace(
+    /^:::collapsible(?:\s+(.*))?\n([\s\S]*?)\n:::\s*$/gm,
+    (_match, title = "Details", body: string) => {
+      const index =
+        details.push(
+          `<details><summary>${escapeHtml(title)}</summary>\n<div class="gc-details-content">${escapeHtml(body)}</div>\n</details>`
+        ) - 1;
+      return `__GC_FORMS_DETAILS_${index}__`;
+    }
+  );
+
+  // Raw HTML is escaped before the generated details markup is put back. This keeps the
+  // existing Markdown renderer safe while allowing our controlled details element through.
+  return marker
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/__GC_FORMS_DETAILS_(\d+)__/g, (_match, index) => details[Number(index)]);
 };
 
 export const RichText = (props: RichTextProps): React.ReactElement | null => {
@@ -70,7 +94,7 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
       <Markdown
         options={{
           forceBlock: true,
-          disableParsingRawHTML: true,
+          disableParsingRawHTML: false,
           renderRule(next, node) {
             if (node.type === RuleType.text) {
               return stripEntities(node.text);
@@ -86,7 +110,7 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
           },
         }}
       >
-        {children}
+        {renderCollapsibleMarkdown(children)}
       </Markdown>
     </div>
   );

@@ -8,3 +8,47 @@
 .gc-editor-container li:has(> ol:only-child) {
   list-style-type: none;
 }
+
+/* Keep the two editable regions visually distinct while composing a collapsible block. */
+.gc-editor-container .collapsible-container {
+  margin: 1.5rem 0;
+  border: 2px solid #d6d9dd;
+  border-radius: 0.25rem;
+  background: #fff;
+}
+
+.gc-editor-container .collapsible-title {
+  padding: 0.35rem 1rem;
+  border-bottom: 2px solid #d6d9dd;
+  background: #f1f2f3;
+}
+
+.gc-editor-container .collapsible-title::before,
+.gc-editor-container .collapsible-content::before {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #505a5f;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gc-editor-container .collapsible-title::before {
+  content: "Summary";
+}
+
+.gc-editor-container .collapsible-content {
+  min-height: 5rem;
+  padding: 0.75rem 1rem 1rem;
+  border-left: 0.5rem solid #929292;
+}
+
+.gc-editor-container .collapsible-content::before {
+  content: "Details content";
+}
+
+.gc-editor-container .collapsible-title p,
+.gc-editor-container .collapsible-content p {
+  margin: 0;
+}

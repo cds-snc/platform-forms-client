@@ -24,12 +24,18 @@ import { $isTableSelection } from "@lexical/table";
 import { $getNearestBlockElementAncestorOrThrow } from "@lexical/utils";
 import {
   $createParagraphNode,
+  $createTextNode,
   $getSelection,
   $isRangeSelection,
   $isTextNode,
   LexicalEditor,
 } from "lexical";
 import { INDENT_CONTENT_COMMAND, OUTDENT_CONTENT_COMMAND } from "lexical";
+import {
+  $createCollapsibleContainerNode,
+  $createCollapsibleContentNode,
+  $createCollapsibleTitleNode,
+} from "../../nodes/CollapsibleNodes";
 
 export const formatParagraph = (editor: LexicalEditor) => {
   editor.update(() => {
@@ -178,4 +184,18 @@ export const formatIndent = (editor: LexicalEditor) => {
 
 export const formatOutdent = (editor: LexicalEditor) => {
   editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
+};
+
+export const insertCollapsible = (editor: LexicalEditor) => {
+  editor.update(() => {
+    const selection = $getSelection();
+    if (!$isRangeSelection(selection)) return;
+    const container = $createCollapsibleContainerNode();
+    const title = $createCollapsibleTitleNode();
+    const content = $createCollapsibleContentNode();
+    title.append($createParagraphNode().append($createTextNode("Details")));
+    content.append($createParagraphNode());
+    container.append(title, content);
+    selection.insertNodes([container]);
+  });
 };

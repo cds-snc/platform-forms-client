@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.25] - 2026-08-14
+
+- Add details component
+
 ## [2.2.24] - 2026-08-10
 
 - Update address complete validation and sanitization

@@ -21,6 +21,7 @@
 @include meta.load-css("_alert");
 @include meta.load-css("_combobox");
 @include meta.load-css("./_fieldset");
+@include meta.load-css("./_details");
 
 .gc-fieldset ul {
   @apply mb-14;
