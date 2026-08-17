@@ -48,9 +48,11 @@ import { CollapsibleIcon } from "../../icons/CollapsibleIcon";
 export default function ToolbarPlugin({
   editorId,
   setIsLinkEditMode,
+  enableCollapsibleBlocks,
 }: {
   editorId: string;
   setIsLinkEditMode: (isLinkEditMode: boolean) => void;
+  enableCollapsibleBlocks: boolean;
 }) {
   const [editor] = useLexicalComposerContext();
 
@@ -71,18 +73,7 @@ export default function ToolbarPlugin({
     }
   }, [activeEditor, setIsLinkEditMode, toolbarState.isLink]);
 
-  const [items] = useState([
-    { id: 1, txt: "heading2" },
-    { id: 2, txt: "heading3" },
-    { id: 3, txt: "bold" },
-    { id: 4, txt: "italic" },
-    { id: 5, txt: "bulletedList" },
-    { id: 6, txt: "numberedList" },
-    { id: 7, txt: "link" },
-    { id: 8, txt: "indent" },
-    { id: 9, txt: "outdent" },
-    { id: 10, txt: "collapsible" },
-  ]);
+  const toolbarItemCount = enableCollapsibleBlocks ? 10 : 9;
 
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
   const [currentFocusIndex, setCurrentFocusIndex] = useState(0);
@@ -110,10 +101,10 @@ export default function ToolbarPlugin({
         setCurrentFocusIndex((index) => Math.max(0, index - 1));
       } else if (key === "ArrowRight") {
         evt.preventDefault();
-        setCurrentFocusIndex((index) => Math.min(items.length - 1, index + 1));
+        setCurrentFocusIndex((index) => Math.min(toolbarItemCount - 1, index + 1));
       }
     },
-    [items, setCurrentFocusIndex, setToolbarInit, toolbarInit]
+    [setCurrentFocusIndex, setToolbarInit, toolbarInit, toolbarItemCount]
   );
 
   const $updateToolbar = useCallback(() => {
@@ -423,22 +414,24 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipInsertCollapsible")}>
-          <button
-            tabIndex={currentFocusIndex == 9 ? 0 : -1}
-            ref={(el) => {
-              const index = "button-9" as unknown as number;
-              if (el && itemsRef.current) itemsRef.current[index] = el;
-            }}
-            disabled={!isEditable}
-            onClick={() => insertCollapsible(editor)}
-            className="toolbar-item"
-            aria-label={t("insertCollapsible")}
-            data-testid="collapsible-button"
-          >
-            <CollapsibleIcon />
-          </button>
-        </ToolTip>
+        {enableCollapsibleBlocks && (
+          <ToolTip text={t("tooltipInsertCollapsible")}>
+            <button
+              tabIndex={currentFocusIndex == 9 ? 0 : -1}
+              ref={(el) => {
+                const index = "button-9" as unknown as number;
+                if (el && itemsRef.current) itemsRef.current[index] = el;
+              }}
+              disabled={!isEditable}
+              onClick={() => insertCollapsible(editor)}
+              className="toolbar-item"
+              aria-label={t("insertCollapsible")}
+              data-testid="collapsible-button"
+            >
+              <CollapsibleIcon />
+            </button>
+          </ToolTip>
+        )}
       </div>
     </>
   );

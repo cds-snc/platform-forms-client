@@ -32,6 +32,7 @@ export const RichText = () => {
             className="gc-formview"
             onChange={updateValue}
             enableDraggableBlocks={enableDraggableBlocks}
+            enableCollapsibleBlocks
             maxLength={enableMaxLength ? maxLength : undefined}
             showTreeview={showTreeview}
           />
