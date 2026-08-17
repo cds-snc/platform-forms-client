@@ -35,6 +35,7 @@ import {
   formatIndent,
   formatNumberedList,
   formatOutdent,
+  insertCollapsible,
 } from "./utils";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import "./styles.css";
@@ -42,6 +43,7 @@ import { SHORTCUTS } from "../ShortcutsPlugin/shortcuts";
 import { blockTypeToBlockName, useToolbarState } from "../../context/ToolbarContext";
 import { IndentIcon } from "../../icons/IndentIcon";
 import { OutdentIcon } from "../../icons/OutdentIcon";
+import { CollapsibleIcon } from "../../icons/CollapsibleIcon";
 
 export default function ToolbarPlugin({
   editorId,
@@ -79,6 +81,7 @@ export default function ToolbarPlugin({
     { id: 7, txt: "link" },
     { id: 8, txt: "indent" },
     { id: 9, txt: "outdent" },
+    { id: 10, txt: "collapsible" },
   ]);
 
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
@@ -417,6 +420,23 @@ export default function ToolbarPlugin({
             data-testid="outdent-button"
           >
             <OutdentIcon />
+          </button>
+        </ToolTip>
+
+        <ToolTip text={t("tooltipInsertCollapsible")}>
+          <button
+            tabIndex={currentFocusIndex == 9 ? 0 : -1}
+            ref={(el) => {
+              const index = "button-9" as unknown as number;
+              if (el && itemsRef.current) itemsRef.current[index] = el;
+            }}
+            disabled={!isEditable}
+            onClick={() => insertCollapsible(editor)}
+            className="toolbar-item"
+            aria-label={t("insertCollapsible")}
+            data-testid="collapsible-button"
+          >
+            <CollapsibleIcon />
           </button>
         </ToolTip>
       </div>

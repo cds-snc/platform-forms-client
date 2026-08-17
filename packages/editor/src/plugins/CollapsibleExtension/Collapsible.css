@@ -23,6 +23,20 @@
   outline: none;
 }
 
+/* Lexical titles contain a paragraph. Remove its browser margin so the
+   disclosure marker aligns with the title text rather than the whole block. */
+.Collapsible__title > * {
+  margin-block: 0;
+}
+
+.Collapsible__title p {
+  margin: 0;
+}
+
+.Collapsible__content > p:last-child {
+  margin-bottom: 0;
+}
+
 .Collapsible__title::marker,
 .Collapsible__title::-webkit-details-marker {
   display: none;
@@ -34,7 +48,7 @@
   border-width: 4px 6px 4px 6px;
   border-left-color: #000;
   display: block;
-  content: '';
+  content: "";
   position: absolute;
   left: 7px;
   top: 50%;
@@ -48,7 +62,7 @@
 }
 
 .Collapsible__content {
-  padding: 0 5px 5px 20px;
+  padding: 10px 5px 5px 20px;
   box-sizing: border-box;
   interpolate-size: allow-keywords;
   overflow: hidden;
