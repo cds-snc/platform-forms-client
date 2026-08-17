@@ -756,9 +756,9 @@
       "canadianOnly": "Canadian addresses only",
       "format": "Select a format for the address",
       "fullAddress": "Entire address combined",
-      "fullAddressDesc": "Displays as one line.",
+      "fullAddressDesc": "Displays as one line in response data.",
       "splitAddress": "Address split into parts",
-      "splitAddressDesc": "Separated in multiple lines."
+      "splitAddressDesc": "Separated in multiple lines in response data."
     },
     "apiOptionsSection": {
       "title": "Customize API data attributes",
