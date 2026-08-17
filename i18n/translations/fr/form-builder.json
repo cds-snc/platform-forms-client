@@ -87,7 +87,6 @@
       "fields": "Format",
       "fieldsDesc": "Définissez la façon dont les adresses s’affichent dans les réponses.",
       "multipleAddresses": "Adresses",
-      "startTyping": "Commencez à taper l'adresse à rechercher",
       "components": {
         "unitNumber": "Numéro de l’unité",
         "civicNumber": "Numéro civique",
@@ -757,7 +756,7 @@
       "canadianOnly": "Adresses canadiennes seulement",
       "format": "Sélectionnez un format pour l'adresse",
       "fullAddress": "Adresse entière combinée",
-      "fullAddressDesc": "S’affiche sure une seule ligne.",
+      "fullAddressDesc": "S’affiche sur une seule ligne.",
       "splitAddress": "Adresse fractionnée en parties",
       "splitAddressDesc": "Séparée sur plusieurs lignes."
     },

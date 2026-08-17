@@ -10,6 +10,7 @@ import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTempla
 import { UpdateTemplateAction } from "@root/lib/templates/types";
 import { FormProperties } from "@lib/types";
 import { useAppUpdate } from "../useAppUpdate";
+import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -90,11 +91,13 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       return { status: "locked" };
     }
 
-    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    const parsedFormConfig = safeJSONParse<FormProperties>(getSchema());
 
-    if (!formConfig) {
+    if (!parsedFormConfig) {
       return { status: "invalid" };
     }
+
+    const formConfig = autoFlowFormIfPossible(parsedFormConfig);
 
     try {
       const operationResult = await createOrUpdateTemplate({
@@ -146,6 +149,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       // Avoid a redundant trailing write when no additional local edits were made.
       const id = getId();
       if (!templateIsDirty.current && id !== "") {
+        // eslint-disable-next-line
         return drainQueuedSaves(latestResult);
       }
 

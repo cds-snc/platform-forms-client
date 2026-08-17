@@ -9,11 +9,10 @@ export const initialize: TemplateStore<"initialize"> =
   (set) =>
   (language = "en") => {
     set((state) => {
-      const allowGroups = state.allowGroupsFlag;
       state.id = "";
       state.lang = language as Language;
       state.translationLanguagePriority = language as Language;
-      state.form = initializeGroups({ ...defaultForm }, allowGroups);
+      state.form = initializeGroups({ ...defaultForm });
 
       // Ensure order by groups layout
       if (!state.form.groupsLayout) {

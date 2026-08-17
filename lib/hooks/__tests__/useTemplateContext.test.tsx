@@ -8,6 +8,7 @@ import {
   SaveTemplateProvider,
   useTemplateContext,
 } from "@lib/hooks/form-builder/useTemplateContext";
+import { FormProperties } from "@lib/types";
 
 type OperationResult = {
   formRecord: {
@@ -18,7 +19,8 @@ type OperationResult = {
 };
 
 const { createOrUpdateTemplateMock, mockStore, subscribeMock } = vi.hoisted(() => ({
-  createOrUpdateTemplateMock: vi.fn<() => Promise<OperationResult>>(),
+  createOrUpdateTemplateMock:
+    vi.fn<(input: { formConfig: FormProperties }) => Promise<OperationResult>>(),
   mockStore: {
     getDeliveryOption: vi.fn(() => undefined),
     getId: vi.fn(() => "form-1"),
@@ -226,5 +228,69 @@ describe("useTemplateContext saveDraft concurrency", () => {
     });
 
     expect(createOrUpdateTemplateMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("autoflows automatic groups before saving", async () => {
+    const pageId = "b34a213b-fa2e-4a9b-a255-6dc956b27558";
+    const formConfig = {
+      groups: {
+        end: {
+          name: "End",
+          titleEn: "End",
+          titleFr: "End",
+          autoFlow: true,
+          elements: [],
+          nextAction: "start",
+        },
+        start: {
+          name: "Start",
+          titleEn: "Start",
+          titleFr: "Start",
+          autoFlow: true,
+          elements: [],
+          nextAction: "review",
+        },
+        review: {
+          name: "Review",
+          titleEn: "Review",
+          titleFr: "Review",
+          autoFlow: true,
+          elements: [],
+        },
+        [pageId]: {
+          name: "New page",
+          titleEn: "",
+          titleFr: "",
+          autoFlow: true,
+          elements: [],
+          nextAction: "end",
+        },
+      },
+      groupsLayout: [pageId],
+    };
+    mockStore.getSchema.mockReturnValue(JSON.stringify(formConfig));
+    createOrUpdateTemplateMock.mockResolvedValue({
+      formRecord: { id: "form-1", updatedAt: new Date().toISOString() },
+    });
+
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <SaveTemplateProvider>{children}</SaveTemplateProvider>
+    );
+
+    const { result } = renderHook(() => useTemplateContext(), { wrapper });
+
+    await act(async () => {
+      await result.current.saveDraft();
+    });
+
+    const savedForm = createOrUpdateTemplateMock.mock.calls[0][0].formConfig;
+    if (!savedForm.groups) {
+      throw new Error("Expected saved form groups");
+    }
+
+    expect(savedForm.groups.start?.nextAction).toBe(pageId);
+    expect(savedForm.groups[pageId]?.nextAction).toBe("review");
+    expect(savedForm.groups.review?.nextAction).toBe("end");
+    expect(savedForm.groups.end?.nextAction).toBeUndefined();
   });
 });
