@@ -67,7 +67,7 @@ export const hasCleanedRules = (elements: FormElement[], element: FormElement) =
 export const transform: TemplateStore<"transform"> = (set) => () => {
   set((state) => {
     // Make sure groups are initialized
-    state.form = initializeGroups({ ...state.form }, true);
+    state.form = initializeGroups({ ...state.form });
 
     // Clean rules and ensure UUIDs
     state.form.elements.forEach((element, index) => {
