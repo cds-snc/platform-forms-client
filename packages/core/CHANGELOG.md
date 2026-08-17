@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.26] - 2026-08-17
+
+- Add collapsible extension 
+
 ## [2.2.25] - 2026-08-17
 
 - Add styles for details component
