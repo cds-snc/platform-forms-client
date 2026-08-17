@@ -43,6 +43,7 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
     return visibleGroups;
   }
 
+  // Push the current group to visibleGroups
   visibleGroups.push(currentGroup);
 
   // If there is no nextAction, treat as "end"
@@ -80,6 +81,7 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
     const catchAllRule = relevantNextActions.find((action) =>
       action.choiceId.includes("catch-all")
     );
+
     let matchFound = false;
 
     for (const action of relevantNextActions) {
@@ -135,7 +137,7 @@ export const checkPageVisibility = (
   const groupId = findGroupByElementId(formRecord, element.id);
   if (!groupId) return false;
 
-  // Use pre-computed set if it exists to avoid walking the "tree" repeatedly
+  // Check if pre-computed visible groups exist to avoid walking the "tree" repeatedly
   if (precomputedVisibleGroups) {
     return precomputedVisibleGroups.has(groupId);
   }
@@ -189,6 +191,7 @@ export const checkVisibilityRecursive = (
   const activeElementMap = elementMap ?? buildElementMap(formRecord.form.elements);
 
   const hasGroups = !!formRecord.form.groups && Object.keys(formRecord.form.groups).length > 0;
+
   const activeVisibleGroups =
     visibleGroupsCache ??
     (hasGroups
@@ -200,6 +203,7 @@ export const checkVisibilityRecursive = (
           )
         )
       : undefined);
+
   if (!checkPageVisibility(formRecord, element, values, activeVisibleGroups)) {
     checked[elId] = false;
     return false;
@@ -338,6 +342,7 @@ export const computeAllVisibility = (
   const elementMap = buildElementMap(formRecord.form.elements);
 
   const hasGroups = !!formRecord.form.groups && Object.keys(formRecord.form.groups).length > 0;
+
   const visibleGroupsCache = hasGroups
     ? new Set(
         getVisibleGroupsBasedOnValuesRecursive(
@@ -347,6 +352,7 @@ export const computeAllVisibility = (
         )
       )
     : undefined;
+
   formRecord.form.elements.forEach((element) => {
     const isVisible = checkVisibilityRecursive(
       formRecord,
@@ -390,18 +396,18 @@ export const recomputeAffectedVisibility = (
   // Collect all elements that depend on the changed elements
   const affectedElementIds = collectDependentElements(changedElementIds, elementDependencies);
 
-  // If no elements are affected, return the current map
   if (affectedElementIds.size === 0) {
     return currentVisibilityMap;
   }
 
-  // Create a new map to avoid mutating the current one
   const updatedMap = new Map(currentVisibilityMap);
+
   // Reuse caller-provided map to avoid rebuilding on every call (elements are static)
   const elementMap = cachedElementMap ?? buildElementMap(formRecord.form.elements);
 
-  // No groups here (we return early above when groups are enabled), so avoid building visibleGroupsCache.
+  // No groups here (we return early above when groups are enabled), so avoid building visibleGroupsCache --?
   const visibleGroupsCache = undefined;
+
   // Build a cache
   const checked: Record<string, boolean> = {};
   currentVisibilityMap.forEach((val, key) => {
@@ -450,22 +456,26 @@ export const getChangedChoiceElementIds = (
   const allKeys = new Set([...Object.keys(oldValues), ...Object.keys(newValues)]);
   const elementMap = cachedElementMap ?? buildElementMap(formElements);
   allKeys.forEach((key) => {
-    // Shallow comparison - FormValues is Record<string, string | string[]> so
-    // JSON.stringify is unnecessarily expensive and allocates on every update.
+    // Doing a shallow comparison should be adequate since FormValues Record<string, string | string[]>
     const oldVal = oldValues[key];
     const newVal = newValues[key];
-    if (oldVal === newVal) return;
+    if (oldVal === newVal) {
+      return;
+    }
     if (
       Array.isArray(oldVal) &&
       Array.isArray(newVal) &&
       oldVal.length === newVal.length &&
       oldVal.every((v, i) => v === newVal[i])
-    )
+    ) {
       return;
+    }
 
     // Check if this element is a choice-based input
     const element = elementMap.get(key);
-    if (!element || !isChoiceInputType(element.type)) return;
+    if (!element || !isChoiceInputType(element.type)) {
+      return;
+    }
 
     // Check if any elements depend on this one
     if (elementDependencies.has(key)) {

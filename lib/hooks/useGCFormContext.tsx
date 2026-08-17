@@ -182,9 +182,9 @@ export const GCFormsProvider = ({
         elementMap
       );
 
-      // Keep the ref in sync so rapid successive calls use the latest base map
+      // Keep the ref in sync so rapid successive calls use the latest map
       visibilityMapRef.current = updatedVisibility;
-      // Pure state update - no side effects inside the setter
+
       setVisibilityMap(updatedVisibility);
 
       // Build the diff outside the setter so it's available to the event payload
@@ -350,6 +350,7 @@ export const useGCFormsContext = () => {
   return formsContext;
 };
 
+// TODO should this be in a separate file/context?
 export const useVisibilityContext = () => {
   const ctx = useContext(VisibilityContext);
   // Outside the provider treat every element as visible
