@@ -1,10 +1,10 @@
 # Changelog
 
-## [2.2.25] - 2026-08-17
+## [2.2.26] - 2026-08-17
 
 - Add new Star Rating input validation type
 
-## [2.2.25] - 2026-07-30
+## [2.2.25] - 2026-08-17
 
 - Add styles for details component
 
