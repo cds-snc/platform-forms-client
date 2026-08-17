@@ -1,0 +1,67 @@
+// Plain HTML equivalent of the GCDS details component.
+.gc-richText details {
+  margin-block: var(--gcds-spacing-300, 1.5rem);
+}
+
+.gc-richText details summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: fit-content;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--gcds-details-default-text);
+  font: var(--gcds-details-font-desktop);
+  text-decoration: underline;
+  cursor: pointer;
+  list-style: none;
+}
+
+.gc-richText details summary:hover,
+.gc-richText details summary:focus-visible {
+  color: var(--gcds-details-hover-text);
+  text-decoration-thickness: var(--gcds-details-hover-decoration-thickness);
+}
+
+.gc-richText details[open] summary:hover,
+.gc-richText details[open] summary:focus {
+  border-radius: var(--gcds-details-focus-border-radius);
+  background-color: var(--gcds-details-focus-background);
+  color: var(--gcds-details-focus-text);
+  box-shadow: var(--gcds-details-focus-box-shadow);
+  outline-offset: var(--gcds-details-focus-outline-offset);
+  outline: var(--gcds-details-focus-outline);
+  text-decoration: none;
+}
+
+.gc-richText details summary::-webkit-details-marker {
+  display: none;
+}
+
+.gc-richText details summary::before {
+  width: 0;
+  height: 0;
+  border-top: 0.4rem solid transparent;
+  border-bottom: 0.4rem solid transparent;
+  border-left: 0.55rem solid currentColor;
+  content: "";
+  transition: transform 120ms ease-in-out;
+}
+
+.gc-richText details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.gc-richText details .gc-details-content {
+  padding: var(--gcds-details-panel-padding);
+  margin: var(--gcds-details-panel-margin);
+  border-left: var(--gcds-details-panel-border-width) solid var(--gcds-details-panel-border-color);
+}
+
+.gc-richText details .gc-details-content > :first-child {
+  margin-top: 0;
+}
+
+.gc-richText details .gc-details-content > :last-child {
+  margin-bottom: 0;
+}
