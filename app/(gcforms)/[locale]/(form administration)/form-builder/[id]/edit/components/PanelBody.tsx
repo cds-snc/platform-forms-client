@@ -11,10 +11,7 @@ import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-
-import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
-import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { ManagedDataDetails } from "./ManagedDataDetails";
 
@@ -36,7 +33,6 @@ export const PanelBody = ({
   const isDynamicRow = item.type === "dynamicRow";
 
   const isAddressComplete = item.type === "addressComplete";
-  const isFormattedDate = item.type === "formattedDate";
   const isFileUpload = item.type === "fileInput";
   const hasCustomRegex =
     item.properties.validation?.type === "custom" && item.properties.validation.regex;
@@ -51,12 +47,11 @@ export const PanelBody = ({
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
-  const { Event } = useCustomEvent();
-
   const description =
     properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
 
   const describedById = description ? `item${item.id}-describedby` : undefined;
+  const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
 
   const isInvalid = isFileUpload && !hasApiKeyId;
 
@@ -97,18 +92,6 @@ export const PanelBody = ({
                 <div>
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
-                {isFormattedDate && (
-                  <div className="my-4 self-end">
-                    <Button
-                      theme="secondary"
-                      onClick={() => {
-                        Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
-                      }}
-                    >
-                      <>{t("addElementDialog.formattedDate.customizeDate")}</>
-                    </Button>
-                  </div>
-                )}
               </>
 
               {maxLength && (
@@ -124,7 +107,7 @@ export const PanelBody = ({
               {isAddressComplete && (
                 <div>
                   <div>
-                    {!item.properties.addressComponents?.canadianOnly && (
+                    {!isCanadianOnly && (
                       <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
                         {t("addElementDialog.addressComplete.country")}
                       </div>
@@ -136,27 +119,16 @@ export const PanelBody = ({
                       {t("addElementDialog.addressComplete.city")}
                     </div>
                     <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                      {item.properties.addressComponents?.canadianOnly &&
-                        t("addElementDialog.addressComplete.components.province")}
-                      {!item.properties.addressComponents?.canadianOnly &&
+                      {isCanadianOnly && t("addElementDialog.addressComplete.components.province")}
+                      {!isCanadianOnly &&
                         t("addElementDialog.addressComplete.components.provinceOrState")}
                     </div>
                     <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                      {item.properties.addressComponents?.canadianOnly &&
+                      {isCanadianOnly &&
                         t("addElementDialog.addressComplete.components.postalCode")}
-                      {!item.properties.addressComponents?.canadianOnly &&
+                      {!isCanadianOnly &&
                         t("addElementDialog.addressComplete.components.postalCodeOrZip")}
                     </div>
-                  </div>
-                  <div className="my-4 self-end">
-                    <Button
-                      theme="secondary"
-                      onClick={() => {
-                        Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
-                      }}
-                    >
-                      {t("addElementDialog.addressComplete.customize")}
-                    </Button>
                   </div>
                 </div>
               )}

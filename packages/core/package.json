@@ -23,6 +23,8 @@
     "build:styles": "node scripts/build-styles.mjs",
     "test": "vitest --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts --watch",
+    "yalc:publish": "yarn build && yarn dlx yalc publish",
+    "yalc:publish:replace": "yarn build && yarn dlx yalc publish --replace",
     "prepack": "yarn build",
     "core:prepack": "yarn prepack"
   },

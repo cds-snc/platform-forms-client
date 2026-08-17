@@ -43,6 +43,7 @@ export async function submitForm(
   values: Responses,
   language: string,
   formRecordOrId: PublicFormRecord | string,
+  isPreview: boolean,
   captchaToken?: string | undefined,
   fileChecksums?: Record<string, string>
 ): Promise<{
@@ -55,7 +56,7 @@ export async function submitForm(
     const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
     try {
-      const template = await getPublicTemplateByID(formId);
+      const template = await getPublicTemplateByID(formId, isPreview ? "draft" : "published");
 
       if (!template) {
         throw new Error(`Could not find any form associated to identifier ${formId}`);
@@ -68,7 +69,7 @@ export async function submitForm(
         };
       }
 
-      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
+      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
 
       if (shouldVerifyHCaptcha) {
         const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);

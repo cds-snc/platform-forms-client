@@ -9,17 +9,32 @@ import {
   getAddressCompleteChoices,
   getSelectedAddress,
   getAddressCompleteRetrieve,
+} from "./actions";
+import {
+  localizeAddressCompleteDescription,
   matchesAddressPattern,
+  getCountryCodeFromName,
+  getCountryNameFromCode,
 } from "./utils";
-import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
-import { useState, useEffect, useRef } from "react";
+import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import debounce from "lodash/debounce";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
 import { cn } from "@lib/utils";
-import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { Language } from "@lib/types/form-builder-types";
 import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { isValidAddressSubFieldInvalid, getAddressSubFieldError } from "@gcforms/core";
+import {
+  MIN_ADDRESS_SEARCH_LENGTH,
+  MAX_SEARCH_QUERY_LENGTH,
+  MAX_ADDRESS_FIELD_LENGTH,
+  MAX_POSTAL_CODE_LENGTH,
+  normalizeAddressField,
+  normalizeQuery,
+  normalizePostalCode,
+} from "./utils";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string, keepOpen: boolean) => void;
@@ -36,39 +51,41 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const [choices, setChoices] = useState<string[]>([]);
   const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
 
-  // Cache and Allow values
-  const [isReady, setIsReady] = useState(false);
-  const [allow, setAllow] = useState(false);
-  const [apiKey, setApiKey] = useState("");
+  // Memoize addressLabels and toFullAddress so callbacks can be stable
+  const addressLabelsMemo = useMemo(
+    () => ({
+      en: t("addElementDialog.addressComplete.multipleAddresses", { lng: "en" }),
+      fr: t("addElementDialog.addressComplete.multipleAddresses", { lng: "fr" }),
+      current: t("addElementDialog.addressComplete.multipleAddresses"),
+    }),
+    [t]
+  );
 
-  const toFullAddress = (address: AddressCompleteChoice): string => {
-    return address.Text + ", " + address.Description;
-  };
+  const toFullAddress = useCallback(
+    (address: AddressCompleteChoice) =>
+      address.Text +
+      ", " +
+      localizeAddressCompleteDescription(address.Description, addressLabelsMemo),
+    [addressLabelsMemo]
+  );
 
   const comboboxRef = useRef<ManagedComboboxRef>(null);
+
+  const countryError = getAddressSubFieldError(meta.error, "country");
+  const streetError = getAddressSubFieldError(meta.error, "streetAddress");
+  const cityError = getAddressSubFieldError(meta.error, "city");
+  const provinceError = getAddressSubFieldError(meta.error, "province");
+  const postalError = getAddressSubFieldError(meta.error, "postalCode");
 
   // Check if addressComplete is allowed.
   const { getFlag } = useFeatureFlags();
   const featureFlags = {
     addressComplete: getFlag("addressComplete"),
   };
-  useEffect(() => {
-    const checkAllowed = async () => {
-      if (featureFlags.addressComplete) {
-        setAllow(true);
-        setApiKey(process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY || "");
-      } else {
-        setApiKey("");
-      }
 
-      setIsReady(true);
-    };
+  const isNoAuthPreviewMode = useMemo(() => window.location.href.includes("/0000/"), []);
 
-    if (apiKey === "") {
-      // Don't recheck.
-      checkAllowed();
-    }
-  }, [apiKey, featureFlags.addressComplete]);
+  const allowAddressComplete = featureFlags.addressComplete && !isNoAuthPreviewMode;
 
   //Form fillers address elements
   const [addressObject, setAddressObject] = useState<AddressElements>(
@@ -82,7 +99,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           // Make sure the initial default is CAN to avoid null cases when:
           // - the address is "Canada only"
           // - the address is not "Canada only" and the country drop down was not interacted with
-          country: "CAN",
+          country: "Canada",
         }
   );
 
@@ -92,61 +109,64 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     helpers.setValue(newValue);
   }, [addressObject, helpers]);
 
-  const handleAddressComplete = async (choices: AddressCompleteChoice[]) => {
-    //loop through the responseData and add it to the addressResultsCache
-    const newElements: AddressCompleteChoice[] = [];
+  // Keep a ref to the latest addressObject so the debounced function can read current values
+  const addressObjectRef = useRef<AddressElements | null>(addressObject);
+  useEffect(() => {
+    addressObjectRef.current = addressObject;
+  }, [addressObject]);
 
-    for (let i = 0; i < choices.length; i++) {
-      // Check key doesn't already exist.
-      if (!addressResultCache.find((item: AddressCompleteChoice) => item.Id === choices[i].Id)) {
-        newElements.push(choices[i]);
-      }
-    }
+  // Debounced search ref will be initialized after handleAddressComplete is defined
+  const debouncedSearchRef = useRef<(((q: string) => void) & { cancel?: () => void }) | null>(null);
 
-    if (newElements.length > 0) {
-      setAddressResultCache((prevCache) => [...prevCache, ...newElements]);
-    }
+  const handleAddressComplete = useCallback(
+    async (choices: AddressCompleteChoice[]) => {
+      // Add new results to the cache using functional update to avoid stale reads
+      setAddressResultCache((prevCache) => {
+        const newElements = choices.filter((c) => !prevCache.find((p) => p.Id === c.Id));
+        return newElements.length > 0 ? [...prevCache, ...newElements] : prevCache;
+      });
 
-    // Filter the results to avoid duplicate entry
-    const uniqueResults = choices.filter(
-      (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
-        index ===
-        self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
-    );
+      // Filter the results to avoid duplicate entry
+      const uniqueResults = choices.filter(
+        (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
+          index ===
+          self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
+      );
 
-    setChoices(
-      uniqueResults.map((item: AddressCompleteChoice) => {
-        return toFullAddress(item);
-      })
-    );
-  };
+      setChoices(uniqueResults.map((item: AddressCompleteChoice) => toFullAddress(item)));
+    },
+    [setAddressResultCache, setChoices, toFullAddress]
+  );
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressData("streetAddress", e.target.value); // Update the street address in the address object
     // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
 
-    if (!allow) {
+    if (!allowAddressComplete) {
       return;
     } // Abandon if addressComplete is disabled.
 
     const query = e.target.value;
+
+    if (normalizeQuery(query).length < MIN_ADDRESS_SEARCH_LENGTH) {
+      debouncedSearchRef.current?.cancel?.();
+      setChoices([]);
+      setAddressResultCache([]);
+      return;
+    }
 
     if (matchesAddressPattern(query)) {
       await onAddressSet(query); // Do Search for Nested Address via ID instead of Query.
       return;
     } // Abandon, don't search on nested addresses.
 
-    const responseData = await getAddressCompleteChoices(
-      apiKey,
-      query,
-      addressObject?.country || "CAN"
-    );
-
-    handleAddressComplete(responseData);
+    // Debounced search to avoid calling the API on every keystroke
+    debouncedSearchRef.current?.(query);
+    return;
   };
 
   const onAddressSet = async (value: string) => {
-    if (!allow) {
+    if (!allowAddressComplete) {
       return;
     } // Abandon if addressComplete is disabled.
 
@@ -169,35 +189,79 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
       // Handle the Next value.
       if (nextValue == AddressCompleNext.Retrieve) {
-        const responseData = await getSelectedAddress(
-          apiKey,
-          selectedResult.Id,
-          addressObject?.country || "CAN",
-          i18n.language as Language
-        );
-        if (responseData) {
-          const results = responseData;
-          setAddressObject(results);
-          if (comboboxRef.current) {
-            comboboxRef.current.changeInputValue(results.streetAddress, false);
+        try {
+          const response = await getSelectedAddress(
+            selectedResult.Id,
+            getCountryCodeFromName(addressObject?.country),
+            i18n.language as Language
+          );
+          if (response.error) {
+            // no-op - we log server side, but don't want to show the user an error for this.
+          } else if (response.address) {
+            setAddressObject({
+              ...response.address,
+              country: getCountryNameFromCode(response.address.country, i18n.language as Language),
+            });
+            if (comboboxRef.current) {
+              comboboxRef.current.changeInputValue(response.address.streetAddress, false);
+            }
           }
+        } catch (err: unknown) {
+          // no-op
         }
       } else if (nextValue == AddressCompleNext.Find) {
         // Do another lookup for the address.
-        const responseData = await getAddressCompleteRetrieve(
-          apiKey,
-          selectedResult.Id,
-          addressObject?.country || "CAN"
-        );
+        try {
+          const response = await getAddressCompleteRetrieve(
+            selectedResult.Id,
+            getCountryCodeFromName(addressObject?.country),
+            i18n.language as Language
+          );
 
-        if (comboboxRef.current) {
-          comboboxRef.current.changeInputValue("", true);
+          if (response.error) {
+            setChoices([]);
+          } else {
+            if (comboboxRef.current) {
+              comboboxRef.current.changeInputValue("", true);
+            }
+
+            handleAddressComplete(response.items);
+          }
+        } catch (err: unknown) {
+          setChoices([]);
         }
-
-        handleAddressComplete(responseData);
       }
     }
   };
+
+  // Initialize debounced search after handler is defined, and recreate when language or handler changes
+  useEffect(() => {
+    debouncedSearchRef.current = debounce(async (query: string) => {
+      try {
+        const response = await getAddressCompleteChoices(
+          query,
+          getCountryCodeFromName(addressObjectRef.current?.country),
+          i18n.language as Language
+        );
+        if (response.error) {
+          setChoices([]);
+          setAddressResultCache([]);
+        } else {
+          handleAddressComplete(response.items);
+        }
+      } catch (err: unknown) {
+        setChoices([]);
+        setAddressResultCache([]);
+      }
+    }, 300);
+
+    return () => {
+      if (debouncedSearchRef.current && debouncedSearchRef.current.cancel) {
+        debouncedSearchRef.current?.cancel();
+        debouncedSearchRef.current = null;
+      }
+    };
+  }, [i18n.language, t, handleAddressComplete]);
 
   const setAddressData = (key: string, value: string) => {
     let baseAddressObject = {};
@@ -208,7 +272,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         city: "",
         province: "",
         postalCode: "",
-        country: "CAN",
+        country: "Canada",
       };
     } else {
       baseAddressObject = addressObject;
@@ -216,15 +280,30 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
     for (const internalKey in baseAddressObject) {
       if (key === internalKey) {
-        const newAddressObject = { ...baseAddressObject, [key]: value };
+        const sanitizedValue =
+          key === "postalCode" ? normalizePostalCode(value) : normalizeAddressField(value);
+        const newAddressObject = { ...baseAddressObject, [key]: sanitizedValue };
         setAddressObject(newAddressObject as AddressElements);
       }
     }
   };
 
-  const countryChoices = countries.all?.map((country) => {
-    return country[i18n.language as Language];
-  });
+  const countryChoices = countries.all
+    ?.map((country) => country[i18n.language as Language])
+    .sort((firstCountry, secondCountry) =>
+      firstCountry.localeCompare(secondCountry, i18n.language as Language)
+    );
+
+  // Determine the localized display value for the current country code or name
+  const countryBaseValue = (() => {
+    try {
+      const stored = addressObject?.country;
+      return getCountryNameFromCode(stored, i18n.language as Language);
+    } catch (e) {
+      // fall through to default
+    }
+    return "Canada";
+  })();
 
   const setCountry = (countryText: string) => {
     // Get the country from the countries.all object.
@@ -238,7 +317,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         city: "",
         province: "",
         postalCode: "",
-        country: country.id,
+        country: country[i18n.language as Language],
       });
       if (comboboxRef.current) {
         comboboxRef.current.changeInputValue("", false);
@@ -257,7 +336,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         id={id}
         tabIndex={0}
       >
-        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset"}>
+        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset size-h3"}>
           {label}
         </legend>
 
@@ -269,9 +348,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </div>
         )}
         {!props.canadianOnly && (
-          <div className="mb-6 mt-4">
+          <div className="mt-4 mb-6">
             <Label
               htmlFor={`${name}-country`}
+              id={`label-${name}-country`}
               className={props.required ? "gcds-label required" : "gcds-label"}
               required={props.required}
               lang={lang}
@@ -283,9 +363,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               name={`${name}-country`}
               choices={countryChoices}
               onSetValue={(val) => setCountry(val)}
-              className={cn(meta.error && "gc-error-input")}
+              className={cn(
+                isValidAddressSubFieldInvalid(meta.error, "country") && "gc-error-input"
+              )}
+              overrideError={countryError}
               required={props.required}
-              baseValue="Canada"
+              baseValue={countryBaseValue}
               useFilter={true}
               data-testid="addresscomplete-input-country"
             />
@@ -295,6 +378,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         <div className="mb-6">
           <Label
             htmlFor={`${name}-streetAddress`}
+            id={`label-${name}-streetAddress`}
             className={props.required ? "gcds-label required" : "gcds-label"}
             required={props.required}
             lang={lang}
@@ -304,27 +388,45 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Description id={`${name}-streetDesc`}>
             {t("addElementDialog.addressComplete.street.description")}
           </Description>
-          {isReady && (
-            <ManagedCombobox
-              ref={comboboxRef}
-              choices={choices}
-              key={`${name}-streetAddress`}
-              id={`${name}-streetAddress`}
-              name={`${name}-streetAddress`}
-              onChange={onAddressSearch}
-              onSetValue={onAddressSet}
-              baseValue={addressObject.streetAddress}
-              required={props.required}
-              placeholderText={allow ? t("addElementDialog.addressComplete.startTyping") : ""}
-              ariaDescribedBy={`${name}-streetDesc`}
-            />
-          )}
-          {!isReady && (
+          {getCountryCodeFromName(addressObject.country) === "CAN" ? (
             <>
-              <div role="status" className="mt-2">
-                <SpinnerIcon className="size-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
-                <span className="sr-only">{t("loading")}</span>
-              </div>
+              <ManagedCombobox
+                ref={comboboxRef}
+                choices={choices}
+                key={`${name}-streetAddress`}
+                id={`${name}-streetAddress`}
+                name={`${name}-streetAddress`}
+                onChange={onAddressSearch}
+                onSetValue={onAddressSet}
+                baseValue={addressObject.streetAddress}
+                required={props.required}
+                ariaDescribedBy={`${name}-streetDesc ${name}-streetDesc-2`}
+                maxLength={MAX_SEARCH_QUERY_LENGTH}
+                className={cn(
+                  isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+                )}
+                overrideError={streetError}
+              />
+            </>
+          ) : (
+            <>
+              {isValidAddressSubFieldInvalid(meta.error, "streetAddress") && (
+                <ErrorMessage id={"errorMessage" + `${name}-city`}>{streetError}</ErrorMessage>
+              )}
+              <input
+                type="text"
+                id={`${name}-streetAddress`}
+                name={`${name}-streetAddress`}
+                value={addressObject.streetAddress}
+                onChange={(e) => setAddressData("streetAddress", e.target.value)}
+                maxLength={MAX_ADDRESS_FIELD_LENGTH}
+                className={cn(
+                  "gc-input-text",
+                  isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
+                )}
+                required={props.required}
+                data-testid="addresscomplete-streetAddress-input"
+              />
             </>
           )}
           <input type="hidden" {...field} />
@@ -334,13 +436,20 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Label htmlFor={`${name}-city`} className="gcds-label">
             {t("addElementDialog.addressComplete.city")}
           </Label>
+          {cityError && (
+            <ErrorMessage id={"errorMessage" + `${name}-city`}>{cityError}</ErrorMessage>
+          )}
           <input
             type="text"
             id={`${name}-city`}
             name={`${name}-city`}
             value={addressObject.city}
             onChange={(e) => setAddressData("city", e.target.value)}
-            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            maxLength={MAX_ADDRESS_FIELD_LENGTH}
+            className={cn(
+              "gc-input-text",
+              isValidAddressSubFieldInvalid(meta.error, "city") && "gc-error-input"
+            )}
             required={props.required}
             data-testid="addresscomplete-input-city"
           />
@@ -352,13 +461,20 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             {!props.canadianOnly &&
               t("addElementDialog.addressComplete.components.provinceOrState")}
           </Label>
+          {provinceError && (
+            <ErrorMessage id={"errorMessage" + `${name}-province`}>{provinceError}</ErrorMessage>
+          )}
           <input
             type="text"
             id={`${name}-province`}
             name={`${name}-province`}
             value={addressObject.province}
             onChange={(e) => setAddressData("province", e.target.value)}
-            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            maxLength={MAX_ADDRESS_FIELD_LENGTH}
+            className={cn(
+              "gc-input-text",
+              isValidAddressSubFieldInvalid(meta.error, "province") && "gc-error-input"
+            )}
             required={required}
             data-testid="addresscomplete-input-province"
           />
@@ -370,13 +486,20 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             {!props.canadianOnly &&
               t("addElementDialog.addressComplete.components.postalCodeOrZip")}
           </Label>
+          {postalError && (
+            <ErrorMessage id={"errorMessage" + `${name}-postal`}>{postalError}</ErrorMessage>
+          )}
           <input
             id={`${name}-postal`}
             type="text"
             name={`${name}-postal`}
             value={addressObject.postalCode}
             onChange={(e) => setAddressData("postalCode", e.target.value)}
-            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            maxLength={MAX_POSTAL_CODE_LENGTH}
+            className={cn(
+              "gc-input-text",
+              isValidAddressSubFieldInvalid(meta.error, "postalCode") && "gc-error-input"
+            )}
             required={required}
             data-testid="addresscomplete-input-postalCode"
           />

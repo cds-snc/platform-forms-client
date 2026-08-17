@@ -13,9 +13,8 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
   const closingDate = typeof record.closingDate === "string" ? record.closingDate : null;
 
   set((state) => {
-    const allowGroups = state.allowGroupsFlag;
     state.id = record.id;
-    state.form = initializeGroups({ ...defaultForm, ...record.form }, allowGroups);
+    state.form = initializeGroups({ ...defaultForm, ...record.form });
 
     if (!state.form.groupsLayout) {
       state.form.groupsLayout = [];

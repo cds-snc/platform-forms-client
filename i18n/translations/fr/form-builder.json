@@ -65,35 +65,28 @@
       "postal": "Code postal",
       "province": "Province ou territoire",
       "street": {
-        "description": "Indiquez le nom de rue et le numéro d'unité.",
+        "description": "Indiquez d’abord le numéro d’unité, le cas échéant, suivi du numéro municipal et du nom de la rue.",
         "label": "Adresse municipale"
       },
       "title": "Adresse"
     },
     "addressComplete": {
-      "whatIsYourAddress": "Adresse postale",
+      "whatIsYourAddress": "Adresse",
       "city": "Ville ou communauté",
       "country": "Pays",
-      "description": "Le champ d'adresse utilise l'API AdresseComplète de Postes Canada pour vérifier les adresses au fur et à mesure qu'elles sont saisies. Utilisez-le pour recueillir des adresses plus précises.",
+      "description": "<span>Un modèle pour la collecte d’adresses, y compris la ville, la province et le code postal.</span><span>Postes Canada peut trouver et vérifier les adresses au Canada.</span>",
       "label": "Adresse",
       "postal": "Code postal ou zip",
       "province": "Province, territoire ou état",
       "street": {
-        "description": "Indiquez le nom et le numéro de rue.",
+        "description": "Indiquez d’abord le numéro d’unité, le cas échéant, suivi du numéro municipal et du nom de la rue.",
         "label": "Adresse municipale"
       },
       "title": "Adresse",
       "select": "Sélectionner les éléments de l'adresse à inclure.",
-      "options": "Options de format d’adresse",
-      "fields": "Format des données",
-      "fieldsDesc": "Ceci détermine la manière dont l’adresse apparaît dans les données de réponses.",
-      "fullAddress": "Adresse entière combinée",
-      "fullAddressDesc": "Données affichées en tant qu'une seule ligne.",
-      "splitAddress": "Adresse fractionnée en parties",
-      "splitAddressDesc": "Données divisées en plusieurs lignes.",
-      "customize": "Adapter le format",
-      "startTyping": "Commencez à taper l'adresse à rechercher",
-      "canadianOnly": "Adresses canadiennes seulement",
+      "fields": "Format",
+      "fieldsDesc": "Définissez la façon dont les adresses s’affichent dans les réponses.",
+      "multipleAddresses": "Adresses",
       "components": {
         "unitNumber": "Numéro de l’unité",
         "civicNumber": "Numéro civique",
@@ -641,6 +634,7 @@
       "GeneratedAPIKey": "Clé API générée par {{userEmail}}: ID = {{APIkeyID}",
       "RefreshedAPIKey": "Clé API re-générée par {{userEmail}}: ID = {{APIkeyID}}",
       "DeletedAPIKey": "Clé API supprimée par {{userEmail}}: ID = {{serviceAccountID}}",
+      "IncreasedThrottling": "Taux d'API défini à {{throttlingRate}} pour {{weeks}} semaines",
       "ChangeSecurityAttribute": "Classification modifiée à : {{securityAttribute}}",
       "SetFormPurpose": "Usage prévu défini comme :{{formPurpose}}",
       "SetSaveAndResume": "Sauvegarde des réponses modifiée à :{{saveAndResume}}",
@@ -700,6 +694,8 @@
     "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
     "syncedLatest": "Vous modifiez maintenant la version enregistrée du formulaire la plus récente.",
     "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer.",
+    "takeoverAvailableMessage": "Le formulaire est maintenant disponible pour modification.",
+    "takeoverAvailableTitle": "Formulaire disponible pour modification",
     "sessionExpiredTitle": "Votre session a expiré",
     "sessionExpiredMessage": "Vos modifications ont été enregistrées. Vous pouvez reprendre le formulaire pour y apporter des changements en actualisant la page.",
     "returnToForms": "Retourner aux formulaires",
@@ -752,6 +748,17 @@
       "infoBox": "Quel format de date utiliser?",
       "infoLine1": "Le format standard de la date au Canada est AAAA-MM-JJ et devrait être votre premier choix, à moins qu'il n'y ait une raison de choisir un format différent.",
       "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
+    },
+    "addressComplete": {
+      "addressOptions": "Options d'adresse",
+      "typeOfAddress": "Quel type d'adresses sont collectées?",
+      "allowInternational": "Autoriser les adresses internationales",
+      "canadianOnly": "Adresses canadiennes seulement",
+      "format": "Sélectionnez un format pour l'adresse",
+      "fullAddress": "Adresse entière combinée",
+      "fullAddressDesc": "S’affiche sur une seule ligne.",
+      "splitAddress": "Adresse fractionnée en parties",
+      "splitAddressDesc": "Séparée sur plusieurs lignes."
     },
     "apiOptionsSection": {
       "title": "Personnaliser les attributs des données de l'API",
@@ -1709,5 +1716,6 @@
     "description": "Modifier un formulaire déjà en production",
     "button": "Mettre à jour"
   },
-  "formDownloadFailed": "Le téléchargement du formulaire a échoué."
+  "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
+  "formActions": "Actions liées au formulaire"
 }

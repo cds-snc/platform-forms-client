@@ -180,14 +180,9 @@ const CardLinks = memo(
     const responsesLink = `/${language}/form-builder/${id}/responses`;
     const settingsLink = `/${language}/form-builder/${id}/settings`;
 
-    if (!isPublished) {
-      return <div className="mb-4" />;
-    }
-
     return (
       <div className="mt-2">
         {ttl != null && <Unarchive id={id} isPublished={isPublished} language={language} />}
-
         {/* Email delivery */}
         {deliveryOption && deliveryOption.emailAddress && (
           <span className="mt-4 block text-sm">
@@ -195,7 +190,6 @@ const CardLinks = memo(
             {t("card.deliveryOption.email")} {deliveryOption.emailAddress}
           </span>
         )}
-
         {/* Vault delivery */}
         {deliveryOption && ttl == null && !deliveryOption.emailAddress && !isPublishedDraft && (
           <>
@@ -220,7 +214,6 @@ const CardLinks = memo(
             )}
           </>
         )}
-
         {/* Settings link - only for published non-archived forms */}
         {ttl == null && !isPublishedDraft && (
           <Link
@@ -246,6 +239,7 @@ const CardTitle = memo(
     collaboratorCount,
     isClosed,
     linkToEdit,
+    status,
   }: {
     id: string;
     name: string;
@@ -253,6 +247,7 @@ const CardTitle = memo(
     collaboratorCount: number;
     isClosed: boolean;
     linkToEdit?: boolean;
+    status: FormTabStatus;
   }) => {
     const {
       t,
@@ -267,7 +262,7 @@ const CardTitle = memo(
     const content = name ? name : t("card.unnamedForm");
     let titleElement: React.ReactNode;
 
-    if (isClosed) {
+    if (isClosed || status === TAB_STATUS.ARCHIVED) {
       titleElement = (
         <span className={classes} title={name}>
           {content}
@@ -479,6 +474,7 @@ const CardComponent = ({
           isClosed={cardState === CARD_STATE.CLOSED}
           collaboratorCount={collaboratorCount}
           linkToEdit={isPublishedDraftOnDraftTab}
+          status={status}
         />
         <CardCollaboratorCount collaboratorCount={collaboratorCount} />
         <Suspense fallback={<Skeleton count={2} className="my-3 w-[300px]" />}>

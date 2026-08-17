@@ -5,15 +5,19 @@ import { mapTemplateToPublicFormRecord, parseTemplate } from "../internal";
 import { logMessage } from "@lib/logger";
 import { isTemplateVersioningEnabled } from "../versioning/internal";
 import { getPublicTemplateByID as getPublicTemplateByIDVersioningEnabled } from "@lib/templates/versioning/queries/getPublicTemplateByID";
+import { PublicTemplateMode } from "../versioning/internal/types";
 
 /**
  * Get a form template by ID (only includes public information but does not require any permission)
  * @param formID ID of form template
  * @returns PublicFormRecord
  */
-export async function getPublicTemplateByID(formID: string): Promise<PublicFormRecord | null> {
+export async function getPublicTemplateByID(
+  formID: string,
+  mode: PublicTemplateMode = "published"
+): Promise<PublicFormRecord | null> {
   if (await isTemplateVersioningEnabled()) {
-    return getPublicTemplateByIDVersioningEnabled(formID);
+    return getPublicTemplateByIDVersioningEnabled(formID, mode);
   }
 
   try {

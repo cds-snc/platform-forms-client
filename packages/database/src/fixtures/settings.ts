@@ -76,6 +76,39 @@ const editLockRedirectIdleMs: Setting = {
   value: "1800000",
 };
 
+const addressCompleteFindRateLimitMax: Setting = {
+  internalId: "addressCompleteFindRateLimitMax",
+  nameEn: "Address Complete Find Rate Limit Max (count)",
+  nameFr: "Limite maximale de recherche d'adresse complète (nombre)",
+  descriptionEn:
+    "The maximum number of typeahead find requests (within the threshold) before the user is rate limited.",
+  descriptionFr:
+    "Le nombre maximal de requêtes de recherche avec saisie semi-automatique (dans la limite du seuil) avant que l'utilisateur ne soit soumis à une limitation de débit.",
+  value: "400",
+};
+
+const addressCompleteRetrieveRateLimitMax: Setting = {
+  internalId: "addressCompleteRetrieveRateLimitMax",
+  nameEn: "Address Complete Retrieve Rate Limit Max (count)",
+  nameFr: "Limite maximale de récupération de l'adresse complète (nombre)",
+  descriptionEn:
+    "The maximum number of retrieve requests (within the threshold) before the user is rate limited.",
+  descriptionFr:
+    "Le nombre maximal de requêtes de récupération (dans la limite du seuil) avant que l'utilisateur ne soit soumis à une limitation de débit.",
+  value: "200",
+};
+
+const addressCompleteRateLimitWindowSeconds: Setting = {
+  internalId: "addressCompleteRateLimitWindowSeconds",
+  nameEn: "Address Complete Rate Limit Window",
+  nameFr: "Fenêtre de limite de débit pour Address Complete",
+  descriptionEn:
+    "The window of time that as user is rate limited - applies to both `addressCompleteFindRateLimitMax` and `addressCompleteRetrieveRateLimitMax`.",
+  descriptionFr:
+    "La fenêtre temporelle durant laquelle l'utilisateur est soumis à une limitation de débit s'applique à la fois à `addressCompleteFindRateLimitMax` et à `addressCompleteRetrieveRateLimitMax`.",
+  value: "60",
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -84,6 +117,9 @@ const allSettings = [
   nagwarePhaseEscalated,
   responseDownloadLimit,
   editLockRedirectIdleMs,
+  addressCompleteFindRateLimitMax,
+  addressCompleteRetrieveRateLimitMax,
+  addressCompleteRateLimitWindowSeconds,
 ];
 
 export default {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useSyncExternalStore } from "react";
 import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
@@ -58,9 +58,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   }: InnerFormProps = props;
 
   const { t } = useTranslation();
-  const [canFocusOnError, setCanFocusOnError] = useState(false);
-  const [lastSubmitCount, setLastSubmitCount] = useState(-1);
-  const [isServer, setIsServer] = useState(true);
+  const lastFocusedSubmitCount = useRef(-1);
 
   const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
   // TODO: This can be removed in the next refactor.
@@ -99,27 +97,17 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
-    if (formStatusError) {
-      setFocusOnErrorMessage(props, serverErrorId);
-    }
-
-    if (!props.isValid && !canFocusOnError) {
-      if (props.submitCount > lastSubmitCount) {
-        setCanFocusOnError(true);
-        setLastSubmitCount(props.submitCount);
-      }
-    } else if (!props.isValid) {
+    if (!props.isValid && props.submitCount > lastFocusedSubmitCount.current) {
+      lastFocusedSubmitCount.current = props.submitCount;
       setFocusOnErrorMessage(props, errorId);
-      setCanFocusOnError(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
+  }, [errorId, errorList, props]);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsServer(false);
-    }
-  }, [setIsServer]);
+  const isServer = useSyncExternalStore(
+    () => () => {},
+    () => false,
+    () => true
+  );
 
   // Don't prerender the form on the server because inputs will change and cause
   // hydration errors based on state stored client side
@@ -195,6 +183,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             handleSubmit={handleSubmit}
             noValidate={true}
             isPublished={isPublished}
+            isPreview={props.isPreview}
             captchaTokenRef={props.captchaToken}
             resetCaptchaRef={props.resetCaptchaRef}
           >
@@ -323,6 +312,7 @@ export const Form = withFormik<FormProps, Responses>({
         formValuesWithoutFileContent,
         formikBag.props.language,
         formikBag.props.formRecord.id,
+        formikBag.props.isPreview ?? false,
         formikBag.props.captchaToken?.current,
         fileChecksums
       );
