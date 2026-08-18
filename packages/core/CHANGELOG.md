@@ -1,8 +1,12 @@
 # Changelog
 
-## [2.3.0] - 2026-08-17
+## [2.3.0] - 2026-08-18
 
 - Update visibility to be event driven with a different function signature
+
+## [2.2.25] - 2026-08-17
+
+- Add styles for details component
 
 ## [2.2.24] - 2026-08-10
 

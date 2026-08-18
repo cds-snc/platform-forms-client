@@ -22,5 +22,7 @@
   "tooltipIndent": "Indent",
   "tooltipOutdent": "Outdent",
   "indent": "Indent",
-  "outdent": "Outdent"
+  "outdent": "Outdent",
+  "tooltipInsertCollapsible": "Insert collapsible container",
+  "insertCollapsible": "Insert collapsible container"
 }

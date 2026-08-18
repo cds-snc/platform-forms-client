@@ -22,5 +22,7 @@
   "tooltipIndent": "Indentation",
   "tooltipOutdent": "Suppression d'indentation",
   "indent": "Indentation",
-  "outdent": "Suppression d'indentation"
+  "outdent": "Suppression d'indentation",
+  "tooltipInsertCollapsible": "Insérer un conteneur réductible",
+  "insertCollapsible": "Insérer un conteneur réductible"
 }

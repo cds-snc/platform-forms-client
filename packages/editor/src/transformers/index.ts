@@ -1,5 +1,6 @@
 import { TextMatchTransformer } from "@lexical/markdown";
 import { $createTextNode, $isLineBreakNode, LineBreakNode } from "lexical";
+export { COLLAPSIBLE } from "./collapsible";
 
 export const LINE_BREAK_FIX: TextMatchTransformer = {
   dependencies: [LineBreakNode],
