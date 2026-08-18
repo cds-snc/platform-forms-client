@@ -38,7 +38,7 @@
       "textField": "Ajouter une réponse courte",
       "textArea": "Ajouter une réponse longue",
       "radio": "Ajouter des boutons radio",
-      "starRating": "Ajouter une évaluation par étoiles",
+      "starRating": "Ajouter un classement par étoiles",
       "checkbox": "Ajouter des cases à cocher",
       "dropdown": "Ajouter une liste déroulante",
       "fileInput": "Ajouter un téléverseur de fichier",
@@ -275,10 +275,10 @@
       "selectOnlyOne": "Sélectionnez une option."
     },
     "starRating": {
-      "description": "Un élément d'évaluation par étoiles où les utilisateurs sélectionnent une note de 1 à N étoiles.",
-      "title": "Évaluation par étoiles",
-      "exampleQuestion": "Comment évalueriez-vous votre expérience?",
-      "exampleDescription": "[FR]The greater the number of stars, the better the experience.",
+      "title": "Classement par étoiles",
+      "description": "Une échelle d'évaluation permettant de donner son avis en attribuant une note comprise entre 1 et un certain nombre étoiles.",
+      "exampleQuestion": "Comment évalueriez-vous ce service?",
+      "exampleDescription": "Plus il y a d'étoiles, meilleure est l'expérience.",
       "numberOfStars": "Nombre d'étoiles"
     },
     "richText": {

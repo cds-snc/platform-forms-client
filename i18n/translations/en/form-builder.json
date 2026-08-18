@@ -280,6 +280,12 @@
       "exampleQuestion": "How would you rate your experience?",
       "exampleDescription": "The greater the number of stars, the better the experience.",
       "numberOfStars": "Number of stars"
+    "starRating": {
+      "title": "Star rating",
+      "description": "A rating scale to provide feedback based on a score from 1 to a certain number of stars.",
+      "exampleQuestion": "How would you rate this service?",
+      "exampleDescription": "The more stars, the better the experience.",
+      "numberOfStars": "Number of stars"
     },
     "richText": {
       "description": "A rich text element for inserting headings, paragraph text, lists, or links.",
