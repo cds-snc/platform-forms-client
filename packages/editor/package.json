@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/editor",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -9,6 +9,7 @@
   "packageManager": "yarn@4.10.3",
   "dependencies": {
     "@lexical/code": "^0.49.0",
+    "@lexical/html": "^0.49.0",
     "@lexical/link": "^0.49.0",
     "@lexical/list": "^0.49.0",
     "@lexical/markdown": "^0.49.0",
