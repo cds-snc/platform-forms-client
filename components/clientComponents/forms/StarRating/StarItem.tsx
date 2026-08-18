@@ -1,4 +1,5 @@
 import { Fragment, memo } from "react";
+import { StarRatingIcon } from "@root/components/serverComponents/icons";
 
 interface StarItemProps {
   starValue: number;
@@ -63,9 +64,7 @@ export const StarItem = memo(function StarItem({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        <span className={active ? "text-yellow-400" : "text-gray-300"} aria-hidden="true">
-          ★
-        </span>
+        <StarRatingIcon className="size-12" active={active} title={ariaLabel} />
       </label>
     </Fragment>
   );
