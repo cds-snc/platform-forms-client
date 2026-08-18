@@ -316,3 +316,12 @@ export const getElementsUsingChoiceIdParent = ({
 
   return elements;
 };
+
+export const normalizeString = (value: string | unknown): string => {
+  return String(value ?? "").trim();
+};
+
+export const truncateField = (value: string | unknown, maxLength: number): string => {
+  const str = normalizeString(value);
+  return str.length > maxLength ? str.slice(0, maxLength) : str;
+};

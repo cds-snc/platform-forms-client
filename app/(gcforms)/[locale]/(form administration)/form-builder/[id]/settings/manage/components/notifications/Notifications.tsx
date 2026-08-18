@@ -48,7 +48,8 @@ export const Notifications = ({
   }
 
   const handleToggleNotifications = async (enabled: boolean) => {
-    const result = await updateNotificationsUser(formId, { ...loggedInUser, enabled });
+    const result = await updateNotificationsUser(formId, enabled);
+
     if (result !== undefined && "error" in result) {
       toast.error(updateNotificationsError);
       return;

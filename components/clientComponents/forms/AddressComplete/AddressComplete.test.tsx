@@ -2,12 +2,13 @@
  * @vitest-environment jsdom
  */
 import React, { useImperativeHandle, useState } from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AddressComplete } from "./AddressComplete";
 import type { AddressCompleteProps } from "./types";
 import type { ManagedComboboxProps } from "./ManagedCombobox";
+import { localizeAddressCompleteDescription } from "./utils";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string, keepOpen: boolean) => void;
@@ -76,9 +77,32 @@ vi.mock("./actions", () => ({
   getAddressCompleteRetrieve: getAddressCompleteRetrieveMock,
 }));
 
-vi.mock("./utils", () => ({
-  matchesAddressPattern: matchesAddressPatternMock,
-}));
+vi.mock("./utils", async (importActual) => {
+  const actual = await importActual<typeof import("./utils")>();
+  return {
+    ...actual,
+    matchesAddressPattern: matchesAddressPatternMock,
+    localizeAddressCompleteDescription: vi.fn(
+      (description: string, labels: { en: string; fr: string; current: string }) =>
+        description.replace(
+          /\s+-\s+(\d+)\s+(Addresses|Adresses)$/i,
+          (_match: string, count: string) => ` - ${count} ${labels.current}`
+        )
+    ),
+    getCountryCodeFromName: vi.fn((value?: string) => {
+      if (!value) return "CAN";
+      const lowered = value.toLowerCase();
+      if (lowered === "canada" || lowered === "can") return "CAN";
+      if (lowered === "france" || lowered === "fra") return "FRA";
+      return value;
+    }),
+    getCountryNameFromCode: vi.fn((value?: string, _language?: string) => {
+      if (!value) return "Canada";
+      if (value.toLowerCase() === "can") return "Canada";
+      return value;
+    }),
+  };
+});
 
 vi.mock("@clientComponents/forms", () => {
   const ManagedCombobox = React.forwardRef<ManagedComboboxRef, ManagedComboboxMockProps>(
@@ -159,9 +183,9 @@ describe("AddressComplete", () => {
     vi.clearAllMocks();
     getFlagMock.mockReturnValue(false);
     matchesAddressPatternMock.mockReturnValue(false);
-    getAddressCompleteChoicesMock.mockResolvedValue([]);
-    getSelectedAddressMock.mockResolvedValue(undefined);
-    getAddressCompleteRetrieveMock.mockResolvedValue([]);
+    getAddressCompleteChoicesMock.mockResolvedValue({ items: [], error: null });
+    getSelectedAddressMock.mockResolvedValue({ address: null, error: null });
+    getAddressCompleteRetrieveMock.mockResolvedValue({ items: [], error: null });
     formikState.value = "";
     formikState.error = undefined;
   });
@@ -199,26 +223,29 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue([
-      {
-        Id: "1",
-        Text: "123 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-      {
-        Id: "2",
-        Text: "123 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-      {
-        Id: "3",
-        Text: "124 Main St",
-        Description: "Ottawa",
-        Next: "Retrieve",
-      },
-    ]);
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "1",
+          Text: "123 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+        {
+          Id: "2",
+          Text: "123 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+        {
+          Id: "3",
+          Text: "124 Main St",
+          Description: "Ottawa",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
 
     renderComponent();
 
@@ -227,7 +254,7 @@ describe("AddressComplete", () => {
     await user.type(streetInput, "123 Main");
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN");
+      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN", "en");
     });
 
     await waitFor(() => {
@@ -241,20 +268,26 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue([
-      {
-        Id: "id-retrieve-1",
-        Text: "100 Queen St",
-        Description: "Toronto",
-        Next: "Retrieve",
-      },
-    ]);
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "id-retrieve-1",
+          Text: "100 Queen St",
+          Description: "Toronto",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
     getSelectedAddressMock.mockResolvedValue({
-      streetAddress: "100 Queen St",
-      city: "Toronto",
-      province: "Ontario",
-      postalCode: "M5H 2N2",
-      country: "CAN",
+      address: {
+        streetAddress: "100 Queen St",
+        city: "Toronto",
+        province: "Ontario",
+        postalCode: "M5H 2N2",
+        country: "CAN",
+      },
+      error: null,
     });
 
     renderComponent();
@@ -282,7 +315,7 @@ describe("AddressComplete", () => {
         city: "Toronto",
         province: "Ontario",
         postalCode: "M5H 2N2",
-        country: "CAN",
+        country: "Canada",
       })
     );
   });
@@ -291,22 +324,28 @@ describe("AddressComplete", () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
-    getAddressCompleteChoicesMock.mockResolvedValue([
-      {
-        Id: "nested-id-1",
-        Text: "King St W",
-        Description: "Toronto - 15489 Addresses",
-        Next: "Find",
-      },
-    ]);
-    getAddressCompleteRetrieveMock.mockResolvedValue([
-      {
-        Id: "nested-id-2",
-        Text: "123 King St W",
-        Description: "Toronto",
-        Next: "Retrieve",
-      },
-    ]);
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-1",
+          Text: "King St W",
+          Description: "Toronto - 15489 Addresses",
+          Next: "Find",
+        },
+      ],
+      error: null,
+    });
+    getAddressCompleteRetrieveMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-2",
+          Text: "123 King St W",
+          Description: "Toronto",
+          Next: "Retrieve",
+        },
+      ],
+      error: null,
+    });
 
     renderComponent();
 
@@ -315,7 +354,7 @@ describe("AddressComplete", () => {
     await user.click(screen.getByTestId("address-streetAddress-set-first"));
 
     await waitFor(() => {
-      expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("nested-id-1", "CAN");
+      expect(getAddressCompleteRetrieveMock).toHaveBeenCalledWith("nested-id-1", "CAN", "en");
     });
 
     expect(changeInputValueMock).toHaveBeenCalledWith("", true);
@@ -324,7 +363,7 @@ describe("AddressComplete", () => {
     );
   });
 
-  it("resets address fields when country changes and uses selected country for lookup", async () => {
+  it("resets address fields when country changes and uses manual street input for non-CAN", async () => {
     const user = userEvent.setup();
 
     getFlagMock.mockReturnValue(true);
@@ -346,11 +385,73 @@ describe("AddressComplete", () => {
       expect(screen.getByTestId("addresscomplete-input-postalCode")).toHaveValue("");
     });
 
-    await user.type(screen.getByTestId("address-streetAddress-input"), "10 Rue");
+    await user.type(screen.getByTestId("addresscomplete-streetAddress-input"), "10 Rue");
+
+    expect(getAddressCompleteChoicesMock).not.toHaveBeenCalled();
+  });
+
+  it("searches using the latest typed query for Canadian addresses", async () => {
+    getFlagMock.mockReturnValue(true);
+    getAddressCompleteChoicesMock.mockResolvedValue({ items: [], error: null });
+
+    renderComponent();
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    fireEvent.change(streetInput, { target: { value: "1" } });
+    fireEvent.change(streetInput, { target: { value: "12" } });
+    fireEvent.change(streetInput, { target: { value: "123 Main" } });
 
     await waitFor(() => {
-      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("10 Rue", "FRA");
+      expect(getAddressCompleteChoicesMock).toHaveBeenCalled();
     });
+    expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("123 Main", "CAN", "en");
+  });
+
+  it("does not search when the normalized query is shorter than the minimum", async () => {
+    const user = userEvent.setup();
+
+    getFlagMock.mockReturnValue(true);
+    renderComponent();
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    await user.type(streetInput, "1");
+
+    expect(getAddressCompleteChoicesMock).not.toHaveBeenCalled();
+    expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent("");
+  });
+
+  it("localizes nested address descriptions in French", async () => {
+    const user = userEvent.setup();
+
+    getFlagMock.mockReturnValue(true);
+    getAddressCompleteChoicesMock.mockResolvedValue({
+      items: [
+        {
+          Id: "nested-id-fr-1",
+          Text: "222 King St E",
+          Description: "Bowmanville ON L1C P6 - 27 Addresses",
+          Next: "Find",
+        },
+      ],
+      error: null,
+    });
+
+    renderComponent({ lang: "fr" });
+
+    const streetInput = await screen.findByTestId("address-streetAddress-input");
+    await user.type(streetInput, "222 King");
+
+    await waitFor(() => {
+      expect(getAddressCompleteChoicesMock).toHaveBeenLastCalledWith("222 King", "CAN", "fr");
+    });
+
+    expect(localizeAddressCompleteDescription).toHaveBeenCalledWith(
+      "Bowmanville ON L1C P6 - 27 Addresses",
+      { en: "Addresses", fr: "Adresses", current: "Adresses" }
+    );
+    expect(screen.getByTestId("address-streetAddress-choices")).toHaveTextContent(
+      "222 King St E, Bowmanville ON L1C P6 - 27 Adresses"
+    );
   });
 
   it("does not call AddressComplete APIs when feature flag is disabled", async () => {

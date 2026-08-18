@@ -6,10 +6,9 @@ import { NotificationsIntervalDefault } from "@gcforms/types";
 
 export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (jsonConfig) => {
   set((state) => {
-    const allowGroups = state.allowGroupsFlag;
     state.id = "";
     state.lang = "en";
-    state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
+    state.form = initializeGroups({ ...defaultForm, ...jsonConfig });
 
     // Ensure order by groups layout
     if (!state.form.groupsLayout) {

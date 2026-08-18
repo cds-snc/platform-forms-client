@@ -3,29 +3,136 @@
 import { FormElement } from "@lib/types";
 import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
 import { Answer } from "@lib/responseDownloadFormats/types";
+import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
+import { getRedisInstance } from "@root/lib/integration/redisConnector";
+import { getClientIp } from "@root/lib/ip";
+import { getAppSetting } from "@root/lib/appSettings";
+import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
+import {
+  isPositiveSafeInteger,
+  MIN_ADDRESS_SEARCH_LENGTH,
+  normalizeAddressField,
+  normalizeCountryCode,
+  normalizeQuery,
+} from "./utils";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
 const retriveAddressUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws";
-const addressCompleteKey = process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY || "";
+const addressCompleteKey = process.env.ADDRESSCOMPLETE_API_KEY || "";
+
+// Helper: inspect response.Items[0] for the documented 4-column error table.
+const hasItems0Error = (responseData: unknown): boolean => {
+  // see: www.canadapost-postescanada.ca/ac/support/api/addresscomplete-interactive-find
+  // example error response: { "Items": [ { "Error": "Invalid Key", "Description": "The key is invalid.", "Cause": "--" } ] }
+
+  try {
+    if (!responseData || typeof responseData !== "object") return false;
+    const maybe = responseData as { Items?: unknown };
+    if (!Array.isArray(maybe.Items) || maybe.Items.length === 0) return false;
+    const first = maybe.Items[0] as Record<string, unknown>;
+    if (!first) return false;
+
+    // The AddressComplete API returns a 4-column error table in Items[0]
+    // with columns: Error, Description, Cause, Resolution. Normal results
+    // also include a Description field, so only treat as an error when the
+    // `Error` key exists (and is non-empty) or when both `Cause` and
+    // `Resolution` keys are present per the documented error shape.
+    const hasErrorKey =
+      Object.prototype.hasOwnProperty.call(first, "Error") &&
+      first.Error != null &&
+      String(first.Error).trim() !== "";
+    const hasCauseAndResolution =
+      Object.prototype.hasOwnProperty.call(first, "Cause") &&
+      Object.prototype.hasOwnProperty.call(first, "Resolution");
+
+    if (hasErrorKey || hasCauseAndResolution) {
+      const errorCode = Number(first.Error);
+
+      // Ignore "Response Errors"
+      // 1001 - The SearchTerm or LastId parameters were not supplied includes "" (empty string)
+      if (errorCode === 1001) {
+        return false;
+      }
+
+      if (errorCode >= 2 && errorCode <= 23) {
+        logMessage.warn(`AddressComplete API returned error: ${JSON.stringify(first)}`);
+      } else {
+        logMessage.info(`AddressComplete API returned error: ${JSON.stringify(first)}`);
+      }
+
+      return true;
+    }
+
+    return false;
+  } catch (e) {
+    // If anything unexpected happens, don't treat as an item error.
+    return false;
+  }
+};
 
 // Function returns address complete list of choices.
-export const getAddressCompleteChoices = async (query: string, countryCode: string) => {
+export const getAddressCompleteChoices = async (
+  query: string,
+  countryCode: string,
+  language: string
+): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
+  if (!addressCompleteKey) {
+    return { items: [], error: "API_KEY_MISSING" };
+  }
+
+  // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
+  // Also avoid upstream calls for short queries that are unlikely to produce useful results.
+  const normalizedQuery = normalizeQuery(query);
+  if (normalizedQuery.length < MIN_ADDRESS_SEARCH_LENGTH) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  // No need to normalize language since the client should send exactly "en" or "fr"
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&SearchTerm=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&SearchTerm=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
-  const response = await fetch(autoCompleteUrl + params, {
-    headers: { "content-Type": "application/x-www-form-urlencoded" },
-    method: "POST",
-  });
+  try {
+    const response = await fetch(autoCompleteUrl + params, {
+      headers: { "content-Type": "application/x-www-form-urlencoded" },
+      method: "POST",
+    });
 
-  const responseData = await response.json(); //Todo #4341  - Error Handling
+    if (!response.ok) {
+      throw new Error(`Received non-OK response: ${response.status}`);
+    }
 
-  return responseData.Items as AddressCompleteChoice[];
+    const responseData = await response.json();
+
+    if (hasItems0Error(responseData)) {
+      return { items: [], error: "SERVICE_UNAVAILABLE" };
+    }
+
+    return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
+  } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
+    return { items: [], error: "NETWORK_ERROR" };
+  }
 };
 
 // Functions returns the selected address.
@@ -33,42 +140,121 @@ export const getSelectedAddress = async (
   value: string,
   countryCode: string,
   language: Language
-) => {
-  const selectedResult = value;
+): Promise<{ address: AddressElements | null; error?: string | null }> => {
+  if (!addressCompleteKey) {
+    return { address: null, error: "API_KEY_MISSING" };
+  }
+
+  const normalizedCanadaPostId = normalizeAddressField(value);
+  if (!isValidCanadaPostId(normalizedCanadaPostId)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (!isValidLanguage(language)) {
+    return { address: null, error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.retrieve)) {
+    return { address: null, error: "RATE_LIMITED" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&Id=" + encodeURIComponent(selectedResult);
-  params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&Id=" + encodeURIComponent(normalizedCanadaPostId);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
-  const response = await fetch(retriveAddressUrl + params, {
-    headers: { "content-Type": "application/x-www-form-urlencoded" },
-    method: "POST",
-  });
+  try {
+    const response = await fetch(retriveAddressUrl + params, {
+      headers: { "content-Type": "application/x-www-form-urlencoded" },
+      method: "POST",
+    });
 
-  const responseData = await response.json(); //Todo #4341 - Error Handling
+    if (!response.ok) {
+      throw new Error(`Received non-OK response: ${response.status}`);
+    }
 
-  const addressData = responseData.Items as AddressCompleteResult[];
+    const responseData = await response.json();
 
-  const addressComponents = await getAddressComponents(addressData, language);
+    if (hasItems0Error(responseData)) {
+      return { address: null, error: "SERVICE_UNAVAILABLE" };
+    }
 
-  return addressComponents;
+    const addressData = responseData?.Items as AddressCompleteResult[];
+
+    const addressComponents = await getAddressComponents(addressData, language);
+
+    return { address: addressComponents, error: null };
+  } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
+    return { address: null, error: "NETWORK_ERROR" };
+  }
 };
 
 // Function returns the address set from a retreive.
-export const getAddressCompleteRetrieve = async (query: string, countryCode: string) => {
+export const getAddressCompleteRetrieve = async (
+  query: string,
+  countryCode: string,
+  language: string
+): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
+  if (!addressCompleteKey) {
+    return { items: [], error: "API_KEY_MISSING" };
+  }
+
+  const normalizedQuery = normalizeQuery(query);
+  if (!isValidCanadaPostId(normalizedQuery)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
+  if (!isValidCountryCode(normalizedCountryCode)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (!isValidLanguage(language)) {
+    return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
-  params += "&LastId=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent(countryCode);
+  params += "&LastId=" + encodeURIComponent(normalizedQuery);
+  params += "&Country=" + encodeURIComponent(normalizedCountryCode);
+  params += "&LanguagePreference=" + encodeURIComponent(language);
 
-  const response = await fetch(autoCompleteUrl + params, {
-    headers: { "content-Type": "application/x-www-form-urlencoded" },
-    method: "POST",
-  });
+  try {
+    const response = await fetch(autoCompleteUrl + params, {
+      headers: { "content-Type": "application/x-www-form-urlencoded" },
+      method: "POST",
+    });
 
-  const responseData = await response.json(); //Todo #4341  - Error Handling
+    if (!response.ok) {
+      throw new Error(`Received non-OK response: ${response.status}`);
+    }
 
-  return responseData.Items as AddressCompleteChoice[];
+    const responseData = await response.json(); //Todo #4341  - Error Handling
+
+    if (hasItems0Error(responseData)) {
+      return { items: [], error: "SERVICE_UNAVAILABLE" };
+    }
+
+    return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
+  } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
+    return { items: [], error: "NETWORK_ERROR" };
+  }
 };
 
 // Helper function combines API component results into single address object.
@@ -135,21 +321,75 @@ export const getAddressAsAnswerElements = async (
   return answerArray;
 };
 
+const nestedAddressPattern = /\s+-\s+\d+\s+(Addresses|Adresses)$/i;
+
 // Helper function to test if the address has multiple results.
 // -- ref: Issue #4464, Issue #4417
 // This helper exists because the AddressComplete API has arbitrary returning of if an Address is Nested or not.
 // This is usually determined by the
 //    Next: AddressCompleNext;
 //    Retrieve for a regular address or Find for a Nested.
-// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested Addresses.
-// This regex is an attempt to correct that until the API is updated.
-//
-// Breakdown of the regex:
-// \s+-\s+ - Matches the " - " part with optional spaces around the hyphen.
-// \d+ - Matches one or more digits.
-// \s+Addresses$ - Matches the word "Addresses" with a space before it, ensuring it is at the end of the string.
-// i - Makes the pattern case insensitive.
+// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested addresses.
 export async function matchesAddressPattern(input: string): Promise<boolean> {
-  const pattern = /\s+-\s+\d+\s+Addresses$/i;
-  return pattern.test(input);
+  return nestedAddressPattern.test(input);
 }
+
+const RATE_LIMIT_KEY_PREFIX = "address-complete";
+const RATE_LIMIT_SCOPE = {
+  find: "find",
+  retrieve: "retrieve",
+} as const;
+type RateLimitScope = (typeof RATE_LIMIT_SCOPE)[keyof typeof RATE_LIMIT_SCOPE];
+
+const RATE_LIMIT_MAX_SETTING = {
+  [RATE_LIMIT_SCOPE.find]: "addressCompleteFindRateLimitMax",
+  [RATE_LIMIT_SCOPE.retrieve]: "addressCompleteRetrieveRateLimitMax",
+} as const;
+
+// Returns true when the IP has exceeded the per-minute request "budget"
+const incrementAndCheckRateLimiting = async (
+  ip: string,
+  scope: RateLimitScope
+): Promise<boolean> => {
+  try {
+    const rateLimitMax = Number(await getAppSetting(RATE_LIMIT_MAX_SETTING[scope]));
+    const rateLimitWindowSeconds = Number(
+      await getAppSetting("addressCompleteRateLimitWindowSeconds")
+    );
+    if (!isPositiveSafeInteger(rateLimitMax) || !isPositiveSafeInteger(rateLimitWindowSeconds)) {
+      throw new Error("Invalid configuration");
+    }
+
+    const redis = await getRedisInstance();
+    const key = `${RATE_LIMIT_KEY_PREFIX}:${scope}:${ip}`;
+
+    // Increment the related IPs count
+    const pipeline = redis.pipeline();
+    pipeline.incr(key);
+    pipeline.expire(key, rateLimitWindowSeconds);
+
+    const results = await pipeline.exec();
+
+    // If there was an error incrementing ([error, value] tuple), just return false to avoid breaking the form UX
+    const incrResult = results?.[0];
+    if (incrResult?.[0]) {
+      return false;
+    }
+
+    // Check whether that IP is beyond the threshold and should be rate limited
+    const count = incrResult?.[1] as number;
+    const isRateLimited = count > rateLimitMax;
+    if (isRateLimited) {
+      logMessage.warn(
+        `AddressComplete user rate limited on ${scope} operation because they hit ${count}/${rateLimitMax} within ${rateLimitWindowSeconds}s.`
+      );
+    }
+    return isRateLimited;
+  } catch (err) {
+    logMessage.error(
+      `AddressComplete rate limiting failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
+    // Most likely case is Redis is down, just pass through to avoid breaking the form UX
+    return false;
+  }
+};

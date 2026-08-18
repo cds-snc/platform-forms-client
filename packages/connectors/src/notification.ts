@@ -2,7 +2,6 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { randomUUID } from "crypto";
-import { ErrorWithCause } from "./types/errors";
 import { getAwsSQSQueueURL } from "./utils";
 import { EmailContent } from "./gc-notify-connector";
 
@@ -47,9 +46,9 @@ export const sendImmediate = async ({
     await _createRecord({ notificationId, emails, content });
     await enqueueDeferred(notificationId);
   } catch (error) {
-    throw new ErrorWithCause(`Error creating immediate notification id ${notificationId}`, {
-      cause: error,
-    });
+    throw new Error(
+      `Error creating immediate notification id ${notificationId}. Reason: ${(error as Error).message}`
+    );
   }
 };
 
@@ -76,9 +75,9 @@ export const sendDeferred = async ({
   try {
     await _createRecord({ notificationId, emails, content });
   } catch (error) {
-    throw new ErrorWithCause(`Error creating deferred notification id ${notificationId}`, {
-      cause: error,
-    });
+    throw new Error(
+      `Error creating deferred notification id ${notificationId}. Reason: ${(error as Error).message}`
+    );
   }
 };
 
@@ -106,7 +105,7 @@ export const enqueueDeferred = async (notificationId: string): Promise<void> => 
       throw new Error("Received null SQS message identifier");
     }
   } catch (error) {
-    throw new ErrorWithCause(`Could not enqueue`, { cause: error });
+    throw new Error(`Could not enqueue. Reason: ${(error as Error).message}`);
   }
 };
 
@@ -132,6 +131,6 @@ const _createRecord = async ({
       })
     );
   } catch (error) {
-    throw new ErrorWithCause(`Could not create record`, { cause: error });
+    throw new Error(`Could not create record. Reason: ${(error as Error).message}`);
   }
 };

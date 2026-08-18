@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.2.25] - 2026-08-17
+
+- Add styles for details component
+
+## [2.2.24] - 2026-08-10
+
+- Update address complete validation and sanitization
+
+## [2.2.23] - 2026-08-04
+
+- Update address complete validation
+
+## [2.2.22] - 2026-07-31
+
+- Move address complete validation to helper
+
+## [2.2.21] - 2026-07-31
+
+- Update validation for address complete
+
 ## [2.2.20] - 2026-07-30
 
 - Fixes legend reset nesting to apply only to fieldset
