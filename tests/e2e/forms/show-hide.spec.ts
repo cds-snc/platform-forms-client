@@ -21,18 +21,56 @@ test.describe("Show/Hide conditional logic", { tag: "@published-form" }, () => {
     }
   });
 
-  test("shows dependent field when choice selected", async ({ page }) => {
+  test("dependent field is hidden on initial load", async ({ page }) => {
     await page.goto(publishedFormPath);
 
-    // The dependent text field "More" (id 2) should be hidden until choice 1.1 (B) is selected
+    const dependentField = page.getByRole("textbox", { name: "More" });
+    await expect(dependentField).toBeHidden();
+  });
+
+  test("shows dependent field when triggering choice is selected", async ({ page }) => {
+    await page.goto(publishedFormPath);
+
     const dependentField = page.getByRole("textbox", { name: "More" });
     await expect(dependentField).toBeHidden();
 
-    // Select the radio choice that triggers the conditional rule by accessible name
-    // Click the label for the radio input to avoid pointer interception issues
     await page.locator('label[for="1.1"]').click();
 
-    // Now the dependent field should be visible
     await expect(dependentField).toBeVisible({ timeout: 5000 });
+  });
+
+  test("hides dependent field when triggering choice is replaced", async ({ page }) => {
+    await page.goto(publishedFormPath);
+
+    const dependentField = page.getByRole("textbox", { name: "More" });
+    await page.locator('label[for="1.1"]').click();
+    await expect(dependentField).toBeVisible({ timeout: 5000 });
+
+    await page.locator('label[for="1.0"]').click();
+
+    await expect(dependentField).toBeHidden({ timeout: 5000 });
+  });
+
+  test("non-triggering choice does not show dependent field", async ({ page }) => {
+    await page.goto(publishedFormPath);
+
+    const dependentField = page.getByRole("textbox", { name: "More" });
+    await page.locator('label[for="1.0"]').click();
+
+    await expect(dependentField).toBeHidden({ timeout: 5000 });
+  });
+
+  test("preserves show/hide behavior after navigating to another group", async ({ page }) => {
+    await page.goto(publishedFormPath);
+    await page.getByTestId("nextButton").click();
+
+    const dependentField = page.getByRole("textbox", { name: "Previous application details" });
+    await expect(dependentField).toBeHidden();
+
+    await page.locator('label[for="3.0"]').click();
+    await expect(dependentField).toBeVisible({ timeout: 5000 });
+
+    await page.locator('label[for="3.1"]').click();
+    await expect(dependentField).toBeHidden({ timeout: 5000 });
   });
 });

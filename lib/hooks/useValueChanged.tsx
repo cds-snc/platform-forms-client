@@ -1,20 +1,39 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useFormikContext } from "formik";
 import { useGCFormsContext } from "./useGCFormContext";
 
-/**
- * This is a workaround to allow setting custom values in the formik form values.
- * Steps:
- * 1. in this file set the value below using setFieldValue
- * 2. in FormBuilder.tsx getFormInitialValues() add the new value
- * 3. in Form.tsx add the new value to the FormProps interface
- * 4. in Form.tsx this new value will now be available in the formik form values.* (props to Tim :)
- */
+type FormContextValues = {
+  currentGroup: string | null;
+  groupHistory: string[];
+  matchedIds: string[];
+};
+
+const arraysMatch = (first: string[], second: string[]) =>
+  first.length === second.length && first.every((value, index) => value === second[index]);
+
+export const syncFormContextValues = (
+  setFieldValue: (field: string, value: unknown) => void,
+  previousValues: FormContextValues | undefined,
+  nextValues: FormContextValues
+): FormContextValues => {
+  if (!previousValues || previousValues.currentGroup !== nextValues.currentGroup) {
+    setFieldValue("currentGroup", nextValues.currentGroup);
+  }
+  if (!previousValues || !arraysMatch(previousValues.groupHistory, nextValues.groupHistory)) {
+    setFieldValue("groupHistory", nextValues.groupHistory);
+  }
+  if (!previousValues || !arraysMatch(previousValues.matchedIds, nextValues.matchedIds)) {
+    setFieldValue("matchedIds", nextValues.matchedIds);
+  }
+
+  return nextValues;
+};
+
 export const useFormValuesChanged = () => {
   const { values, setFieldValue } = useFormikContext();
   const { updateValues, currentGroup, getGroupHistory, matchedIds } = useGCFormsContext();
-  const groupHistory = getGroupHistory();
+  const previousContextValues = useRef<FormContextValues | undefined>(undefined);
 
   useEffect(() => {
     if (process.env.APP_ENV === "test") {
@@ -23,9 +42,14 @@ export const useFormValuesChanged = () => {
     }
     updateValues({ formValues: values as Record<string, string> });
 
-    // This is where you assign (set) the values that are added to formik form values in Form.tsx
-    setFieldValue("currentGroup", currentGroup);
-    setFieldValue("groupHistory", groupHistory);
-    setFieldValue("matchedIds", matchedIds);
-  }, [updateValues, values, setFieldValue, currentGroup, groupHistory, matchedIds]);
+    previousContextValues.current = syncFormContextValues(
+      setFieldValue,
+      previousContextValues.current,
+      {
+        currentGroup,
+        groupHistory: getGroupHistory(),
+        matchedIds,
+      }
+    );
+  }, [updateValues, values, setFieldValue, currentGroup, getGroupHistory, matchedIds]);
 };
