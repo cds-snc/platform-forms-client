@@ -45,7 +45,7 @@ export const BackButtonGroup = ({
           focusHeadingBySelector(["form h2", "h1"]);
         }}
         type="button"
-        className="group mr-4 "
+        className="group mr-4"
         theme="secondary"
         dataTestId="backButtonGroup"
       >
@@ -53,11 +53,8 @@ export const BackButtonGroup = ({
           t("goBack", { lng: language })
         ) : (
           <>
-            <BackArrowIcon24x24
-              className="group-focus:fill-white group-active:fill-white"
-              title={t("goBack", { lng: language })}
-            />
-            <span className="hidden laptop:block">{t("goBack", { lng: language })}</span>
+            <BackArrowIcon24x24 className="group-focus:fill-white group-active:fill-white" />
+            <span className="laptop:block hidden">{t("goBack", { lng: language })}</span>
           </>
         )}
       </Button>
