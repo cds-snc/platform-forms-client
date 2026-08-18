@@ -30,6 +30,7 @@ import {
   LexicalEditor,
 } from "lexical";
 import { INDENT_CONTENT_COMMAND, OUTDENT_CONTENT_COMMAND } from "lexical";
+import { INSERT_COLLAPSIBLE_COMMAND } from "../CollapsibleExtension";
 
 export const formatParagraph = (editor: LexicalEditor) => {
   editor.update(() => {
@@ -178,4 +179,8 @@ export const formatIndent = (editor: LexicalEditor) => {
 
 export const formatOutdent = (editor: LexicalEditor) => {
   editor.dispatchCommand(OUTDENT_CONTENT_COMMAND, undefined);
+};
+
+export const insertCollapsible = (editor: LexicalEditor) => {
+  editor.dispatchCommand(INSERT_COLLAPSIBLE_COMMAND, undefined);
 };

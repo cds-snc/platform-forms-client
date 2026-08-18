@@ -41,11 +41,8 @@ export const BackButton = ({
         t("goBack", { lng: language })
       ) : (
         <>
-          <BackArrowIcon24x24
-            className="group-focus:fill-white group-active:fill-white"
-            title={t("goBack", { lng: language }) + " " + previousGroup}
-          />
-          <span className="hidden laptop:block">{t("goBack", { lng: language })}</span>
+          <BackArrowIcon24x24 className="group-focus:fill-white group-active:fill-white" />
+          <span className="laptop:block hidden">{t("goBack", { lng: language })}</span>
         </>
       )}
     </Button>
