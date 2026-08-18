@@ -23,7 +23,7 @@ const Brand = ({ brand, lang }: { brand: BrandProperties | undefined | null; lan
     (brand?.[getLocalizedProperty("url", language)] as string | undefined) ?? t("fip.link");
 
   // This default height seems to work for most custom brand logos so far.
-  let logoStyles = `min-h-[25px] max-h-[40px] tablet:min-h-[35px] tablet:max-h-[70px] laptop:min-h-[40px] laptop:max-h-[80px] max-w-[600px]`;
+  let logoStyles = `min-h-[25px] max-h-[40px] tablet:min-h-[35px] tablet:max-h-[70px] laptop:min-h-[40px] laptop:max-h-[80px] max-w-[min(600px,100%)] h-auto`;
 
   // This customization applies to the default logo only. We may need to add more custom sizes in future.
   if (!themeLogo) {
@@ -31,9 +31,9 @@ const Brand = ({ brand, lang }: { brand: BrandProperties | undefined | null; lan
   }
 
   return (
-    <a href={linkUrl} aria-label={logoTitle}>
-      <picture>
-        <img src={logo} alt={logoTitle} className={logoStyles} />
+    <a href={linkUrl} aria-label={logoTitle} className="block max-w-full">
+      <picture className="block max-w-full">
+        <img src={logo} alt={logoTitle} className={`block max-w-full ${logoStyles}`} />
       </picture>
     </a>
   );
