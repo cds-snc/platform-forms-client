@@ -24,6 +24,9 @@ export const StarRatingIcon = ({
     <path
       d="M12 2.5l2.93 5.94 6.56.95-4.74 4.62 1.12 6.53L12 17.45l-5.87 3.09 1.12-6.53-4.74-4.62 6.56-.95L12 2.5z"
       fill="currentColor"
+      stroke="currentColor"
+      strokeLinejoin="round"
+      strokeWidth="0.5"
     />
   </svg>
 );
