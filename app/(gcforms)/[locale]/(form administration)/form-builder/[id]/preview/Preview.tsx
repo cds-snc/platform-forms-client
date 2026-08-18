@@ -20,6 +20,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { BackArrowIcon } from "@serverComponents/icons";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
+import { VisibilityProvider } from "@lib/hooks/useVisibilityContext";
 import Skeleton from "react-loading-skeleton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
@@ -114,7 +115,7 @@ export const Preview = ({
       <PreviewNavigation />
       <div className="h-12"></div>
       <div
-        className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
+        className={`border-blue-focus mb-8 border-3 border-dashed bg-white p-4 ${
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
@@ -181,17 +182,19 @@ export const Preview = ({
             </GcdsH1>
             {!hasHydrated && <Skeleton count={5} height={40} className="mb-4" />}
             {hasHydrated && (
-              <GCFormsProvider formRecord={formRecord}>
-                <PreviewFormWrapper
-                  key={previewRenderKey}
-                  formRecord={formRecord}
-                  disableSubmit={disableSubmit}
-                  allowGrouping={allowGrouping}
-                  setSent={setSent}
-                >
-                  {currentForm}
-                </PreviewFormWrapper>
-              </GCFormsProvider>
+              <VisibilityProvider formRecord={formRecord}>
+                <GCFormsProvider formRecord={formRecord}>
+                  <PreviewFormWrapper
+                    key={previewRenderKey}
+                    formRecord={formRecord}
+                    disableSubmit={disableSubmit}
+                    allowGrouping={allowGrouping}
+                    setSent={setSent}
+                  >
+                    {currentForm}
+                  </PreviewFormWrapper>
+                </GCFormsProvider>
+              </VisibilityProvider>
             )}
           </div>
         )}
@@ -203,7 +206,7 @@ export const Preview = ({
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
           <div
-            className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4"
+            className="border-blue-focus mb-8 border-3 border-dashed bg-white p-4"
             data-testid="confirmation-container"
           >
             <div className="gc-formview">

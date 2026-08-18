@@ -1,18 +1,9 @@
 "use client";
-import {
-  createContext,
-  useContext,
-  ReactNode,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-} from "react";
+import { createContext, memo, useCallback, useContext, ReactNode, useState, useRef } from "react";
 
 import type { FormValues, GroupsType, PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
-import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
 
 import { getNextAction, filterValuesByVisibleElements, idArraysMatch } from "@lib/formContext";
 
@@ -20,11 +11,6 @@ import {
   mapIdsToValues,
   getValuesWithMatchedIds,
   getVisibleGroupsBasedOnValuesRecursive,
-  buildElementDependencies,
-  buildElementMap,
-  computeAllVisibility,
-  recomputeAffectedVisibility,
-  getChangedChoiceElementIds,
 } from "@gcforms/core";
 
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -71,48 +57,22 @@ interface GCFormsContextValueType {
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
 
-interface VisibilityContextValueType {
-  isElementVisible: (elementId: string) => boolean;
-}
-
-const VisibilityContext = createContext<VisibilityContextValueType | undefined>(undefined);
-
-export const GCFormsProvider = ({
+export const GCFormsProvider = memo(function GCFormsProvider({
   children,
   formRecord,
 }: {
   children: ReactNode;
   formRecord: PublicFormRecord;
-}) => {
-  const { Event } = useCustomEvent();
+}) {
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = useRef({});
   const history = useRef<string[]>([LOCKED_GROUPS.START]);
+  const matchedIdsRef = useRef<string[]>([]);
   const [matchedIds, setMatchedIds] = useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
-
-  // Initialize visibility state with element dependencies
-  const elementDependencies = useMemo(
-    () => buildElementDependencies(formRecord.form.elements),
-    [formRecord.form.elements]
-  );
-
-  // Build the element lookup map once — elements don't change during a session.
-  // Passed to recomputeAffectedVisibility to avoid rebuilding it on every value change.
-  const elementMap = useMemo(
-    () => buildElementMap(formRecord.form.elements),
-    [formRecord.form.elements]
-  );
-
-  const [visibilityMap, setVisibilityMap] = useState<Map<string, boolean>>(() =>
-    computeAllVisibility(formRecord, {})
-  );
-  // Ref stays in sync with state so updateValues always reads the latest map
-  // synchronously, even if multiple updates arrive before the next re-render.
-  const visibilityMapRef = useRef(visibilityMap);
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -154,58 +114,17 @@ export const GCFormsProvider = ({
     }
   };
 
-  const updateValues = ({ formValues }: { formValues: FormValues }): void => {
-    const oldValues = values.current;
-    values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
-    if (!idArraysMatch(matchedIds, valueIds)) {
-      setMatchedIds(valueIds);
-    }
-
-    const changedChoiceIds = getChangedChoiceElementIds(
-      oldValues,
-      formValues,
-      formRecord.form.elements,
-      elementDependencies,
-      elementMap
-    );
-
-    if (changedChoiceIds.length > 0) {
-      // Read the latest map from the ref (not stale closure state) and recompute
-      const prevVisibilityMap = visibilityMapRef.current;
-      const updatedVisibility = recomputeAffectedVisibility(
-        formRecord,
-        formValues,
-        changedChoiceIds,
-        elementDependencies,
-        prevVisibilityMap,
-        elementMap
-      );
-
-      // Keep the ref in sync so rapid successive calls use the latest map
-      visibilityMapRef.current = updatedVisibility;
-
-      setVisibilityMap(updatedVisibility);
-
-      // Build the diff outside the setter so it's available to the event payload
-      const visibilityChanges: Record<string, boolean> = {};
-      updatedVisibility.forEach((isVisible, id) => {
-        if (prevVisibilityMap.get(id) !== isVisible) {
-          visibilityChanges[id] = isVisible;
-        }
-      });
-
-      // Deferring to next tick because CustomEvent dispatch is synchronous and
-      // firing inline triggers a React "setState during render" warning
-      queueMicrotask(() => {
-        Event.fire(EventKeys.formValuesChanged, {
-          changedChoiceIds,
-          visibilityChanges,
-          values: formValues,
-        });
-      });
-    }
-  };
+  const updateValues = useCallback(
+    ({ formValues }: { formValues: FormValues }): void => {
+      values.current = formValues;
+      const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
+      if (!idArraysMatch(matchedIdsRef.current, valueIds)) {
+        matchedIdsRef.current = valueIds;
+        setMatchedIds(valueIds);
+      }
+    },
+    [formRecord]
+  );
 
   // Helper to not expose the setter
   const setGroup = (group: string | null) => {
@@ -215,13 +134,6 @@ export const GCFormsProvider = ({
   const getValues = () => {
     return values.current;
   };
-
-  const isElementVisible = useCallback(
-    (elementId: string): boolean => {
-      return visibilityMap.get(elementId) ?? true;
-    },
-    [visibilityMap]
-  );
 
   // TODO: once groups flag is on, just use formHasGroups
   const groupsCheck = (groupsFlag: boolean | undefined) => {
@@ -299,12 +211,10 @@ export const GCFormsProvider = ({
         getProgressData,
       }}
     >
-      <VisibilityContext.Provider value={{ isElementVisible }}>
-        {children}
-      </VisibilityContext.Provider>
+      {children}
     </GCFormsContext.Provider>
   );
-};
+});
 
 export const useGCFormsContext = () => {
   const formsContext = useContext(GCFormsContext);
@@ -348,14 +258,4 @@ export const useGCFormsContext = () => {
     };
   }
   return formsContext;
-};
-
-// TODO should this be in a separate file/context?
-export const useVisibilityContext = () => {
-  const ctx = useContext(VisibilityContext);
-  // Outside the provider treat every element as visible
-  if (ctx === undefined) {
-    return { isElementVisible: () => true };
-  }
-  return ctx;
 };

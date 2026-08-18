@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
+import { VisibilityProvider } from "@lib/hooks/useVisibilityContext";
 import { PageContent } from "./pageContent";
 import { allowGrouping } from "@lib/groups/utils/allowGrouping";
 import { serverTranslation } from "@i18n";
@@ -86,18 +87,20 @@ export default async function Page(props0: {
         saveAndResume={saveAndResume}
         footer={footer}
       >
-        <GCFormsProvider formRecord={formRecord}>
-          <PageContent
-            formRecord={formRecord}
-            language={language}
-            formTitle={formTitle}
-            isPastClosingDate={isPastClosingDate}
-            step={step}
-            formId={formId}
-            saveAndResume={saveAndResume}
-            isAllowGrouping={isAllowGrouping}
-          />
-        </GCFormsProvider>
+        <VisibilityProvider formRecord={formRecord}>
+          <GCFormsProvider formRecord={formRecord}>
+            <PageContent
+              formRecord={formRecord}
+              language={language}
+              formTitle={formTitle}
+              isPastClosingDate={isPastClosingDate}
+              step={step}
+              formId={formId}
+              saveAndResume={saveAndResume}
+              isAllowGrouping={isAllowGrouping}
+            />
+          </GCFormsProvider>
+        </VisibilityProvider>
       </FormDisplayLayout>
     </Suspense>
   );

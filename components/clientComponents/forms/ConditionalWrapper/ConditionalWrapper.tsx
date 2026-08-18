@@ -1,5 +1,6 @@
 "use client";
-import { useGCFormsContext, useVisibilityContext } from "@lib/hooks/useGCFormContext";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { useVisibilityContext } from "@lib/hooks/useVisibilityContext";
 import { type ConditionalRule, type FormElement } from "@gcforms/types";
 import { inGroup } from "@gcforms/core";
 
