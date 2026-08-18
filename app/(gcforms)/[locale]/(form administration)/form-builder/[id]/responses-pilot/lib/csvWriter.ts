@@ -250,6 +250,7 @@ export const getRow = ({
         .join("\n");
     }
     let answerText = mappedAnswer.answer;
+
     if (
       typeof answerText === "string" &&
       specialChars.some((char) => answerText.startsWith(char))
