@@ -17,8 +17,6 @@ interface StarItemProps {
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
-  sparkle: boolean;
-  onSparkleEnd: () => void;
 }
 
 export const StarItem = memo(function StarItem({
@@ -38,8 +36,6 @@ export const StarItem = memo(function StarItem({
   onKeyDown,
   onMouseEnter,
   onMouseLeave,
-  sparkle,
-  onSparkleEnd,
 }: StarItemProps) {
   return (
     <Fragment>
@@ -67,17 +63,6 @@ export const StarItem = memo(function StarItem({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {sparkle &&
-          [1, 2, 3, 4, 5, 6].map((n) => (
-            <span
-              key={n}
-              className={`star-sparkle-particle star-sparkle-particle--${n}`}
-              aria-hidden="true"
-              {...(n === 2 ? { onAnimationEnd: onSparkleEnd } : {})}
-            >
-              ★
-            </span>
-          ))}
         <span className={active ? "text-yellow-400" : "text-gray-300"} aria-hidden="true">
           ★
         </span>

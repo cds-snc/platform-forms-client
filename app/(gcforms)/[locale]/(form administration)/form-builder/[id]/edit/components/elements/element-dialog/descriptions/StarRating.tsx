@@ -26,7 +26,6 @@ export const StarRating = () => {
             name={"star-rating-example-5"}
             required={false}
             numberOfStars={5}
-            sparkleOnSelect={false}
           />
         </FormGroup>
       </ExampleWrapper>

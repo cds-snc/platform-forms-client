@@ -22,7 +22,6 @@ import { QuestionIdOptions } from "./QuestionIdOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { FileTypeOptions } from "./FileTypeOptions";
 import { NumberFieldOptions } from "./NumberFieldOptions";
-import { StarRatingSparkleOptions } from "./StarRatingSparkleOptions";
 
 import { CopyItem } from "./CopyItem";
 import { CustomRegexOptions } from "./CustomRegexOptions";
@@ -141,7 +140,6 @@ export const MoreDialog = () => {
                 setItem={setItem}
                 setIsValid={setIsNumberFieldOptionsValid}
               />
-              <StarRatingSparkleOptions item={item} setItem={setItem} />
               <DynamicRowOptions item={item} setItem={setItem} />
               <TextFieldOptions item={item} setItem={setItem} />
               <CharacterLimitOptions item={item} setItem={setItem} />
