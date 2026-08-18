@@ -68,4 +68,16 @@ describe("Generate a rich text element", () => {
     render(<GenerateElement element={richTextWithHTML} language="en" />);
     expect(screen.queryByRole("link")).toHaveAttribute("target");
   });
+
+  it("renders collapsible Markdown blocks", () => {
+    const richTextWithCollapsible = { ...richTextData } as FormElement;
+    richTextWithCollapsible.properties.descriptionEn =
+      ":::collapsible Learn more about this topic\nAdditional information.\n:::";
+
+    render(<GenerateElement element={richTextWithCollapsible} language="en" />);
+
+    expect(document.querySelector("details")).toBeInTheDocument();
+    expect(screen.getByText("Learn more about this topic")).toBeInTheDocument();
+    expect(screen.getByText("Additional information.")).toBeInTheDocument();
+  });
 });
