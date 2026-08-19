@@ -13,7 +13,7 @@
 
 .Collapsible__title {
   cursor: pointer;
-  padding: 5px 5px 5px 20px;
+  padding: 5px 5px 5px 40px;
   position: relative;
   list-style: none;
   outline: none;
@@ -45,16 +45,16 @@
 
 .Collapsible__title:before {
   /* CSS triangle */
-  border-style: solid;
-  border-color: transparent;
-  border-width: 4px 6px 4px 6px;
-  border-left-color: var(--gcds-details-default-text);
+  width: 0;
+  height: 0;
+  border-block: var(--gcds-details-summary-arrow-border-top-bottom) solid transparent;
+  border-inline-start: var(--gcds-details-summary-arrow-border-left) solid
+    var(--gcds-details-default-text);
   display: block;
   content: "";
   position: absolute;
-  left: 7px;
+  left: var(--gcds-details-summary-arrow-left);
   top: 50%;
-  transform-origin: 2px 50%;
   transform: translateY(-50%);
   transition: transform 0.3s ease;
 }
@@ -76,5 +76,6 @@
     height 0.3s ease-out,
     opacity 0.3s ease-out,
     visibility 0.3s ease-out allow-discrete;
-  margin-left: 5px;
+  margin-left: 10px;
+  min-height: 40px;
 }
