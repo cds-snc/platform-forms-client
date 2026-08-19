@@ -85,5 +85,6 @@ export { CheckNoBorderIcon } from "./CheckNoBorderIcon";
 export { XIcon } from "./XIcon";
 export { ArchiveIcon } from "./ArchiveIcon";
 export { StarIcon } from "./StarIcon";
+export { StarRatingIcon } from "./StarRatingIcon";
 export { PersonIcon } from "./PersonIcon";
 export { ClosedStatusIcon } from "./ClosedStatusIcon";
