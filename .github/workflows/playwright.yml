@@ -38,6 +38,8 @@ jobs:
       TOKEN_SECRET: testKey
       APP_ENV: test
       NEXT_PUBLIC_APP_ENV: test
+      # Needed for the proxy origin check on server actions
+      HOST_URL: http://localhost:3000
       NEXT_PUBLIC_ZITADEL_URL: https://auth.forms-staging.cdssandbox.xyz
       ZITADEL_CLIENT_ID: "11111111111111111"
       REDIS_URL: localhost
