@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
 import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 export const NextButton = ({
   validateForm,
@@ -37,6 +38,7 @@ export const NextButton = ({
   const { updateFormDelay } = useFormDelay();
   const { t } = useTranslation("form-builder");
   const router = useRouter();
+  const { Event } = useCustomEvent();
 
   const checkIfFormClosed = async () => {
     if (await isFormClosed(formRecord.id)) {
@@ -124,6 +126,8 @@ export const NextButton = ({
             updateFormDelay(formRecord.form, currentGroup);
             handleNextAction();
             focusHeadingBySelector("form h2");
+          } else {
+            Event.fire(EventKeys.continueValidationError);
           }
         }}
         dataTestId="nextButton"
@@ -132,7 +136,7 @@ export const NextButton = ({
           t("next", { lng: language })
         ) : (
           <>
-            <span className="hidden laptop:block">{t("next", { lng: language })}</span>
+            <span className="laptop:block hidden">{t("next", { lng: language })}</span>
             <ForwardArrowIcon24x24 className="fill-white" title={t("next", { lng: language })} />
           </>
         )}
