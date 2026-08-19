@@ -8,9 +8,6 @@
  */
 
 .Collapsible__container {
-  background: #fcfcfc;
-  border: 1px solid #eee;
-  border-radius: 10px;
   margin-bottom: 8px;
 }
 
@@ -18,9 +15,13 @@
   cursor: pointer;
   padding: 5px 5px 5px 20px;
   position: relative;
-  font-weight: bold;
   list-style: none;
   outline: none;
+  font: var(--gcds-details-font-desktop);
+  text-decoration: underline;
+  color: var(--gcds-details-default-text);
+  text-decoration-thickness: var(--gcds-details-default-decoration-thickness);
+  text-underline-offset: var(--gcds-details-summary-underline-offset);
 }
 
 /* Lexical titles contain a paragraph. Remove its browser margin so the
@@ -43,10 +44,11 @@
 }
 
 .Collapsible__title:before {
+  /* CSS triangle */
   border-style: solid;
   border-color: transparent;
   border-width: 4px 6px 4px 6px;
-  border-left-color: #000;
+  border-left-color: var(--gcds-details-default-text);
   display: block;
   content: "";
   position: absolute;
@@ -58,50 +60,21 @@
 }
 
 .Collapsible__container[open] > .Collapsible__title:before {
+  /* CSS triangle */
   transform: translateY(-50%) rotate(90deg);
 }
 
 .Collapsible__content {
+  color: var(--gcds-text-role-primary);
+  font: var(--gcds-text-size-body-desktop);
   padding: 10px 5px 5px 20px;
   box-sizing: border-box;
+  border-left: 5px solid var(--gcds-details-panel-border-color);
   interpolate-size: allow-keywords;
   overflow: hidden;
   transition:
     height 0.3s ease-out,
     opacity 0.3s ease-out,
     visibility 0.3s ease-out allow-discrete;
-}
-
-/* Chrome uses div with hidden attribute — override display to allow animation */
-.Collapsible__content[hidden] {
-  content-visibility: visible;
-  display: block;
-  height: 0;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    height 0.3s ease-in,
-    opacity 0.3s ease-in,
-    visibility 0.3s ease-in allow-discrete;
-}
-
-/* Non-Chrome uses <details> — animate via ::details-content */
-details.Collapsible__container::details-content {
-  interpolate-size: allow-keywords;
-  overflow: hidden;
-  transition:
-    height 0.3s ease-out,
-    opacity 0.3s ease-out,
-    content-visibility 0.3s ease-out allow-discrete;
-}
-
-details.Collapsible__container:not([open])::details-content {
-  height: 0;
-  opacity: 0;
-  content-visibility: hidden;
-  transition:
-    height 0.3s ease-in,
-    opacity 0.3s ease-in,
-    content-visibility 0.3s ease-in allow-discrete;
+  margin-left: 5px;
 }
