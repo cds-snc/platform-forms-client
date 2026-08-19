@@ -45,6 +45,9 @@ ENV COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 
+# Disable Prisma usage data collection (see https://www.prisma.io/docs/orm/v6/tools/prisma-cli#telemetry)
+ENV CHECKPOINT_DISABLE=1
+
 WORKDIR /src
 
 COPY --from=base /src/public ./public
