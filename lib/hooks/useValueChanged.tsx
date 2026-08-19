@@ -1,7 +1,11 @@
 "use client";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useFormikContext } from "formik";
 import { useGCFormsContext } from "./useGCFormContext";
+import { useEffectDebugger } from "@root/debugging/useEffect";
+import { mapIdsToValues } from "@gcforms/core";
+import { idArraysMatch } from "@lib/formContext";
+import type { FormValues } from "@gcforms/types";
 
 /**
  * This is a workaround to allow setting custom values in the formik form values.
@@ -13,19 +17,31 @@ import { useGCFormsContext } from "./useGCFormContext";
  */
 export const useFormValuesChanged = () => {
   const { values, setFieldValue } = useFormikContext();
-  const { updateValues, currentGroup, getGroupHistory, matchedIds } = useGCFormsContext();
+  const { updateValues, currentGroup, getGroupHistory, formRecord } = useGCFormsContext();
   const groupHistory = getGroupHistory();
 
-  useEffect(() => {
-    if (process.env.APP_ENV === "test") {
-      // skip for test env
-      return;
-    }
-    updateValues({ formValues: values as Record<string, string> });
+  useEffectDebugger(
+    () => {
+      if (process.env.APP_ENV === "test") {
+        // skip for test env
+        return;
+      }
+      const formValues = values as FormValues;
+      updateValues({ formValues });
 
-    // This is where you assign (set) the values that are added to formik form values in Form.tsx
-    setFieldValue("currentGroup", currentGroup);
-    setFieldValue("groupHistory", groupHistory);
-    setFieldValue("matchedIds", matchedIds);
-  }, [updateValues, values, setFieldValue, currentGroup, groupHistory, matchedIds]);
+      // This is where you assign (set) the values that are added to formik form values in Form.tsx
+      setFieldValue("currentGroup", currentGroup);
+      setFieldValue("groupHistory", groupHistory);
+
+      // Compute matchedIds directly from values instead of reading it back from GCFormsContext
+      // state, otherwise writing it into formik values re-triggers this effect an extra time.
+      const nextMatchedIds = mapIdsToValues(formRecord.form.elements, formValues);
+      const currentMatchedIds = (formValues.matchedIds as string[]) || [];
+      if (!idArraysMatch(currentMatchedIds, nextMatchedIds)) {
+        setFieldValue("matchedIds", nextMatchedIds);
+      }
+    },
+    [updateValues, values, setFieldValue, currentGroup, groupHistory, formRecord],
+    ["updateValues", "values", "setFieldValue", "currentGroup", "getGroupHistory", "formRecord"]
+  );
 };
