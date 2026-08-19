@@ -4,6 +4,7 @@ import {
   parseStarRatingAnswer,
   formatStarRating,
   formatStarRatingAnswer,
+  formatStarRatingAnswerForCsv,
 } from "./utils";
 import { FormElementTypes } from "@lib/types";
 
@@ -84,6 +85,14 @@ describe("formatStarRatingAnswer", () => {
 
   it("formats a rating equal to numberOfStars", () => {
     expect(formatStarRatingAnswer(JSON.stringify({ value: 5, numberOfStars: 5 }))).toBe("5/5");
+  });
+});
+
+describe("formatStarRatingAnswerForCsv", () => {
+  it("prefixes the fraction so Excel keeps it as text", () => {
+    expect(formatStarRatingAnswerForCsv(JSON.stringify({ value: 5, numberOfStars: 5 }))).toBe(
+      "'5/5"
+    );
   });
 });
 

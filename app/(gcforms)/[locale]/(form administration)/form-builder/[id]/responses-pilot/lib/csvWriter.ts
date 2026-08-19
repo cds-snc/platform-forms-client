@@ -8,6 +8,7 @@ import { sortByLayout } from "@lib/utils/form-builder";
 import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
+import { formatStarRatingAnswerForCsv } from "@root/components/clientComponents/forms/StarRating/utils";
 import { ResponseFilenameMapping } from "./processResponse";
 
 const specialChars = ["=", "+", "-", "@"];
@@ -225,6 +226,10 @@ export const getRow = ({
 
     if (!mappedAnswer) {
       return "-";
+    }
+
+    if (mappedAnswer.type === FormElementTypes.starRating) {
+      return formatStarRatingAnswerForCsv(String(mappedAnswer.answer));
     }
 
     if (mappedAnswer.answer instanceof Array) {

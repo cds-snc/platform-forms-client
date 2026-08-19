@@ -42,6 +42,13 @@ export const formatStarRatingAnswer = (rawAnswer: string): string => {
   return parsed ? formatStarRating(parsed.value, parsed.numberOfStars) : rawAnswer || "-";
 };
 
+/**
+ * Prefixes a Star Rating CSV value so Excel keeps the fraction as text instead of parsing it as a date.
+ */
+export const formatStarRatingAnswerForCsv = (rawAnswer: string): string => {
+  return `'${formatStarRatingAnswer(rawAnswer)}`;
+};
+
 export const checkAndformatStarRatingAnswer = (item: Answer): string | undefined => {
   if (item.type !== FormElementTypes.starRating) {
     return undefined;
