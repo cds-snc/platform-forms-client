@@ -110,6 +110,15 @@ export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
         { status: 400 }
       );
     }
+
+    const allowedOrigin = process.env.HOST_URL;
+
+    const origin = req.headers.get("origin");
+
+    if (origin && origin !== allowedOrigin) {
+      logMessage.info(`Middleware: Request origin ${origin} is not allowed.`);
+      return NextResponse.json({ error: "Request origin is not allowed." }, { status: 403 });
+    }
   }
 
   // Layer 0 - Set CORS on API routes
