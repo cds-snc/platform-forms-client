@@ -79,3 +79,7 @@
   margin-left: 10px;
   min-height: 40px;
 }
+
+.Collapsible__content[hidden] {
+  border-left-color: transparent;
+}
