@@ -1,4 +1,5 @@
 import Drawer from "./Drawer";
+import { Close } from "@serverComponents/icons/Close";
 import { SaveProgressIcon, UploadIcon } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
@@ -53,6 +54,17 @@ export const MobileDrawer = ({
 
   return (
     <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)}>
+      <Button
+        theme="link"
+        className="group absolute top-0 right-0 z-1000 mt-4 mr-4"
+        aria-label={t("close")}
+        onClick={() => setDrawerOpen(false)}
+        dataTestId="close-dialog"
+      >
+        <span className="block">
+          <Close className="group-focus:fill-white-default inline-block" />
+        </span>
+      </Button>
       <h2>{t("saveAndResume.more")}</h2>
       <div className="mx-4 flex flex-col gap-4">
         <Button
@@ -76,16 +88,6 @@ export const MobileDrawer = ({
         </LinkButton.Secondary>
       </div>
       <p className="my-6 px-4">{t("saveAndResume.protectYourDataNote")}</p>
-
-      <div className="border-t-gcds-blue-muted bg-gcds-blue-100 sticky bottom-0 -mx-2 border-2 p-4">
-        <Button
-          theme="secondary"
-          className="rounded-full bg-white"
-          onClick={() => setDrawerOpen(false)}
-        >
-          {t("saveAndResume.cancel")}
-        </Button>
-      </div>
     </Drawer>
   );
 };

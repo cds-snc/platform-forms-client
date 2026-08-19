@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.6](https://github.com/cds-snc/platform-forms-client/compare/v4.21.5...v4.21.6) (2026-08-18)
+
+
+### Bug Fixes
+
+* avoid prefetching active user list ([#7733](https://github.com/cds-snc/platform-forms-client/issues/7733)) ([f30f79e](https://github.com/cds-snc/platform-forms-client/commit/f30f79e1ed508bfd7c2eac6894448370d5d97383))
+* update to ensure brand sizing when zoomed ([#7746](https://github.com/cds-snc/platform-forms-client/issues/7746)) ([58cb287](https://github.com/cds-snc/platform-forms-client/commit/58cb287ba9490e91af60384708026c3e6b94d333))
+
+
+### Miscellaneous Chores
+
+* add details component styles ([#7738](https://github.com/cds-snc/platform-forms-client/issues/7738)) ([fd6568e](https://github.com/cds-snc/platform-forms-client/commit/fd6568e9c80aef648740973199dad6eedc7e9840))
+* add lexical collapsible to admin playground editor ([#7741](https://github.com/cds-snc/platform-forms-client/issues/7741)) ([02ad2c3](https://github.com/cds-snc/platform-forms-client/commit/02ad2c3b83bf613be2b2df56eec3c38a02d3ca29))
+* bump lexical to 0.49 ([#7739](https://github.com/cds-snc/platform-forms-client/issues/7739)) ([ab562ae](https://github.com/cds-snc/platform-forms-client/commit/ab562ae0fe428341e536b437ce67f945ce280425))
+* Remove title attribute from Back buttons ([#7747](https://github.com/cds-snc/platform-forms-client/issues/7747)) ([f191b41](https://github.com/cds-snc/platform-forms-client/commit/f191b41cdbcdcac3e58370de3a182f0912ed4a83))
+* Specify what the split/combined setting applies to  ([#7744](https://github.com/cds-snc/platform-forms-client/issues/7744)) ([3e3be48](https://github.com/cds-snc/platform-forms-client/commit/3e3be48a81f268c22acc1cc02c333cdf05e75ca6))
+* Update Next 16.3.1 ([#7737](https://github.com/cds-snc/platform-forms-client/issues/7737)) ([7fbff6e](https://github.com/cds-snc/platform-forms-client/commit/7fbff6e3119e7e1946822841be545459bd80483b))
+* use close button inside drawer menu ([#7745](https://github.com/cds-snc/platform-forms-client/issues/7745)) ([1ebe663](https://github.com/cds-snc/platform-forms-client/commit/1ebe6634483da390cf32e33931c25322bf135cc5))
+
 ## [4.21.5](https://github.com/cds-snc/platform-forms-client/compare/v4.21.4...v4.21.5) (2026-08-14)
 
 

@@ -117,6 +117,7 @@ export const fillData = (
         return fileInputFiller(value as Response);
       case FormElementTypes.formattedDate:
       case FormElementTypes.addressComplete:
+      case FormElementTypes.starRating:
         if (typeof value === "string") {
           return deserializeJsonObject(value);
         }

@@ -100,10 +100,10 @@ export const ConfirmDownloadDialog = ({
                   <li className="marker:text-2xl marker:font-bold">
                     {t(`${tParent}.prompt.text2`)}
                   </li>
+                  <li className="marker:text-2xl marker:font-bold">
+                    {t(`${tParent}.prompt.text3`)}
+                  </li>
                 </ol>
-                <div className="mt-6 mb-2 ml-6 font-bold italic">
-                  {t(`${tParent}.prompt.text3`)}
-                </div>
               </>
             )}
             {/* Show save response text */}
