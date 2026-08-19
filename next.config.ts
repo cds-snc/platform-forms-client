@@ -70,6 +70,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       // Note: this matches values in constants.ts
       bodySizeLimit: "10mb",
+      allowedOrigins: process.env.HOST_URL ? [process.env.HOST_URL] : [],
     },
   },
   typedRoutes: true,
