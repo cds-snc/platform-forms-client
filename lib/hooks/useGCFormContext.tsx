@@ -1,5 +1,13 @@
 "use client";
-import { createContext, useContext, ReactNode, useState, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+} from "react";
 
 import type { FormValues, GroupsType, PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -69,6 +77,7 @@ export const GCFormsProvider = ({
   const values = useRef({});
   const history = useRef<string[]>([LOCKED_GROUPS.START]);
   const [matchedIds, setMatchedIds] = useState<string[]>([]);
+  const matchedIdsRef = useRef<string[]>(matchedIds);
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
@@ -113,13 +122,24 @@ export const GCFormsProvider = ({
     }
   };
 
-  const updateValues = ({ formValues }: { formValues: FormValues }): void => {
-    values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
-    if (!idArraysMatch(matchedIds, valueIds)) {
-      setMatchedIds(valueIds);
-    }
-  };
+  const updateValues = useCallback(
+    ({ formValues }: { formValues: FormValues }): void => {
+      values.current = formValues;
+      const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
+      if (!idArraysMatch(matchedIdsRef.current, valueIds)) {
+        setMatchedIds(valueIds);
+      }
+    },
+    // formRecord is stable for the lifetime of the provider, matchedIdsRef is read via ref
+    // so this identity stays stable across matchedIds updates and doesn't re-trigger consumers
+    [formRecord]
+  );
+
+  // Keep the ref in sync so updateValues can compare against the latest matchedIds
+  // without needing matchedIds itself as a dependency.
+  useEffect(() => {
+    matchedIdsRef.current = matchedIds;
+  }, [matchedIds]);
 
   // Helper to not expose the setter
   const setGroup = (group: string | null) => {
