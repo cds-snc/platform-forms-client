@@ -7,7 +7,7 @@ import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
 import { getClientIp } from "@root/lib/ip";
 import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
-import { checkRateLimited, incrementAndCheckRateLimiting } from "./rateLimiter";
+import { isRateLimited, recordAndCheckRateLimit } from "./rateLimiter";
 import {
   MIN_ADDRESS_SEARCH_LENGTH,
   normalizeAddressField,
@@ -72,7 +72,7 @@ const hasItems0Error = (responseData: unknown): boolean => {
 };
 
 // Function returns address complete list of choices.
-// Note: find requests are not rate limited because the do not incur a cost to the API
+// Note: find requests are not rate limited because they do not incur a cost to the API
 export const getAddressCompleteChoices = async (
   query: string,
   countryCode: string,
@@ -99,8 +99,8 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "INVALID_INPUT" };
   }
 
-  // Avoid showing find results if rate limited
-  if (await checkRateLimited(await getClientIp())) {
+  // Avoid showing find results if rate limited for UX reasons
+  if (await isRateLimited(await getClientIp())) {
     return { items: [], error: "RATE_LIMITED" };
   }
 
@@ -160,7 +160,7 @@ export const getSelectedAddress = async (
   }
 
   // Increment the rate limit for paid Retrieve requests
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
+  if (await recordAndCheckRateLimit(await getClientIp())) {
     return { address: null, error: "RATE_LIMITED" };
   }
 
@@ -223,8 +223,8 @@ export const getAddressCompleteRetrieve = async (
     return { items: [], error: "INVALID_INPUT" };
   }
 
-  // Check the existing rate limit for free Find requests
-  if (await checkRateLimited(await getClientIp())) {
+  // Avoid showing find results if rate limited for UX reasons
+  if (await isRateLimited(await getClientIp())) {
     return { items: [], error: "RATE_LIMITED" };
   }
 

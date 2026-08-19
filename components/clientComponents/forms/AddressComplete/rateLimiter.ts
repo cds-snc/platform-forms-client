@@ -18,6 +18,15 @@ const loadSetting = async (key: string): Promise<number> => {
   return value;
 };
 
+const parseRateLimitCount = (value: unknown): number => {
+  const count = Number(value ?? 0);
+  if (!Number.isSafeInteger(count) || count < 0) {
+    throw new Error("Invalid rate limit count");
+  }
+
+  return count;
+};
+
 const evaluateRateLimit = (count: number, max: number, shouldLog = false): boolean => {
   const isRateLimited = count > max;
   // Only log on the first request over the limit to avoid spamming the logs.
@@ -28,11 +37,11 @@ const evaluateRateLimit = (count: number, max: number, shouldLog = false): boole
   return isRateLimited;
 };
 
-export const checkRateLimited = async (ip: string): Promise<boolean> => {
+export const isRateLimited = async (ip: string): Promise<boolean> => {
   try {
     const max = await loadSetting(RATE_LIMIT_MAX_SETTING);
     const redis = await getRedisInstance();
-    const count = Number((await redis.get(`${RATE_LIMIT_KEY_PREFIX}:${ip}`)) ?? 0);
+    const count = parseRateLimitCount(await redis.get(`${RATE_LIMIT_KEY_PREFIX}:${ip}`));
 
     return evaluateRateLimit(count, max);
   } catch (err) {
@@ -43,7 +52,7 @@ export const checkRateLimited = async (ip: string): Promise<boolean> => {
   }
 };
 
-export const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
+export const recordAndCheckRateLimit = async (ip: string): Promise<boolean> => {
   try {
     const [max, windowSeconds] = await Promise.all([
       loadSetting(RATE_LIMIT_MAX_SETTING),
@@ -57,13 +66,23 @@ export const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean
     pipeline.expire(key, windowSeconds);
     const results = await pipeline.exec();
 
-    // If incrementing fails ([error, value] tuple), fail open to avoid breaking the form UX.
     const [incrError, incrCount] = results?.[0] ?? [];
     if (incrError) {
-      return false;
+      throw new Error(incrError instanceof Error ? incrError.message : String(incrError));
     }
 
-    const count = Number(incrCount ?? 0);
+    const [expireError, expireResult] = results?.[1] ?? [];
+    // Cleanup the key if the expire command fails to avoid leaving a key that never expires
+    if (expireError || expireResult !== 1) {
+      await redis.del(key);
+      throw new Error(
+        expireError instanceof Error
+          ? expireError.message
+          : String(expireError ?? `Unexpected expiry result: ${expireResult}`)
+      );
+    }
+
+    const count = parseRateLimitCount(incrCount);
     return evaluateRateLimit(count, max, true);
   } catch (err) {
     logMessage.error(
