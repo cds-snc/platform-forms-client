@@ -121,7 +121,9 @@ export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
     }
 
     if (!origin || origin !== allowedOrigin) {
-      logMessage.info(`Middleware: Request origin ${origin ?? "<missing>"} is not allowed.`);
+      logMessage.info(
+        `Middleware: Request origin ${origin ?? "<missing>"} is not allowed. Allowed: ${allowedOrigin}`
+      );
       return NextResponse.json({ error: "Request origin is not allowed." }, { status: 403 });
     }
   }
