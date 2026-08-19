@@ -9,29 +9,20 @@ const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
 const RATE_LIMIT_MAX_SETTING = "addressCompleteRetrieveRateLimitMax";
 const RATE_LIMIT_WINDOW_SETTING = "addressCompleteRateLimitWindowSeconds";
 
-const getRateLimitMax = async (): Promise<number> => {
-  const max = Number(await getAppSetting(RATE_LIMIT_MAX_SETTING));
-  if (!isPositiveSafeInteger(max)) {
+const loadSetting = async (key: string): Promise<number> => {
+  const value = Number(await getAppSetting(key));
+  if (!isPositiveSafeInteger(value)) {
     throw new Error("Invalid configuration");
   }
 
-  return max;
-};
-
-const getRateLimitWindowSeconds = async (): Promise<number> => {
-  const windowSeconds = Number(await getAppSetting(RATE_LIMIT_WINDOW_SETTING));
-  if (!isPositiveSafeInteger(windowSeconds)) {
-    throw new Error("Invalid configuration");
-  }
-
-  return windowSeconds;
+  return value;
 };
 
 const evaluateRateLimit = (count: number, max: number, shouldLog = false): boolean => {
   const isRateLimited = count > max;
-  // Only log the first time a user is rate limited to avoid spamming the logs.
+  // Only log on the first request over the limit to avoid spamming the logs.
   if (shouldLog && count === max + 1) {
-    logMessage.warn(`AddressComplete user has been rate limited.`);
+    logMessage.warn(`Address Complete: User has been rate limited (${count}/${max} requests)`);
   }
 
   return isRateLimited;
@@ -39,7 +30,7 @@ const evaluateRateLimit = (count: number, max: number, shouldLog = false): boole
 
 export const checkRateLimited = async (ip: string): Promise<boolean> => {
   try {
-    const max = await getRateLimitMax();
+    const max = await loadSetting(RATE_LIMIT_MAX_SETTING);
     const redis = await getRedisInstance();
     const count = Number((await redis.get(`${RATE_LIMIT_KEY_PREFIX}:${ip}`)) ?? 0);
 
@@ -52,12 +43,11 @@ export const checkRateLimited = async (ip: string): Promise<boolean> => {
   }
 };
 
-// Handles the rate limit for paid Retrieve requests and checks whether the user is rate limited.
 export const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
   try {
     const [max, windowSeconds] = await Promise.all([
-      getRateLimitMax(),
-      getRateLimitWindowSeconds(),
+      loadSetting(RATE_LIMIT_MAX_SETTING),
+      loadSetting(RATE_LIMIT_WINDOW_SETTING),
     ]);
     const redis = await getRedisInstance();
     const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
@@ -67,13 +57,13 @@ export const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean
     pipeline.expire(key, windowSeconds);
     const results = await pipeline.exec();
 
-    // If incrementing fails, fail open to avoid breaking the form UX.
-    const incrResult = results?.[0];
-    if (incrResult?.[0]) {
+    // If incrementing fails ([error, value] tuple), fail open to avoid breaking the form UX.
+    const [incrError, incrCount] = results?.[0] ?? [];
+    if (incrError) {
       return false;
     }
 
-    const count = Number(incrResult?.[1] ?? 0);
+    const count = Number(incrCount ?? 0);
     return evaluateRateLimit(count, max, true);
   } catch (err) {
     logMessage.error(
