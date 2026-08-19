@@ -48,6 +48,11 @@ export default async function Layout(props: {
     ability: null,
   }));
 
+  // User is not authenticated and is trying to access a form that is not the default form (0000)
+  if (!session && id !== "0000") {
+    redirect(`/${locale}/auth/login`);
+  }
+
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();

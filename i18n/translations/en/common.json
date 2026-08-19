@@ -295,7 +295,7 @@
     "resumePage": {
       "upload": {
         "title": "Load your saved answers",
-        "description": "Also reattach documents, such birth certificates and resumes."
+        "description": "If you attached documents to your form, you may need to attach them again."
       },
       "mismatchedForm": {
         "title": "Continue the form with these answers?",
@@ -312,17 +312,17 @@
       "readyToContinue": {
         "title": "Ready to continue?",
         "intro": "For questions you’ve already answered:",
-        "text1": "1. Find the saved file on your device.",
-        "text2": "2. Upload the file to add saved answers to the form.",
-        "text3": "3. Reattach any documents, as these do not upload with your answers.",
-        "text4": "4. Continue filling out the form."
+        "text1": "1. Find the saved copy on your device.",
+        "text2": "2. Upload the copy to load saved answers to the form.",
+        "text3": "3. Check whether you need to reattach any documents, as they may not upload with your answers.",
+        "text4": "4. Continue with the form."
       }
     },
     "prompt": {
       "title": "Save to device",
-      "text1": "Download a copy of your form in progress.",
-      "text2": "Resume later by finding the file on your device. Load your saved answers and reattach documents such as birth certificates or resumes.",
-      "text3": "Keep the file with your form answers in a safe place on a trusted device.",
+      "text1": "Download and save a copy of your form in progress.",
+      "text2": "When you want to continue, open the copy to find the link for this form.",
+      "text3": "Visit the link, select “Load your answers” and follow the prompts.",
       "okay": "Save",
       "cancel": "Cancel"
     },
@@ -390,6 +390,10 @@
   },
   "confirmFileWarning": {
     "text": "This copy of your answers will not include the files you attached to your submission."
+  },
+  "starRating": {
+    "starLabel_one": "{{count}} star",
+    "starLabel_other": "{{count}} stars"
   },
   "loginPilot": {
     "title": "Sign in to GC Forms",

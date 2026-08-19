@@ -38,6 +38,7 @@
       "textField": "Add short answer",
       "textArea": "Add long answer",
       "radio": "Add radio buttons",
+      "starRating": "Add star rating",
       "checkbox": "Add checkboxes",
       "dropdown": "Add dropdown",
       "fileInput": "Add file upload",
@@ -87,7 +88,6 @@
       "fields": "Format",
       "fieldsDesc": "Decide how addresses appear in responses.",
       "multipleAddresses": "Addresses",
-      "startTyping": "Start typing an address to search",
       "components": {
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
@@ -273,6 +273,13 @@
       "title": "Radio buttons",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Select one option."
+    },
+    "starRating": {
+      "title": "Star rating",
+      "description": "A rating scale to provide feedback based on a score from 1 to a certain number of stars.",
+      "exampleQuestion": "How would you rate this service?",
+      "exampleDescription": "The more stars, the better the experience.",
+      "numberOfStars": "Number of stars"
     },
     "richText": {
       "description": "A rich text element for inserting headings, paragraph text, lists, or links.",
@@ -757,9 +764,9 @@
       "canadianOnly": "Canadian addresses only",
       "format": "Select a format for the address",
       "fullAddress": "Entire address combined",
-      "fullAddressDesc": "Displays as one line.",
+      "fullAddressDesc": "Displays as one line in response data.",
       "splitAddress": "Address split into parts",
-      "splitAddressDesc": "Separated in multiple lines."
+      "splitAddressDesc": "Separated in multiple lines in response data."
     },
     "apiOptionsSection": {
       "title": "Customize API data attributes",
@@ -1224,6 +1231,7 @@
   "shortAnswerText": "Short answer",
   "signInToTest": "<a href=\"/en/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Radio buttons",
+  "starRating": "Star rating",
   "start": "Start",
   "startErrorTemplateSize": "The form file is too large",
   "startErrorDuplicateQuestionId": "Question IDs must be unique",

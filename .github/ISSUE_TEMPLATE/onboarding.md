@@ -41,6 +41,7 @@ assignees: ''
 
 ## Tooling access
 - [ ] Set-up access to Github, Google Drive, Figma, and other required accounts
+- [ ] Add to our [Github team](https://github.com/orgs/cds-snc/teams/forms-platform)
 
 ## GC Forms itself
 _Feel free to create accounts, explore docs and play around in the app_

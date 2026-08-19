@@ -3,6 +3,7 @@ import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
 import { sortByLayout } from "@lib/utils/form-builder";
+import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -65,6 +66,10 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
           .join("\n");
       }
       let answerText = answer.answer;
+      const starRatingText = checkAndformatStarRatingAnswer(answer);
+      if (starRatingText !== undefined) {
+        return starRatingText;
+      }
       if (
         typeof answerText === "string" &&
         specialChars.some((char) => answerText.startsWith(char))

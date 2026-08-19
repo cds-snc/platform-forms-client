@@ -9,7 +9,13 @@ import { getRedisInstance } from "@root/lib/integration/redisConnector";
 import { getClientIp } from "@root/lib/ip";
 import { getAppSetting } from "@root/lib/appSettings";
 import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
-import { normalizeAddressField, normalizeCountryCode, normalizeQuery } from "./utils";
+import {
+  isPositiveSafeInteger,
+  MIN_ADDRESS_SEARCH_LENGTH,
+  normalizeAddressField,
+  normalizeCountryCode,
+  normalizeQuery,
+} from "./utils";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
@@ -77,14 +83,11 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "API_KEY_MISSING" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
-    return { items: [], error: "RATE_LIMITED" };
-  }
-
   // Do not call the API if the query is empty or only whitespace, as it will return a 1001 error (SearchTerm not supplied).
+  // Also avoid upstream calls for short queries that are unlikely to produce useful results.
   const normalizedQuery = normalizeQuery(query);
-  if (!normalizedQuery || normalizedQuery === "") {
-    return { items: [], error: null };
+  if (normalizedQuery.length < MIN_ADDRESS_SEARCH_LENGTH) {
+    return { items: [], error: "INVALID_INPUT" };
   }
 
   const normalizedCountryCode = normalizeCountryCode(countryCode);
@@ -95,6 +98,10 @@ export const getAddressCompleteChoices = async (
   // No need to normalize language since the client should send exactly "en" or "fr"
   if (!isValidLanguage(language)) {
     return { items: [], error: "INVALID_INPUT" };
+  }
+
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
+    return { items: [], error: "RATE_LIMITED" };
   }
 
   let params = "?";
@@ -110,7 +117,7 @@ export const getAddressCompleteChoices = async (
     });
 
     if (!response.ok) {
-      return { items: [], error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json();
@@ -121,6 +128,9 @@ export const getAddressCompleteChoices = async (
 
     return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { items: [], error: "NETWORK_ERROR" };
   }
 };
@@ -133,10 +143,6 @@ export const getSelectedAddress = async (
 ): Promise<{ address: AddressElements | null; error?: string | null }> => {
   if (!addressCompleteKey) {
     return { address: null, error: "API_KEY_MISSING" };
-  }
-
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
-    return { address: null, error: "RATE_LIMITED" };
   }
 
   const normalizedCanadaPostId = normalizeAddressField(value);
@@ -153,6 +159,10 @@ export const getSelectedAddress = async (
     return { address: null, error: "INVALID_INPUT" };
   }
 
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.retrieve)) {
+    return { address: null, error: "RATE_LIMITED" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&Id=" + encodeURIComponent(normalizedCanadaPostId);
@@ -166,7 +176,7 @@ export const getSelectedAddress = async (
     });
 
     if (!response.ok) {
-      return { address: null, error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json();
@@ -181,6 +191,9 @@ export const getSelectedAddress = async (
 
     return { address: addressComponents, error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { address: null, error: "NETWORK_ERROR" };
   }
 };
@@ -193,10 +206,6 @@ export const getAddressCompleteRetrieve = async (
 ): Promise<{ items: AddressCompleteChoice[]; error?: string | null }> => {
   if (!addressCompleteKey) {
     return { items: [], error: "API_KEY_MISSING" };
-  }
-
-  if (await incrementAndCheckRateLimiting(await getClientIp())) {
-    return { items: [], error: "RATE_LIMITED" };
   }
 
   const normalizedQuery = normalizeQuery(query);
@@ -213,6 +222,10 @@ export const getAddressCompleteRetrieve = async (
     return { items: [], error: "INVALID_INPUT" };
   }
 
+  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
+    return { items: [], error: "RATE_LIMITED" };
+  }
+
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&LastId=" + encodeURIComponent(normalizedQuery);
@@ -226,7 +239,7 @@ export const getAddressCompleteRetrieve = async (
     });
 
     if (!response.ok) {
-      return { items: [], error: "SERVICE_UNAVAILABLE" };
+      throw new Error(`Received non-OK response: ${response.status}`);
     }
 
     const responseData = await response.json(); //Todo #4341  - Error Handling
@@ -237,6 +250,9 @@ export const getAddressCompleteRetrieve = async (
 
     return { items: (responseData?.Items as AddressCompleteChoice[]) || [], error: null };
   } catch (err: unknown) {
+    logMessage.warn(
+      `AddressComplete API request failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     return { items: [], error: "NETWORK_ERROR" };
   }
 };
@@ -318,34 +334,61 @@ export async function matchesAddressPattern(input: string): Promise<boolean> {
   return nestedAddressPattern.test(input);
 }
 
-const RATE_LIMIT_KEY_PREFIX = "address-complete:rate-limit";
+const RATE_LIMIT_KEY_PREFIX = "address-complete";
+const RATE_LIMIT_SCOPE = {
+  find: "find",
+  retrieve: "retrieve",
+} as const;
+type RateLimitScope = (typeof RATE_LIMIT_SCOPE)[keyof typeof RATE_LIMIT_SCOPE];
+
+const RATE_LIMIT_MAX_SETTING = {
+  [RATE_LIMIT_SCOPE.find]: "addressCompleteFindRateLimitMax",
+  [RATE_LIMIT_SCOPE.retrieve]: "addressCompleteRetrieveRateLimitMax",
+} as const;
 
 // Returns true when the IP has exceeded the per-minute request "budget"
-const incrementAndCheckRateLimiting = async (ip: string): Promise<boolean> => {
+const incrementAndCheckRateLimiting = async (
+  ip: string,
+  scope: RateLimitScope
+): Promise<boolean> => {
   try {
-    const rateLimitMax = Number(await getAppSetting("addressCompleteRateLimitMax"));
+    const rateLimitMax = Number(await getAppSetting(RATE_LIMIT_MAX_SETTING[scope]));
     const rateLimitWindowSeconds = Number(
       await getAppSetting("addressCompleteRateLimitWindowSeconds")
     );
+    if (!isPositiveSafeInteger(rateLimitMax) || !isPositiveSafeInteger(rateLimitWindowSeconds)) {
+      throw new Error("Invalid configuration");
+    }
 
     const redis = await getRedisInstance();
-    const key = `${RATE_LIMIT_KEY_PREFIX}:${ip}`;
+    const key = `${RATE_LIMIT_KEY_PREFIX}:${scope}:${ip}`;
 
     // Increment the related IPs count
     const pipeline = redis.pipeline();
     pipeline.incr(key);
     pipeline.expire(key, rateLimitWindowSeconds);
 
-    // Check whether that IP is beyond the threshold
     const results = await pipeline.exec();
 
-    // pipeline results are [error, value] tuples; index 0 is the incr result
+    // If there was an error incrementing ([error, value] tuple), just return false to avoid breaking the form UX
     const incrResult = results?.[0];
+    if (incrResult?.[0]) {
+      return false;
+    }
 
-    const count = (incrResult?.[1] ?? 0) as number;
-
-    return count > rateLimitMax;
-  } catch {
+    // Check whether that IP is beyond the threshold and should be rate limited
+    const count = incrResult?.[1] as number;
+    const isRateLimited = count > rateLimitMax;
+    if (isRateLimited) {
+      logMessage.warn(
+        `AddressComplete user rate limited on ${scope} operation because they hit ${count}/${rateLimitMax} within ${rateLimitWindowSeconds}s.`
+      );
+    }
+    return isRateLimited;
+  } catch (err) {
+    logMessage.error(
+      `AddressComplete rate limiting failed. Reason: ${err instanceof Error ? err.message : String(err)}`
+    );
     // Most likely case is Redis is down, just pass through to avoid breaking the form UX
     return false;
   }

@@ -1,11 +1,7 @@
 "use client";
 import React, { useId, useState } from "react";
-import {
-  $convertFromMarkdownString,
-  $convertToMarkdownString,
-  TRANSFORMERS,
-} from "@lexical/markdown";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
+import { LexicalExtensionComposer } from "@lexical/react/LexicalExtensionComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
@@ -18,8 +14,8 @@ import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
-import { editorConfig } from "./config";
-import { LINE_BREAK_FIX } from "./transformers";
+import { createEditorExtension } from "./config";
+import { COLLAPSIBLE, LINE_BREAK_FIX } from "./transformers";
 import { Language } from "./i18n";
 import { LocaleContext } from "./context/LocaleContext";
 
@@ -40,6 +36,7 @@ interface EditorProps {
   className?: string;
   maxLength?: number;
   enableDraggableBlocks?: boolean;
+  enableCollapsibleBlocks?: boolean;
 
   onChange?(...args: unknown[]): unknown;
 }
@@ -56,6 +53,7 @@ export const Editor = ({
   className,
   maxLength,
   enableDraggableBlocks = false,
+  enableCollapsibleBlocks = false,
 }: EditorProps) => {
   contentLocale = contentLocale || locale;
 
@@ -64,6 +62,8 @@ export const Editor = ({
 
   const randomId = useId();
   const editorId = id || `editor-${randomId}`;
+  // LexicalExtensionComposer recreates the editor when its extension changes.
+  const [editorExtension] = useState(() => createEditorExtension(content));
 
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
     if (_floatingAnchorElem !== null) {
@@ -74,16 +74,13 @@ export const Editor = ({
   return (
     <LocaleContext initialLocale={locale as Language}>
       <ToolbarContext>
-        <LexicalComposer
-          initialConfig={{
-            ...editorConfig,
-            editorState: () => {
-              $convertFromMarkdownString(content, [...TRANSFORMERS]);
-            },
-          }}
-        >
+        <LexicalExtensionComposer extension={editorExtension} contentEditable={null}>
           <div className="gc-editor-container">
-            <ToolbarPlugin editorId={editorId} setIsLinkEditMode={setIsLinkEditMode} />
+            <ToolbarPlugin
+              editorId={editorId}
+              setIsLinkEditMode={setIsLinkEditMode}
+              enableCollapsibleBlocks={enableCollapsibleBlocks}
+            />
             <ShortcutsPlugin setIsLinkEditMode={setIsLinkEditMode} />
             <RichTextPlugin
               contentEditable={
@@ -108,7 +105,11 @@ export const Editor = ({
             <OnChangePlugin
               onChange={(editorState) => {
                 editorState.read(() => {
-                  const markdown = $convertToMarkdownString([...TRANSFORMERS, LINE_BREAK_FIX]);
+                  const markdown = $convertToMarkdownString([
+                    ...TRANSFORMERS,
+                    COLLAPSIBLE,
+                    LINE_BREAK_FIX,
+                  ]);
                   onChange && onChange(markdown);
                 });
               }}
@@ -133,7 +134,7 @@ export const Editor = ({
               </>
             )}
           </div>
-        </LexicalComposer>
+        </LexicalExtensionComposer>
       </ToolbarContext>
     </LocaleContext>
   );

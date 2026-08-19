@@ -105,6 +105,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
     if (!props.isValid && !canFocusOnError) {
       if (props.submitCount > lastSubmitCount) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCanFocusOnError(true);
         setLastSubmitCount(props.submitCount);
       }
@@ -116,7 +117,21 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   useEffect(() => {
+    const handleContinueValidationError = () => setCanFocusOnError(true);
+
+    document.addEventListener(EventKeys.continueValidationError, handleContinueValidationError);
+
+    return () => {
+      document.removeEventListener(
+        EventKeys.continueValidationError,
+        handleContinueValidationError
+      );
+    };
+  }, []);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsServer(false);
     }
   }, [setIsServer]);

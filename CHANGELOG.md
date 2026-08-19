@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.21.6](https://github.com/cds-snc/platform-forms-client/compare/v4.21.5...v4.21.6) (2026-08-18)
+
+
+### Bug Fixes
+
+* avoid prefetching active user list ([#7733](https://github.com/cds-snc/platform-forms-client/issues/7733)) ([f30f79e](https://github.com/cds-snc/platform-forms-client/commit/f30f79e1ed508bfd7c2eac6894448370d5d97383))
+* update to ensure brand sizing when zoomed ([#7746](https://github.com/cds-snc/platform-forms-client/issues/7746)) ([58cb287](https://github.com/cds-snc/platform-forms-client/commit/58cb287ba9490e91af60384708026c3e6b94d333))
+
+
+### Miscellaneous Chores
+
+* add details component styles ([#7738](https://github.com/cds-snc/platform-forms-client/issues/7738)) ([fd6568e](https://github.com/cds-snc/platform-forms-client/commit/fd6568e9c80aef648740973199dad6eedc7e9840))
+* add lexical collapsible to admin playground editor ([#7741](https://github.com/cds-snc/platform-forms-client/issues/7741)) ([02ad2c3](https://github.com/cds-snc/platform-forms-client/commit/02ad2c3b83bf613be2b2df56eec3c38a02d3ca29))
+* bump lexical to 0.49 ([#7739](https://github.com/cds-snc/platform-forms-client/issues/7739)) ([ab562ae](https://github.com/cds-snc/platform-forms-client/commit/ab562ae0fe428341e536b437ce67f945ce280425))
+* Remove title attribute from Back buttons ([#7747](https://github.com/cds-snc/platform-forms-client/issues/7747)) ([f191b41](https://github.com/cds-snc/platform-forms-client/commit/f191b41cdbcdcac3e58370de3a182f0912ed4a83))
+* Specify what the split/combined setting applies to  ([#7744](https://github.com/cds-snc/platform-forms-client/issues/7744)) ([3e3be48](https://github.com/cds-snc/platform-forms-client/commit/3e3be48a81f268c22acc1cc02c333cdf05e75ca6))
+* Update Next 16.3.1 ([#7737](https://github.com/cds-snc/platform-forms-client/issues/7737)) ([7fbff6e](https://github.com/cds-snc/platform-forms-client/commit/7fbff6e3119e7e1946822841be545459bd80483b))
+* use close button inside drawer menu ([#7745](https://github.com/cds-snc/platform-forms-client/issues/7745)) ([1ebe663](https://github.com/cds-snc/platform-forms-client/commit/1ebe6634483da390cf32e33931c25322bf135cc5))
+
+## [4.21.5](https://github.com/cds-snc/platform-forms-client/compare/v4.21.4...v4.21.5) (2026-08-14)
+
+
+### Miscellaneous Chores
+
+* Remove groups check in form initialization ([#7730](https://github.com/cds-snc/platform-forms-client/issues/7730)) ([c34761a](https://github.com/cds-snc/platform-forms-client/commit/c34761a491adfd520192981b9b89c3c092d6effc))
+* Remove more instances of AllowGroups checks and ensure defaults true ([#7732](https://github.com/cds-snc/platform-forms-client/issues/7732)) ([85339e0](https://github.com/cds-snc/platform-forms-client/commit/85339e068e63dd371c19977d915cfb1d0d70cc2a))
+
+## [4.21.4](https://github.com/cds-snc/platform-forms-client/compare/v4.21.3...v4.21.4) (2026-08-13)
+
+
+### Bug Fixes
+
+* add auto-flow before save ([#7722](https://github.com/cds-snc/platform-forms-client/issues/7722)) ([6c49118](https://github.com/cds-snc/platform-forms-client/commit/6c49118e7502190511a9185cfd8ad9e7ec720c4b))
+* **deps:** update dependency next-auth to v5.0.0-beta.32 [security] ([#7679](https://github.com/cds-snc/platform-forms-client/issues/7679)) ([bb9505f](https://github.com/cds-snc/platform-forms-client/commit/bb9505ff2dc9bb70329e33b844e9bb5c1a8cfaa5))
+
+
+### Miscellaneous Chores
+
+* add check for preview url ([#7694](https://github.com/cds-snc/platform-forms-client/issues/7694)) ([4a6b720](https://github.com/cds-snc/platform-forms-client/commit/4a6b720ae91281ef668cc16d2b02b99746c58a95))
+* Add onboarding checklist item for GitHub team access ([b649ca5](https://github.com/cds-snc/platform-forms-client/commit/b649ca5345b47ecdb3d4e154d121252c5fe6b659))
+* add owner checks ([#7702](https://github.com/cds-snc/platform-forms-client/issues/7702)) ([b2d48ec](https://github.com/cds-snc/platform-forms-client/commit/b2d48ec09711db5dffae4144dafbfb031f898562))
+* add required text above input ([#7710](https://github.com/cds-snc/platform-forms-client/issues/7710)) ([00027ec](https://github.com/cds-snc/platform-forms-client/commit/00027ecd843278432cf736b746e4ada2484ed396))
+* address complete rate limiter followup ([#7717](https://github.com/cds-snc/platform-forms-client/issues/7717)) ([317eed3](https://github.com/cds-snc/platform-forms-client/commit/317eed3148c9b47bd439989cc3f2c94d57cc3d9d))
+* address complete rate limiting  ([#7689](https://github.com/cds-snc/platform-forms-client/issues/7689)) ([8ce58fb](https://github.com/cds-snc/platform-forms-client/commit/8ce58fb94648538a0893311a68f4ce129d7d215e))
+* fix preview description for address complete ([#7701](https://github.com/cds-snc/platform-forms-client/issues/7701)) ([4de2fd5](https://github.com/cds-snc/platform-forms-client/commit/4de2fd55acc4eb017c8be5f632bbb784af732e0f))
+* french typo ([#7711](https://github.com/cds-snc/platform-forms-client/issues/7711)) ([53f299f](https://github.com/cds-snc/platform-forms-client/commit/53f299f9bbaa14a07b2de4483113ddff7ed38b65))
+* Keep countries list alphabetical whether rendering in English or French ([#7712](https://github.com/cds-snc/platform-forms-client/issues/7712)) ([74fbbcb](https://github.com/cds-snc/platform-forms-client/commit/74fbbcb01e753a26d569c28680a557e30e8794a5))
+* Redirect unauthed users accessing a form-builder path for a specific form ([#7704](https://github.com/cds-snc/platform-forms-client/issues/7704)) ([409c506](https://github.com/cds-snc/platform-forms-client/commit/409c506108bf10f1074b04ffc5739011c1a46bff))
+* Remove customize button ([#7703](https://github.com/cds-snc/platform-forms-client/issues/7703)) ([55be83f](https://github.com/cds-snc/platform-forms-client/commit/55be83f554f001cc6b35207cdb54e0f6188a9a09))
+* Remove start typing text ([#7716](https://github.com/cds-snc/platform-forms-client/issues/7716)) ([b08f4a6](https://github.com/cds-snc/platform-forms-client/commit/b08f4a61dacc9ab2626e88636a694bcb3ccbe35f))
+* tighten check for unauth'd user ([#7696](https://github.com/cds-snc/platform-forms-client/issues/7696)) ([5b37489](https://github.com/cds-snc/platform-forms-client/commit/5b37489e613c5881fbb91cb2e15a3783166f13c9))
+* update address complete min search length ([#7726](https://github.com/cds-snc/platform-forms-client/issues/7726)) ([2b374df](https://github.com/cds-snc/platform-forms-client/commit/2b374dffd77477274128e3914393a0421a5bf39d))
+* update immer ([#7541](https://github.com/cds-snc/platform-forms-client/issues/7541)) ([6a2c509](https://github.com/cds-snc/platform-forms-client/commit/6a2c5097d8f26eabc4617790bb3670cf852a1e00))
+
 ## [4.21.3](https://github.com/cds-snc/platform-forms-client/compare/v4.21.2...v4.21.3) (2026-08-11)
 
 
