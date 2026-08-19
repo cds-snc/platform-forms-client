@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { allowedOrigin } from "./allowedOrigin";
 import { fallbackLng, languages } from "./i18n/settings";
 import type { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
@@ -111,8 +112,6 @@ export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
       );
     }
 
-    const allowedOrigin = process.env.HOST_URL;
-
     const origin = req.headers.get("origin");
 
     if (!allowedOrigin) {
@@ -121,9 +120,7 @@ export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
     }
 
     if (!origin || origin !== allowedOrigin) {
-      logMessage.info(
-        `Middleware: Request origin ${origin ?? "<missing>"} is not allowed. Allowed: ${allowedOrigin}`
-      );
+      logMessage.info(`Middleware: Request origin ${origin ?? "<missing>"} is not allowed.`);
       return NextResponse.json({ error: "Request origin is not allowed." }, { status: 403 });
     }
   }
