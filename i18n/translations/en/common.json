@@ -295,7 +295,7 @@
     "resumePage": {
       "upload": {
         "title": "Load your saved answers",
-        "description": "If you attached documents to your form, you may need to attach them again."
+        "description": "If you attached documents to your form, you need to attach them again."
       },
       "mismatchedForm": {
         "title": "Continue the form with these answers?",
@@ -314,13 +314,13 @@
         "intro": "For questions you’ve already answered:",
         "text1": "1. Find the saved copy on your device.",
         "text2": "2. Upload the copy to load saved answers to the form.",
-        "text3": "3. Check whether you need to reattach any documents, as they may not upload with your answers.",
+        "text3": "3. Reattach any documents, as they do not upload with your answers.",
         "text4": "4. Continue with the form."
       }
     },
     "prompt": {
       "title": "Save to device",
-      "text1": "Download and save a copy of your form in progress.",
+      "text1": "Download and save a copy of your form.",
       "text2": "When you want to continue, open the copy to find the link for this form.",
       "text3": "Visit the link, select “Load your answers” and follow the prompts.",
       "okay": "Save",
