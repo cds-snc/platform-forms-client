@@ -158,9 +158,7 @@ export const ResponseHtmlAggregated = ({
                   return (
                     <div key="" className="mt-32 break-before-page">
                       <h3 id={submission.id} tabIndex={-1}>
-                        {t("responseAggregatedTemplate.dataList.formResponse", {
-                          lng: lang,
-                        })}{" "}
+                        {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
                         {submission.id}
                       </h3>
                       <ColumnTable
