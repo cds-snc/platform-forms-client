@@ -36,7 +36,6 @@ interface EditorProps {
   className?: string;
   maxLength?: number;
   enableDraggableBlocks?: boolean;
-  enableCollapsibleBlocks?: boolean;
 
   onChange?(...args: unknown[]): unknown;
 }
@@ -53,7 +52,6 @@ export const Editor = ({
   className,
   maxLength,
   enableDraggableBlocks = false,
-  enableCollapsibleBlocks = false,
 }: EditorProps) => {
   contentLocale = contentLocale || locale;
 
@@ -76,11 +74,7 @@ export const Editor = ({
       <ToolbarContext>
         <LexicalExtensionComposer extension={editorExtension} contentEditable={null}>
           <div className="gc-editor-container">
-            <ToolbarPlugin
-              editorId={editorId}
-              setIsLinkEditMode={setIsLinkEditMode}
-              enableCollapsibleBlocks={enableCollapsibleBlocks}
-            />
+            <ToolbarPlugin editorId={editorId} setIsLinkEditMode={setIsLinkEditMode} />
             <ShortcutsPlugin setIsLinkEditMode={setIsLinkEditMode} />
             <RichTextPlugin
               contentEditable={
