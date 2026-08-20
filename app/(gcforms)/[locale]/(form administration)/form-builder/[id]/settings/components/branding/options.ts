@@ -431,4 +431,13 @@ export const options = [
     logoTitleEn: "Agriculture and Agri-Food Canada",
     logoTitleFr: "Agriculture et Agroalimentaire Canada",
   },
+  {
+    name: "chrs",
+    urlEn: "https://chrs.ca/en",
+    urlFr: "https://chrs.ca/fr",
+    logoEn: "/img/branding/chrs-en.svg",
+    logoFr: "/img/branding/chrs-fr.svg",
+    logoTitleEn: "Canadian Heritage Rivers System",
+    logoTitleFr: "Réseau des rivières du patrimoine canadien",
+  },
 ];
