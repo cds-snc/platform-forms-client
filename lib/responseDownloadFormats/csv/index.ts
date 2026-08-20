@@ -3,7 +3,10 @@ import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
 import { sortByLayout } from "@lib/utils/form-builder";
-import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
+import {
+  checkAndformatStarRatingAnswer,
+  getStarRatingHeaderStrings,
+} from "@root/components/clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -18,14 +21,21 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     elements: formResponseSubmissions.formRecord.form.elements,
   }).filter((element) => !richTextElements.includes(element.type));
 
+  // This should be refactored if we ever add more new types.
   const header = sortedElements.map((element) => {
-    const starRatingSuffix =
-      element.type === FormElementTypes.starRating
-        ? ` (${t("starRating.outOf", { lng: "en", count: element.properties.numberOfStars ?? 5 })})\n` +
-          `${element.properties.titleFr} (${t("starRating.outOf", { lng: "fr", count: element.properties.numberOfStars ?? 5 })})`
-        : `\n${element.properties.titleFr}`;
+    const starRatingHeader = getStarRatingHeaderStrings(
+      {
+        type: element.type,
+        questionEn: element.properties.titleEn,
+        questionFr: element.properties.titleFr,
+      },
+      element.properties.numberOfStars ?? 5,
+      t
+    );
 
-    return `${element.properties.titleEn}${starRatingSuffix}${
+    return `${starRatingHeader?.stringEn ?? element.properties.titleEn}\n${
+      starRatingHeader?.stringFr ?? element.properties.titleFr
+    }${
       element.type === FormElementTypes.formattedDate && element.properties.dateFormat
         ? "\n" +
           t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
@@ -71,15 +81,12 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
           )
           .join("\n");
       }
-      let answerText = answer.answer;
       const starRatingText = checkAndformatStarRatingAnswer(answer);
       if (starRatingText !== undefined) {
         return starRatingText;
       }
-      if (
-        typeof answerText === "string" &&
-        specialChars.some((char) => answerText.startsWith(char))
-      ) {
+      let answerText = answer.answer;
+      if (specialChars.some((char) => answerText.startsWith(char))) {
         answerText = `'${answerText}`;
       }
       if (answerText == "") {

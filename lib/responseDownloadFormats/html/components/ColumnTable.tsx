@@ -8,7 +8,11 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
-import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
+import {
+  checkAndformatStarRatingAnswer,
+  getStarRatingHeaderStrings,
+  getStarRatingNumberOfStars,
+} from "@root/components/clientComponents/forms/StarRating/utils";
 
 /*
  ⚡ NOTE: CSS is compiled 
@@ -27,28 +31,21 @@ const QuestionColumns = ({
 }): JSX.Element => {
   const { t } = customTranslate("common");
 
+  // This should be refactored if we ever add more new types.
   const renderRow = (index: number | string, lang: Language, item: Answer) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
     const starRatingValue = checkAndformatStarRatingAnswer(item);
-    const numberOfStars =
-      item.type === FormElementTypes.starRating
-        ? (formRecord.form.elements.find((el) => el.id === item.questionId)?.properties
-            .numberOfStars ?? 5)
-        : undefined;
+    const starRatingHeader = getStarRatingHeaderStrings(
+      item,
+      getStarRatingNumberOfStars(formRecord, item.questionId),
+      t
+    );
     return (
       <div key={`row-${index}`} className="border-gray flex w-full flex-row border-b py-4">
         <dt data-testid={`col-question-${index}`} className="w-96 py-4 font-bold">
-          {orderLanguageStrings({
-            stringEn:
-              numberOfStars !== undefined
-                ? `${item.questionEn} (${t("starRating.outOf", { lng: "en", count: numberOfStars })})`
-                : item.questionEn,
-            stringFr:
-              numberOfStars !== undefined
-                ? `${item.questionFr} (${t("starRating.outOf", { lng: "fr", count: numberOfStars })})`
-                : item.questionFr,
-            lang,
-          })}
+          {starRatingHeader
+            ? orderLanguageStrings({ ...starRatingHeader, lang })
+            : orderLanguageStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
           {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
             <>
               <br />{" "}

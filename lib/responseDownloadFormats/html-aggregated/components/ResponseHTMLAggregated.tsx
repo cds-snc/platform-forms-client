@@ -11,7 +11,10 @@ import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
 import { formatDateTimeUTC, formatDateTimeUTCFr } from "@lib/utils/form-builder";
-import { FormElementTypes } from "@lib/types";
+import {
+  getStarRatingHeaderStrings,
+  getStarRatingNumberOfStars,
+} from "@root/components/clientComponents/forms/StarRating/utils";
 import { Language } from "@root/lib/types/form-builder-types";
 import { VersionBadge } from "../../html/components/VersionBadge";
 
@@ -27,6 +30,7 @@ export const ResponseHtmlAggregated = ({
   host = "",
 }: HTMLDownloadProps) => {
   const { t } = customTranslate("my-forms");
+  const { t: commonT } = customTranslate("common");
   const formRecord = formResponseSubmissions.formRecord;
 
   // Newline deliniated will work to paste multiple codes in the confirmation dialog.
@@ -41,36 +45,30 @@ export const ResponseHtmlAggregated = ({
   const headersForTable = [
     {
       title: orderLanguageStrings({
-        stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
-        stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
+        stringEn: t("responseTemplate.responseNumber", { ns: "my-forms", lng: "en" }),
+        stringFr: t("responseTemplate.responseNumber", { ns: "my-forms", lng: "fr" }),
         lang,
       }),
       type: "formData",
     },
     {
       title: orderLanguageStrings({
-        stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
-        stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
+        stringEn: t("responseTemplate.submissionDate", { ns: "my-forms", lng: "en" }),
+        stringFr: t("responseTemplate.submissionDate", { ns: "my-forms", lng: "fr" }),
         lang,
       }),
       type: "formData",
     },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
-      const numberOfStars =
-        answer.type === FormElementTypes.starRating
-          ? (formRecord.form.elements.find((el) => el.id === answer.questionId)?.properties
-              .numberOfStars ?? 5)
-          : undefined;
+      const starRatingHeader = getStarRatingHeaderStrings(
+        answer,
+        getStarRatingNumberOfStars(formRecord, answer.questionId),
+        commonT
+      );
       return {
         title: orderLanguageStrings({
-          stringEn:
-            numberOfStars !== undefined
-              ? `${answer.questionEn} (${t("common:starRating.outOf", { lng: "en", count: numberOfStars })})`
-              : answer.questionEn,
-          stringFr:
-            numberOfStars !== undefined
-              ? `${answer.questionFr} (${t("common:starRating.outOf", { lng: "fr", count: numberOfStars })})`
-              : answer.questionFr,
+          stringEn: starRatingHeader?.stringEn ?? answer.questionEn,
+          stringFr: starRatingHeader?.stringFr ?? answer.questionFr,
           lang,
         }),
         type: answer.type,
@@ -107,13 +105,18 @@ export const ResponseHtmlAggregated = ({
                 <VersionBadge
                   id="version-badge"
                   versionNumber={formRecord.versionNumber}
-                  versionText={t("responseTemplate.versionNumber", { lng: lang })}
+                  versionText={t("responseTemplate.versionNumber", { ns: "my-forms", lng: lang })}
                 />
               </div>
 
               <div className="mb-14 border-2 border-dashed border-black bg-slate-50 p-8">
                 <div className="mb-4 flex justify-between">
-                  <h2>{t("responseAggregatedTemplate.officialReceipt", { lng: lang })}</h2>
+                  <h2>
+                    {t("responseAggregatedTemplate.officialReceipt", {
+                      ns: "my-forms",
+                      lng: lang,
+                    })}
+                  </h2>
                   <ProtectedLevel
                     securityAttribute={formResponseSubmissions.formRecord.securityAttribute}
                     lang={lang}
@@ -122,14 +125,17 @@ export const ResponseHtmlAggregated = ({
                 <p className="mb-4">
                   <strong>{submissions.length}</strong>{" "}
                   {`${t("responseAggregatedTemplate.responsesDownloaded", {
+                    ns: "my-forms",
                     lng: lang,
                     count: submissions.length,
                   })} ${dateTime}`}
                 </p>
                 <p className="mb-4">
-                  {t("responseAggregatedTemplate.needToVerify", { lng: lang })}
+                  {t("responseAggregatedTemplate.needToVerify", { ns: "my-forms", lng: lang })}
                 </p>
-                <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
+                <p className="mb-8">
+                  {t("responseAggregatedTemplate.useTheCopy", { ns: "my-forms", lng: lang })}
+                </p>
                 <CopyCodes
                   host={host}
                   confirmationCodes={confirmationCodes}
@@ -138,7 +144,7 @@ export const ResponseHtmlAggregated = ({
                 />
               </div>
 
-              <h2>{t("responseAggregatedTemplate.title", { lng: lang })}</h2>
+              <h2>{t("responseAggregatedTemplate.title", { ns: "my-forms", lng: lang })}</h2>
 
               <div className="mt-14 overflow-x-auto">
                 <AggregatedTable
@@ -150,14 +156,17 @@ export const ResponseHtmlAggregated = ({
               </div>
 
               <h2 className="sr-only">
-                {t("responseAggregatedTemplate.dataList.title", { lng: lang })}
+                {t("responseAggregatedTemplate.dataList.title", { ns: "my-forms", lng: lang })}
               </h2>
               {submissions &&
                 submissions.map((submission) => {
                   return (
                     <div key="" className="mt-32 break-before-page">
                       <h3 id={submission.id} tabIndex={-1}>
-                        {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
+                        {t("responseAggregatedTemplate.dataList.formResponse", {
+                          ns: "my-forms",
+                          lng: lang,
+                        })}{" "}
                         {submission.id}
                       </h3>
                       <ColumnTable
