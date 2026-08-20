@@ -524,13 +524,5 @@ type GenerateElementProps = {
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
   const { element, language } = props;
   const generatedElement = _buildForm(element, language);
-  return (
-    <ConditionalWrapper
-      element={element}
-      rules={element.properties.conditionalRules || null}
-      lang={language}
-    >
-      {generatedElement}
-    </ConditionalWrapper>
-  );
+  return <ConditionalWrapper element={element}>{generatedElement}</ConditionalWrapper>;
 };

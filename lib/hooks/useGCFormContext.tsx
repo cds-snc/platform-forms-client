@@ -12,7 +12,6 @@ import {
   getValuesWithMatchedIds,
   getVisibleGroupsBasedOnValuesRecursive,
   getVisibleElementIdsForGroup,
-  getDeepVisibleElementIds,
 } from "@gcforms/core";
 
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -31,7 +30,6 @@ interface GCFormsContextValueType {
   getValues: () => FormValues;
   matchedIds: string[];
   visibleElementIds: Set<string>;
-  deepVisibleElementIds: Set<string>;
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -83,9 +81,6 @@ export const GCFormsProvider = ({
   const [matchedIds, setMatchedIds] = useState<string[]>([]);
   const [visibleElementIds, setVisibleElementIds] = useState(() =>
     getVisibleElementIdsForGroup(formRecord, {}, initialGroup)
-  );
-  const [deepVisibleElementIds, setDeepVisibleElementIds] = useState(() =>
-    getDeepVisibleElementIds(formRecord, {})
   );
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
@@ -140,14 +135,11 @@ export const GCFormsProvider = ({
     const nextVisibleElementIds = getVisibleElementIdsForGroup(
       formRecord,
       formValues,
-      currentGroup
+      currentGroup,
+      valueIds
     );
-    const nextDeepVisibleElementIds = getDeepVisibleElementIds(formRecord, formValues);
     setVisibleElementIds((previous) =>
       setsAreEqual(previous, nextVisibleElementIds) ? previous : nextVisibleElementIds
-    );
-    setDeepVisibleElementIds((previous) =>
-      setsAreEqual(previous, nextDeepVisibleElementIds) ? previous : nextDeepVisibleElementIds
     );
   };
 
@@ -226,7 +218,6 @@ export const GCFormsProvider = ({
         getValues,
         matchedIds,
         visibleElementIds,
-        deepVisibleElementIds,
         groups,
         currentGroup,
         getPreviousGroup,
@@ -264,7 +255,6 @@ export const useGCFormsContext = () => {
       setSubmissionDate: () => void 0,
       matchedIds: [""],
       visibleElementIds: new Set(),
-      deepVisibleElementIds: new Set(),
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",

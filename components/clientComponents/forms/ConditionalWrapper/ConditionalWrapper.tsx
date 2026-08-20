@@ -1,7 +1,7 @@
 "use client";
 import { Activity, type ReactElement } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { type ConditionalRule, type FormElement } from "@gcforms/types";
+import { type FormElement } from "@gcforms/types";
 
 export const ConditionalWrapper = ({
   children,
@@ -9,8 +9,6 @@ export const ConditionalWrapper = ({
 }: {
   children: ReactElement;
   element: FormElement;
-  rules: ConditionalRule[] | null;
-  lang: string;
 }) => {
   const { visibleElementIds } = useGCFormsContext();
 

@@ -4,6 +4,7 @@ import {
   checkPageVisibility,
   getValuesWithMatchedIds,
   getVisibleGroupsBasedOnValuesRecursive,
+  getVisibleElementIdsForGroup,
 } from "./index";
 
 describe("checkPageVisibility", () => {
@@ -103,6 +104,29 @@ describe("checkPageVisibility", () => {
       },
     } as PublicFormRecord;
     expect(checkPageVisibility(formRecord, baseElement, {})).toBe(false);
+  });
+
+  it("excludes elements without rules from unreachable groups", () => {
+    const element2: FormElement = { ...baseElement, id: 2 };
+    const groups: GroupsType = {
+      start: {
+        name: "Start",
+        titleEn: "Start",
+        titleFr: "Start",
+        elements: [],
+        nextAction: "groupA",
+      },
+      groupA: { name: "A", titleEn: "Group A", titleFr: "Group A", elements: ["2"] },
+      groupB: { name: "B", titleEn: "Group B", titleFr: "Group B", elements: ["1"] },
+    };
+    const formRecord = {
+      form: {
+        elements: [baseElement, element2],
+        groups,
+      },
+    } as PublicFormRecord;
+
+    expect([...getVisibleElementIdsForGroup(formRecord, {})]).toEqual(["2"]);
   });
 
   it("follows conditional navigation with nextAction array based on form values", () => {

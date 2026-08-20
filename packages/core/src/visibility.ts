@@ -232,13 +232,13 @@ const getVisibleGroupIds = (formRecord: PublicFormRecord, values: FormValues) =>
 };
 
 const isElementInVisibleGroup = (
-  formRecord: PublicFormRecord,
   element: FormElement,
-  visibleGroupIds: Set<string> | undefined
+  visibleGroupIds: Set<string> | undefined,
+  elementGroupIds: Map<string, string>
 ) => {
   if (!visibleGroupIds) return true;
 
-  const groupId = findGroupByElementId(formRecord, element.id);
+  const groupId = elementGroupIds.get(element.id.toString());
   return !groupId || visibleGroupIds.has(groupId);
 };
 
@@ -247,6 +247,7 @@ const getConditionallyVisible = (
   formRecord: PublicFormRecord,
   matchedIds: Set<string>,
   visibleGroupIds: Set<string> | undefined,
+  elementGroupIds: Map<string, string>,
   checked: Record<string, boolean>
 ): boolean => {
   const elementId = element.id.toString();
@@ -254,13 +255,13 @@ const getConditionallyVisible = (
 
   const rules = element.properties.conditionalRules;
   if (!rules || rules.length === 0) {
-    return isElementInVisibleGroup(formRecord, element, visibleGroupIds);
+    return isElementInVisibleGroup(element, visibleGroupIds, elementGroupIds);
   }
 
   checked[elementId] = false;
 
   const isVisible =
-    isElementInVisibleGroup(formRecord, element, visibleGroupIds) &&
+    isElementInVisibleGroup(element, visibleGroupIds, elementGroupIds) &&
     rules.some((rule) => {
       const [parentId] = rule.choiceId.split(".");
       const parent = getElementById(formRecord.form.elements, parentId);
@@ -268,8 +269,14 @@ const getConditionallyVisible = (
       if (!parent) return matchedIds.has(rule.choiceId);
 
       return (
-        getConditionallyVisible(parent, formRecord, matchedIds, visibleGroupIds, checked) &&
-        matchedIds.has(rule.choiceId)
+        getConditionallyVisible(
+          parent,
+          formRecord,
+          matchedIds,
+          visibleGroupIds,
+          elementGroupIds,
+          checked
+        ) && matchedIds.has(rule.choiceId)
       );
     });
 
@@ -281,13 +288,26 @@ const getVisibleElementIds = (
   formRecord: PublicFormRecord,
   values: FormValues,
   currentGroup?: string | null,
-  deep = false
+  matchedChoiceIds = mapIdsToValues(formRecord.form.elements, values)
 ) => {
   const groups = formRecord.form.groups as GroupsType | undefined;
   const visibleGroupIds = getVisibleGroupIds(formRecord, values);
-  const matchedIds = new Set(mapIdsToValues(formRecord.form.elements, values));
+  const matchedIds = new Set(matchedChoiceIds);
   const checked: Record<string, boolean> = {};
   const visibleElementIds = new Set<string>();
+  const hasGroups = !!groups && Object.keys(groups).length >= 1;
+  const elementGroupIds = new Map<string, string>();
+  if (hasGroups) {
+    for (const [groupId, group] of Object.entries(groups)) {
+      for (const elementId of group.elements || []) {
+        if (!elementGroupIds.has(elementId.toString())) {
+          elementGroupIds.set(elementId.toString(), groupId);
+        }
+      }
+    }
+  }
+  const currentGroupElementIds =
+    currentGroup && hasGroups ? new Set(groups[currentGroup]?.elements || []) : undefined;
 
   for (const element of formRecord.form.elements) {
     if (element.subId) {
@@ -295,20 +315,18 @@ const getVisibleElementIds = (
       continue;
     }
 
-    if (
-      !deep &&
-      currentGroup &&
-      groups &&
-      Object.keys(groups).length >= 1 &&
-      !inGroup(currentGroup, element.id, groups)
-    ) {
+    if (currentGroupElementIds && !currentGroupElementIds.has(element.id.toString())) {
       continue;
     }
 
-    const isVisible = deep
-      ? getConditionallyVisible(element, formRecord, matchedIds, visibleGroupIds, checked)
-      : !element.properties.conditionalRules?.length ||
-        getConditionallyVisible(element, formRecord, matchedIds, visibleGroupIds, checked);
+    const isVisible = getConditionallyVisible(
+      element,
+      formRecord,
+      matchedIds,
+      visibleGroupIds,
+      elementGroupIds,
+      checked
+    );
 
     if (isVisible) visibleElementIds.add(element.id.toString());
   }
@@ -319,8 +337,6 @@ const getVisibleElementIds = (
 export const getVisibleElementIdsForGroup = (
   formRecord: PublicFormRecord,
   values: FormValues,
-  currentGroup?: string | null
-) => getVisibleElementIds(formRecord, values, currentGroup);
-
-export const getDeepVisibleElementIds = (formRecord: PublicFormRecord, values: FormValues) =>
-  getVisibleElementIds(formRecord, values, null, true);
+  currentGroup?: string | null,
+  matchedChoiceIds?: string[]
+) => getVisibleElementIds(formRecord, values, currentGroup, matchedChoiceIds);

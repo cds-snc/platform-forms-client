@@ -8,7 +8,7 @@ import {
   type NextActionRule,
 } from "@gcforms/types";
 
-import { ensureChoiceId, checkVisibilityRecursive } from "@gcforms/core";
+import { ensureChoiceId, getVisibleElementIdsForGroup } from "@gcforms/core";
 
 /**
  * Checks if two arrays match.
@@ -311,9 +311,8 @@ export const filterShownElements = (
     return elements;
   }
 
-  return elements.filter((element) => {
-    return checkVisibilityRecursive(formRecord, element, values);
-  });
+  const visibleElementIds = getVisibleElementIdsForGroup(formRecord, values);
+  return elements.filter((element) => visibleElementIds.has(element.id.toString()));
 };
 
 export const filterValuesByVisibleElements = (
@@ -325,9 +324,10 @@ export const filterValuesByVisibleElements = (
     return values;
   }
 
+  const shownElementIds = new Set(shownElements.map((element) => element.id.toString()));
   const filteredValues: { [key: string]: Response } = {};
   Object.keys(values).forEach((key) => {
-    if (shownElements.find((el) => el.id === Number(key))) {
+    if (shownElementIds.has(String(Number(key)))) {
       // Note: want to keep original value type (e.g. Checkbox=Array) or Formik may get confused
       filteredValues[key] = values[key];
     }

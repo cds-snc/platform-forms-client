@@ -1,7 +1,6 @@
 import { FormElement, PublicFormRecord } from "@gcforms/types";
 import {
   checkVisibilityRecursive,
-  getDeepVisibleElementIds,
   getVisibleElementIdsForGroup,
 } from "./visibility";
 
@@ -187,8 +186,6 @@ describe("Recursive visibility check", () => {
       "2",
       "6",
     ]);
-    expect([...getDeepVisibleElementIds(formRecord, valuesHidden6)]).toEqual(["1"]);
-    expect([...getDeepVisibleElementIds(formRecord, valuesVisible6)]).toEqual(["1", "2", "6"]);
   });
 
   test("Complex recursive test", async () => {
