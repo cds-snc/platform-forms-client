@@ -38,6 +38,7 @@
       "textField": "Ajouter une réponse courte",
       "textArea": "Ajouter une réponse longue",
       "radio": "Ajouter des boutons radio",
+      "starRating": "Ajouter un classement par étoiles",
       "checkbox": "Ajouter des cases à cocher",
       "dropdown": "Ajouter une liste déroulante",
       "fileInput": "Ajouter un téléverseur de fichier",
@@ -272,6 +273,13 @@
       "title": "Boutons radio",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Sélectionnez une option."
+    },
+    "starRating": {
+      "title": "Classement par étoiles",
+      "description": "Une échelle d'évaluation permettant de donner son avis en attribuant une note comprise entre 1 et un certain nombre étoiles.",
+      "exampleQuestion": "Comment évalueriez-vous ce service?",
+      "exampleDescription": "Plus il y a d'étoiles, meilleure est l'expérience.",
+      "numberOfStars": "Nombre d'étoiles"
     },
     "richText": {
       "description": "Élément de texte enrichi pour insérer des en-têtes, des paragraphes, des listes ou des liens.",
@@ -1233,6 +1241,7 @@
   "shortAnswerText": "Réponse courte",
   "signInToTest": "<a href=\"/fr/auth/login\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
   "singleChoice": "Boutons radio",
+  "starRating": "Évaluation par étoiles",
   "start": "Commencer",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",

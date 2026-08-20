@@ -44,6 +44,7 @@ import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
 import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 import { traceFunction } from "@lib/otel";
 import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
+import { StarRatingObject } from "@root/components/clientComponents/forms/StarRating/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -481,6 +482,11 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       // If the answer is somehow not parseable as JSON, return it as is
       return answer as string;
     }
+  }
+
+  if (question && question.type === FormElementTypes.starRating) {
+    const starRatingObject = answer as StarRatingObject;
+    return `${starRatingObject.value}/${starRatingObject.numberOfStars}`;
   }
 
   return answer as string;

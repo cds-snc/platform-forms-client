@@ -30,14 +30,7 @@ export type FormValues = Record<string, string | string[]>;
 export type ChoiceRule = { elementId: string; choiceId: string };
 export type NextActionRule = { groupId: string; choiceId: string };
 export type HTMLTextInputTypeAttribute =
-  | "text"
-  | "email"
-  | "name"
-  | "number"
-  | "password"
-  | "search"
-  | "tel"
-  | "url";
+  "text" | "email" | "name" | "number" | "password" | "search" | "tel" | "url";
 
 // Extends HTMLTextInputTypeAttribute with validation-only strategies that do not
 // map directly to an HTML <input type> value.
@@ -64,6 +57,7 @@ export const FormElementTypes = {
   formattedDate: "formattedDate",
   numberInput: "numberInput",
   customJson: "customJson",
+  starRating: "starRating",
 } as const;
 export type FormElementTypes = (typeof FormElementTypes)[keyof typeof FormElementTypes];
 
@@ -143,6 +137,7 @@ export interface ElementProperties {
   stepCount?: number;
   currencyCode?: string;
   useThousandsSeparator?: boolean;
+  numberOfStars?: number;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
