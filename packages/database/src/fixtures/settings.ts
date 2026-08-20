@@ -83,7 +83,7 @@ const addressCompleteRetrieveRateLimitMax: Setting = {
   descriptionEn: "The maximum number of retrieve requests before the user is rate limited.",
   descriptionFr:
     "Le nombre maximal de requêtes de récupération avant que l'utilisateur ne soit soumis à une limitation de débit.",
-  value: "200",
+  value: "12",
 };
 
 const addressCompleteRateLimitWindowSeconds: Setting = {
