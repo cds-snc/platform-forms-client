@@ -5,8 +5,6 @@ import { getAddressAsString } from "@clientComponents/forms/AddressComplete/util
 
 import { FormElement, FormElementTypes } from "@root/packages/types/src/form-types";
 import { ResponseFilenameMapping } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/lib/processResponse";
-import { StarRatingObject } from "@root/components/clientComponents/forms/StarRating/types";
-
 const getDateAsString = (answer: DateObject | string | object, dateFormat: DateFormat): string => {
   try {
     if (typeof answer === "object" && "YYYY" in answer && "MM" in answer && "DD" in answer) {
@@ -69,11 +67,6 @@ export const getAnswerAsString = (
       // If the answer is somehow not parseable as JSON, return it as is
       return answer as string;
     }
-  }
-
-  if (question && question.type === FormElementTypes.starRating) {
-    const starRatingObject = answer as StarRatingObject;
-    return `${starRatingObject.value}/${starRatingObject.numberOfStars}`;
   }
 
   return answer as string;

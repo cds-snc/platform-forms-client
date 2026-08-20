@@ -44,8 +44,6 @@ import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
 import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 import { traceFunction } from "@lib/otel";
 import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
-import { StarRatingObject } from "@root/components/clientComponents/forms/StarRating/types";
-
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
 type ResponseVersion = string | number | null;
@@ -485,8 +483,7 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
   }
 
   if (question && question.type === FormElementTypes.starRating) {
-    const starRatingObject = answer as StarRatingObject;
-    return `${starRatingObject.value}/${starRatingObject.numberOfStars}`;
+    return String(answer ?? "");
   }
 
   return answer as string;

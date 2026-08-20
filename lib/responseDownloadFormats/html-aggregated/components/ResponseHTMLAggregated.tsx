@@ -11,6 +11,7 @@ import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
 import { formatDateTimeUTC, formatDateTimeUTCFr } from "@lib/utils/form-builder";
+import { FormElementTypes } from "@lib/types";
 import { Language } from "@root/lib/types/form-builder-types";
 import { VersionBadge } from "../../html/components/VersionBadge";
 
@@ -55,10 +56,21 @@ export const ResponseHtmlAggregated = ({
       type: "formData",
     },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
+      const numberOfStars =
+        answer.type === FormElementTypes.starRating
+          ? (formRecord.form.elements.find((el) => el.id === answer.questionId)?.properties
+              .numberOfStars ?? 5)
+          : undefined;
       return {
         title: orderLanguageStrings({
-          stringEn: answer.questionEn,
-          stringFr: answer.questionFr,
+          stringEn:
+            numberOfStars !== undefined
+              ? `${answer.questionEn} (${t("common:starRating.outOf", { lng: "en", count: numberOfStars })})`
+              : answer.questionEn,
+          stringFr:
+            numberOfStars !== undefined
+              ? `${answer.questionFr} (${t("common:starRating.outOf", { lng: "fr", count: numberOfStars })})`
+              : answer.questionFr,
           lang,
         }),
         type: answer.type,

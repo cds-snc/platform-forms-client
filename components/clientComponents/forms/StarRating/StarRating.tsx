@@ -5,8 +5,6 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { StarItem } from "./StarItem";
-import { StarRatingObject } from "./types";
-
 interface StarRatingProps extends InputFieldProps {
   numberOfStars?: number;
 }
@@ -30,17 +28,8 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
     () => false
   );
 
-  const parseStoredValue = (raw: string): number => {
-    if (!raw) return 0;
-    try {
-      const parsed = JSON.parse(raw) as StarRatingObject;
-      return parsed?.value ?? 0;
-    } catch {
-      return 0;
-    }
-  };
-
-  const currentValue = isClient ? parseStoredValue(field.value) : 0;
+  // Number() handles both a numeric Formik value and a string restored from localStorage.
+  const currentValue = isClient ? Number(field.value) || 0 : 0;
   const activeValue = hovered !== null ? hovered : currentValue;
 
   // numberOfStars is a static prop — only recompute if it changes
@@ -75,11 +64,11 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
       }
 
       const newValue = stars[newIndex];
-      helpers.setValue(JSON.stringify({ value: newValue, numberOfStars }));
+      helpers.setValue(newValue);
       setHovered(newValue);
       inputRefs.current[newIndex]?.focus();
     },
-    [stars, helpers, numberOfStars]
+    [stars, helpers]
   );
 
   const errorId = meta.error ? `error-${id}` : undefined;
@@ -111,7 +100,7 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
               inputRefs.current[index] = el;
             }}
             onChange={() => {
-              helpers.setValue(JSON.stringify({ value: starValue, numberOfStars }));
+              helpers.setValue(starValue);
             }}
             onFocus={(e) => {
               setHovered(starValue);

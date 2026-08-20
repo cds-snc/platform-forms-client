@@ -22,13 +22,24 @@ const QuestionRows = ({
   const renderColumn = (index: number, lang: Language, item: Answer, subItem = false) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
     const starRatingValue = checkAndformatStarRatingAnswer(item);
+    const numberOfStars =
+      item.type === FormElementTypes.starRating
+        ? (formRecord.form.elements.find((el) => el.id === item.questionId)?.properties
+            .numberOfStars ?? 5)
+        : undefined;
     return (
       <div
         key={`row-${index}`}
         className={`flex ${subItem ? "flex-row" : "flex-col"} border-gray border-b`}
       >
         <dt className="border-gray border-b-2 p-4 font-bold whitespace-nowrap">
-          {String(item[getProperty("question", lang)])}
+          {numberOfStars !== undefined
+            ? orderLanguageStrings({
+                stringEn: `${item.questionEn} (${t("starRating.outOf", { lng: "en", count: numberOfStars })})`,
+                stringFr: `${item.questionFr} (${t("starRating.outOf", { lng: "fr", count: numberOfStars })})`,
+                lang,
+              })
+            : String(item[getProperty("question", lang)])}
           {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
             <>
               <br />

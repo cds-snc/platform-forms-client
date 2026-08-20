@@ -30,10 +30,25 @@ const QuestionColumns = ({
   const renderRow = (index: number | string, lang: Language, item: Answer) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
     const starRatingValue = checkAndformatStarRatingAnswer(item);
+    const numberOfStars =
+      item.type === FormElementTypes.starRating
+        ? (formRecord.form.elements.find((el) => el.id === item.questionId)?.properties
+            .numberOfStars ?? 5)
+        : undefined;
     return (
       <div key={`row-${index}`} className="border-gray flex w-full flex-row border-b py-4">
         <dt data-testid={`col-question-${index}`} className="w-96 py-4 font-bold">
-          {orderLanguageStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
+          {orderLanguageStrings({
+            stringEn:
+              numberOfStars !== undefined
+                ? `${item.questionEn} (${t("starRating.outOf", { lng: "en", count: numberOfStars })})`
+                : item.questionEn,
+            stringFr:
+              numberOfStars !== undefined
+                ? `${item.questionFr} (${t("starRating.outOf", { lng: "fr", count: numberOfStars })})`
+                : item.questionFr,
+            lang,
+          })}
           {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
             <>
               <br />{" "}

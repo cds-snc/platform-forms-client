@@ -19,7 +19,13 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   }).filter((element) => !richTextElements.includes(element.type));
 
   const header = sortedElements.map((element) => {
-    return `${element.properties.titleEn}\n${element.properties.titleFr}${
+    const starRatingSuffix =
+      element.type === FormElementTypes.starRating
+        ? ` (${t("starRating.outOf", { lng: "en", count: element.properties.numberOfStars ?? 5 })})\n` +
+          `${element.properties.titleFr} (${t("starRating.outOf", { lng: "fr", count: element.properties.numberOfStars ?? 5 })})`
+        : `\n${element.properties.titleFr}`;
+
+    return `${element.properties.titleEn}${starRatingSuffix}${
       element.type === FormElementTypes.formattedDate && element.properties.dateFormat
         ? "\n" +
           t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +

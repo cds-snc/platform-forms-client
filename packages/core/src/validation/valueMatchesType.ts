@@ -109,6 +109,12 @@ export const valueMatches = (
       }
       return false;
     }
+    case FormElementTypes.starRating: {
+      if (typeof value === "number" || typeof value === "string") {
+        return true;
+      }
+      return false;
+    }
     case FormElementTypes.dynamicRow: {
       if (!Array.isArray(value)) {
         return false;
