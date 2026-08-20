@@ -1,8 +1,5 @@
 import { FormElement, PublicFormRecord } from "@gcforms/types";
-import {
-  checkVisibilityRecursive,
-  getVisibleElementIdsForGroup,
-} from "./visibility";
+import { checkVisibilityRecursive, getVisibleElementIdsForGroup } from "./visibility";
 
 describe("Recursive visibility check", () => {
   test("Simple recursive test", async () => {
