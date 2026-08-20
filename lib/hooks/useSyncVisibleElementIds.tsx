@@ -5,7 +5,7 @@ import { useGCFormsContext } from "./useGCFormContext";
 import { useEffectDebugger } from "@root/debugger/useEffect";
 
 export const useSyncVisibleElementIds = () => {
-  const { values } = useFormikContext();
+  const { values, setFieldValue } = useFormikContext();
   const { updateVisibleElementIds, currentGroup } = useGCFormsContext();
 
   useEffectDebugger(
@@ -15,6 +15,7 @@ export const useSyncVisibleElementIds = () => {
         return;
       }
 
+      setFieldValue("currentGroup", currentGroup);
       updateVisibleElementIds(values as Record<string, string>);
     },
     [values, currentGroup],
