@@ -528,6 +528,17 @@ describe("Gov Email domain validator", () => {
     ["test@sencanada.ca", false],
     ["test@lop.parl.ca", false],
     ["test@ciec-ccie.parl.gc.ca", false],
+    ["test@citt-tcce.gc.ca", false],
+    ["test@sst-tss.gc.ca", false],
+    ["test@eiboa-caae.gc.ca", false],
+    ["test@cirb-ccri.gc.ca", false],
+    ["test@cirb-ccri.gc.ca", false],
+    ["test@ccperb-cceebc.gc.ca", false],
+    ["test@ct-tc.gc.ca", false],
+    ["test@fpslreb-crtespf.gc.ca", false],
+    ["test@sct-trp.gc.ca", false],
+    ["test@eptc-tpec.gc.ca", false],   
+    ["test@njc-cnm.gc.ca", false],   
   ])(`Should return true if email is valid (testing "%s")`, async (email, isValid) => {
     expect(isValidGovEmail(email)).toBe(isValid);
   });
