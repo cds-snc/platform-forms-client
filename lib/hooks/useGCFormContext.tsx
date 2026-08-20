@@ -11,6 +11,8 @@ import {
   mapIdsToValues,
   getValuesWithMatchedIds,
   getVisibleGroupsBasedOnValuesRecursive,
+  getVisibleElementIdsForGroup,
+  getDeepVisibleElementIds,
 } from "@gcforms/core";
 
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -28,6 +30,8 @@ interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
   matchedIds: string[];
+  visibleElementIds: Set<string>;
+  deepVisibleElementIds: Set<string>;
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -55,6 +59,14 @@ interface GCFormsContextValueType {
   };
 }
 
+const setsAreEqual = (first: Set<string>, second: Set<string>) => {
+  if (first.size !== second.size) return false;
+  for (const value of first) {
+    if (!second.has(value)) return false;
+  }
+  return true;
+};
+
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
 
 export const GCFormsProvider = ({
@@ -69,6 +81,12 @@ export const GCFormsProvider = ({
   const values = useRef({});
   const history = useRef<string[]>([LOCKED_GROUPS.START]);
   const [matchedIds, setMatchedIds] = useState<string[]>([]);
+  const [visibleElementIds, setVisibleElementIds] = useState(() =>
+    getVisibleElementIdsForGroup(formRecord, {}, initialGroup)
+  );
+  const [deepVisibleElementIds, setDeepVisibleElementIds] = useState(() =>
+    getDeepVisibleElementIds(formRecord, {})
+  );
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
@@ -119,11 +137,27 @@ export const GCFormsProvider = ({
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }
+    const nextVisibleElementIds = getVisibleElementIdsForGroup(
+      formRecord,
+      formValues,
+      currentGroup
+    );
+    const nextDeepVisibleElementIds = getDeepVisibleElementIds(formRecord, formValues);
+    setVisibleElementIds((previous) =>
+      setsAreEqual(previous, nextVisibleElementIds) ? previous : nextVisibleElementIds
+    );
+    setDeepVisibleElementIds((previous) =>
+      setsAreEqual(previous, nextDeepVisibleElementIds) ? previous : nextDeepVisibleElementIds
+    );
   };
 
   // Helper to not expose the setter
   const setGroup = (group: string | null) => {
     setCurrentGroup(group);
+    const nextVisibleElementIds = getVisibleElementIdsForGroup(formRecord, values.current, group);
+    setVisibleElementIds((previous) =>
+      setsAreEqual(previous, nextVisibleElementIds) ? previous : nextVisibleElementIds
+    );
   };
 
   const getValues = () => {
@@ -191,6 +225,8 @@ export const GCFormsProvider = ({
         updateValues,
         getValues,
         matchedIds,
+        visibleElementIds,
+        deepVisibleElementIds,
         groups,
         currentGroup,
         getPreviousGroup,
@@ -227,6 +263,8 @@ export const useGCFormsContext = () => {
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
       matchedIds: [""],
+      visibleElementIds: new Set(),
+      deepVisibleElementIds: new Set(),
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",

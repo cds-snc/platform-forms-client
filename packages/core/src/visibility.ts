@@ -6,6 +6,7 @@ import {
   getValuesWithMatchedIds,
   findGroupByElementId,
   inGroup,
+  mapIdsToValues,
 } from "./helpers";
 
 /**
@@ -220,3 +221,106 @@ export const isElementVisible = (
 
   return checkVisibilityRecursive(formRecord, element, values);
 };
+
+const getVisibleGroupIds = (formRecord: PublicFormRecord, values: FormValues) => {
+  if (!formRecord.form.groups || Object.keys(formRecord.form.groups).length === 0) {
+    return undefined;
+  }
+
+  const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, values);
+  return new Set(getVisibleGroupsBasedOnValuesRecursive(formRecord, valuesWithMatchedIds, "start"));
+};
+
+const isElementInVisibleGroup = (
+  formRecord: PublicFormRecord,
+  element: FormElement,
+  visibleGroupIds: Set<string> | undefined
+) => {
+  if (!visibleGroupIds) return true;
+
+  const groupId = findGroupByElementId(formRecord, element.id);
+  return !groupId || visibleGroupIds.has(groupId);
+};
+
+const getConditionallyVisible = (
+  element: FormElement,
+  formRecord: PublicFormRecord,
+  matchedIds: Set<string>,
+  visibleGroupIds: Set<string> | undefined,
+  checked: Record<string, boolean>
+): boolean => {
+  const elementId = element.id.toString();
+  if (checked[elementId] !== undefined) return checked[elementId];
+
+  const rules = element.properties.conditionalRules;
+  if (!rules || rules.length === 0) {
+    return isElementInVisibleGroup(formRecord, element, visibleGroupIds);
+  }
+
+  checked[elementId] = false;
+
+  const isVisible =
+    isElementInVisibleGroup(formRecord, element, visibleGroupIds) &&
+    rules.some((rule) => {
+      const [parentId] = rule.choiceId.split(".");
+      const parent = getElementById(formRecord.form.elements, parentId);
+
+      if (!parent) return matchedIds.has(rule.choiceId);
+
+      return (
+        getConditionallyVisible(parent, formRecord, matchedIds, visibleGroupIds, checked) &&
+        matchedIds.has(rule.choiceId)
+      );
+    });
+
+  checked[elementId] = isVisible;
+  return isVisible;
+};
+
+const getVisibleElementIds = (
+  formRecord: PublicFormRecord,
+  values: FormValues,
+  currentGroup?: string | null,
+  deep = false
+) => {
+  const groups = formRecord.form.groups as GroupsType | undefined;
+  const visibleGroupIds = getVisibleGroupIds(formRecord, values);
+  const matchedIds = new Set(mapIdsToValues(formRecord.form.elements, values));
+  const checked: Record<string, boolean> = {};
+  const visibleElementIds = new Set<string>();
+
+  for (const element of formRecord.form.elements) {
+    if (element.subId) {
+      visibleElementIds.add(element.id.toString());
+      continue;
+    }
+
+    if (
+      !deep &&
+      currentGroup &&
+      groups &&
+      Object.keys(groups).length >= 1 &&
+      !inGroup(currentGroup, element.id, groups)
+    ) {
+      continue;
+    }
+
+    const isVisible = deep
+      ? getConditionallyVisible(element, formRecord, matchedIds, visibleGroupIds, checked)
+      : !element.properties.conditionalRules?.length ||
+        getConditionallyVisible(element, formRecord, matchedIds, visibleGroupIds, checked);
+
+    if (isVisible) visibleElementIds.add(element.id.toString());
+  }
+
+  return visibleElementIds;
+};
+
+export const getVisibleElementIdsForGroup = (
+  formRecord: PublicFormRecord,
+  values: FormValues,
+  currentGroup?: string | null
+) => getVisibleElementIds(formRecord, values, currentGroup);
+
+export const getDeepVisibleElementIds = (formRecord: PublicFormRecord, values: FormValues) =>
+  getVisibleElementIds(formRecord, values, null, true);

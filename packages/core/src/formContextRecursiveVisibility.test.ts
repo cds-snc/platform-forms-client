@@ -1,5 +1,9 @@
 import { FormElement, PublicFormRecord } from "@gcforms/types";
-import { checkVisibilityRecursive } from "./visibility";
+import {
+  checkVisibilityRecursive,
+  getDeepVisibleElementIds,
+  getVisibleElementIdsForGroup,
+} from "./visibility";
 
 describe("Recursive visibility check", () => {
   test("Simple recursive test", async () => {
@@ -176,6 +180,15 @@ describe("Recursive visibility check", () => {
 
     const isVisible2 = checkVisibilityRecursive(formRecord, element, valuesVisible6);
     expect(isVisible2).toEqual(true);
+
+    expect([...getVisibleElementIdsForGroup(formRecord, valuesHidden6, "start")]).toEqual(["1"]);
+    expect([...getVisibleElementIdsForGroup(formRecord, valuesVisible6, "start")]).toEqual([
+      "1",
+      "2",
+      "6",
+    ]);
+    expect([...getDeepVisibleElementIds(formRecord, valuesHidden6)]).toEqual(["1"]);
+    expect([...getDeepVisibleElementIds(formRecord, valuesVisible6)]).toEqual(["1", "2", "6"]);
   });
 
   test("Complex recursive test", async () => {

@@ -27,6 +27,8 @@ export {
   checkPageVisibility,
   checkVisibilityRecursive,
   isElementVisible,
+  getVisibleElementIdsForGroup,
+  getDeepVisibleElementIds,
 } from "./visibility";
 
 export {
