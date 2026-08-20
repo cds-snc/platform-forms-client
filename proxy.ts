@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { allowedOrigin } from "./allowedOrigin";
+import { allowedOrigin } from "./lib/origin";
 import { fallbackLng, languages } from "./i18n/settings";
 import type { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
@@ -9,6 +9,7 @@ import NextAuth, { Session } from "next-auth";
 import type { NextAuthRequest } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { BODY_SIZE_LIMIT } from "@root/constants";
+import { getOrigin } from "./lib/origin";
 
 const verboseDebug = false;
 
@@ -112,7 +113,7 @@ export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
       );
     }
 
-    const origin = req.headers.get("origin");
+    const origin = await getOrigin();
 
     if (!allowedOrigin) {
       logMessage.error("Middleware: HOST_URL is not configured.");

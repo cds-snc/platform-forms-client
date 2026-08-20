@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { allowedOrigin } from "./allowedOrigin";
+import { allowedOrigin } from "./lib/origin";
 
 const nextConfig: NextConfig = {
   deploymentId: process.env.NEXT_DEPLOYMENT_ID ?? "local",
