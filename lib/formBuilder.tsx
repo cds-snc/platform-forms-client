@@ -520,10 +520,16 @@ export const mergeFormValuesWithInitialValues = (
 type GenerateElementProps = {
   element: FormElement;
   language: string;
+  isTestMode?: boolean;
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
-  const { element, language } = props;
+  const { element, language, isTestMode } = props;
   const generatedElement = _buildForm(element, language);
+
+  if (isTestMode) {
+    return generatedElement;
+  }
+
   return (
     <ConditionalWrapper
       element={element}
