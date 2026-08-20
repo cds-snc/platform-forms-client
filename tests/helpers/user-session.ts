@@ -19,13 +19,19 @@ export async function userSession(
   await page.fill("input[id='username']", admin ? "test.admin@cds-snc.ca" : "test.user@cds-snc.ca");
   await page.fill("input[id='password']", "testTesttest");
 
-  // Submit login form and wait for verification code form to appear
-  await page.click("button[type='submit']");
+  // Submit login form
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: "networkidle" }),
+    page.click("button[type='submit']"),
+  ]);
 
   // Verification code step
   await page.locator("[id='verificationCodeForm']").waitFor({ state: "visible" });
   await page.fill("input[id='verificationCode']", "12345");
-  await page.click("button[type='submit']");
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: "networkidle" }),
+    page.click("button[type='submit']"),
+  ]);
 
   // Wait for auth cookie (authjs.session-token) to be set
   // Use Playwright's cookie API for more reliable checking
