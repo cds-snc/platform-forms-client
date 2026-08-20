@@ -5,12 +5,10 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 import { logMessage } from "@lib/logger";
 import { type Language } from "@lib/types/form-builder-types";
-import { getRedisInstance } from "@root/lib/integration/redisConnector";
 import { getClientIp } from "@root/lib/ip";
-import { getAppSetting } from "@root/lib/appSettings";
 import { isValidCanadaPostId, isValidCountryCode, isValidLanguage } from "./validation";
+import { isRateLimited, recordAndCheckRateLimit } from "./rateLimiter";
 import {
-  isPositiveSafeInteger,
   MIN_ADDRESS_SEARCH_LENGTH,
   normalizeAddressField,
   normalizeCountryCode,
@@ -74,6 +72,7 @@ const hasItems0Error = (responseData: unknown): boolean => {
 };
 
 // Function returns address complete list of choices.
+// Note: find requests are not rate limited because they do not incur a cost to the API
 export const getAddressCompleteChoices = async (
   query: string,
   countryCode: string,
@@ -100,7 +99,8 @@ export const getAddressCompleteChoices = async (
     return { items: [], error: "INVALID_INPUT" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
+  // Avoid showing find results if rate limited for UX reasons
+  if (await isRateLimited(await getClientIp())) {
     return { items: [], error: "RATE_LIMITED" };
   }
 
@@ -159,7 +159,8 @@ export const getSelectedAddress = async (
     return { address: null, error: "INVALID_INPUT" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.retrieve)) {
+  // Increment the rate limit for paid Retrieve requests
+  if (await recordAndCheckRateLimit(await getClientIp())) {
     return { address: null, error: "RATE_LIMITED" };
   }
 
@@ -222,7 +223,8 @@ export const getAddressCompleteRetrieve = async (
     return { items: [], error: "INVALID_INPUT" };
   }
 
-  if (await incrementAndCheckRateLimiting(await getClientIp(), RATE_LIMIT_SCOPE.find)) {
+  // Avoid showing find results if rate limited for UX reasons
+  if (await isRateLimited(await getClientIp())) {
     return { items: [], error: "RATE_LIMITED" };
   }
 
@@ -333,63 +335,3 @@ const nestedAddressPattern = /\s+-\s+\d+\s+(Addresses|Adresses)$/i;
 export async function matchesAddressPattern(input: string): Promise<boolean> {
   return nestedAddressPattern.test(input);
 }
-
-const RATE_LIMIT_KEY_PREFIX = "address-complete";
-const RATE_LIMIT_SCOPE = {
-  find: "find",
-  retrieve: "retrieve",
-} as const;
-type RateLimitScope = (typeof RATE_LIMIT_SCOPE)[keyof typeof RATE_LIMIT_SCOPE];
-
-const RATE_LIMIT_MAX_SETTING = {
-  [RATE_LIMIT_SCOPE.find]: "addressCompleteFindRateLimitMax",
-  [RATE_LIMIT_SCOPE.retrieve]: "addressCompleteRetrieveRateLimitMax",
-} as const;
-
-// Returns true when the IP has exceeded the per-minute request "budget"
-const incrementAndCheckRateLimiting = async (
-  ip: string,
-  scope: RateLimitScope
-): Promise<boolean> => {
-  try {
-    const rateLimitMax = Number(await getAppSetting(RATE_LIMIT_MAX_SETTING[scope]));
-    const rateLimitWindowSeconds = Number(
-      await getAppSetting("addressCompleteRateLimitWindowSeconds")
-    );
-    if (!isPositiveSafeInteger(rateLimitMax) || !isPositiveSafeInteger(rateLimitWindowSeconds)) {
-      throw new Error("Invalid configuration");
-    }
-
-    const redis = await getRedisInstance();
-    const key = `${RATE_LIMIT_KEY_PREFIX}:${scope}:${ip}`;
-
-    // Increment the related IPs count
-    const pipeline = redis.pipeline();
-    pipeline.incr(key);
-    pipeline.expire(key, rateLimitWindowSeconds);
-
-    const results = await pipeline.exec();
-
-    // If there was an error incrementing ([error, value] tuple), just return false to avoid breaking the form UX
-    const incrResult = results?.[0];
-    if (incrResult?.[0]) {
-      return false;
-    }
-
-    // Check whether that IP is beyond the threshold and should be rate limited
-    const count = incrResult?.[1] as number;
-    const isRateLimited = count > rateLimitMax;
-    if (isRateLimited) {
-      logMessage.warn(
-        `AddressComplete user rate limited on ${scope} operation because they hit ${count}/${rateLimitMax} within ${rateLimitWindowSeconds}s.`
-      );
-    }
-    return isRateLimited;
-  } catch (err) {
-    logMessage.error(
-      `AddressComplete rate limiting failed. Reason: ${err instanceof Error ? err.message : String(err)}`
-    );
-    // Most likely case is Redis is down, just pass through to avoid breaking the form UX
-    return false;
-  }
-};
