@@ -13,10 +13,7 @@ vi.mock("formik", async () => {
   const actual = await vi.importActual<typeof import("formik")>("formik");
   return {
     ...actual,
-    useField: vi.fn(() => [
-      { field: { value: "" } },
-      { meta: { touched: null, error: null } },
-    ]),
+    useField: vi.fn(() => [{ field: { value: "" } }, { meta: { touched: null, error: null } }]),
   };
 });
 
@@ -53,7 +50,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Dropdown component", (lang
 
   it("renders without errors", async () => {
     const user = userEvent.setup();
-    render(<GenerateElement element={dropdownData} language={lang} />);
+    render(<GenerateElement element={dropdownData} language={lang} isTestMode={true} />);
 
     const title = lang === "en" ? dropdownData.properties.titleEn : dropdownData.properties.titleFr;
     const description =
@@ -78,7 +75,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Dropdown component", (lang
 
   it("required elements display properly", () => {
     dropdownData.properties.validation!.required = true;
-    render(<GenerateElement element={dropdownData} language={lang} />);
+    render(<GenerateElement element={dropdownData} language={lang} isTestMode={true} />);
     expect(screen.queryByTestId("required")).toBeInTheDocument();
     dropdownData.properties.validation!.required = false;
   });
