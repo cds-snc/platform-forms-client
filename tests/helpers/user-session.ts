@@ -19,19 +19,15 @@ export async function userSession(
   await page.fill("input[id='username']", admin ? "test.admin@cds-snc.ca" : "test.user@cds-snc.ca");
   await page.fill("input[id='password']", "testTesttest");
 
-  // Submit login form
-  await Promise.all([
-    page.waitForNavigation({ waitUntil: "networkidle" }),
-    page.click("button[type='submit']"),
-  ]);
+  // Submit login form and wait for navigation to MFA page
+  await page.click("button[type='submit']");
+  await page.waitForURL("**/auth/mfa", { waitUntil: "networkidle" });
 
   // Verification code step
   await page.locator("[id='verificationCodeForm']").waitFor({ state: "visible" });
   await page.fill("input[id='verificationCode']", "12345");
-  await Promise.all([
-    page.waitForNavigation({ waitUntil: "networkidle" }),
-    page.click("button[type='submit']"),
-  ]);
+  await page.click("button[type='submit']");
+  await page.waitForURL((url) => !url.pathname.includes("/auth/mfa"), { waitUntil: "networkidle" });
 
   // Wait for auth cookie (authjs.session-token) to be set
   // Use Playwright's cookie API for more reliable checking
