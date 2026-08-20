@@ -48,11 +48,9 @@ import { CollapsibleIcon } from "../../icons/CollapsibleIcon";
 export default function ToolbarPlugin({
   editorId,
   setIsLinkEditMode,
-  enableCollapsibleBlocks,
 }: {
   editorId: string;
   setIsLinkEditMode: (isLinkEditMode: boolean) => void;
-  enableCollapsibleBlocks: boolean;
 }) {
   const [editor] = useLexicalComposerContext();
 
@@ -73,7 +71,7 @@ export default function ToolbarPlugin({
     }
   }, [activeEditor, setIsLinkEditMode, toolbarState.isLink]);
 
-  const toolbarItemCount = enableCollapsibleBlocks ? 10 : 9;
+  const toolbarItemCount = 10;
 
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
   const [currentFocusIndex, setCurrentFocusIndex] = useState(0);
@@ -414,24 +412,22 @@ export default function ToolbarPlugin({
           </button>
         </ToolTip>
 
-        {enableCollapsibleBlocks && (
-          <ToolTip text={t("tooltipInsertCollapsible")}>
-            <button
-              tabIndex={currentFocusIndex == 9 ? 0 : -1}
-              ref={(el) => {
-                const index = "button-9" as unknown as number;
-                if (el && itemsRef.current) itemsRef.current[index] = el;
-              }}
-              disabled={!isEditable}
-              onClick={() => insertCollapsible(editor)}
-              className="toolbar-item"
-              aria-label={t("insertCollapsible")}
-              data-testid="collapsible-button"
-            >
-              <CollapsibleIcon />
-            </button>
-          </ToolTip>
-        )}
+        <ToolTip text={t("tooltipInsertCollapsible")}>
+          <button
+            tabIndex={currentFocusIndex == 9 ? 0 : -1}
+            ref={(el) => {
+              const index = "button-9" as unknown as number;
+              if (el && itemsRef.current) itemsRef.current[index] = el;
+            }}
+            disabled={!isEditable}
+            onClick={() => insertCollapsible(editor)}
+            className="toolbar-item"
+            aria-label={t("insertCollapsible")}
+            data-testid="collapsible-button"
+          >
+            <CollapsibleIcon />
+          </button>
+        </ToolTip>
       </div>
     </>
   );
