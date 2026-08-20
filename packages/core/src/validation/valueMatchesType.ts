@@ -109,11 +109,9 @@ export const valueMatches = (
       }
       return false;
     }
+    // Formik stores the selected numeric starValue, not the radio input's string value.
     case FormElementTypes.starRating: {
-      if (typeof value === "number" || typeof value === "string") {
-        return true;
-      }
-      return false;
+      return typeof value === "number";
     }
     case FormElementTypes.dynamicRow: {
       if (!Array.isArray(value)) {
