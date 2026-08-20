@@ -69,7 +69,7 @@ WORKDIR /src
 COPY --from=build /src/.next/standalone ./
 COPY --from=build /src/.next/static ./.next/static
 
-COPY package.json yarn.lock .yarnrc.yml next.config.ts nextCacheHandler.ts ./
+COPY package.json yarn.lock .yarnrc.yml next.config.ts ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY scripts/pr-review-entrypoint.sh ./entrypoint.sh
