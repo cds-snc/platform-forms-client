@@ -70,7 +70,6 @@
     "@headless-tree/core": "^1.7.0",
     "@headless-tree/react": "^1.7.0",
     "@headlessui/react": "^2.2.10",
-    "@neshca/cache-handler": "^1.2.1",
     "@next/mdx": "16.3.1",
     "@opentelemetry/exporter-jaeger": "^2.10.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.221.0",
