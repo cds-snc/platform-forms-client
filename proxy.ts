@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { allowedOrigin } from "./lib/origin";
 import { fallbackLng, languages } from "./i18n/settings";
 import type { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
@@ -8,6 +9,7 @@ import NextAuth, { Session } from "next-auth";
 import type { NextAuthRequest } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { BODY_SIZE_LIMIT } from "@root/constants";
+import { getOrigin } from "./lib/origin";
 
 const verboseDebug = false;
 
@@ -109,6 +111,18 @@ export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
         { error: "Invalid characters or escape sequences in request body." },
         { status: 400 }
       );
+    }
+
+    const origin = await getOrigin();
+
+    if (!allowedOrigin) {
+      logMessage.error("Middleware: HOST_URL is not configured.");
+      return NextResponse.json({ error: "Server misconfiguration." }, { status: 500 });
+    }
+
+    if (!origin || origin !== allowedOrigin) {
+      logMessage.info(`Middleware: Request origin ${origin ?? "<missing>"} is not allowed.`);
+      return NextResponse.json({ error: "Request origin is not allowed." }, { status: 403 });
     }
   }
 
