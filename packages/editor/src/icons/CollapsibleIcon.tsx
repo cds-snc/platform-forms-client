@@ -5,14 +5,14 @@ export const CollapsibleIcon = () => (
     <path
       d="M3 14.5H10M3 21H10M3 17.75H10"
       stroke="#64748B"
-      stroke-width="2"
-      stroke-linecap="round"
+      strokeWidth="2"
+      strokeLinecap="round"
     />
     <path
       d="M14 14.5L21 14.5M14 21H21M14 17.75L21 17.75"
       stroke="black"
-      stroke-width="2"
-      stroke-linecap="round"
+      strokeWidth="2"
+      strokeLinecap="round"
     />
   </svg>
 );
