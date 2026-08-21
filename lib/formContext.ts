@@ -324,32 +324,6 @@ export const filterShownElements = (
   });
 };
 
-export const getElementIdsAffectingVisibility = (formRecord: FormRecord | PublicFormRecord) => {
-  const elementIds = new Set<string>();
-
-  if (!formRecord?.form?.elements) return [];
-
-  // Loop through all elements and check for conditional rules
-  formRecord.form.elements.forEach((element) => {
-    element.properties.conditionalRules?.forEach((rule) => {
-      elementIds.add(rule.choiceId.split(".")[0]);
-    });
-  });
-
-  // Loop through all groups and check for nextAction rules
-  Object.values(formRecord.form.groups ?? {}).forEach((group) => {
-    if (!Array.isArray(group.nextAction)) return;
-
-    group.nextAction.forEach((rule) => {
-      if (!rule.choiceId.includes("catch-all")) {
-        elementIds.add(rule.choiceId.split(".")[0]);
-      }
-    });
-  });
-
-  return Array.from(elementIds);
-};
-
 export const filterValuesByVisibleElements = (
   formRecord: FormRecord | PublicFormRecord,
   values: FormValues
