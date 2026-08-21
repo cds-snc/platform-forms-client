@@ -9,15 +9,8 @@ const nextConfig: NextConfig = {
     includePaths: ["./styles"],
   },
   poweredByHeader: false,
-  compiler: {
-    // Remove all console.* calls
-    // removeConsole: false,
-  },
   output: process.env.NEXT_OUTPUT_STANDALONE === "true" ? "standalone" : undefined,
-  ...(process.env.LAMBDA_ENV && {
-    cacheHandler: "./nextCacheHandler.ts",
-    cacheMaxMemorySize: 0, // disable default in-memory caching
-  }),
+
   async headers() {
     return [
       {
