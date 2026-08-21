@@ -1,11 +1,36 @@
 import { expect } from 'vitest'
-import { filterShownElements } from "@lib/formContext";
+import { filterShownElements, getElementIdsAffectingVisibility } from "@lib/formContext";
 
 // Fixtures captured by adding a break point in Forms.tsx and copying the values from the debugger
 import {withConditionalRules, withoutConditionalRules} from "../../__fixtures__/getRulesElementsHiddenRemoved.json";
 import { FormElement } from '../types';
 
 describe("formContext filterShownElements()", () => {
+    it("finds element ids used by visibility rules", () => {
+        const result = getElementIdsAffectingVisibility({
+            form: {
+                elements: [
+                    { id: 1, properties: { conditionalRules: [{ choiceId: "1.0" }] } },
+                    { id: 2, properties: { conditionalRules: [{ choiceId: "2.1" }] } },
+                ],
+                groups: {
+                    start: {
+                        name: "start",
+                        titleEn: "Start",
+                        titleFr: "Debut",
+                        elements: ["1"],
+                        nextAction: [
+                            { groupId: "next", choiceId: "1.0" },
+                            { groupId: "end", choiceId: "catch-all" },
+                        ],
+                    },
+                },
+            },
+        } as never);
+
+        expect(result).toEqual(["1", "2"]);
+    });
+
   it("Handles filtering out correct element", () => {
     const expectedOutput = [
       {
