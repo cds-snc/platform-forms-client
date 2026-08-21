@@ -1,16 +1,20 @@
 "use client";
-import { createContext, useContext, ReactNode, useState, useRef } from "react";
+import { createContext, useContext, ReactNode, useState, useRef, useCallback } from "react";
 
 import type { FormValues, GroupsType, PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
-import { getNextAction, filterValuesByVisibleElements, idArraysMatch } from "@lib/formContext";
+import {
+  getNextAction,
+  filterValuesByVisibleElements,
+  filterShownElements,
+} from "@lib/formContext";
 
 import {
-  mapIdsToValues,
   getValuesWithMatchedIds,
   getVisibleGroupsBasedOnValuesRecursive,
+  mapIdsToValues,
 } from "@gcforms/core";
 
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -25,9 +29,7 @@ import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headle
 import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
 
 interface GCFormsContextValueType {
-  updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
-  matchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -53,6 +55,8 @@ interface GCFormsContextValueType {
     currentGroup: string;
     versionNumber?: number | null;
   };
+  visibleElementIds: Set<string>;
+  updateVisibleElementIds: (formValues: Record<string, string>) => void;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -68,10 +72,10 @@ export const GCFormsProvider = ({
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = useRef({});
   const history = useRef<string[]>([LOCKED_GROUPS.START]);
-  const [matchedIds, setMatchedIds] = useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
+  const [visibleElementIds, setVisibleElementIds] = useState<Set<string>>(new Set());
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -96,6 +100,7 @@ export const GCFormsProvider = ({
     if (!currentGroup) return;
 
     const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
+    const matchedIds = mapIdsToValues(formRecord.form.elements, values.current);
     const filteredMatchedIds = matchedIds.filter((id) => {
       const parentId = id.split(".")[0];
       if (filteredResponses[parentId]) {
@@ -105,7 +110,6 @@ export const GCFormsProvider = ({
 
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
-
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
         pushIdToHistory(nextAction);
@@ -113,21 +117,28 @@ export const GCFormsProvider = ({
     }
   };
 
-  const updateValues = ({ formValues }: { formValues: FormValues }): void => {
-    values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
-    if (!idArraysMatch(matchedIds, valueIds)) {
-      setMatchedIds(valueIds);
-    }
+  const getValues = () => {
+    return values.current;
   };
+
+  const updateVisibleElementIds = useCallback(
+    (formValues: Record<string, string>) => {
+      const elements = filterShownElements(
+        formRecord,
+        formValues as FormValues,
+        currentGroup ?? "start"
+      );
+      const newVisibleElementIds = new Set(elements.map((element) => element.id.toString()));
+      setVisibleElementIds(newVisibleElementIds);
+
+      values.current = formValues as FormValues;
+    },
+    [formRecord, currentGroup]
+  );
 
   // Helper to not expose the setter
   const setGroup = (group: string | null) => {
     setCurrentGroup(group);
-  };
-
-  const getValues = () => {
-    return values.current;
   };
 
   // TODO: once groups flag is on, just use formHasGroups
@@ -188,9 +199,7 @@ export const GCFormsProvider = ({
         setSubmissionId,
         submissionDate,
         setSubmissionDate,
-        updateValues,
         getValues,
-        matchedIds,
         groups,
         currentGroup,
         getPreviousGroup,
@@ -204,6 +213,8 @@ export const GCFormsProvider = ({
         clearHistoryAfterId,
         getGroupTitle,
         getProgressData,
+        visibleElementIds,
+        updateVisibleElementIds,
       }}
     >
       {children}
@@ -216,9 +227,6 @@ export const useGCFormsContext = () => {
   if (formsContext === undefined) {
     // For now just return a default context if we're not inside the provider
     return {
-      updateValues: () => {
-        return "noop";
-      },
       getValues: () => {
         return {};
       },
@@ -226,7 +234,6 @@ export const useGCFormsContext = () => {
       setSubmissionId: () => void 0,
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
-      matchedIds: [""],
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",
@@ -241,6 +248,8 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
+      visibleElementIds: new Set<string>(),
+      updateVisibleElementIds: () => void 0,
       getProgressData: () => {
         return {
           id: "",
