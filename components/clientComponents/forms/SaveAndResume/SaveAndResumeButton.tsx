@@ -5,10 +5,15 @@ import { type Language } from "@lib/types/form-builder-types";
 import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Buttons/SubmitButton";
 import { ConfirmDownloadDialog } from "./ConfirmDownloadDialog";
 import { SaveProgressIcon } from "@serverComponents/icons";
+import { useFormikContext } from "formik";
+import { useGCFormsContext } from "@root/lib/hooks/useGCFormContext";
 
 export const SaveAndResumeButton = ({ language }: { language: Language }) => {
   const { t } = useTranslation("review");
   const [confirm, setConfirm] = useState(false);
+
+  const { values } = useFormikContext();
+  const { updateVisibleElementIds } = useGCFormsContext();
 
   return (
     <div>
@@ -17,7 +22,10 @@ export const SaveAndResumeButton = ({ language }: { language: Language }) => {
         type="button"
         loading={confirm}
         theme="secondary"
-        onClick={() => setConfirm(true)}
+        onClick={() => {
+          updateVisibleElementIds(values as Record<string, string>);
+          setConfirm(true);
+        }}
       >
         <>
           {t("saveAndResume.saveBtn", { lng: language })}
@@ -30,7 +38,10 @@ export const SaveAndResumeButton = ({ language }: { language: Language }) => {
           type="progress"
           language={language}
           open={confirm}
-          handleClose={() => setConfirm(false)}
+          handleClose={() => {
+            updateVisibleElementIds(values as Record<string, string>);
+            setConfirm(false);
+          }}
         />
       )}
     </div>
