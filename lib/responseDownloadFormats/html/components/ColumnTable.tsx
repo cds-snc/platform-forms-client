@@ -51,7 +51,7 @@ const QuestionColumns = ({
           <dd data-testid={`col-answer-${index}`} className={`flex-1 py-4 pl-8`}>
             <p>{numberInputValue}</p>
           </dd>
-        ) : starRatingValue !== undefined ? (
+        ) : item.type === FormElementTypes.starRating ? (
           <dd data-testid={`col-answer-${index}`} className={`flex-1 py-4 pl-8`}>
             <p>{starRatingValue}</p>
           </dd>

@@ -393,7 +393,8 @@
   },
   "starRating": {
     "starLabel_one": "{{count}} star",
-    "starLabel_other": "{{count}} stars"
+    "starLabel_other": "{{count}} stars",
+    "outOf": "{{value}} out of {{numberOfStars}}"
   },
   "loginPilot": {
     "title": "Sign in to GC Forms",

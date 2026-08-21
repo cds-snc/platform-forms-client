@@ -110,6 +110,7 @@ export const writeRow = async ({
     createdAt: new Date(createdAt).toISOString(),
     mappedAnswers,
     sortedElements,
+    rawAnswers,
   });
 
   const recordsData = [row];
@@ -191,14 +192,22 @@ export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }
 
   // Build headers in the same style as server-side transform (titles with EN/FR and date format)
   const headerTitles = sortedElements.map((element: FormElement) => {
-    return `${element.properties.titleEn}\n${element.properties.titleFr}${
-      element.type === FormElementTypes.formattedDate && element.properties.dateFormat
-        ? "\n" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
-          "/" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" })
-        : ""
-    }`;
+    let columnTitle = `${element.properties.titleEn}\n${element.properties.titleFr}`;
+    if (element.type === FormElementTypes.formattedDate && element.properties.dateFormat) {
+      columnTitle +=
+        "\n" +
+        t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
+        "\n" +
+        t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" });
+    }
+    if (element.type === FormElementTypes.starRating) {
+      columnTitle +=
+        "\n" +
+        `Out of ${element.properties.numberOfStars}` +
+        "\n" +
+        `Sur ${element.properties.numberOfStars}`;
+    }
+    return columnTitle;
   });
 
   // prepend submission id and date headers and append receipt text similar to transform
@@ -213,11 +222,13 @@ export const getRow = ({
   createdAt,
   mappedAnswers,
   sortedElements,
+  rawAnswers,
 }: {
   rowId: string;
   createdAt: string;
   mappedAnswers: MappedAnswer[];
   sortedElements: FormElement[];
+  rawAnswers: Record<string, Response>;
 }) => {
   // Build row similar to server-side transform
   const answers = sortedElements.map((element) => {
@@ -250,6 +261,19 @@ export const getRow = ({
         .join("\n");
     }
     let answerText = mappedAnswer.answer;
+
+    if (element.type === FormElementTypes.starRating) {
+      const rawAnswer = rawAnswers[String(element.id)];
+      if (
+        rawAnswer !== null &&
+        typeof rawAnswer === "object" &&
+        !Array.isArray(rawAnswer) &&
+        "value" in rawAnswer
+      ) {
+        return rawAnswer.value as string | number;
+      }
+      return "-";
+    }
 
     if (
       typeof answerText === "string" &&

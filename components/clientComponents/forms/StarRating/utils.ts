@@ -30,7 +30,7 @@ export const formatStarRating = (
     return String(value);
   }
 
-  return `${value}/${numberOfStars}`;
+  return `${value} out of ${numberOfStars}`;
 };
 
 /**
@@ -40,6 +40,27 @@ export const formatStarRating = (
 export const formatStarRatingAnswer = (rawAnswer: string): string => {
   const parsed = parseStarRatingAnswer(rawAnswer);
   return parsed ? formatStarRating(parsed.value, parsed.numberOfStars) : rawAnswer || "-";
+};
+
+export const getFormattedStarRatingFromObject = (rawAnswer: string): string => {
+  try {
+    const parsed: StarRatingObject = JSON.parse(rawAnswer);
+    if (
+      parsed !== null &&
+      typeof parsed === "object" &&
+      "value" in parsed &&
+      "numberOfStars" in parsed
+    ) {
+      return parsed.value + " out of " + parsed.numberOfStars;
+    }
+  } catch {
+    return rawAnswer;
+  }
+  return rawAnswer;
+};
+
+export const getStarRatingScoreFromObject = (rating: StarRatingObject): number => {
+  return rating.value;
 };
 
 export const checkAndformatStarRatingAnswer = (item: Answer): string | undefined => {
