@@ -1,14 +1,17 @@
 import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
-import { customTranslate } from "@lib/i18nHelpers";
+import { serverTranslation } from "@i18n";
 import { sortByLayout } from "@lib/utils/form-builder";
-import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
+import { getStarRatingScoreFromObject } from "@clientComponents/forms/StarRating/utils";
+import { StarRatingObject } from "@clientComponents/forms/StarRating/types";
 
 const specialChars = ["=", "+", "-", "@"];
 
-export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
-  const { t } = customTranslate("common");
+export const transform = async (formResponseSubmissions: FormResponseSubmissions) => {
+  const { t: tEn } = await serverTranslation("common", { lang: "en" });
+  const { t: tFr } = await serverTranslation("common", { lang: "fr" });
+
   const { submissions } = formResponseSubmissions;
 
   const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
@@ -19,14 +22,28 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   }).filter((element) => !richTextElements.includes(element.type));
 
   const header = sortedElements.map((element) => {
-    return `${element.properties.titleEn}\n${element.properties.titleFr}${
-      element.type === FormElementTypes.formattedDate && element.properties.dateFormat
-        ? "\n" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
-          "/" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" })
-        : ""
-    }`;
+    let columnTitle = `${element.properties.titleEn}\n${element.properties.titleFr}`;
+    if (element.type === FormElementTypes.formattedDate && element.properties.dateFormat) {
+      columnTitle +=
+        "\n" +
+        tEn(`formattedDate.${element.properties.dateFormat}`) +
+        "\n" +
+        tFr(`formattedDate.${element.properties.dateFormat}`);
+    }
+    if (element.type === FormElementTypes.starRating) {
+      columnTitle +=
+        "\n" +
+        tEn("starRating.outOf", {
+          value: "",
+          numberOfStars: element.properties.numberOfStars,
+        }).trim() +
+        "\n" +
+        tFr("starRating.outOf", {
+          value: "",
+          numberOfStars: element.properties.numberOfStars,
+        }).trim();
+    }
+    return columnTitle;
   });
 
   header.unshift(
@@ -66,10 +83,11 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
           .join("\n");
       }
       let answerText = answer.answer;
-      const starRatingText = checkAndformatStarRatingAnswer(answer);
-      if (starRatingText !== undefined) {
-        return starRatingText;
+
+      if (element.type === FormElementTypes.starRating) {
+        return getStarRatingScoreFromObject(JSON.parse(answerText) as StarRatingObject);
       }
+
       if (
         typeof answerText === "string" &&
         specialChars.some((char) => answerText.startsWith(char))

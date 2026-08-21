@@ -5,10 +5,12 @@ import { FormElementTypes, type FormElement } from "@lib/types";
 
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
 import { sortByLayout } from "@lib/utils/form-builder";
-import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
+import { getStarRatingScoreFromObject } from "@clientComponents/forms/StarRating/utils";
+import { StarRatingObject } from "@clientComponents/forms/StarRating/types";
+import { customTranslate } from "@lib/i18nHelpers";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -29,7 +31,7 @@ export const initCsv = async ({
   }
 
   const sortedElements = orderElements({ formTemplate });
-  const headers = getHeaders({ sortedElements });
+  const headers = await getHeaders({ sortedElements });
 
   // Init the file with headers from the template
   const csvStringifier = createCsvStringifier({
@@ -114,8 +116,10 @@ export const writeRow = async ({
 
   const recordsData = [row];
 
+  const headers = await getHeaders({ sortedElements });
+
   const csvStringifier = createCsvStringifier({
-    header: getHeaders({ sortedElements }),
+    header: headers,
     alwaysQuote: true,
   });
 
@@ -186,19 +190,35 @@ export const orderElements = ({ formTemplate }: { formTemplate: FormProperties }
   return sortedElements;
 };
 
-export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }) => {
+export const getHeaders = async ({ sortedElements }: { sortedElements: FormElement[] }) => {
   const { t } = customTranslate("common");
 
   // Build headers in the same style as server-side transform (titles with EN/FR and date format)
   const headerTitles = sortedElements.map((element: FormElement) => {
-    return `${element.properties.titleEn}\n${element.properties.titleFr}${
-      element.type === FormElementTypes.formattedDate && element.properties.dateFormat
-        ? "\n" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
-          "/" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" })
-        : ""
-    }`;
+    let columnTitle = `${element.properties.titleEn}\n${element.properties.titleFr}`;
+    if (element.type === FormElementTypes.formattedDate && element.properties.dateFormat) {
+      columnTitle +=
+        "\n" +
+        t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
+        "\n" +
+        t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" });
+    }
+    if (element.type === FormElementTypes.starRating) {
+      columnTitle +=
+        "\n" +
+        t("starRating.outOf", {
+          value: "",
+          numberOfStars: element.properties.numberOfStars,
+          lng: "en",
+        }).trim() +
+        "\n" +
+        t("starRating.outOf", {
+          value: "",
+          numberOfStars: element.properties.numberOfStars,
+          lng: "fr",
+        }).trim();
+    }
+    return columnTitle;
   });
 
   // prepend submission id and date headers and append receipt text similar to transform
@@ -250,6 +270,10 @@ export const getRow = ({
         .join("\n");
     }
     let answerText = mappedAnswer.answer;
+
+    if (element.type === FormElementTypes.starRating) {
+      return getStarRatingScoreFromObject(JSON.parse(answerText) as StarRatingObject);
+    }
 
     if (
       typeof answerText === "string" &&
