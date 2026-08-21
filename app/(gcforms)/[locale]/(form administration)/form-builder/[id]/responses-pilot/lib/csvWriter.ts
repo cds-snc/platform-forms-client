@@ -5,12 +5,12 @@ import { FormElementTypes, type FormElement } from "@lib/types";
 
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
 import { sortByLayout } from "@lib/utils/form-builder";
+import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
 import { getStarRatingScoreFromObject } from "@clientComponents/forms/StarRating/utils";
 import { StarRatingObject } from "@clientComponents/forms/StarRating/types";
-import { customTranslate } from "@lib/i18nHelpers";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -207,20 +207,6 @@ export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }
         `Out of ${element.properties.numberOfStars}` +
         "\n" +
         `Sur ${element.properties.numberOfStars}`;
-
-      // columnTitle +=
-      //   "\n" +
-      //   t("starRating.outOf", {
-      //     value: "",
-      //     numberOfStars: element.properties.numberOfStars,
-      //     lng: "en",
-      //   }).trim() +
-      //   "\n" +
-      //   t("starRating.outOf", {
-      //     value: "",
-      //     numberOfStars: element.properties.numberOfStars,
-      //     lng: "fr",
-      //   }).trim();
     }
     return columnTitle;
   });
