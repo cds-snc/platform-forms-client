@@ -272,7 +272,7 @@ export const getRow = ({
     let answerText = mappedAnswer.answer;
 
     if (element.type === FormElementTypes.starRating) {
-      return getStarRatingScoreFromObject(JSON.parse(answerText) as StarRatingObject);
+      return getStarRatingScoreFromObject(answerText as unknown as StarRatingObject);
     }
 
     if (
