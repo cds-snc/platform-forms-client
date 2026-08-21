@@ -31,7 +31,7 @@ export const initCsv = async ({
   }
 
   const sortedElements = orderElements({ formTemplate });
-  const headers = await getHeaders({ sortedElements });
+  const headers = getHeaders({ sortedElements });
 
   // Init the file with headers from the template
   const csvStringifier = createCsvStringifier({
@@ -116,10 +116,8 @@ export const writeRow = async ({
 
   const recordsData = [row];
 
-  const headers = await getHeaders({ sortedElements });
-
   const csvStringifier = createCsvStringifier({
-    header: headers,
+    header: getHeaders({ sortedElements }),
     alwaysQuote: true,
   });
 
@@ -190,7 +188,7 @@ export const orderElements = ({ formTemplate }: { formTemplate: FormProperties }
   return sortedElements;
 };
 
-export const getHeaders = async ({ sortedElements }: { sortedElements: FormElement[] }) => {
+export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }) => {
   const { t } = customTranslate("common");
 
   // Build headers in the same style as server-side transform (titles with EN/FR and date format)
@@ -206,17 +204,23 @@ export const getHeaders = async ({ sortedElements }: { sortedElements: FormEleme
     if (element.type === FormElementTypes.starRating) {
       columnTitle +=
         "\n" +
-        t("starRating.outOf", {
-          value: "",
-          numberOfStars: element.properties.numberOfStars,
-          lng: "en",
-        }).trim() +
+        `Out of ${element.properties.numberOfStars}` +
         "\n" +
-        t("starRating.outOf", {
-          value: "",
-          numberOfStars: element.properties.numberOfStars,
-          lng: "fr",
-        }).trim();
+        `Sur ${element.properties.numberOfStars}`;
+
+      // columnTitle +=
+      //   "\n" +
+      //   t("starRating.outOf", {
+      //     value: "",
+      //     numberOfStars: element.properties.numberOfStars,
+      //     lng: "en",
+      //   }).trim() +
+      //   "\n" +
+      //   t("starRating.outOf", {
+      //     value: "",
+      //     numberOfStars: element.properties.numberOfStars,
+      //     lng: "fr",
+      //   }).trim();
     }
     return columnTitle;
   });
