@@ -205,7 +205,18 @@ export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }
       const numberOfStars =
         element.properties.numberOfStars ??
         formattedStarRatingDefaultElementProperties.numberOfStars;
-      columnTitle += "\n" + `Out of ${numberOfStars}` + "\n" + `Sur ${numberOfStars}`;
+      const enRatingRange = t("starRating.outOf", {
+        lng: "en",
+        value: "",
+        numberOfStars,
+      }).trim();
+      const frRatingRange = t("starRating.outOf", {
+        lng: "fr",
+        value: "",
+        numberOfStars,
+      }).trim();
+
+      columnTitle = `${element.properties.titleEn} (${enRatingRange})\n${element.properties.titleFr} (${frRatingRange})`;
     }
     return columnTitle;
   });

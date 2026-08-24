@@ -35,17 +35,16 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
       const numberOfStars =
         element.properties.numberOfStars ??
         formattedStarRatingDefaultElementProperties.numberOfStars;
-      columnTitle +=
-        "\n" +
-        tEn("starRating.outOf", {
-          value: "",
-          numberOfStars,
-        }).trim() +
-        "\n" +
-        tFr("starRating.outOf", {
-          value: "",
-          numberOfStars,
-        }).trim();
+      const enRatingRange = tEn("starRating.outOf", {
+        value: "",
+        numberOfStars,
+      }).trim();
+      const frRatingRange = tFr("starRating.outOf", {
+        value: "",
+        numberOfStars,
+      }).trim();
+
+      columnTitle = `${element.properties.titleEn} (${enRatingRange})\n${element.properties.titleFr} (${frRatingRange})`;
     }
     return columnTitle;
   });
