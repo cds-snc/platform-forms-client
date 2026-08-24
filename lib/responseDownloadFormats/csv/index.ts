@@ -3,6 +3,7 @@ import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { serverTranslation } from "@i18n";
 import { sortByLayout } from "@lib/utils/form-builder";
+import { formattedStarRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getStarRatingScoreFromObject } from "@clientComponents/forms/StarRating/utils";
 import { StarRatingObject } from "@clientComponents/forms/StarRating/types";
 
@@ -31,16 +32,19 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
         tFr(`formattedDate.${element.properties.dateFormat}`);
     }
     if (element.type === FormElementTypes.starRating) {
+      const numberOfStars =
+        element.properties.numberOfStars ??
+        formattedStarRatingDefaultElementProperties.numberOfStars;
       columnTitle +=
         "\n" +
         tEn("starRating.outOf", {
           value: "",
-          numberOfStars: element.properties.numberOfStars,
+          numberOfStars,
         }).trim() +
         "\n" +
         tFr("starRating.outOf", {
           value: "",
-          numberOfStars: element.properties.numberOfStars,
+          numberOfStars,
         }).trim();
     }
     return columnTitle;

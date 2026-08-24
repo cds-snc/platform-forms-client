@@ -9,6 +9,7 @@ import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
+import { formattedStarRatingDefaultElementProperties } from "@root/components/clientComponents/forms/StarRating/defaults";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -201,11 +202,10 @@ export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }
         t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" });
     }
     if (element.type === FormElementTypes.starRating) {
-      columnTitle +=
-        "\n" +
-        `Out of ${element.properties.numberOfStars}` +
-        "\n" +
-        `Sur ${element.properties.numberOfStars}`;
+      const numberOfStars =
+        element.properties.numberOfStars ??
+        formattedStarRatingDefaultElementProperties.numberOfStars;
+      columnTitle += "\n" + `Out of ${numberOfStars}` + "\n" + `Sur ${numberOfStars}`;
     }
     return columnTitle;
   });
