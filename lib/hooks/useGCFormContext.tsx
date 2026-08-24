@@ -123,13 +123,21 @@ export const GCFormsProvider = ({
 
   const updateVisibleElementIds = useCallback(
     (formValues: Record<string, string>) => {
-      const elements = filterShownElements(
+      const visibleElements = filterShownElements(
         formRecord,
         formValues as FormValues,
         currentGroup ?? "start"
       );
-      const newVisibleElementIds = new Set(elements.map((element) => element.id.toString()));
-      setVisibleElementIds(newVisibleElementIds);
+      const newVisibleElementIds = new Set(visibleElements.map((element) => element.id.toString()));
+
+      // Only update the state if the new set of visible element IDs is different from the
+      // previous set (ie reduce rerenders for changes that don't affect visibility)
+      setVisibleElementIds((previousVisibleElementIds) => {
+        const hasChanged =
+          previousVisibleElementIds.size !== newVisibleElementIds.size ||
+          [...newVisibleElementIds].some((id) => !previousVisibleElementIds.has(id));
+        return hasChanged ? newVisibleElementIds : previousVisibleElementIds;
+      });
 
       values.current = formValues as FormValues;
     },
