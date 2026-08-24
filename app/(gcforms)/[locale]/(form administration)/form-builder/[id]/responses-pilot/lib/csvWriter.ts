@@ -283,6 +283,7 @@ export const getRow = ({
       ) {
         return rawAnswer.value as string | number;
       }
+
       return "-";
     }
 
