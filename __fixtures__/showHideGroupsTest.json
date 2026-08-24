@@ -1,0 +1,225 @@
+{
+  "groups": {
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Confirmation page",
+      "autoFlow": true,
+      "elements": []
+    },
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Start page",
+      "autoFlow": false,
+      "elements": ["1", "2", "3", "4"],
+      "nextAction": [
+        {
+          "groupId": "ba4645d7-ad61-4b5c-b8cf-5d5a8fe0ea80",
+          "choiceId": "1.0"
+        },
+        {
+          "groupId": "ec47cc35-3bfe-40c0-820c-0678c738515b",
+          "choiceId": "1.1"
+        }
+      ]
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "End (Review page and Confirmation)",
+      "titleFr": "End (Review page and Confirmation)",
+      "autoFlow": true,
+      "elements": [],
+      "nextAction": "end"
+    },
+    "ba4645d7-ad61-4b5c-b8cf-5d5a8fe0ea80": {
+      "name": "Page A",
+      "titleEn": "Page A",
+      "titleFr": "",
+      "autoFlow": true,
+      "elements": ["7", "8"],
+      "nextAction": "ec47cc35-3bfe-40c0-820c-0678c738515b"
+    },
+    "ec47cc35-3bfe-40c0-820c-0678c738515b": {
+      "name": "Page B",
+      "titleEn": "Page B",
+      "titleFr": "",
+      "autoFlow": true,
+      "elements": ["5", "6"],
+      "nextAction": "review"
+    }
+  },
+  "layout": [1, 2, 3, 4, 7, 8, 5, 6],
+  "titleEn": "Show hide form",
+  "titleFr": "",
+  "elements": [
+    {
+      "id": 7,
+      "type": "textField",
+      "uuid": "dd5b847c-e4cf-408d-a03e-7684f7bc4a6f",
+      "properties": {
+        "tags": [],
+        "choices": [],
+        "titleEn": "Question A",
+        "titleFr": "",
+        "questionId": "",
+        "validation": { "required": false },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 8,
+      "type": "textField",
+      "uuid": "98c81fd2-8271-418f-9824-0545adbb4f5d",
+      "properties": {
+        "tags": [],
+        "choices": [],
+        "titleEn": "A - show optional",
+        "titleFr": "",
+        "questionId": "",
+        "validation": { "required": false },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [{ "choiceId": "2.0" }]
+      }
+    },
+    {
+      "id": 5,
+      "type": "textField",
+      "uuid": "a5700c8a-f227-44d4-8fc8-483d68ec008f",
+      "properties": {
+        "tags": [],
+        "choices": [],
+        "titleEn": "Question B",
+        "titleFr": "",
+        "questionId": "",
+        "validation": { "required": false },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 6,
+      "type": "textField",
+      "uuid": "1e50589a-7198-4cb7-9bed-d16c16ffeae6",
+      "properties": {
+        "tags": [],
+        "choices": [],
+        "titleEn": "B - show optional",
+        "titleFr": "",
+        "questionId": "",
+        "validation": { "required": false },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [{ "choiceId": "2.1" }]
+      }
+    },
+    {
+      "id": 1,
+      "type": "radio",
+      "uuid": "83a1264b-c9cb-48f7-be89-d743e9996963",
+      "properties": {
+        "tags": [],
+        "choices": [
+          { "en": "Page A", "fr": "" },
+          { "en": "Page B", "fr": "" }
+        ],
+        "titleEn": "Which page do you want to go to?",
+        "titleFr": "",
+        "questionId": "",
+        "validation": { "required": false },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "checkbox",
+      "uuid": "9ebc9b70-4e80-4213-8d21-f91f2357c93f",
+      "properties": {
+        "tags": [],
+        "choices": [
+          { "en": "Show on page A", "fr": "" },
+          { "en": "Show on page B", "fr": "" }
+        ],
+        "titleEn": "Show on another page",
+        "titleFr": "",
+        "questionId": "",
+        "validation": { "required": false },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "dropdown",
+      "uuid": "906934fe-5b0c-4a51-b8de-320bd8040130",
+      "properties": {
+        "tags": [],
+        "choices": [
+          { "en": "Yes", "fr": "" },
+          { "en": "No", "fr": "" },
+          { "en": "Other ", "fr": "Autre " }
+        ],
+        "titleEn": "Do you agree?",
+        "titleFr": "",
+        "questionId": "",
+        "validation": { "required": false },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 4,
+      "type": "textField",
+      "properties": {
+        "choices": [{ "en": "", "fr": "" }],
+        "titleEn": "Other ",
+        "titleFr": "Autre ",
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [{ "choiceId": "3.2" }]
+      }
+    }
+  ],
+  "confirmation": {
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "groupsLayout": ["ba4645d7-ad61-4b5c-b8cf-5d5a8fe0ea80", "ec47cc35-3bfe-40c0-820c-0678c738515b"],
+  "introduction": { "descriptionEn": "", "descriptionFr": "" },
+  "privacyPolicy": { "descriptionEn": "", "descriptionFr": "" },
+  "lastGeneratedElementId": 8
+}
