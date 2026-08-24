@@ -3,7 +3,7 @@
  */
 export async function getOrigin(): Promise<string> {
   if (process.env.APP_ENV === "test") {
-    return "https://test.forms-formulaires.canada.ca";
+    return "http://localhost:3000";
   }
 
   const { headers } = await import("next/headers");
