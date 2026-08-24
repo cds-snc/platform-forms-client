@@ -35,8 +35,8 @@ describe("parseStarRatingAnswer", () => {
 });
 
 describe("formatStarRating", () => {
-  it("formats value and numberOfStars as a fraction", () => {
-    expect(formatStarRating(3, 5)).toBe("3/5");
+  it("formats value and numberOfStars as an out-of string", () => {
+    expect(formatStarRating(3, 5)).toBe("3 out of 5");
   });
 
   it("returns the value string when numberOfStars is 0", () => {
@@ -57,8 +57,10 @@ describe("formatStarRating", () => {
 });
 
 describe("formatStarRatingAnswer", () => {
-  it("formats a valid JSON star rating as a fraction", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 4, numberOfStars: 5 }))).toBe("4/5");
+  it("formats a valid JSON star rating as an out-of string", () => {
+    expect(formatStarRatingAnswer(JSON.stringify({ value: 4, numberOfStars: 5 }))).toBe(
+      "4 out of 5"
+    );
   });
 
   it("returns '-' for null", () => {
@@ -79,11 +81,15 @@ describe("formatStarRatingAnswer", () => {
   });
 
   it("formats a minimum rating of 1", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 1, numberOfStars: 5 }))).toBe("1/5");
+    expect(formatStarRatingAnswer(JSON.stringify({ value: 1, numberOfStars: 5 }))).toBe(
+      "1 out of 5"
+    );
   });
 
   it("formats a rating equal to numberOfStars", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 5, numberOfStars: 5 }))).toBe("5/5");
+    expect(formatStarRatingAnswer(JSON.stringify({ value: 5, numberOfStars: 5 }))).toBe(
+      "5 out of 5"
+    );
   });
 });
 
@@ -133,7 +139,7 @@ describe("formatStarRatingAnswer", () => {
       type: FormElementTypes.starRating,
     });
 
-    expect(result).toBe("3/5");
+    expect(result).toBe("3 out of 5");
   });
 
   it("formats with a non-default star count from JSON", () => {
@@ -145,7 +151,7 @@ describe("formatStarRatingAnswer", () => {
       type: FormElementTypes.starRating,
     });
 
-    expect(result).toBe("7/10");
+    expect(result).toBe("7 out of 10");
   });
 
   it("returns the string representation of a null answer", () => {
