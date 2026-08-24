@@ -1,6 +1,11 @@
 import { FormElementTypes } from "@lib/types";
-import { Answer } from "@root/lib/responseDownloadFormats/types";
 import type { StarRatingObject } from "./types";
+
+type StarRatingItem = {
+  type?: FormElementTypes;
+  answer: unknown;
+  [key: string]: unknown;
+};
 
 /**
  * Utility function to use when rendering a formatted star rating string
@@ -8,8 +13,8 @@ import type { StarRatingObject } from "./types";
  * @param item
  * @returns string
  */
-export const getFormattedStarRatingFromObject = (item: Answer): string | undefined => {
-  if (item.type !== FormElementTypes.starRating) {
+export const getFormattedStarRatingFromObject = (item: StarRatingItem): string | undefined => {
+  if (item.type !== undefined && item.type !== FormElementTypes.starRating) {
     return undefined;
   }
 
@@ -31,15 +36,6 @@ export const parseStarRatingAnswer = (answer: string): StarRatingObject | undefi
 };
 
 /**
- * Formats a star rating answer (e.g. "3 out of 5").
- * Returns the raw answer unchanged if unparseable, or "-" if empty.
- */
-export const formatStarRatingAnswer = (rawAnswer: string): string => {
-  const parsed = parseStarRatingAnswer(rawAnswer);
-  return parsed ? formatStarRating(parsed.value, parsed.numberOfStars) : rawAnswer || "-";
-};
-
-/**
  * Check that a star rating object is valid
  *
  * @param obj
@@ -54,10 +50,6 @@ export const isValidStarRatingObject = (obj: unknown): obj is StarRatingObject =
     typeof obj.value === "number" &&
     typeof obj.numberOfStars === "number"
   );
-};
-
-export const getStarRatingScoreFromObject = (rating: StarRatingObject): number => {
-  return rating.value;
 };
 
 export const formatStarRating = (

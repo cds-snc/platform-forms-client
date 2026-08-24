@@ -1,6 +1,6 @@
 import { FormItem } from "../helpers";
 import { BaseElement } from "./BaseElement";
-import { formatStarRatingAnswer } from "../../StarRating/utils";
+import { getFormattedStarRatingFromObject } from "../../StarRating/utils";
 
 export const StarRating = ({
   formItem,
@@ -11,7 +11,10 @@ export const StarRating = ({
     return <></>;
   }
 
-  const starRatingAnswer = formatStarRatingAnswer(formItem.values as string);
+  const starRatingAnswer = getFormattedStarRatingFromObject({
+    type: formItem.type,
+    answer: formItem.values,
+  });
 
   if (!starRatingAnswer) {
     return <BaseElement formItem={formItem} />;

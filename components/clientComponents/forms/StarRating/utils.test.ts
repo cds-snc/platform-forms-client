@@ -3,7 +3,6 @@ import {
   getFormattedStarRatingFromObject,
   parseStarRatingAnswer,
   formatStarRating,
-  formatStarRatingAnswer,
 } from "./utils";
 import { FormElementTypes } from "@lib/types";
 
@@ -56,44 +55,7 @@ describe("formatStarRating", () => {
   });
 });
 
-describe("formatStarRatingAnswer", () => {
-  it("formats a valid JSON star rating as an out-of string", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 4, numberOfStars: 5 }))).toBe(
-      "4 out of 5"
-    );
-  });
-
-  it("returns '-' for null", () => {
-    expect(formatStarRatingAnswer(null as unknown as string)).toBe("-");
-  });
-
-  it("returns '-' for undefined", () => {
-    expect(formatStarRatingAnswer(undefined as unknown as string)).toBe("-");
-  });
-
-  it("returns an unparseable string unchanged", () => {
-    expect(formatStarRatingAnswer("3")).toBe("3");
-  });
-
-  it("returns JSON with missing required properties unchanged", () => {
-    const answer = JSON.stringify({ value: 3 });
-    expect(formatStarRatingAnswer(answer)).toBe(answer);
-  });
-
-  it("formats a minimum rating of 1", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 1, numberOfStars: 5 }))).toBe(
-      "1 out of 5"
-    );
-  });
-
-  it("formats a rating equal to numberOfStars", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 5, numberOfStars: 5 }))).toBe(
-      "5 out of 5"
-    );
-  });
-});
-
-describe("formatStarRatingAnswer", () => {
+describe("getFormattedStarRatingFromObject", () => {
   it("returns undefined for non-starRating element types", () => {
     const result = getFormattedStarRatingFromObject({
       questionId: 1,
