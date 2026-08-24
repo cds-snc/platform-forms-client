@@ -9,7 +9,7 @@ import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
-import { formattedStarRatingDefaultElementProperties } from "@root/components/clientComponents/forms/StarRating/defaults";
+import { formattedStarRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 
 const specialChars = ["=", "+", "-", "@"];
 

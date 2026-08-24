@@ -6,7 +6,7 @@ import { formatUserInput } from "@lib/utils/strings";
 import { FormRecord } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
-import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
+import { getFormattedStarRatingFromObject } from "@root/components/clientComponents/forms/StarRating/utils";
 
 export interface TableHeader {
   title: string;
@@ -61,7 +61,7 @@ export const AggregatedTable = ({
               {submission.answers &&
                 submission.answers.map((item) => {
                   const formattedNumberInput = formatNumberInputAnswer(item, lang, formRecord);
-                  const formattedStarRating = checkAndformatStarRatingAnswer(item);
+                  const formattedStarRating = getFormattedStarRatingFromObject(item);
                   if (Array.isArray(item.answer)) {
                     return (
                       <td

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  checkAndformatStarRatingAnswer,
+  getFormattedStarRatingFromObject,
   parseStarRatingAnswer,
   formatStarRating,
   formatStarRatingAnswer,
@@ -95,7 +95,7 @@ describe("formatStarRatingAnswer", () => {
 
 describe("formatStarRatingAnswer", () => {
   it("returns undefined for non-starRating element types", () => {
-    const result = checkAndformatStarRatingAnswer({
+    const result = getFormattedStarRatingFromObject({
       questionId: 1,
       questionEn: "Question",
       questionFr: "Question",
@@ -107,7 +107,7 @@ describe("formatStarRatingAnswer", () => {
   });
 
   it("passes through a placeholder '-' answer unchanged", () => {
-    const result = checkAndformatStarRatingAnswer({
+    const result = getFormattedStarRatingFromObject({
       questionId: 1,
       questionEn: "Rating",
       questionFr: "Évaluation",
@@ -119,7 +119,7 @@ describe("formatStarRatingAnswer", () => {
   });
 
   it("returns '-' for an empty answer", () => {
-    const result = checkAndformatStarRatingAnswer({
+    const result = getFormattedStarRatingFromObject({
       questionId: 1,
       questionEn: "Rating",
       questionFr: "Évaluation",
@@ -131,7 +131,7 @@ describe("formatStarRatingAnswer", () => {
   });
 
   it("formats the answer from a JSON string with value and numberOfStars", () => {
-    const result = checkAndformatStarRatingAnswer({
+    const result = getFormattedStarRatingFromObject({
       questionId: 42,
       questionEn: "Rating",
       questionFr: "Évaluation",
@@ -143,7 +143,7 @@ describe("formatStarRatingAnswer", () => {
   });
 
   it("formats with a non-default star count from JSON", () => {
-    const result = checkAndformatStarRatingAnswer({
+    const result = getFormattedStarRatingFromObject({
       questionId: 5,
       questionEn: "Rating",
       questionFr: "Évaluation",
@@ -155,7 +155,7 @@ describe("formatStarRatingAnswer", () => {
   });
 
   it("returns the string representation of a null answer", () => {
-    const result = checkAndformatStarRatingAnswer({
+    const result = getFormattedStarRatingFromObject({
       questionId: 1,
       questionEn: "Rating",
       questionFr: "Évaluation",
@@ -163,6 +163,6 @@ describe("formatStarRatingAnswer", () => {
       type: FormElementTypes.starRating,
     });
 
-    expect(result).toBe("null");
+    expect(result).toBe("-");
   });
 });
