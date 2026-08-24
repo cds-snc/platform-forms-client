@@ -11,7 +11,7 @@ import { useEffectDebugger } from "@root/debugger/useEffect";
  * visible element IDs accordingly.
  */
 export const useSyncVisibleElementIds = () => {
-  const { values } = useFormikContext();
+  const { values, setFieldValue } = useFormikContext();
   const { updateVisibleElementIds, currentGroup } = useGCFormsContext();
 
   useEffectDebugger(
@@ -21,6 +21,8 @@ export const useSyncVisibleElementIds = () => {
         return;
       }
 
+      // Needed in validation to ensure only visible elements are validated
+      setFieldValue("currentGroup", currentGroup);
       updateVisibleElementIds(values as Record<string, string>);
     },
     [values, currentGroup],

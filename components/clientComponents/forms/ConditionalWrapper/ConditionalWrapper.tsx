@@ -15,7 +15,7 @@ export const ConditionalWrapper = ({
   const { visibleElementIds } = useGCFormsContext();
 
   // Check if the element is a child of a dynamic element
-  if (element.subId) {
+  if (element.subId || visibleElementIds === null) {
     return children;
   }
 

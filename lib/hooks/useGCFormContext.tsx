@@ -55,7 +55,7 @@ interface GCFormsContextValueType {
     currentGroup: string;
     versionNumber?: number | null;
   };
-  visibleElementIds: Set<string>;
+  visibleElementIds: Set<string> | null;
   updateVisibleElementIds: (formValues: Record<string, string>) => void;
 }
 
@@ -75,7 +75,7 @@ export const GCFormsProvider = ({
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
-  const [visibleElementIds, setVisibleElementIds] = useState<Set<string>>(new Set());
+  const [visibleElementIds, setVisibleElementIds] = useState<Set<string> | null>(null);
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -134,8 +134,10 @@ export const GCFormsProvider = ({
       // previous set (ie reduce rerenders for changes that don't affect visibility)
       setVisibleElementIds((previousVisibleElementIds) => {
         const hasChanged =
+          previousVisibleElementIds === null ||
           previousVisibleElementIds.size !== newVisibleElementIds.size ||
           [...newVisibleElementIds].some((id) => !previousVisibleElementIds.has(id));
+
         return hasChanged ? newVisibleElementIds : previousVisibleElementIds;
       });
 
