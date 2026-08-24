@@ -62,7 +62,7 @@ describe("Generate a text area", () => {
     "renders without errors",
     (lang: Language) => {
       it("renders without errors", () => {
-        render(<GenerateElement element={textAreaData} language={lang} />);
+        render(<GenerateElement element={textAreaData} language={lang} isTestMode={true} />);
 
         const title = (
           lang === "en" ? textAreaData.properties.titleEn : textAreaData.properties.titleFr
@@ -98,7 +98,9 @@ describe("Accessibility tests for the textarea component.", () => {
   let localScreen: ReturnType<typeof render>;
 
   beforeEach(() => {
-    localScreen = render(<GenerateElement element={textAreaData2} language={"en"} />);
+    localScreen = render(
+      <GenerateElement element={textAreaData2} language={"en"} isTestMode={true} />
+    );
   });
   it("checks the `aria-describedby` attribute", () => {
     // initial attribute has no value since the description is empty.
