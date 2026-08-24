@@ -3,6 +3,7 @@ import { Language, LocalizedElementProperties } from "../../types/form-builder-t
 import { isValidatedTextType, isAutoCompleteField } from "@lib/utils/form-builder";
 import { addressCompleteDefaultElementProperties } from "@clientComponents/forms/AddressComplete/defaults";
 import { formattedDateDefaultElementProperties } from "@clientComponents/forms/FormattedDate/defaults";
+import { formattedStarRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 
 type ElementType =
   | keyof typeof FormElementTypes
@@ -151,6 +152,13 @@ export const createElement = (element: FormElement, type: string) => {
     newElement.properties = {
       ...newElement.properties,
       ...formattedDateDefaultElementProperties,
+    };
+  }
+
+  if (type === FormElementTypes.starRating) {
+    newElement.properties = {
+      ...newElement.properties,
+      ...formattedStarRatingDefaultElementProperties,
     };
   }
 

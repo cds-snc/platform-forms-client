@@ -42,6 +42,7 @@ export const formatStarRatingAnswer = (rawAnswer: string): string => {
   return parsed ? formatStarRating(parsed.value, parsed.numberOfStars) : rawAnswer || "-";
 };
 
+// TODO - no longer used
 export const getFormattedStarRatingFromObject = (rawAnswer: string): string => {
   try {
     const parsed: StarRatingObject = JSON.parse(rawAnswer);
