@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { allowedOrigin } from "./lib/origin";
 
 const nextConfig: NextConfig = {
   deploymentId: process.env.NEXT_DEPLOYMENT_ID ?? "local",
@@ -63,6 +64,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       // Note: this matches values in constants.ts
       bodySizeLimit: "10mb",
+      allowedOrigins: allowedOrigin ? [allowedOrigin] : [],
     },
   },
   typedRoutes: true,
