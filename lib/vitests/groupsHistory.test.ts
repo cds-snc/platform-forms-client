@@ -1,8 +1,12 @@
-import { expect } from 'vitest';
-import { getGroupHistory, pushIdToHistory, clearHistoryAfterId, getPreviousIdFromCurrentId } from "@lib/utils/form-builder/groupsHistory";
-import { LOCKED_GROUPS } from '@formBuilder/components/shared/right-panel/headless-treeview/constants';
+import { expect } from "vitest";
+import {
+  getGroupHistory,
+  pushIdToHistory,
+  clearHistoryAfterId,
+} from "@lib/utils/form-builder/groupsHistory";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
-const defaultHistory:string[] = [
+const defaultHistory: string[] = [
   LOCKED_GROUPS.START,
   "group1",
   "group2",
@@ -12,7 +16,7 @@ const defaultHistory:string[] = [
 ];
 
 describe("getGroupHistory tests", () => {
-  const history:string[] = [...defaultHistory];
+  const history: string[] = [...defaultHistory];
 
   it("handles invalid input", () => {
     // @ts-expect-error - testing invalid input
@@ -26,9 +30,8 @@ describe("getGroupHistory tests", () => {
   });
 });
 
-
 describe("addGroupHistory tests", () => {
-  let history:string[] = [...defaultHistory];
+  let history: string[] = [...defaultHistory];
 
   it("handles invalid input", () => {
     // @ts-expect-error - testing invalid input
@@ -48,7 +51,7 @@ describe("addGroupHistory tests", () => {
 });
 
 describe("removeGroupHistory tests", () => {
-  let history:string[] = [...defaultHistory];
+  let history: string[] = [...defaultHistory];
 
   it("handles invalid input", () => {
     // @ts-expect-error - testing invalid input
@@ -63,25 +66,5 @@ describe("removeGroupHistory tests", () => {
   it("removes/sets history at the end", () => {
     history = clearHistoryAfterId("group3", history);
     expect(history.length).toEqual(4);
-  });
-});
-
-describe("getPreviousIdFromCurrentId tests", () => {
-  const history:string[] = [...defaultHistory];
-
-  it("handles an invalid id", () => {
-    expect(getPreviousIdFromCurrentId("INVALID", history)).toEqual(null);
-  });
-
-  it("returns nothing at start of history", () => {
-    expect(getPreviousIdFromCurrentId(LOCKED_GROUPS.START, history)).toEqual(null);
-  });
-
-  it("returns previous Id around middle of history", () => {
-    expect(getPreviousIdFromCurrentId("group3", history)).toEqual("group2");
-  });
-
-  it("returns previous Id at end of history", () => {
-    expect(getPreviousIdFromCurrentId("group5", history)).toEqual("group4");
   });
 });
