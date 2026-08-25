@@ -122,7 +122,7 @@
     "protectedA": "PROTECTED A",
     "protectedB": "PROTECTED B"
   },
-  "viewForm": "View form (opens in  tab)",
+  "viewForm": "View form (opens in new tab)",
   "editForm": "Edit form",
   "navLabel": "Forms navigation",
   "errors": {
