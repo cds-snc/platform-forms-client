@@ -72,6 +72,15 @@ export const getAddressFieldLabel = (
 };
 
 export const getAddressAsString = (address: AddressElements, split?: boolean): string => {
+  if (
+    address.streetAddress === "" &&
+    address.city === "" &&
+    address.province === "" &&
+    address.postalCode === ""
+  ) {
+    return ""; // If all address fields are empty, return an empty string
+  }
+
   if (split) {
     let addressString = "";
     for (const key in address) {
