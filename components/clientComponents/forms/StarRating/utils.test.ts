@@ -1,162 +1,74 @@
-import { describe, expect, it } from "vitest";
 import {
-  checkAndformatStarRatingAnswer,
-  parseStarRatingAnswer,
-  formatStarRating,
-  formatStarRatingAnswer,
+  getFormattedStarRatingFromObject,
+  getScoreFromStarRatingObject,
+  isValidStarRatingObject,
 } from "./utils";
-import { FormElementTypes } from "@lib/types";
+import type { StarRatingObject } from "./types";
 
-describe("parseStarRatingAnswer", () => {
-  it("returns the object when a JSON string contains value and numberOfStars", () => {
-    const answer = JSON.stringify({ value: 3, numberOfStars: 5 });
-    expect(parseStarRatingAnswer(answer)).toEqual({ value: 3, numberOfStars: 5 });
+describe("isValidStarRatingObject", () => {
+  it("returns true for a valid star rating object", () => {
+    const validObject: StarRatingObject = { value: 4, numberOfStars: 5 };
+
+    expect(isValidStarRatingObject(validObject)).toBe(true);
   });
 
-  it("returns undefined for null", () => {
-    expect(parseStarRatingAnswer(null as unknown as string)).toBeUndefined();
+  it("returns false for non-object inputs", () => {
+    expect(isValidStarRatingObject(null)).toBe(false);
+    expect(isValidStarRatingObject(undefined)).toBe(false);
+    expect(isValidStarRatingObject("4/5")).toBe(false);
+    expect(isValidStarRatingObject(42)).toBe(false);
   });
 
-  it("returns undefined for undefined", () => {
-    expect(parseStarRatingAnswer(undefined as unknown as string)).toBeUndefined();
+  it("returns false for objects with missing properties", () => {
+    expect(isValidStarRatingObject({})).toBe(false);
+    expect(isValidStarRatingObject({ value: 4 })).toBe(false);
+    expect(isValidStarRatingObject({ numberOfStars: 5 })).toBe(false);
   });
 
-  it("returns undefined for a plain string", () => {
-    expect(parseStarRatingAnswer("3/5")).toBeUndefined();
-  });
-
-  it("returns undefined when value is missing", () => {
-    expect(parseStarRatingAnswer(JSON.stringify({ numberOfStars: 5 }))).toBeUndefined();
-  });
-
-  it("returns undefined when numberOfStars is missing", () => {
-    expect(parseStarRatingAnswer(JSON.stringify({ value: 3 }))).toBeUndefined();
-  });
-});
-
-describe("formatStarRating", () => {
-  it("formats value and numberOfStars as a fraction", () => {
-    expect(formatStarRating(3, 5)).toBe("3/5");
-  });
-
-  it("returns the value string when numberOfStars is 0", () => {
-    expect(formatStarRating(3, 0)).toBe("3");
-  });
-
-  it("returns the value string when numberOfStars is negative", () => {
-    expect(formatStarRating(3, -1)).toBe("3");
-  });
-
-  it("returns the string representation when value is 0 (falsy)", () => {
-    expect(formatStarRating(0, 5)).toBe("0");
-  });
-
-  it("returns '-' string unchanged when value is '-'", () => {
-    expect(formatStarRating("-", 5)).toBe("-");
+  it("returns false for objects with invalid property types", () => {
+    expect(isValidStarRatingObject({ value: "4", numberOfStars: 5 })).toBe(false);
+    expect(isValidStarRatingObject({ value: 4, numberOfStars: "5" })).toBe(false);
   });
 });
 
-describe("formatStarRatingAnswer", () => {
-  it("formats a valid JSON star rating as a fraction", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 4, numberOfStars: 5 }))).toBe("4/5");
+describe("getFormattedStarRatingFromObject", () => {
+  it("formats a valid object in English by default", () => {
+    expect(getFormattedStarRatingFromObject({ value: 4, numberOfStars: 5 })).toBe("4 out of 5");
   });
 
-  it("returns '-' for null", () => {
-    expect(formatStarRatingAnswer(null as unknown as string)).toBe("-");
+  it("formats a valid object in French", () => {
+    expect(getFormattedStarRatingFromObject({ value: 3, numberOfStars: 5 }, "fr")).toBe("3 sur 5");
   });
 
-  it("returns '-' for undefined", () => {
-    expect(formatStarRatingAnswer(undefined as unknown as string)).toBe("-");
+  it("formats a valid JSON string", () => {
+    expect(getFormattedStarRatingFromObject('{"value":2,"numberOfStars":5}')).toBe("2 out of 5");
   });
 
-  it("returns an unparseable string unchanged", () => {
-    expect(formatStarRatingAnswer("3")).toBe("3");
+  it('returns "-" for invalid JSON strings', () => {
+    expect(getFormattedStarRatingFromObject("not-json")).toBe("-");
   });
 
-  it("returns JSON with missing required properties unchanged", () => {
-    const answer = JSON.stringify({ value: 3 });
-    expect(formatStarRatingAnswer(answer)).toBe(answer);
-  });
-
-  it("formats a minimum rating of 1", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 1, numberOfStars: 5 }))).toBe("1/5");
-  });
-
-  it("formats a rating equal to numberOfStars", () => {
-    expect(formatStarRatingAnswer(JSON.stringify({ value: 5, numberOfStars: 5 }))).toBe("5/5");
+  it('returns "-" for parsed objects that are not valid star ratings', () => {
+    expect(getFormattedStarRatingFromObject('{"value":"2","numberOfStars":5}')).toBe("-");
+    expect(getFormattedStarRatingFromObject('{"foo":"bar"}')).toBe("-");
   });
 });
 
-describe("formatStarRatingAnswer", () => {
-  it("returns undefined for non-starRating element types", () => {
-    const result = checkAndformatStarRatingAnswer({
-      questionId: 1,
-      questionEn: "Question",
-      questionFr: "Question",
-      answer: "3",
-      type: FormElementTypes.radio,
-    });
-
-    expect(result).toBeUndefined();
+describe("getScoreFromStarRatingObject", () => {
+  it("returns score from a valid object", () => {
+    expect(getScoreFromStarRatingObject({ value: 5, numberOfStars: 5 })).toBe(5);
   });
 
-  it("passes through a placeholder '-' answer unchanged", () => {
-    const result = checkAndformatStarRatingAnswer({
-      questionId: 1,
-      questionEn: "Rating",
-      questionFr: "Évaluation",
-      answer: "-",
-      type: FormElementTypes.starRating,
-    });
-
-    expect(result).toBe("-");
+  it("returns score from a valid JSON string", () => {
+    expect(getScoreFromStarRatingObject('{"value":1,"numberOfStars":5}')).toBe(1);
   });
 
-  it("returns '-' for an empty answer", () => {
-    const result = checkAndformatStarRatingAnswer({
-      questionId: 1,
-      questionEn: "Rating",
-      questionFr: "Évaluation",
-      answer: "",
-      type: FormElementTypes.starRating,
-    });
-
-    expect(result).toBe("-");
+  it("returns undefined for invalid JSON strings", () => {
+    expect(getScoreFromStarRatingObject("not-json")).toBeUndefined();
   });
 
-  it("formats the answer from a JSON string with value and numberOfStars", () => {
-    const result = checkAndformatStarRatingAnswer({
-      questionId: 42,
-      questionEn: "Rating",
-      questionFr: "Évaluation",
-      answer: JSON.stringify({ value: 3, numberOfStars: 5 }),
-      type: FormElementTypes.starRating,
-    });
-
-    expect(result).toBe("3/5");
-  });
-
-  it("formats with a non-default star count from JSON", () => {
-    const result = checkAndformatStarRatingAnswer({
-      questionId: 5,
-      questionEn: "Rating",
-      questionFr: "Évaluation",
-      answer: JSON.stringify({ value: 7, numberOfStars: 10 }),
-      type: FormElementTypes.starRating,
-    });
-
-    expect(result).toBe("7/10");
-  });
-
-  it("returns the string representation of a null answer", () => {
-    const result = checkAndformatStarRatingAnswer({
-      questionId: 1,
-      questionEn: "Rating",
-      questionFr: "Évaluation",
-      answer: null as unknown as string,
-      type: FormElementTypes.starRating,
-    });
-
-    expect(result).toBe("null");
+  it("returns undefined for invalid star rating objects", () => {
+    expect(getScoreFromStarRatingObject('{"value":"1","numberOfStars":5}')).toBeUndefined();
+    expect(getScoreFromStarRatingObject('{"foo":"bar"}')).toBeUndefined();
   });
 });
