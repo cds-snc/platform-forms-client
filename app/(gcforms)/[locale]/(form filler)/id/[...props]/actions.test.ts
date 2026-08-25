@@ -8,7 +8,7 @@ vi.mock("@lib/templates/queries/getPublicTemplateByID", () => ({
   getPublicTemplateByID: vi.fn(),
 }));
 
-vi.mock("@lib/validation/hCaptcha", () => ({
+vi.mock("@gcforms/hcaptcha", () => ({
   verifyHCaptchaToken: vi.fn(),
 }));
 
@@ -52,7 +52,7 @@ vi.mock("./lib/server/processFormData", () => ({
 }));
 
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
-import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
+import { verifyHCaptchaToken } from "@gcforms/hcaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
@@ -94,7 +94,7 @@ describe("submitForm", () => {
     // Default successful mocks
     (getPublicTemplateByID as Mock).mockResolvedValue(mockTemplate);
     (checkOne as Mock).mockResolvedValue(false);
-    (verifyHCaptchaToken as Mock).mockResolvedValue(true);
+    (verifyHCaptchaToken as Mock).mockResolvedValue({ verified: true });
     (dateHasPast as Mock).mockReturnValue(false);
     (serverTranslation as Mock).mockResolvedValue({ t: vi.fn() });
     (validateVisibleElements as Mock).mockReturnValue({ errors: {} });

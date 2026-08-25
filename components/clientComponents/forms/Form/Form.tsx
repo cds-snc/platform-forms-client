@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
@@ -29,7 +29,6 @@ import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
-import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { FormStatus, type FormValues } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
@@ -42,6 +41,8 @@ import { uploadFile } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...pr
 
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { HCaptchaForm } from "@gcforms/hcaptcha/hCaptchaForm";
+import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -96,6 +97,24 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const cta = props.saveAndResumeEnabled ? (
     <SaveAndResumeButton language={language as Language} />
   ) : null;
+
+  const onHCaptchaConfigError = useCallback((code: string) => {
+    logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
+  }, []);
+
+  const onHCaptchaSuspiciousError = useCallback((code: string) => {
+    logMessage.warn(
+      `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
+    );
+  }, []);
+
+  const onHCaptchaRecoverableError = useCallback((code: string) => {
+    logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
+  }, []);
+
+  const onHCaptchaExpired = useCallback(() => {
+    logMessage.info("hCaptcha: challenge expired");
+  }, []);
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -203,16 +222,20 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </RichText>
           )}
 
-          <FormCaptcha
+          <HCaptchaForm
             id="form"
-            dataTestId="form"
-            lang={language}
-            handleSubmit={handleSubmit}
+            data-testid="form"
+            language={language}
+            onSubmit={handleSubmit}
             noValidate={true}
-            isPublished={isPublished}
-            isPreview={props.isPreview}
             captchaTokenRef={props.captchaToken}
+            enabled={shouldCheckCaptcha(isPublished, props.isPreview ?? false)}
+            onConfigError={onHCaptchaConfigError}
+            onRecoverableError={onHCaptchaRecoverableError}
+            onSuspiciousError={onHCaptchaSuspiciousError}
+            onCaptchaExpired={onHCaptchaExpired}
             resetCaptchaRef={props.resetCaptchaRef}
+            siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -261,7 +284,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 props={props}
               />
             </FormActions>
-          </FormCaptcha>
+          </HCaptchaForm>
         </>
       }
     </>

@@ -1,0 +1,60 @@
+{
+  "name": "@gcforms/hcaptcha",
+  "version": "1.0.0",
+  "author": "Canadian Digital Service",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "yarn@4.10.3",
+  "dependencies": {
+    "@hcaptcha/react-hcaptcha": "^2.0.2"
+  },
+  "peerDependencies": {
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "react": "19.2.8",
+    "tsup": "^8.3.6",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/verifyHCaptchaToken.ts src/HCaptchaForm.tsx src/useHCaptchaToken.ts src/useHCaptchaErrorHandling.ts --format cjs,esm --dts --clean",
+    "prepack": "yarn build",
+    "hcaptcha:prepack": "yarn prepack"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./hCaptchaForm": {
+      "types": "./dist/HCaptchaForm.d.ts",
+      "require": "./dist/HCaptchaForm.js",
+      "import": "./dist/HCaptchaForm.mjs"
+    },
+    "./verifyHCaptchaToken": {
+      "types": "./dist/verifyHCaptchaToken.d.ts",
+      "require": "./dist/verifyHCaptchaToken.js",
+      "import": "./dist/verifyHCaptchaToken.mjs"
+    },
+    "./useHCaptchaToken": {
+      "types": "./dist/useHCaptchaToken.d.ts",
+      "require": "./dist/useHCaptchaToken.js",
+      "import": "./dist/useHCaptchaToken.mjs"
+    },
+    "./useHCaptchaErrorHandling": {
+      "types": "./dist/useHCaptchaErrorHandling.d.ts",
+      "require": "./dist/useHCaptchaErrorHandling.js",
+      "import": "./dist/useHCaptchaErrorHandling.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ]
+}
