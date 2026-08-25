@@ -13,8 +13,7 @@ import { useGCFormsContext } from "./useGCFormContext";
  */
 export const useFormValuesChanged = () => {
   const { values, setFieldValue } = useFormikContext();
-  const { updateValues, currentGroup, getGroupHistory, matchedIds } = useGCFormsContext();
-  const groupHistory = getGroupHistory();
+  const { updateValues, currentGroup, matchedIds } = useGCFormsContext();
 
   useEffect(() => {
     if (process.env.APP_ENV === "test") {
@@ -25,7 +24,6 @@ export const useFormValuesChanged = () => {
 
     // This is where you assign (set) the values that are added to formik form values in Form.tsx
     setFieldValue("currentGroup", currentGroup);
-    setFieldValue("groupHistory", groupHistory);
     setFieldValue("matchedIds", matchedIds);
-  }, [updateValues, values, setFieldValue, currentGroup, groupHistory, matchedIds]);
+  }, [updateValues, values, setFieldValue, currentGroup, matchedIds]);
 };

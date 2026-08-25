@@ -1,10 +1,8 @@
 "use client";
 import { createContext, useContext, ReactNode, useState, useRef } from "react";
-
 import type { FormValues, GroupsType, PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
-
 import { getNextAction, filterValuesByVisibleElements, idArraysMatch } from "@lib/formContext";
 
 import {
@@ -14,14 +12,7 @@ import {
 } from "@gcforms/core";
 
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
-import {
-  getGroupHistory as _getGroupHistory,
-  pushIdToHistory as _pushIdToHistory,
-  clearHistoryAfterId as _clearHistoryAfterId,
-} from "@lib/utils/form-builder/groupsHistory";
-
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-
 import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
 
 interface GCFormsContextValueType {
@@ -42,9 +33,6 @@ interface GCFormsContextValueType {
   submissionDate: string | undefined;
   setSubmissionDate: (date: string) => void;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
-  getGroupHistory: () => string[];
-  pushIdToHistory: (groupId: string) => string[];
-  clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
   getProgressData: () => {
     id: string;
@@ -108,7 +96,6 @@ export const GCFormsProvider = ({
 
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
-        pushIdToHistory(nextAction);
       }
     }
   };
@@ -137,13 +124,6 @@ export const GCFormsProvider = ({
     // Do an additional check to really make sure, there should be at least a start and end group
     return formHasGroups(formRecord.form);
   };
-
-  const getGroupHistory = () => _getGroupHistory(history.current);
-
-  const pushIdToHistory = (groupId: string) => _pushIdToHistory(groupId, history.current);
-
-  // Note: this only removes the group entry and not the values
-  const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
   const getProgressData = () => {
     const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values.current);
@@ -199,9 +179,6 @@ export const GCFormsProvider = ({
         hasNextAction,
         isOffBoardSection,
         groupsCheck,
-        getGroupHistory,
-        pushIdToHistory,
-        clearHistoryAfterId,
         getGroupTitle,
         getProgressData,
       }}
@@ -237,9 +214,6 @@ export const useGCFormsContext = () => {
       formRecord: {} as PublicFormRecord,
       formId: "0000",
       groupsCheck: () => false,
-      getGroupHistory: () => [],
-      pushIdToHistory: () => [],
-      clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
       getProgressData: () => {
         return {
