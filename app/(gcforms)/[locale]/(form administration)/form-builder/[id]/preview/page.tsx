@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { authCheckAndThrow } from "@lib/actions";
 import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
-import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
@@ -38,8 +37,6 @@ export default async function Page(props: { params: Promise<{ id: string; locale
       }));
   const disableSubmit = id === "0000" || !session?.user;
 
-  const isAllowGrouping = allowGrouping();
-
   const formID = id;
 
   if (!session?.user && formID !== "0000") {
@@ -59,5 +56,5 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     return <PreviewClosed closedDetails={closedDetails.closedDetails as ClosedDetails} />;
   }
 
-  return <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />;
+  return <Preview disableSubmit={disableSubmit} />;
 }

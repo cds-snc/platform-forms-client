@@ -17,7 +17,6 @@ export interface PageContentProps {
   step: string;
   formId: string;
   saveAndResume: boolean;
-  isAllowGrouping?: boolean;
 }
 
 export const PageContent = ({
@@ -28,7 +27,6 @@ export const PageContent = ({
   step,
   formId,
   saveAndResume,
-  isAllowGrouping,
 }: PageContentProps) => {
   const classes = cn("gc-form-wrapper");
 
@@ -69,7 +67,6 @@ export const PageContent = ({
             </>
           }
           formRecord={formRecord}
-          allowGrouping={isAllowGrouping}
         />
       </FormDelayProvider>
     </div>

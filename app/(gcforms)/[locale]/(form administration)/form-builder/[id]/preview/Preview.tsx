@@ -29,13 +29,7 @@ import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { PreviewFormWrapper } from "./PreviewFormWrapper";
 import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 
-export const Preview = ({
-  disableSubmit = true,
-  allowGrouping = false,
-}: {
-  disableSubmit?: boolean;
-  allowGrouping?: boolean;
-}) => {
+export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
   const { status } = useSession();
   const { i18n } = useTranslation(["common", "confirmation"]);
   const { id, getSchema, getIsPublished, getSecurityAttribute, closingDate, changeKey } =
@@ -114,7 +108,7 @@ export const Preview = ({
       <PreviewNavigation />
       <div className="h-12"></div>
       <div
-        className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
+        className={`border-blue-focus mb-8 border-3 border-dashed bg-white p-4 ${
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
@@ -186,7 +180,6 @@ export const Preview = ({
                   key={previewRenderKey}
                   formRecord={formRecord}
                   disableSubmit={disableSubmit}
-                  allowGrouping={allowGrouping}
                   setSent={setSent}
                 >
                   {currentForm}
@@ -203,7 +196,7 @@ export const Preview = ({
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
           <div
-            className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4"
+            className="border-blue-focus mb-8 border-3 border-dashed bg-white p-4"
             data-testid="confirmation-container"
           >
             <div className="gc-formview">

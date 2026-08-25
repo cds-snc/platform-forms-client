@@ -116,7 +116,6 @@ export interface TemplateStoreState extends TemplateStoreProps {
   removeChoiceFromRules: (elId: string, choiceIndex: number) => void;
   removeChoiceFromNextActions: (elId: string, choiceIndex: number) => void;
   setChangeKey: (key: string) => void;
-  getGroupsEnabled: () => boolean;
   setGroupsLayout: (layout: string[]) => void;
   getHighestElementId: () => number;
   generateElementId: () => number;
@@ -148,7 +147,6 @@ export interface TemplateStoreProps {
   publishDesc: string;
   closingDate?: string | null;
   changeKey: string;
-  allowGroupsFlag: boolean;
   saveAndResume: boolean;
   notificationsInterval?: NotificationsInterval;
   editLock?: EditLockState | null;
