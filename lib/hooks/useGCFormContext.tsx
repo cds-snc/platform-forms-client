@@ -37,7 +37,6 @@ interface GCFormsContextValueType {
   getProgressData: () => {
     id: string;
     values: FormValues;
-    history: string[];
     currentGroup: string;
     versionNumber?: number | null;
   };
@@ -55,7 +54,6 @@ export const GCFormsProvider = ({
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = useRef({});
-  const history = useRef<string[]>([LOCKED_GROUPS.START]);
   const [matchedIds, setMatchedIds] = useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
@@ -131,7 +129,6 @@ export const GCFormsProvider = ({
     return {
       id: formRecord.id,
       values: formValuesWithoutFileContent as FormValues,
-      history: history.current,
       currentGroup: currentGroup || "",
       versionNumber: formRecord.versionNumber ?? 1,
     };
@@ -219,7 +216,6 @@ export const useGCFormsContext = () => {
         return {
           id: "",
           values: {},
-          history: [],
           currentGroup: "",
           versionNumber: 1,
         };
