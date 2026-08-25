@@ -21,17 +21,19 @@ export const mapAnswers = ({
   formTemplate,
   rawAnswers,
   attachments,
+  onMissingDynamicRowSubQuestion,
 }: {
   formTemplate: FormProperties;
   rawAnswers: Record<string, Response>;
   attachments?: ResponseFilenameMapping;
+  onMissingDynamicRowSubQuestion?: (index: number) => void;
 }): MappedAnswer[] => {
   const elementMap = getElementMap(formTemplate);
 
   const mappedAnswers: Array<MappedAnswer | null> = Object.entries(rawAnswers).map(
     ([questionId, rawAnswer]) => {
       const question = elementMap.get(Number(questionId));
-      return getMappedAnswer({ question, rawAnswer, attachments });
+      return getMappedAnswer({ question, rawAnswer, attachments, onMissingDynamicRowSubQuestion });
     }
   );
 
@@ -47,17 +49,24 @@ const getMappedAnswer = ({
   question,
   rawAnswer,
   attachments,
+  onMissingDynamicRowSubQuestion,
 }: {
   question?: FormElement;
   rawAnswer: Response;
   attachments?: ResponseFilenameMapping;
+  onMissingDynamicRowSubQuestion?: (index: number) => void;
 }): MappedAnswer => {
   if (!question) {
     return createFallbackMappedAnswer({ rawAnswer });
   }
 
   if (question.type === FormElementTypes.dynamicRow && Array.isArray(rawAnswer)) {
-    return handleAnswerArray({ question, rawAnswers: rawAnswer, attachments });
+    return handleAnswerArray({
+      question,
+      rawAnswers: rawAnswer,
+      attachments,
+      onMissingDynamicRowSubQuestion,
+    });
   }
 
   return createAnswerObject({
@@ -77,10 +86,12 @@ const handleAnswerArray = ({
   question,
   rawAnswers,
   attachments,
+  onMissingDynamicRowSubQuestion,
 }: {
   question?: FormElement;
   rawAnswers: Response[];
   attachments?: ResponseFilenameMapping;
+  onMissingDynamicRowSubQuestion?: (index: number) => void;
 }): MappedAnswer => {
   if (!question || !Array.isArray(rawAnswers)) {
     throw new Error("Invalid input for handleAnswerArray");
@@ -98,10 +109,16 @@ const handleAnswerArray = ({
       const subQuestion = subQuestions[index];
 
       if (!subQuestion) {
+        onMissingDynamicRowSubQuestion?.(index);
         return createFallbackMappedAnswer({ questionId: index, rawAnswer: value });
       }
 
-      return getMappedAnswer({ question: subQuestion, rawAnswer: value, attachments });
+      return getMappedAnswer({
+        question: subQuestion,
+        rawAnswer: value,
+        attachments,
+        onMissingDynamicRowSubQuestion,
+      });
     });
 
     return subAnswers;
