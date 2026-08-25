@@ -158,7 +158,6 @@ describe("Recursive visibility check", () => {
       "2": "Other",
       "6": "",
       currentGroup: "start",
-      groupHistory: ["start"],
       matchedIds: ["1.1", "2.2"],
     };
 
@@ -167,7 +166,6 @@ describe("Recursive visibility check", () => {
       "2": "Other",
       "6": "First location",
       currentGroup: "start",
-      groupHistory: ["start"],
       matchedIds: ["1.0", "2.2", "6.0"],
     };
 
@@ -537,7 +535,6 @@ describe("Recursive visibility check", () => {
       "9": "",
       "10": "",
       matchedIds: ["1.0"],
-      groupHistory: ["start"],
     };
     expect(checkVisibilityRecursive(formRecord, getElement(2), valuesOne)).toBe(true);
     expect(checkVisibilityRecursive(formRecord, getElement(3), valuesOne)).toBe(false);
@@ -556,7 +553,6 @@ describe("Recursive visibility check", () => {
       "9": "",
       "10": "",
       matchedIds: ["1.2"],
-      groupHistory: ["start"],
     };
     expect(checkVisibilityRecursive(formRecord, getElement(4), valuesThree)).toBe(true);
     expect(checkVisibilityRecursive(formRecord, getElement(2), valuesThree)).toBe(false);
@@ -567,7 +563,6 @@ describe("Recursive visibility check", () => {
       "1": "Three",
       "4": "A",
       matchedIds: ["1.2", "4.0"],
-      groupHistory: ["start"],
     };
     expect(checkVisibilityRecursive(formRecord, getElement(5), valuesThreeA)).toBe(true);
     expect(checkVisibilityRecursive(formRecord, getElement(6), valuesThreeA)).toBe(false);
@@ -577,7 +572,6 @@ describe("Recursive visibility check", () => {
       "1": "Three",
       "4": "B",
       matchedIds: ["1.2", "4.1"],
-      groupHistory: ["start"],
     };
     expect(checkVisibilityRecursive(formRecord, getElement(6), valuesThreeB)).toBe(true);
     expect(checkVisibilityRecursive(formRecord, getElement(5), valuesThreeB)).toBe(false);
@@ -588,7 +582,6 @@ describe("Recursive visibility check", () => {
       "4": "C",
       "7": "2",
       matchedIds: ["1.2", "4.2", "7.1"],
-      groupHistory: ["start"],
     };
     expect(checkVisibilityRecursive(formRecord, getElement(7), valuesThreeC2)).toBe(true);
     expect(checkVisibilityRecursive(formRecord, getElement(9), valuesThreeC2)).toBe(true);
@@ -601,7 +594,6 @@ describe("Recursive visibility check", () => {
       "4": "C",
       "7": "3",
       matchedIds: ["1.2", "4.2", "7.2"],
-      groupHistory: ["start"],
     };
     expect(checkVisibilityRecursive(formRecord, getElement(10), valuesThreeC3)).toBe(true);
     expect(checkVisibilityRecursive(formRecord, getElement(8), valuesThreeC3)).toBe(false);
@@ -611,7 +603,6 @@ describe("Recursive visibility check", () => {
     const valuesTwo = {
       "1": "Two",
       matchedIds: ["1.1"],
-      groupHistory: ["start"],
     };
     expect(checkVisibilityRecursive(formRecord, getElement(3), valuesTwo)).toBe(true);
     expect(checkVisibilityRecursive(formRecord, getElement(2), valuesTwo)).toBe(false);
@@ -623,7 +614,6 @@ describe("Recursive visibility check", () => {
       "4": "C",
       "7": "1",
       matchedIds: ["1.2", "4.2", "7.0"],
-      groupHistory: ["start"],
     };
     expect(checkVisibilityRecursive(formRecord, getElement(8), valuesThreeC1)).toBe(true);
     expect(checkVisibilityRecursive(formRecord, getElement(9), valuesThreeC1)).toBe(false);
