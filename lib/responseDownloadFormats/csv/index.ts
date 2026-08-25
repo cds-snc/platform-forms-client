@@ -3,7 +3,7 @@ import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { serverTranslation } from "@i18n";
 import { sortByLayout } from "@lib/utils/form-builder";
-import { formattedStarRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
+import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getFormattedStarRatingFromObject } from "@clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
@@ -32,8 +32,7 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
     }
     if (element.type === FormElementTypes.starRating) {
       const numberOfStars =
-        element.properties.numberOfStars ??
-        formattedStarRatingDefaultElementProperties.numberOfStars;
+        element.properties.numberOfStars ?? starRatingDefaultElementProperties.numberOfStars;
       const enRatingRange = tEn("starRating.outOf", {
         value: "",
         numberOfStars,

@@ -1,3 +1,3 @@
-export const formattedStarRatingDefaultElementProperties = {
+export const starRatingDefaultElementProperties = {
   numberOfStars: 5,
 };
