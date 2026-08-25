@@ -487,6 +487,9 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
   // For StarRating return the serialized JSON object so that
   // the CSV and HTML transforms can handle it contextually.
   if (question && question.type === FormElementTypes.starRating) {
+    if (!answer) {
+      return "";
+    }
     const starRatingObject = answer as StarRatingObject;
     return JSON.stringify(starRatingObject);
   }
