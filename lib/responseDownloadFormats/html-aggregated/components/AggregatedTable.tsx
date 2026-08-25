@@ -61,7 +61,10 @@ export const AggregatedTable = ({
               {submission.answers &&
                 submission.answers.map((item) => {
                   const formattedNumberInput = formatNumberInputAnswer(item, lang, formRecord);
-                  const formattedStarRating = getFormattedStarRatingFromObject(item);
+                  const formattedStarRating = getFormattedStarRatingFromObject(
+                    item.answer as string,
+                    lang
+                  );
                   if (Array.isArray(item.answer)) {
                     return (
                       <td
@@ -100,6 +103,8 @@ export const AggregatedTable = ({
                                           <div className="overflow-hidden">
                                             {formattedNumberInput !== undefined ? (
                                               <span>{formattedNumberInput}</span>
+                                            ) : formattedStarRating !== undefined ? (
+                                              <span>{formattedStarRating}</span>
                                             ) : (
                                               <span
                                                 dangerouslySetInnerHTML={{

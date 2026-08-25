@@ -21,7 +21,7 @@ const QuestionRows = ({
   const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: Language, item: Answer, subItem = false) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
-    const starRatingValue = getFormattedStarRatingFromObject(item);
+    const starRatingValue = getFormattedStarRatingFromObject(item.answer as string, lang);
     return (
       <div
         key={`row-${index}`}

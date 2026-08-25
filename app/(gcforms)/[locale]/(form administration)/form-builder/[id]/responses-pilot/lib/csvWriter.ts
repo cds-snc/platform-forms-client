@@ -10,6 +10,7 @@ import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
+import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -111,7 +112,6 @@ export const writeRow = async ({
     createdAt: new Date(createdAt).toISOString(),
     mappedAnswers,
     sortedElements,
-    rawAnswers,
   });
 
   const recordsData = [row];
@@ -232,13 +232,11 @@ export const getRow = ({
   createdAt,
   mappedAnswers,
   sortedElements,
-  rawAnswers,
 }: {
   rowId: string;
   createdAt: string;
   mappedAnswers: MappedAnswer[];
   sortedElements: FormElement[];
-  rawAnswers: Record<string, Response>;
 }) => {
   // Build row similar to server-side transform
   const answers = sortedElements.map((element) => {
@@ -273,17 +271,7 @@ export const getRow = ({
     let answerText = mappedAnswer.answer;
 
     if (element.type === FormElementTypes.starRating) {
-      const rawAnswer = rawAnswers[String(element.id)];
-      if (
-        rawAnswer !== null &&
-        typeof rawAnswer === "object" &&
-        !Array.isArray(rawAnswer) &&
-        "value" in rawAnswer
-      ) {
-        return rawAnswer.value as string | number;
-      }
-
-      return "-";
+      return getScoreFromStarRatingObject(answerText);
     }
 
     if (

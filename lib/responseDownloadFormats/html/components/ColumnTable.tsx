@@ -29,7 +29,7 @@ const QuestionColumns = ({
 
   const renderRow = (index: number | string, lang: Language, item: Answer) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
-    const starRatingValue = getFormattedStarRatingFromObject(item);
+    const starRatingValue = getFormattedStarRatingFromObject(item.answer as string, lang);
     return (
       <div key={`row-${index}`} className="border-gray flex w-full flex-row border-b py-4">
         <dt data-testid={`col-question-${index}`} className="w-96 py-4 font-bold">

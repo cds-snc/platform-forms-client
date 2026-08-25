@@ -4,7 +4,7 @@ import { FormElementTypes } from "@lib/types";
 import { serverTranslation } from "@i18n";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
-import { getFormattedStarRatingFromObject } from "@clientComponents/forms/StarRating/utils";
+import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -86,7 +86,7 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
       let answerText = answer.answer;
 
       if (element.type === FormElementTypes.starRating) {
-        return getFormattedStarRatingFromObject(answer);
+        return getScoreFromStarRatingObject(answer.answer);
       }
 
       if (
