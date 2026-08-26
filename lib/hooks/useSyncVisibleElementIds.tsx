@@ -25,5 +25,5 @@ export const useSyncVisibleElementIds = () => {
       setFieldValue("currentGroup", currentGroup);
     }
     updateVisibleElementIds(values as Record<string, string>);
-  }, [values, currentGroup]);
+  }, [values, currentGroup, updateVisibleElementIds, setFieldValue]);
 };
