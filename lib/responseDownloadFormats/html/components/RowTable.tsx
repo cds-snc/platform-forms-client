@@ -45,7 +45,7 @@ const QuestionRows = ({
         <dd className="p-4">
           {item.type === FormElementTypes.numberInput ? (
             <p>{numberInputValue}</p>
-          ) : starRatingValue !== undefined ? (
+          ) : item.type === FormElementTypes.starRating ? (
             <p>{starRatingValue}</p>
           ) : (
             <p dangerouslySetInnerHTML={{ __html: formatUserInput(String(item.answer)) }}></p>
