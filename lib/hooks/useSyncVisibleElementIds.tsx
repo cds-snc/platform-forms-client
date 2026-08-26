@@ -1,9 +1,8 @@
 "use client";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { useFormikContext } from "formik";
 import type { Responses } from "@gcforms/types";
 import { useGCFormsContext } from "./useGCFormContext";
-import { useEffectDebugger } from "@root/debugger/useEffect";
 
 /**
  * This hook synchronizes the visible element IDs in GCForms context based
@@ -15,20 +14,16 @@ export const useSyncVisibleElementIds = () => {
   const { values, setFieldValue } = useFormikContext<Responses>();
   const { updateVisibleElementIds, currentGroup } = useGCFormsContext();
 
-  useEffectDebugger(
-    () => {
-      if (process.env.APP_ENV === "test") {
-        // skip for test env
-        return;
-      }
+  useEffect(() => {
+    if (process.env.APP_ENV === "test") {
+      // skip for test env
+      return;
+    }
 
-      // Only sync currentGroup to formik if it has changed
-      if (values.currentGroup !== currentGroup) {
-        setFieldValue("currentGroup", currentGroup);
-      }
-      updateVisibleElementIds(values as Record<string, string>);
-    },
-    [values, currentGroup],
-    ["values", "currentGroup"]
-  );
+    // Only sync currentGroup to formik if it has changed
+    if (values.currentGroup !== currentGroup) {
+      setFieldValue("currentGroup", currentGroup);
+    }
+    updateVisibleElementIds(values as Record<string, string>);
+  }, [values, currentGroup]);
 };
