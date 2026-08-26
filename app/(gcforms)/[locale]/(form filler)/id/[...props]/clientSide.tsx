@@ -42,9 +42,6 @@ export const FormWrapper = ({
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
   const { cachedSession } = useResponsesCache();
-  const captchaToken = React.useRef("");
-  // TODO : If the formRecord contains file inputs Save and Resume is not available
-  const resetCaptchaRef = React.useRef<{ resetToken: () => void }>({ resetToken: () => {} });
 
   const saveAndResume = formRecord?.saveAndResume;
 
@@ -140,8 +137,6 @@ export const FormWrapper = ({
         currentGroup={currentGroup}
         setCaptchaFail={setCaptchaFail}
         captchaFail={captchaFail}
-        captchaToken={captchaToken}
-        resetCaptchaRef={resetCaptchaRef}
       >
         {currentForm}
       </Form>

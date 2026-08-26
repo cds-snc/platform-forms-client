@@ -14,7 +14,7 @@ export type VerifyHCaptchaTokenOptions = {
   secret: string | undefined;
   remoteIp?: string;
   logger?: CaptchaLogger;
-  scoreThreshold?: number;
+  maxAllowedScore?: number;
   maxRetries?: number;
   fetchImpl?: typeof fetch;
 };
@@ -26,7 +26,7 @@ type HCaptchaResponse = {
 };
 
 const HCAPTCHA_SITE_VERIFY_URL = "https://api.hcaptcha.com/siteverify";
-const DEFAULT_SCORE_THRESHOLD = 0.79;
+const DEFAULT_MAX_ALLOWED_SCORE = 0.79;
 const DEFAULT_MAX_RETRIES = 3;
 
 export const verifyHCaptchaToken = async (
@@ -37,7 +37,7 @@ export const verifyHCaptchaToken = async (
     secret,
     remoteIp,
     logger,
-    scoreThreshold = DEFAULT_SCORE_THRESHOLD,
+    maxAllowedScore = DEFAULT_MAX_ALLOWED_SCORE,
     maxRetries = DEFAULT_MAX_RETRIES,
     fetchImpl = fetch,
   } = options;
@@ -105,7 +105,7 @@ export const verifyHCaptchaToken = async (
   }
 
   const score = captchaData.score;
-  const verified = captchaData.success && (score === undefined || score <= scoreThreshold);
+  const verified = captchaData.success && (score === undefined || score <= maxAllowedScore);
 
   return verified ? { verified: true, score } : { verified: false, reason: "invalid-response" };
 };

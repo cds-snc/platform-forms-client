@@ -1,6 +1,2 @@
-export {
-  verifyHCaptchaToken,
-  type CaptchaLogger,
-  type HCaptchaVerificationResult,
-  type VerifyHCaptchaTokenOptions,
-} from "./verifyHCaptchaToken";
+// Backward-compat: @gcforms/hcaptcha still resolves to server exports
+export * from "./server/index";

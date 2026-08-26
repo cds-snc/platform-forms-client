@@ -1,12 +1,12 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
 import { Alert, RichText } from "@clientComponents/forms";
 import { validateOnSubmit } from "@gcforms/core";
 
-import { type FormProps, type InnerFormProps } from "./types";
+import { type FormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
 import { type Responses } from "@lib/types";
 
@@ -31,6 +31,10 @@ import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
 import { FormStatus, type FormValues } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
+import {
+  FormCaptcha,
+  type FormCaptchaHandle,
+} from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { ga } from "@lib/client/clientHelpers";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
 import { handleUploadError } from "@lib/fileInput/handleUploadError";
@@ -41,22 +45,34 @@ import { uploadFile } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...pr
 
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { HCaptchaForm } from "@gcforms/hcaptcha/hCaptchaForm";
 import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
+import type { FormikProps } from "formik";
+import type { Responses as FormikResponses } from "@lib/types";
+
+// Injected by the Form wrapper; callers never set these directly
+type InternalCaptchaProps = {
+  onCaptchaReset: () => void;
+  setCaptchaFormHandle: (handle: FormCaptchaHandle | null) => void;
+  getCaptchaToken: () => string | undefined;
+};
+
+type InternalFormProps = FormProps & InternalCaptchaProps;
+type InternalInnerFormProps = InternalFormProps & FormikProps<FormikResponses>;
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm: React.FC<InnerFormProps> = (props) => {
+const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
   const {
     children,
     handleSubmit,
+    setCaptchaFormHandle,
     status,
     language,
     formRecord: { id: formID, form, isPublished },
     dirty,
-  }: InnerFormProps = props;
+  }: InternalInnerFormProps = props;
 
   const { t } = useTranslation();
   const [canFocusOnError, setCanFocusOnError] = useState(false);
@@ -97,24 +113,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const cta = props.saveAndResumeEnabled ? (
     <SaveAndResumeButton language={language as Language} />
   ) : null;
-
-  const onHCaptchaConfigError = useCallback((code: string) => {
-    logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
-  }, []);
-
-  const onHCaptchaSuspiciousError = useCallback((code: string) => {
-    logMessage.warn(
-      `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
-    );
-  }, []);
-
-  const onHCaptchaRecoverableError = useCallback((code: string) => {
-    logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
-  }, []);
-
-  const onHCaptchaExpired = useCallback(() => {
-    logMessage.info("hCaptcha: challenge expired");
-  }, []);
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -222,19 +220,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </RichText>
           )}
 
-          <HCaptchaForm
+          <FormCaptcha
+            ref={setCaptchaFormHandle}
             id="form"
             data-testid="form"
             language={language}
             onSubmit={handleSubmit}
             noValidate={true}
-            captchaTokenRef={props.captchaToken}
-            enabled={shouldCheckCaptcha(isPublished, props.isPreview ?? false)}
-            onConfigError={onHCaptchaConfigError}
-            onRecoverableError={onHCaptchaRecoverableError}
-            onSuspiciousError={onHCaptchaSuspiciousError}
-            onCaptchaExpired={onHCaptchaExpired}
-            resetCaptchaRef={props.resetCaptchaRef}
+            captchaEnabled={shouldCheckCaptcha(isPublished, props.isPreview ?? false)}
             siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
           >
             {isGroupsCheck &&
@@ -284,7 +277,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 props={props}
               />
             </FormActions>
-          </HCaptchaForm>
+          </FormCaptcha>
         </>
       }
     </>
@@ -295,7 +288,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
  * This is the main Form component that wraps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
-export const Form = withFormik<FormProps, Responses>({
+const InternalForm = withFormik<InternalFormProps, Responses>({
   validateOnChange: false,
 
   validateOnBlur: false,
@@ -363,7 +356,7 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.language,
         formikBag.props.formRecord.id,
         formikBag.props.isPreview ?? false,
-        formikBag.props.captchaToken?.current,
+        formikBag.props.getCaptchaToken(),
         fileChecksums
       );
 
@@ -380,7 +373,7 @@ export const Form = withFormik<FormProps, Responses>({
         }
 
         // Avoid a potential error where a token could be reused by re-submitting after an error
-        formikBag.props.resetCaptchaRef?.current?.resetToken?.();
+        formikBag.props.onCaptchaReset();
 
         return;
       }
@@ -447,7 +440,7 @@ export const Form = withFormik<FormProps, Responses>({
       }
 
       // Avoid a potential error where a token could be reused by re-submitting after an error
-      formikBag.props.resetCaptchaRef?.current?.resetToken?.();
+      formikBag.props.onCaptchaReset();
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {
@@ -460,3 +453,22 @@ export const Form = withFormik<FormProps, Responses>({
     }
   },
 })(InnerForm);
+
+// Manages captcha refs privately so callers don't deal with ref plumbing
+export const Form: React.FC<FormProps> = (props) => {
+  const captchaFormRef = useRef<FormCaptchaHandle | null>(null);
+  const setCaptchaFormHandle = useCallback((handle: FormCaptchaHandle | null) => {
+    captchaFormRef.current = handle;
+  }, []);
+  const getCaptchaToken = useCallback(() => captchaFormRef.current?.getToken(), []);
+  const onCaptchaReset = useCallback(() => captchaFormRef.current?.reset(), []);
+
+  return (
+    <InternalForm
+      {...props}
+      setCaptchaFormHandle={setCaptchaFormHandle}
+      getCaptchaToken={getCaptchaToken}
+      onCaptchaReset={onCaptchaReset}
+    />
+  );
+};
