@@ -15,14 +15,13 @@ export const EditButton = ({
   onClick?: () => void;
   description?: string;
 }): React.ReactElement => {
-  const { setGroup, clearHistoryAfterId } = useGCFormsContext();
+  const { setGroup } = useGCFormsContext();
   return (
     <Button
       theme={theme}
       className="text-left leading-10"
       onClick={() => {
         setGroup(reviewItemId);
-        clearHistoryAfterId(reviewItemId);
         // Focus groups heading on navigation
         onClick && onClick();
       }}

@@ -322,18 +322,16 @@ describe("getValuesWithMatchedIds", () => {
     expect(result).toEqual({ "2": "Non-existent option" });
   });
 
-  it("ignores reserved keys (currentGroup, groupHistory, matchedIds)", () => {
+  it("ignores reserved keys (currentGroup, matchedIds)", () => {
     const values: FormValues = {
       "2": "Option A",
       currentGroup: "start",
-      groupHistory: ["start"],
       matchedIds: ["2.0"],
     };
     const result = getValuesWithMatchedIds(formElements, values);
     expect(result).toEqual({
       "2": "2.0",
       currentGroup: "start",
-      groupHistory: ["start"],
       matchedIds: ["2.0"],
     });
   });
