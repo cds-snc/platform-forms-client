@@ -30,7 +30,6 @@ export const flattenStructureToValues = (root: unknown): JsonPrimitive[] => {
 const NON_VALUE_FORM_ELEMENTS = new Set([
   ...Object.values(LOCKED_GROUPS),
   "currentGroup",
-  "groupHistory",
   "matchedIds",
 ]);
 

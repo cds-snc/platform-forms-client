@@ -18,14 +18,7 @@ import {
 } from "@gcforms/core";
 
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
-import {
-  getGroupHistory as _getGroupHistory,
-  pushIdToHistory as _pushIdToHistory,
-  clearHistoryAfterId as _clearHistoryAfterId,
-} from "@lib/utils/form-builder/groupsHistory";
-
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-
 import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
 
 interface GCFormsContextValueType {
@@ -44,14 +37,10 @@ interface GCFormsContextValueType {
   submissionDate: string | undefined;
   setSubmissionDate: (date: string) => void;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
-  getGroupHistory: () => string[];
-  pushIdToHistory: (groupId: string) => string[];
-  clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
   getProgressData: () => {
     id: string;
     values: FormValues;
-    history: string[];
     currentGroup: string;
     versionNumber?: number | null;
   };
@@ -71,7 +60,6 @@ export const GCFormsProvider = ({
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
   const values = useRef({});
-  const history = useRef<string[]>([LOCKED_GROUPS.START]);
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
   const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
@@ -112,7 +100,6 @@ export const GCFormsProvider = ({
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
-        pushIdToHistory(nextAction);
       }
     }
   };
@@ -159,20 +146,12 @@ export const GCFormsProvider = ({
     return formHasGroups(formRecord.form);
   };
 
-  const getGroupHistory = () => _getGroupHistory(history.current);
-
-  const pushIdToHistory = (groupId: string) => _pushIdToHistory(groupId, history.current);
-
-  // Note: this only removes the group entry and not the values
-  const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
-
   const getProgressData = () => {
     const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values.current);
 
     return {
       id: formRecord.id,
       values: formValuesWithoutFileContent as FormValues,
-      history: history.current,
       currentGroup: currentGroup || "",
       versionNumber: formRecord.versionNumber ?? 1,
     };
@@ -218,9 +197,6 @@ export const GCFormsProvider = ({
         hasNextAction,
         isOffBoardSection,
         groupsCheck,
-        getGroupHistory,
-        pushIdToHistory,
-        clearHistoryAfterId,
         getGroupTitle,
         getProgressData,
         visibleElementIds,
@@ -254,9 +230,6 @@ export const useGCFormsContext = () => {
       formRecord: {} as PublicFormRecord,
       formId: "0000",
       groupsCheck: () => false,
-      getGroupHistory: () => [],
-      pushIdToHistory: () => [],
-      clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
       visibleElementIds: new Set<string>(),
       updateVisibleElementIds: () => void 0,
@@ -264,7 +237,6 @@ export const useGCFormsContext = () => {
         return {
           id: "",
           values: {},
-          history: [],
           currentGroup: "",
           versionNumber: 1,
         };
