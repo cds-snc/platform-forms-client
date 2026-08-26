@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.1](https://github.com/cds-snc/platform-forms-client/compare/v4.22.0...v4.22.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* AggregatedTable and RowTable data rendering ([#7817](https://github.com/cds-snc/platform-forms-client/issues/7817)) ([c9ce2c6](https://github.com/cds-snc/platform-forms-client/commit/c9ce2c63f6eabb4111959231da9cb271c4585a8f))
+
+
+### Miscellaneous Chores
+
+* Refactor the way that element/group visibility is synced back to context ([#7781](https://github.com/cds-snc/platform-forms-client/issues/7781)) ([7540873](https://github.com/cds-snc/platform-forms-client/commit/75408738596aa60a2390d7924dd1c4a292d20a7e))
+
 ## [4.22.0](https://github.com/cds-snc/platform-forms-client/compare/v4.21.6...v4.22.0) (2026-08-25)
 
 
