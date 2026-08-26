@@ -440,4 +440,13 @@ export const options = [
     logoTitleEn: "Canadian Heritage Rivers System",
     logoTitleFr: "Réseau des rivières du patrimoine canadien",
   },
+  {
+    name: "tcs",
+    urlEn: "https://www.tradecommissioner.gc.ca/en.html",
+    urlFr: "https://www.deleguescommerciaux.gc.ca/fr.html",
+    logoEn: "/img/branding/tcs-en.svg",
+    logoFr: "/img/branding/tcs-fr.svg",
+    logoTitleEn: "Trade Commissioner Service",
+    logoTitleFr: "Service des délégués commerciaux",
+  },
 ];
