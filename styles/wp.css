@@ -1,0 +1,2093 @@
+/**
+ * wp-block-styles.css
+ * Comprehensive styles for WordPress Gutenberg block classes
+ * rendered via the WP REST API in a headless/Next.js context.
+ *
+ * Usage (global):
+ *   import 'wp-block-styles.css'  // in _app.js or app/layout.tsx
+ *
+ * Usage (scoped to a wrapper):
+ *   All selectors are prefixed with .wp-content so you can scope
+ *   by adding className="wp-content" to your post content wrapper.
+ *   In that case, use: import 'wp-block-styles.css' anywhere above the component.
+ *
+ * Caching:
+ *   This file is static and side-effect free — safe to cache aggressively.
+ *   Recommended Cache-Control: public, max-age=31536000, immutable
+ *   Rename or version the file on updates (e.g. wp-block-styles.v2.css)
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * TABLE OF CONTENTS
+ *   1.  Reset & Base
+ *   2.  Typography  (paragraph, heading, list, preformatted, code, poetry)
+ *   3.  Quote & Pullquote
+ *   4.  Image
+ *   5.  Gallery
+ *   6.  Video & Audio
+ *   7.  Embed (iframe / oEmbed)
+ *   8.  Media & Text
+ *   9.  Cover
+ *   10. Columns & Column
+ *   11. Group
+ *   12. Buttons & Button
+ *   13. Table
+ *   14. Separator & Spacer
+ *   15. File Download
+ *   16. Details / Accordion
+ *   17. Social Icons
+ *   18. Search Block
+ *   19. Latest Posts / Latest Comments
+ *   20. Math (MathML / LaTeX)
+ *   21. Navigation (minimal reset)
+ *   22. RSS Block
+ *   23. Icon  (WordPress 7.0)
+ *   24. Breadcrumbs  (WordPress 7.0)
+ *   25. Navigation Overlay Close  (WordPress 7.0)
+ *   26. Tabs  (experimental — WordPress 7.0)
+ *   27. Playlist  (experimental — WordPress 7.0)
+ *   28. Form  (experimental — WordPress 7.0)
+ *   29. Alignment Utilities (alignwide, alignfull, alignleft, alignright)
+ *   30. Has-text-align helpers
+ *   31. Color & Gradient utility classes
+ *   32. Legacy / Classic Editor classes
+ *   33. Dark Mode  (@media prefers-color-scheme: dark) + [data-theme="dark"]
+ *   34. Print      (@media print)
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ─── 0. CSS Custom Properties ─────────────────────────────────────────────── */
+:root {
+  --wp-content-max-width: 860px;
+  --wp-wide-max-width: 1200px;
+  --wp-gap: 1.5rem;
+  --wp-border-color: #e2e2e2;
+  --wp-code-bg: #1e1e1e;
+  --wp-code-color: #f8f8f2;
+  --wp-inline-code-bg: #f4f4f4;
+  --wp-inline-code-color: #1a1a1a;
+  --wp-blockquote-border: #888;
+  --wp-pullquote-border: currentColor;
+  --wp-caption-color: #6b6b6b;
+  --wp-button-bg: #333;
+  --wp-button-color: #fff;
+  --wp-input-bg: #fff;
+  --wp-input-color: inherit;
+  --wp-scrollbar-color: #555;
+  --wp-link-color: #2563eb;
+  --wp-link-visited-color: #7c3aed;
+  --wp-surface-bg: #f9f9f9;
+  --wp-surface-alt-bg: #f5f5f5;
+}
+
+/* ─── 1. Reset & Base ───────────────────────────────────────────────────────── */
+.wp-content {
+  max-width: var(--wp-content-max-width);
+  margin: 0 auto;
+  padding: 0;
+  line-height: 1.7;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.wp-content * {
+  box-sizing: border-box;
+}
+
+.wp-content a {
+  word-wrap: break-word;
+  color: var(--wp-link-color, #2563eb);
+  text-decoration: underline;
+}
+
+.wp-content a:hover {
+  opacity: 0.8;
+}
+
+.wp-content a:visited {
+  color: var(--wp-link-visited-color, #7c3aed);
+}
+
+/* ─── 2. Typography ─────────────────────────────────────────────────────────── */
+
+/* Paragraph */
+.wp-block-paragraph,
+.wp-content p {
+  margin-bottom: 1.25rem;
+}
+
+.wp-block-paragraph.has-drop-cap::first-letter,
+.has-drop-cap::first-letter {
+  float: left;
+  font-size: 4em;
+  line-height: 0.68;
+  font-weight: 700;
+  margin: 0.1em 0.15em 0 0;
+}
+
+/* Headings */
+.wp-block-heading,
+.wp-content h1,
+.wp-content h2,
+.wp-content h3,
+.wp-content h4,
+.wp-content h5,
+.wp-content h6 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.wp-content h1:first-child,
+.wp-content h2:first-child,
+.wp-content h3:first-child {
+  margin-top: 0;
+}
+
+.wp-content h1 {
+  font-size: 2em;
+}
+.wp-content h2 {
+  font-size: 1.6em;
+}
+.wp-content h3 {
+  font-size: 1.35em;
+}
+.wp-content h4 {
+  font-size: 1.15em;
+}
+.wp-content h5 {
+  font-size: 1em;
+}
+.wp-content h6 {
+  font-size: 0.9em;
+}
+
+/* List */
+.wp-block-list,
+.wp-content ul,
+.wp-content ol {
+  padding: 0 0 0 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.wp-block-list li,
+.wp-content ul li,
+.wp-content ol li {
+  margin-bottom: 0.35rem;
+  line-height: 1.6;
+}
+
+/* Unordered: disc → circle → square as nesting deepens */
+.wp-content ul,
+.wp-block-list:not(ol) {
+  list-style-type: disc;
+  list-style-position: outside;
+}
+
+.wp-content ul ul,
+.wp-content ol ul {
+  list-style-type: circle;
+  list-style-position: outside;
+  margin-left: 1.25rem;
+  padding-top: 0.25rem;
+}
+
+.wp-content ul ul ul {
+  list-style-type: square;
+}
+
+/* Ordered: decimal → lower-latin → lower-roman */
+.wp-content ol,
+.wp-block-list[type="ordered"] {
+  list-style-type: decimal;
+  list-style-position: outside;
+}
+
+.wp-content ol ol,
+.wp-content ul ol {
+  list-style-type: lower-latin;
+  list-style-position: outside;
+  margin-left: 1.25rem;
+  padding-top: 0.25rem;
+}
+
+.wp-content ol ol ol {
+  list-style-type: lower-roman;
+}
+
+.wp-block-list.is-style-checkmark-list,
+.wp-block-list.is-style-checked-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.wp-block-list.is-style-checkmark-list li::before,
+.wp-block-list.is-style-checked-list li::before {
+  content: "✓ ";
+  font-weight: 700;
+}
+
+/* Preformatted */
+.wp-block-preformatted {
+  font-family: monospace;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+  background: var(--wp-code-bg);
+  color: var(--wp-code-color);
+  padding: 1.25rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1.75rem 0;
+}
+
+/* Code */
+.wp-block-code {
+  background: var(--wp-code-bg);
+  color: var(--wp-code-color);
+  border-radius: 4px;
+  margin: 1.75rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--wp-scrollbar-color) var(--wp-code-bg);
+}
+
+.wp-block-code::-webkit-scrollbar {
+  height: 6px;
+  background: var(--wp-code-bg);
+}
+
+.wp-block-code::-webkit-scrollbar-track {
+  background: var(--wp-code-bg);
+}
+
+.wp-block-code::-webkit-scrollbar-thumb {
+  background-color: var(--wp-scrollbar-color);
+  border-radius: 10px;
+}
+
+.wp-block-code code {
+  display: block;
+  padding: 1.25rem;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.875em;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+/* Inline code */
+.wp-content code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.875em;
+  background: var(--wp-inline-code-bg);
+  color: var(--wp-inline-code-color);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+/* Block code overrides the inline code reset above */
+.wp-block-code code {
+  background: transparent;
+  color: inherit;
+  padding: 12px;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+/* Verse / Poetry */
+.wp-block-verse {
+  font-family: inherit;
+  font-style: italic;
+  white-space: pre-wrap;
+  padding: 1rem 1.5rem;
+  margin: 1.75rem 0;
+  border-left: 3px solid var(--wp-blockquote-border);
+}
+
+/* Footnotes */
+.wp-block-footnotes {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  border-top: 1px solid var(--wp-border-color);
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+}
+
+.wp-block-footnotes ol {
+  padding-left: 1.25rem;
+}
+
+/* ─── 3. Quote & Pullquote ──────────────────────────────────────────────────── */
+.wp-block-quote {
+  border-left: 4px solid var(--wp-blockquote-border);
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+}
+
+.wp-block-quote p {
+  margin: 0 0 0.5rem;
+  font-style: italic;
+}
+
+.wp-block-quote cite {
+  display: block;
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  font-style: normal;
+}
+
+.wp-block-quote.is-style-large,
+.wp-block-quote.is-large {
+  border-left: none;
+  padding: 2rem 2.5rem;
+  text-align: center;
+}
+
+.wp-block-quote.is-style-large p,
+.wp-block-quote.is-large p {
+  font-size: 1.4em;
+  font-weight: 300;
+}
+
+.wp-block-pullquote {
+  border-top: 4px solid var(--wp-pullquote-border);
+  border-bottom: 4px solid var(--wp-pullquote-border);
+  margin: 2rem 0;
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+.wp-block-pullquote blockquote {
+  margin: 0;
+}
+
+.wp-block-pullquote p {
+  font-size: 1.4em;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.wp-block-pullquote cite {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  font-style: normal;
+}
+
+.wp-block-pullquote.is-style-solid-color {
+  background: var(--wp-button-bg);
+  color: var(--wp-button-color);
+  padding: 2rem;
+  border-color: transparent;
+}
+
+.wp-block-pullquote.is-style-solid-color a {
+  color: #fff;
+}
+
+.wp-block-pullquote.is-style-solid-color cite {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.wp-block-pullquote.is-style-solid-color code {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ─── 4. Image ──────────────────────────────────────────────────────────────── */
+.wp-block-image {
+  margin: 1.75rem 0;
+}
+
+.wp-block-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wp-block-image figure {
+  margin: 0;
+}
+
+.wp-block-image figcaption,
+.wp-block-image .wp-element-caption {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Image style variations */
+.wp-block-image.is-style-rounded img {
+  border-radius: 9999px;
+}
+
+.wp-block-image.is-style-default img {
+  border-radius: 0;
+}
+
+/* ─── 5. Gallery ─────────────────────────────────────────────────────────────  */
+.wp-block-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--wp-gap);
+  margin: 1.75rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wp-block-gallery.columns-default,
+.wp-block-gallery.is-layout-flex {
+  display: grid;
+}
+.wp-block-gallery.columns-1 {
+  grid-template-columns: 1fr;
+}
+.wp-block-gallery.columns-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.wp-block-gallery.columns-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.wp-block-gallery.columns-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.wp-block-gallery.columns-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+.wp-block-gallery.columns-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.wp-block-gallery .wp-block-image,
+.wp-block-gallery figure {
+  margin: 0;
+}
+
+.wp-block-gallery .wp-block-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wp-block-gallery figcaption,
+.wp-block-gallery .wp-element-caption {
+  font-size: 0.8em;
+  color: var(--wp-caption-color);
+  text-align: center;
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 640px) {
+  .wp-block-gallery.columns-3,
+  .wp-block-gallery.columns-4,
+  .wp-block-gallery.columns-5,
+  .wp-block-gallery.columns-6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ─── 6. Video & Audio ───────────────────────────────────────────────────────  */
+.wp-block-video {
+  margin: 1.75rem 0;
+}
+
+.wp-block-video video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wp-block-video figcaption,
+.wp-block-video .wp-element-caption {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.wp-block-audio {
+  margin: 1.75rem 0;
+}
+
+.wp-block-audio audio {
+  width: 100%;
+  display: block;
+}
+
+.wp-block-audio figcaption,
+.wp-block-audio .wp-element-caption {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* ─── 7. Embed (iframe / oEmbed) ─────────────────────────────────────────────  */
+
+/* 16:9 ratio wrapper — the default for YouTube, Vimeo, etc. */
+.wp-block-embed {
+  margin: 1.75rem 0;
+}
+
+.wp-block-embed__wrapper {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
+  overflow: hidden;
+}
+
+.wp-block-embed__wrapper iframe,
+.wp-block-embed__wrapper video,
+.wp-block-embed__wrapper object,
+.wp-block-embed__wrapper embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Ratio variants */
+.wp-block-embed.is-type-video.wp-embed-aspect-4-3 .wp-block-embed__wrapper,
+.wp-block-embed[class*="wp-embed-aspect-4-3"] .wp-block-embed__wrapper {
+  padding-bottom: 75%; /* 4:3 */
+}
+
+.wp-block-embed[class*="wp-embed-aspect-1-1"] .wp-block-embed__wrapper {
+  padding-bottom: 100%; /* 1:1 */
+}
+
+.wp-block-embed[class*="wp-embed-aspect-9-16"] .wp-block-embed__wrapper {
+  padding-bottom: 177.78%; /* 9:16 vertical */
+}
+
+.wp-block-embed[class*="wp-embed-aspect-21-9"] .wp-block-embed__wrapper {
+  padding-bottom: 42.86%; /* 21:9 cinematic */
+}
+
+/* Rich preview cards (Twitter/X, etc.) */
+.wp-block-embed.is-type-rich .wp-block-embed__wrapper {
+  height: auto;
+  padding-bottom: 0;
+}
+
+.wp-block-embed.is-type-rich .wp-block-embed__wrapper iframe {
+  position: static;
+  width: 100%;
+  height: auto;
+}
+
+.wp-block-embed figcaption,
+.wp-block-embed .wp-element-caption {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* ─── 8. Media & Text ────────────────────────────────────────────────────────  */
+.wp-block-media-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--wp-gap);
+  align-items: center;
+  margin: 1.75rem 0;
+}
+
+.wp-block-media-text.has-media-on-the-right {
+  grid-template-columns: 1fr 1fr;
+}
+
+.wp-block-media-text.has-media-on-the-right .wp-block-media-text__media {
+  order: 2;
+}
+
+.wp-block-media-text.has-media-on-the-right .wp-block-media-text__content {
+  order: 1;
+}
+
+.wp-block-media-text__media img,
+.wp-block-media-text__media video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wp-block-media-text__content {
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .wp-block-media-text.is-stacked-on-mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .wp-block-media-text {
+    grid-template-columns: 1fr;
+  }
+
+  .wp-block-media-text.has-media-on-the-right .wp-block-media-text__media {
+    order: 0;
+  }
+
+  .wp-block-media-text.has-media-on-the-right .wp-block-media-text__content {
+    order: 0;
+  }
+}
+
+/* ─── 9. Cover ───────────────────────────────────────────────────────────────  */
+.wp-block-cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 430px;
+  margin: 1.75rem 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.wp-block-cover__image-background,
+.wp-block-cover__video-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* WordPress sets data-object-fit via a frontend script that doesn't run in headless.
+   These rules ensure cover images are positioned correctly without that script. */
+.wp-block-cover__image-background[data-object-fit="cover"] {
+  object-fit: cover;
+}
+
+.wp-block-cover__image-background[data-object-fit="contain"] {
+  object-fit: contain;
+}
+
+.wp-block-cover__background,
+.wp-block-cover-image__background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.wp-block-cover__inner-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--wp-content-max-width);
+  padding: 2rem;
+  color: #fff;
+  text-align: center;
+}
+
+.wp-block-cover.has-left-content .wp-block-cover__inner-container {
+  text-align: left;
+}
+
+.wp-block-cover.has-right-content .wp-block-cover__inner-container {
+  text-align: right;
+}
+
+.wp-block-cover.is-light .wp-block-cover__inner-container {
+  color: #333;
+}
+
+/* ─── 10. Columns & Column ───────────────────────────────────────────────────  */
+.wp-block-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-gap);
+  margin: 1.75rem 0;
+}
+
+.wp-block-column {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.wp-block-columns.is-not-stacked-on-mobile .wp-block-column {
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 768px) {
+  .wp-block-columns:not(.is-not-stacked-on-mobile) {
+    flex-direction: column;
+  }
+
+  .wp-block-columns:not(.is-not-stacked-on-mobile) .wp-block-column {
+    flex-basis: 100% !important;
+  }
+}
+
+/* ─── 11. Group ──────────────────────────────────────────────────────────────  */
+.wp-block-group {
+  margin: 1.75rem 0;
+}
+
+/* Row layout */
+.wp-block-group.is-layout-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp-gap);
+  align-items: center;
+}
+
+/* Grid layout */
+.wp-block-group.is-layout-grid {
+  display: grid;
+  gap: var(--wp-gap);
+}
+
+/* ─── 12. Buttons & Button ───────────────────────────────────────────────────  */
+.wp-block-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.75rem 0;
+}
+
+.wp-block-buttons.is-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.wp-block-button {
+  display: inline-flex;
+}
+
+.wp-block-button__link {
+  display: inline-block;
+  padding: 0.65em 1.4em;
+  background: var(--wp-button-bg);
+  color: var(--wp-button-color);
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.95em;
+  transition: opacity 0.15s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.wp-block-button__link:hover {
+  opacity: 0.85;
+  color: #fff;
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link {
+  background: transparent;
+  border: 2px solid currentColor;
+  color: inherit;
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link:hover {
+  opacity: 0.75;
+}
+
+.wp-block-button.is-style-fill .wp-block-button__link {
+  background: var(--wp-button-bg);
+  color: var(--wp-button-color);
+}
+
+/* ─── 13. Table ──────────────────────────────────────────────────────────────  */
+.wp-block-table {
+  margin: 1.75rem 0;
+  overflow-x: auto;
+  display: block;
+  width: 100%;
+}
+
+.wp-block-table table {
+  width: max-content;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.wp-block-table th,
+.wp-block-table td {
+  width: max-content;
+  max-width: 320px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--wp-border-color);
+  text-align: left;
+  vertical-align: top;
+}
+
+.wp-block-table th {
+  background: var(--wp-surface-alt-bg);
+  font-weight: 700;
+}
+
+.wp-block-table.is-style-stripes tbody tr:nth-child(odd) td {
+  background: var(--wp-surface-bg);
+}
+
+.wp-block-table.is-style-stripes th,
+.wp-block-table.is-style-stripes td {
+  border-color: transparent;
+}
+
+.wp-block-table figcaption,
+.wp-block-table .wp-element-caption {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* ─── 14. Separator & Spacer ─────────────────────────────────────────────────  */
+.wp-block-separator {
+  border: none;
+  border-top: 2px solid var(--wp-border-color);
+  margin: 2rem auto;
+  width: 100%;
+}
+
+.wp-block-separator.is-style-wide {
+  width: 100%;
+}
+
+.wp-block-separator.is-style-dots {
+  border: none;
+  text-align: center;
+  height: 1.5rem;
+}
+
+.wp-block-separator.is-style-dots::before {
+  content: "· · ·";
+  font-size: 1.4em;
+  letter-spacing: 0.6em;
+  color: var(--wp-caption-color);
+}
+
+.wp-block-spacer {
+  display: block;
+}
+
+/* ─── 15. File Download ──────────────────────────────────────────────────────  */
+.wp-block-file {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--wp-border-color);
+  border-radius: 4px;
+  margin: 1.75rem 0;
+}
+
+.wp-block-file .wp-block-file__content-wrapper {
+  flex: 1;
+}
+
+.wp-block-file .wp-block-file__textlink {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.wp-block-file .wp-block-file__textlink:hover {
+  text-decoration: underline;
+}
+
+.wp-block-file .wp-block-file__button {
+  display: inline-block;
+  padding: 0.5em 1em;
+  background: var(--wp-button-bg);
+  color: var(--wp-button-color);
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.wp-block-file .wp-block-file__button:hover {
+  opacity: 0.85;
+  color: #fff;
+}
+
+/* ─── 16. Details / Accordion ────────────────────────────────────────────────  */
+
+/* Native <details> block (WP 6.4+) */
+.wp-block-details {
+  margin: 1.75rem 0;
+  border: 1px solid var(--wp-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.wp-block-details > summary {
+  padding: 0.9rem 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  -webkit-user-select: none;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--wp-surface-bg);
+}
+
+.wp-block-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wp-block-details > summary::after {
+  content: "+";
+  font-size: 1.2em;
+  font-weight: 300;
+  transition: transform 0.2s ease;
+}
+
+.wp-block-details[open] > summary::after {
+  content: "−";
+}
+
+.wp-block-details > :not(summary) {
+  padding: 0.9rem 1.1rem;
+}
+
+/* Accordion (Gutenberg Experimental — core/accordion) */
+.wp-block-accordion {
+  margin: 1.75rem 0;
+  border: 1px solid var(--wp-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.wp-block-accordion-item {
+  border-bottom: 1px solid var(--wp-border-color);
+}
+
+.wp-block-accordion-item:last-child {
+  border-bottom: none;
+}
+
+.wp-block-accordion-heading {
+  padding: 0;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--wp-surface-bg);
+  -webkit-user-select: none;
+  user-select: none;
+  margin: 0;
+}
+
+.wp-block-accordion-heading__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  background: none;
+  border: none;
+  font-size: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+
+.wp-block-accordion-heading__toggle-icon {
+  flex-shrink: 0;
+  margin-left: 1rem;
+  font-size: 1.2em;
+  font-weight: 300;
+}
+
+/* The Interactivity API toggles inert and .is-open in a live WP environment.
+   In headless, the Interactivity API does not run, so panels remain with the
+   inert attribute. Override inert so all panels display as expanded static
+   sections — no content is hidden. */
+.wp-block-accordion-panel {
+  padding: 1rem 1.1rem;
+}
+
+.wp-block-accordion-panel[inert] {
+  display: block;
+  pointer-events: auto;
+}
+
+/* ─── 17. Social Icons ───────────────────────────────────────────────────────  */
+.wp-block-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+  margin: 1.75rem 0;
+}
+
+.wp-block-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.wp-block-social-link a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+.wp-block-social-link svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: currentColor;
+  display: block;
+  flex-shrink: 0;
+}
+
+.wp-block-social-link-label.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Pill style */
+.wp-block-social-links.is-style-pill-shape .wp-block-social-link {
+  border-radius: 9999px;
+  padding: 0 0.75rem;
+  width: auto;
+}
+
+/* Logos only (no background) */
+.wp-block-social-links.is-style-logos-only .wp-block-social-link {
+  background: transparent !important;
+}
+
+/* Default colors */
+.wp-block-social-link-anchor {
+  color: #fff;
+}
+
+/* Default fallback background — WordPress normally injects inline colors per service */
+.wp-block-social-link {
+  background: #444;
+}
+
+/* Per-service brand colors */
+.wp-social-link-facebook {
+  background: #1877f2;
+}
+.wp-social-link-twitter,
+.wp-social-link-x {
+  background: #000;
+}
+.wp-social-link-instagram {
+  background: #e1306c;
+}
+.wp-social-link-linkedin {
+  background: #0a66c2;
+}
+.wp-social-link-youtube {
+  background: #ff0000;
+}
+.wp-social-link-github {
+  background: #24292e;
+}
+.wp-social-link-tiktok {
+  background: #010101;
+}
+.wp-social-link-pinterest {
+  background: #e60023;
+}
+.wp-social-link-snapchat {
+  background: #fffc00;
+  color: #000;
+}
+.wp-social-link-tumblr {
+  background: #35465c;
+}
+.wp-social-link-reddit {
+  background: #ff4500;
+}
+.wp-social-link-spotify {
+  background: #1db954;
+}
+.wp-social-link-mastodon {
+  background: #6364ff;
+}
+.wp-social-link-chain {
+  background: #444;
+}
+
+/* ─── 17b. Social Embed Overrides (Twitter/X, Instagram, TikTok) ─────────────  */
+
+/*
+ * Social embeds inject their own blockquote before their JS loads.
+ * These rules style the pre-load blockquote state and override the
+ * injected iframe wrappers so they don't break your layout.
+ */
+
+/* Twitter / X */
+blockquote.twitter-tweet {
+  display: flex;
+  flex-direction: column;
+  border-left: 3px solid #1da1f2;
+  padding: 1rem 1rem 2rem 1.25rem;
+  margin: 1.75rem 0;
+  font-style: italic;
+  background: transparent;
+}
+
+blockquote.twitter-tweet p {
+  margin: 0 0 0.75rem;
+}
+
+blockquote.twitter-tweet a {
+  color: #1da1f2;
+  word-break: break-word;
+}
+
+/* Twitter embed wrapper: the injected iframe is height-intrinsic,
+   so we release the padding-bottom trick that applies to video embeds */
+.is-provider-twitter,
+.wp-block-embed-twitter {
+  display: flex;
+}
+
+.is-provider-twitter > .wp-block-embed__wrapper,
+.wp-block-embed-twitter > .wp-block-embed__wrapper {
+  position: static;
+  height: auto;
+  padding-bottom: 0 !important;
+  width: 100%;
+}
+
+.is-provider-twitter .twitter-tweet,
+.wp-block-embed-twitter .twitter-tweet {
+  height: 100%;
+}
+
+.is-provider-twitter iframe,
+.wp-block-embed-twitter iframe {
+  position: static;
+  width: 100% !important;
+  max-width: 550px;
+}
+
+/* Instagram */
+.instagram-media {
+  border-radius: 4px;
+  margin: 1.5rem auto !important;
+  max-width: 540px !important;
+}
+
+/* TikTok */
+.tiktok-embed {
+  border-radius: 4px;
+  margin: 1.5rem auto;
+  max-width: 605px;
+}
+
+.tiktok-embed a {
+  word-break: break-word;
+}
+
+/* ─── 18. Search Block ───────────────────────────────────────────────────────  */
+.wp-block-search {
+  margin: 1.75rem 0;
+}
+
+.wp-block-search__inside-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--wp-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.wp-block-search__input {
+  flex: 1;
+  padding: 0.6rem 0.9rem;
+  border: none;
+  font-size: 1em;
+  outline: none;
+  background: var(--wp-input-bg);
+  color: var(--wp-input-color);
+}
+
+.wp-block-search__button {
+  padding: 0.6rem 1rem;
+  background: var(--wp-button-bg);
+  color: var(--wp-button-color);
+  border: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.wp-block-search__button:hover {
+  background: #555;
+}
+
+.wp-block-search__label {
+  display: block;
+  font-size: 0.85em;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+/* ─── 19. Latest Posts / Latest Comments ─────────────────────────────────────  */
+.wp-block-latest-posts {
+  padding: 0;
+  list-style: none;
+  margin: 1.75rem 0;
+}
+
+.wp-block-latest-posts__post-title {
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+}
+
+.wp-block-latest-posts__post-title:hover {
+  text-decoration: underline;
+}
+
+.wp-block-latest-posts__post-date {
+  font-size: 0.8em;
+  color: var(--wp-caption-color);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.wp-block-latest-posts__post-excerpt {
+  font-size: 0.9em;
+  margin-top: 0.25rem;
+}
+
+.wp-block-latest-posts.is-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--wp-gap);
+}
+
+.wp-block-latest-comments {
+  padding: 0;
+  list-style: none;
+  margin: 1.75rem 0;
+}
+
+.wp-block-latest-comments__comment {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--wp-border-color);
+}
+
+.wp-block-latest-comments__comment-meta {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+}
+
+/* ─── 20. Math (MathML / LaTeX) ──────────────────────────────────────────────  */
+
+/*
+ * The Math block renders MathML markup with wp-block-math as its wrapper.
+ * Browsers that support MathML display it natively; for others, WP loads
+ * MathJax or KaTeX as a polyfill. These rules ensure the wrapper doesn't
+ * clip overflow (common with tall fractions/matrices) and gives it
+ * appropriate vertical rhythm.
+ */
+
+.wp-block-math {
+  margin: 1.75rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.wp-block-math math,
+.wp-block-math .math-inline {
+  display: block;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+/* Inline math via the inline Math format */
+.math-inline {
+  display: inline;
+  font-size: 1em;
+}
+
+/* MathJax / KaTeX polyfill containers */
+.MathJax,
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+/* ─── 21. Navigation (minimal reset for REST API content) ────────────────────  */
+.wp-block-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.wp-block-navigation-item {
+  list-style: none;
+}
+
+.wp-block-navigation-item__content {
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  display: block;
+}
+
+/* ─── 22. RSS Block ──────────────────────────────────────────────────────────  */
+.wp-block-rss {
+  padding: 0;
+  list-style: none;
+  margin: 1.75rem 0;
+}
+
+.wp-block-rss__item {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--wp-border-color);
+}
+
+.wp-block-rss__item:last-child {
+  border-bottom: none;
+}
+
+.wp-block-rss__item-title {
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+}
+
+.wp-block-rss__item-title:hover {
+  text-decoration: underline;
+}
+
+.wp-block-rss__item-publish-date {
+  font-size: 0.8em;
+  color: var(--wp-caption-color);
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.wp-block-rss__item-author {
+  font-size: 0.8em;
+  color: var(--wp-caption-color);
+  display: block;
+}
+
+.wp-block-rss__item-excerpt {
+  font-size: 0.9em;
+  margin-top: 0.35rem;
+}
+
+.wp-block-rss.is-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--wp-gap);
+}
+
+/* ─── 23. Icon (WordPress 7.0) ───────────────────────────────────────────────  */
+
+/*
+ * The Icon block (core/icon) renders an inline SVG wrapped in
+ * <figure class="wp-block-icon">. WordPress injects width/height via inline
+ * styles; these rules provide layout defaults and ensure the SVG fills
+ * currentColor for theme-driven coloring.
+ */
+
+.wp-block-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem 0;
+}
+
+.wp-block-icon figure {
+  margin: 0;
+  display: inline-flex;
+}
+
+.wp-block-icon svg {
+  display: block;
+  width: 48px;
+  height: 48px;
+  fill: currentColor;
+  max-width: 100%;
+}
+
+/* ─── 24. Breadcrumbs (WordPress 7.0) ────────────────────────────────────────  */
+
+/*
+ * The Breadcrumbs block (core/breadcrumbs) renders a <nav> containing a
+ * sequence of links separated by a configurable separator character.
+ */
+
+.wp-block-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 1rem 0;
+  font-size: 0.9em;
+  padding: 0;
+}
+
+.wp-block-breadcrumbs ol,
+.wp-block-breadcrumbs ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.wp-block-breadcrumbs li {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
+.wp-block-breadcrumbs .wp-block-breadcrumbs__separator,
+.wp-block-breadcrumbs [aria-hidden="true"] {
+  padding: 0 0.3rem;
+  color: var(--wp-caption-color);
+}
+
+.wp-block-breadcrumbs a {
+  text-decoration: none;
+}
+
+.wp-block-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.wp-block-breadcrumbs .wp-block-breadcrumbs__current {
+  color: var(--wp-caption-color);
+}
+
+/* ─── 25. Navigation Overlay Close (WordPress 7.0) ──────────────────────────  */
+
+/*
+ * The Navigation Overlay Close block (core/navigation-overlay-close) renders
+ * a <button> that dismisses the mobile navigation overlay. In headless
+ * environments the overlay is JS-driven; these styles reset the button
+ * and provide a sensible baseline appearance.
+ */
+
+.wp-block-navigation-overlay-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 1em;
+  line-height: 1;
+  border-radius: 4px;
+}
+
+.wp-block-navigation-overlay-close:hover {
+  opacity: 0.75;
+}
+
+/* ─── 26. Tabs — experimental (WordPress 7.0) ───────────────────────────────  */
+
+/*
+ * The Tabs block (core/tabs) requires the Interactivity API to toggle panels.
+ * In headless environments the Interactivity API does not run, so all panels
+ * render statically. These rules display all panels stacked so no content
+ * is hidden. If you add the Interactivity API to your headless project,
+ * remove the .wp-block-tab-panel override and let [hidden] manage visibility.
+ */
+
+.wp-block-tabs {
+  margin: 1.75rem 0;
+}
+
+.wp-block-tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: 2px solid var(--wp-border-color);
+  padding: 0;
+  margin: 0 0 1rem;
+  list-style: none;
+}
+
+.wp-block-tab {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.wp-block-tab[aria-selected="true"],
+.wp-block-tab.is-active {
+  border-bottom-color: currentColor;
+}
+
+.wp-block-tab-panels {
+  position: relative;
+}
+
+/* Headless fallback: all panels visible and stacked */
+.wp-block-tab-panel {
+  display: block;
+  padding: 1rem 0;
+}
+
+.wp-block-tab-panel + .wp-block-tab-panel {
+  border-top: 1px solid var(--wp-border-color);
+}
+
+/* When Interactivity API is active it sets [hidden] on inactive panels */
+.wp-block-tab-panel[hidden] {
+  display: none;
+}
+
+/* ─── 27. Playlist — experimental (WordPress 7.0) ───────────────────────────  */
+
+.wp-block-playlist {
+  margin: 1.75rem 0;
+  border: 1px solid var(--wp-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.wp-block-playlist figcaption,
+.wp-block-playlist .wp-element-caption {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.wp-block-playlist-track {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--wp-border-color);
+  cursor: pointer;
+}
+
+.wp-block-playlist-track:last-child {
+  border-bottom: none;
+}
+
+.wp-block-playlist-track:hover {
+  background: var(--wp-surface-bg);
+}
+
+.wp-block-playlist-track img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.wp-block-playlist-track__title {
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.wp-block-playlist-track__artist,
+.wp-block-playlist-track__album {
+  font-size: 0.8em;
+  color: var(--wp-caption-color);
+}
+
+.wp-block-playlist-track__length {
+  margin-left: auto;
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* ─── 28. Form — experimental (WordPress 7.0) ───────────────────────────────  */
+
+.wp-block-form {
+  margin: 1.75rem 0;
+}
+
+.wp-block-form-input {
+  margin-bottom: 1rem;
+}
+
+.wp-block-form-input label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 0.35rem;
+}
+
+.wp-block-form-input input,
+.wp-block-form-input textarea,
+.wp-block-form-input select {
+  width: 100%;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--wp-border-color);
+  border-radius: 4px;
+  background: var(--wp-input-bg);
+  color: var(--wp-input-color);
+  font-size: 1em;
+  font-family: inherit;
+}
+
+.wp-block-form-input input:focus,
+.wp-block-form-input textarea:focus,
+.wp-block-form-input select:focus {
+  outline: 2px solid var(--wp-link-color);
+  outline-offset: -1px;
+}
+
+.wp-block-form-input textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.wp-block-form-submit-button {
+  margin-top: 0.5rem;
+}
+
+.wp-block-form-submit-button button,
+.wp-block-form-submit-button input[type="submit"] {
+  display: inline-block;
+  padding: 0.65em 1.4em;
+  background: var(--wp-button-bg);
+  color: var(--wp-button-color);
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.wp-block-form-submit-button button:hover,
+.wp-block-form-submit-button input[type="submit"]:hover {
+  opacity: 0.85;
+}
+
+.wp-block-form-submission-notification {
+  padding: 0.9rem 1.1rem;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+.wp-block-form-submission-notification[data-type="success"] {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.wp-block-form-submission-notification[data-type="error"] {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* ─── 29. Alignment Utilities ────────────────────────────────────────────────  */
+
+/* Wide alignment — breaks slightly past content column */
+.alignwide {
+  max-width: var(--wp-wide-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+/* Full bleed alignment */
+.alignfull {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/* Float alignments */
+.alignleft {
+  float: left;
+  margin: 0 1.5rem 1rem 0;
+  max-width: 50%;
+}
+
+.alignright {
+  float: right;
+  margin: 0 0 1rem 1.5rem;
+  max-width: 50%;
+}
+
+.aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Clearfix for float-aligned elements */
+.wp-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media (max-width: 640px) {
+  .alignleft,
+  .alignright {
+    float: none;
+    margin: 1rem 0;
+    max-width: 100%;
+  }
+}
+
+/* ─── 30. Text Align Helpers ─────────────────────────────────────────────────  */
+.has-text-align-left {
+  text-align: left;
+}
+.has-text-align-center {
+  text-align: center;
+}
+.has-text-align-right {
+  text-align: right;
+}
+
+/* ─── 31. Color & Background Utility Classes ─────────────────────────────────  */
+
+/* WP generates inline styles for custom colors, but also emits utility classes
+   for its named palette. We provide neutral fallbacks so layout isn't broken. */
+.has-background {
+  padding: 1.25rem 1.5rem;
+}
+
+/* Ensure text remains readable when WP sets background color classes */
+[class*="has-"][class*="-background-color"] {
+  padding: 0.2em 0;
+}
+
+/* Named palette color classes (WP default theme palette as reference) */
+.has-black-color {
+  color: #000;
+}
+.has-white-color {
+  color: #fff;
+}
+.has-cyan-bluish-gray-color {
+  color: #abb8c3;
+}
+.has-pale-pink-color {
+  color: #f78da7;
+}
+.has-vivid-red-color {
+  color: #cf2e2e;
+}
+.has-luminous-vivid-orange-color {
+  color: #ff6900;
+}
+.has-luminous-vivid-amber-color {
+  color: #fcb900;
+}
+.has-light-green-cyan-color {
+  color: #7bdcb5;
+}
+.has-vivid-green-cyan-color {
+  color: #00d084;
+}
+.has-pale-cyan-blue-color {
+  color: #8ed1fc;
+}
+.has-vivid-cyan-blue-color {
+  color: #0693e3;
+}
+.has-vivid-purple-color {
+  color: #9b51e0;
+}
+
+.has-black-background-color {
+  background-color: #000;
+}
+.has-white-background-color {
+  background-color: #fff;
+}
+.has-cyan-bluish-gray-background-color {
+  background-color: #abb8c3;
+}
+.has-pale-pink-background-color {
+  background-color: #f78da7;
+}
+.has-vivid-red-background-color {
+  background-color: #cf2e2e;
+}
+.has-luminous-vivid-orange-background-color {
+  background-color: #ff6900;
+}
+.has-luminous-vivid-amber-background-color {
+  background-color: #fcb900;
+}
+.has-light-green-cyan-background-color {
+  background-color: #7bdcb5;
+}
+.has-vivid-green-cyan-background-color {
+  background-color: #00d084;
+}
+.has-pale-cyan-blue-background-color {
+  background-color: #8ed1fc;
+}
+.has-vivid-cyan-blue-background-color {
+  background-color: #0693e3;
+}
+.has-vivid-purple-background-color {
+  background-color: #9b51e0;
+}
+
+/* Font size utility classes */
+.has-small-font-size {
+  font-size: 0.8em;
+}
+.has-medium-font-size {
+  font-size: 1em;
+}
+.has-large-font-size {
+  font-size: 1.4em;
+}
+.has-x-large-font-size {
+  font-size: 1.8em;
+}
+.has-xx-large-font-size {
+  font-size: 2.4em;
+}
+.has-huge-font-size {
+  font-size: 2.8em;
+}
+
+/* ─── 32. Legacy / Classic Editor Classes ────────────────────────────────────  */
+
+/* Classic block (raw TinyMCE output from pre-Gutenberg content) */
+.wp-block-freeform {
+  line-height: 1.7;
+}
+
+/* Legacy caption */
+.wp-caption {
+  max-width: 100%;
+  margin: 1rem 0;
+}
+
+.wp-caption img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.wp-caption-text,
+.wp-caption p {
+  font-size: 0.85em;
+  color: var(--wp-caption-color);
+  text-align: center;
+  margin: 0.35rem 0 0;
+}
+
+/* ─── 33. Dark Mode ──────────────────────────────────────────────────────────  */
+/*
+ * Dark mode is applied in two ways:
+ *   1. Automatically via OS preference:  @media (prefers-color-scheme: dark)
+ *   2. Manually via a data attribute:    [data-theme="dark"]  on <html> or any ancestor
+ *
+ * Both selectors share identical rules via the shared mixin below.
+ * The data-theme attribute takes precedence over the OS preference when present,
+ * allowing a user-controlled theme toggle to override the system setting.
+ *
+ * Usage (manual toggle):
+ *   document.documentElement.setAttribute('data-theme', 'dark')
+ *   document.documentElement.setAttribute('data-theme', 'light')
+ *   document.documentElement.removeAttribute('data-theme')  // fall back to OS
+ */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --wp-border-color: #333;
+    --wp-code-bg: #111;
+    --wp-code-color: #f8f8f2;
+    --wp-inline-code-bg: #1a1a1a;
+    --wp-inline-code-color: #f8f8f2;
+    --wp-blockquote-border: #555;
+    --wp-caption-color: #aaa;
+    --wp-button-bg: #555;
+    --wp-button-color: #fff;
+    --wp-input-bg: #1a1a1a;
+    --wp-input-color: #f0f0f0;
+    --wp-scrollbar-color: #666;
+    --wp-surface-bg: #1a1a1a;
+    --wp-surface-alt-bg: #1a1a1a;
+  }
+
+  :root:not([data-theme="light"]) .wp-block-table.is-style-stripes tbody tr:nth-child(odd) td {
+    background: #161616;
+  }
+
+  :root:not([data-theme="light"]) .wp-block-latest-comments__comment {
+    border-bottom-color: #333;
+  }
+}
+
+/* Manual dark theme via data-theme="dark" — overrides OS preference */
+[data-theme="dark"] {
+  --wp-border-color: #333;
+  --wp-code-bg: #111;
+  --wp-code-color: #f8f8f2;
+  --wp-inline-code-bg: #1a1a1a;
+  --wp-inline-code-color: #f8f8f2;
+  --wp-blockquote-border: #555;
+  --wp-caption-color: #aaa;
+  --wp-button-bg: #555;
+  --wp-button-color: #fff;
+  --wp-input-bg: #1a1a1a;
+  --wp-input-color: #f0f0f0;
+  --wp-scrollbar-color: #666;
+  --wp-surface-bg: #1a1a1a;
+  --wp-surface-alt-bg: #1a1a1a;
+}
+
+[data-theme="dark"] .wp-block-table.is-style-stripes tbody tr:nth-child(odd) td {
+  background: #161616;
+}
+
+[data-theme="dark"] .wp-block-latest-comments__comment {
+  border-bottom-color: #333;
+}
+
+/* ─── 34. Print ──────────────────────────────────────────────────────────────  */
+@media print {
+  /* Remove interactive / screen-only blocks */
+  .wp-block-buttons,
+  .wp-block-button,
+  .wp-block-search,
+  .wp-block-social-links,
+  .wp-block-navigation,
+  .wp-block-cover__video-background {
+    display: none !important;
+  }
+
+  /* Flatten full-bleed and wide alignments */
+  .alignfull,
+  .alignwide {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Prevent floats from breaking print layout */
+  .alignleft,
+  .alignright {
+    float: none !important;
+    max-width: 100% !important;
+    margin: 1rem 0 !important;
+  }
+
+  /* Ensure images don't overflow the page */
+  .wp-block-image img,
+  .wp-block-gallery .wp-block-image img,
+  .wp-block-media-text__media img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Replace embeds with a plain placeholder */
+  .wp-block-embed {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.85em;
+    color: #666;
+  }
+
+  .wp-block-embed__wrapper {
+    position: static !important;
+    height: auto !important;
+    padding-bottom: 0 !important;
+  }
+
+  .wp-block-embed__wrapper iframe {
+    display: none !important;
+  }
+
+  .wp-block-embed::before {
+    content: "[Embedded media — view online]";
+    display: block;
+  }
+
+  /* Code blocks: wrap instead of scroll */
+  .wp-block-code,
+  .wp-block-preformatted {
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+    border: 1px solid #ccc;
+  }
+
+  /* Columns: stack vertically */
+  .wp-block-columns {
+    flex-direction: column !important;
+  }
+
+  /* Avoid page breaks inside key blocks */
+  .wp-block-image,
+  .wp-block-table,
+  .wp-block-quote,
+  .wp-block-pullquote,
+  .wp-block-code {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Links: show URLs after anchor text */
+  .wp-content a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555;
+    word-break: break-all;
+  }
+
+  /* Not for buttons or nav items */
+  .wp-block-button__link::after,
+  .wp-block-navigation-item__content::after {
+    content: none !important;
+  }
+}
