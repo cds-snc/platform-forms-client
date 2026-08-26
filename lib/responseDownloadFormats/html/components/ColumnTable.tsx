@@ -8,7 +8,7 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
-import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
+import { getFormattedStarRatingFromObject } from "@root/components/clientComponents/forms/StarRating/utils";
 
 /*
  ⚡ NOTE: CSS is compiled 
@@ -29,7 +29,7 @@ const QuestionColumns = ({
 
   const renderRow = (index: number | string, lang: Language, item: Answer) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
-    const starRatingValue = checkAndformatStarRatingAnswer(item);
+    const starRatingValue = getFormattedStarRatingFromObject(item.answer as string, lang);
     return (
       <div key={`row-${index}`} className="border-gray flex w-full flex-row border-b py-4">
         <dt data-testid={`col-question-${index}`} className="w-96 py-4 font-bold">
@@ -51,7 +51,7 @@ const QuestionColumns = ({
           <dd data-testid={`col-answer-${index}`} className={`flex-1 py-4 pl-8`}>
             <p>{numberInputValue}</p>
           </dd>
-        ) : starRatingValue !== undefined ? (
+        ) : item.type === FormElementTypes.starRating ? (
           <dd data-testid={`col-answer-${index}`} className={`flex-1 py-4 pl-8`}>
             <p>{starRatingValue}</p>
           </dd>
