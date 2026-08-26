@@ -76,25 +76,23 @@ const editLockRedirectIdleMs: Setting = {
   value: "1800000",
 };
 
-const addressCompleteRateLimitMax: Setting = {
-  internalId: "addressCompleteRateLimitMax",
-  nameEn: "Address Complete Rate Limit Max (count)",
-  nameFr: "Limite maximale du taux de complétion d'adresse (nombre)",
-  descriptionEn:
-    "The maximim number of requests (within the threshold) before the user is rate limited.",
+const addressCompleteRetrieveRateLimitMax: Setting = {
+  internalId: "addressCompleteRetrieveRateLimitMax",
+  nameEn: "Address Complete Retrieve Rate Limit Max (count)",
+  nameFr: "Limite maximale de récupération de l'adresse complète (nombre)",
+  descriptionEn: "The maximum number of retrieve requests before the user is rate limited.",
   descriptionFr:
-    "Le nombre maximal de requêtes (dans la limite du seuil) avant que l'utilisateur ne soit soumis à une limitation de débit.",
-  value: "200",
+    "Le nombre maximal de requêtes de récupération avant que l'utilisateur ne soit soumis à une limitation de débit.",
+  value: "12",
 };
 
 const addressCompleteRateLimitWindowSeconds: Setting = {
   internalId: "addressCompleteRateLimitWindowSeconds",
-  nameEn: "Address Complete Rate Limit Window (seconds)",
-  nameFr: "Fenêtre de limitation de débit complète de l'adresse (secondes)",
-  descriptionEn:
-    "The window of time that as user is rate limited e.g. 200 requests per 60 seconds.",
+  nameEn: "Address Complete Rate Limit Window",
+  nameFr: "Fenêtre de limite de débit pour Address Complete",
+  descriptionEn: "The window of time that as user is rate limited.",
   descriptionFr:
-    "La fenêtre temporelle durant laquelle l'utilisateur est soumis à une limitation de débit (par exemple, 300 requêtes par tranche de 60 secondes).",
+    "La fenêtre temporelle durant laquelle l'utilisateur est soumis à une limitation de débit.",
   value: "60",
 };
 
@@ -106,7 +104,7 @@ const allSettings = [
   nagwarePhaseEscalated,
   responseDownloadLimit,
   editLockRedirectIdleMs,
-  addressCompleteRateLimitMax,
+  addressCompleteRetrieveRateLimitMax,
   addressCompleteRateLimitWindowSeconds,
 ];
 

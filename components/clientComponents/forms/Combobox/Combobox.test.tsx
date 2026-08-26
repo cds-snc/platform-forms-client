@@ -55,7 +55,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang
   afterEach(() => cleanup());
 
   it("renders without errors", async () => {
-    render(<GenerateElement element={comboboxData} language={lang} />);
+    render(<GenerateElement element={comboboxData} language={lang} isTestMode={true} />);
 
     const title = lang === "en" ? comboboxData.properties.titleEn : comboboxData.properties.titleFr;
     const shortDescription =
@@ -104,17 +104,15 @@ describe("Combobox language switch", () => {
     const setErrorMock = vi.fn();
 
     // Intercept useField that Comboox uses and provide with a default French choice
-    vi.mocked(useField).mockReturnValueOnce(
-      [
-        {
-          value: "Colombie-Britannique",
-          name: "province",
-          onBlur: undefined,
-        },
-        { touched: null, error: null },
-        { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
-      ] as unknown as ReturnType<typeof useField>
-    );
+    vi.mocked(useField).mockReturnValueOnce([
+      {
+        value: "Colombie-Britannique",
+        name: "province",
+        onBlur: undefined,
+      },
+      { touched: null, error: null },
+      { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
+    ] as unknown as ReturnType<typeof useField>);
 
     const englishChoices = ["British Columbia", "Alberta", "Ontario"];
     const bilingualChoices = [
@@ -145,17 +143,15 @@ describe("Combobox language switch", () => {
     const setValueMock = vi.fn();
     const setErrorMock = vi.fn();
 
-    vi.mocked(useField).mockReturnValueOnce(
-      [
-        {
-          value: "British Columbia",
-          name: "province",
-          onBlur: undefined,
-        },
-        { touched: null, error: null },
-        { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
-      ] as unknown as ReturnType<typeof useField>
-    );
+    vi.mocked(useField).mockReturnValueOnce([
+      {
+        value: "British Columbia",
+        name: "province",
+        onBlur: undefined,
+      },
+      { touched: null, error: null },
+      { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
+    ] as unknown as ReturnType<typeof useField>);
 
     const frenchChoices = ["Colombie-Britannique", "Alberta", "Ontario"];
     const bilingualChoices = [
@@ -183,17 +179,15 @@ describe("Combobox language switch", () => {
     const setValueMock = vi.fn();
     const setErrorMock = vi.fn();
 
-    vi.mocked(useField).mockReturnValueOnce(
-      [
-        {
-          value: "British Columbia",
-          name: "province",
-          onBlur: undefined,
-        },
-        { touched: null, error: null },
-        { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
-      ] as unknown as ReturnType<typeof useField>
-    );
+    vi.mocked(useField).mockReturnValueOnce([
+      {
+        value: "British Columbia",
+        name: "province",
+        onBlur: undefined,
+      },
+      { touched: null, error: null },
+      { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
+    ] as unknown as ReturnType<typeof useField>);
 
     const englishChoices = ["British Columbia", "Alberta", "Ontario"];
     const bilingualChoices = [
@@ -219,31 +213,21 @@ describe("Combobox language switch", () => {
     const setValueMock = vi.fn();
     const setErrorMock = vi.fn();
 
-    vi.mocked(useField).mockReturnValueOnce(
-      [
-        {
-          value: "Some Value",
-          name: "field",
-          onBlur: undefined,
-        },
-        { touched: null, error: null },
-        { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
-      ] as unknown as ReturnType<typeof useField>
-    );
+    vi.mocked(useField).mockReturnValueOnce([
+      {
+        value: "Some Value",
+        name: "field",
+        onBlur: undefined,
+      },
+      { touched: null, error: null },
+      { setValue: setValueMock, setError: setErrorMock, setTouched: vi.fn() },
+    ] as unknown as ReturnType<typeof useField>);
 
     const choices = ["Some Value", "Other Value"];
 
-    render(
-      <Combobox
-        id="test-combobox"
-        name="field"
-        lang="en"
-        choices={choices}
-      />
-    );
+    render(<Combobox id="test-combobox" name="field" lang="en" choices={choices} />);
 
     // setValue should NOT be called without allChoices
     expect(setValueMock).not.toHaveBeenCalled();
   });
 });
-

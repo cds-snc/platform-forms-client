@@ -18,7 +18,12 @@ describe("Lexical Editor", () => {
   it("Renders the Lexical Editor", async () => {
     //
     const rendered = render(
-      <Editor ariaLabel="AriaLabel" ariaDescribedBy="AriaDescribedBy" id="editor-test" content="Here is some test content" />
+      <Editor
+        ariaLabel="AriaLabel"
+        ariaDescribedBy="AriaDescribedBy"
+        id="editor-test"
+        content="Here is some test content"
+      />
     );
 
     await act(async () => {
@@ -45,8 +50,9 @@ describe("Lexical Editor", () => {
     // Toolbar has aria-controls attribute
     expect(toolbar).toHaveAttribute("aria-controls", contentArea.id);
 
-    // Toolbar contains 9 formatting buttons
-    expect(toolbarButtons).toHaveLength(9);
+    // Details component is enabled by default.
+    expect(toolbarButtons).toHaveLength(10);
+    expect(within(toolbar).getByTestId("collapsible-button")).toBeInTheDocument();
 
     // Content area has default content and attributes
     expect(contentArea).toHaveAttribute("aria-label", "AriaLabel");
@@ -57,9 +63,55 @@ describe("Lexical Editor", () => {
     expect(contentArea).toHaveAttribute("data-lexical-editor", "true");
   });
 
+  it("can insert collapsible content from the toolbar", async () => {
+    const onChange = vi.fn();
+    const rendered = render(
+      <Editor id="editor-test" content="Here is some content" onChange={onChange} />
+    );
+
+    await act(async () => {
+      await promise;
+    });
+
+    await userEvent.click(screen.getByTestId("collapsible-button"));
+
+    expect(rendered.container.querySelector(".Collapsible__container")).toBeInTheDocument();
+    expect(rendered.container.querySelector(".Collapsible__title")).toBeInTheDocument();
+    expect(rendered.container.querySelector(".Collapsible__content")).toBeInTheDocument();
+    expect(onChange).toHaveBeenLastCalledWith(expect.stringContaining(":::collapsible"));
+  });
+
+  it("renders collapsible Markdown blocks", async () => {
+    const rendered = render(
+      <Editor
+        content={":::collapsible summary test\nDetails body\n:::"}
+        ariaLabel="AriaLabel"
+        enableCollapsibleBlocks
+      />
+    );
+
+    await act(async () => {
+      await promise;
+    });
+
+    expect(rendered.container.querySelector(".Collapsible__container")).toBeInTheDocument();
+    expect(rendered.container.querySelector(".Collapsible__title")).toHaveTextContent(
+      "summary test"
+    );
+    expect(rendered.container.querySelector(".Collapsible__content")).toHaveTextContent(
+      "Details body"
+    );
+  });
+
   it("can keyboard navigate the RichTextEditor", async () => {
     render(
-        <div><Editor ariaLabel="AriaLabel" ariaDescribedBy="AriaDescribedBy" content="Here is some test content" /></div>
+      <div>
+        <Editor
+          ariaLabel="AriaLabel"
+          ariaDescribedBy="AriaDescribedBy"
+          content="Here is some test content"
+        />
+      </div>
     );
 
     await act(async () => {

@@ -6,10 +6,7 @@ import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 
 export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
-  const initializedDefaultForm = initializeGroups(
-    { ...defaultForm },
-    initProps?.allowGroupsFlag || false
-  );
+  const initializedDefaultForm = initializeGroups({ ...defaultForm });
 
   if (!initializedDefaultForm.groupsLayout) {
     initializedDefaultForm.groupsLayout = [];
@@ -35,7 +32,7 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     publishDesc: "",
     closingDate: initProps?.closingDate,
     changeKey: String(new Date().getTime()),
-    allowGroupsFlag: initProps?.allowGroupsFlag || false,
+    allowGroupsFlag: true,
     saveAndResume: true,
     notificationsInterval: NotificationsIntervalDefault,
     editLock: null,
@@ -49,7 +46,7 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
       ...initProps?.form,
     };
 
-    initProps.form = initializeGroups(initProps.form, initProps?.allowGroupsFlag || false);
+    initProps.form = initializeGroups(initProps.form);
 
     // Ensure order by groups layout
     if (!initProps.form.groupsLayout) {

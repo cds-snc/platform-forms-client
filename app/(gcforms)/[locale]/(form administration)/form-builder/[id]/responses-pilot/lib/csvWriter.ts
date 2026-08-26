@@ -9,6 +9,8 @@ import { customTranslate } from "@lib/i18nHelpers";
 import { MappedAnswer } from "@lib/responses/mapper/types";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
+import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
+import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -191,14 +193,31 @@ export const getHeaders = ({ sortedElements }: { sortedElements: FormElement[] }
 
   // Build headers in the same style as server-side transform (titles with EN/FR and date format)
   const headerTitles = sortedElements.map((element: FormElement) => {
-    return `${element.properties.titleEn}\n${element.properties.titleFr}${
-      element.type === FormElementTypes.formattedDate && element.properties.dateFormat
-        ? "\n" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
-          "/" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" })
-        : ""
-    }`;
+    let columnTitle = `${element.properties.titleEn}\n${element.properties.titleFr}`;
+    if (element.type === FormElementTypes.formattedDate && element.properties.dateFormat) {
+      columnTitle +=
+        "\n" +
+        t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
+        "\n" +
+        t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" });
+    }
+    if (element.type === FormElementTypes.starRating) {
+      const numberOfStars =
+        element.properties.numberOfStars ?? starRatingDefaultElementProperties.numberOfStars;
+      const enRatingRange = t("starRating.outOf", {
+        lng: "en",
+        value: "",
+        numberOfStars,
+      }).trim();
+      const frRatingRange = t("starRating.outOf", {
+        lng: "fr",
+        value: "",
+        numberOfStars,
+      }).trim();
+
+      columnTitle = `${element.properties.titleEn} (${enRatingRange})\n${element.properties.titleFr} (${frRatingRange})`;
+    }
+    return columnTitle;
   });
 
   // prepend submission id and date headers and append receipt text similar to transform
@@ -250,6 +269,11 @@ export const getRow = ({
         .join("\n");
     }
     let answerText = mappedAnswer.answer;
+
+    if (element.type === FormElementTypes.starRating) {
+      return getScoreFromStarRatingObject(answerText);
+    }
+
     if (
       typeof answerText === "string" &&
       specialChars.some((char) => answerText.startsWith(char))

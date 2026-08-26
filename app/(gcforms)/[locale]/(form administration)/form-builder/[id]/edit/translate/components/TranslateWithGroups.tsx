@@ -140,6 +140,7 @@ const Element = ({
     FormElementTypes.formattedDate,
     FormElementTypes.addressComplete,
     FormElementTypes.fileInput,
+    FormElementTypes.starRating,
   ];
 
   if (element.type === FormElementTypes.dynamicRow) {

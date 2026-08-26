@@ -164,6 +164,19 @@ export const isValidGovEmail = (email: string): boolean => {
     ".parl.ca", // Excludes *.parl.ca (e.g., lop.parl.ca)
     ".ourcommons.ca", // Excludes *.ourcommons.ca
     ".sencanada.ca", // Excludes *.sencanada.ca
+    ".citt-tcce.gc.ca", //Excludes *.citt-tcce.gc.ca 
+    ".sst-tss.gc.ca", // Excludes *.sst-tss.gc.ca
+    ".eiboa-caae.gc.ca", // Excludes *.eiboa-caae.gc.ca
+    ".cart-crac.gc.ca", // Excludes *.cart-crac.gc.ca
+    ".cirb-ccri.gc.ca", // Excludes *.cirb-ccri.gc.ca
+    ".ccperb-cceebc.gc.ca", // Excludes *.ccperb-cceebc.gc.ca
+    ".chrt-tcdp.gc.ca", // Excludes *.chrt-tcdp.gc.ca
+    ".ct-tc.gc.ca",  // Excludes *.ct-tc.gc.ca
+    ".psdpt-tpfd.gc.ca", // Excludes *.psdpt-tpfd.gc.ca
+    ".fpslreb-crtespf.gc.ca", // Excludes *.fpslreb-crtespf.gc.ca  
+    ".sct-trp.gc.ca", // Excludes *.sct-trp.gc.ca
+    ".eptc-tpec.gc.ca",  // Excludes *.eptc-tpec.gc.ca
+    ".njc-cnm.gc.ca", // Excludes *.njc-cnm.gc.ca
   ];
 
   // Extract domain from email (part after @)

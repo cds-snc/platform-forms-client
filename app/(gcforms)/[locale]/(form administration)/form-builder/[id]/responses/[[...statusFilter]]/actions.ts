@@ -44,6 +44,7 @@ import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
 import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 import { traceFunction } from "@lib/otel";
 import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
+import { StarRatingObject } from "@root/components/clientComponents/forms/StarRating/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -321,7 +322,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           case DownloadFormat.CSV:
             return {
               receipt: await htmlAggregatedTransform(formResponse, lang),
-              responses: csvTransform(formResponse),
+              responses: await csvTransform(formResponse),
             };
           case DownloadFormat.HTML_AGGREGATED:
             return await htmlAggregatedTransform(formResponse, lang);
@@ -481,6 +482,16 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       // If the answer is somehow not parseable as JSON, return it as is
       return answer as string;
     }
+  }
+
+  // For StarRating return the serialized JSON object so that
+  // the CSV and HTML transforms can handle it contextually.
+  if (question && question.type === FormElementTypes.starRating) {
+    if (!answer) {
+      return "";
+    }
+    const starRatingObject = answer as StarRatingObject;
+    return JSON.stringify(starRatingObject);
   }
 
   return answer as string;

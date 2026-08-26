@@ -25,7 +25,7 @@ export const AddressComplete = () => {
         <Trans
           ns="form-builder"
           i18nKey="addElementDialog.addressComplete.description"
-          components={{ br: <br /> }}
+          components={{ br: <br />, span: <span className="mb-4 inline-block"></span> }}
         />
       </p>
 

@@ -1,0 +1,85 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ *
+ */
+
+.Collapsible__container {
+  margin-bottom: 8px;
+}
+
+.Collapsible__title {
+  cursor: pointer;
+  padding: 5px 5px 5px 40px;
+  position: relative;
+  list-style: none;
+  outline: none;
+  font: var(--gcds-details-font-desktop);
+  text-decoration: underline;
+  color: var(--gcds-details-default-text);
+  text-decoration-thickness: var(--gcds-details-default-decoration-thickness);
+  text-underline-offset: var(--gcds-details-summary-underline-offset);
+}
+
+/* Lexical titles contain a paragraph. Remove its browser margin so the
+   disclosure marker aligns with the title text rather than the whole block. */
+.Collapsible__title > * {
+  margin-block: 0;
+}
+
+.Collapsible__title p {
+  margin: 0;
+}
+
+.Collapsible__content > p:last-child {
+  margin-bottom: 0;
+}
+
+.Collapsible__title::marker,
+.Collapsible__title::-webkit-details-marker {
+  display: none;
+}
+
+.Collapsible__title:before {
+  /* CSS triangle */
+  width: 0;
+  height: 0;
+  border-block: var(--gcds-details-summary-arrow-border-top-bottom) solid transparent;
+  border-inline-start: var(--gcds-details-summary-arrow-border-left) solid
+    var(--gcds-details-default-text);
+  display: block;
+  content: "";
+  position: absolute;
+  left: var(--gcds-details-summary-arrow-left);
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+}
+
+.Collapsible__container[open] > .Collapsible__title:before {
+  /* CSS triangle */
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.Collapsible__content {
+  color: var(--gcds-text-role-primary);
+  font: var(--gcds-text-size-body-desktop);
+  padding: 10px 5px 5px 20px;
+  box-sizing: border-box;
+  border-left: 5px solid var(--gcds-details-panel-border-color);
+  interpolate-size: allow-keywords;
+  overflow: hidden;
+  transition:
+    height 0.3s ease-out,
+    opacity 0.3s ease-out,
+    visibility 0.3s ease-out allow-discrete;
+  margin-left: 10px;
+  min-height: 40px;
+}
+
+.Collapsible__content[hidden] {
+  border-left-color: transparent;
+}
