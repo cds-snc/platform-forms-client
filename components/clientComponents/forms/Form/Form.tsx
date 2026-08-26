@@ -20,7 +20,7 @@ import {
   submitForm,
   isFormClosed,
 } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
-import { useSyncVisibleElementIds } from "@lib/hooks/useSyncVisibleElementIds";
+import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
 import { StatusError } from "../StatusError/StatusError";
@@ -70,7 +70,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
-  useSyncVisibleElementIds();
+  useFormValuesChanged();
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
