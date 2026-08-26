@@ -13,6 +13,8 @@ export interface HCaptchaFormHandle {
 export type HCaptchaFormProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onSubmit"> &
   UseHCaptchaOptions & {
     children: ReactNode;
+    /** Handles unexpected execution failures; expected CAPTCHA outcomes are returned as results. */
+    onUnexpectedError?: (error: unknown) => void;
     onSubmit: (event: SubmitEvent<HTMLFormElement>, captchaToken: string | undefined) => void;
   };
 
@@ -31,6 +33,7 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
       onRecoverableError,
       onSuspiciousError,
       onSubmit,
+      onUnexpectedError,
       siteKey,
       ...formProps
     },
@@ -54,9 +57,14 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
       (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        execute((captchaToken) => onSubmit(event, captchaToken));
+        void execute()
+          .then((result) => {
+            if (result.verified) onSubmit(event, result.token);
+            else if (result.allowed) onSubmit(event, undefined);
+          })
+          .catch((error: unknown) => onUnexpectedError?.(error));
       },
-      [execute, onSubmit]
+      [execute, onSubmit, onUnexpectedError]
     );
 
     return (

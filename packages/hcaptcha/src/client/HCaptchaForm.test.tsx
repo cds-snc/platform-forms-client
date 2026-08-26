@@ -1,10 +1,11 @@
 /**
  * @vitest-environment jsdom
  */
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { forwardRef, useImperativeHandle } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { HCaptchaForm, type HCaptchaFormProps } from "./HCaptchaForm";
+import { useHCaptcha, type HCaptchaExecutionResult } from "./useHCaptcha";
 
 vi.mock("@hcaptcha/react-hcaptcha", () => ({
   default: (() => {
@@ -38,7 +39,39 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
   })(),
 }));
 
+const HookHarness = ({
+  failureMode,
+  onResult,
+}: {
+  failureMode?: "allow" | "block";
+  onResult: (result: HCaptchaExecutionResult) => void;
+}) => {
+  const { captcha, execute } = useHCaptcha({ siteKey: "site-key", failureMode });
+
+  return (
+    <>
+      <button type="button" onClick={async () => onResult(await execute())}>
+        Execute
+      </button>
+      {captcha}
+    </>
+  );
+};
+
 describe("HCaptchaForm error handling", () => {
+  it("reports unexpected submit-handler failures", async () => {
+    const onUnexpectedError = vi.fn();
+    const error = new Error("execution failed");
+    const onSubmit = vi.fn(() => {
+      throw error;
+    });
+    const { container } = renderForm({ onSubmit, onUnexpectedError });
+
+    fireEvent.submit(container.querySelector("form")!);
+
+    await waitFor(() => expect(onUnexpectedError).toHaveBeenCalledWith(error));
+  });
+
   const renderForm = (props: Partial<HCaptchaFormProps> = {}) =>
     render(
       <HCaptchaForm siteKey="site-key" onSubmit={vi.fn()} {...props}>
@@ -46,14 +79,25 @@ describe("HCaptchaForm error handling", () => {
       </HCaptchaForm>
     );
 
-  it("submits with the token after captcha execution completes", () => {
+  it("submits with the token after captcha execution completes", async () => {
     const onSubmit = vi.fn();
     const { container } = renderForm({ onSubmit });
 
     fireEvent.submit(container.querySelector("form")!);
 
-    expect(onSubmit).toHaveBeenCalledOnce();
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledOnce());
     expect(onSubmit.mock.calls[0]?.[1]).toBe("captcha-token");
+  });
+
+  it("returns a structured result from the headless hook", async () => {
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({ verified: true, token: "captcha-token" })
+    );
   });
 
   it("reports configuration errors without resetting the token", () => {

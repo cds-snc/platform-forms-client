@@ -20,7 +20,12 @@ export type UseHCaptchaOptions = {
   siteKey: string;
 };
 
-export type HCaptchaSubmitCallback = (captchaToken: string | undefined) => void;
+export type HCaptchaFailureReason =
+  "disabled" | "configuration-error" | "captcha-error" | "not-ready" | "execution-error";
+
+export type HCaptchaExecutionResult =
+  | { verified: true; token: string }
+  | { verified: false; allowed: boolean; reason: HCaptchaFailureReason };
 
 export type UseHCaptchaResult = {
   /**
@@ -28,8 +33,8 @@ export type UseHCaptchaResult = {
    * but hCaptcha may display a challenge when additional verification is needed.
    */
   captcha: ReactNode;
-  /** Starts verification and calls back with a token, or undefined when CAPTCHA is bypassed. */
-  execute: (onComplete: HCaptchaSubmitCallback) => void;
+  /** Starts verification and resolves when a token is generated or the failure policy is applied. */
+  execute: () => Promise<HCaptchaExecutionResult>;
   reset: () => void;
   token: string | undefined;
 };
@@ -51,7 +56,10 @@ export const useHCaptcha = ({
   siteKey,
 }: UseHCaptchaOptions): UseHCaptchaResult => {
   const hCaptchaRef = useRef<HCaptcha>(null);
-  const completionRef = useRef<HCaptchaSubmitCallback | null>(null);
+  const pendingExecutionRef = useRef<{
+    promise: Promise<HCaptchaExecutionResult>;
+    resolve: (result: HCaptchaExecutionResult) => void;
+  } | null>(null);
   const hasFatalErrorRef = useRef(false);
   const [token, setToken] = useState<string | undefined>();
 
@@ -61,60 +69,84 @@ export const useHCaptcha = ({
     onCaptchaExpired?.();
   }, [onCaptchaExpired]);
 
+  const complete = useCallback((result: HCaptchaExecutionResult) => {
+    pendingExecutionRef.current?.resolve(result);
+    pendingExecutionRef.current = null;
+  }, []);
+
+  const failureResult = useCallback(
+    (reason: HCaptchaFailureReason): HCaptchaExecutionResult => ({
+      verified: false,
+      allowed: failureMode === "allow" || reason === "disabled",
+      reason,
+    }),
+    [failureMode]
+  );
+
   const onError = useCallback(
     (code: string) => {
       if (CONFIG_ERROR_CODES.includes(code)) {
         hasFatalErrorRef.current = true;
         onConfigError?.(code);
+        complete(failureResult("configuration-error"));
       } else if (SUSPICIOUS_ERROR_CODES.includes(code)) {
         reset();
         onSuspiciousError?.(code);
+        complete(failureResult("captcha-error"));
       } else {
         reset();
         onRecoverableError?.(code);
+        complete(failureResult("captcha-error"));
       }
 
       onAnyError?.(code);
     },
-    [onAnyError, onConfigError, onRecoverableError, onSuspiciousError, reset]
+    [
+      complete,
+      failureResult,
+      onAnyError,
+      onConfigError,
+      onRecoverableError,
+      onSuspiciousError,
+      reset,
+    ]
   );
 
-  const completeWithoutCaptcha = useCallback(
-    (onComplete: HCaptchaSubmitCallback) => {
-      completionRef.current = null;
-      if (failureMode === "allow") onComplete(undefined);
+  const execute = useCallback((): Promise<HCaptchaExecutionResult> => {
+    if (pendingExecutionRef.current) return pendingExecutionRef.current.promise;
+
+    let resolveExecution: (result: HCaptchaExecutionResult) => void = () => {};
+    const promise = new Promise<HCaptchaExecutionResult>((resolve) => {
+      resolveExecution = resolve;
+    });
+    pendingExecutionRef.current = { promise, resolve: resolveExecution };
+
+    if (!captchaEnabled) {
+      complete(failureResult("disabled"));
+      return promise;
+    }
+
+    if (!hCaptchaRef.current || hasFatalErrorRef.current) {
+      complete(failureResult(hasFatalErrorRef.current ? "configuration-error" : "not-ready"));
+      return promise;
+    }
+
+    try {
+      hCaptchaRef.current.execute();
+    } catch {
+      complete(failureResult("execution-error"));
+    }
+
+    return promise;
+  }, [captchaEnabled, complete, failureResult]);
+
+  const onVerify = useCallback(
+    (verifiedToken: string) => {
+      setToken(verifiedToken);
+      complete({ verified: true, token: verifiedToken });
     },
-    [failureMode]
+    [complete]
   );
-
-  const execute = useCallback(
-    (onComplete: HCaptchaSubmitCallback) => {
-      completionRef.current = onComplete;
-
-      if (!captchaEnabled) {
-        onComplete(undefined);
-        return;
-      }
-
-      if (!hCaptchaRef.current || hasFatalErrorRef.current) {
-        completeWithoutCaptcha(onComplete);
-        return;
-      }
-
-      try {
-        hCaptchaRef.current.execute();
-      } catch {
-        completeWithoutCaptcha(onComplete);
-      }
-    },
-    [captchaEnabled, completeWithoutCaptcha]
-  );
-
-  const onVerify = useCallback((verifiedToken: string) => {
-    setToken(verifiedToken);
-    completionRef.current?.(verifiedToken);
-    completionRef.current = null;
-  }, []);
 
   const captcha = captchaEnabled ? (
     <HCaptcha
