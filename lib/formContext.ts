@@ -9,7 +9,6 @@ import {
 } from "@gcforms/types";
 
 import { ensureChoiceId, checkVisibilityRecursive } from "@gcforms/core";
-import { inGroup } from "@gcforms/core";
 
 /**
  * Checks if two arrays match.
@@ -300,8 +299,7 @@ export const decrementChoiceIds = ({
 
 export const filterShownElements = (
   formRecord: FormRecord | PublicFormRecord,
-  values: FormValues,
-  currentGroup?: string
+  values: FormValues
 ) => {
   if (!formRecord || !formRecord.form || !formRecord.form.elements) {
     return [];
@@ -314,12 +312,6 @@ export const filterShownElements = (
   }
 
   return elements.filter((element) => {
-    if (currentGroup && formRecord.form.groups) {
-      return (
-        inGroup(currentGroup, element.id, formRecord.form.groups) &&
-        checkVisibilityRecursive(formRecord, element, values)
-      );
-    }
     return checkVisibilityRecursive(formRecord, element, values);
   });
 };
