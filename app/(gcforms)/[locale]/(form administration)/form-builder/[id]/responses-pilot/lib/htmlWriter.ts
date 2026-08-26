@@ -1,10 +1,24 @@
 import { ResponseHtml } from "@root/lib/responseDownloadFormats/html/components/ResponseHtml";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { mapAnswers } from "@root/lib/responses/mapper/mapAnswers";
-import { FormProperties, SecurityAttribute, Response } from "@root/lib/types";
+import { FormProperties, FormRecord, SecurityAttribute, Response } from "@root/lib/types";
 import { TFunction } from "i18next";
 import { Submission } from "@root/lib/responseDownloadFormats/types";
 import { ResponseFilenameMapping } from "./processResponse";
+
+const getSecurityAttribute = (formTemplate: FormProperties): SecurityAttribute => {
+  const securityAttribute = (formTemplate as { securityAttribute?: unknown }).securityAttribute;
+
+  if (
+    securityAttribute === "Unclassified" ||
+    securityAttribute === "Protected A" ||
+    securityAttribute === "Protected B"
+  ) {
+    return securityAttribute;
+  }
+
+  return "Unclassified";
+};
 
 export const writeHtml = async ({
   htmlDirectoryHandle,
@@ -12,6 +26,7 @@ export const writeHtml = async ({
   submission,
   attachments,
   formId,
+  versionNumber,
   t,
 }: {
   htmlDirectoryHandle: FileSystemDirectoryHandle;
@@ -23,6 +38,7 @@ export const writeHtml = async ({
   };
   attachments?: ResponseFilenameMapping;
   formId: string;
+  versionNumber?: number | null;
   t: TFunction<string | string[], undefined>;
 }) => {
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
@@ -40,18 +56,14 @@ export const writeHtml = async ({
     answers: mappedAnswers,
   } as Submission;
 
-  // Ensure securityAttribute is of type SecurityAttribute
-  const securityAttribute: SecurityAttribute =
-    typeof formTemplate.securityAttribute === "string"
-      ? (formTemplate.securityAttribute as SecurityAttribute)
-      : "Unclassified";
-
-  const formRecord = {
+  const securityAttribute = getSecurityAttribute(formTemplate);
+  const formRecord: FormRecord = {
     id: formId,
-    name: String(formTemplate.name ?? ""),
+    name: String((formTemplate as { name?: string }).name ?? formTemplate.titleEn ?? ""),
     form: formTemplate,
     isPublished: Boolean(formTemplate.isPublished),
     securityAttribute,
+    versionNumber,
   };
 
   const html = renderToStaticMarkup(
@@ -61,7 +73,7 @@ export const writeHtml = async ({
       confirmationCode: "",
       responseID: submissionObj.id,
       createdAt: submissionObj.createdAt,
-      securityAttribute: "Unclassified",
+      securityAttribute: formRecord.securityAttribute,
       showCodes: false,
       t,
     })

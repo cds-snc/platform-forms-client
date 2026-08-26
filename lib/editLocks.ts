@@ -25,6 +25,14 @@ const EDIT_LOCK_ASSIGNED_PENDING_USERS_COUNT_CACHE_PREFIX =
 const EDIT_LOCK_TAKEOVER_SAVE_ACK_POLL_MS = 100;
 const EDIT_LOCK_ASSIGNED_USERS_CACHE_TTL_SECONDS = 300;
 
+const getEffectiveTemplatePublishState = ({
+  isPublished,
+  currentDraftVersionId,
+}: {
+  isPublished: boolean;
+  currentDraftVersionId?: string | null;
+}) => !currentDraftVersionId && isPublished;
+
 export type EditLockPresenceStatus = "active" | "idle" | "away";
 export type EditLockVisibilityState = "visible" | "hidden";
 
@@ -106,7 +114,7 @@ const getEditLockKey = (templateId: string) => `${EDIT_LOCK_KEY_PREFIX}:${templa
 const getEditLockStreamKey = (templateId: string) => `${EDIT_LOCK_STREAM_PREFIX}:${templateId}`;
 const getEditLockTakeoverSaveAckKey = (templateId: string, sessionId: string) =>
   `${EDIT_LOCK_TAKEOVER_SAVE_ACK_PREFIX}:${templateId}:${sessionId}`;
-const getEditLockAssignedUsersCacheKey = (templateId: string) =>
+export const getEditLockAssignedUsersCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_CACHE_PREFIX}:${templateId}`;
 export const getEditLockAssignedUsersCountCacheKey = (templateId: string) =>
   `${EDIT_LOCK_ASSIGNED_USERS_COUNT_CACHE_PREFIX}:${templateId}`;
@@ -514,6 +522,7 @@ const fetchAndCacheUserData = async (
       where: { id: templateId },
       select: {
         isPublished: true,
+        currentDraftVersionId: true,
         _count: {
           select: {
             users: true,
@@ -528,6 +537,7 @@ const fetchAndCacheUserData = async (
     return null;
   }
 
+  const isPublished = getEffectiveTemplatePublishState(template);
   const userCount = template._count.users;
   const pendingUserCount = template._count.invitations;
   const hasEnoughUsers =
@@ -554,7 +564,7 @@ const fetchAndCacheUserData = async (
     ]);
   }
 
-  return { isPublished: template.isPublished, userCount, pendingUserCount, hasEnoughUsers };
+  return { isPublished, userCount, pendingUserCount, hasEnoughUsers };
 };
 
 /**
@@ -607,7 +617,12 @@ const shouldEnforceTemplateEditLockInternal = async (
   const cachedTemplate = formCache.cacheAvailable
     ? await formCache.check(templateId).catch(() => null)
     : null;
-  const cachedIsPublished = cachedTemplate?.isPublished ?? null;
+  const cachedIsPublished = cachedTemplate
+    ? getEffectiveTemplatePublishState({
+        isPublished: cachedTemplate.isPublished,
+        currentDraftVersionId: cachedTemplate.currentDraftVersionId,
+      })
+    : null;
 
   let cachedHasEnoughUsers: boolean | null = null;
 

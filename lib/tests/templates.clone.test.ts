@@ -2,7 +2,7 @@ import type { MockedFunction } from "vitest";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
-import { cloneTemplate } from "../templates";
+import { cloneTemplate } from "@lib/templates/mutations/cloneTemplate";
 import { logEvent } from "@lib/auditLogs";
 
 vi.mock("@lib/auditLogs", async () => {

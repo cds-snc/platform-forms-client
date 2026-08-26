@@ -43,6 +43,10 @@ export const Invitations = ({ invitations }: { invitations: Omit<Invitation, "in
     );
   };
 
+  if (!invitations || invitations.length === 0) {
+    return null;
+  }
+
   return (
     <div className="mb-4 flex flex-col gap-2">
       {invitations.map((invitation: Omit<Invitation, "invitedBy">) => {

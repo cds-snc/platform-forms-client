@@ -154,6 +154,7 @@ async function main() {
       console.log(`Creating ${environment} Users`);
       await createUsers(environment);
     }
+
     if (environment === "development" && developerEmail && developerName) {
       // associate templates to developer
       console.log("Adding existing templates to developer account");

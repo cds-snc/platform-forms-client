@@ -33,7 +33,7 @@ export const ResumeForm = ({
           <StartAgain formId={formId} />
         </div>
       </div>
-      <ToastContainer limit={1} autoClose={false} containerId="resume" />
+      <ToastContainer limit={1} autoClose={false} containerId="resume" width="750px" />
     </>
   );
 };

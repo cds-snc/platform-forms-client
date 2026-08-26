@@ -8,6 +8,7 @@ export type PrivateApiKey = {
 export type NewFormSubmission = {
   name: string;
   createdAt: number;
+  version: number;
 };
 
 export type EncryptedFormSubmission = {

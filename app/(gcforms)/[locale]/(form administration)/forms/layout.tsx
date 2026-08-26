@@ -22,10 +22,8 @@ export default AuthenticatedLayout(async ({ children, params, session }) => {
             showAccountMenu={!!session}
             accountMenuPublishingEnabled={publishFormsEnabled}
           />
-          <div className="laptop:mx-32 desktop:mx-64 mx-4 shrink-0 grow basis-auto">
-            <main id="content" className="mb-10">
-              {children}
-            </main>
+          <div className="shrink-0 grow basis-auto">
+            <main id="content">{children}</main>
             <ToastContainer containerId="default" />
           </div>
           <Footer displayFormBuilderFooter className="mt-0" />

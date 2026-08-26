@@ -5,7 +5,7 @@ import { DeactivationReason, DeactivationReasons, NagwareResult } from "./types"
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { sendDeactivationEmail } from "@lib/deactivate";
-import { getAllTemplatesForUser } from "./templates";
+import { getAllTemplatesForUser } from "@lib/templates/queries/getAllTemplatesForUser";
 import { listAllSubmissions } from "./vault";
 import { detectOldUnprocessedSubmissions } from "./nagware";
 import { AppUser } from "./types/user-types";

@@ -12,6 +12,7 @@ export const DownloadSingleButton = ({
   id,
   formId,
   responseId,
+  version,
   setDownloadError,
   onDownloadSuccess,
   ariaLabelledBy,
@@ -19,6 +20,7 @@ export const DownloadSingleButton = ({
   id: string;
   formId: string;
   responseId: string;
+  version?: string | number | null;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
   onDownloadSuccess: () => void;
   ariaLabelledBy: string;
@@ -32,6 +34,7 @@ export const DownloadSingleButton = ({
         ids: [responseId],
         format: DownloadFormat.HTML,
         lang: i18n.language as Language,
+        version,
       })) as HtmlResponse | ServerActionError;
 
       if ("error" in response) {
@@ -63,7 +66,7 @@ export const DownloadSingleButton = ({
     <button
       id={id}
       onClick={handleDownload}
-      className="rounded border-2 border-white active:border-blue-focus"
+      className="active:border-blue-focus rounded border-2 border-white"
       aria-labelledby={`${id} ${ariaLabelledBy}`}
     >
       <DownloadIcon className="inline-block scale-50" />

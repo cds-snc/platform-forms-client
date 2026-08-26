@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { authorization } from "@lib/privileges";
 import { Metadata } from "next";
 import { DataView } from "./clientSide";
-import { getAllTemplates } from "@lib/templates";
+import { getAllTemplates } from "@lib/templates/queries/getAllTemplates";
 import { AuthenticatedPage } from "@lib/pages/auth";
 
 export async function generateMetadata(props: {

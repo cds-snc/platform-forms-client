@@ -6,7 +6,7 @@ import { useTranslation } from "@root/i18n/client";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { closeForm, updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { updateTemplate } from "@formBuilder/actions";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ga } from "@lib/client/clientHelpers";
@@ -17,6 +17,10 @@ import { PrePublishDialog } from "@formBuilder/[id]/publish/PrePublishDialog";
 import { PopoverPublishedView } from "./PopoverPublishedView";
 import { PopoverChecklistView } from "./PopoverChecklistView";
 import { PopoverUnauthenticatedView } from "./PopoverUnauthenticatedView";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
+import { UpdateTemplateAction } from "@lib/templates/types";
+import { useTemplateContext } from "@root/lib/hooks/form-builder/useTemplateContext";
 
 const ChevronDownIcon = () => (
   <svg
@@ -51,14 +55,24 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const [description, setDescription] = useState("");
   const [reasonForPublish, setReasonForPublish] = useState("");
   const dialog = useDialogRef();
+  const { getFlag } = useFeatureFlags();
 
-  const { isPublished, closingDate, setClosingDate } = useTemplateStore((state) => ({
+  const {
+    isPublished,
+    closingDate,
+    setClosingDate,
+    currentPublishedVersionId,
+    currentDraftVersionId,
+  } = useTemplateStore((state) => ({
     isPublished: state.isPublished,
     closingDate: state.closingDate,
     setClosingDate: state.setClosingDate,
+    currentPublishedVersionId: state.currentPublishedVersionId,
+    currentDraftVersionId: state.currentDraftVersionId,
   }));
 
   const setGroupId = useGroupStore((state) => state.setId);
+  const { saveDraftIfNeeded } = useTemplateContext();
 
   const {
     userCanPublish,
@@ -92,6 +106,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     const handleToggle = (event: Event) => {
       const open = (event as ToggleEvent).newState === "open";
       setIsOpen(open);
+      setPublishing(false);
 
       if (open) {
         const firstFocusable = popover.querySelector<HTMLElement>(
@@ -131,8 +146,12 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const isUnauthenticated = status === "unauthenticated";
   const canPublishFromPopover = allChecksPass && !!userCanPublish && !publishing;
   const showPublishAction = allChecksPass;
-  const triggerLabel = isPublished ? t("published") : t("publish");
-  const isPublishReady = !isPublished && allChecksPass && !!userCanPublish;
+  const isTemplateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
+  const showPublishedView = isTemplateVersioningEnabled
+    ? Boolean(isPublished && !currentDraftVersionId)
+    : isPublished;
+  const triggerLabel = showPublishedView ? t("published") : t("publish");
+  const isPublishReady = !showPublishedView && allChecksPass && !!userCanPublish;
   const signInLink = `/${locale}/auth/login`;
   const createAccountLink = `/${locale}/auth/register`;
   const unlockPublishingHref = `/${locale}/unlock-publishing`;
@@ -167,7 +186,8 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     }
   };
 
-  const handleOpenPrePublish = () => {
+  const handleOpenPrePublish = async () => {
+    await saveDraftIfNeeded();
     setShowPrePublishDialog(true);
   };
 
@@ -194,8 +214,9 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     try {
       ga("publish_form");
 
-      const { formRecord, error: publishError } = await updateTemplatePublishedStatus({
-        id: formId,
+      const { formRecord, error: publishError } = await updateTemplate({
+        action: UpdateTemplateAction.IsPublished,
+        formId: formId,
         isPublished: true,
         publishFormType: formType,
         publishDescription: description,
@@ -244,8 +265,9 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     setUpdatingStatus(true);
 
     const nextClosingDate = pendingToggleValue ? null : new Date().toISOString();
-    const result = await closeForm({
-      id: formId,
+    const result = await updateTemplate({
+      action: UpdateTemplateAction.ClosedData,
+      formId: formId,
       closingDate: nextClosingDate,
     });
 
@@ -280,7 +302,6 @@ export const PublishButton = ({ locale }: { locale: string }) => {
         popoverTarget="publish-menu-popover"
         popoverTargetAction="toggle"
         interestfor="publish-menu-popover"
-        data-share="form-builder-share"
         aria-label={triggerLabel}
         aria-expanded={isOpen}
         aria-controls="publish-menu-popover"
@@ -298,8 +319,9 @@ export const PublishButton = ({ locale }: { locale: string }) => {
         style={popoverStyle}
         className="publish-menu-popover z-20 w-76 rounded-lg border border-slate-300 bg-white px-4 py-5 shadow-[0_8px_24px_rgba(15,23,42,0.14)]"
       >
-        {isPublished ? (
+        {showPublishedView ? (
           <PopoverPublishedView
+            formId={formId}
             t={t}
             publishedLinks={publishedLinks}
             copiedLink={copiedLink}
@@ -364,6 +386,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
 
       {showPrePublishDialog && (
         <PrePublishDialog
+          hasCurrentlyPublishedVersion={currentPublishedVersionId !== null}
           setDescription={setDescription}
           setFormType={setFormType}
           description={description}

@@ -4,6 +4,7 @@ import { VaultSubmissionOverview, VaultStatus } from "@lib/types";
 export const TableActions = {
   UPDATE: "UPDATE",
   RESET: "RESET",
+  UNCHECK: "UNCHECK",
 } as const;
 export type TableActions = (typeof TableActions)[keyof typeof TableActions];
 
@@ -23,6 +24,7 @@ export interface ReducerTableItemsActions {
       checked: boolean;
     };
     vaultSubmissions?: VaultSubmissionOverview[];
+    ids?: string[];
   };
 }
 
@@ -110,6 +112,24 @@ export const reducerTableItems = (
         throw Error("Table sort dispatch missing vaultSubmissions");
       }
       return initialTableItemsState(payload.vaultSubmissions, state.overdueAfter);
+    }
+
+    case "UNCHECK": {
+      if (!payload.ids) {
+        throw Error("Table uncheck dispatch missing ids");
+      }
+      const idsToUncheck = new Set(payload.ids);
+      const newStatusItems = new Map(state.statusItems);
+      const newCheckedItems = new Map(state.checkedItems);
+      idsToUncheck.forEach((id) => {
+        newStatusItems.set(id, false);
+        newCheckedItems.delete(id);
+      });
+      return {
+        ...state,
+        checkedItems: newCheckedItems,
+        statusItems: newStatusItems,
+      };
     }
     default:
       throw Error("Unknown action: " + action.type);

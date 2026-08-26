@@ -43,7 +43,7 @@ jobs:
         with:
           filters: |
             migrations:
-              - 'prisma/migrations/**'
+              - 'packages/database/prisma/migrations/**'
 
   build-and-push-container:
     needs: [run-check]
@@ -144,7 +144,7 @@ jobs:
 
             aws lambda update-function-configuration \
               --function-name $FUNCTION_NAME-$PR_NUMBER \
-              --environment "Variables={NEXTAUTH_URL=$URL}" > /dev/null 2>&1
+              --environment "Variables={NEXTAUTH_URL=$URL,HOST_URL=$URL}" > /dev/null 2>&1
 
             aws logs create-log-group --log-group-name /aws/lambda/$FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
             aws logs put-retention-policy --log-group-name /aws/lambda/$FUNCTION_NAME-$PR_NUMBER --retention-in-days 14 > /dev/null 2>&1

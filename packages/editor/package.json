@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/editor",
-  "version": "1.0.16",
+  "version": "1.0.22",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -8,11 +8,24 @@
   },
   "packageManager": "yarn@4.10.3",
   "dependencies": {
-    "@lexical/react": "^0.39.0",
-    "lexical": "^0.39.0"
+    "@lexical/code": "^0.49.0",
+    "@lexical/html": "^0.49.0",
+    "@lexical/link": "^0.49.0",
+    "@lexical/list": "^0.49.0",
+    "@lexical/markdown": "^0.49.0",
+    "@lexical/react": "^0.49.0",
+    "@lexical/rich-text": "^0.49.0",
+    "@lexical/selection": "^0.49.0",
+    "@lexical/table": "^0.49.0",
+    "@lexical/utils": "^0.49.0",
+    "lexical": "^0.49.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.4"
   },
   "peerDependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   }
 }

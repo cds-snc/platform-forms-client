@@ -4,8 +4,6 @@ FROM node:24-alpine AS build
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
-ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49 
-# Address Complete API key is domain locked, and provided to the client browser, where the API is processed.
 
 ARG ZITADEL_URL
 ENV NEXT_PUBLIC_ZITADEL_URL=$ZITADEL_URL
@@ -49,9 +47,6 @@ ENV INDEX_SITE=$INDEX_SITE
 ARG TAG_VERSION
 ENV TAG_VERSION=$TAG_VERSION
 
-ARG NEXT_DEPLOYMENT_ID
-ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
-
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
 ENV PORT=3000
@@ -63,12 +58,15 @@ ENV LAMBDA_ENV=1
 # Use the REVIEW_ENV environment variable to determine if the app is running in a Review environment
 ENV REVIEW_ENV=1
 
+# Disable Prisma usage data collection (see https://www.prisma.io/docs/orm/v6/tools/prisma-cli#telemetry)
+ENV CHECKPOINT_DISABLE=1
+
 WORKDIR /src
 
 COPY --from=build /src/.next/standalone ./
 COPY --from=build /src/.next/static ./.next/static
 
-COPY package.json yarn.lock .yarnrc.yml next.config.ts nextCacheHandler.ts ./
+COPY package.json yarn.lock .yarnrc.yml next.config.ts ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY scripts/pr-review-entrypoint.sh ./entrypoint.sh

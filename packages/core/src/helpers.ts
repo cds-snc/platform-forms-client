@@ -156,7 +156,7 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
   const newValues = { ...values };
 
   Object.entries(values).forEach(([key, value]) => {
-    if (["currentGroup", "groupHistory", "matchedIds"].includes(key)) return;
+    if (["currentGroup", "matchedIds"].includes(key)) return;
 
     const el = getElementById(formElements, key);
     const choices = el?.properties?.choices;
@@ -315,4 +315,13 @@ export const getElementsUsingChoiceIdParent = ({
   });
 
   return elements;
+};
+
+export const normalizeString = (value: string | unknown): string => {
+  return String(value ?? "").trim();
+};
+
+export const truncateField = (value: string | unknown, maxLength: number): string => {
+  const str = normalizeString(value);
+  return str.length > maxLength ? str.slice(0, maxLength) : str;
 };

@@ -8,6 +8,7 @@ import { FeatureFlags } from "@lib/cache/types";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { clearTemplateStore } from "@lib/store/utils";
+import { createClearGcPlatformLoginHintCookie } from "@root/app/(gcforms)/[locale]/(user authentication)/auth/login/components/client/gcPlatformLoginHintCookie";
 import "./AccountMenu.css";
 
 const PersonIcon = () => (
@@ -104,6 +105,7 @@ export const AccountMenu = ({
 
   const handleLogout = () => {
     clearTemplateStore();
+    document.cookie = createClearGcPlatformLoginHintCookie();
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const timeOptions = { timeZone: tz };

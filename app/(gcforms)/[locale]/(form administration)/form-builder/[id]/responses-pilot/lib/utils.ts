@@ -55,6 +55,7 @@ export async function getAccessTokenFromApiKey(
   productId: string
 ): Promise<string> {
   const zitadelURL = process.env.NEXT_PUBLIC_ZITADEL_URL;
+
   if (!zitadelURL) {
     return Promise.reject(new Error("Zitadel URL is not set."));
   }

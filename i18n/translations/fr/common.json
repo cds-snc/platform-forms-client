@@ -130,7 +130,8 @@
     "typography": "Typographie",
     "upload": "Téléverser",
     "viewTemplates": "Afficher les modèles",
-    "allForms": "Formulaires"
+    "allForms": "Formulaires",
+    "events": "Journaux d’audit"
   },
   "formElements": {
     "characterCount": {
@@ -277,6 +278,10 @@
       "title": "Vérifiez attentivement vos réponses",
       "message": "Vos réponses sauvegardées proviennent d'un autre formulaire d'origine. Vérifiez-les attentivement avant de les soumettre."
     },
+    "formUpdatedWarning": {
+      "title": "Nous avons mis à jour ce formulaire",
+      "message": "Vos réponses enregistrées pourraient ne plus s’appliquer. Confirmez vos réponses avant de soumettre le formulaire."
+    },
     "resumeUploadError": {
       "title": "Problème de téléversement",
       "description": "Essayez de téléverser à nouveau le fichier ou recommencez un nouveau formulaire et copiez-collez vos réponses du fichier.",
@@ -289,8 +294,8 @@
     },
     "resumePage": {
       "upload": {
-        "title": "Téléversez vos réponses",
-        "description": "Continuez à partir de votre formulaire sauvegardé en cours"
+        "title": "Téléversez vos réponses sauvegardées",
+        "description": "Si vous aviez joint des fichiers à votre formulaire, vous devez les téléverser à nouveau."
       },
       "mismatchedForm": {
         "title": "Souhaitez-vous poursuivre le formulaire avec ces réponses?",
@@ -301,22 +306,23 @@
         "continue": "Continuer quand même"
       },
       "restart": {
-        "title": "Commencez le formulaire",
+        "title": "Commencez le formulaire à nouveau",
         "description": "Remplissez un nouveau formulaire"
       },
       "readyToContinue": {
         "title": "Prêt à continuer?",
-        "intro": "Pour continuer le formulaire que vous avez commencé :",
-        "text1": "1. Trouvez le fichier sauvegardé sur votre appareil",
-        "text2": "2. Téléversez-le pour intégrer vos réponses dans le formulaire",
-        "text3": "3. Continuer à remplir le formulaire"
+        "intro": "Pour les questions auxquelles vous avez déjà répondu :",
+        "text1": "1. Trouvez la copie sauvegardé sur votre appareil",
+        "text2": "2. Téléversez-la pour intégrer vos réponses dans le formulaire",
+        "text3": "3. Joignez à nouveau tous les documents, car ils ne seront pas téléversés avec vos réponses.",
+        "text4": "4. Continuer à remplir le formulaire."
       }
     },
     "prompt": {
       "title": "Sauvegarder sur l’appareil",
-      "text1": "Téléchargez une copie du formulaire rempli jusqu'à présent.",
-      "text2": "Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil et téléversant vos réponses sauvegardées.",
-      "text3": "Assurez vous de protéger vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
+      "text1": "Téléchargez et enregistrez une copie de votre formulaire.",
+      "text2": "Lorsque vous souhaitez pousuivre, ouvrez cette copie à nouveau pour trouver le lien vers le formulaire.",
+      "text3": "Visitez le lien, et sélectionnez « Téléverser vos réponses » et suivez les instructions.",
       "okay": "Sauvegarder",
       "cancel": "Annuler"
     },
@@ -356,8 +362,8 @@
         "description": " Conservez ce fichier en un lieu sûr sur votre appareil pour protéger vos renseignements personnels."
       },
       "badge": {
-        "text": "Formulaire soumis le ",
-        "lastSaved": "{{day}} {{month}} {{year}}",
+        "text": "Formulaire soumis : ",
+        "lastSaved": "le {{day}} {{month}} {{year}}",
         "submissionId": "Numéro de référence : {{submissionId}}"
       },
       "generateHtmlError": {
@@ -384,9 +390,26 @@
   "confirmFileWarning": {
     "text": "Cette copie de vos réponses n'aura pas les fichiers que vous avez joints à votre soumission."
   },
+  "starRating": {
+    "starLabel_one": "{{count}} étoile",
+    "starLabel_other": "{{count}} étoiles",
+    "outOf": "{{value}} sur {{numberOfStars}}"
+  },
   "loginPilot": {
     "title": "Se connecter à Formulaires GC",
     "description": "Utilisez votre compte du gouvernement pour créer des formulaires et accéder aux réponses soumises.",
     "button": "Se connecter"
+  },
+  "appUpdate": {
+    "builder": {
+      "title": "Veuillez mettre à jour Formulaires GC",
+      "description": "Vérifiez votre formulaire après la mise à jour et avant la publication.",
+      "button": "Mettre à jour"
+    },
+    "user": {
+      "title": "Pour continuer, mettez à jour ce formulaire",
+      "description": "Vérifiez vos réponses après la mise à jour et avant de soumettre votre formulaire.",
+      "button": "Mettre à jour"
+    }
   }
 }

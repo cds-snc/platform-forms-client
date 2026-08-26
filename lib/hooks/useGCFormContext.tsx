@@ -1,40 +1,28 @@
 "use client";
-import React, { createContext, useContext, ReactNode } from "react";
+import { createContext, useContext, ReactNode, useState, useRef, useCallback } from "react";
 
-import { type FormValues, type GroupsType, type PublicFormRecord } from "@gcforms/types";
+import type { FormValues, GroupsType, PublicFormRecord } from "@gcforms/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
-import { getNextAction, filterValuesByVisibleElements, idArraysMatch } from "@lib/formContext";
+import {
+  getNextAction,
+  filterValuesByVisibleElements,
+  filterShownElements,
+} from "@lib/formContext";
 
 import {
-  mapIdsToValues,
   getValuesWithMatchedIds,
   getVisibleGroupsBasedOnValuesRecursive,
+  mapIdsToValues,
 } from "@gcforms/core";
 
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
-import {
-  getGroupHistory as _getGroupHistory,
-  pushIdToHistory as _pushIdToHistory,
-  clearHistoryAfterId as _clearHistoryAfterId,
-} from "@lib/utils/form-builder/groupsHistory";
-
-import {
-  saveSessionProgress as saveToSession,
-  restoreSessionProgress as restoreSession,
-} from "@lib/utils/saveSessionProgress";
-
-import { toggleSavedValues } from "@i18n/toggleSavedValues";
-
-import { type FileInputResponse } from "@lib/types";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
 
 interface GCFormsContextValueType {
-  updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
-  matchedIds: string[];
-  filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
   getPreviousGroup: (currentGroup: string) => string;
@@ -42,27 +30,22 @@ interface GCFormsContextValueType {
   handleNextAction: () => void;
   hasNextAction: (group: string) => boolean;
   isOffBoardSection: (group: string) => boolean;
+  formId: string;
   formRecord: PublicFormRecord;
   submissionId: string | undefined;
   setSubmissionId: (submissionId: string) => void;
   submissionDate: string | undefined;
   setSubmissionDate: (date: string) => void;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
-  getGroupHistory: () => string[];
-  pushIdToHistory: (groupId: string) => string[];
-  clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
-  saveSessionProgress: (language: Language | undefined) => void;
-  restoreSessionProgress: (
-    language: Language
-  ) => false | { id: number; language: Language; values: FormValues | false };
   getProgressData: () => {
     id: string;
     values: FormValues;
-    history: string[];
     currentGroup: string;
+    versionNumber?: number | null;
   };
-  getNonce: () => string;
+  visibleElementIds: Set<string> | null;
+  updateVisibleElementIds: (formValues: Record<string, string>) => void;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -70,29 +53,17 @@ const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefi
 export const GCFormsProvider = ({
   children,
   formRecord,
-  nonce,
 }: {
   children: ReactNode;
   formRecord: PublicFormRecord;
-  nonce?: string;
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LOCKED_GROUPS.START : null;
-  const values = React.useRef({});
-  const history = React.useRef<string[]>([LOCKED_GROUPS.START]);
-  const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
-  const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
-  const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
-  const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
-
-  // eslint-disable-next-line react-hooks/refs
-  const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
-  const filteredMatchedIds = matchedIds.filter((id) => {
-    const parentId = id.split(".")[0];
-    if (filteredResponses[parentId]) {
-      return id;
-    }
-  });
+  const values = useRef({});
+  const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
+  const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
+  const [submissionDate, setSubmissionDate] = useState<string | undefined>(undefined);
+  const [visibleElementIds, setVisibleElementIds] = useState<Set<string> | null>(null);
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -116,39 +87,55 @@ export const GCFormsProvider = ({
   const handleNextAction = () => {
     if (!currentGroup) return;
 
+    const filteredResponses = filterValuesByVisibleElements(formRecord, values.current);
+    const matchedIds = mapIdsToValues(formRecord.form.elements, values.current);
+    const filteredMatchedIds = matchedIds.filter((id) => {
+      const parentId = id.split(".")[0];
+      if (filteredResponses[parentId]) {
+        return id;
+      }
+    });
+
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
-
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
-        pushIdToHistory(nextAction);
       }
     }
   };
 
-  const updateValues = ({
-    formValues,
-  }: {
-    formValues: Record<string, string[] | string>;
-  }): void => {
-    values.current = formValues;
-    const valueIds = mapIdsToValues(formRecord.form.elements, formValues);
-    if (!idArraysMatch(matchedIds, valueIds)) {
-      setMatchedIds(valueIds);
-    }
+  const getValues = () => {
+    return values.current;
   };
+
+  const updateVisibleElementIds = useCallback(
+    (formValues: Record<string, string>) => {
+      const visibleElements = filterShownElements(
+        formRecord,
+        formValues as FormValues,
+        currentGroup ?? "start"
+      );
+      const newVisibleElementIds = new Set(visibleElements.map((element) => element.id.toString()));
+
+      // Only update the state if the new set of visible element IDs is different from the
+      // previous set (ie reduce rerenders for changes that don't affect visibility)
+      setVisibleElementIds((previousVisibleElementIds) => {
+        const hasChanged =
+          previousVisibleElementIds === null ||
+          previousVisibleElementIds.size !== newVisibleElementIds.size ||
+          [...newVisibleElementIds].some((id) => !previousVisibleElementIds.has(id));
+
+        return hasChanged ? newVisibleElementIds : previousVisibleElementIds;
+      });
+
+      values.current = formValues as FormValues;
+    },
+    [formRecord, currentGroup]
+  );
 
   // Helper to not expose the setter
   const setGroup = (group: string | null) => {
     setCurrentGroup(group);
-  };
-
-  const getValues = () => {
-    return values.current as FormValues;
-  };
-
-  const getNonce = () => {
-    return nonce || "";
   };
 
   // TODO: once groups flag is on, just use formHasGroups
@@ -159,68 +146,15 @@ export const GCFormsProvider = ({
     return formHasGroups(formRecord.form);
   };
 
-  const getGroupHistory = () => _getGroupHistory(history.current);
-
-  const pushIdToHistory = (groupId: string) => _pushIdToHistory(groupId, history.current);
-
-  // Note: this only removes the group entry and not the values
-  const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
-
   const getProgressData = () => {
-    const cleanedValues = {} as unknown as FormValues;
-
-    Object.entries(values.current).map(([key, value]) => {
-      let cleanedValue = value;
-
-      // For file inputs reset the values to null
-      if (value && typeof value === "object" && "size" in value) {
-        cleanedValue = { name: null, size: null, content: null } as FileInputResponse;
-      }
-
-      // For repeating sets (dynamicRow), reset any file inputs within rows
-      if (Array.isArray(value)) {
-        cleanedValue = value.map((row) => {
-          if (row && typeof row === "object" && !Array.isArray(row)) {
-            const cleanedRow = { ...(row as Record<string, unknown>) };
-            for (const [rowKey, rowValue] of Object.entries(cleanedRow)) {
-              if (rowValue && typeof rowValue === "object" && "size" in rowValue) {
-                cleanedRow[rowKey] = { name: null, size: null, content: null };
-              }
-            }
-            return cleanedRow;
-          }
-          return row;
-        });
-      }
-
-      // For all other inputs just return the value
-      cleanedValues[key] = cleanedValue as string | string[];
-    });
+    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values.current);
 
     return {
       id: formRecord.id,
-      values: cleanedValues,
-      history: history.current,
+      values: formValuesWithoutFileContent as FormValues,
       currentGroup: currentGroup || "",
+      versionNumber: formRecord.versionNumber ?? 1,
     };
-  };
-
-  const saveSessionProgress = (language: Language = "en") => {
-    const vals =
-      language === "en"
-        ? values.current
-        : (toggleSavedValues(formRecord.form, { values: values.current }, "en") as FormValues);
-
-    saveToSession(language, {
-      id: formRecord.id,
-      values: vals,
-      history: history.current,
-      currentGroup: currentGroup || "",
-    });
-  };
-
-  const restoreSessionProgress = (language: Language) => {
-    return restoreSession({ id: formRecord.id, form: formRecord.form, language });
   };
 
   const getGroupTitle = (groupId: string | null, language: Language) => {
@@ -228,7 +162,10 @@ export const GCFormsProvider = ({
   };
 
   const getPreviousGroup = (currentGroup: string) => {
-    const valuesWithMatchedIds = getValuesWithMatchedIds(formRecord.form.elements, values.current);
+    const valuesWithMatchedIds = getValuesWithMatchedIds(
+      formRecord.form.elements,
+      values.current as FormValues
+    );
     const visibleGroups = getVisibleGroupsBasedOnValuesRecursive(
       formRecord,
       valuesWithMatchedIds,
@@ -246,14 +183,12 @@ export const GCFormsProvider = ({
     <GCFormsContext.Provider
       value={{
         formRecord,
+        formId: formRecord.id,
         submissionId,
         setSubmissionId,
         submissionDate,
         setSubmissionDate,
-        updateValues,
         getValues,
-        matchedIds,
-        filteredMatchedIds,
         groups,
         currentGroup,
         getPreviousGroup,
@@ -262,14 +197,10 @@ export const GCFormsProvider = ({
         hasNextAction,
         isOffBoardSection,
         groupsCheck,
-        getGroupHistory,
-        pushIdToHistory,
-        clearHistoryAfterId,
         getGroupTitle,
-        saveSessionProgress,
         getProgressData,
-        restoreSessionProgress,
-        getNonce,
+        visibleElementIds,
+        updateVisibleElementIds,
       }}
     >
       {children}
@@ -282,18 +213,13 @@ export const useGCFormsContext = () => {
   if (formsContext === undefined) {
     // For now just return a default context if we're not inside the provider
     return {
-      updateValues: () => {
-        return "noop";
-      },
       getValues: () => {
-        return;
+        return {};
       },
       submissionId: undefined,
       setSubmissionId: () => void 0,
       submissionDate: undefined,
       setSubmissionDate: () => void 0,
-      matchedIds: [""],
-      filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
       getPreviousGroup: () => "",
@@ -302,24 +228,19 @@ export const useGCFormsContext = () => {
       isOffBoardSection: () => false,
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,
+      formId: "0000",
       groupsCheck: () => false,
-      getGroupHistory: () => [],
-      pushIdToHistory: () => [],
-      clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
-      saveSessionProgress: () => void 0,
+      visibleElementIds: new Set<string>(),
+      updateVisibleElementIds: () => void 0,
       getProgressData: () => {
         return {
           id: "",
           values: {},
-          history: [],
           currentGroup: "",
+          versionNumber: 1,
         };
       },
-      restoreSessionProgress: () => {
-        return {};
-      },
-      getNonce: () => "",
     };
   }
   return formsContext;

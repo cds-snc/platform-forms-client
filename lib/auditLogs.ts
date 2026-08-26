@@ -17,11 +17,13 @@ import { getClientIp } from "./ip";
 export const AuditLogEvent = {
   // Form Events
   CreateForm: "CreateForm",
+  CreateDraftFromPublishedForm: "CreateDraftFromPublishedForm",
   ReadForm: "ReadForm",
   UpdateForm: "UpdateForm",
   DeleteForm: "DeleteForm",
   UnarchiveForm: "UnarchiveForm",
   PublishForm: "PublishForm",
+  RepublishForm: "RepublishForm",
   ChangeFormName: "ChangeFormName",
   ChangeDeliveryOption: "ChangeDeliveryOption",
   ChangeFormPurpose: "ChangeFormPurpose",
@@ -31,7 +33,7 @@ export const AuditLogEvent = {
   RevokeFormAccess: "RevokeFormAccess",
   UpdateNotificationsInterval: "UpdateNotificationsInterval",
   UpdatedNotificationSettings: "UpdatedNotificationSettings",
-  UpdateFormJsonConfig: "updateFormJsonConfig",
+  UpdateFormBranding: "UpdateFormBranding",
   // Invitations
   InvitationCreated: "InvitationCreated",
   InvitationAccepted: "InvitationAccepted",
@@ -78,15 +80,18 @@ export const AuditLogEvent = {
 
 const FormBuildingEvents = [
   AuditLogEvent.CreateForm,
+  AuditLogEvent.CreateDraftFromPublishedForm,
   AuditLogEvent.UpdateForm,
   AuditLogEvent.DeleteForm,
   AuditLogEvent.UnarchiveForm,
   AuditLogEvent.PublishForm,
+  AuditLogEvent.RepublishForm,
   AuditLogEvent.ChangeFormName,
   AuditLogEvent.ChangeDeliveryOption,
   AuditLogEvent.ChangeFormPurpose,
   AuditLogEvent.ChangeFormSaveAndResume,
   AuditLogEvent.ChangeSecurityAttribute,
+  AuditLogEvent.UpdateFormBranding,
 ];
 const FormCollaborationEvents = [AuditLogEvent.GrantFormAccess, AuditLogEvent.RevokeFormAccess];
 const ResponseEvents = [
@@ -139,7 +144,6 @@ export const AuditLogDetails = {
   CognitoUserIdentifier: "Cognito user unique identifier (sub): ${userId}",
   UpdatedNotificationSettings: "UpdatedNotificationSettings",
   ConfirmedResponsesForForm: "ConfirmedResponsesForForm",
-  DeletedDraftResponsesForForm: "Deleted draft responses for form ${formId}",
   RetreiveSelectedFormResponses:
     "Retrieve selected responses for form ${formID} with ID ${submissionID}",
   ListAllResponsesForForm: "List all responses ${status} for form ${formID}",
@@ -149,15 +153,15 @@ export const AuditLogDetails = {
   ClonedForm: "DuplicatedForm",
   UpdateClosingDate: "UpdateClosingDate",
   RemoveClosingDate: "RemoveClosingDate",
+  UpdateFormBranding: "UpdateFormBranding",
   RetrieveFormUsers: "Retrieved users associated with Form",
-  RevokeFormAccess: "Access revoked for ${userId}",
   SetDeliveryToVault: "Delivery Option set to the Vault",
   SetSaveAndResume: "SetSaveAndResume",
   SetFormPurpose: "SetFormPurpose",
   FormContentUpdated: "UpdatedFormContent",
   UpdatedFormName: "UpdatedFormName",
   GrantFormAccess: "Access granted to ${userID}",
-  AccessedForms: "Accessed Forms: ${formList}",
+  AccessedForm: "Accessed Form: ${formId}",
   ChangeDeliveryOption: "Changed delivery option to ${deliveryOption}",
   ChangeSecurityAttribute: "ChangeSecurityAttribute",
   AccessGrantedTo: "GrantAccess",
@@ -175,6 +179,9 @@ export const AuditLogDetails = {
     "Granted privilege ${privilege} to user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
   RevokedPrivilege:
     "Revoked privilege ${privilege} from user ${email} (userID: ${userId}) by ${userEmail} (userID: ${abilityUserId})",
+  CreateDraftFromPublishedForm: "CreateDraftFromPublishedForm",
+  PublishForm: "PublishForm",
+  RepublishForm: "RepublishForm",
 } as const;
 
 export type AuditLogDetails = (typeof AuditLogDetails)[keyof typeof AuditLogDetails];
@@ -218,7 +225,6 @@ type AuditDetailsParams = {
     userEmail: string;
   };
   [AuditLogDetails.ConfirmedResponsesForForm]: { formId: string };
-  [AuditLogDetails.DeletedDraftResponsesForForm]: { formId: string };
   [AuditLogDetails.RetreiveSelectedFormResponses]: {
     formID: string;
     submissionID: string;
@@ -236,24 +242,23 @@ type AuditDetailsParams = {
   [AuditLogDetails.UpdateClosingDate]: { closingDate: string };
   [AuditLogDetails.RemoveClosingDate]: never;
   [AuditLogDetails.RetrieveFormUsers]: never;
-  [AuditLogDetails.RevokeFormAccess]: { userId: string };
   [AuditLogDetails.SetDeliveryToVault]: never;
   [AuditLogDetails.SetSaveAndResume]: { saveAndResume: string };
   [AuditLogDetails.SetFormPurpose]: { formPurpose: string };
   [AuditLogDetails.FormContentUpdated]: never;
   [AuditLogDetails.UpdatedFormName]: { newFormName: string };
   [AuditLogDetails.GrantFormAccess]: { userID: string };
-  [AuditLogDetails.AccessedForms]: { formList: string };
+  [AuditLogDetails.AccessedForm]: { formId: string };
   [AuditLogDetails.ChangeDeliveryOption]: { deliveryOption: string };
   [AuditLogDetails.ChangeSecurityAttribute]: { securityAttribute: string };
   [AuditLogDetails.AccessGrantedTo]: { userList: string };
   [AuditLogDetails.AccessRevokedFor]: { userList: string };
   [AuditLogDetails.RefreshedApiKey]: {
-    userId: string;
+    userEmail: string;
     serviceAccountId: string;
   };
   [AuditLogDetails.CreatedNewApiKey]: {
-    userId: string;
+    userEmail: string;
     serviceAccountId: string;
   };
   [AuditLogDetails.DeletedServiceAccount]: {
@@ -278,6 +283,10 @@ type AuditDetailsParams = {
     userEmail: string;
     abilityUserId: string;
   };
+  [AuditLogDetails.UpdateFormBranding]: { brand: string };
+  [AuditLogDetails.CreateDraftFromPublishedForm]: {
+    versionNumber: string;
+  };
 };
 
 export const AuditLogAccessDeniedDetails = {
@@ -291,6 +300,7 @@ export const AuditLogAccessDeniedDetails = {
   AccessDenied_AttemptToGetFormJson: "Attempted to get form jsonConfig",
   AccessDenied_AttemptToUpdateSecurityAttribute: "Attempted to update security attribute",
   AccessDenied_AttemptToUpdateClosingDate: "Attempted to update closing date for Form",
+  AccessDenied_AttemptToUpdateEmailNotifications: "Attempted to update email notifications",
   AccessDenied_AttemptToCloneFormNoEdit: "Attempted to clone Form - missing edit permission",
   AccessDenied_AttemptToCloneFormNoCreate: "Attempted to clone Form - missing create permission",
   AccessDenied_AttemptToSetDeliveryToVault: "Attempted to set Delivery Option to the Vault",
@@ -560,8 +570,7 @@ export const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => 
       );
 
       const unprocessedKeys = data.UnprocessedKeys?.AuditLogs?.Keys as
-        | Array<{ UserID: string; "Event#SubjectID#TimeStamp": string }>
-        | undefined;
+        Array<{ UserID: string; "Event#SubjectID#TimeStamp": string }> | undefined;
 
       if (!unprocessedKeys || unprocessedKeys.length === 0) {
         break;

@@ -4,11 +4,12 @@ import { authCheckAndThrow } from "@lib/actions";
 import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
 import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
-import { ClientContainer } from "./ClientContainer";
-import { checkIfClosed } from "@lib/templates";
+import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
 import { Language } from "@lib/types/form-builder-types";
+import { getTemplateVersionState } from "@lib/templates/versioning/queries/getTemplateVersionState";
+import { PublishedPreview } from "./PublishedPreview";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -45,16 +46,18 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     return notFound();
   }
 
+  const templateVersionState = await getTemplateVersionState(id);
+
+  if (templateVersionState?.isPublished && !templateVersionState.currentDraftVersionId) {
+    return <PublishedPreview locale={locale as Language} id={id} />;
+  }
+
   // A non authenticated user can't set a closing date on a form.
-  const closedDetails = session ? await checkIfClosed(id) : null;
+  const closedDetails = session ? await getTemplateClosureState(id) : null;
 
   if (closedDetails && closedDetails.isPastClosingDate) {
     return <PreviewClosed closedDetails={closedDetails.closedDetails as ClosedDetails} />;
   }
 
-  return (
-    <ClientContainer id={id} locale={locale as Language}>
-      <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
-    </ClientContainer>
-  );
+  return <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />;
 }

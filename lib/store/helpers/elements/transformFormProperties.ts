@@ -37,7 +37,7 @@ const updateNumberInputType = (element: FormElement) => {
 
 const cleanFormStructure = (form: FormProperties) => {
   // Make sure groups exist before we use them to decide which elements are valid.
-  const cleanedForm = initializeGroups({ ...form }, true);
+  const cleanedForm = initializeGroups({ ...form });
 
   // Clean groupsLayout
   if (cleanedForm.groupsLayout && cleanedForm.groupsLayout.length > 0) {

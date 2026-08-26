@@ -37,7 +37,7 @@ describe("Toggle saved values utilities", () => {
       ],
     };
 
-    expect(findElement(form, 10)).toEqual({
+    expect(findElement(form.elements, "10")).toEqual({
       id: 10,
       type: "textField",
       properties: {
@@ -46,8 +46,8 @@ describe("Toggle saved values utilities", () => {
       },
     });
 
-    expect(findElement(form, 100)).toEqual(undefined);
-    expect(findElement({ elements: [] }, 100)).toEqual(undefined);
+    expect(findElement(form.elements, "100")).toEqual(undefined);
+    expect(findElement([], 100)).toEqual(undefined);
   });
 
   it("Should find choice by value", () => {
@@ -77,27 +77,23 @@ describe("Toggle saved values utilities", () => {
   });
 
   it("Should toggle a choice value to from en / fr", () => {
-    const form = {
-      elements: [
-        {
-          id: 1,
-          type: FormElementTypes.radio,
-          properties: {
-            titleEn: "Title 1 en",
-            titleFr: "Title 1 fr",
-            choices: [
-              { en: "Yes", fr: "Oui" },
-              { en: "No", fr: "Non" },
-              { en: "Maybe", fr: "Peut être" },
-            ],
-          },
-        },
-      ],
+    const element = {
+      id: 1,
+      type: FormElementTypes.radio,
+      properties: {
+        titleEn: "Title 1 en",
+        titleFr: "Title 1 fr",
+        choices: [
+          { en: "Yes", fr: "Oui" },
+          { en: "No", fr: "Non" },
+          { en: "Maybe", fr: "Peut être" },
+        ],
+      },
     };
 
-    expect(getToggledValue(form, 1, "Yes", "en")).toEqual("Oui");
-    expect(getToggledValue(form, 1, "Non", "fr")).toEqual("No");
-    expect(getToggledValue(form, 1, "oui", "fr")).toEqual("Yes");
+    expect(getToggledValue(element, "Yes", "en")).toEqual("Oui");
+    expect(getToggledValue(element, "Non", "fr")).toEqual("No");
+    expect(getToggledValue(element, "oui", "fr")).toEqual("Yes");
   });
 });
 
@@ -140,15 +136,74 @@ describe("Toggle saved values", () => {
             ],
           },
         },
+        {
+          id: 200,
+          type: FormElementTypes.dynamicRow,
+          properties: {
+            titleEn: "Title 200 en",
+            titleFr: "Title 200 fr",
+            choices: [
+              {
+                en: "",
+                fr: "",
+              },
+            ],
+            subElements: [
+              {
+                id: 2001,
+                type: FormElementTypes.textField,
+                properties: {
+                  titleEn: "Title 2001 en",
+                  titleFr: "Title 2001 fr",
+                },
+              },
+              {
+                id: 2002,
+                type: FormElementTypes.radio,
+                properties: {
+                  titleEn: "Title 2002 en",
+                  titleFr: "Title 2002 fr",
+                  choices: [
+                    { en: "Yes", fr: "Oui" },
+                    { en: "No", fr: "Non" },
+                  ],
+                },
+              },
+              {
+                id: 2003,
+                type: FormElementTypes.checkbox,
+                properties: {
+                  titleEn: "Title 2003 en",
+                  titleFr: "Title 2003 fr",
+                  choices: [
+                    { en: "A", fr: "A fr" },
+                    { en: "B", fr: "B fr" },
+                  ],
+                },
+              },
+            ],
+          },
+        },
       ],
     };
 
     const result = toggleSavedValues(
-      form,
-      { values: { "1": "my input text", "10": "No", "100": ["A", "B"] } },
+      form.elements,
+      {
+        "1": "my input text",
+        "10": "No",
+        "100": ["A", "B"],
+        "200": [{ "0": "input text", "1": "Yes", "2": "A" }],
+      },
+
       "en"
     );
 
-    expect(result).toEqual({ "1": "my input text", "10": "Non", "100": ["A fr", "B fr"] });
+    expect(result).toEqual({
+      "1": "my input text",
+      "10": "Non",
+      "100": ["A fr", "B fr"],
+      "200": [{ "0": "input text", "1": "Oui", "2": "A fr" }],
+    });
   });
 });

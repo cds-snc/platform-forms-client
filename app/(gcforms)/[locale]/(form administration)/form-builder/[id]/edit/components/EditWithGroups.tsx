@@ -25,7 +25,15 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
 
-export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
+export const EditWithGroups = ({
+  id,
+  locale,
+  hasDraft,
+}: {
+  id: string;
+  locale: string;
+  hasDraft: boolean;
+}) => {
   const { t } = useTranslation("form-builder");
   const {
     title,
@@ -73,11 +81,11 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   }, [title]);
 
   useEffect(() => {
-    if (isPublished) {
+    if (isPublished && !hasDraft) {
       router.replace(`/${locale}/form-builder/${id}/published`);
       return;
     }
-  }, [router, isPublished, id, locale]);
+  }, [router, isPublished, id, locale, hasDraft]);
 
   const _debounced = debounce(
     useCallback(
@@ -177,6 +185,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
                     try {
                       const currentName = getName();
                       if (!currentName || currentName === prevTitleRef.current) {
+                        // Only update the name if it hasn't been manually changed by the user to something different than the title.
                         updateField(`name`, cleaned);
                       }
                     } catch (e) {

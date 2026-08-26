@@ -130,4 +130,8 @@ export const toast = {
   default: (message: string | JSX.Element, containerId = "default") => {
     originalToast(toastContent(message, "default"), { containerId });
   },
+  // Dismiss toasts. If `containerId` is provided, dismiss only that container.
+  dismiss: (containerId?: string) => {
+    originalToast.dismiss(containerId);
+  },
 };

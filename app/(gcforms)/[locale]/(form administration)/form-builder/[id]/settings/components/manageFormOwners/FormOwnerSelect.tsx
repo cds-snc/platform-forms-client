@@ -35,13 +35,10 @@ const optionStyles = {
 };
 const noOptionsMessageStyles =
   "text-gray-500 p-2 bg-gray-50 border border-dashed border-gray-200 rounded-sm";
-
 export const usersToOptions = (
   users: { id: string; email: string }[]
 ): { value: string; label: string | null }[] => {
-  return users.map((user) => {
-    return { value: user.id, label: user.email };
-  });
+  return users.map((user) => ({ value: user.id, label: user.email }));
 };
 
 interface FormOwnershipSelectProps {
@@ -70,9 +67,7 @@ export const FormOwnerSelect = ({
         ...styleProxy,
         input: (base) => ({
           ...base,
-          "input:focus": {
-            boxShadow: "none",
-          },
+          "input:focus": { boxShadow: "none" },
         }),
         // On mobile, the label will truncate automatically, so we want to
         // override that behaviour.

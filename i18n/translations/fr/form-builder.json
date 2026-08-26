@@ -38,6 +38,7 @@
       "textField": "Ajouter une réponse courte",
       "textArea": "Ajouter une réponse longue",
       "radio": "Ajouter des boutons radio",
+      "starRating": "Ajouter un classement par étoiles",
       "checkbox": "Ajouter des cases à cocher",
       "dropdown": "Ajouter une liste déroulante",
       "fileInput": "Ajouter un téléverseur de fichier",
@@ -65,35 +66,28 @@
       "postal": "Code postal",
       "province": "Province ou territoire",
       "street": {
-        "description": "Indiquez le nom de rue et le numéro d'unité.",
+        "description": "Indiquez d’abord le numéro d’unité, le cas échéant, suivi du numéro municipal et du nom de la rue.",
         "label": "Adresse municipale"
       },
       "title": "Adresse"
     },
     "addressComplete": {
-      "whatIsYourAddress": "Adresse postale",
+      "whatIsYourAddress": "Adresse",
       "city": "Ville ou communauté",
       "country": "Pays",
-      "description": "Le champ d'adresse utilise l'API AdresseComplète de Postes Canada pour vérifier les adresses au fur et à mesure qu'elles sont saisies. Utilisez-le pour recueillir des adresses plus précises.",
+      "description": "<span>Un modèle pour la collecte d’adresses, y compris la ville, la province et le code postal.</span><span>Postes Canada peut trouver et vérifier les adresses au Canada.</span>",
       "label": "Adresse",
       "postal": "Code postal ou zip",
       "province": "Province, territoire ou état",
       "street": {
-        "description": "Indiquez le nom et le numéro de rue.",
+        "description": "Indiquez d’abord le numéro d’unité, le cas échéant, suivi du numéro municipal et du nom de la rue.",
         "label": "Adresse municipale"
       },
       "title": "Adresse",
       "select": "Sélectionner les éléments de l'adresse à inclure.",
-      "options": "Options de format d’adresse",
-      "fields": "Format des données",
-      "fieldsDesc": "Ceci détermine la manière dont l’adresse apparaît dans les données de réponses.",
-      "fullAddress": "Adresse entière combinée",
-      "fullAddressDesc": "Données affichées en tant qu'une seule ligne.",
-      "splitAddress": "Adresse fractionnée en parties",
-      "splitAddressDesc": "Données divisées en plusieurs lignes.",
-      "customize": "Adapter le format",
-      "startTyping": "Commencez à taper l'adresse à rechercher",
-      "canadianOnly": "Adresses canadiennes seulement",
+      "fields": "Format",
+      "fieldsDesc": "Définissez la façon dont les adresses s’affichent dans les réponses.",
+      "multipleAddresses": "Adresses",
       "components": {
         "unitNumber": "Numéro de l’unité",
         "civicNumber": "Numéro civique",
@@ -280,6 +274,13 @@
       "chooseAnOption": "Question",
       "selectOnlyOne": "Sélectionnez une option."
     },
+    "starRating": {
+      "title": "Classement par étoiles",
+      "description": "Une échelle d'évaluation permettant de donner son avis en attribuant une note comprise entre 1 et un certain nombre étoiles.",
+      "exampleQuestion": "Comment évalueriez-vous ce service?",
+      "exampleDescription": "Plus il y a d'étoiles, meilleure est l'expérience.",
+      "numberOfStars": "Nombre d'étoiles"
+    },
     "richText": {
       "description": "Élément de texte enrichi pour insérer des en-têtes, des paragraphes, des listes ou des liens.",
       "example": "Texte de paragraphe qui peut être mis en forme avec du <strong>gras</strong> ou de l'<i>italique</i>, ou avec des <a tab-index=\"-1\" href=\"#\">hyperliens</a>.",
@@ -398,6 +399,23 @@
   "confirmationDescriptionItem3": "des liens pour obtenir de l’information ou des liens vers des services que les utilisateur·rice·s pourraient utiliser plus tard.",
   "confirmationDescriptionItem4": "un lien vers le formulaire de rétroaction (Si vous n’en avez pas, vous pouvez en créer un à l’aide de Formulaires GC qui sera lancé même temps que votre formulaire principal).",
   "confirmationDescriptionParagraph": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis. Voici quelques éléments utiles à présenter dans la confirmation :",
+  "confirm": {
+    "createDraft": {
+      "title": "Mettre à jour le formulaire publié",
+      "liveForm": "La version actuelle continuera de recueillir des réponses jusqu’à ce que vous publiez la mise à jour du formulaire.",
+      "list": {
+        "title": "⚠️  Avant de publier les mises à jour, discutez avec vos développeurs et testez votre formulaire. Vous pourriez devoir : ",
+        "listitem1": "Ajuster les questions du formulaire et vos flux de travail.",
+        "listitem2": "Révisez les listes et les feuilles de calcul où vous organisez les réponses.",
+        "listitem3": "Mettre à jour l’intégration de l’API."
+      }
+    }
+  },
+  "actions": {
+    "cancel": "Annuler",
+    "continue": "Continuer",
+    "continuing": "En cours..."
+  },
   "confirmationMessage": "Message de confirmation",
   "confirmationPage": "Page de confirmation",
   "contactSupport": "Contacter l’équipe de soutien",
@@ -495,8 +513,13 @@
   "duplicate": "Dupliquer",
   "dyanamicRow": "Ensemble récurrent",
   "edit": "Modifier",
+  "editPublishedForm": "Créer une nouvelle version ébauche",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
+  "publishedEditDraftTitle": "Modifier ce formulaire publié",
+  "publishedEditDraftDescription": "Créez une nouvelle version ébauche pour apporter des changements sans toucher au formulaire en ligne. Vous pourrez publier l'ébauche lorsqu'elle sera prête.",
+  "createDraftVersionError": "Impossible de créer une nouvelle version ébauche pour le moment. Réessayez plus tard.",
+  "creatingDraftVersion": "Création de la version ébauche en cours...",
   "elementActions": "Actions des éléments",
   "email": "Courriel",
   "english": "anglais",
@@ -541,25 +564,31 @@
   "formDownload": {
     "description": "Conservez une version du formulaire enregistrée localement sur votre ordinateur ou utilisez ce fichier pour partager une ébauche en cours de développement.",
     "downloadBtnText": "Télécharger le fichier du formulaire",
-    "title": "Obtenir une copie du formulaire"
+    "title": "Obtenir une copie du formulaire",
+    "versionSelector": {
+      "label": "Sélectionnez une version",
+      "currentDraft": "Version {{version}} - ébauche actuelle",
+      "currentPublished": "Version {{version}} - version publiée actuelle",
+      "previousVersion": "Version {{version}}"
+    }
   },
   "auditDownload": {
-    "description": "Obtenez une feuille de calcul avec l'historique des dernières actions clés effectuées dans un formulaire. Celles-ci pourraient prendre quelques minutes pour apparaître dans le journal d'activité et seront disponibles jusqu'à 30 jours.",
+    "description": "Obtenez une feuille de calcul avec les activités les plus récentes. Formulaires GC affiche des activités des 30 derniers jours sur la création du formulaire, la collaboration et l'intégration API seulement. Veuillez permettre quelques minutes pour que les activités apparaissent dans la feuille de calcul.",
     "downloadBtnText": "Télécharger l'activité récente",
-    "title": "Afficher l'activité du formulaire",
+    "title": "Afficher l’activité récente du formulaire",
     "dialog": {
-      "title": "Télécharger l'activité du formulaire",
+      "title": "Télécharger l’activité du formulaire",
       "downloadBtnText": "Télécharger",
-      "allEventsTitle": "Tous les événements disponibles",
-      "allEventsDescription": "Téléchargez tous les événements qui se sont produits dans le formulaire dans les derniers 30 jours.",
-      "allEventsCheckbox": "Tous les événements disponibles",
-      "specificEventsTitle": "Événements spécifiques",
-      "specificEventsDescription": "Choisissez les événements que vous souhaitez avoir dans le fichier CSV.",
+      "allEventsTitle": "Télécharger toute activité récente :",
+      "allEventsDescription": "Nous n’enregistrons que l’activité des 30 derniers jours.",
+      "allEventsCheckbox": "Toute activité disponible",
+      "specificEventsTitle": "Activités spécifiques",
+      "specificEventsDescription": "Choisissez les activités à inclure dans le tableau :",
       "specific": {
-        "formBuilding": "Création du formulaires",
-        "formCollaboration": "Collaborateurs sur le formulaire",
+        "formBuilding": "Création du formulaire",
+        "formCollaboration": "Collaboration sur le formulaire",
         "responseDownloads": "Récupération des réponses",
-        "apiIntegrations": "Intégration API"
+        "apiIntegrations": "Intégration avec l’API"
       }
     },
     "headers": {
@@ -571,6 +600,7 @@
     },
     "events": {
       "CreateForm": "Formulaire créé",
+      "CreateDraftFromPublishedForm": "Ébauche créée à partir du formulaire publié",
       "DeleteForm": "Formulaire archivé",
       "UnarchiveForm": "Formulaire désarchivé",
       "ChangeDeliveryOption": "Option de livraison modifiée",
@@ -591,38 +621,44 @@
       "DeleteAPIKey": "Clé API supprimée",
       "RefreshAPIKey": "Clé API re-générée",
       "PublishForm": "Formulaire publié",
+      "RepublishForm": "Formulaire re-publié",
       "InvitationAccepted": "Invitation acceptée",
-      "UpdateFormJsonConfig": "Téléchargement d'une copie du formulaire",
-      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification"
+      "UpdateFormBranding": "Mise à jour de l'image de marque du formulaire",
+      "UpdatedNotificationSettings": "Mise à jour des paramètres de notification",
+      "InvitationCreated": "Invitation pour collaborer sur le formulaire envoyée",
+      "InvitationCancelled": "Invitation pour collaborer sur le formulaire annulée"
     },
     "eventDetails": {
+      "CreateDraftFromPublishedForm": "Ébauche - version : {{versionNumber}}",
       "CreatedForm": "Formulaire créé",
       "UpdatedFormName": "Formulaire renommé à :{{newFormName}}",
       "UpdatedFormContent": "Contenu du formulaire mis à jour",
+      "UpdateFormBranding": "Image de marque du formulaire mise à jour : {{brand}}",
       "DuplicatedForm": "Formulaire dupliqué pour en créer un nouveau {{newFormID}}",
       "ArchivedForm": "Formulaire archivé",
       "RestoredForm": "Formulaire désarchivé",
       "DownloadedForm": "Une copie du formulaire a été téléchargée",
-      "CreatedNewAPIKey": "Le compte utilisateur {{userId}} a généré une clé API : ID =  {{serviceAccountId}}",
+      "CreatedNewAPIKey": "Le compte utilisateur {{userEmail}} a généré une clé API : ID =  {{serviceAccountId}}",
       "GeneratedAPIKey": "Clé API générée par {{userEmail}}: ID = {{APIkeyID}",
       "RefreshedAPIKey": "Clé API re-générée par {{userEmail}}: ID = {{APIkeyID}}",
       "DeletedAPIKey": "Clé API supprimée par {{userEmail}}: ID = {{serviceAccountID}}",
+      "IncreasedThrottling": "Taux d'API défini à {{throttlingRate}} pour {{weeks}} semaines",
       "ChangeSecurityAttribute": "Classification modifiée à : {{securityAttribute}}",
       "SetFormPurpose": "Usage prévu défini comme :{{formPurpose}}",
       "SetSaveAndResume": "Sauvegarde des réponses modifiée à :{{saveAndResume}}",
       "UpdateClosingDate": "Date de fermeture modifiée à : {{closingDate}}",
       "RemoveClosingDate": "Date de fermeture supprimée.",
       "UpdatedNotificationSettings": "Paramètre de notification {{enabled}} pour {{userEmail}}",
-
-      "GrantAccess": "Accès accordé à {{userEmail}}",
-      "RevokeAccess": "Accès révoqué pour {{userEmail}}",
+      "GrantAccess": "Accès accordé à {{userList}}",
+      "RevokeAccess": "Accès révoqué pour {{userList}}",
       "UserInvited": "{{userEmail}} a invité {{invitationEmail}}",
       "AcceptedInvitation": "Invitation acceptée par {{userEmail}}",
       "DeclinedInvitation": "Invitation refusée par {{userEmail}}",
       "CancelInvitation": "Invitation annulée pour {{invitationEmail}}",
       "ReceivedFormResponses": "Réponse {{submissionId}} reçue",
       "DownloadedFormResponses": "Réponse {{submissionId}} téléchargée en format {{format}}",
-      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée"
+      "ConfirmedResponsesForForm": "Réponse {{submissionId}} confirmée",
+      "DeletedDraftResponses": "Réponses de l'ébauche de formulaire supprimées"
     },
     "eventParams": {
       "Unclassified": "Non classifié",
@@ -666,6 +702,8 @@
     "syncingLatest": "Synchronisation de la plus récente version enregistrée du formulaire...",
     "syncedLatest": "Vous modifiez maintenant la version enregistrée du formulaire la plus récente.",
     "takeoverError": "Impossible de prendre le contrôle. Veuillez réessayer.",
+    "takeoverAvailableMessage": "Le formulaire est maintenant disponible pour modification.",
+    "takeoverAvailableTitle": "Formulaire disponible pour modification",
     "sessionExpiredTitle": "Votre session a expiré",
     "sessionExpiredMessage": "Vos modifications ont été enregistrées. Vous pouvez reprendre le formulaire pour y apporter des changements en actualisant la page.",
     "returnToForms": "Retourner aux formulaires",
@@ -719,6 +757,17 @@
       "infoLine1": "Le format standard de la date au Canada est AAAA-MM-JJ et devrait être votre premier choix, à moins qu'il n'y ait une raison de choisir un format différent.",
       "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
     },
+    "addressComplete": {
+      "addressOptions": "Options d'adresse",
+      "typeOfAddress": "Quel type d'adresses sont collectées?",
+      "allowInternational": "Autoriser les adresses internationales",
+      "canadianOnly": "Adresses canadiennes seulement",
+      "format": "Sélectionnez un format pour l'adresse",
+      "fullAddress": "Adresse entière combinée",
+      "fullAddressDesc": "S’affiche sur une seule ligne dans les données de réponses.",
+      "splitAddress": "Adresse fractionnée en parties",
+      "splitAddressDesc": "Séparée sur plusieurs lignes dans les données de réponses."
+    },
     "apiOptionsSection": {
       "title": "Personnaliser les attributs des données de l'API",
       "description": "Modifiez la façon dont les champs de votre formulaire sont encodés pour l'intégration de l'API."
@@ -766,6 +815,7 @@
   "privacyStatement": "Avis de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
+  "republish": "Publier une mise à jour",
   "readyToPublish": "Prêt à publier",
   "published": "Publié",
   "publishedBack": "Retourner aux formulaires",
@@ -803,7 +853,26 @@
   },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
+    "republishTitle": "Publier le formulaire mis à jour",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
+    "republish": {
+      "categoryLabel": "Catégorie de formulaire",
+      "helpsUnderstand": "Aidez-nous à comprendre l’objectif de ce formulaire.",
+      "confirm": {
+        "title": "Confirmer la publication",
+        "text1": "Après la publication, la version précédente demeure dans notre base de données. Mais elle ne pourra plus être consultée.",
+        "text2": "Les nouvelles personnes remplissant le formulaire n’auront accès qu’à la dernière version du formulaire. Les personnes qui n’avaient pas terminé de remplir l’ancienne version du formulaire pourront continuer à remplir cette version, tant qu’elles n’actualisent pas la page.",
+        "list": "⚠️ En publiant, vous acceptez que vous ayez peut-être à : ",
+        "listitem1": "Ajuster les questions du formulaire et vos flux de travail.",
+        "listitem2": "Réviser les listes et les feuilles de calcul où vous organisez les réponses.",
+        "listitem3": "Mettre à jour l’intégration de l’API.",
+        "agree": {
+          "label": "Pour continuer, saisissez ",
+          "required": "(obligatoire)",
+          "placeholder": "ACCEPTE"
+        }
+      }
+    },
     "readyForPublicUse": "Formulaire prêt pour un usage par le public",
     "readyForInternalUse": "Formulaire prêt pour un usage interne",
     "sharingForFeedback": "Formulaire à partager pour commentaires ou approbation",
@@ -879,8 +948,7 @@
         "title": "Configurer l’intégration API",
         "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données des soumissions au formulaire vers un système cible avec une intégration sur mesure. Une fois l’API configurée, les réponses pourront être récupérées à partir d'un point de terminaison programmatiquement. Consultez notre site de documentation pour en savoir plus.",
 
-        "text1": "This section is for developers who want to use the API to pull form submission data to a target system with a custom integration. Once set-up, responses can be retrieved from the API endpoint programmatically. Visit our documentation site for more information.",
-
+        "text1": "Cette section s'adresse aux développeur·se·s qui souhaitent utiliser l'API pour extraire les données de soumission de formulaires vers un système cible avec une intégration personnalisée. Une fois la configuration effectuée, les réponses peuvent être récupérées programmatiquement à partir du point de terminaison de l'API. Consultez notre site de documentation pour plus d'informations.",
         "docsButton": {
           "text": "Accéder à la documentation API",
           "link": "https://cds-snc.github.io/forms-api/fr"
@@ -1003,7 +1071,7 @@
           "paragraph3": "Si vous souhaitez désactiver les notifications pour les nouvelles réponses, allez dans Paramètres > Gestion du formulaire."
         },
         "archivedForm": {
-          "subject": "Un formulaire dont vous êtes propriétaire a été archivé | A form you are owner of has been archived",
+          "subject": "Your form has been archived | Votre formulaire a été archivé",
           "paragraph1": "Votre formulaire a été archivé :",
           "paragraph2": "Cette action a été effectuée par :",
           "paragraph3": "Le formulaire peut être désarchivé à partir du dossier d'archives, dans les 30 jours suivant l'archivage.",
@@ -1148,6 +1216,8 @@
     "stepTwoDetails": "Allez sur <a href=\"/\" target=\"_blank\">Formulaires GC</a>. Aucun compte n'est nécessaire.",
     "stepTwoDetailsNoHTML": "Allez sur Formulaires GC (https://forms-formulaires.alpha.canada.ca/). Aucun compte n'est nécessaire.",
     "title": "Partager",
+    "manageAccess": "Gérer l’accès",
+    "file": "Partager le fichier du formulaire",
     "toPreview": "Pour prévisualiser ce formulaire :",
     "unauthenticated": {
       "copyInstructions": "Copier les instructions",
@@ -1171,6 +1241,7 @@
   "shortAnswerText": "Réponse courte",
   "signInToTest": "<a href=\"/fr/auth/login\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
   "singleChoice": "Boutons radio",
+  "starRating": "Évaluation par étoiles",
   "start": "Commencer",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",
@@ -1648,5 +1719,12 @@
   },
   "fileUploadApiWarning": {
     "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
-  }
+  },
+  "publishViewEdit": {
+    "title": "Mettre à jour un formulaire publié",
+    "description": "Modifier un formulaire déjà en production",
+    "button": "Mettre à jour"
+  },
+  "formDownloadFailed": "Le téléchargement du formulaire a échoué.",
+  "formActions": "Actions liées au formulaire"
 }

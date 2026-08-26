@@ -38,6 +38,7 @@
       "textField": "Add short answer",
       "textArea": "Add long answer",
       "radio": "Add radio buttons",
+      "starRating": "Add star rating",
       "checkbox": "Add checkboxes",
       "dropdown": "Add dropdown",
       "fileInput": "Add file upload",
@@ -65,35 +66,28 @@
       "postal": "Postal code",
       "province": "Province or territory",
       "street": {
-        "description": "Include street name and number.",
+        "description": "Start with unit number if you have one, then street number and street name.",
         "label": "Street address"
       },
       "title": "Address"
     },
     "addressComplete": {
-      "whatIsYourAddress": "Mailing address",
+      "whatIsYourAddress": "Address",
       "city": "City, town, or community",
       "country": "Country",
-      "description": "Address is a component that uses the Canada Post AddressComplete API to look up verified addresses as they are entered. Use this element to collect more accurate addresses.",
+      "description": "<span>A pattern to collect a Canadian address, including fields for address, city, province, and postal code.</span><span>Canada Post can find and verify Canadian addresses.</span>",
       "label": "Address",
       "postal": "Postal or zip code",
       "province": "Province, territory, or state",
       "street": {
-        "description": "Include street name and number.",
+        "description": "Start with unit number if you have one, then street number and street name.",
         "label": "Street address"
       },
       "title": "Address",
       "select": "Select which component parts of the address to include.",
-      "options": "Address format options",
-      "fields": "Data format",
-      "fieldsDesc": "This determines how the address appears in response data.",
-      "fullAddress": "Entire address combined",
-      "fullAddressDesc": "Data displays as one line.",
-      "splitAddress": "Address split into parts",
-      "splitAddressDesc": "Data separated in multiple lines.",
-      "customize": "Customize format",
-      "startTyping": "Start typing an address to search",
-      "canadianOnly": "Canadian addresses only",
+      "fields": "Format",
+      "fieldsDesc": "Decide how addresses appear in responses.",
+      "multipleAddresses": "Addresses",
       "components": {
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
@@ -280,6 +274,13 @@
       "chooseAnOption": "Question",
       "selectOnlyOne": "Select one option."
     },
+    "starRating": {
+      "title": "Star rating",
+      "description": "A rating scale to provide feedback based on a score from 1 to a certain number of stars.",
+      "exampleQuestion": "How would you rate this service?",
+      "exampleDescription": "The more stars, the better the experience.",
+      "numberOfStars": "Number of stars"
+    },
     "richText": {
       "description": "A rich text element for inserting headings, paragraph text, lists, or links.",
       "example": "Paragraph text that can be formatted in <strong>bold</strong> or <i>italics</i>, or with <a tab-index=\"-1\" href=\"#\">hyperlinks</a>.",
@@ -398,6 +399,23 @@
   "confirmationDescriptionItem3": "links to information or services that users are likely to need next.",
   "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form).",
   "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to the confirmation are:",
+  "confirm": {
+    "createDraft": {
+      "title": "Update published form",
+      "liveForm": "The current version will continue collecting responses until you publish the updated form.",
+      "list": {
+        "title": "⚠️ Before publishing updates, discuss with your developers and test your form. You may need to:",
+        "listitem1": "Adjust form questions and workflows.",
+        "listitem2": "Revise lists and spreadsheets for organizing responses.",
+        "listitem3": "Update the API integration."
+      }
+    }
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "continuing": "Continuing..."
+  },
   "confirmationMessage": "Confirmation message",
   "confirmationPage": "Confirmation page",
   "contactSupport": "Contact support",
@@ -495,8 +513,13 @@
   "duplicate": "Duplicate",
   "dyanamicRow": "Repeating set",
   "edit": "Edit",
+  "editPublishedForm": "Create a new draft version",
   "editingIn": "Editing in:",
   "editLink": "Edit link",
+  "publishedEditDraftTitle": "Edit this published form",
+  "publishedEditDraftDescription": "Create a new draft version to make changes without affecting the live form. You can publish the draft when it's ready.",
+  "createDraftVersionError": "Unable to create a draft version right now. Try again later.",
+  "creatingDraftVersion": "Creating draft version...",
   "elementActions": "Element actions",
   "email": "Email",
   "english": "English",
@@ -541,25 +564,31 @@
   "formDownload": {
     "description": "Keep a version stored locally on your computer or use this file to share a draft in progress.",
     "downloadBtnText": "Download form file",
-    "title": "Get a copy of your form"
+    "title": "Get a copy of your form",
+    "versionSelector": {
+      "label": "Select a version",
+      "currentDraft": "Version {{version}} - current draft",
+      "currentPublished": "Version {{version}} - current published",
+      "previousVersion": "Version {{version}}"
+    }
   },
   "auditDownload": {
-    "description": "Get a spreadsheet with the history of a form's recent key actions. These may take a few minutes to appear in the activity log and will be available for up to 30 days.",
+    "description": "Get a spreadsheet of a form’s recent activity. At this time, GC Forms shows activity for the last 30 days related to form creation, collaboration and API integration only. Allow a few minutes for activity to show on the spreadsheet.",
     "downloadBtnText": "Download recent activity",
-    "title": "View form activity",
+    "title": "View recent form activity",
     "dialog": {
       "title": "Download form activity",
       "downloadBtnText": "Download",
-      "allEventsTitle": "All available events",
-      "allEventsDescription": "Download all events that have occurred in the form in the last 30 days.",
-      "allEventsCheckbox": "All available events",
-      "specificEventsTitle": "Specific events",
-      "specificEventsDescription": "Choose which events you would like in the CSV file.",
+      "allEventsTitle": "Download all recent activity:",
+      "allEventsDescription": "We only log the last 30 days of activity.",
+      "allEventsCheckbox": "All available activities",
+      "specificEventsTitle": "Specific activities",
+      "specificEventsDescription": "Choose activities to include in the spreadsheet:",
       "specific": {
         "formBuilding": "Creating the form",
-        "formCollaboration": "Form collaborators",
-        "responseDownloads": "Response retrieval",
-        "apiIntegrations": "API integration"
+        "formCollaboration": "Collaborating on a form",
+        "responseDownloads": "Retrieving responses",
+        "apiIntegrations": "Integrating with the API"
       }
     },
     "headers": {
@@ -571,6 +600,7 @@
     },
     "events": {
       "CreateForm": "Form created",
+      "CreateDraftFromPublishedForm": "Draft created from published form",
       "DeleteForm": "Form archived",
       "UnarchiveForm": "Form restored",
       "ChangeDeliveryOption": "Delivery option changed",
@@ -591,19 +621,25 @@
       "DeleteAPIKey": "Deleted API Key",
       "RefreshAPIKey": "Re-generated API Key",
       "PublishForm": "Form published",
+      "RepublishForm": "Re-published form",
       "InvitationAccepted": "Invitation accepted",
-      "UpdateFormJsonConfig": "Downloaded copy of the form",
-      "UpdatedNotificationSettings": "Updated notification settings"
+      "UpdateFormBranding": "Updated form branding",
+      "UpdatedNotificationSettings": "Updated notification settings",
+      "DeletedDraftResponses": "Deleted draft form responses",
+      "InvitationCreated": "Invited a user to collaborate on the form",
+      "InvitationCancelled": "Cancelled a collaboration invitation"
     },
     "eventDetails": {
+      "CreateDraftFromPublishedForm": "Draft version {{versionNumber}}",
       "CreatedForm": "Created form",
       "UpdatedFormName": "Renamed form to: {{newFormName}}",
       "UpdatedFormContent": "Updated form content",
+      "UpdateFormBranding": "Updated form branding to: {{brand}}",
       "DuplicatedForm": "Duplicated form to create a new one {{newFormID}}",
       "ArchivedForm": "Archived form",
       "RestoredForm": "Restored form",
       "DownloadedForm": "Downloaded a copy of the form",
-      "CreatedNewAPIKey": "User account {{userId}} generated an API key: {{serviceAccountId}}",
+      "CreatedNewAPIKey": "User account {{userEmail}} generated an API key: {{serviceAccountId}}",
       "GeneratedAPIKey": "API key generated by {{userEmail}}: ID = {{APIkeyID}}",
       "RefreshedAPIKey": "API key re-generated by {{userEmail}}: ID = {{APIkeyID}}",
       "DeletedAPIKey": "API key deleted by {{userEmail}}: ID = {{serviceAccountID}}",
@@ -614,8 +650,8 @@
       "UpdateClosingDate": "Updated closing date to: {{closingDate}}",
       "RemoveClosingDate": "Removed closing date.",
       "UpdatedNotificationSettings": "Updated notifications setting to: {{enabled}} for {{userEmail}}",
-      "GrantAccess": "Access granted to {{userEmail}}",
-      "RevokeAccess": "Access revoked for {{userEmail}}",
+      "GrantAccess": "Access granted to {{userList}}",
+      "RevokeAccess": "Access revoked for {{userList}}",
       "UserInvited": "{{userEmail}} invited {{invitationEmail}}",
       "AcceptedInvitation": "Invitation accepted by {{userEmail}}",
       "DeclinedInvitation": "Invitation declined by {{userEmail}}",
@@ -721,6 +757,17 @@
       "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
       "infoLine2": "For example, when asking for a date exactly as it’s shown on a passport, card or other document, make the fields match the format of the original. This makes it easier for users to copy the date across accurately."
     },
+    "addressComplete": {
+      "addressOptions": "Address options",
+      "typeOfAddress": "What type of addresses are being collected?",
+      "allowInternational": "Allow international addresses",
+      "canadianOnly": "Canadian addresses only",
+      "format": "Select a format for the address",
+      "fullAddress": "Entire address combined",
+      "fullAddressDesc": "Displays as one line in response data.",
+      "splitAddress": "Address split into parts",
+      "splitAddressDesc": "Separated in multiple lines in response data."
+    },
     "apiOptionsSection": {
       "title": "Customize API data attributes",
       "description": "Modify how your form fields get encoded for the API integration."
@@ -768,6 +815,7 @@
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Help us improve",
   "publish": "Publish",
+  "republish": "Publish update",
   "readyToPublish": "Ready to publish",
   "published": "Published",
   "publishedBack": "Back to Forms",
@@ -804,7 +852,26 @@
   },
   "prePublishFormDialog": {
     "title": "Publish form",
+    "republishTitle": "Publish updated form",
     "text1": "What is your reason for publishing?",
+    "republish": {
+      "categoryLabel": "Form category",
+      "helpsUnderstand": "Help us understand the purpose of this form.",
+      "confirm": {
+        "title": "Confirm publication",
+        "text1": "After you publish, the earlier version remains in our database. But you’ll no longer be able to view it.",
+        "text2": "New form fillers only have access to the updated form. People mid-way through the previous form can complete the earlier version unless they reload the page.",
+        "list": "⚠️ By publishing, you accept that you may need to:",
+        "listitem1": "Adjust form questions and workflows.",
+        "listitem2": "Revise lists and spreadsheets for organizing responses.",
+        "listitem3": "Update your API integration.",
+        "agree": {
+          "label": "To continue, enter ",
+          "required": "(required)",
+          "placeholder": "AGREE"
+        }
+      }
+    },
     "readyForPublicUse": "Ready for public use",
     "readyForInternalUse": "Ready for internal use",
     "sharingForFeedback": "Sharing for feedback or approval",
@@ -1139,6 +1206,8 @@
     "stepTwoDetails": "Go to <a href=\"/\" target=\"_blank\">GC Forms</a>. No account needed.",
     "stepTwoDetailsNoHTML": "Go to GC Forms (https://forms-formulaires.alpha.canada.ca/). No account needed.",
     "title": "Share",
+    "manageAccess": "Manage access",
+    "file": "Share form file",
     "toPreview": "To preview this form:",
     "unauthenticated": {
       "copyInstructions": "Copy instructions",
@@ -1162,6 +1231,7 @@
   "shortAnswerText": "Short answer",
   "signInToTest": "<a href=\"/en/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Radio buttons",
+  "starRating": "Star rating",
   "start": "Start",
   "startErrorTemplateSize": "The form file is too large",
   "startErrorDuplicateQuestionId": "Question IDs must be unique",
@@ -1639,5 +1709,12 @@
   },
   "fileUploadApiWarning": {
     "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
-  }
+  },
+  "publishViewEdit": {
+    "title": "Update a published form",
+    "description": "Change a form that's already live",
+    "button": "Edit form"
+  },
+  "formDownloadFailed": "Failed to download the form.",
+  "formActions": "Form actions"
 }

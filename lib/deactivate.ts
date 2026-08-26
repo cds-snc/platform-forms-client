@@ -1,4 +1,4 @@
-import { sendEmail } from "./integration/notifyConnector";
+import { sendDefaultEmail } from "./integration/notifyConnector";
 import { getOrigin } from "./origin";
 import { DeactivationReason, DeactivationReasons } from "./types";
 
@@ -14,6 +14,8 @@ To find out more or request account reactivation, [contact us](${HOST}/en/contac
 
 Thanks,
 The GC Forms team
+
+---
 
 Bonjour,
 
@@ -41,6 +43,8 @@ If you have any questions, [contact us](${HOST}/en/contact).
 Thanks,
 The GC Forms team
 
+---
+
 Bonjour,
 
 Le compte Formulaires GC de ${email} a été désactivé.
@@ -60,15 +64,12 @@ export const sendDeactivationEmail = async (
 ) => {
   const HOST = await getOrigin();
 
-  await sendEmail(
-    email,
-    {
-      subject: "Account deactivated | Compte désactivé",
-      formResponse:
-        reason === DeactivationReasons.DEFAULT
-          ? defaultTemplate(email, HOST)
-          : sharedTemplate(email, HOST),
-    },
-    "deactivateAccount"
-  );
+  await sendDefaultEmail({
+    to: [email],
+    subject: "Account deactivated | Compte désactivé",
+    body:
+      reason === DeactivationReasons.DEFAULT
+        ? defaultTemplate(email, HOST)
+        : sharedTemplate(email, HOST),
+  });
 };

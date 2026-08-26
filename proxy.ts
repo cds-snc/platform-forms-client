@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { allowedOrigin } from "./lib/origin";
 import { fallbackLng, languages } from "./i18n/settings";
 import type { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
 import { generateCSP } from "@lib/cspScripts";
@@ -8,6 +9,7 @@ import NextAuth, { Session } from "next-auth";
 import type { NextAuthRequest } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { BODY_SIZE_LIMIT } from "@root/constants";
+import { getOrigin } from "./lib/origin";
 
 const verboseDebug = false;
 
@@ -109,6 +111,18 @@ export default async function proxy(req: NextRequest, ctx: NextFetchEvent) {
         { error: "Invalid characters or escape sequences in request body." },
         { status: 400 }
       );
+    }
+
+    const origin = await getOrigin();
+
+    if (!allowedOrigin) {
+      logMessage.error("Middleware: HOST_URL is not configured.");
+      return NextResponse.json({ error: "Server misconfiguration." }, { status: 500 });
+    }
+
+    if (!origin || origin !== allowedOrigin) {
+      logMessage.info(`Middleware: Request origin ${origin ?? "<missing>"} is not allowed.`);
+      return NextResponse.json({ error: "Request origin is not allowed." }, { status: 403 });
     }
   }
 
@@ -261,6 +275,10 @@ const setCSP = (
   const requestHeaders = new Headers(req.headers);
 
   requestHeaders.set("x-nonce", nonce);
+  const cryptoKey = req.cookies.get("crypto-key")?.value;
+  if (cryptoKey) {
+    requestHeaders.set("x-crypto-key", cryptoKey);
+  }
   if (process.env.NODE_ENV !== "development") {
     // Set the CSP header on the request to the server
     requestHeaders.set("content-security-policy", csp);
@@ -280,6 +298,9 @@ const setCSP = (
 
   // Set cookie on response back to browser so client can render correct language on client components
   if (pathLang && cookieLang !== pathLang) response.cookies.set("i18next", pathLang);
+
+  // delete the crypto key cookie so that it cannot be reused
+  response.cookies.delete("crypto-key");
 
   return response;
 };
@@ -307,7 +328,7 @@ const authFlowRedirect = (
   const origin = req.nextUrl.origin;
 
   // Ignore if user is in the auth flow of MfA
-  if (session && !onAuthFlow) {
+  if (session?.user && !onAuthFlow) {
     if (
       !session.user.hasSecurityQuestions &&
       !path.startsWith("/auth/setup-security-questions") &&

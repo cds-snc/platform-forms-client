@@ -21,7 +21,7 @@ export const SaveAndResumeButton = ({ language }: { language: Language }) => {
       >
         <>
           {t("saveAndResume.saveBtn", { lng: language })}
-          <SaveProgressIcon className="ml-2 fill-gcds-blue-800 group-focus:fill-white group-active:fill-white" />
+          <SaveProgressIcon className="fill-gcds-blue-800 ml-2 group-focus:fill-white group-active:fill-white" />
         </>
       </DownloadProgress>
 

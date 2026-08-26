@@ -138,7 +138,7 @@ const AuditFormDownloadButton = ({
           (key) => specificEvents[key as keyof typeof specificEvents]
         );
 
-    const events = await getFormEvents(formId, filter);
+    const events = await getFormEvents(formId, true, filter);
     if (Array.isArray(events)) {
       if (events.length === 0) {
         toast.error(t("auditDownload.noEvents"));

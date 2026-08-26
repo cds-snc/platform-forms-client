@@ -2,7 +2,7 @@
 
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
-import { AuditLogDetails, logEvent } from "@lib/auditLogs";
+import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { ucfirst } from "@lib/client/clientHelpers";
 import {
   Answer,
@@ -14,14 +14,8 @@ import {
   HtmlZippedResponse,
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
-import { getFullTemplateByID } from "@lib/templates";
-import {
-  AddressComponents,
-  FormElement,
-  FormElementTypes,
-  StartFromExclusiveResponse,
-  VaultStatus,
-} from "@lib/types";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
+import { FormElement, FormElementTypes, StartFromExclusiveResponse, VaultStatus } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
   confirmResponses,
@@ -47,14 +41,25 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
 import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
-import {
-  getAddressAsAnswerElements,
-  getAddressAsString,
-} from "@clientComponents/forms/AddressComplete/utils";
-import { serverTranslation } from "@i18n";
+import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 import { traceFunction } from "@lib/otel";
+import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
+import { StarRatingObject } from "@root/components/clientComponents/forms/StarRating/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
+
+type ResponseVersion = string | number | null;
+
+const parseTemplateVersionNumber = (version?: ResponseVersion) => {
+  if (version === undefined || version === null || version === "") return undefined;
+
+  if (typeof version === "number") {
+    return Number.isInteger(version) && version > 0 ? version : undefined;
+  }
+
+  const match = version.trim().match(/^v?(\d+)$/i);
+  return match ? Number.parseInt(match[1], 10) : undefined;
+};
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -124,11 +129,13 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       ids,
       format = DownloadFormat.HTML,
       lang,
+      version,
     }: {
       formID: string;
       ids: string[];
       format: DownloadFormat;
       lang: Language;
+      version?: ResponseVersion;
     }
   ): Promise<
     | HtmlResponse
@@ -140,12 +147,30 @@ export const getSubmissionsByFormat = AuthenticatedAction(
   > => {
     return traceFunction("generateSubmissionResponseFormats", async () => {
       try {
-        const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
-        const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
-
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
-        const fullFormTemplate = await getFullTemplateByID(formID);
+        const templateVersioningEnabled = await isTemplateVersioningEnabled();
+        const templateVersionNumber = templateVersioningEnabled
+          ? parseTemplateVersionNumber(version)
+          : undefined;
+
+        if (templateVersioningEnabled && version && templateVersionNumber === undefined) {
+          throw new FormBuilderError(
+            `Invalid response version: ${version}`,
+            FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
+          );
+        }
+
+        let fullFormTemplate = await getFullTemplateByID(formID, undefined, templateVersionNumber);
+
+        // Note: this code can be removed once the backend is updated to support versioned templates for all forms. The fallback logic is only needed for forms that do not yet have versioned templates.
+
+        // Fallback: only allow fallback to non-versioned template when version 1
+        // was requested. This covers the case where responses were collected
+        // before any versions were created and the UI requests version 1.
+        if (fullFormTemplate === null && templateVersioningEnabled && templateVersionNumber === 1) {
+          fullFormTemplate = await getFullTemplateByID(formID);
+        }
 
         if (fullFormTemplate === null) {
           logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
@@ -241,59 +266,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                   } as Answer;
                 }
 
-                // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
-                if (
-                  question?.type === FormElementTypes.addressComplete &&
-                  question.properties.addressComponents?.splitAddress === true
-                ) {
-                  const addressObject = JSON.parse(answer as string) as AddressElements;
-
-                  const questionComponents = question.properties
-                    .addressComponents as AddressComponents;
-                  if (questionComponents.canadianOnly) {
-                    addressObject.country = "CAN";
-                  }
-
-                  const extraTranslations = {
-                    streetAddress: {
-                      en: tEn("addressComponents.streetAddress"),
-                      fr: tFr("addressComponents.streetAddress"),
-                    },
-                    city: {
-                      en: tEn("addressComponents.city"),
-                      fr: tFr("addressComponents.city"),
-                    },
-                    province: {
-                      en: tEn("addressComponents.province"),
-                      fr: tFr("addressComponents.province"),
-                    },
-                    postalCode: {
-                      en: tEn("addressComponents.postalCode"),
-                      fr: tFr("addressComponents.postalCode"),
-                    },
-                    country: {
-                      en: tEn("addressComponents.country"),
-                      fr: tFr("addressComponents.country"),
-                    },
-                  };
-
-                  const reviewElements = getAddressAsAnswerElements(
-                    question,
-                    addressObject,
-                    extraTranslations
-                  );
-
-                  const addressElements = [reviewElements];
-
-                  return {
-                    questionId: question.id,
-                    type: FormElementTypes.address,
-                    questionEn: question?.properties.titleEn,
-                    questionFr: question?.properties.titleFr,
-                    answer: addressElements,
-                  } as Answer;
-                }
-
                 // return the final answer object
                 return {
                   questionId: question?.id,
@@ -350,7 +322,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           case DownloadFormat.CSV:
             return {
               receipt: await htmlAggregatedTransform(formResponse, lang),
-              responses: csvTransform(formResponse),
+              responses: await csvTransform(formResponse),
             };
           case DownloadFormat.HTML_AGGREGATED:
             return await htmlAggregatedTransform(formResponse, lang);
@@ -493,17 +465,33 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       return "";
     }
 
-    if (question.properties.addressComponents?.splitAddress === true) {
-      return answer as string; //Address was split, return as is.
-    }
-
     try {
-      const addressObject = JSON.parse(answer as string) as AddressElements;
-      return getAddressAsString(addressObject);
+      let addressObject: AddressElements;
+
+      if (typeof answer === "string") {
+        addressObject = JSON.parse(answer) as AddressElements;
+        return getAddressAsString(
+          addressObject,
+          question.properties.addressComponents?.splitAddress
+        );
+      }
+
+      addressObject = answer as AddressElements;
+      return getAddressAsString(addressObject, question.properties.addressComponents?.splitAddress);
     } catch (e) {
       // If the answer is somehow not parseable as JSON, return it as is
       return answer as string;
     }
+  }
+
+  // For StarRating return the serialized JSON object so that
+  // the CSV and HTML transforms can handle it contextually.
+  if (question && question.type === FormElementTypes.starRating) {
+    if (!answer) {
+      return "";
+    }
+    const starRatingObject = answer as StarRatingObject;
+    return JSON.stringify(starRatingObject);
   }
 
   return answer as string;
@@ -518,7 +506,7 @@ const logDownload = async (
     logEvent(
       userId,
       { type: "Response", id: item.id },
-      "DownloadResponse",
+      AuditLogEvent.DownloadResponse,
       AuditLogDetails.DownloadedFormResponses,
       { format: format, "item.id": item.id }
     );

@@ -1,5 +1,53 @@
 # Changelog
 
+## [2.2.27] - 2026-08-26
+
+- Remove references to groupHistory
+
+## [2.2.26] - 2026-08-17
+
+- Add new Star Rating input validation type
+
+## [2.2.25] - 2026-08-17
+
+- Add styles for details component
+
+## [2.2.24] - 2026-08-10
+
+- Update address complete validation and sanitization
+
+## [2.2.23] - 2026-08-04
+
+- Update address complete validation
+
+## [2.2.22] - 2026-07-31
+
+- Move address complete validation to helper
+
+## [2.2.21] - 2026-07-31
+
+- Update validation for address complete
+
+## [2.2.20] - 2026-07-30
+
+- Fixes legend reset nesting to apply only to fieldset
+
+## [2.2.18] - 2026-07-22
+
+- Republish package following failed NPM publication
+
+## [2.2.17] - 2026-07-21
+
+- Republish package following failed NPM publication
+
+## [2.2.14] - 2026-06-15
+
+- Replaced the self-import from @gcforms/core with a local import
+
+## [2.2.13] - 2026-05-25
+
+- Update the non-logged in header so that the FIP and language toggle link are vertically aligned within the same row.
+
 ## [2.2.12] - 2026-05-25
 
 - Adds toast background override to /src/styles/_toast.scss

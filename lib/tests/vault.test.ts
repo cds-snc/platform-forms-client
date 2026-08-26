@@ -8,7 +8,7 @@ import { AccessControlError } from "@lib/auth/errors";
 import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
-import { TemplateAlreadyPublishedError } from "@lib/templates";
+import { TemplateAlreadyPublishedError } from "@lib/templates/internal/errors";
 import { getAppSetting } from "@lib/appSettings";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";

@@ -1,15 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { cn } from "@lib/utils";
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
-import { ShareButton } from "./ShareButton";
+import { ShareButton } from "./ShareMenu/ShareButton";
 import LanguageToggle from "./LanguageToggle";
-import { Button } from "@clientComponents/globals";
 import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
@@ -46,7 +45,7 @@ export const Header = ({
 
   const { getFlag } = useFeatureFlags();
   const isEnabled = getFlag(FeatureFlags.topBanner);
-  const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
+  const templateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
 
   useEffect(() => {
     async function fetchBannerData() {
@@ -62,7 +61,7 @@ export const Header = ({
 
   return (
     <>
-      <header className={cn("bg-gray-soft relative mb-5 px-2", className, paddingTop)}>
+      <header className={cn("bg-gray-soft relative px-2", className, paddingTop)}>
         <SkipLink />
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
@@ -90,32 +89,18 @@ export const Header = ({
                 {t("title", { ns: "common" })}
               </div>
             )}
-            {isFormBuilder && <FileNameInput />}
+            {isFormBuilder && (
+              <FileNameInput templateVersioningEnabled={templateVersioningEnabled} />
+            )}
           </div>
           <div className="ml-auto rounded-xl bg-white px-4 py-2">
             <nav aria-label={t("mainNavAriaLabel", { ns: "common" })}>
               <ul className="flex list-none items-center justify-end px-0 text-base">
                 {(alwaysShowLoginLink || status !== "authenticated") && (
                   <li className="tablet:mr-4 mr-2 py-2 text-base">
-                    {isZitadelLoginEnabled ? (
-                      <form
-                        action={async () => {
-                          await signIn(
-                            "gcForms",
-                            { redirectTo: `/${language}/auth/policy` },
-                            { max_age: 0 }
-                          );
-                        }}
-                      >
-                        <Button type="submit" theme="link">
-                          {t("loginMenu.login")}
-                        </Button>
-                      </form>
-                    ) : (
-                      <Link href={`/${language}/auth/login`} prefetch={false}>
-                        {t("loginMenu.login")}
-                      </Link>
-                    )}
+                    <Link href={`/${language}/auth/login`} prefetch={false}>
+                      {t("loginMenu.login")}
+                    </Link>
                   </li>
                 )}
                 {isFormBuilder && (

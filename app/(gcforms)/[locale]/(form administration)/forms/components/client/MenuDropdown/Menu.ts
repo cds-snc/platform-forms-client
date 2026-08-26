@@ -84,7 +84,7 @@ export class Menu {
   }
 
   open() {
-    this.menuList.style.display = "block";
+    (this.menuList as HTMLUListElement).showPopover?.();
     this.menuButton.setAttribute("aria-expanded", "true");
     this.menuList.focus(); // TODO: forget purpose of this?
     this.focusFirst();
@@ -94,7 +94,7 @@ export class Menu {
     this.removeFocus();
     this.menuButton.removeAttribute("aria-expanded");
     this.menuList.setAttribute("aria-activedescendant", "");
-    this.menuList.style.display = "none";
+    (this.menuList as HTMLUListElement).hidePopover?.();
     this.menuButton.focus();
   }
 

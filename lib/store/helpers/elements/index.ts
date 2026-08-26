@@ -5,6 +5,7 @@ import { propertyPath } from "./propertyPath";
 import { getPathString } from "./getPathString";
 import { getChoice } from "./getChoice";
 import { localizeField } from "./localizeField";
+import { getName } from "./getName";
 
 export {
   getFormElementById,
@@ -14,4 +15,5 @@ export {
   getChoice,
   localizeField,
   getFormElementIndexes,
+  getName,
 };

@@ -2,7 +2,7 @@ import { authCheckAndThrow } from "@lib/actions";
 import { isResponsesPilotModeEnabled } from "./actions";
 import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
-import { getFullTemplateByID } from "@root/lib/templates";
+import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { redirect } from "next/navigation";
 
 export default async function ResponsesLayout(props: {

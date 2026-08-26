@@ -86,7 +86,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getChoice: (elIndex: number, choiceIndex: number) => { en: string; fr: string } | undefined;
   updateField: (
     path: string,
-    value: string | boolean | ElementProperties | BrandProperties
+    value: string | boolean | number | ElementProperties | BrandProperties
   ) => void;
   updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
@@ -97,10 +97,15 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSchema: () => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
+  setTemplateVersionIds: (versionIds: {
+    currentPublishedVersionId?: string | null;
+    currentDraftVersionId?: string | null;
+    versionNumber?: number | null;
+  }) => void;
   getFormElementById: (id: number) => FormElement | undefined;
   getFormElementWithIndexById: (id: number) => FormElementWithIndex | undefined;
   getFormElementIndexes: (id: number) => Indexes;
-  getName: () => string;
+  getName: (allowFallback?: boolean) => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
@@ -131,6 +136,9 @@ export interface TemplateStoreProps {
   hasTransformed: boolean;
   form: FormProperties;
   isPublished: boolean;
+  currentPublishedVersionId?: string | null;
+  currentDraftVersionId?: string | null;
+  versionNumber?: number | null;
   name: string;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;

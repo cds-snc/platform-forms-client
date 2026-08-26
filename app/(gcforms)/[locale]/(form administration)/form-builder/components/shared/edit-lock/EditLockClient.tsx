@@ -23,8 +23,9 @@ export const EditLockClient = ({
 }) => {
   const pathname = usePathname();
   const { t } = useTranslation("form-builder");
-  const { isPublished } = useTemplateStore((s) => ({
+  const { isPublished, currentDraftVersionId } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
+    currentDraftVersionId: s.currentDraftVersionId,
   }));
   const { takeover, getIsActiveTab, hasSessionExpired, isEnabled } = useEditLockContext();
   const { headlessTree } = useTreeRef();
@@ -44,7 +45,9 @@ export const EditLockClient = ({
   }, [toastString]);
 
   const showLockedEdit =
-    isEnabled && !isPublished && (!restrictToEditPaths || isEditPath(pathname));
+    isEnabled &&
+    (!isPublished || currentDraftVersionId) &&
+    (!restrictToEditPaths || isEditPath(pathname));
 
   const handleTakeover = async () => {
     await takeover();

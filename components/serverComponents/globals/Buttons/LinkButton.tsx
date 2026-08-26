@@ -30,6 +30,7 @@ type LinkButtonProps = {
   target?: string;
   "data-testid"?: string;
   prefetch?: boolean;
+  ariaLabelledby?: string;
 };
 
 export const Default = ({ href, children, className, scroll }: LinkButtonProps) => {
@@ -48,6 +49,7 @@ export const Primary = ({
   target,
   prefetch = false,
   "data-testid": dataTestId,
+  ariaLabelledby,
 }: LinkButtonProps) => {
   return (
     <Link
@@ -57,6 +59,7 @@ export const Primary = ({
       target={target}
       data-testid={dataTestId}
       prefetch={prefetch}
+      {...(ariaLabelledby && { "aria-labelledby": ariaLabelledby })}
     >
       {children}
     </Link>

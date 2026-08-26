@@ -2,8 +2,8 @@ import type { Mock, MockedFunction } from "vitest";
 import { prismaMock } from "@testUtils";
 import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import {
   InvalidDomainError,
   InvitationIsExpiredError,
@@ -31,7 +31,9 @@ vi.mock("@lib/privileges");
 vi.mock("@lib/integration/notifyConnector");
 vi.mock("@lib/logger");
 vi.mock("@lib/users");
-vi.mock("@lib/templates");
+vi.mock("@lib/templates/queries/getTemplateWithAssignedUsers", () => ({
+  getTemplateWithAssignedUsers: vi.fn(),
+}));
 vi.mock("@lib/editLocks", () => ({
   invalidateTemplateEditLockUserCountCache: vi.fn(),
 }));
@@ -65,7 +67,7 @@ describe("Invitations", () => {
       (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(inviteUserByEmail("test@cds-snc.ca", "form-id", "message")).rejects.toThrow(
@@ -81,7 +83,7 @@ describe("Invitations", () => {
       );
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(
@@ -93,7 +95,7 @@ describe("Invitations", () => {
       (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(inviteUserByEmail("test@notagovdomain", "form-id", "message")).rejects.toThrow(
@@ -103,7 +105,7 @@ describe("Invitations", () => {
 
     it("should throw TemplateNotFoundError if template is not found", async () => {
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(null);
       (getUser as MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
@@ -121,7 +123,7 @@ describe("Invitations", () => {
       ); // sender
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValueOnce(mockTemplateWithUsers());
 
       prismaMock.invitation.create.mockResolvedValueOnce(
@@ -150,15 +152,12 @@ describe("Invitations", () => {
         expect.stringContaining("register")
       );
 
-      expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith(
-        "invited@cds-snc.ca",
-        expect.objectContaining({
-          subject: expect.any(String),
-          formResponse: "email contents",
-        }),
-        "formInvitationToFutureUser"
-      );
+      expect(sendDefaultEmail).toHaveBeenCalledTimes(1);
+      expect(sendDefaultEmail).toHaveBeenCalledWith({
+        to: ["invited@cds-snc.ca"],
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        body: "email contents",
+      });
       expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
 
@@ -171,7 +170,7 @@ describe("Invitations", () => {
       ); // sender
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValueOnce(mockTemplateWithUsers());
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -203,12 +202,12 @@ describe("Invitations", () => {
         expect.stringContaining("forms"),
         expect.stringContaining("forms")
       );
-      expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith(
-        "invited@cds-snc.ca",
-        expect.any(Object),
-        "formInvitationToExistingUser"
-      );
+      expect(sendDefaultEmail).toHaveBeenCalledTimes(1);
+      expect(sendDefaultEmail).toHaveBeenCalledWith({
+        to: ["invited@cds-snc.ca"],
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        body: "email contents",
+      });
       expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
 
@@ -227,7 +226,7 @@ describe("Invitations", () => {
       (prismaMock.invitation.delete as Mock).mockResolvedValue(null);
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValueOnce({
         formRecord: {
           id: "form-id",
@@ -279,12 +278,12 @@ describe("Invitations", () => {
         expect.stringContaining("register"),
         expect.stringContaining("register")
       );
-      expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith(
-        "invited2@cds-snc.ca",
-        expect.any(Object),
-        "formInvitationToFutureUser"
-      );
+      expect(sendDefaultEmail).toHaveBeenCalledTimes(1);
+      expect(sendDefaultEmail).toHaveBeenCalledWith({
+        to: ["invited2@cds-snc.ca"],
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        body: "email contents",
+      });
       expect(invalidateTemplateEditLockUserCountCache).toHaveBeenCalledWith("form-id");
     });
   });
@@ -315,6 +314,7 @@ describe("Invitations", () => {
           email: "invited@cds-snc.ca",
           expires: new Date(Date.now() + 10000),
           templateId: "template-id",
+          invitedBy: "invited-user-id",
         })
       ); // invitation not expired
 
@@ -391,7 +391,7 @@ describe("Invitations", () => {
       );
 
       (
-        getTemplateWithAssociatedUsers as MockedFunction<typeof getTemplateWithAssociatedUsers>
+        getTemplateWithAssignedUsers as MockedFunction<typeof getTemplateWithAssignedUsers>
       ).mockResolvedValue(
         mockTemplateWithUsers({
           users: [

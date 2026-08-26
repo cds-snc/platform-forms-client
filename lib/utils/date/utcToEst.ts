@@ -41,3 +41,19 @@ export const formClosingDateEst = (
     // dayPeriod,
   };
 };
+
+/**
+ * Formats a date to EST in the format YYYY/MM/DD.
+ * @param date - The date to format (string or Date object).
+ * @param language - The language string code for formatting.
+ * @returns The formatted date string in EST as YYYY/MM/DD.
+ */
+export const formatDateToEstYYYYMMDD = (date: string | Date, language: string): string => {
+  const jsDate = typeof date === "string" ? new Date(date) : date;
+  const { month, day, year } = formClosingDateEst(jsDate.toISOString(), language, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return `${year}/${month}/${day}`;
+};

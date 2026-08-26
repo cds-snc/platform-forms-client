@@ -1,10 +1,16 @@
 {
   "title": "Manage forms",
-  "gotoResponses": "Go to responses",
   "draft": "Draft",
   "published": "Published",
   "manageOwnerships": "Manage ownership",
   "overdueResponses": "Overdue responses",
   "noForms": "No forms found",
-  "deleteForm": "Delete form"
+  "deleteForm": "Delete form",
+  "downloadForm": "Download form",
+  "createDraftVersion": "Create draft version",
+  "card": {
+    "menu": {
+      "more": "More"
+    }
+  }
 }

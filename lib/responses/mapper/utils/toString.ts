@@ -3,8 +3,9 @@ import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDat
 import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
 import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 
-import { FormElement } from "@root/packages/types/src/form-types";
+import { FormElement, FormElementTypes } from "@root/packages/types/src/form-types";
 import { ResponseFilenameMapping } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/lib/processResponse";
+import { StarRatingObject } from "@root/components/clientComponents/forms/StarRating/types";
 
 const getDateAsString = (answer: DateObject | string | object, dateFormat: DateFormat): string => {
   try {
@@ -25,11 +26,11 @@ export const getAnswerAsString = (
   answer: unknown,
   attachments?: ResponseFilenameMapping
 ): string => {
-  if (question && question.type === "checkbox") {
+  if (question && question.type === FormElementTypes.checkbox) {
     return Array(answer).join(", ");
   }
 
-  if (question && question.type === "fileInput") {
+  if (question && question.type === FormElementTypes.fileInput) {
     if (!answer || typeof answer !== "object" || !("name" in answer)) {
       return ""; // If the answer is not an object or does not have a name, return empty string
     }
@@ -45,7 +46,7 @@ export const getAnswerAsString = (
     return attachment ? prefix + attachment.actualName : (answer as { name: string }).name || "";
   }
 
-  if (question && question.type === "formattedDate") {
+  if (question && question.type === FormElementTypes.formattedDate) {
     // Could be empty if the date was not required
     if (!answer) {
       return "";
@@ -56,22 +57,27 @@ export const getAnswerAsString = (
     return getDateAsString(answer, dateFormat);
   }
 
-  if (question && question.type === "addressComplete") {
+  if (question && question.type === FormElementTypes.addressComplete) {
     if (!answer) {
       return "";
     }
 
-    if (question.properties.addressComponents?.splitAddress === true) {
-      return answer as string; //Address was split, return as is.
-    }
-
     try {
-      const addressObject = JSON.parse(answer as string) as AddressElements;
-      return getAddressAsString(addressObject);
+      const addressObject = answer as AddressElements;
+      return getAddressAsString(addressObject, question.properties.addressComponents?.splitAddress);
     } catch (e) {
       // If the answer is somehow not parseable as JSON, return it as is
       return answer as string;
     }
+  }
+
+  if (question && question.type === FormElementTypes.starRating) {
+    if (answer === "") {
+      return "";
+    }
+
+    const starRatingObject = answer as StarRatingObject;
+    return JSON.stringify(starRatingObject);
   }
 
   return answer as string;

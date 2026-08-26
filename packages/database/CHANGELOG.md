@@ -5,6 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.10] - 2026-08-12
+
+- Remove the previously added additional address complete setting
+
+## [1.1.9] - 2026-08-12
+
+- Add Another Address complete setting
+
+## [1.1.8] - 2026-08-11
+
+- Add Address complete settings
+
+## [1.1.7] - 2026-07-29
+
+- Removed migration process for legacy forms with no set `formPurpose`
+
+## [1.1.6] - 2026-07-27
+
+- Added migration process for legacy forms with no set `formPurpose`
+
+## [1.1.5] - 2026-07-22
+
+- Republish package following failed NPM publication
+
+## [1.1.4] - 2026-07-21
+
+- Republish package following failed NPM publication
+
+## [1.1.3] - 2026-07-16
+
+- Add additional template fixture for development
+
+## [1.1.2] - 2026-06-15
+
+- Update AWS SDK packages to latest versions
+
+## [1.1.1] - 2026-06-12
+
+- No change. Reason: previous version did not get push to NPM
+
+## [1.1.0] - 2026-05-29
+
+### Added
+
+- Add template version persistence tables and exported Prisma types for draft and published form versioning.
+
 ## [1.0.9] - 2026-05-11
 
 - Update AWS SDK packages to latest versions

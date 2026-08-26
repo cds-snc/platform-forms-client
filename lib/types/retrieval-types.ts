@@ -30,6 +30,7 @@ export type VaultSubmissionOverview = {
   name: string;
   createdAt: number;
   status: VaultStatus;
+  version?: string | null;
 };
 
 export type StartFromExclusiveResponse = {

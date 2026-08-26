@@ -14,17 +14,28 @@ const packageDirList = fs.existsSync(packagesDir)
       .map((entry) => path.join(packagesDir, entry.name))
   : [];
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
+const [nextBaseConfig, ...remainingNextConfig] = [...nextVitals, ...nextTs];
+const nextConfig = [
   {
-    plugins: {
-      "react-hooks": reactHooks,
+    ...nextBaseConfig,
+    settings: {
+      ...nextBaseConfig.settings,
+      // Fix for ESLint 10+: eslint-plugin-react uses context.getFilename() (legacy API)
+      // which was removed in ESLint 10 flat config. Declaring the version explicitly
+      // prevents the plugin from trying to auto-detect it and failing.
+      // https://github.com/vercel/next.js/issues/89764
+      react: { version: "19" },
     },
     rules: {
+      ...nextBaseConfig.rules,
       ...reactHooks.configs.recommended.rules,
     },
   },
+  ...remainingNextConfig,
+];
+
+const eslintConfig = defineConfig([
+  ...nextConfig,
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",

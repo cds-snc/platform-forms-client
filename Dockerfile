@@ -2,8 +2,6 @@ FROM node:24-alpine AS base
 
 ENV NODE_ENV=production
 ENV NEXT_OUTPUT_STANDALONE=true
-ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49 
-
 COPY . /src
 WORKDIR /src
 
@@ -46,6 +44,9 @@ ENV COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
 
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
+
+# Disable Prisma usage data collection (see https://www.prisma.io/docs/orm/v6/tools/prisma-cli#telemetry)
+ENV CHECKPOINT_DISABLE=1
 
 WORKDIR /src
 

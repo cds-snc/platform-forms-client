@@ -1,4 +1,4 @@
-import { test, expect, type Locator } from "@playwright/test";
+import { test, expect, type Locator, type Page } from "@playwright/test";
 import { DatabaseHelper } from "../../helpers/database-helper";
 
 const setCheckboxValue = async (locator: Locator, checked: boolean) => {
@@ -15,7 +15,7 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
   let formId: string;
   let dbHelper: DatabaseHelper;
 
-  const fillFullName = async (page: Parameters<typeof test>[0]["page"]) => {
+  const fillFullName = async (page: Page) => {
     await page.getByRole("textbox", { name: "Full name" }).fill("Test User");
   };
 

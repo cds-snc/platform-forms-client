@@ -52,6 +52,7 @@ import {
   getChoice,
   localizeField,
   getFormElementIndexes,
+  getName,
 } from "./helpers/elements";
 import { transform } from "./helpers/elements/transformFormProperties";
 import { BetaComponentsError, checkForBetaComponents } from "../validation/betaCheck";
@@ -59,6 +60,9 @@ import { useFeatureFlags } from "../hooks/useFeatureFlags";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { useTranslation } from "@root/i18n/client";
 import { getImportedTemplate } from "./importBuffer";
+import { useRehydrate } from "./hooks/useRehydrate";
+
+import { logMessage } from "@lib/logger";
 
 const createTemplateStore = (
   checkFeatureFlag: (flag: string) => boolean,
@@ -188,14 +192,18 @@ const createTemplateStore = (
             generateElementId: generateElementId(set, get),
             transform: transform(set, get),
             getSchema: () => {
-              // hasHydrated should work here but we get an error. leaving this timeout for now.
-              setTimeout(() => {
-                if (!get().hasTransformed) {
-                  get().transform();
-                }
-                set({ hasTransformed: true });
-              }, 500);
-
+              if (get().hasHydrated && !get().hasTransformed) {
+                // Defer transform to avoid updating state during render
+                Promise.resolve().then(() => {
+                  try {
+                    get().transform?.();
+                    set({ hasTransformed: true });
+                  } catch (e) {
+                    // swallow errors to avoid breaking render
+                    logMessage?.warn?.("deferred transform failed");
+                  }
+                });
+              }
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
             getId: () => get().id,
@@ -203,7 +211,7 @@ const createTemplateStore = (
             getFormElementById: getFormElementById(set, get),
             getFormElementWithIndexById: getFormElementWithIndexById(set, get),
             getFormElementIndexes: getFormElementIndexes(set, get),
-            getName: () => get().name,
+            getName: getName(set, get),
             getDeliveryOption: () => get().deliveryOption,
             getSecurityAttribute: () => get().securityAttribute,
             getGroupsEnabled: () => get().allowGroupsFlag,
@@ -215,6 +223,12 @@ const createTemplateStore = (
               set({ translationLanguagePriority: lang }),
             setFocusInput: (isSet) => set({ focusInput: isSet }),
             setIsPublished: (isPublished) => set({ isPublished }),
+            setTemplateVersionIds: (versionIds) =>
+              set({
+                currentPublishedVersionId: versionIds.currentPublishedVersionId ?? null,
+                currentDraftVersionId: versionIds.currentDraftVersionId ?? null,
+                versionNumber: versionIds.versionNumber ?? null,
+              }),
             setClosingDate: (value) => set({ closingDate: value }),
             setSaveAndResume: (value) => set({ saveAndResume: value }),
             setNotificationsInterval: (value) => set({ notificationsInterval: value }),
@@ -264,22 +278,61 @@ export const TemplateStoreProvider = ({
   }, [store]);
 
   useEffect(() => {
-    const state = store.getState();
+    // Persisted session storage can rehydrate stale publish/version metadata,
+    // so the latest server props must be the source of truth for this route.
+    const syncServerProps = () => {
+      const state = store.getState();
 
-    if (typeof props.isPublished === "boolean" && state.isPublished !== props.isPublished) {
-      state.setIsPublished(props.isPublished);
-    }
+      if (typeof props.isPublished === "boolean" && state.isPublished !== props.isPublished) {
+        state.setIsPublished(props.isPublished);
+      }
 
-    if (props.closingDate !== undefined && state.closingDate !== props.closingDate) {
-      state.setClosingDate(props.closingDate ?? null);
+      if (
+        state.currentPublishedVersionId !== (props.currentPublishedVersionId ?? null) ||
+        state.currentDraftVersionId !== (props.currentDraftVersionId ?? null) ||
+        state.versionNumber !== (props.versionNumber ?? null)
+      ) {
+        state.setTemplateVersionIds({
+          currentPublishedVersionId: props.currentPublishedVersionId,
+          currentDraftVersionId: props.currentDraftVersionId,
+          versionNumber: props.versionNumber,
+        });
+      }
+
+      if (props.closingDate !== undefined && state.closingDate !== props.closingDate) {
+        state.setClosingDate(props.closingDate ?? null);
+      }
+    };
+
+    syncServerProps();
+
+    return store.persist.onFinishHydration(() => {
+      // Reapply after hydration so an older stored snapshot cannot flip a
+      // draft edit session back into a published, read-only state.
+      syncServerProps();
+    });
+  }, [
+    store,
+    props.isPublished,
+    props.currentPublishedVersionId,
+    props.currentDraftVersionId,
+    props.versionNumber,
+    props.closingDate,
+  ]);
+
+  useEffect(() => {
+    if (!store.getState().hasHydrated) {
+      store.persist.rehydrate();
     }
-  }, [store, props.isPublished, props.closingDate]);
+  }, [store]);
 
   try {
     return (
       <TemplateStoreContext.Provider value={store}>
         <FlowRefProvider>
-          <TreeRefProvider>{children}</TreeRefProvider>
+          <TreeRefProvider>
+            <OnlyRenderOnceHydrated>{children}</OnlyRenderOnceHydrated>
+          </TreeRefProvider>
         </FlowRefProvider>
       </TemplateStoreContext.Provider>
     );
@@ -299,4 +352,12 @@ export const useTemplateStore = <T,>(
   const store = useContext(TemplateStoreContext);
   if (!store) throw new Error("Missing Template Store Provider in tree");
   return useStoreWithEqualityFn(store, selector, equalityFn ?? shallow);
+};
+
+const OnlyRenderOnceHydrated = ({ children }: React.PropsWithChildren) => {
+  const hasHydrated = useRehydrate();
+  if (hasHydrated) {
+    return <>{children}</>;
+  }
+  return null;
 };

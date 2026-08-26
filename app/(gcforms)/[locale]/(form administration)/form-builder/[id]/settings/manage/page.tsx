@@ -1,16 +1,12 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { Session } from "next-auth";
-
-import { checkIfClosed } from "@lib/templates";
+import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { authorization } from "@lib/privileges";
 import { AuthenticatedPage } from "@lib/pages/auth";
 import { SetClosingDate } from "./components/close/SetClosingDate";
 import { Notifications } from "./components/notifications/Notifications";
-import {
-  getNotificationsUsersForForm,
-  getUserNotificationSettingsForForm,
-} from "@root/lib/notifications";
+import { getNotificationsUsersForForm } from "@lib/formEmailOrchestration";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -44,18 +40,15 @@ export default AuthenticatedPage(
         .catch(() => false));
 
     if (canSetClosingDate) {
-      const closedData = await checkIfClosed(id);
+      const closedData = await getTemplateClosureState(id);
       closedDetails = closedData?.closedDetails;
     }
 
-    // Get logged in user's notification setting for this form
-    const loggedInUserNotificationsSetting = await getUserNotificationSettingsForForm(
-      id,
-      props.session.user.id
-    );
-
     // Get list of users and their notification settings for this form
     const userNotificationsForForm = await getNotificationsUsersForForm(id);
+
+    const loggedInUserNotificationsSetting =
+      userNotificationsForForm?.find((u) => u.id === props.session.user.id)?.enabled ?? false;
 
     // Is the currently logged in user assigned to this form
     const userIsNotifiable = userNotificationsForForm

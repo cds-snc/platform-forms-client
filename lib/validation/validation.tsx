@@ -2,6 +2,11 @@ import React, { type JSX } from "react";
 import { FormElement, Responses, PublicFormRecord } from "@gcforms/types";
 import { FormikProps } from "formik";
 import { ErrorListItem } from "@clientComponents/forms";
+import {
+  addressErrorSummaryFields,
+  getAddressFieldLabel,
+  isAddressValidationError,
+} from "@clientComponents/forms/AddressComplete/utils";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
@@ -76,18 +81,43 @@ export const getErrorList = (
               )
             : false;
         });
+      } else if (isAddressValidationError(formElementErrorValue)) {
+        return (
+          Object.entries(addressErrorSummaryFields) as Array<
+            [
+              keyof typeof addressErrorSummaryFields,
+              (typeof addressErrorSummaryFields)[keyof typeof addressErrorSummaryFields],
+            ]
+          >
+        )
+          .filter(([fieldKey]) => Boolean(formElementErrorValue.fields[fieldKey]))
+          .map(([fieldKey, config]) => {
+            const fieldError = formElementErrorValue.fields[fieldKey];
+            const fieldLabel = getAddressFieldLabel(fieldKey, props.language || "en");
+            const value = `${String(fieldError)}: ${fieldLabel}`;
+
+            return (
+              <ErrorListItem
+                key={`error-${formElementKey}-${String(fieldKey)}`}
+                errorKey={`${String(formElementKey)}-${config.anchorSuffix}`}
+                value={value}
+              >
+                {value}
+              </ErrorListItem>
+            );
+          });
       } else {
         return (
           <ErrorListItem
             key={`error-${formElementKey}`}
-            errorKey={`${formElementKey}`}
-            value={`${formElementErrorValue}`}
+            errorKey={String(formElementKey)}
+            value={String(formElementErrorValue)}
           >
             <ErrorListMessage
               language={props.language || "en"}
               id={formElementKey}
               elements={props.formRecord.form.elements}
-              defaultValue={formElementErrorValue}
+              defaultValue={String(formElementErrorValue)}
             />
           </ErrorListItem>
         );
@@ -134,6 +164,19 @@ export const isValidGovEmail = (email: string): boolean => {
     ".parl.ca", // Excludes *.parl.ca (e.g., lop.parl.ca)
     ".ourcommons.ca", // Excludes *.ourcommons.ca
     ".sencanada.ca", // Excludes *.sencanada.ca
+    ".citt-tcce.gc.ca", //Excludes *.citt-tcce.gc.ca 
+    ".sst-tss.gc.ca", // Excludes *.sst-tss.gc.ca
+    ".eiboa-caae.gc.ca", // Excludes *.eiboa-caae.gc.ca
+    ".cart-crac.gc.ca", // Excludes *.cart-crac.gc.ca
+    ".cirb-ccri.gc.ca", // Excludes *.cirb-ccri.gc.ca
+    ".ccperb-cceebc.gc.ca", // Excludes *.ccperb-cceebc.gc.ca
+    ".chrt-tcdp.gc.ca", // Excludes *.chrt-tcdp.gc.ca
+    ".ct-tc.gc.ca",  // Excludes *.ct-tc.gc.ca
+    ".psdpt-tpfd.gc.ca", // Excludes *.psdpt-tpfd.gc.ca
+    ".fpslreb-crtespf.gc.ca", // Excludes *.fpslreb-crtespf.gc.ca  
+    ".sct-trp.gc.ca", // Excludes *.sct-trp.gc.ca
+    ".eptc-tpec.gc.ca",  // Excludes *.eptc-tpec.gc.ca
+    ".njc-cnm.gc.ca", // Excludes *.njc-cnm.gc.ca
   ];
 
   // Extract domain from email (part after @)

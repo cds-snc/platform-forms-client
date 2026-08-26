@@ -1,7 +1,7 @@
 import { prisma } from "@gcforms/database";
 import { generateVerificationCode } from "./2fa";
 import { logMessage } from "@lib/logger";
-import { sendEmail } from "@lib/integration/notifyConnector";
+import { sendDefaultEmail } from "@lib/integration/notifyConnector";
 import { userHasSecurityQuestions } from "@lib/auth/securityQuestions";
 import { getOrigin } from "@lib/origin";
 
@@ -93,11 +93,10 @@ export const getPasswordResetAuthenticatedUserEmailAddress = async (
 const sendPasswordResetEmail = async (email: string, token: string) => {
   const baseUrl = await getOrigin();
 
-  await sendEmail(
-    email,
-    {
-      subject: "Password reset | Réinitialisation de mot de passe",
-      formResponse: `
+  await sendDefaultEmail({
+    to: [email],
+    subject: "Password reset | Réinitialisation de mot de passe",
+    body: `
 Reset your password with this link:
 
 [${baseUrl}/en/auth/reset-password/${token}](${baseUrl}/en/auth/reset-password/${token})
@@ -105,7 +104,5 @@ Reset your password with this link:
 Réinitialisez votre mot de passe avec ce lien :
 
 [${baseUrl}/fr/auth/reset-password/${token}](${baseUrl}/fr/auth/reset-password/${token})`,
-    },
-    "passwordReset"
-  );
+  });
 };

@@ -4,7 +4,7 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { AccessControlError } from "@lib/auth/errors";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
@@ -29,6 +29,7 @@ import { EditLockClient } from "@formBuilder/components/shared/edit-lock/EditLoc
 import { EditLockProvider } from "@formBuilder/components/shared/edit-lock/EditLockContext";
 import { AccountMenu } from "@formBuilder/components/shared/account-menu/AccountMenu";
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
+import { CreateDraftConfirmDialog } from "./components/dialogs/CreateDraftConfirmDialog/CreateDraftConfirmDialog";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -47,6 +48,11 @@ export default async function Layout(props: {
     ability: null,
   }));
 
+  // User is not authenticated and is trying to access a form that is not the default form (0000)
+  if (!session && id !== "0000") {
+    redirect(`/${locale}/auth/login`);
+  }
+
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
@@ -59,7 +65,7 @@ export default async function Layout(props: {
   );
 
   if (session && formID && formID !== "0000") {
-    const templateWithUsers = await getTemplateWithAssociatedUsers(formID).catch((e) => {
+    const templateWithUsers = await getTemplateWithAssignedUsers(formID).catch((e) => {
       if (e instanceof AccessControlError) {
         redirect(`/${locale}/admin/unauthorized`);
       }
@@ -110,6 +116,7 @@ export default async function Layout(props: {
             >
               <GroupStoreProvider>
                 <ManageFormAccessDialogContainer formId={id} />
+
                 <div className="h-full">
                   <div className="flex min-h-screen flex-col">
                     <Header
@@ -164,6 +171,7 @@ export default async function Layout(props: {
                     <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
                   </div>
                 </div>
+                <CreateDraftConfirmDialog />
               </GroupStoreProvider>
             </EditLockProvider>
           </RefStoreProvider>

@@ -60,12 +60,44 @@ export const getTreeItems = (
   }
 };
 
+const createCachedTreeItemsReader = (getTreeDataFn: GetTreeDataFunction) => {
+  let cachedItems: Record<string, unknown> | null | undefined;
+  let clearScheduled = false;
+
+  return () => {
+    // Headless-tree asks for many items during one expand/render pass. Reuse the
+    // same full tree snapshot for that pass instead of rebuilding it per item.
+    if (cachedItems !== undefined) {
+      return cachedItems;
+    }
+
+    cachedItems = getTreeItems(getTreeDataFn);
+
+    if (!clearScheduled) {
+      clearScheduled = true;
+      // Clear after the current task so later store changes are picked up on the
+      // next interaction without carrying a long-lived stale tree snapshot.
+      queueMicrotask(() => {
+        cachedItems = undefined;
+        clearScheduled = false;
+      });
+    }
+
+    return cachedItems;
+  };
+};
+
+type TreeItemsReader = ReturnType<typeof createCachedTreeItemsReader>;
+
 /**
  * Safe data loader function for tree items - converts react-complex-tree to headless-tree format
  */
-export const createSafeItemLoader = (getTreeDataFn: GetTreeDataFunction) => {
+export const createSafeItemLoader = (
+  getTreeDataFn: GetTreeDataFunction,
+  readTreeItems: TreeItemsReader = createCachedTreeItemsReader(getTreeDataFn)
+) => {
   return (itemId: string): Record<string, unknown> => {
-    const items = getTreeItems(getTreeDataFn);
+    const items = readTreeItems();
 
     // Always ensure we return something, never undefined
     if (!items) {
@@ -88,9 +120,12 @@ export const createSafeItemLoader = (getTreeDataFn: GetTreeDataFunction) => {
 /**
  * Safe children loader function for tree items
  */
-export const createSafeChildrenLoader = (getTreeDataFn: GetTreeDataFunction) => {
+export const createSafeChildrenLoader = (
+  getTreeDataFn: GetTreeDataFunction,
+  readTreeItems: TreeItemsReader = createCachedTreeItemsReader(getTreeDataFn)
+) => {
   return (itemId: string): string[] => {
-    const items = getTreeItems(getTreeDataFn);
+    const items = readTreeItems();
 
     // If items is null/undefined, return empty array
     if (!items) {
@@ -106,5 +141,14 @@ export const createSafeChildrenLoader = (getTreeDataFn: GetTreeDataFunction) => 
 
     const children = (item as Record<string, unknown>).children;
     return Array.isArray(children) ? children.map(String) : [];
+  };
+};
+
+export const createSafeDataLoader = (getTreeDataFn: GetTreeDataFunction) => {
+  const readTreeItems = createCachedTreeItemsReader(getTreeDataFn);
+
+  return {
+    getItem: createSafeItemLoader(getTreeDataFn, readTreeItems),
+    getChildren: createSafeChildrenLoader(getTreeDataFn, readTreeItems),
   };
 };

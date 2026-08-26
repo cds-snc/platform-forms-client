@@ -4,8 +4,11 @@ vi.mock("@lib/auth", () => ({
   auth: vi.fn().mockResolvedValue({ user: { id: "test-user-id" } }),
 }));
 
-vi.mock("@lib/templates", () => ({
-  getTemplateWithAssociatedUsers: vi.fn(),
+vi.mock("@lib/templates/queries/getTemplateWithAssignedUsers", () => ({
+  getTemplateWithAssignedUsers: vi.fn(),
+}));
+
+vi.mock("@lib/templates/mutations/removeAssignedUserFromTemplate", () => ({
   removeAssignedUserFromTemplate: vi.fn(),
 }));
 

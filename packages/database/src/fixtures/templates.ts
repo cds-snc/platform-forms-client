@@ -565,8 +565,461 @@ const SimpleForm = {
   ],
 };
 
+const KitchenSink = {
+  titleEn: "Kitchen Sink Form: Application",
+  titleFr: "Formulaire Tout-en-Un : Demande",
+  introduction: {
+    descriptionEn: "",
+    descriptionFr: "",
+  },
+  privacyPolicy: {
+    descriptionEn:
+      "**This is a privacy notice:**\n\nThe information submitted will be used to assess if there are any bugs (and then be added into a Zenhub issue), so do not include any actual personal information.",
+    descriptionFr:
+      "**Ceci est un avis de confidentialité :**\n\nLes informations soumises seront utilisées pour évaluer s'il existe des bugs (et seront ensuite ajoutées à un problème Zenhub), n'incluez donc aucune information personnelle réelle.",
+  },
+  confirmation: {
+    descriptionEn: "Confirmed!",
+    descriptionFr: "Confirmed!",
+    referrerUrlEn: "",
+    referrerUrlFr: "",
+  },
+  layout: [15, 16, 18, 32, 33, 39, 34, 38, 36],
+  elements: [
+    {
+      id: 36,
+      type: "dynamicRow",
+      uuid: "bea91e17-39ab-4776-8758-9567f0df95bc",
+      properties: {
+        choices: [
+          {
+            en: "",
+            fr: "",
+          },
+        ],
+        titleEn: "List Additional Team Members (if applicable)",
+        titleFr: "Liste des membres supplémentaires de l'équipe (le cas échéant)",
+        dynamicRow: {
+          rowTitleEn: "Team Memeber",
+          rowTitleFr: "Membre de l'équipe",
+          addButtonTextEn: "Add another team member",
+          addButtonTextFr: "Ajouter un autre membre de l'équipe",
+          removeButtonTextEn: "Remove team member",
+          removeButtonTextFr: "Supprimer un membre de l'équipe",
+        },
+        validation: {
+          required: false,
+        },
+        subElements: [
+          {
+            id: 3601,
+            type: "textField",
+            properties: {
+              choices: [
+                {
+                  en: "",
+                  fr: "",
+                },
+              ],
+              titleEn: "Full name",
+              titleFr: "Nom complet",
+              validation: {
+                required: false,
+              },
+              subElements: [],
+              descriptionEn: "",
+              descriptionFr: "",
+              placeholderEn: "",
+              placeholderFr: "",
+            },
+          },
+          {
+            id: 3602,
+            type: "textField",
+            properties: {
+              choices: [
+                {
+                  en: "",
+                  fr: "",
+                },
+              ],
+              titleEn: "Time Commitment (Hours per week)",
+              titleFr: "Engagement de temps (heures par semaine)",
+              validation: {
+                type: "number",
+                required: false,
+              },
+              subElements: [],
+              descriptionEn: "Enter a number",
+              descriptionFr: "Saisissez un chiffre",
+              placeholderEn: "",
+              placeholderFr: "",
+            },
+          },
+          {
+            id: 3603,
+            type: "textArea",
+            properties: {
+              choices: [
+                {
+                  en: "",
+                  fr: "",
+                },
+              ],
+              titleEn: "Primary Responsibilities",
+              titleFr: "Principales responsabilités",
+              validation: {
+                required: false,
+              },
+              subElements: [],
+              descriptionEn: "",
+              descriptionFr: "",
+              placeholderEn: "",
+              placeholderFr: "",
+            },
+          },
+          {
+            id: 3604,
+            type: "dropdown",
+            properties: {
+              choices: [
+                {
+                  en: "Less than 1 year",
+                  fr: "Moins d'un an",
+                },
+                {
+                  en: "1-3 years",
+                  fr: "1 à 3 ans",
+                },
+                {
+                  en: "4-7 years",
+                  fr: "4 à 7 ans",
+                },
+                {
+                  en: "8+ years",
+                  fr: "8 ans et plus",
+                },
+              ],
+              titleEn: "Years of experience",
+              titleFr: "Années d'expérience",
+              validation: {
+                required: false,
+              },
+              subElements: [],
+              descriptionEn: "",
+              descriptionFr: "",
+              placeholderEn: "",
+              placeholderFr: "",
+            },
+          },
+          {
+            id: 3605,
+            type: "fileInput",
+            uuid: "23eb10cb-585f-460b-84b8-4e231df29e4c",
+            properties: {
+              tags: [],
+              choices: [],
+              titleEn: "Profile Picture for media handout",
+              titleFr: "",
+              fileType: ["pdf", "txt", "doc", "docx", "jpg", "jpeg", "png", "xls", "xlsx", "csv"],
+              questionId: "",
+              validation: {
+                required: false,
+              },
+              subElements: [],
+              descriptionEn: "",
+              descriptionFr: "",
+              placeholderEn: "",
+              placeholderFr: "",
+            },
+          },
+        ],
+        descriptionEn: "",
+        descriptionFr: "",
+        placeholderEn: "",
+        placeholderFr: "",
+        conditionalRules: [],
+      },
+    },
+    {
+      id: 32,
+      type: "numberInput",
+      uuid: "36df7dd4-4a53-4a12-8740-632ec4edd4ea",
+      properties: {
+        choices: [
+          {
+            en: "",
+            fr: "",
+          },
+        ],
+        titleEn: "Funding Amount Requested",
+        titleFr: "Montant du financement demandé",
+        validation: {
+          type: "number",
+          required: false,
+        },
+        subElements: [],
+        descriptionEn: "Enter a number",
+        descriptionFr: "Saisissez un chiffre",
+        placeholderEn: "",
+        placeholderFr: "",
+        conditionalRules: [],
+      },
+    },
+    {
+      id: 39,
+      type: "fileInput",
+      uuid: "45b716a1-b3ac-4c99-b7f8-5f7fb7991d9b",
+      properties: {
+        tags: [],
+        choices: [],
+        titleEn: "Document with additional Justification",
+        titleFr: "Document comportant une justification complémentaire",
+        fileType: ["pdf", "txt", "doc", "docx", "jpg", "jpeg", "png", "xls", "xlsx", "csv"],
+        questionId: "",
+        validation: {
+          required: false,
+        },
+        subElements: [],
+        descriptionEn: "",
+        descriptionFr: "",
+        placeholderEn: "",
+        placeholderFr: "",
+      },
+    },
+    {
+      id: 38,
+      type: "combobox",
+      uuid: "dfbd7821-7bb3-4b0c-aff9-c33930f5f371",
+      properties: {
+        choices: [
+          {
+            en: "application 12345",
+            fr: "Demande",
+          },
+          {
+            en: "application 54321",
+            fr: "Demande",
+          },
+          {
+            en: "application 99999",
+            fr: "Demande 99999",
+          },
+          {
+            en: "application 12486",
+            fr: "Demande 12486",
+          },
+          {
+            en: "application 44842",
+            fr: "Demande 44842",
+          },
+          {
+            en: "application 6123087",
+            fr: "Demande 6123087",
+          },
+        ],
+        titleEn: "Select the type of applicaiton:",
+        titleFr: "Sélectionnez le type de demande :",
+        validation: {
+          required: false,
+        },
+        subElements: [],
+        descriptionEn: "Start typing to narrow down the list.",
+        descriptionFr: "Commencez à taper pour réduire la liste.",
+        placeholderEn: "",
+        placeholderFr: "",
+        conditionalRules: [
+          {
+            choiceId: "34.0",
+          },
+        ],
+      },
+    },
+    {
+      id: 33,
+      type: "textArea",
+      uuid: "c5788747-adbe-4465-9378-c3e8d694e6b9",
+      properties: {
+        choices: [
+          {
+            en: "",
+            fr: "",
+          },
+        ],
+        titleEn: "Justification for Funding",
+        titleFr: "Justification du financement",
+        validation: {
+          required: false,
+        },
+        subElements: [],
+        descriptionEn: "",
+        descriptionFr: "",
+        placeholderEn: "",
+        placeholderFr: "",
+        conditionalRules: [],
+      },
+    },
+    {
+      id: 34,
+      type: "radio",
+      uuid: "d074b609-ab92-42b5-b3fe-c5b80c2b36ae",
+      properties: {
+        choices: [
+          {
+            en: "Yes",
+            fr: "Oui",
+          },
+          {
+            en: "No",
+            fr: "Non",
+          },
+        ],
+        titleEn: "Have you previously submitted an application?",
+        titleFr: "Avez-vous déjà soumis une demande ?",
+        validation: {
+          required: false,
+        },
+        subElements: [],
+        descriptionEn: "",
+        descriptionFr: "",
+        placeholderEn: "",
+        placeholderFr: "",
+      },
+    },
+    {
+      id: 15,
+      type: "richText",
+      uuid: "4fab1e54-83b5-48cd-a029-4295ab7ee8d5",
+      properties: {
+        choices: [
+          {
+            en: "",
+            fr: "",
+          },
+        ],
+        titleEn: "",
+        titleFr: "",
+        validation: {
+          required: false,
+        },
+        subElements: [],
+        descriptionEn: "## What is your name?",
+        descriptionFr: "## Quel est votre nom?",
+        placeholderEn: "",
+        placeholderFr: "",
+        conditionalRules: [],
+      },
+    },
+    {
+      id: 16,
+      type: "textField",
+      uuid: "82ca7299-9418-4c81-8a4a-305f0a8c905c",
+      properties: {
+        choices: [
+          {
+            en: "",
+            fr: "",
+          },
+        ],
+        titleEn: "First name",
+        titleFr: "Prénom",
+        validation: {
+          required: true,
+        },
+        subElements: [],
+        autoComplete: "given-name",
+        descriptionEn: "",
+        descriptionFr: "",
+        placeholderEn: "",
+        placeholderFr: "",
+        conditionalRules: [],
+      },
+    },
+    {
+      id: 18,
+      type: "textField",
+      uuid: "da088b13-1060-4b22-8156-937312d21757",
+      properties: {
+        choices: [
+          {
+            en: "",
+            fr: "",
+          },
+        ],
+        titleEn: "Last name",
+        titleFr: "Nom de famille",
+        validation: {
+          required: true,
+        },
+        subElements: [],
+        autoComplete: "family-name",
+        descriptionEn: "",
+        descriptionFr: "",
+        placeholderEn: "",
+        placeholderFr: "",
+        conditionalRules: [],
+      },
+    },
+  ],
+  groups: {
+    start: {
+      name: "Start",
+      titleEn: "Start page",
+      titleFr: "Start page",
+      autoFlow: true,
+      elements: [],
+      nextAction: "28b566cf-9bf4-4e13-a2b7-f4d1fa5ea69c",
+    },
+    "28b566cf-9bf4-4e13-a2b7-f4d1fa5ea69c": {
+      name: "Applicant Information",
+      titleEn: "Applicant Information",
+      titleFr: "Informations sur le demandeur",
+      autoFlow: true,
+      elements: ["15", "16", "18"],
+      nextAction: "f2bad1a5-13e0-4a75-952c-97992b28964d",
+    },
+    "f2bad1a5-13e0-4a75-952c-97992b28964d": {
+      name: "Additional Information",
+      titleEn: "Additional Information - Funding Support!",
+      titleFr: "Informations supplémentaires - Soutien financier",
+      autoFlow: true,
+      elements: ["32", "33", "39", "34", "38"],
+      nextAction: "aa319924-8151-4b08-bc94-343f76edf514",
+    },
+    "aa319924-8151-4b08-bc94-343f76edf514": {
+      name: "Repeating Sets",
+      titleEn: "Repeating Sets",
+      titleFr: "Ensembles répétitifs",
+      autoFlow: true,
+      elements: ["36"],
+      nextAction: "review",
+    },
+    review: {
+      name: "Review",
+      titleEn: "End (Review page and Confirmation)",
+      titleFr: "End (Review page and Confirmation)",
+      autoFlow: true,
+      elements: [],
+      nextAction: "end",
+    },
+    end: {
+      name: "End",
+      titleEn: "Confirmation page",
+      titleFr: "Confirmation page",
+      autoFlow: true,
+      elements: [],
+    },
+  },
+  groupsLayout: [
+    "28b566cf-9bf4-4e13-a2b7-f4d1fa5ea69c",
+    "f2bad1a5-13e0-4a75-952c-97992b28964d",
+    "aa319924-8151-4b08-bc94-343f76edf514",
+  ],
+  lastGeneratedElementId: 39,
+};
+
 export default {
-  development: [LemonadeStand, SimpleForm],
+  development: [LemonadeStand, SimpleForm, KitchenSink],
   production: [],
   test: [LemonadeStand, SimpleForm],
 } as JsonFormCollection;

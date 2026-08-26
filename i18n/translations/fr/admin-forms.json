@@ -1,10 +1,16 @@
 {
   "title": "Gérer les formulaires",
-  "gotoResponses": "Accéder aux réponses",
   "draft": "Ébauche",
   "published": "Publié",
   "manageOwnerships": "Gérer les propriétaires",
   "overdueResponses": "Réponses en retard",
   "noForms": "Aucun formulaire trouvé",
-  "deleteForm": "Supprimer le formulaire"
+  "deleteForm": "Supprimer le formulaire",
+  "downloadForm": "Télécharger le formulaire",
+  "createDraftVersion": "Créer une ébauche",
+  "card": {
+    "menu": {
+      "more": "Plus"
+    }
+  }
 }

@@ -1,46 +1,27 @@
 "use client";
-import React from "react";
+import { Activity, type ReactElement } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { type ConditionalRule, type FormElement } from "@gcforms/types";
-import { inGroup, checkVisibilityRecursive } from "@gcforms/core";
 
 export const ConditionalWrapper = ({
   children,
   element,
-  rules,
 }: {
-  children: React.ReactElement;
+  children: ReactElement;
   element: FormElement;
   rules: ConditionalRule[] | null;
   lang: string;
 }) => {
-  const { getValues, currentGroup, groups, formRecord } = useGCFormsContext();
+  const { visibleElementIds } = useGCFormsContext();
 
   // Check if the element is a child of a dynamic element
-  if (element.subId) {
+  if (element.subId || visibleElementIds === null) {
     return children;
   }
 
-  // Check if we're using groups and if the current element is in a group
-  if (
-    currentGroup &&
-    groups &&
-    Object.keys(groups).length >= 1 &&
-    groups &&
-    !inGroup(currentGroup, element.id, groups)
-  )
-    return null;
-
-  // If there's no rule or no choiceId, just return the children
-  if (!rules || rules.length < 1) return children;
-
-  const values = getValues() || {};
-
-  const isVisible = checkVisibilityRecursive(formRecord, element, values);
-
-  if (!isVisible) {
-    return null;
-  }
-
-  return children;
+  return (
+    <Activity mode={visibleElementIds.has(element.id.toString()) ? "visible" : "hidden"}>
+      {children}
+    </Activity>
+  );
 };

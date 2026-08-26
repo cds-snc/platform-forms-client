@@ -7,7 +7,7 @@ import {
   type SubElementTypeMismatch,
   valueMatchesType,
   hasValue,
-} from "@gcforms/core";
+} from "./validation/valueMatchesType";
 
 /*
  Wrapper function to validate form responses - to ensure signature consistency  for validateOnSubmit

@@ -6,9 +6,7 @@ import {
   FormElementTypes,
   Response,
 } from "@lib/types";
-import { isValidDateObject } from "@root/components/clientComponents/forms/FormattedDate/utils";
-import { logMessage } from "@root/lib/logger";
-import { DateObject } from "@root/packages/types/src";
+import { logMessage } from "@lib/logger";
 
 interface FileInputObj extends FileInputResponse {
   name: string | null;
@@ -59,21 +57,15 @@ const dynamicRowFiller = (values: Responses[], element: FormElement): Responses[
   return newValues;
 };
 
-/**
- * Deserialize a date object from a JSON string
- *
- * @param value
- * @returns DateObject | string
- */
-export const deserializeDateObject = (value: string): DateObject | string => {
+const deserializeJsonObject = (value: string): Record<string, unknown> | string => {
   try {
     const parsed = JSON.parse(value);
 
-    if (isValidDateObject(parsed)) {
+    if (typeof parsed === "object" && parsed !== null) {
       return parsed;
     }
   } catch (e) {
-    logMessage.info(`Failed to parse date object value: ${value}, error: ${JSON.stringify(e)}`);
+    logMessage.info(`Failed to parse JSON object value: ${value}, error: ${JSON.stringify(e)}`);
   }
 
   return value;
@@ -124,12 +116,11 @@ export const fillData = (
       case FormElementTypes.fileInput:
         return fileInputFiller(value as Response);
       case FormElementTypes.formattedDate:
+      case FormElementTypes.addressComplete:
+      case FormElementTypes.starRating:
         if (typeof value === "string") {
-          return deserializeDateObject(value);
+          return deserializeJsonObject(value);
         }
-        return value;
-      case FormElementTypes.address:
-        // @TODO: deserialize address object as above
         return value;
       default:
         return value;

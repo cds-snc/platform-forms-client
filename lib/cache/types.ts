@@ -3,12 +3,13 @@
 export const UserFeatureFlags = {
   addressComplete: "addressComplete",
   responsesPilot: "responsesPilot",
-  userSideAuditLogs: "userSideAuditLogs",
+  templateVersioning: "templateVersioning",
 } as const;
 
 export const FeatureFlags = {
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
+  notification: "notification",
   topBanner: "topBanner",
   zitadelLogin: "zitadelLogin",
   ...UserFeatureFlags,

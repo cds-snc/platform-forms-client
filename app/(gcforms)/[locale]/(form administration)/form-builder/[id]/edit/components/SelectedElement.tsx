@@ -8,6 +8,7 @@ import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elemen
 import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder/useElementOptions";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
+import { StarRatingSelector } from "./elements/StarRatingSelector";
 import { DateElement } from "./elements/DateElement";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 
@@ -118,6 +119,14 @@ export const SelectedElement = ({
           </>
         );
       }
+      break;
+    case FormElementTypes.starRating:
+      element = (
+        <>
+          <ShortAnswer>{t("addElementDialog.starRating.title")}</ShortAnswer>
+          <StarRatingSelector item={item} />
+        </>
+      );
       break;
     case "checkbox":
       if (elIndex !== -1) {

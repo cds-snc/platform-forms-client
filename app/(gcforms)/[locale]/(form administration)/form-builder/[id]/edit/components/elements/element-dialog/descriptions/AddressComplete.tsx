@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { Trans } from "react-i18next";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { AddressComplete as AddressCompleteComponent } from "@clientComponents/forms/AddressComplete/AddressComplete";
@@ -20,12 +21,18 @@ export const AddressComplete = () => {
         />
       </div>
       <h3 className="mb-4">{t("addElementDialog.addressComplete.title")}</h3>
-      <p>{t("addElementDialog.addressComplete.description")}</p>
+      <p>
+        <Trans
+          ns="form-builder"
+          i18nKey="addElementDialog.addressComplete.description"
+          components={{ br: <br />, span: <span className="mb-4 inline-block"></span> }}
+        />
+      </p>
 
       <ExampleWrapper>
         <h4 className="mb-4">{t("addElementDialog.addressComplete.whatIsYourAddress")}</h4>
-        <div className="mb-6">
-          <AddressCompleteComponent id="test-address" name="test-address" canadianOnly={false} />
+        <div>
+          <AddressCompleteComponent id="test-address" name="test-address" canadianOnly={true} />
         </div>
       </ExampleWrapper>
     </div>

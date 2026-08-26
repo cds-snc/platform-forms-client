@@ -6,6 +6,7 @@ import { getProperty } from "@lib/i18nHelpers";
 import { FormRecord } from "@gcforms/types";
 import { TFunction } from "i18next";
 import { Language } from "@root/lib/types/form-builder-types";
+import { VersionBadge } from "./VersionBadge";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -14,6 +15,7 @@ export interface ResponseSectionProps {
   submissionDate: number;
   formResponse: Submission;
   formRecord: FormRecord;
+  versionNumber?: number | null;
   showCodes?: boolean;
   t: TFunction<string | string[], undefined>;
 }
@@ -33,6 +35,7 @@ export const ResponseSection = ({
   submissionDate,
   formResponse,
   formRecord,
+  versionNumber,
   showCodes = true,
   t,
 }: ResponseSectionProps) => {
@@ -142,7 +145,16 @@ export const ResponseSection = ({
         </ul>
       </nav>
 
-      <h2 className="gc-h1 mt-20">{String(formRecord.form[getProperty("title", lang)])}</h2>
+      <div className="mt-20 flex flex-wrap items-start justify-between gap-4">
+        <h2 className="gc-h1" aria-describedby={`version-badge-${lang}`}>
+          {String(formRecord.form[getProperty("title", lang)])}
+        </h2>
+        <VersionBadge
+          id={`version-badge-${lang}`}
+          versionNumber={versionNumber}
+          versionText={t("responseTemplate.versionNumber", { lng: lang })}
+        />
+      </div>
       <h3 id={`columnTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
       </h3>

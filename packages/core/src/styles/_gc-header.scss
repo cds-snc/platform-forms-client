@@ -27,7 +27,7 @@
     container: component brand / inline-size;
     border-block-end: var(--gcds-header-brand-border-width) solid
       var(--gcds-header-brand-border-color);
-    padding: var(--gcds-header-brand-padding);
+    padding: 0.7rem 0 !important;
 
     .brand__container {
       display: grid;
@@ -54,10 +54,8 @@
 @layer wide {
   @container brand (width >= 51em) {
     .gcds-header__container .gcds-header__brand .brand__container {
-      grid-template-areas:
-        "toggle toggle"
-        "signature search";
-      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "signature toggle";
+      grid-template-columns: 1fr;
     }
   }
 }

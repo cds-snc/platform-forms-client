@@ -772,7 +772,7 @@ export const authorization = {
       },
     ]);
   },
-  canAccessBetaComponents: async (flag: string) => {
+  checkUserFlag: async (flag: string) => {
     const session = await auth();
     const userFeatureFlags = session?.user.featureFlags;
     if (!userFeatureFlags || userFeatureFlags.length < 1) {

@@ -4,10 +4,13 @@ import isEqual from "lodash.isequal";
 import { useSession } from "next-auth/react";
 import { logMessage } from "@lib/logger";
 import { safeJSONParse } from "@lib/utils";
-import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
-import { FormProperties, FormRecord } from "@lib/types";
+import { createOrUpdateTemplate, updateTemplate } from "@formBuilder/actions";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
+import { UpdateTemplateAction } from "@root/lib/templates/types";
+import { FormProperties } from "@lib/types";
+import { useAppUpdate } from "../useAppUpdate";
+import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -17,23 +20,10 @@ type SaveDraftResult = {
 };
 
 interface TemplateApiType {
-  templateIsDirty: React.MutableRefObject<boolean>;
+  templateIsDirty: React.RefObject<boolean>;
   updatedAt: number | undefined;
   setUpdatedAt: React.Dispatch<React.SetStateAction<number | undefined>>;
-  createOrUpdateTemplate:
-    | (({
-        id,
-        formConfig,
-        name,
-        deliveryOption,
-        securityAttribute,
-        saveAndResume,
-        notificationsInterval,
-      }: CreateOrUpdateTemplateType) => Promise<{
-        formRecord: FormRecord | null;
-        error?: string;
-      }>)
-    | null;
+
   saveDraft: () => Promise<SaveDraftResult>;
   saveDraftIfNeeded: () => Promise<SaveDraftResult>;
   resetState: () => void;
@@ -43,19 +33,12 @@ const defaultTemplateApi: TemplateApiType = {
   templateIsDirty: { current: false },
   updatedAt: undefined,
   setUpdatedAt: () => {},
-  createOrUpdateTemplate: null,
   saveDraft: async () => ({ status: "skipped" }),
   saveDraftIfNeeded: async () => ({ status: "skipped" }),
   resetState: () => {},
 };
 
-type TrackedTemplateState = [
-  form: unknown,
-  isPublished: boolean,
-  name: string,
-  deliveryOption: unknown,
-  securityAttribute: unknown,
-];
+type TrackedTemplateState = [form: FormProperties];
 
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
@@ -63,6 +46,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
   const [, setDirtyTick] = useState(0);
   const { status } = useSession();
+  const { updateTriggered } = useAppUpdate();
 
   const {
     getDeliveryOption,
@@ -86,11 +70,12 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     setFromRecord: s.setFromRecord,
   }));
 
-  const templateIsDirty = useRef(false);
+  const templateIsDirty = useRef(updateTriggered);
   const savedSnapshot = useRef<TrackedTemplateState | null>(null);
   const saveInFlight = useRef(false);
   const queuedSaveRequested = useRef(false);
   const saveDraftQueue = useRef<Array<(result: SaveDraftResult) => void>>([]);
+
   const resetState = useCallback(() => {
     templateIsDirty.current = false;
     savedSnapshot.current = null;
@@ -106,17 +91,19 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       return { status: "locked" };
     }
 
-    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    const parsedFormConfig = safeJSONParse<FormProperties>(getSchema());
 
-    if (!formConfig) {
+    if (!parsedFormConfig) {
       return { status: "invalid" };
     }
+
+    const formConfig = autoFlowFormIfPossible(parsedFormConfig);
 
     try {
       const operationResult = await createOrUpdateTemplate({
         id: getId(),
         formConfig,
-        name: getName(),
+        name: getName(true),
         deliveryOption: getDeliveryOption(),
         securityAttribute,
         notificationsInterval,
@@ -162,6 +149,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       // Avoid a redundant trailing write when no additional local edits were made.
       const id = getId();
       if (!templateIsDirty.current && id !== "") {
+        // eslint-disable-next-line
         return drainQueuedSaves(latestResult);
       }
 
@@ -206,14 +194,28 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   }, [queueSaveDraft, getId]);
 
   useSubscibeToTemplateStore(
-    (s) =>
-      [
-        s.form,
-        s.isPublished,
-        s.name,
-        s.deliveryOption,
-        s.securityAttribute,
-      ] as TrackedTemplateState,
+    (s) => [s.name],
+    (current, previous) => {
+      if (!hasHydrated) {
+        return;
+      }
+
+      if (status !== "authenticated") {
+        return;
+      }
+
+      if (current[0] !== previous[0]) {
+        updateTemplate({
+          action: UpdateTemplateAction.Name,
+          formId: getId(),
+          name: current[0],
+        });
+      }
+    }
+  );
+
+  useSubscibeToTemplateStore(
+    (s) => [s.form] as TrackedTemplateState,
     (current, previous) => {
       if (!hasHydrated) {
         return;
@@ -241,7 +243,6 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         templateIsDirty,
         updatedAt,
         setUpdatedAt,
-        createOrUpdateTemplate,
         saveDraft: queueSaveDraft,
         saveDraftIfNeeded,
         resetState,
