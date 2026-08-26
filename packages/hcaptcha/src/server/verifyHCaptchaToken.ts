@@ -15,7 +15,7 @@ export type VerifyHCaptchaTokenOptions = {
   remoteIp?: string;
   logger?: CaptchaLogger;
   maxAllowedScore?: number;
-  maxRetries?: number;
+  maxAttempts?: number;
   fetchImpl?: typeof fetch;
 };
 
@@ -25,9 +25,8 @@ type HCaptchaResponse = {
   "error-codes"?: string[];
 };
 
-const HCAPTCHA_SITE_VERIFY_URL = "https://api.hcaptcha.com/siteverify";
 const DEFAULT_MAX_ALLOWED_SCORE = 0.79;
-const DEFAULT_MAX_RETRIES = 3;
+const DEFAULT_MAX_ATTEMPTS = 3;
 
 export const verifyHCaptchaToken = async (
   token: string | undefined,
@@ -38,7 +37,7 @@ export const verifyHCaptchaToken = async (
     remoteIp,
     logger,
     maxAllowedScore = DEFAULT_MAX_ALLOWED_SCORE,
-    maxRetries = DEFAULT_MAX_RETRIES,
+    maxAttempts = DEFAULT_MAX_ATTEMPTS,
     fetchImpl = fetch,
   } = options;
 
@@ -53,38 +52,11 @@ export const verifyHCaptchaToken = async (
   }
 
   const requestBody = new URLSearchParams({ secret, response: token });
-  if (remoteIp) requestBody.set("remoteip", remoteIp);
+  if (remoteIp) {
+    requestBody.set("remoteip", remoteIp);
+  }
 
-  const verify = async (attempt: number): Promise<{ response?: Response; error?: unknown }> => {
-    try {
-      const response = await fetchImpl(HCAPTCHA_SITE_VERIFY_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: requestBody,
-        signal: AbortSignal.timeout(5000),
-      });
-
-      if (response.ok || (response.status >= 400 && response.status < 500)) {
-        return { response };
-      }
-
-      if (attempt < maxRetries) {
-        logger?.info?.(`hCaptcha: verification attempt ${attempt + 1} failed`);
-        return verify(attempt + 1);
-      }
-
-      return { response };
-    } catch (error) {
-      if (attempt < maxRetries) {
-        logger?.info?.(`hCaptcha: verification attempt ${attempt + 1} failed`);
-        return verify(attempt + 1);
-      }
-
-      return { error };
-    }
-  };
-
-  const { response, error } = await verify(0);
+  const { response, error } = await verifyWithRetry(requestBody, fetchImpl, logger, maxAttempts);
 
   if (!response || response.status >= 500) {
     logger?.warn?.(`hCaptcha: verification request failed${error ? `: ${String(error)}` : ""}`);
@@ -109,3 +81,63 @@ export const verifyHCaptchaToken = async (
 
   return verified ? { verified: true, score } : { verified: false, reason: "invalid-response" };
 };
+
+type VerificationAttemptResult = { response?: Response; error?: unknown };
+
+const HCAPTCHA_SITE_VERIFY_URL = "https://api.hcaptcha.com/siteverify";
+const RETRY_BASE_DELAY_MS = 1000;
+const RETRY_MAX_DELAY_MS = 10000;
+
+// Retry logic with progressive backoff for transient errors (network issues, 5xx responses)
+const verifyWithRetry = (
+  requestBody: URLSearchParams,
+  fetchImpl: typeof fetch,
+  logger: CaptchaLogger | undefined,
+  maxAttempts: number,
+  attempt = 1,
+  retryDelay = RETRY_BASE_DELAY_MS
+): Promise<VerificationAttemptResult> =>
+  fetchImpl(HCAPTCHA_SITE_VERIFY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: requestBody,
+    signal: AbortSignal.timeout(5000),
+  })
+    .then((response) => {
+      if (response.ok || (response.status >= 400 && response.status < 500)) {
+        return { response };
+      }
+
+      if (attempt >= maxAttempts) {
+        return { response };
+      }
+
+      logger?.info?.(`hCaptcha: verification attempt ${attempt} failed`);
+      return new Promise((resolve) => setTimeout(resolve, retryDelay)).then(() =>
+        verifyWithRetry(
+          requestBody,
+          fetchImpl,
+          logger,
+          maxAttempts,
+          attempt + 1,
+          Math.min(retryDelay * 2, RETRY_MAX_DELAY_MS)
+        )
+      );
+    })
+    .catch((error) => {
+      if (attempt >= maxAttempts) {
+        return { error };
+      }
+
+      logger?.info?.(`hCaptcha: verification attempt ${attempt} failed`);
+      return new Promise((resolve) => setTimeout(resolve, retryDelay)).then(() =>
+        verifyWithRetry(
+          requestBody,
+          fetchImpl,
+          logger,
+          maxAttempts,
+          attempt + 1,
+          Math.min(retryDelay * 2, RETRY_MAX_DELAY_MS)
+        )
+      );
+    });

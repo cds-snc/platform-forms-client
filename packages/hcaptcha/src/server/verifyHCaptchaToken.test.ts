@@ -15,9 +15,11 @@ describe("verifyHCaptchaToken", () => {
   });
 
   it("accepts a successful verification", async () => {
-    const fetchImpl = vi.fn().mockResolvedValue(
-      new Response(JSON.stringify({ success: true, score: 0.2 }), { status: 200 })
-    );
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ success: true, score: 0.2 }), { status: 200 })
+      );
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
@@ -31,9 +33,11 @@ describe("verifyHCaptchaToken", () => {
   });
 
   it("rejects a suspicious score", async () => {
-    const fetchImpl = vi.fn().mockResolvedValue(
-      new Response(JSON.stringify({ success: true, score: 0.8 }), { status: 200 })
-    );
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ success: true, score: 0.8 }), { status: 200 })
+      );
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
@@ -67,7 +71,7 @@ describe("verifyHCaptchaToken", () => {
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
-      maxRetries: 1,
+      maxAttempts: 2,
       fetchImpl,
     });
 

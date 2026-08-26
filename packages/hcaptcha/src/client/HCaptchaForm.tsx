@@ -3,7 +3,6 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import type { FormHTMLAttributes, ReactNode, SubmitEvent } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
-import { useHCaptchaErrorHandling } from "./useHCaptchaErrorHandling";
 
 export interface HCaptchaFormHandle {
   reset: () => void;
@@ -25,6 +24,9 @@ export type HCaptchaFormProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onSub
   onSubmit: (event: SubmitEvent<HTMLFormElement>, captchaToken: string | undefined) => void;
   siteKey: string;
 };
+
+const CONFIG_ERROR_CODES = ["invalid-sitekey", "missing-sitekey"];
+const SUSPICIOUS_ERROR_CODES = ["invalid-data", "invalid-input-response"];
 
 export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
   (
@@ -56,13 +58,24 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
       onCaptchaExpired?.();
     }, [onCaptchaExpired, resetCaptcha]);
 
-    const { onErrorCallback, hasFatalErrorRef } = useHCaptchaErrorHandling({
-      onConfigError,
-      onError: onAnyError,
-      onRecoverableError,
-      onSuspiciousError,
-      resetToken,
-    });
+    const hasFatalErrorRef = useRef(false);
+    const onErrorCallback = useCallback(
+      (code: string) => {
+        if (CONFIG_ERROR_CODES.includes(code)) {
+          hasFatalErrorRef.current = true;
+          onConfigError?.(code);
+        } else if (SUSPICIOUS_ERROR_CODES.includes(code)) {
+          resetToken();
+          onSuspiciousError?.(code);
+        } else {
+          resetToken();
+          onRecoverableError?.(code);
+        }
+
+        onAnyError?.(code);
+      },
+      [onAnyError, onConfigError, onRecoverableError, onSuspiciousError, resetToken]
+    );
 
     useImperativeHandle(ref, () => ({ reset: resetToken }), [resetToken]);
 
