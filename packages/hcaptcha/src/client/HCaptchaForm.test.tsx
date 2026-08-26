@@ -7,22 +7,54 @@ import { describe, expect, it, vi } from "vitest";
 import { HCaptchaForm, type HCaptchaFormProps } from "./HCaptchaForm";
 
 vi.mock("@hcaptcha/react-hcaptcha", () => ({
-  default: forwardRef(({ onError }: { onError: (code: string) => void }, ref) => {
-    useImperativeHandle(ref, () => ({ resetCaptcha: vi.fn(), execute: vi.fn() }));
-    return ["invalid-sitekey", "invalid-data", "network-error"].map((code) => (
-      <button
-        key={code}
-        type="button"
-        data-testid={`captcha-error-${code}`}
-        onClick={() => onError(code)}
-      />
-    ));
-  }),
+  default: (() => {
+    const MockHCaptcha = forwardRef(
+    (
+      {
+        onError,
+        onVerify,
+      }: {
+        onError: (code: string) => void;
+        onVerify: (token: string) => void;
+      },
+      ref
+    ) => {
+      useImperativeHandle(ref, () => ({
+        resetCaptcha: vi.fn(),
+        execute: vi.fn(() => onVerify("captcha-token")),
+      }));
+      return ["invalid-sitekey", "invalid-data", "network-error"].map((code) => (
+        <button
+          key={code}
+          type="button"
+          data-testid={`captcha-error-${code}`}
+          onClick={() => onError(code)}
+        />
+      ));
+      }
+    );
+    MockHCaptcha.displayName = "MockHCaptcha";
+    return MockHCaptcha;
+  })(),
 }));
 
 describe("HCaptchaForm error handling", () => {
   const renderForm = (props: Partial<HCaptchaFormProps> = {}) =>
-    render(<HCaptchaForm siteKey="site-key" onSubmit={vi.fn()} {...props} />);
+    render(
+      <HCaptchaForm siteKey="site-key" onSubmit={vi.fn()} {...props}>
+        <button type="submit">Submit</button>
+      </HCaptchaForm>
+    );
+
+  it("submits with the token after captcha execution completes", () => {
+    const onSubmit = vi.fn();
+    const { container } = renderForm({ onSubmit });
+
+    fireEvent.submit(container.querySelector("form")!);
+
+    expect(onSubmit).toHaveBeenCalledOnce();
+    expect(onSubmit.mock.calls[0]?.[1]).toBe("captcha-token");
+  });
 
   it("reports configuration errors without resetting the token", () => {
     const onConfigError = vi.fn();

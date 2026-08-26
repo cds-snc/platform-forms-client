@@ -454,7 +454,8 @@ const InternalForm = withFormik<InternalFormProps, Responses>({
   },
 })(InnerForm);
 
-// Manages captcha refs privately so callers don't deal with ref plumbing
+// Keeps CAPTCHA ref wiring inside Form so InnerForm only receives narrow callbacks
+// for reading the token and resetting widget state.
 export const Form: React.FC<FormProps> = (props) => {
   const captchaFormRef = useRef<FormCaptchaHandle | null>(null);
   const setCaptchaFormHandle = useCallback((handle: FormCaptchaHandle | null) => {
