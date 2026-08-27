@@ -156,7 +156,7 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
   const newValues = { ...values };
 
   Object.entries(values).forEach(([key, value]) => {
-    if (["currentGroup", "groupHistory", "matchedIds"].includes(key)) return;
+    if (["currentGroup", "matchedIds"].includes(key)) return;
 
     const el = getElementById(formElements, key);
     const choices = el?.properties?.choices;
