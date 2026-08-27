@@ -40,7 +40,7 @@ export const FormItemFactory = ({
       return <FormattedDate formItem={formItem} />;
 
     case FormElementTypes.starRating:
-      return <StarRating formItem={formItem} />;
+      return <StarRating formItem={formItem} language={language} />;
 
     case FormElementTypes.addressComplete:
     case FormElementTypes.address: // TODO deprecated?

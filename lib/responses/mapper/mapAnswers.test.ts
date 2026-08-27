@@ -8,6 +8,32 @@ import type { PublicFormRecord, Response } from "@gcforms/types";
 import { FormProperties } from "@gcforms/types";
 
 describe("mapAnswers", () => {
+  it("preserves star rating data for HTML formatting", () => {
+    const template = {
+      id: "star-rating",
+      form: {
+        elements: [
+          {
+            id: 1,
+            type: "starRating",
+            properties: { titleEn: "Rating", titleFr: "Evaluation" },
+          },
+        ],
+      },
+      isPublished: true,
+      securityAttribute: "Unclassified",
+    } as unknown as PublicFormRecord;
+
+    const mapped = mapAnswers({
+      formTemplate: template.form as FormProperties,
+      rawAnswers: {
+        "1": { value: 3, numberOfStars: 5 } as unknown as Response,
+      },
+    });
+
+    expect(mapped[0].answer).toBe('{"value":3,"numberOfStars":5}');
+  });
+
   it("maps kitchen-sink fixture answers into mapped answer objects", () => {
     const template = {
       id: "kitchen",

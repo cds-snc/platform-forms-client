@@ -23,7 +23,6 @@ const cleaner = (key: string, value: string) =>
 type ResumeFormResponse = {
   id: string;
   values: FormValues;
-  history: string[];
   currentGroup: string;
 };
 
@@ -67,8 +66,8 @@ export const Upload = ({ formId }: { formId: string }) => {
 
   useEffect(() => clearDragResetTimeout, []);
 
-  const restoreProgress = async ({ id, values, history, currentGroup }: ResumeFormResponse) => {
-    await saveSessionProgress({ id, values, history, currentGroup, language, restoredForm: true });
+  const restoreProgress = async ({ id, values, currentGroup }: ResumeFormResponse) => {
+    await saveSessionProgress({ id, values, currentGroup, language, restoredForm: true });
     window.location.href = `/${language}/id/${id}`;
   };
 
@@ -81,7 +80,6 @@ export const Upload = ({ formId }: { formId: string }) => {
     await restoreProgress({
       id: pendingMismatchResume.sourceFormId,
       values: pendingMismatchResume.values,
-      history: pendingMismatchResume.history,
       currentGroup: pendingMismatchResume.currentGroup,
     });
     setPendingMismatchResume(null);
@@ -151,7 +149,7 @@ export const Upload = ({ formId }: { formId: string }) => {
           throw new Error(errorCode);
         }
 
-        if (!parsed.values || !parsed.history || !parsed.currentGroup) {
+        if (!parsed.values || !parsed.currentGroup) {
           errorCode = FormServerErrorCodes.FORM_RESUME_INVALID_DATA;
           throw new Error(errorCode);
         }
@@ -161,7 +159,6 @@ export const Upload = ({ formId }: { formId: string }) => {
           setPendingMismatchResume({
             sourceFormId: id,
             values: parsed.values,
-            history: parsed.history,
             currentGroup: parsed.currentGroup,
           });
           return;
