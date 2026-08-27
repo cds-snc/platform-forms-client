@@ -1,8 +1,7 @@
-export { HCaptchaForm } from "./HCaptchaForm";
-export type { HCaptchaFormProps, HCaptchaFailureMode, HCaptchaFormHandle } from "./HCaptchaForm";
 export { useHCaptcha } from "./useHCaptcha";
 export type {
   HCaptchaExecutionResult,
+  HCaptchaFailureMode,
   HCaptchaFailureReason,
   UseHCaptchaOptions,
   UseHCaptchaResult,

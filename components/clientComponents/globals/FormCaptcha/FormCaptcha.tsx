@@ -1,12 +1,8 @@
 "use client";
 
-import type { ReactNode, SubmitEvent } from "react";
+import type { FormHTMLAttributes, ReactNode, SubmitEvent } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
-import {
-  HCaptchaForm,
-  type HCaptchaFormHandle,
-  type HCaptchaFormProps,
-} from "@gcforms/hcaptcha/client";
+import { useHCaptcha, type UseHCaptchaOptions } from "@gcforms/hcaptcha/client";
 import { logMessage } from "@lib/logger";
 
 export interface FormCaptchaHandle {
@@ -14,26 +10,52 @@ export interface FormCaptchaHandle {
   reset: () => void;
 }
 
-type FormCaptchaProps = Omit<HCaptchaFormProps, "children" | "onSubmit"> & {
-  children: ReactNode;
-  onSubmit: (event: SubmitEvent<HTMLFormElement>) => void;
-};
+type FormCaptchaProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onSubmit"> &
+  UseHCaptchaOptions & {
+    children: ReactNode;
+    onSubmit: (event: SubmitEvent<HTMLFormElement>) => void;
+  };
 
 export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
   ({ children, onSubmit, ...props }, ref) => {
-    const captchaFormRef = useRef<HCaptchaFormHandle | null>(null);
     const captchaToken = useRef<string | undefined>(undefined);
-    const setCaptchaFormHandle = useCallback((handle: HCaptchaFormHandle | null) => {
-      captchaFormRef.current = handle;
-    }, []);
-
-    const handleSubmit = useCallback(
-      (event: SubmitEvent<HTMLFormElement>, token: string | undefined) => {
-        captchaToken.current = token;
-        onSubmit(event);
+    const {
+      captchaEnabled,
+      failureMode,
+      language,
+      onAnyError,
+      onCaptchaExpired,
+      onConfigError,
+      onRecoverableError,
+      onSuspiciousError,
+      siteKey,
+      ...formProps
+    } = props;
+    const { captcha, execute, reset } = useHCaptcha({
+      captchaEnabled,
+      failureMode,
+      language,
+      siteKey,
+      onConfigError: (code) => {
+        logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
+        onConfigError?.(code);
       },
-      [onSubmit]
-    );
+      onRecoverableError: (code) => {
+        logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
+        onRecoverableError?.(code);
+      },
+      onSuspiciousError: (code) => {
+        logMessage.warn(
+          `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
+        );
+        onSuspiciousError?.(code);
+      },
+      onCaptchaExpired: () => {
+        logMessage.info("hCaptcha: challenge expired");
+        onCaptchaExpired?.();
+      },
+      onAnyError,
+    });
 
     useImperativeHandle(
       ref,
@@ -41,34 +63,29 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
         getToken: () => captchaToken.current,
         reset: () => {
           captchaToken.current = undefined;
-          captchaFormRef.current?.reset();
+          reset();
         },
       }),
-      []
+      [reset]
+    );
+
+    const handleSubmit = useCallback(
+      (event: SubmitEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        void execute().then((result) => {
+          if (result.verified) captchaToken.current = result.token;
+          else if (!result.allowed) return;
+          onSubmit(event);
+        });
+      },
+      [execute, onSubmit]
     );
 
     return (
-      <HCaptchaForm
-        {...props}
-        ref={setCaptchaFormHandle}
-        onSubmit={handleSubmit}
-        onConfigError={(code) => {
-          logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
-        }}
-        onRecoverableError={(code) => {
-          logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
-        }}
-        onSuspiciousError={(code) => {
-          logMessage.warn(
-            `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
-          );
-        }}
-        onCaptchaExpired={() => {
-          logMessage.info("hCaptcha: challenge expired");
-        }}
-      >
+      <form {...formProps} onSubmit={handleSubmit}>
         {children}
-      </HCaptchaForm>
+        {captcha}
+      </form>
     );
   }
 );

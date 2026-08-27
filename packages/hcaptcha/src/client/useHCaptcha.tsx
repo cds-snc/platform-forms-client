@@ -2,7 +2,7 @@
 
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import type { ReactNode } from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 
 export type HCaptchaFailureMode = "allow" | "block";
 
@@ -36,7 +36,6 @@ export type UseHCaptchaResult = {
   /** Starts verification and resolves when a token is generated or the failure policy is applied. */
   execute: () => Promise<HCaptchaExecutionResult>;
   reset: () => void;
-  token: string | undefined;
 };
 
 const CONFIG_ERROR_CODES = ["invalid-sitekey", "missing-sitekey"];
@@ -61,14 +60,6 @@ export const useHCaptcha = ({
     resolve: (result: HCaptchaExecutionResult) => void;
   } | null>(null);
   const hasFatalErrorRef = useRef(false);
-  const [token, setToken] = useState<string | undefined>();
-
-  const reset = useCallback(() => {
-    hCaptchaRef.current?.resetCaptcha();
-    setToken(undefined);
-    onCaptchaExpired?.();
-  }, [onCaptchaExpired]);
-
   const complete = useCallback((result: HCaptchaExecutionResult) => {
     pendingExecutionRef.current?.resolve(result);
     pendingExecutionRef.current = null;
@@ -82,6 +73,12 @@ export const useHCaptcha = ({
     }),
     [failureMode]
   );
+
+  const reset = useCallback(() => {
+    hCaptchaRef.current?.resetCaptcha();
+    complete(failureResult("captcha-error"));
+    onCaptchaExpired?.();
+  }, [complete, failureResult, onCaptchaExpired]);
 
   const onError = useCallback(
     (code: string) => {
@@ -142,7 +139,6 @@ export const useHCaptcha = ({
 
   const onVerify = useCallback(
     (verifiedToken: string) => {
-      setToken(verifiedToken);
       complete({ verified: true, token: verifiedToken });
     },
     [complete]
@@ -162,5 +158,5 @@ export const useHCaptcha = ({
     />
   ) : null;
 
-  return { captcha, execute, reset, token };
+  return { captcha, execute, reset };
 };
