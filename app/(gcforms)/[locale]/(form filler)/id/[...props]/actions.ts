@@ -28,6 +28,8 @@ import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 import { randomUUID } from "crypto";
 import { getClientIp } from "@lib/ip";
 
+const HCAPTCHA_MAX_ALLOWED_SCORE = 0.79;
+
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
@@ -78,6 +80,7 @@ export async function submitForm(
         const captchaResult = await verifyHCaptchaToken(captchaToken || "", {
           secret: process.env.HCAPTCHA_SITE_VERIFY_KEY,
           remoteIp: String(await getClientIp()),
+          maxAllowedScore: HCAPTCHA_MAX_ALLOWED_SCORE,
           logger: {
             info: (message) => logMessage.info(`${message} for formId ${formId}`),
             warn: (message) => logMessage.warn(`${message} for formId ${formId}`),

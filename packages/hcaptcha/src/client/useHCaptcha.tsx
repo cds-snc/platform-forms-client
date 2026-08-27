@@ -11,17 +11,20 @@ export type UseHCaptchaOptions = {
   /** Controls whether a failed or unavailable CAPTCHA allows the submission to continue. */
   failureMode?: HCaptchaFailureMode;
   language?: string;
-  onConfigError?: (code: string) => void;
-  /** Fires on every error, after any category-specific callback. */
-  onAnyError?: (code: string) => void;
+  /** Fires for every error reported by hCaptcha. */
+  onError?: (code: string) => void;
   onCaptchaExpired?: () => void;
-  onRecoverableError?: (code: string) => void;
-  onSuspiciousError?: (code: string) => void;
   siteKey: string;
 };
 
 export type HCaptchaFailureReason =
-  "disabled" | "configuration-error" | "captcha-error" | "not-ready" | "execution-error";
+  | "disabled"
+  | "configuration-error"
+  | "captcha-error"
+  | "expired"
+  | "cancelled"
+  | "not-ready"
+  | "execution-error";
 
 export type HCaptchaExecutionResult =
   | { verified: true; token: string }
@@ -39,7 +42,6 @@ export type UseHCaptchaResult = {
 };
 
 const CONFIG_ERROR_CODES = ["invalid-sitekey", "missing-sitekey"];
-const SUSPICIOUS_ERROR_CODES = ["invalid-data", "invalid-input-response"];
 
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs.
@@ -47,11 +49,8 @@ export const useHCaptcha = ({
   captchaEnabled = true,
   failureMode = "allow",
   language,
-  onConfigError,
-  onAnyError,
+  onError: onErrorCallback,
   onCaptchaExpired,
-  onRecoverableError,
-  onSuspiciousError,
   siteKey,
 }: UseHCaptchaOptions): UseHCaptchaResult => {
   const hCaptchaRef = useRef<HCaptcha>(null);
@@ -68,7 +67,7 @@ export const useHCaptcha = ({
   const failureResult = useCallback(
     (reason: HCaptchaFailureReason): HCaptchaExecutionResult => ({
       verified: false,
-      allowed: failureMode === "allow" || reason === "disabled",
+      allowed: reason !== "cancelled" && (failureMode === "allow" || reason === "disabled"),
       reason,
     }),
     [failureMode]
@@ -76,37 +75,32 @@ export const useHCaptcha = ({
 
   const reset = useCallback(() => {
     hCaptchaRef.current?.resetCaptcha();
-    complete(failureResult("captcha-error"));
+    complete(failureResult("cancelled"));
+  }, [complete, failureResult]);
+
+  const onExpired = useCallback(() => {
+    hCaptchaRef.current?.resetCaptcha();
+    complete(failureResult("expired"));
     onCaptchaExpired?.();
   }, [complete, failureResult, onCaptchaExpired]);
+
+  const resetAfterError = useCallback(() => {
+    hCaptchaRef.current?.resetCaptcha();
+    complete(failureResult("captcha-error"));
+  }, [complete, failureResult]);
 
   const onError = useCallback(
     (code: string) => {
       if (CONFIG_ERROR_CODES.includes(code)) {
         hasFatalErrorRef.current = true;
-        onConfigError?.(code);
         complete(failureResult("configuration-error"));
-      } else if (SUSPICIOUS_ERROR_CODES.includes(code)) {
-        reset();
-        onSuspiciousError?.(code);
-        complete(failureResult("captcha-error"));
       } else {
-        reset();
-        onRecoverableError?.(code);
-        complete(failureResult("captcha-error"));
+        resetAfterError();
       }
 
-      onAnyError?.(code);
+      onErrorCallback?.(code);
     },
-    [
-      complete,
-      failureResult,
-      onAnyError,
-      onConfigError,
-      onRecoverableError,
-      onSuspiciousError,
-      reset,
-    ]
+    [complete, failureResult, onErrorCallback, resetAfterError]
   );
 
   const execute = useCallback((): Promise<HCaptchaExecutionResult> => {
@@ -150,8 +144,8 @@ export const useHCaptcha = ({
       sitekey={siteKey}
       onVerify={onVerify}
       onError={onError}
-      onChalExpired={reset}
-      onExpire={reset}
+      onChalExpired={onExpired}
+      onExpire={onExpired}
       languageOverride={language}
       size="invisible"
       loadAsync={true}

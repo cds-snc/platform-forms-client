@@ -167,6 +167,25 @@ describe("submitForm", () => {
     expect(sendDefaultEmail).not.toHaveBeenCalled();
   });
 
+  it("should apply the configured hCaptcha score policy", async () => {
+    const captchaToken = "captcha-token";
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_APP_ENV", "production");
+
+    try {
+      await submitForm(mockValues, mockLanguage, mockFormId, false, captchaToken);
+
+      expect(verifyHCaptchaToken).toHaveBeenCalledWith(
+        captchaToken,
+        expect.objectContaining({
+          maxAllowedScore: 0.79,
+        })
+      );
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it("should send a first submission notification when form is eligible and no prior marker exists", async () => {
     const mockEmailData = {
       emails: ["user@example.com"],

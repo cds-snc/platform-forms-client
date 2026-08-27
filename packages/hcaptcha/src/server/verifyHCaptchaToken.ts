@@ -7,7 +7,8 @@ export type HCaptchaVerificationResult =
   | { verified: true; score?: number }
   | {
       verified: false;
-      reason: "missing-token" | "missing-secret" | "invalid-response" | "api-error";
+      reason:
+        "missing-token" | "missing-secret" | "invalid-response" | "score-too-high" | "api-error";
     };
 
 export type VerifyHCaptchaTokenOptions = {
@@ -25,7 +26,6 @@ type HCaptchaResponse = {
   "error-codes"?: string[];
 };
 
-const DEFAULT_MAX_ALLOWED_SCORE = 0.79;
 const DEFAULT_MAX_ATTEMPTS = 3;
 
 export const verifyHCaptchaToken = async (
@@ -36,7 +36,7 @@ export const verifyHCaptchaToken = async (
     secret,
     remoteIp,
     logger,
-    maxAllowedScore = DEFAULT_MAX_ALLOWED_SCORE,
+    maxAllowedScore,
     maxAttempts = DEFAULT_MAX_ATTEMPTS,
     fetchImpl = fetch,
   } = options;
@@ -77,9 +77,21 @@ export const verifyHCaptchaToken = async (
   }
 
   const score = captchaData.score;
-  const verified = captchaData.success && (score === undefined || score <= maxAllowedScore);
+  const verificationSucceeded = captchaData.success;
+  const scorePolicyConfigured = maxAllowedScore !== undefined;
 
-  return verified ? { verified: true, score } : { verified: false, reason: "invalid-response" };
+  if (verificationSucceeded && scorePolicyConfigured) {
+    const scoreIsMissing = typeof score !== "number";
+    const scoreExceedsLimit = !scoreIsMissing && score > maxAllowedScore;
+
+    if (scoreIsMissing || scoreExceedsLimit) {
+      return { verified: false, reason: "score-too-high" };
+    }
+  }
+
+  return captchaData.success
+    ? { verified: true, score }
+    : { verified: false, reason: "invalid-response" };
 };
 
 type VerificationAttemptResult = { response?: Response; error?: unknown };

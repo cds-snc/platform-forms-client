@@ -14,6 +14,18 @@ describe("verifyHCaptchaToken", () => {
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 
+  it("rejects a missing secret without calling hCaptcha", async () => {
+    const fetchImpl = vi.fn();
+
+    const result = await verifyHCaptchaToken("token", {
+      secret: undefined,
+      fetchImpl,
+    });
+
+    expect(result).toEqual({ verified: false, reason: "missing-secret" });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
   it("accepts a successful verification", async () => {
     const fetchImpl = vi
       .fn()
@@ -32,6 +44,16 @@ describe("verifyHCaptchaToken", () => {
     expect(String(fetchImpl.mock.calls[0][1]?.body)).toContain("remoteip=127.0.0.1");
   });
 
+  it("accepts a successful response without applying a score policy", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ success: true, score: 0.8 }), { status: 200 })
+    );
+
+    const result = await verifyHCaptchaToken("token", { secret: "secret", fetchImpl });
+
+    expect(result).toEqual({ verified: true, score: 0.8 });
+  });
+
   it("rejects a suspicious score", async () => {
     const fetchImpl = vi
       .fn()
@@ -41,10 +63,25 @@ describe("verifyHCaptchaToken", () => {
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
+      maxAllowedScore: 0.79,
       fetchImpl,
     });
 
-    expect(result).toEqual({ verified: false, reason: "invalid-response" });
+    expect(result).toEqual({ verified: false, reason: "score-too-high" });
+  });
+
+  it("rejects a configured score policy when the response has no score", async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify({ success: true }), { status: 200 }));
+
+    const result = await verifyHCaptchaToken("token", {
+      secret: "secret",
+      maxAllowedScore: 0.79,
+      fetchImpl,
+    });
+
+    expect(result).toEqual({ verified: false, reason: "score-too-high" });
   });
 
   it("does not retry a rejected 4xx response", async () => {
@@ -60,6 +97,27 @@ describe("verifyHCaptchaToken", () => {
     });
 
     expect(result).toEqual({ verified: false, reason: "invalid-response" });
+    expect(fetchImpl).toHaveBeenCalledOnce();
+  });
+
+  it("rejects a malformed verification response", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(new Response("not-json", { status: 200 }));
+
+    const result = await verifyHCaptchaToken("token", { secret: "secret", fetchImpl });
+
+    expect(result).toEqual({ verified: false, reason: "invalid-response" });
+  });
+
+  it("returns an API error after retries are exhausted", async () => {
+    const fetchImpl = vi.fn().mockRejectedValue(new Error("network failure"));
+
+    const result = await verifyHCaptchaToken("token", {
+      secret: "secret",
+      maxAttempts: 1,
+      fetchImpl,
+    });
+
+    expect(result).toEqual({ verified: false, reason: "api-error" });
     expect(fetchImpl).toHaveBeenCalledOnce();
   });
 

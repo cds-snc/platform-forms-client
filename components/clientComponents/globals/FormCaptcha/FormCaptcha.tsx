@@ -5,6 +5,8 @@ import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 import { useHCaptcha, type UseHCaptchaOptions } from "@gcforms/hcaptcha/client";
 import { logMessage } from "@lib/logger";
 
+const SUSPICIOUS_ERROR_CODES = ["invalid-data", "invalid-input-response"];
+
 export interface FormCaptchaHandle {
   getToken: () => string | undefined;
   reset: () => void;
@@ -13,21 +15,19 @@ export interface FormCaptchaHandle {
 type FormCaptchaProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onSubmit"> &
   UseHCaptchaOptions & {
     children: ReactNode;
+    onUnexpectedError?: (error: unknown) => void;
     onSubmit: (event: SubmitEvent<HTMLFormElement>) => void;
   };
 
 export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
-  ({ children, onSubmit, ...props }, ref) => {
+  ({ children, onSubmit, onUnexpectedError, ...props }, ref) => {
     const captchaToken = useRef<string | undefined>(undefined);
     const {
       captchaEnabled,
       failureMode,
       language,
-      onAnyError,
       onCaptchaExpired,
-      onConfigError,
-      onRecoverableError,
-      onSuspiciousError,
+      onError,
       siteKey,
       ...formProps
     } = props;
@@ -36,25 +36,22 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
       failureMode,
       language,
       siteKey,
-      onConfigError: (code) => {
-        logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
-        onConfigError?.(code);
-      },
-      onRecoverableError: (code) => {
-        logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
-        onRecoverableError?.(code);
-      },
-      onSuspiciousError: (code) => {
-        logMessage.warn(
-          `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
-        );
-        onSuspiciousError?.(code);
+      onError: (code) => {
+        if (SUSPICIOUS_ERROR_CODES.includes(code)) {
+          logMessage.warn(
+            `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
+          );
+        } else if (code === "invalid-sitekey" || code === "missing-sitekey") {
+          logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
+        } else {
+          logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
+        }
+        onError?.(code);
       },
       onCaptchaExpired: () => {
         logMessage.info("hCaptcha: challenge expired");
         onCaptchaExpired?.();
       },
-      onAnyError,
     });
 
     useImperativeHandle(
@@ -72,13 +69,26 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
     const handleSubmit = useCallback(
       (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        void execute().then((result) => {
-          if (result.verified) captchaToken.current = result.token;
-          else if (!result.allowed) return;
-          onSubmit(event);
-        });
+        captchaToken.current = undefined;
+        void execute()
+          .then((result) => {
+            if (!result.verified && !result.allowed) return;
+
+            if (result.verified) captchaToken.current = result.token;
+
+            return onSubmit(event);
+          })
+          .catch((error: unknown) => {
+            try {
+              if (onUnexpectedError) return onUnexpectedError(error);
+
+              logMessage.error(error as Error);
+            } catch (handlerError) {
+              logMessage.error(handlerError as Error);
+            }
+          });
       },
-      [execute, onSubmit]
+      [execute, onSubmit, onUnexpectedError]
     );
 
     return (
