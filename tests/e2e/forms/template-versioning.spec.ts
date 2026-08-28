@@ -1,15 +1,12 @@
 import { test, expect } from "@playwright/test";
 import { DatabaseHelper } from "../../helpers";
 import { prisma, Prisma } from "@gcforms/database";
-import { UserFeatureFlags } from "@lib/cache/types";
 
 test.describe("Republishing a form with template versioning", { tag: "@published-form" }, () => {
   test.fixme();
 
   let formId: string;
   let dbHelper: DatabaseHelper;
-  let adminUserId: string;
-  let addedTemplateVersioningFlag = false;
 
   test.use({ storageState: "tests/.auth/user-admin.json" });
 
@@ -20,48 +17,9 @@ test.describe("Republishing a form with template versioning", { tag: "@published
       published: true,
       userEmail: "test.admin@cds-snc.ca",
     });
-
-    const adminUser = await prisma.user.findUnique({
-      where: { email: "test.admin@cds-snc.ca" },
-      select: { id: true },
-    });
-
-    if (!adminUser) {
-      throw new Error("Admin test user was not found");
-    }
-
-    adminUserId = adminUser.id;
-
-    const existingFlag = await prisma.userFeature.findUnique({
-      where: {
-        userId_feature: {
-          userId: adminUserId,
-          feature: UserFeatureFlags.templateVersioning,
-        },
-      },
-    });
-
-    if (!existingFlag) {
-      await prisma.userFeature.create({
-        data: {
-          userId: adminUserId,
-          feature: UserFeatureFlags.templateVersioning,
-        },
-      });
-      addedTemplateVersioningFlag = true;
-    }
   });
 
   test.afterAll(async () => {
-    if (addedTemplateVersioningFlag) {
-      await prisma.userFeature.deleteMany({
-        where: {
-          userId: adminUserId,
-          feature: UserFeatureFlags.templateVersioning,
-        },
-      });
-    }
-
     if (formId) {
       await dbHelper.deleteTemplate(formId);
     }
