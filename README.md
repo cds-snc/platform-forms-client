@@ -53,6 +53,23 @@ yarn dev
 
 Browse web application on `http://localhost:3000`.
 
+### Speech input prototype
+
+The optional speech input prototype records audio in the browser and sends it to the
+application's `/api/speech-to-text` route. That route forwards the request to a service
+you operate; audio is never sent to the browser's Web Speech provider.
+
+Enable it with these server environment variables:
+
+```sh
+NEXT_PUBLIC_ENABLE_SPEECH_INPUT=true
+SPEECH_TO_TEXT_URL=http://your-private-stt-service/transcribe
+```
+
+The speech service must accept multipart form data with an `audio` file and optional
+`language` field, and return JSON in the form `{ "text": "..." }`. The prototype limits
+audio uploads to 25 MB and does not log audio or transcripts in this application.
+
 ### Edit `@gcforms/core` styles locally
 
 If you are changing styles in `packages/core/src/styles`, use the local `yalc` workflow to test the built package the same way it will be consumed after publish.
