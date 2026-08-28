@@ -19,11 +19,7 @@ import {
 } from "@lib/auditLogs";
 
 import { logMessage } from "@lib/logger";
-import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
-import {
-  DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
-  DownloadableTemplateVersion,
-} from "@lib/templates/types";
+import { DownloadableTemplateVersion } from "@lib/templates/types";
 import { getFormattedDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { getTemplateVersionById } from "@lib/templates/versioning/queries/getTemplateVersionById";
@@ -167,23 +163,6 @@ export const getDownloadableFormVersions = AuthenticatedAction(
         throw e;
       });
 
-      if (!(await isTemplateVersioningEnabled())) {
-        const formRecord = await getFullTemplateByID(formId, false);
-
-        if (!formRecord) {
-          throw new Error("Form Not Found");
-        }
-
-        return {
-          versions: [
-            {
-              versionNumber: formRecord.versionNumber ?? 1,
-              label: DOWNLOADABLE_TEMPLATE_VERSION_LABEL.currentDraft,
-            },
-          ],
-        };
-      }
-
       const versions = await getFormattedDownloadableTemplateVersions(formId);
 
       if (!versions || versions.length === 0) {
@@ -221,16 +200,6 @@ export const getDownloadableFormVersionConfig = AuthenticatedAction(
         }
         throw e;
       });
-
-      if (!(await isTemplateVersioningEnabled())) {
-        const formRecord = await getFullTemplateByID(formId, false);
-
-        if (!formRecord) {
-          throw new Error("Form Not Found");
-        }
-
-        return { formConfig: formRecord.form };
-      }
 
       if (!versionId) {
         // No version id provided (likely templates created before versioning).
