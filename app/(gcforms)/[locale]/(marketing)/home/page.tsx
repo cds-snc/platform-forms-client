@@ -1,6 +1,6 @@
 import { languages } from "@root/i18n/settings";
 import { getWPPage } from "@lib/cms";
-import { CMSBoundary } from "@serverComponents/globals/ShadowBoundary";
+import { ShadowContainer } from "@clientComponents/globals/ShadowBoundary";
 
 // Next.js will invalidate the cache when a
 // request comes in, at most once every 5 minutes.
@@ -16,11 +16,11 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const { locale } = await params;
   const page = await getWPPage("home", locale);
   return (
-    <CMSBoundary>
+    <ShadowContainer>
       <div>
         <h1 dangerouslySetInnerHTML={{ __html: page.title.rendered }} />
         <div dangerouslySetInnerHTML={{ __html: page.content.rendered }} />
       </div>
-    </CMSBoundary>
+    </ShadowContainer>
   );
 }
