@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.2.27] - 2026-08-26
+
+- Remove references to groupHistory
+
 ## [2.2.26] - 2026-08-17
 
 - Add new Star Rating input validation type

@@ -72,8 +72,12 @@ export const getAnswerAsString = (
   }
 
   if (question && question.type === FormElementTypes.starRating) {
+    if (answer === "") {
+      return "";
+    }
+
     const starRatingObject = answer as StarRatingObject;
-    return `${starRatingObject.value}/${starRatingObject.numberOfStars}`;
+    return JSON.stringify(starRatingObject);
   }
 
   return answer as string;

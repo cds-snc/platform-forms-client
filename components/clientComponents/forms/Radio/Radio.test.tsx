@@ -41,7 +41,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
     test("renders without errors", () => {
       render(
         <Formik onSubmit={() => {}} initialValues={{}}>
-          <GenerateElement element={radioButtonData} language={lang} />
+          <GenerateElement element={radioButtonData} language={lang} isTestMode={true} />
         </Formik>
       );
       const title =
@@ -70,7 +70,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
       radioButtonData.properties.validation!.required = false as boolean;
       render(
         <Formik onSubmit={() => {}} initialValues={{}}>
-          <GenerateElement element={radioButtonData} language={lang} />
+          <GenerateElement element={radioButtonData} language={lang} isTestMode={true} />
         </Formik>
       );
       expect(screen.queryByTestId("required")).not.toBeInTheDocument();

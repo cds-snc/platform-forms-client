@@ -19,7 +19,6 @@ export interface FormProps {
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
   allowGrouping?: boolean | undefined;
-  groupHistory?: string[];
   matchedIds?: string[];
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;

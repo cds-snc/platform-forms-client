@@ -1,51 +1,56 @@
-import { FormElementTypes } from "@lib/types";
-import { Answer } from "@root/lib/responseDownloadFormats/types";
 import type { StarRatingObject } from "./types";
-
-export const parseStarRatingAnswer = (answer: string): StarRatingObject | undefined => {
-  try {
-    const parsed: StarRatingObject = JSON.parse(answer);
-    if (
-      parsed !== null &&
-      typeof parsed === "object" &&
-      "value" in parsed &&
-      "numberOfStars" in parsed
-    ) {
-      return parsed;
-    }
-  } catch {
-    // Not a valid star rating JSON object
-  }
-};
-
-export const getStarRatingAsString = (rating: StarRatingObject): string => {
-  return `${rating.value}/${rating.numberOfStars}`;
-};
-
-export const formatStarRating = (
-  value: string | number | undefined,
-  numberOfStars: number
-): string => {
-  if (!value || value === "-" || numberOfStars <= 0) {
-    return String(value);
-  }
-
-  return `${value}/${numberOfStars}`;
-};
+import { Language } from "@lib/types/form-builder-types";
 
 /**
- * Formats a star rating answer as a fraction string (e.g. "3/5").
- * Returns the raw answer unchanged if unparseable, or "-" if empty.
+ * Check that a star rating object is valid
+ *
+ * @param obj
+ * @returns boolean
  */
-export const formatStarRatingAnswer = (rawAnswer: string): string => {
-  const parsed = parseStarRatingAnswer(rawAnswer);
-  return parsed ? formatStarRating(parsed.value, parsed.numberOfStars) : rawAnswer || "-";
+export const isValidStarRatingObject = (obj: unknown): obj is StarRatingObject => {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "value" in obj &&
+    "numberOfStars" in obj &&
+    typeof obj.value === "number" &&
+    typeof obj.numberOfStars === "number"
+  );
 };
 
-export const checkAndformatStarRatingAnswer = (item: Answer): string | undefined => {
-  if (item.type !== FormElementTypes.starRating) {
-    return undefined;
+export const getFormattedStarRatingFromObject = (
+  starRatingObject: StarRatingObject | string,
+  lang: Language = "en"
+): string => {
+  if (typeof starRatingObject === "string") {
+    try {
+      starRatingObject = JSON.parse(starRatingObject);
+    } catch {
+      return "-";
+    }
   }
 
-  return formatStarRatingAnswer(String(item.answer));
+  if (!isValidStarRatingObject(starRatingObject)) {
+    return "-";
+  }
+  return lang === "en"
+    ? `${starRatingObject.value} out of ${starRatingObject.numberOfStars}`
+    : `${starRatingObject.value} sur ${starRatingObject.numberOfStars}`;
+};
+
+export const getScoreFromStarRatingObject = (
+  starRatingObject: StarRatingObject | string
+): number | undefined => {
+  if (typeof starRatingObject === "string") {
+    try {
+      starRatingObject = JSON.parse(starRatingObject);
+    } catch {
+      return undefined;
+    }
+  }
+
+  if (!isValidStarRatingObject(starRatingObject)) {
+    return undefined;
+  }
+  return starRatingObject.value;
 };

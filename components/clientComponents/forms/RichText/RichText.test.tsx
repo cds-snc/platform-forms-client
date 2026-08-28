@@ -28,7 +28,7 @@ describe("Generate a rich text element", () => {
   afterEach(() => cleanup());
 
   it.each([["en"], ["fr"]] as Array<[Language]>)("renders properly", (lang: Language) => {
-    render(<GenerateElement element={richTextData} language={lang} />);
+    render(<GenerateElement element={richTextData} language={lang} isTestMode={true} />);
     const title = lang === "en" ? richTextData.properties.titleEn : richTextData.properties.titleFr;
     const description =
       lang === "en" ? richTextData.properties.descriptionEn : richTextData.properties.descriptionFr;
@@ -49,7 +49,7 @@ describe("Generate a rich text element", () => {
         descriptionFr: "",
       },
     } as const as FormElement;
-    render(<GenerateElement element={emptyRichTextData} language="en" />);
+    render(<GenerateElement element={emptyRichTextData} language="en" isTestMode={true} />);
     expect(screen.queryByRole("label")).not.toBeInTheDocument();
     expect(screen.queryByTestId("richText")).not.toBeInTheDocument();
   });
@@ -58,14 +58,14 @@ describe("Generate a rich text element", () => {
     const richTextWithHTML = { ...richTextData } as FormElement;
     richTextWithHTML.properties.descriptionEn =
       "Testing <script data-testid='script'>alert('pwned')</script> this";
-    render(<GenerateElement element={richTextWithHTML} language="en" />);
+    render(<GenerateElement element={richTextWithHTML} language="en" isTestMode={true} />);
     expect(screen.queryByTestId("script")).not.toBeInTheDocument();
   });
 
   it("Renders link with target attribute", () => {
     const richTextWithHTML = { ...richTextData } as FormElement;
     richTextWithHTML.properties.descriptionEn = "Testing [link](https://google.ca) this";
-    render(<GenerateElement element={richTextWithHTML} language="en" />);
+    render(<GenerateElement element={richTextWithHTML} language="en" isTestMode={true} />);
     expect(screen.queryByRole("link")).toHaveAttribute("target");
   });
 
@@ -74,7 +74,7 @@ describe("Generate a rich text element", () => {
     richTextWithCollapsible.properties.descriptionEn =
       ":::collapsible Learn more about this topic\nAdditional information.\n:::";
 
-    render(<GenerateElement element={richTextWithCollapsible} language="en" />);
+    render(<GenerateElement element={richTextWithCollapsible} language="en" isTestMode={true} />);
 
     expect(document.querySelector("details")).toBeInTheDocument();
     expect(screen.getByText("Learn more about this topic")).toBeInTheDocument();

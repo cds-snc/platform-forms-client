@@ -9,7 +9,6 @@ export const RichText = () => {
   const { i18n } = useTranslation();
   const [value, setValue] = useState("");
   const [enableDraggableBlocks, setEnableDraggableBlocks] = useState(true);
-  const [enableCollapsibleBlocks, setEnableCollapsibleBlocks] = useState(false);
   const [enableMaxLength, setEnableMaxLength] = useState(false);
   const [maxLength, setMaxLength] = useState<number | undefined>(undefined);
   const [showTreeview, setShowTreeview] = useState(false);
@@ -33,7 +32,6 @@ export const RichText = () => {
             className="gc-formview"
             onChange={updateValue}
             enableDraggableBlocks={enableDraggableBlocks}
-            enableCollapsibleBlocks={enableCollapsibleBlocks}
             maxLength={enableMaxLength ? maxLength : undefined}
             showTreeview={showTreeview}
           />
@@ -92,17 +90,6 @@ export const RichText = () => {
               }}
             />
             <label>Show treeview</label>
-          </div>
-          <div className="my-4">
-            <input
-              type="checkbox"
-              className="mr-2"
-              checked={enableCollapsibleBlocks}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setEnableCollapsibleBlocks(e.target.checked);
-              }}
-            />
-            <label>Enable collapsible blocks</label>
           </div>
           <div className="my-4">
             <input

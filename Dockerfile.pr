@@ -47,9 +47,6 @@ ENV INDEX_SITE=$INDEX_SITE
 ARG TAG_VERSION
 ENV TAG_VERSION=$TAG_VERSION
 
-ARG NEXT_DEPLOYMENT_ID
-ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
-
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
 ENV PORT=3000
@@ -69,7 +66,7 @@ WORKDIR /src
 COPY --from=build /src/.next/standalone ./
 COPY --from=build /src/.next/static ./.next/static
 
-COPY package.json yarn.lock .yarnrc.yml next.config.ts nextCacheHandler.ts ./
+COPY package.json yarn.lock .yarnrc.yml next.config.ts ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY scripts/pr-review-entrypoint.sh ./entrypoint.sh

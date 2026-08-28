@@ -492,9 +492,6 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
   // Used to track the current group dynamically
   initialValues.currentGroup = "";
 
-  // Used to track the group history dynamically
-  initialValues.groupHistory = [];
-
   // Used to track the Ids of elements from show/hide that should be included (visible) dynamically
   initialValues.matchedIds = [];
 
@@ -520,10 +517,16 @@ export const mergeFormValuesWithInitialValues = (
 type GenerateElementProps = {
   element: FormElement;
   language: string;
+  isTestMode?: boolean;
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
-  const { element, language } = props;
+  const { element, language, isTestMode } = props;
   const generatedElement = _buildForm(element, language);
+
+  if (isTestMode) {
+    return generatedElement;
+  }
+
   return (
     <ConditionalWrapper
       element={element}

@@ -7,7 +7,7 @@ import { FormElementTypes, FormRecord } from "@lib/types";
 import { formatUserInput } from "@lib/utils/strings";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
-import { checkAndformatStarRatingAnswer } from "@root/components/clientComponents/forms/StarRating/utils";
+import { getFormattedStarRatingFromObject } from "@root/components/clientComponents/forms/StarRating/utils";
 
 const QuestionRows = ({
   submission,
@@ -21,7 +21,7 @@ const QuestionRows = ({
   const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: Language, item: Answer, subItem = false) => {
     const numberInputValue = formatNumberInputAnswer(item, lang, formRecord);
-    const starRatingValue = checkAndformatStarRatingAnswer(item);
+    const starRatingValue = getFormattedStarRatingFromObject(item.answer as string, lang);
     return (
       <div
         key={`row-${index}`}
@@ -45,7 +45,7 @@ const QuestionRows = ({
         <dd className="p-4">
           {item.type === FormElementTypes.numberInput ? (
             <p>{numberInputValue}</p>
-          ) : starRatingValue !== undefined ? (
+          ) : item.type === FormElementTypes.starRating ? (
             <p>{starRatingValue}</p>
           ) : (
             <p dangerouslySetInnerHTML={{ __html: formatUserInput(String(item.answer)) }}></p>

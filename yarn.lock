@@ -2766,19 +2766,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neshca/cache-handler@npm:^1.2.1":
-  version: 1.9.0
-  resolution: "@neshca/cache-handler@npm:1.9.0"
-  dependencies:
-    cluster-key-slot: "npm:1.1.2"
-    lru-cache: "npm:10.4.3"
-  peerDependencies:
-    next: ">= 13.5.1 < 15"
-    redis: ">= 4.6"
-  checksum: 10c0/883360e0979181448c8a81886d69e3460d3ea60283ceaaf1941a8bc8255cb1dedf5ba448951cf0cabf9969381a4481777d3c408cd7a5537e7e4d0c13f89544a4
-  languageName: node
-  linkType: hard
-
 "@next/env@npm:16.3.1":
   version: 16.3.1
   resolution: "@next/env@npm:16.3.1"
@@ -7069,13 +7056,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cluster-key-slot@npm:1.1.2":
-  version: 1.1.2
-  resolution: "cluster-key-slot@npm:1.1.2"
-  checksum: 10c0/d7d39ca28a8786e9e801eeb8c770e3c3236a566625d7299a47bb71113fb2298ce1039596acb82590e598c52dbc9b1f088c8f587803e697cb58e1867a95ff94d3
-  languageName: node
-  linkType: hard
-
 "cognito_backup@workspace:utils/cognitoBackup":
   version: 0.0.0-use.local
   resolution: "cognito_backup@workspace:utils/cognitoBackup"
@@ -9140,7 +9120,6 @@ __metadata:
     "@headless-tree/core": "npm:^1.7.0"
     "@headless-tree/react": "npm:^1.7.0"
     "@headlessui/react": "npm:^2.2.10"
-    "@neshca/cache-handler": "npm:^1.2.1"
     "@next/mdx": "npm:16.3.1"
     "@opentelemetry/exporter-jaeger": "npm:^2.10.0"
     "@opentelemetry/exporter-trace-otlp-http": "npm:^0.221.0"
@@ -10805,13 +10784,6 @@ __metadata:
   version: 2.0.0
   resolution: "lowercase-keys@npm:2.0.0"
   checksum: 10c0/f82a2b3568910509da4b7906362efa40f5b54ea14c2584778ddb313226f9cbf21020a5db35f9b9a0e95847a9b781d548601f31793d736b22a2b8ae8eb9ab1082
-  languageName: node
-  linkType: hard
-
-"lru-cache@npm:10.4.3":
-  version: 10.4.3
-  resolution: "lru-cache@npm:10.4.3"
-  checksum: 10c0/ebd04fbca961e6c1d6c0af3799adcc966a1babe798f685bb84e6599266599cd95d94630b10262f5424539bc4640107e8a33aa28585374abf561d30d16f4b39fb
   languageName: node
   linkType: hard
 

@@ -50,9 +50,9 @@ describe("Lexical Editor", () => {
     // Toolbar has aria-controls attribute
     expect(toolbar).toHaveAttribute("aria-controls", contentArea.id);
 
-    // Collapsible content is disabled by default.
-    expect(toolbarButtons).toHaveLength(9);
-    expect(within(toolbar).queryByTestId("collapsible-button")).not.toBeInTheDocument();
+    // Details component is enabled by default.
+    expect(toolbarButtons).toHaveLength(10);
+    expect(within(toolbar).getByTestId("collapsible-button")).toBeInTheDocument();
 
     // Content area has default content and attributes
     expect(contentArea).toHaveAttribute("aria-label", "AriaLabel");
@@ -66,12 +66,7 @@ describe("Lexical Editor", () => {
   it("can insert collapsible content from the toolbar", async () => {
     const onChange = vi.fn();
     const rendered = render(
-      <Editor
-        id="editor-test"
-        content="Here is some content"
-        onChange={onChange}
-        enableCollapsibleBlocks
-      />
+      <Editor id="editor-test" content="Here is some content" onChange={onChange} />
     );
 
     await act(async () => {

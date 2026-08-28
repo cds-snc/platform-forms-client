@@ -87,7 +87,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
           {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} isTestMode={true} />
         </Form>
       );
 
@@ -119,7 +119,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
           {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} isTestMode={true} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
@@ -171,7 +171,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
           {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} isTestMode={true} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
@@ -210,7 +210,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
           {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} isTestMode={true} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
@@ -252,7 +252,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         // @ts-expect-error - test data missing required FormRecord fields
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
           {/* @ts-expect-error - test data has string type instead of FormElementTypes */}
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} isTestMode={true} />
         </Form>
       );
 

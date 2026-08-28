@@ -38,11 +38,17 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Generate a form group", (l
   test("renders properly", () => {
     render(
       <Formik onSubmit={() => {}} initialValues={{}}>
-        <GenerateElement element={radioButtonData} language={lang} />
+        <GenerateElement element={radioButtonData} language={lang} isTestMode={true} />
       </Formik>
     );
-    const title = (lang === "en" ? radioButtonData.properties.titleEn : radioButtonData.properties.titleFr) as string;
-    const description = (lang === "en" ? radioButtonData.properties.descriptionEn : radioButtonData.properties.descriptionFr) as string;
+    const title = (
+      lang === "en" ? radioButtonData.properties.titleEn : radioButtonData.properties.titleFr
+    ) as string;
+    const description = (
+      lang === "en"
+        ? radioButtonData.properties.descriptionEn
+        : radioButtonData.properties.descriptionFr
+    ) as string;
 
     // Title are rendered
     screen.getAllByText(title).forEach((input) => {

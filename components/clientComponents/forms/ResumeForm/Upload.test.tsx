@@ -116,7 +116,6 @@ describe("Upload", () => {
         language: "en",
         id: "previous-form",
         values: { firstName: "Avery" },
-        history: ["start"],
         currentGroup: "start",
         restoredForm: true,
       });
@@ -160,7 +159,6 @@ describe("Upload", () => {
       expect(saveSessionProgressMock).toHaveBeenCalledWith({
         id: "current-form",
         values: { firstName: "Avery" },
-        history: ["start"],
         language: "en",
         currentGroup: "start",
         restoredForm: true,

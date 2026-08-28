@@ -322,7 +322,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           case DownloadFormat.CSV:
             return {
               receipt: await htmlAggregatedTransform(formResponse, lang),
-              responses: csvTransform(formResponse),
+              responses: await csvTransform(formResponse),
             };
           case DownloadFormat.HTML_AGGREGATED:
             return await htmlAggregatedTransform(formResponse, lang);
@@ -484,9 +484,14 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
     }
   }
 
+  // For StarRating return the serialized JSON object so that
+  // the CSV and HTML transforms can handle it contextually.
   if (question && question.type === FormElementTypes.starRating) {
+    if (!answer) {
+      return "";
+    }
     const starRatingObject = answer as StarRatingObject;
-    return `${starRatingObject.value}/${starRatingObject.numberOfStars}`;
+    return JSON.stringify(starRatingObject);
   }
 
   return answer as string;

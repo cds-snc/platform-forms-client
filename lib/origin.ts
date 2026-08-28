@@ -3,7 +3,7 @@
  */
 export async function getOrigin(): Promise<string> {
   if (process.env.APP_ENV === "test") {
-    return "https://test.forms-formulaires.canada.ca";
+    return "http://localhost:3000";
   }
 
   const { headers } = await import("next/headers");
@@ -25,3 +25,6 @@ export async function isProductionEnvironment(): Promise<boolean> {
   const host = await getOrigin();
   return host.includes("forms-formulaires") && host.includes("canada.ca");
 }
+
+// Strip trailing slashes from HOST_URL to avoid issues with CORS and other origin checks.
+export const allowedOrigin = process.env.HOST_URL?.trim().replace(/\/+$/, "");
