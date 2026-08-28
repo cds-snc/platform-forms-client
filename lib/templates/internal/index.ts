@@ -16,6 +16,14 @@ import {
 
 import { authCheckAndThrow } from "@lib/actions/auth";
 import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
+import { authorization } from "@lib/privileges";
+import { checkOne } from "@lib/cache/flags";
+
+export const checkFlag = async (flag: string) => {
+  return (await Promise.all([checkOne(flag), authorization.checkUserFlag(flag)])).reduce(
+    (prev, curr) => prev || curr
+  );
+};
 
 export const isTemplateVersioningEnabled = async () => {
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));

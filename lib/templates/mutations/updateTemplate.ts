@@ -3,14 +3,14 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord, FormProperties } from "@lib/types";
 import { parseTemplate, templateRecordInclude } from "../internal";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
-import { UpdateTemplateCommand, UpdateTemplateAction } from "../../types";
-import { authorizeForCommand } from "../../mutations/shared/authorizeForCommand";
-import { logTemplateUpdateEvent } from "../../mutations/shared/logTemplateUpdateEvent";
-import { TemplateAlreadyPublishedError } from "../../internal/errors";
+import { UpdateTemplateCommand, UpdateTemplateAction } from "../types";
+import { authorizeForCommand } from "../mutations/shared/authorizeForCommand";
+import { logTemplateUpdateEvent } from "../mutations/shared/logTemplateUpdateEvent";
+import { TemplateAlreadyPublishedError } from "../internal/errors";
 import type { Prisma } from "@gcforms/database";
-import { publishTemplate } from "../../mutations/publishTemplate";
-import { buildUpdateQuery, UpdatePlan } from "../../mutations/shared/buildUpdateQuery";
-import { validateFormConfig } from "../../mutations/shared/validateFormConfig";
+import { publishTemplate } from "../mutations/publishTemplate";
+import { buildUpdateQuery, UpdatePlan } from "../mutations/shared/buildUpdateQuery";
+import { validateFormConfig } from "../mutations/shared/validateFormConfig";
 
 type CurrentTemplate = Prisma.TemplateGetPayload<{
   select: {

@@ -1,9 +1,5 @@
 import { FormRecord } from "@lib/types";
-import {
-  isTemplateVersioningEnabled,
-  templateRecordInclude,
-  templateVersionSelect,
-} from "../internal/index";
+import { templateRecordInclude, templateVersionSelect } from "../internal/index";
 import { authorization } from "@lib/privileges";
 import {
   AuditLogAccessDeniedDetails,
@@ -17,10 +13,6 @@ import { parseTemplate } from "../internal/index";
 import { formCache } from "@lib/cache/formCache";
 
 export async function createDraftVersionForTemplate(formID: string): Promise<FormRecord | null> {
-  if (!(await isTemplateVersioningEnabled())) {
-    throw new Error("Template versioning is not enabled.");
-  }
-
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
       e.user.id,

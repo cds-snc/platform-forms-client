@@ -1,6 +1,4 @@
 "use client";
-import { useEffect } from "react";
-
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 
 type Props = {
@@ -16,16 +14,7 @@ export const VersionSelector = ({
   selectedVersion,
   setSelectedVersion,
   t,
-  isTemplateVersioningEnabled,
 }: Props) => {
-  // ensure a version is still passed when the feature is off
-  useEffect(() => {
-    if (!isTemplateVersioningEnabled) {
-      const v = responseVersions.length >= 1 ? responseVersions[0] : null;
-      if (!selectedVersion && v) setSelectedVersion(v);
-    }
-  }, [isTemplateVersioningEnabled, responseVersions, selectedVersion, setSelectedVersion]);
-
   if (!responseVersions || responseVersions.length === 0) return null;
 
   const isDisabled = responseVersions.length === 1;
@@ -34,7 +23,7 @@ export const VersionSelector = ({
   const disabledStyles = "bg-slate-100 text-slate-500 cursor-not-allowed";
 
   return (
-    <div className={`mb-4 ${!isTemplateVersioningEnabled ? "hidden" : ""}`}>
+    <div className={`mb-4`}>
       <div>
         <label htmlFor="downloadVersion" className="mb-1 inline-block font-medium">
           {t("loadKeyPage.versionSelector.label")}
