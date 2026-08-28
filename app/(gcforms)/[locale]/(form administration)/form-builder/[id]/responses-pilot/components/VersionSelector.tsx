@@ -6,7 +6,6 @@ type Props = {
   selectedVersion: string | null;
   setSelectedVersion: (v: string | null) => void;
   t: (key: string) => string | React.ReactNode;
-  isTemplateVersioningEnabled?: boolean;
 };
 
 export const VersionSelector = ({

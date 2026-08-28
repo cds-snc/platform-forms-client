@@ -8,7 +8,6 @@ import { clearTemplateStorage } from "@lib/store/utils";
 import { useCallback, useState, useMemo } from "react";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import {
   MenuDropdown,
   MenuDropdownItemCallback,
@@ -43,9 +42,6 @@ export const Menu = ({
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const isEmailDelivery = deliveryOption && deliveryOption.emailAddress;
-
-  const { getFlag } = useFeatureFlags();
-  const templateVersioningEnabled = getFlag("templateVersioning");
 
   const handleDelete = useCallback(() => {
     setShowConfirm(true);
@@ -129,11 +125,7 @@ export const Menu = ({
       },
       {
         filtered:
-          templateVersioningEnabled &&
-          !isEmailDelivery &&
-          status !== TAB_STATUS.ARCHIVED &&
-          isPublished &&
-          !hasDraft
+          !isEmailDelivery && status !== TAB_STATUS.ARCHIVED && isPublished && !hasDraft
             ? false
             : true,
         title: t("card.menu.createDraftVersion"),
@@ -215,7 +207,6 @@ export const Menu = ({
       ttl,
       t,
       copyLinkCallback,
-      templateVersioningEnabled,
       language,
       id,
       restoreFormCallback,
