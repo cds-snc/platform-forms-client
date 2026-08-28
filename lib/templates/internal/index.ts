@@ -1,54 +1,70 @@
+import { FeatureFlags } from "@lib/cache/types";
 import { Prisma } from "@gcforms/database";
-import { authorization } from "@lib/privileges";
-import { checkOne } from "@lib/cache/flags";
 import {
-  FormRecord,
-  FormProperties,
-  SecurityAttribute,
+  TemplateRecordForParsing,
+  TemplateVersionConfigSnapshot,
+  TemplateVersionSnapshot,
+} from "./types";
+import {
   ClosedDetails,
-  PublicFormRecord,
+  FormProperties,
+  FormRecord,
   NotificationsInterval,
+  PublicFormRecord,
+  SecurityAttribute,
 } from "@gcforms/types";
 
-export const checkFlag = async (flag: string) => {
-  return (await Promise.all([checkOne(flag), authorization.checkUserFlag(flag)])).reduce(
-    (prev, curr) => prev || curr
+import { authCheckAndThrow } from "@lib/actions/auth";
+import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
+
+export const isTemplateVersioningEnabled = async () => {
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+
+  if (!session?.user) {
+    return false;
+  }
+
+  const hasAccess = await featureFlagAllowedForUser(
+    session.user.id,
+    FeatureFlags.templateVersioning
   );
+
+  return hasAccess;
+};
+
+export const templateVersionSelect = {
+  id: true,
+  versionNumber: true,
+  status: true,
+  jsonConfig: true,
+} satisfies Prisma.TemplateVersionSelect;
+
+export const templateRecordInclude = {
+  deliveryOption: true,
+  currentDraftVersion: {
+    select: templateVersionSelect,
+  },
+  currentPublishedVersion: {
+    select: templateVersionSelect,
+  },
+} satisfies Prisma.TemplateInclude;
+
+export const getTemplateJsonConfigMirrorData = (jsonConfig: Prisma.JsonObject) => {
+  return { jsonConfig };
 };
 
 // ******************************************
 // Internal Module Functions
 // ******************************************
-export const parseTemplate = (template: {
-  id: string;
-  created_at?: Date;
-  updated_at?: Date;
-  name: string;
-  jsonConfig: Prisma.JsonValue;
-  isPublished: boolean;
-  deliveryOption: {
-    emailAddress: string;
-    emailSubjectEn: string | null;
-    emailSubjectFr: string | null;
-  } | null;
-  securityAttribute: string;
-  formPurpose: string;
-  publishReason: string;
-  publishFormType: string;
-  publishDesc: string;
-  closingDate?: Date | null;
-  closedDetails?: Prisma.JsonValue | null;
-  saveAndResume: boolean;
-  notificationsInterval?: number | null;
-  ttl?: Date | null;
-  lastEditedBy?: {
-    name: string | null;
-  } | null;
-  _count?: {
-    users: number;
-    invitations: number;
-  };
-}): FormRecord => {
+export const parseTemplate = (
+  template: TemplateRecordForParsing,
+  options?: {
+    version?: TemplateVersionSnapshot | null;
+    isPublished?: boolean;
+  }
+): FormRecord => {
+  const version = options?.version ?? getBuilderVersion(template);
+
   return {
     id: template.id,
     ...(template.created_at && {
@@ -58,8 +74,13 @@ export const parseTemplate = (template: {
       updatedAt: template.updated_at.toString(),
     }),
     name: template.name,
-    form: template.jsonConfig as FormProperties,
-    isPublished: template.isPublished,
+    form: version ? parseJsonConfig(version.jsonConfig) : getResolvedTemplateFormConfig(template),
+    isPublished: options?.isPublished ?? template.isPublished,
+    currentPublishedVersionId: template.currentPublishedVersionId ?? null,
+    currentDraftVersionId: template.currentDraftVersionId ?? null,
+    versionNumber: version?.versionNumber ?? null,
+    currentPublishedVersion: template.currentPublishedVersion?.versionNumber ?? null,
+    currentDraftVersion: template.currentDraftVersion?.versionNumber ?? null,
     ...(template.deliveryOption && {
       deliveryOption: {
         emailAddress: template.deliveryOption.emailAddress,
@@ -83,8 +104,6 @@ export const parseTemplate = (template: {
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
     ...(template.ttl && { ttl: template.ttl }),
-    ...(template.lastEditedBy?.name && { lastEditedBy: template.lastEditedBy.name }),
-    ...(template._count && { _count: template._count }),
   };
 };
 
@@ -100,6 +119,7 @@ export const mapTemplateToPublicFormRecord = (template: FormRecord): PublicFormR
   return {
     id: template.id,
     updatedAt: template.updatedAt,
+    versionNumber: template.versionNumber,
     closingDate: template.closingDate,
     closedDetails: template.closedDetails,
     form: template.form,
@@ -107,4 +127,54 @@ export const mapTemplateToPublicFormRecord = (template: FormRecord): PublicFormR
     securityAttribute: template.securityAttribute,
     saveAndResume: template.saveAndResume,
   };
+};
+
+export const getBuilderVersion = (
+  template: Pick<TemplateRecordForParsing, "currentDraftVersion" | "currentPublishedVersion">
+) => {
+  return template.currentDraftVersion ?? template.currentPublishedVersion ?? null;
+};
+
+const parseJsonConfig = (raw: Prisma.JsonValue): FormProperties => {
+  if (typeof raw === "string") {
+    return JSON.parse(raw) as FormProperties;
+  }
+
+  return raw as FormProperties;
+};
+
+const getResolvedTemplateFormConfig = (
+  template: {
+    jsonConfig: Prisma.JsonValue;
+    currentDraftVersion?: TemplateVersionConfigSnapshot | null;
+    currentPublishedVersion?: TemplateVersionConfigSnapshot | null;
+  },
+  options?: {
+    preferPublished?: boolean;
+    allowTemplateFallback?: boolean;
+  }
+) => {
+  return parseJsonConfig(getResolvedTemplateRawConfig(template, options));
+};
+
+const getResolvedTemplateRawConfig = (
+  template: {
+    jsonConfig: Prisma.JsonValue;
+    currentDraftVersion?: TemplateVersionConfigSnapshot | null;
+    currentPublishedVersion?: TemplateVersionConfigSnapshot | null;
+  },
+  options?: {
+    preferPublished?: boolean;
+    allowTemplateFallback?: boolean;
+  }
+) => {
+  const version = options?.preferPublished
+    ? (template.currentPublishedVersion ?? template.currentDraftVersion ?? null)
+    : (template.currentDraftVersion ?? template.currentPublishedVersion ?? null);
+
+  if (version) {
+    return version.jsonConfig;
+  }
+
+  return template.jsonConfig;
 };

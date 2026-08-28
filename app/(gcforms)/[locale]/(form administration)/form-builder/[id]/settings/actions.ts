@@ -20,9 +20,9 @@ import {
 
 import { logMessage } from "@lib/logger";
 import { DownloadableTemplateVersion } from "@lib/templates/types";
-import { getFormattedDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
+import { getFormattedDownloadableTemplateVersions } from "@lib/templates/queries/getDownloadableTemplateVersions";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
-import { getTemplateVersionById } from "@lib/templates/versioning/queries/getTemplateVersionById";
+import { getTemplateVersionById } from "@lib/templates/queries/getTemplateVersionById";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 

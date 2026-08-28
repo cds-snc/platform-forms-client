@@ -28,7 +28,7 @@ import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "@lib/audit
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
 import { AccessControlError } from "@lib/auth/errors";
-import * as versioningInternal from "@lib/templates/versioning/internal";
+import * as versioningInternal from "@root/lib/templates/internal";
 import {
   mockAuthorizationPass,
   mockAuthorizationFail,
