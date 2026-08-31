@@ -4,7 +4,7 @@ import { createFallbackMappedAnswer, createAnswerObject } from "./utils/toAnswer
 import { getAnswerAsString } from "./utils/toString";
 import { FormProperties } from "@gcforms/types";
 import { Response } from "@gcforms/types";
-import { ResponseFilenameMapping } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/lib/processResponse";
+import { ResponseFilenameMapping } from "@formBuilder/[id]/responses-pilot/lib/processResponse";
 
 /**
  * Map raw response answers to the standardized MappedAnswer shape using a template.
