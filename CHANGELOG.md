@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.2](https://github.com/cds-snc/platform-forms-client/compare/v4.22.1...v4.22.2) (2026-08-31)
+
+
+### Bug Fixes
+
+* Conditional indicator option text not displaying for some elements ([#7829](https://github.com/cds-snc/platform-forms-client/issues/7829)) ([21ab970](https://github.com/cds-snc/platform-forms-client/commit/21ab970f54380133fec8c9eead20a7b3684e7249))
+* Ensure language is passed into save progress cache ([#7819](https://github.com/cds-snc/platform-forms-client/issues/7819)) ([8934ab1](https://github.com/cds-snc/platform-forms-client/commit/8934ab1c98a3bec2965dc24c8b3a690e0a7303eb))
+* Initiate register through auth flow ([#7826](https://github.com/cds-snc/platform-forms-client/issues/7826)) ([c5e8364](https://github.com/cds-snc/platform-forms-client/commit/c5e8364da986abc37f4d6ac90024d13077c83645))
+
+
+### Miscellaneous Chores
+
+* Cleanup and remove old groupHistory code ([#7802](https://github.com/cds-snc/platform-forms-client/issues/7802)) ([6126226](https://github.com/cds-snc/platform-forms-client/commit/6126226a49047f528fa0c89de45d23952e4e443b))
+* cleanup sharing a published form shows English and French with different styling   ([#7832](https://github.com/cds-snc/platform-forms-client/issues/7832)) ([34cc4a5](https://github.com/cds-snc/platform-forms-client/commit/34cc4a5d2d4d56e91d37dbeb5f522e76e22ec1d2))
+* Refactor element/group visibility sync (re-apply [#7781](https://github.com/cds-snc/platform-forms-client/issues/7781)) ([#7814](https://github.com/cds-snc/platform-forms-client/issues/7814)) ([547b09c](https://github.com/cds-snc/platform-forms-client/commit/547b09cceaa2636343f1e86314a696213f07e995))
+* Remove inaccurate content re: publishing ([#7831](https://github.com/cds-snc/platform-forms-client/issues/7831)) ([0c63627](https://github.com/cds-snc/platform-forms-client/commit/0c63627a81cde129013fc99ecbbac3b7a78885eb))
+
 ## [4.22.1](https://github.com/cds-snc/platform-forms-client/compare/v4.22.0...v4.22.1) (2026-08-26)
 
 
