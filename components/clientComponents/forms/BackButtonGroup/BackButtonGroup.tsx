@@ -15,7 +15,7 @@ export const BackButtonGroup = ({
   onClick?: () => void;
   saveAndResumeEnabled?: boolean;
 }) => {
-  const { currentGroup, getGroupHistory, getPreviousGroup, setGroup } = useGCFormsContext();
+  const { currentGroup, getPreviousGroup, setGroup } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
 
   // Only show on Group screens
@@ -30,10 +30,6 @@ export const BackButtonGroup = ({
 
   return (
     <>
-      {/* For debugging */}
-      <div className="hidden">
-        {`currentGroup=${currentGroup}, groupHistory=${JSON.stringify(getGroupHistory())}`}
-      </div>
       <Button
         onClick={async (e) => {
           e.preventDefault();

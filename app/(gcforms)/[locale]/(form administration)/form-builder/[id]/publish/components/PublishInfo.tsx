@@ -17,12 +17,6 @@ export const PublishInfo = async ({
     <div className="">
       <InfoCard title={t("whatYouNeedToKnow")}>
         <ul className="list-none p-0">
-          {!isPublished && (
-            <li className="mb-5 bg-gray-50 p-1.5">
-              <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("publishingDisablesEditing")}</h3>
-              <p className="text-sm">{t("publishingDisablesEditingDescription")}</p>
-            </li>
-          )}
           <li className="mb-5 bg-gray-50 p-1.5">
             <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("publishingLocksSettings")}</h3>
             <p className="text-sm">{t("publishingLocksSettingsDescription")}</p>
