@@ -18,10 +18,6 @@
       "title": "Adresse complète",
       "description": "Activer la complétion d'adresse CanadaPost pour les formulaires"
     },
-    "formTimer": {
-      "title": "formTimer",
-      "description": "Activer formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
-    },
     "hCaptcha": {
       "title": "hCaptcha",
       "description": "Activer la prévention anti-spam hCaptcha"
