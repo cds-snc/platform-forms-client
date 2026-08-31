@@ -23,9 +23,7 @@ import { cn } from "@lib/utils";
 import { NextStep } from "./NextStep";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { StatusFilter } from "../types";
-
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionOverview[];
@@ -68,9 +66,6 @@ export const DownloadTable = ({
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
 
-  const { getFlag } = useFeatureFlags();
-  const templateVersioningEnabled = getFlag("templateVersioning");
-
   // Check to see if we should show the version column. If there are mixed versions and at least one submission is not version 1, show the version column. Otherwise hide it.
   const showVersionsColumn = useMemo(() => {
     const hasMixedVersions = vaultSubmissions.some(
@@ -81,8 +76,8 @@ export const DownloadTable = ({
       (submission) => Number(submission.version) !== 1 && submission.version !== undefined
     );
 
-    return hasNonVersion1Submissions && templateVersioningEnabled && hasMixedVersions;
-  }, [vaultSubmissions, templateVersioningEnabled]);
+    return hasNonVersion1Submissions && hasMixedVersions;
+  }, [vaultSubmissions]);
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -219,7 +214,7 @@ export const DownloadTable = ({
           </thead>
           <tbody>
             <tr className="border-y-1 border-slate-400 bg-slate-100 py-2">
-              <td colSpan={templateVersioningEnabled ? 6 : 5} className="px-4 py-2">
+              <td colSpan={6} className="px-4 py-2">
                 <Pagination
                   startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
@@ -314,7 +309,7 @@ export const DownloadTable = ({
               );
             })}
             <tr className="border-y-1 border-slate-300 bg-slate-100 py-2">
-              <td colSpan={templateVersioningEnabled ? 6 : 5} className="px-4 py-2">
+              <td colSpan={6} className="px-4 py-2">
                 <Pagination
                   startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}

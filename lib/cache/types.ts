@@ -3,7 +3,6 @@
 export const UserFeatureFlags = {
   addressComplete: "addressComplete",
   responsesPilot: "responsesPilot",
-  templateVersioning: "templateVersioning",
 } as const;
 
 export const FeatureFlags = {
