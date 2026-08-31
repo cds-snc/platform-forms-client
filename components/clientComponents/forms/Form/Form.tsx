@@ -62,11 +62,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
   const [isServer, setIsServer] = useState(true);
 
-  const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
-  // TODO: This can be removed in the next refactor.
-  const isGroupsCheck = groupsCheck(props.allowGrouping);
+  const { currentGroup, getGroupTitle } = useGCFormsContext();
   const isShowReviewPage = showReviewPage(form);
-  const showIntro = isGroupsCheck ? currentGroup === LOCKED_GROUPS.START : true;
+  const showIntro = currentGroup === LOCKED_GROUPS.START;
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
@@ -196,7 +194,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           )}
 
           {/* Policy shows before form elements when groups are on */}
-          {isGroupsCheck && showIntro && (
+          {showIntro && (
             <RichText>
               {form.privacyPolicy &&
                 form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
@@ -214,8 +212,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             captchaTokenRef={props.captchaToken}
             resetCaptchaRef={props.resetCaptchaRef}
           >
-            {isGroupsCheck &&
-              isShowReviewPage &&
+            {isShowReviewPage &&
               currentGroup !== LOCKED_GROUPS.REVIEW &&
               currentGroup !== LOCKED_GROUPS.START && (
                 // Let the buttons and other logic control the focus to avoid conflicting with the
@@ -227,15 +224,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             {children}
 
-            {/* Policy shows after form elements when groups off */}
-            {!isGroupsCheck && showIntro && (
-              <RichText>
-                {form.privacyPolicy &&
-                  form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-              </RichText>
-            )}
-
-            {isGroupsCheck && isShowReviewPage && currentGroup === LOCKED_GROUPS.REVIEW && (
+            {isShowReviewPage && currentGroup === LOCKED_GROUPS.REVIEW && (
               <Review language={language as Language} />
             )}
 
@@ -248,7 +237,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             >
               <PrimaryFormButtons
                 saveAndResumeEnabled={props.saveAndResumeEnabled || false}
-                isGroupsCheck={isGroupsCheck}
                 isShowReviewPage={isShowReviewPage}
                 language={language}
                 formId={formID}

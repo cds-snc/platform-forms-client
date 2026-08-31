@@ -21,11 +21,9 @@ import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
 export const FormWrapper = ({
   formRecord,
   header,
-  allowGrouping,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   header: React.ReactNode;
-  allowGrouping?: boolean | undefined;
 }) => {
   // TODO cast language as "en" | "fr" in TS below
   const {
@@ -135,7 +133,6 @@ export const FormWrapper = ({
             />
           );
         }}
-        allowGrouping={allowGrouping}
         // Used in Formik handleSubmit where there is no access to useGCFormsContext
         currentGroup={currentGroup}
         setCaptchaFail={setCaptchaFail}
