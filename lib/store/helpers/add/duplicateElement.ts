@@ -34,9 +34,8 @@ export const duplicateElement: TemplateStore<"duplicateElement"> =
       state.form.layout.splice(elIndex + 1, 0, id);
 
       // Handle groups
-      const allowGroups = state.allowGroupsFlag;
-      groupId = allowGroups && groupId ? groupId : "";
-      if (allowGroups && groupId) {
+      groupId = groupId ? groupId : "";
+      if (groupId) {
         if (!state.form.groups) state.form.groups = {};
         if (!state.form.groups[groupId])
           state.form.groups[groupId] = {

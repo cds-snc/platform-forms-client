@@ -18,7 +18,6 @@ export interface FormProps {
   onSuccess: (id: string, submissionId?: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
-  allowGrouping?: boolean | undefined;
   matchedIds?: string[];
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;

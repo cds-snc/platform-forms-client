@@ -32,7 +32,6 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     publishDesc: "",
     closingDate: initProps?.closingDate,
     changeKey: String(new Date().getTime()),
-    allowGroupsFlag: true,
     saveAndResume: true,
     notificationsInterval: NotificationsIntervalDefault,
     editLock: null,

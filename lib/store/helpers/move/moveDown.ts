@@ -4,8 +4,7 @@ import { moveDown as moveElementDown } from "@lib/utils/form-builder";
 export const moveDown: TemplateStore<"moveDown"> = (set) => (elIndex, groupId) =>
   set((state) => {
     state.form.layout = moveElementDown(state.form.layout, elIndex);
-    const allowGroups = state.allowGroupsFlag;
-    if (allowGroups && groupId) {
+    if (groupId) {
       const group = state.form.groups && state.form.groups[groupId];
       if (group) {
         // Convert the elements array to a number array

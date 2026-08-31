@@ -104,7 +104,7 @@ export const sortByGroups = ({
   return sortByLayout({ layout, elements });
 };
 
-export const getSchemaFromState = (state: TemplateStoreState, allowGroups = false) => {
+export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
     form: {
       titleEn,
@@ -137,10 +137,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
     lastGeneratedElementId,
   };
 
-  // Force this is off until a enable in a follow-up PR
-  const sortUsingGroups = allowGroups;
-
-  if (sortUsingGroups && formHasGroups(form)) {
+  if (formHasGroups(form)) {
     const groups = form.groups as GroupsType;
     form.layout = getLayoutFromGroups(form, groups);
   }
