@@ -15,7 +15,7 @@ import {
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
-import { FormElement, FormElementTypes, StartFromExclusiveResponse, VaultStatus } from "@lib/types";
+import { StartFromExclusiveResponse, VaultStatus } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
   confirmResponses,
@@ -37,12 +37,9 @@ import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
-import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
-import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
-import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
-import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 import { traceFunction } from "@lib/otel";
-import { StarRatingObject } from "@clientComponents/forms/StarRating/types";
+import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
+import type { Response } from "@gcforms/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -199,80 +196,10 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                 delete filteredSubmissionData[key];
               }
             });
-            const submission = Object.entries(filteredSubmissionData).map(
-              ([questionId, answer]) => {
-                const question = fullFormTemplate.form.elements.find(
-                  (element) => element.id === Number(questionId)
-                );
-
-                // Handle Dynamic Rows
-                if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
-                  return {
-                    questionId: question.id,
-                    type: question?.type,
-                    questionEn: question?.properties.titleEn,
-                    questionFr: question?.properties.titleFr,
-                    answer: answer.map((item) => {
-                      return Object.values(item).map((value, index) => {
-                        if (question?.properties.subElements) {
-                          // Filter out richText elements from subElements since we access them by index
-                          const subQuestions = question?.properties.subElements.filter(
-                            (subElement) => {
-                              return subElement.type !== FormElementTypes.richText;
-                            }
-                          );
-
-                          // The question does not exist for the given index.
-                          // This can happen on Draft forms when a dynamic row is modified
-                          // after a submission and the submission is subsequently downloaded.
-                          if (!subQuestions.length || !subQuestions[index]) {
-                            // If this happens on a published form, we should log it
-                            if (fullFormTemplate.isPublished) {
-                              logMessage.error(
-                                `Dynamic row submission for form ${formID} has an invalid index ${index} for subQuestions.`
-                              );
-                            }
-
-                            return {
-                              questionId: index,
-                              type: "-",
-                              questionEn: "-",
-                              questionFr: "-",
-                              answer: value as string,
-                            };
-                          }
-
-                          const subQuestion = subQuestions[index];
-
-                          return {
-                            questionId: subQuestion.id,
-                            type: subQuestion.type,
-                            questionEn: subQuestion.properties.titleEn,
-                            questionFr: subQuestion.properties.titleFr,
-                            answer: getAnswerAsString(subQuestion, value),
-                            ...(subQuestion.type === "formattedDate" && {
-                              dateFormat: subQuestion.properties.dateFormat,
-                            }),
-                          };
-                        }
-                      });
-                    }),
-                  } as Answer;
-                }
-
-                // return the final answer object
-                return {
-                  questionId: question?.id,
-                  type: question?.type,
-                  questionEn: question?.properties.titleEn,
-                  questionFr: question?.properties.titleFr,
-                  answer: getAnswerAsString(question, answer),
-                  ...(question?.type === "formattedDate" && {
-                    dateFormat: question.properties.dateFormat,
-                  }),
-                } as Answer;
-              }
-            );
+            const submission = mapAnswers({
+              formTemplate: fullFormTemplate.form,
+              rawAnswers: filteredSubmissionData as Record<string, Response>,
+            });
 
             let sorted: Answer[];
             if (formHasGroups(fullFormTemplate.form)) {
@@ -415,80 +342,6 @@ const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answ
   const groups = orderGroups(form.groups, form.groupsLayout) ?? {};
   const layout = getLayoutFromGroups(form, groups);
   return sortByLayout({ layout, elements });
-};
-
-const getDateAsString = (answer: DateObject | string | object, dateFormat: DateFormat): string => {
-  try {
-    if (typeof answer === "object" && "YYYY" in answer && "MM" in answer && "DD" in answer) {
-      const dateObject = answer as unknown as DateObject;
-      return getFormattedDateFromObject(dateFormat, dateObject);
-    }
-
-    const dateObject = JSON.parse(answer as string) as DateObject;
-    return getFormattedDateFromObject(dateFormat, dateObject);
-  } catch (e) {
-    return answer as string;
-  }
-};
-
-const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
-  if (question && question.type === "checkbox") {
-    return Array(answer).join(", ");
-  }
-
-  if (question && question.type === "fileInput") {
-    if (!answer || typeof answer !== "object" || !("name" in answer)) {
-      return ""; // If the answer is not an object or does not have a name, return empty string
-    }
-    return answer.name as string;
-  }
-
-  if (question && question.type === "formattedDate") {
-    // Could be empty if the date was not required
-    if (!answer) {
-      return "";
-    }
-
-    const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
-
-    return getDateAsString(answer, dateFormat);
-  }
-
-  if (question && question.type === "addressComplete") {
-    if (!answer) {
-      return "";
-    }
-
-    try {
-      let addressObject: AddressElements;
-
-      if (typeof answer === "string") {
-        addressObject = JSON.parse(answer) as AddressElements;
-        return getAddressAsString(
-          addressObject,
-          question.properties.addressComponents?.splitAddress
-        );
-      }
-
-      addressObject = answer as AddressElements;
-      return getAddressAsString(addressObject, question.properties.addressComponents?.splitAddress);
-    } catch (e) {
-      // If the answer is somehow not parseable as JSON, return it as is
-      return answer as string;
-    }
-  }
-
-  // For StarRating return the serialized JSON object so that
-  // the CSV and HTML transforms can handle it contextually.
-  if (question && question.type === FormElementTypes.starRating) {
-    if (!answer) {
-      return "";
-    }
-    const starRatingObject = answer as StarRatingObject;
-    return JSON.stringify(starRatingObject);
-  }
-
-  return answer as string;
 };
 
 const logDownload = async (
