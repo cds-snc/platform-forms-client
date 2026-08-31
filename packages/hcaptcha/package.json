@@ -27,15 +27,7 @@
     "prepack": "yarn build",
     "hcaptcha:prepack": "yarn prepack"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
-    },
     "./server": {
       "types": "./dist/server.d.ts",
       "require": "./dist/server.js",

@@ -8,7 +8,7 @@ vi.mock("@lib/templates/queries/getPublicTemplateByID", () => ({
   getPublicTemplateByID: vi.fn(),
 }));
 
-vi.mock("@gcforms/hcaptcha", () => ({
+vi.mock("@gcforms/hcaptcha/server", () => ({
   verifyHCaptchaToken: vi.fn(),
 }));
 
@@ -52,7 +52,7 @@ vi.mock("./lib/server/processFormData", () => ({
 }));
 
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
-import { verifyHCaptchaToken } from "@gcforms/hcaptcha";
+import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
 import { checkOne } from "@lib/cache/flags";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";

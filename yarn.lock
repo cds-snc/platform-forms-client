@@ -1813,6 +1813,7 @@ __metadata:
     tsup: "npm:^8.3.6"
     typescript: "npm:^6.0.2"
   peerDependencies:
+    "@hcaptcha/react-hcaptcha": ^2.0.2
     react: ^19.1.0
   languageName: unknown
   linkType: soft

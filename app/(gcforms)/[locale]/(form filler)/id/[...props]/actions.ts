@@ -1,6 +1,6 @@
 "use server";
 
-import { verifyHCaptchaToken } from "@gcforms/hcaptcha";
+import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
 import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
