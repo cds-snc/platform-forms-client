@@ -7,7 +7,7 @@ import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosu
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
 import { Language } from "@lib/types/form-builder-types";
-import { getTemplateVersionState } from "@lib/templates/versioning/queries/getTemplateVersionState";
+import { getTemplateVersionState } from "@lib/templates/queries/getTemplateVersionState";
 import { PublishedPreview } from "./PublishedPreview";
 
 export async function generateMetadata(props: {

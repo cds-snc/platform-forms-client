@@ -42,8 +42,7 @@ import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDat
 import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
 import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 import { traceFunction } from "@lib/otel";
-import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
-import { StarRatingObject } from "@root/components/clientComponents/forms/StarRating/types";
+import { StarRatingObject } from "@clientComponents/forms/StarRating/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -148,12 +147,9 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       try {
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
-        const templateVersioningEnabled = await isTemplateVersioningEnabled();
-        const templateVersionNumber = templateVersioningEnabled
-          ? parseTemplateVersionNumber(version)
-          : undefined;
+        const templateVersionNumber = parseTemplateVersionNumber(version) ?? undefined;
 
-        if (templateVersioningEnabled && version && templateVersionNumber === undefined) {
+        if (version && templateVersionNumber === undefined) {
           throw new FormBuilderError(
             `Invalid response version: ${version}`,
             FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
@@ -167,7 +163,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         // Fallback: only allow fallback to non-versioned template when version 1
         // was requested. This covers the case where responses were collected
         // before any versions were created and the UI requests version 1.
-        if (fullFormTemplate === null && templateVersioningEnabled && templateVersionNumber === 1) {
+        if (fullFormTemplate === null && templateVersionNumber === 1) {
           fullFormTemplate = await getFullTemplateByID(formID);
         }
 

@@ -3,9 +3,7 @@ import { FormRecord } from "@lib/types";
 import { getAbility } from "@lib/privileges";
 import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { logMessage } from "@lib/logger";
-import { parseTemplate } from "../internal";
-import { isTemplateVersioningEnabled } from "../versioning/internal";
-import { getAllTemplatesForUser as getAllTemplatesForUserVersioningEnabled } from "../versioning/queries/getAllTemplatesForUser";
+import { parseTemplate, templateVersionSelect } from "../internal";
 
 export type TemplateOptions = {
   sortByDateUpdated?: "asc" | "desc";
@@ -19,12 +17,6 @@ export type TemplateOptions = {
 export async function getAllTemplatesForUser(
   options?: TemplateOptions
 ): Promise<Array<FormRecord>> {
-  const templateVersioningEnabled = await isTemplateVersioningEnabled();
-
-  if (templateVersioningEnabled) {
-    return getAllTemplatesForUserVersioningEnabled(options);
-  }
-
   try {
     const ability = await getAbility();
 
@@ -55,6 +47,14 @@ export async function getAllTemplatesForUser(
           publishDesc: true,
           saveAndResume: true,
           notificationsInterval: true,
+          currentPublishedVersionId: true,
+          currentDraftVersionId: true,
+          currentDraftVersion: {
+            select: templateVersionSelect,
+          },
+          currentPublishedVersion: {
+            select: templateVersionSelect,
+          },
           lastEditedBy: {
             select: {
               name: true,
