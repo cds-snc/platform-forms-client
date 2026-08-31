@@ -1,11 +1,7 @@
 "use server";
-
 import { revalidatePath } from "next/cache";
-
 import { redirect } from "next/navigation";
-
-import { createDraftVersionForTemplate } from "@root/lib/templates/mutations/createDraftForTemplate";
-
+import { createDraftVersionForTemplate } from "@lib/templates/mutations/createDraftForTemplate";
 import { AuthenticatedAction } from "@lib/actions";
 import { type FormRecord } from "@lib/types";
 
