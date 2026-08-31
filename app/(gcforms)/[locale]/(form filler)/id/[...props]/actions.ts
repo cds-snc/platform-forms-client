@@ -27,6 +27,11 @@ import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 
 import { randomUUID } from "crypto";
 
+// Block submissions when hCaptcha verification fails, including failed scores, API failures after
+// retries, missing or expired tokens, and invalid configuration.
+// ⚠️ Set to false to allow submissions despite verification failures.
+const HCAPTCHA_FAILURE_BLOCKING_ENABLED = true;
+
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
@@ -72,10 +77,8 @@ export async function submitForm(
       const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
 
       if (shouldVerifyHCaptcha) {
-        const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
-        // hCaptcha runs regardless but only block submissions if the feature flag is enabled
         const captchaVerified = await verifyHCaptchaToken(captchaToken || "", formId);
-        if (hCaptchaBlockingMode && !captchaVerified) {
+        if (HCAPTCHA_FAILURE_BLOCKING_ENABLED && !captchaVerified) {
           return {
             id: formId,
             error: {
