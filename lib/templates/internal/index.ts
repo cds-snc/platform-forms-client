@@ -94,6 +94,8 @@ export const parseTemplate = (
     saveAndResume: template.saveAndResume,
     notificationsInterval: template.notificationsInterval as NotificationsInterval,
     ...(template.ttl && { ttl: template.ttl }),
+    ...(template.lastEditedBy?.name && { lastEditedBy: template.lastEditedBy.name }),
+    ...(template._count && { _count: template._count }),
   };
 };
 
