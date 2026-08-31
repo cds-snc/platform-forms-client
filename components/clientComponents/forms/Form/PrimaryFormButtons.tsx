@@ -10,7 +10,6 @@ const isFormClosed = (status: FormStatus) => {
 };
 
 export const PrimaryFormButtons = ({
-  isGroupsCheck,
   isShowReviewPage,
   language,
   formId,
@@ -19,7 +18,6 @@ export const PrimaryFormButtons = ({
   getFormDelay,
   saveAndResumeEnabled,
 }: {
-  isGroupsCheck: boolean;
   isShowReviewPage: boolean;
   language: string;
   formId: string;
@@ -32,7 +30,7 @@ export const PrimaryFormButtons = ({
     Object.entries(props.errors).length > 0 || props.status === FormStatus.ERROR;
   return (
     <div className="flex">
-      {isGroupsCheck && isShowReviewPage && (
+      {isShowReviewPage && (
         <BackButtonGroup
           saveAndResumeEnabled={saveAndResumeEnabled}
           language={language as Language}
@@ -44,7 +42,7 @@ export const PrimaryFormButtons = ({
           fallBack: () => {
             return (
               <div className="flex">
-                {isGroupsCheck && isShowReviewPage && (
+                {isShowReviewPage && (
                   <BackButton
                     saveAndResumeEnabled={saveAndResumeEnabled}
                     language={language as Language}

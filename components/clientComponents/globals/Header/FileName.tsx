@@ -7,11 +7,7 @@ import { useTranslation } from "@i18n/client";
 import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 
-export const FileNameInput = ({
-  templateVersioningEnabled,
-}: {
-  templateVersioningEnabled: boolean;
-}) => {
+export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder", "my-forms"]);
   const { updateField, getName, getIsPublished, currentDraftVersionId, versionNumber } =
     useTemplateStore((s) => ({
@@ -115,7 +111,7 @@ export const FileNameInput = ({
         disabled={isPublished && !currentDraftVersionId && true}
       />
 
-      {templateVersioningEnabled && currentDraftVersionId && versionNumber && (
+      {currentDraftVersionId && versionNumber && (
         <div
           data-draft-id={currentDraftVersionId}
           className="inline-block self-start rounded border-solid border-yellow-700 bg-yellow-300 p-1 px-2 text-sm"

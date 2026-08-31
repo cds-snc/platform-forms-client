@@ -17,8 +17,6 @@ import { PrePublishDialog } from "@formBuilder/[id]/publish/PrePublishDialog";
 import { PopoverPublishedView } from "./PopoverPublishedView";
 import { PopoverChecklistView } from "./PopoverChecklistView";
 import { PopoverUnauthenticatedView } from "./PopoverUnauthenticatedView";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
 import { UpdateTemplateAction } from "@lib/templates/types";
 import { useTemplateContext } from "@root/lib/hooks/form-builder/useTemplateContext";
 
@@ -55,7 +53,6 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const [description, setDescription] = useState("");
   const [reasonForPublish, setReasonForPublish] = useState("");
   const dialog = useDialogRef();
-  const { getFlag } = useFeatureFlags();
 
   const {
     isPublished,
@@ -146,10 +143,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
   const isUnauthenticated = status === "unauthenticated";
   const canPublishFromPopover = allChecksPass && !!userCanPublish && !publishing;
   const showPublishAction = allChecksPass;
-  const isTemplateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
-  const showPublishedView = isTemplateVersioningEnabled
-    ? Boolean(isPublished && !currentDraftVersionId)
-    : isPublished;
+  const showPublishedView = Boolean(isPublished && !currentDraftVersionId);
   const triggerLabel = showPublishedView ? t("published") : t("publish");
   const isPublishReady = !showPublishedView && allChecksPass && !!userCanPublish;
   const signInLink = `/${locale}/auth/login`;

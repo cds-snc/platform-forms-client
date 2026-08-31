@@ -4,8 +4,7 @@ import { moveUp as moveElementUp } from "@lib/utils/form-builder";
 export const moveUp: TemplateStore<"moveUp"> = (set) => (elIndex, groupId) =>
   set((state) => {
     state.form.layout = moveElementUp(state.form.layout, elIndex);
-    const allowGroups = state.allowGroupsFlag;
-    if (allowGroups && groupId) {
+    if (groupId) {
       const group = state.form.groups && state.form.groups[groupId];
       if (group) {
         // Convert the elements array to a number array

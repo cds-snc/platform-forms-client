@@ -35,11 +35,9 @@ import { AuthenticatedAction } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
 import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
-import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { traceFunction } from "@lib/otel";
-import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import type { Response } from "@gcforms/types";
 
@@ -146,12 +144,9 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       try {
         const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
-        const templateVersioningEnabled = await isTemplateVersioningEnabled();
-        const templateVersionNumber = templateVersioningEnabled
-          ? parseTemplateVersionNumber(version)
-          : undefined;
+        const templateVersionNumber = parseTemplateVersionNumber(version) ?? undefined;
 
-        if (templateVersioningEnabled && version && templateVersionNumber === undefined) {
+        if (version && templateVersionNumber === undefined) {
           throw new FormBuilderError(
             `Invalid response version: ${version}`,
             FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
@@ -165,7 +160,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         // Fallback: only allow fallback to non-versioned template when version 1
         // was requested. This covers the case where responses were collected
         // before any versions were created and the UI requests version 1.
-        if (fullFormTemplate === null && templateVersioningEnabled && templateVersionNumber === 1) {
+        if (fullFormTemplate === null && templateVersionNumber === 1) {
           fullFormTemplate = await getFullTemplateByID(formID);
         }
 
@@ -190,7 +185,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           );
         }
 
-        const allowGroupsFlag = allowGrouping();
         // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
         const responses = queryResult
           .sort((a, b) => a.createdAt - b.createdAt)
@@ -208,7 +202,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
             });
 
             let sorted: Answer[];
-            if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
+            if (formHasGroups(fullFormTemplate.form)) {
               sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
             } else {
               sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });

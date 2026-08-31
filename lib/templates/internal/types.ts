@@ -47,6 +47,13 @@ export type TemplateRecordForParsing = {
   saveAndResume: boolean;
   notificationsInterval?: number | null;
   ttl?: Date | null;
+  lastEditedBy?: {
+    name: string | null;
+  } | null;
+  _count?: {
+    users: number;
+    invitations: number;
+  };
 };
 
 export type PublicTemplateMode = "published" | "draft";
