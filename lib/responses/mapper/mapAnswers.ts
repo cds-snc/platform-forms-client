@@ -21,19 +21,17 @@ export const mapAnswers = ({
   formTemplate,
   rawAnswers,
   attachments,
-  onMissingDynamicRowSubQuestion,
 }: {
   formTemplate: FormProperties;
   rawAnswers: Record<string, Response>;
   attachments?: ResponseFilenameMapping;
-  onMissingDynamicRowSubQuestion?: (index: number) => void;
 }): MappedAnswer[] => {
   const elementMap = getElementMap(formTemplate);
 
   const mappedAnswers: Array<MappedAnswer | null> = Object.entries(rawAnswers).map(
     ([questionId, rawAnswer]) => {
       const question = elementMap.get(Number(questionId));
-      return getMappedAnswer({ question, rawAnswer, attachments, onMissingDynamicRowSubQuestion });
+      return getMappedAnswer({ question, rawAnswer, attachments });
     }
   );
 
@@ -49,12 +47,10 @@ const getMappedAnswer = ({
   question,
   rawAnswer,
   attachments,
-  onMissingDynamicRowSubQuestion,
 }: {
   question?: FormElement;
   rawAnswer: Response;
   attachments?: ResponseFilenameMapping;
-  onMissingDynamicRowSubQuestion?: (index: number) => void;
 }): MappedAnswer => {
   if (!question) {
     return createFallbackMappedAnswer({ rawAnswer });
@@ -65,7 +61,6 @@ const getMappedAnswer = ({
       question,
       rawAnswers: rawAnswer,
       attachments,
-      onMissingDynamicRowSubQuestion,
     });
   }
 
@@ -86,12 +81,10 @@ const handleAnswerArray = ({
   question,
   rawAnswers,
   attachments,
-  onMissingDynamicRowSubQuestion,
 }: {
   question?: FormElement;
   rawAnswers: Response[];
   attachments?: ResponseFilenameMapping;
-  onMissingDynamicRowSubQuestion?: (index: number) => void;
 }): MappedAnswer => {
   if (!question || !Array.isArray(rawAnswers)) {
     throw new Error("Invalid input for handleAnswerArray");
@@ -109,7 +102,6 @@ const handleAnswerArray = ({
       const subQuestion = subQuestions[index];
 
       if (!subQuestion) {
-        onMissingDynamicRowSubQuestion?.(index);
         return createFallbackMappedAnswer({ questionId: index, rawAnswer: value });
       }
 
@@ -117,7 +109,6 @@ const handleAnswerArray = ({
         question: subQuestion,
         rawAnswer: value,
         attachments,
-        onMissingDynamicRowSubQuestion,
       });
     });
 

@@ -205,13 +205,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
             const submission = mapAnswers({
               formTemplate: fullFormTemplate.form,
               rawAnswers: filteredSubmissionData as Record<string, Response>,
-              onMissingDynamicRowSubQuestion: (index) => {
-                if (fullFormTemplate.isPublished) {
-                  logMessage.error(
-                    `Dynamic row submission for form ${formID} has an invalid index ${index} for subQuestions.`
-                  );
-                }
-              },
             });
 
             let sorted: Answer[];
