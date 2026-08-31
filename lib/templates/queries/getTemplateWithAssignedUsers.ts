@@ -2,20 +2,12 @@ import { prisma, prismaErrors } from "@gcforms/database";
 import { FormRecord } from "@lib/types";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "@lib/auditLogs";
-import { parseTemplate } from "../internal";
-import { isTemplateVersioningEnabled } from "../versioning/internal";
-import { getTemplateWithAssignedUsers as getTemplateWithAssignedUsersVersioningEnabled } from "../versioning/queries/getTemplateWithAssignedUsers";
+import { templateRecordInclude, getBuilderVersion, parseTemplate } from "../internal";
 
 export async function getTemplateWithAssignedUsers(formID: string): Promise<{
   formRecord: FormRecord;
   users: { id: string; name: string | null; email: string }[];
 } | null> {
-  const templateVersioningEnabled = await isTemplateVersioningEnabled();
-
-  if (templateVersioningEnabled) {
-    return getTemplateWithAssignedUsersVersioningEnabled(formID);
-  }
-
   const { user } = await authorization.canViewForm(formID).catch((e) => {
     logEvent(
       e.user.id,
@@ -31,12 +23,7 @@ export async function getTemplateWithAssignedUsers(formID: string): Promise<{
         id: formID,
       },
       include: {
-        deliveryOption: true,
-        lastEditedBy: {
-          select: {
-            name: true,
-          },
-        },
+        ...templateRecordInclude,
         users: {
           select: {
             id: true,
@@ -52,7 +39,10 @@ export async function getTemplateWithAssignedUsers(formID: string): Promise<{
 
   logEvent(user.id, { type: "Form", id: formID }, "ReadForm", AuditLogDetails.RetrieveFormUsers);
   return {
-    formRecord: parseTemplate(templateWithAssociatedUsers),
+    formRecord: parseTemplate(templateWithAssociatedUsers, {
+      version: getBuilderVersion(templateWithAssociatedUsers),
+      isPublished: undefined,
+    }),
     users: templateWithAssociatedUsers.users,
   };
 }

@@ -4,7 +4,7 @@ import { EditWithGroups } from "./components/EditWithGroups";
 import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDialog/DynamicRowDialog";
 import { MoreDialog } from "../components/dialogs/MoreDialog/MoreDialog";
 import { RulesDialog } from "../components/dialogs/RulesDialog/RulesDialog";
-import { getTemplateVersionState } from "@lib/templates/versioning/queries/getTemplateVersionState";
+import { getTemplateVersionState } from "@lib/templates/queries/getTemplateVersionState";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
