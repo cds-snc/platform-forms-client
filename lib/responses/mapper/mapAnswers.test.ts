@@ -183,6 +183,94 @@ describe("mapAnswers", () => {
     expect(typeof firstCell.answer === "string").toBe(true);
   });
 
+  it("maps object-shaped dynamicRow rows in property insertion order", () => {
+    const template = {
+      id: "dynamic-object-row",
+      form: {
+        elements: [
+          {
+            id: 7,
+            type: "dynamicRow",
+            properties: {
+              subElements: [
+                { id: 70, type: "textField", properties: { titleEn: "A" } },
+                { id: 71, type: "textField", properties: { titleEn: "B" } },
+              ],
+            },
+          },
+        ],
+      },
+      isPublished: true,
+      securityAttribute: "Unclassified",
+    } as unknown as PublicFormRecord;
+
+    const mapped = mapAnswers({
+      formTemplate: template.form as FormProperties,
+      rawAnswers: {
+        "7": [{ first: "row1col1", second: "row1col2" }],
+      } as unknown as Record<string, Response>,
+    });
+
+    const dynamicAnswer = mapped[0];
+    if (typeof dynamicAnswer === "string") throw new Error("expected object mapped answer");
+    const row = dynamicAnswer.answer as MappedAnswer[][];
+    expect(row[0][0]).toMatchObject({ questionId: 70, answer: "row1col1" });
+    expect(row[0][1]).toMatchObject({ questionId: 71, answer: "row1col2" });
+  });
+
+  it("filters rich text and creates fallbacks for unmapped dynamicRow cells", () => {
+    const template = {
+      id: "dynamic-fallback",
+      form: {
+        elements: [
+          {
+            id: 7,
+            type: "dynamicRow",
+            properties: {
+              subElements: [
+                { id: 70, type: "textField", properties: { titleEn: "A" } },
+                { id: 71, type: "richText", properties: { titleEn: "Instructions" } },
+              ],
+            },
+          },
+        ],
+      },
+      isPublished: true,
+      securityAttribute: "Unclassified",
+    } as unknown as PublicFormRecord;
+
+    const mapped = mapAnswers({
+      formTemplate: template.form as FormProperties,
+      rawAnswers: {
+        "7": [["mapped", "unmapped"]],
+      } as unknown as Record<string, Response>,
+    });
+
+    const dynamicAnswer = mapped[0];
+    if (typeof dynamicAnswer === "string") throw new Error("expected object mapped answer");
+    const row = dynamicAnswer.answer as MappedAnswer[][];
+    expect(row[0][0]).toMatchObject({ questionId: 70, answer: "mapped" });
+    expect(row[0][1]).toMatchObject({
+      type: "-",
+      questionId: 1,
+      answer: JSON.stringify("unmapped"),
+    });
+  });
+
+  it("returns fallback answers when the form has no elements", () => {
+    const mapped = mapAnswers({
+      formTemplate: {} as FormProperties,
+      rawAnswers: { "42": "orphaned answer" } as Record<string, Response>,
+    });
+
+    expect(mapped).toEqual([
+      expect.objectContaining({
+        type: "-",
+        answer: JSON.stringify("orphaned answer"),
+      }),
+    ]);
+  });
+
   it("handles file upload answers with potentially malicious attachments", () => {
     const template = {
       id: "file-upload",
