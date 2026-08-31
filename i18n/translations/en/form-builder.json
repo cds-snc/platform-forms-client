@@ -827,8 +827,6 @@
   "publishedTitle": "Your form is published",
   "publishedViewLinks": "View and share your published form with these links:",
   "whatYouNeedToKnow": "What you need to know",
-  "publishingDisablesEditing": "Publishing disables editing.",
-  "publishingDisablesEditingDescription": "Once you publish, you cannot make changes to this form. If changes are needed after publishing, use the form file to create and publish a new form.",
   "publishingLocksSettings": "Publishing locks some settings.",
   "publishingLocksSettingsDescription": "Many form settings will no longer be changeable such as the form's classification and intended use.",
   "publishingRemovesTestResponses": "Publishing removes test responses.",
