@@ -63,6 +63,7 @@
     "@gcforms/core": "workspace:*",
     "@gcforms/database": "workspace:*",
     "@gcforms/editor": "workspace:*",
+    "@gcforms/hcaptcha": "workspace:*",
     "@gcforms/tag-input": "workspace:*",
     "@gcforms/types": "workspace:*",
     "@hcaptcha/react-hcaptcha": "^2.0.2",

@@ -1,0 +1,45 @@
+{
+  "name": "@gcforms/hcaptcha",
+  "version": "1.0.0",
+  "author": "Canadian Digital Service",
+  "license": "MIT",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=17.3"
+  },
+  "packageManager": "yarn@4.10.3",
+  "peerDependencies": {
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
+    "@types/react": "19.2.18",
+    "react": "19.2.8",
+    "tsdown": "^0.15.6",
+    "typescript": "^6.0.2"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "yarn build",
+    "hcaptcha:prepack": "yarn prepack"
+  },
+  "exports": {
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "require": "./dist/server.js",
+      "import": "./dist/server.mjs"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "require": "./dist/client.js",
+      "import": "./dist/client.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ]
+}

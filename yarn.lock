@@ -1803,6 +1803,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@gcforms/hcaptcha@workspace:*, @gcforms/hcaptcha@workspace:packages/hcaptcha":
+  version: 0.0.0-use.local
+  resolution: "@gcforms/hcaptcha@workspace:packages/hcaptcha"
+  dependencies:
+    "@hcaptcha/react-hcaptcha": "npm:^2.0.2"
+    "@types/react": "npm:19.2.18"
+    react: "npm:19.2.8"
+    tsdown: "npm:^0.15.6"
+    typescript: "npm:^6.0.2"
+  peerDependencies:
+    "@hcaptcha/react-hcaptcha": ^2.0.2
+    react: ^19.1.0
+  languageName: unknown
+  linkType: soft
+
 "@gcforms/tag-input@workspace:*, @gcforms/tag-input@workspace:packages/tag-input":
   version: 0.0.0-use.local
   resolution: "@gcforms/tag-input@workspace:packages/tag-input"
@@ -9113,6 +9128,7 @@ __metadata:
     "@gcforms/core": "workspace:*"
     "@gcforms/database": "workspace:*"
     "@gcforms/editor": "workspace:*"
+    "@gcforms/hcaptcha": "workspace:*"
     "@gcforms/tag-input": "workspace:*"
     "@gcforms/types": "workspace:*"
     "@hcaptcha/react-hcaptcha": "npm:^2.0.2"
