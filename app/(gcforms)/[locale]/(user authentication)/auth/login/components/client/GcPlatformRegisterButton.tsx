@@ -1,22 +1,22 @@
 "use client";
 
 import { Button } from "@clientComponents/globals";
-import { gcFormsAuthorizationParamsLogin } from "@lib/auth/gcFormsAuthorizationParams";
+import { gcFormsAuthorizationParamsRegister } from "@lib/auth/gcFormsAuthorizationParams";
 import { createGcPlatformLoginHintCookie } from "./gcPlatformLoginHintCookie";
 import { signIn } from "next-auth/react";
 
-type GcPlatformSignInButtonProps = {
+type GcPlatformRegisterButtonProps = {
   locale: string;
   label: string;
 };
 
-export const GcPlatformSignInButton = ({ locale, label }: GcPlatformSignInButtonProps) => {
+export const GcPlatformRegisterButton = ({ locale, label }: GcPlatformRegisterButtonProps) => {
   const handleClick = async () => {
     document.cookie = createGcPlatformLoginHintCookie();
     await signIn(
       "gcForms",
       { redirectTo: `/${locale}/auth/policy` },
-      gcFormsAuthorizationParamsLogin
+      gcFormsAuthorizationParamsRegister
     );
   };
 
