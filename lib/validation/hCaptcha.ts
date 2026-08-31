@@ -4,7 +4,9 @@ import { logMessage } from "@lib/logger";
 import { withRetry } from "../utils/retry";
 
 /**
- * Verifies the client hCaptcha token is valid using the hCaptcha API
+ * Verifies the client hCaptcha token is valid using the hCaptcha API.
+ * Block submissions when hCaptcha verification fails, including failed scores, API failures after
+ * retries, missing or expired tokens, and invalid configuration.
  *
  * @param token captcha token to verify
  * @returns boolean true if the token is valid
