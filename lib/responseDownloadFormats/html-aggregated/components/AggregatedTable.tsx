@@ -3,7 +3,7 @@ import { Submission } from "@lib/responseDownloadFormats/types";
 import { getProperty } from "@lib/i18nHelpers";
 import { formatDate } from "@lib/client/clientHelpers";
 import { formatUserInput } from "@lib/utils/strings";
-import { FormRecord } from "@gcforms/types";
+import { FormElementTypes, FormRecord } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
 import { getFormattedStarRatingFromObject } from "@root/components/clientComponents/forms/StarRating/utils";
@@ -88,6 +88,10 @@ export const AggregatedTable = ({
                                       lang,
                                       formRecord
                                     );
+                                    const formattedStarRating = getFormattedStarRatingFromObject(
+                                      subSubItem.answer as string,
+                                      lang
+                                    );
                                     return (
                                       <tr key={String(subSubItem.questionId)}>
                                         <th
@@ -101,9 +105,9 @@ export const AggregatedTable = ({
                                           style={{ maxWidth: "12rem" }}
                                         >
                                           <div className="overflow-hidden">
-                                            {formattedNumberInput !== undefined ? (
+                                            {subSubItem.type === FormElementTypes.numberInput ? (
                                               <span>{formattedNumberInput}</span>
-                                            ) : formattedStarRating !== undefined ? (
+                                            ) : subSubItem.type === FormElementTypes.starRating ? (
                                               <span>{formattedStarRating}</span>
                                             ) : (
                                               <span
@@ -132,9 +136,9 @@ export const AggregatedTable = ({
                       style={{ maxWidth: "16rem" }}
                     >
                       <div className="overflow-hidden">
-                        {formattedNumberInput !== undefined ? (
+                        {item.type === FormElementTypes.numberInput ? (
                           <span>{formattedNumberInput}</span>
-                        ) : formattedStarRating !== undefined ? (
+                        ) : item.type === FormElementTypes.starRating ? (
                           <span>{formattedStarRating}</span>
                         ) : (
                           <span

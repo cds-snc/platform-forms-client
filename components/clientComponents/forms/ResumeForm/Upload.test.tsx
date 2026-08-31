@@ -74,7 +74,7 @@ const createSavedFormFile = (data: { id: string; values: Record<string, string> 
     "utf8"
   ).toString("base64");
 
-  return `<!doctype html><html><body><div id="form-data">${JSON.stringify({ data: encodedData })}</div></body></html>`;
+  return `<!doctype html><html lang="en"><body><div id="form-data">${JSON.stringify({ data: encodedData })}</div></body></html>`;
 };
 
 beforeEach(() => {
@@ -116,7 +116,6 @@ describe("Upload", () => {
         language: "en",
         id: "previous-form",
         values: { firstName: "Avery" },
-        history: ["start"],
         currentGroup: "start",
         restoredForm: true,
       });
@@ -160,7 +159,6 @@ describe("Upload", () => {
       expect(saveSessionProgressMock).toHaveBeenCalledWith({
         id: "current-form",
         values: { firstName: "Avery" },
-        history: ["start"],
         language: "en",
         currentGroup: "start",
         restoredForm: true,

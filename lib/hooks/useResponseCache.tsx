@@ -28,7 +28,6 @@ const LOCAL_CACHE_NAME = "gcforms-virtual-files";
 type Options = {
   id: string;
   values: Responses;
-  history: string[];
   currentGroup: string;
   language: string;
   versionNumber?: number | null;
@@ -364,7 +363,6 @@ const restoreSessionProgress = async (): Promise<RestoredProgress | false | unde
 export const saveSessionProgress = async ({
   id,
   values,
-  history,
   currentGroup,
   language,
   versionNumber,
@@ -383,7 +381,6 @@ export const saveSessionProgress = async ({
     // Allow formId to be overwritten when used as part of Upload File to resume
     id,
     values: formValuesWithoutFileContent,
-    history,
     currentGroup,
     language,
     versionNumber: versionNumber ?? 1,
@@ -417,15 +414,13 @@ export const useResponsesCache = () => {
     i18n: { language },
   } = useTranslation();
   const { updateTriggered } = useAppUpdate();
-  const { formId, formRecord, getValues, getGroupHistory, currentGroup } = useGCFormsContext();
+  const { formId, formRecord, getValues, currentGroup } = useGCFormsContext();
   const hasSaved = useRef(false);
   const saveSessionFromContext = async () => {
     const values = getValues();
-    const history = getGroupHistory();
     return saveSessionProgress({
       id: formId,
       values,
-      history,
       currentGroup: currentGroup || "",
       language,
       versionNumber: formRecord.versionNumber,
