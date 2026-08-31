@@ -1,10 +1,10 @@
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 import { getFormattedDateResponse } from "@clientComponents/forms/FormattedDate/utils";
 import { getAddressCompleteResponse } from "@clientComponents/forms/AddressComplete/utils";
-import { getStarRatingResponse } from "@root/components/clientComponents/forms/StarRating/utils";
+import { getStarRatingResponse } from "@clientComponents/forms/StarRating/utils";
 
-import { FormElement, FormElementTypes } from "@root/packages/types/src/form-types";
-import { ResponseFilenameMapping } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/lib/processResponse";
+import { FormElement, FormElementTypes } from "@gcforms/types";
+import { ResponseFilenameMapping } from "@formBuilder/[id]/responses-pilot/lib/processResponse";
 
 export const getAnswerAsString = (
   question: FormElement | undefined,
