@@ -1,5 +1,6 @@
 "use server";
 
+import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
 import { PublicFormRecord, Responses, SignedURLMap } from "@lib/types";
 import { normalizeFormResponses } from "./lib/server/normalizeFormResponses";
 import { processFormData } from "./lib/server/processFormData";
@@ -7,7 +8,6 @@ import { logMessage } from "@lib/logger";
 import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { FormStatus } from "@gcforms/types";
-import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { dateHasPast } from "@lib/utils";
@@ -26,6 +26,9 @@ import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 
 import { randomUUID } from "crypto";
+import { getClientIp } from "@lib/ip";
+
+const HCAPTCHA_MAX_ALLOWED_SCORE = 0.79;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -72,8 +75,16 @@ export async function submitForm(
       const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
 
       if (shouldVerifyHCaptcha) {
-        const captchaVerified = await verifyHCaptchaToken(captchaToken || "", formId);
-        if (!captchaVerified) {
+        const captchaResult = await verifyHCaptchaToken(captchaToken || "", {
+          secret: process.env.HCAPTCHA_SITE_VERIFY_KEY,
+          remoteIp: String(await getClientIp()),
+          maxAllowedScore: HCAPTCHA_MAX_ALLOWED_SCORE,
+          logger: {
+            info: (message) => logMessage.info(`${message} for formId ${formId}`),
+            warn: (message) => logMessage.warn(`${message} for formId ${formId}`),
+          },
+        });
+        if (!captchaResult.verified) {
           return {
             id: formId,
             error: {

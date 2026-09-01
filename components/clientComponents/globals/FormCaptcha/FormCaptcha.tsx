@@ -1,111 +1,98 @@
-import { SubmitEvent, useRef, useEffect, useCallback } from "react";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
+import type { FormHTMLAttributes, ReactNode, SubmitEvent } from "react";
+import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
+import { useHCaptcha, type UseHCaptchaOptions } from "@gcforms/hcaptcha/client";
 import { logMessage } from "@lib/logger";
-import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
-import { useCaptchaToken } from "./useCaptchaToken";
-import { useCaptchaErrorHandling } from "./useCaptchaErrorHandling";
 
-/**
- * Acts as a hCaptcha wrapper to help simplify the wiring around adding hCaptcha to a form.
- */
-export const FormCaptcha = ({
-  children,
-  handleSubmit,
-  lang,
-  dataTestId = "",
-  isPublished = true,
-  isPreview = false,
-  captchaTokenRef,
-  resetCaptchaRef,
-  ...rest
-}: {
-  children: React.ReactNode;
-  handleSubmit: (e?: SubmitEvent<HTMLFormElement>) => void;
-  lang: string;
-  dataTestId?: string;
-  isPublished?: boolean;
-  isPreview?: boolean;
-  captchaTokenRef: React.RefObject<string> | undefined;
-  resetCaptchaRef?: React.RefObject<{ resetToken: () => void }>;
-} & React.FormHTMLAttributes<HTMLFormElement>) => {
-  const hCaptchaRef = useRef<HCaptcha>(null);
-  const formSubmitEventRef = useRef<SubmitEvent<HTMLFormElement>>(null);
-  const doHCaptchaFlow = shouldCheckCaptcha(isPublished, isPreview);
+const SUSPICIOUS_ERROR_CODES = ["invalid-data", "invalid-input-response"];
 
-  const { setToken, resetToken } = useCaptchaToken(captchaTokenRef, hCaptchaRef);
+export interface FormCaptchaHandle {
+  getToken: () => string | undefined;
+  reset: () => void;
+}
 
-  const { onErrorCallback, hasFatalErrorRef } = useCaptchaErrorHandling({ resetToken });
+type FormCaptchaProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onSubmit"> &
+  Omit<UseHCaptchaOptions, "failureMode"> & {
+    children: ReactNode;
+    captchaEnabled?: boolean;
+    onUnexpectedError?: (error: unknown) => void;
+    onSubmit: (event: SubmitEvent<HTMLFormElement>) => void;
+  };
 
-  useEffect(() => {
-    if (resetCaptchaRef) {
-      resetCaptchaRef.current.resetToken = resetToken;
-    }
-  }, [resetCaptchaRef, resetToken]);
-
-  const onFormSubmit = useCallback(
-    (event: SubmitEvent<HTMLFormElement>) => {
-      event.preventDefault();
-
-      // Skip hCaptcha and allow submission though when hCaptcha's disabled or returns a fatal error code
-      if (!doHCaptchaFlow || hasFatalErrorRef.current) {
-        handleSubmit(event);
-        return;
-      }
-
-      formSubmitEventRef.current = event;
-
-      // Skip hCaptcha and allow submission though when when hCaptcha itself generates an excepetion (e.g. not loaded yet)
-      try {
-        if (hCaptchaRef.current) {
-          hCaptchaRef.current.execute();
+export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
+  ({ children, captchaEnabled = true, onSubmit, onUnexpectedError, ...props }, ref) => {
+    const captchaToken = useRef<string | undefined>(undefined);
+    const { language, onCaptchaExpired, onError, siteKey, ...formProps } = props;
+    const { captcha, execute, reset } = useHCaptcha({
+      language,
+      siteKey,
+      onError: (code) => {
+        if (SUSPICIOUS_ERROR_CODES.includes(code)) {
+          logMessage.warn(
+            `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
+          );
+        } else if (code === "invalid-sitekey" || code === "missing-sitekey") {
+          logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
         } else {
-          logMessage.warn("hCaptcha: not ready, bypassing hCaptcha and submitting form");
-          handleSubmit(event);
+          logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
         }
-      } catch (error) {
-        logMessage.warn(
-          `hCaptcha: execute() failed, bypassing hCaptcha and submitting form: ${JSON.stringify(error)}`
-        );
-        handleSubmit(event);
-      }
-    },
-    [doHCaptchaFlow, handleSubmit, hasFatalErrorRef]
-  );
+        onError?.(code);
+      },
+      onCaptchaExpired: () => {
+        logMessage.info("hCaptcha: challenge expired");
+        onCaptchaExpired?.();
+      },
+    });
 
-  const onTokenGeneratedCallback = useCallback(
-    (token: string) => {
-      setToken(token);
-      handleSubmit(formSubmitEventRef.current as SubmitEvent<HTMLFormElement>);
-    },
-    [setToken, handleSubmit]
-  );
+    useImperativeHandle(
+      ref,
+      () => ({
+        getToken: () => captchaToken.current,
+        reset: () => {
+          captchaToken.current = undefined;
+          reset();
+        },
+      }),
+      [reset]
+    );
 
-  const onChallengeExpiredCallback = useCallback(() => {
-    logMessage.info("hCaptcha: challenge expired");
-    resetToken();
-  }, [resetToken]);
+    const handleSubmit = useCallback(
+      (event: SubmitEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        captchaToken.current = undefined;
 
-  return (
-    <form
-      method="POST"
-      {...(dataTestId ? { "data-testid": dataTestId } : {})}
-      {...rest}
-      onSubmit={onFormSubmit}
-    >
-      {children}
-      {doHCaptchaFlow && (
-        <HCaptcha
-          ref={hCaptchaRef}
-          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
-          onVerify={onTokenGeneratedCallback}
-          onError={onErrorCallback}
-          onChalExpired={onChallengeExpiredCallback}
-          onExpire={resetToken}
-          languageOverride={lang}
-          size="invisible"
-          loadAsync={true}
-        />
-      )}
-    </form>
-  );
-};
+        if (!captchaEnabled) {
+          onSubmit(event);
+          return;
+        }
+
+        void execute()
+          .then((result) => {
+            if (!result.verified && !result.allowed) return;
+
+            if (result.verified) captchaToken.current = result.token;
+
+            return onSubmit(event);
+          })
+          .catch((error: unknown) => {
+            try {
+              if (onUnexpectedError) return onUnexpectedError(error);
+
+              logMessage.error(error as Error);
+            } catch (handlerError) {
+              logMessage.error(handlerError as Error);
+            }
+          });
+      },
+      [captchaEnabled, execute, onSubmit, onUnexpectedError]
+    );
+
+    return (
+      <form {...formProps} onSubmit={handleSubmit}>
+        {children}
+        {captchaEnabled && captcha}
+      </form>
+    );
+  }
+);
+
+FormCaptcha.displayName = "FormCaptcha";
