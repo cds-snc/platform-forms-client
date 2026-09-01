@@ -480,7 +480,7 @@ describe("<ElementDialog />", () => {
     await expect.element(contact).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const address = listbox.getByTestId("address");
+    const address = listbox.getByTestId("addressComplete");
     await expect.element(address).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
