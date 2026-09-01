@@ -301,14 +301,14 @@ describe("<ElementDialog />", () => {
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
 
-  it("adds an address element", async () => {
+  it("adds an address complete element", async () => {
     const handleCloseSpy = vi.fn();
     const handleAddTypeSpy = vi.fn();
 
     await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     // Click on the address element
-    const addressElement = page.getByTestId("address");
+    const addressElement = page.getByTestId("addressComplete");
     await addressElement.click();
 
     // Verify the description content is visible on the right side
