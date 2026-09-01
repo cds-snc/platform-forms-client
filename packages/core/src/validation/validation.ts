@@ -21,7 +21,6 @@ export type TranslateFn = (key: string, options?: Record<string, unknown>) => st
 
 export const isFieldResponseValid = (
   value: unknown,
-  values: Responses,
   componentType: string,
   formElement: FormElement,
   validator: ValidationProperties,
@@ -201,7 +200,6 @@ export const isFieldResponseValid = (
           if (subElement.properties.validation) {
             const validationError = isFieldResponseValid(
               row[index],
-              values,
               subElement.type,
               subElement,
               subElement.properties.validation,

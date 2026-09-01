@@ -92,7 +92,6 @@ export const validateVisibleElements = (
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
         responseValue,
-        values,
         formElement.type,
         formElement,
         formElement.properties.validation,
