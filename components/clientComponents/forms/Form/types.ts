@@ -18,7 +18,6 @@ export interface FormProps {
   onSuccess: (id: string, submissionId?: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
-  matchedIds?: string[];
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;
   setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;
