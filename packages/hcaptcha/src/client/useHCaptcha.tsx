@@ -8,10 +8,10 @@ export type HCaptchaFailureMode = "allow" | "block";
 
 export type UseHCaptchaOptions = {
   captchaEnabled?: boolean;
-  /** Controls whether a failed or unavailable CAPTCHA allows the submission to continue. */
+  // Controls whether a failed or unavailable CAPTCHA allows the submission to continue
   failureMode?: HCaptchaFailureMode;
   language?: string;
-  /** Fires for every error reported by hCaptcha. */
+  // Fires for every error reported by hCaptcha
   onError?: (code: string) => void;
   onCaptchaExpired?: () => void;
   siteKey: string;
@@ -31,12 +31,10 @@ export type HCaptchaExecutionResult =
   | { verified: false; allowed: boolean; reason: HCaptchaFailureReason };
 
 export type UseHCaptchaResult = {
-  /**
-   * The hCaptcha component to render alongside the form. It has no visible UI during normal use,
-   * but hCaptcha may display a challenge when additional verification is needed.
-   */
+  // The hCaptcha component to render alongside the form. It has no visible UI during normal use,
+  // but hCaptcha may display a challenge when additional verification is needed
   captcha: ReactNode;
-  /** Starts verification and resolves when a token is generated or the failure policy is applied. */
+  // Starts verification and resolves when a token is generated or the failure flow is applied
   execute: () => Promise<HCaptchaExecutionResult>;
   reset: () => void;
 };
@@ -44,7 +42,7 @@ export type UseHCaptchaResult = {
 const CONFIG_ERROR_CODES = ["invalid-sitekey", "missing-sitekey"];
 
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
-// with their own submission flow, including forms that use uncontrolled inputs.
+// with their own submission flow, including forms that use uncontrolled inputs
 export const useHCaptcha = ({
   captchaEnabled = true,
   failureMode = "allow",
