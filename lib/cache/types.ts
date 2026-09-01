@@ -6,7 +6,6 @@ export const UserFeatureFlags = {
 } as const;
 
 export const FeatureFlags = {
-  hCaptcha: "hCaptcha",
   notification: "notification",
   topBanner: "topBanner",
   zitadelLogin: "zitadelLogin",

@@ -18,10 +18,6 @@
       "title": "Address Complete",
       "description": "Enable CanadaPost address completion for forms"
     },
-    "hCaptcha": {
-      "title": "hCaptcha",
-      "description": "Enable hCaptcha spam prevention"
-    },
     "topBanner": {
       "title": "Banner",
       "description": "Enable warning banner to be visible"
