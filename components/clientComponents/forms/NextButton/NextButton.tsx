@@ -12,7 +12,6 @@ import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { ga, focusHeadingBySelector } from "@lib/client/clientHelpers";
-import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useRouter } from "next/navigation";
@@ -35,7 +34,6 @@ export const NextButton = ({
   saveAndResumeEnabled?: boolean;
 }) => {
   const { currentGroup, hasNextAction, handleNextAction, isOffBoardSection } = useGCFormsContext();
-  const { updateFormDelay } = useFormDelay();
   const { t } = useTranslation("form-builder");
   const router = useRouter();
   const { Event } = useCustomEvent();
@@ -123,7 +121,6 @@ export const NextButton = ({
           checkIfFormClosed();
 
           if (await handleValidation()) {
-            updateFormDelay(formRecord.form, currentGroup);
             handleNextAction();
             focusHeadingBySelector("form h2");
           } else {

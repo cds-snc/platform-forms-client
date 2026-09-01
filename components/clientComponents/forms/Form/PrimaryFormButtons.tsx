@@ -12,18 +12,12 @@ const isFormClosed = (status: FormStatus) => {
 export const PrimaryFormButtons = ({
   isShowReviewPage,
   language,
-  formId,
-  formTitle,
   props,
-  getFormDelay,
   saveAndResumeEnabled,
 }: {
   isShowReviewPage: boolean;
   language: string;
-  formId: string;
-  formTitle: string;
   props: InnerFormProps;
-  getFormDelay: () => number;
   saveAndResumeEnabled?: boolean;
 }) => {
   const submissionError =
@@ -50,9 +44,6 @@ export const PrimaryFormButtons = ({
                 )}
                 <SubmitButton
                   disabled={isFormClosed(props.status)}
-                  getFormDelay={getFormDelay}
-                  formID={formId}
-                  formTitle={formTitle}
                   submissionError={submissionError}
                 />
               </div>
@@ -60,13 +51,7 @@ export const PrimaryFormButtons = ({
           },
         })
       ) : (
-        <SubmitButton
-          disabled={isFormClosed(props.status)}
-          getFormDelay={getFormDelay}
-          formID={formId}
-          formTitle={formTitle}
-          submissionError={submissionError}
-        />
+        <SubmitButton disabled={isFormClosed(props.status)} submissionError={submissionError} />
       )}
     </div>
   );

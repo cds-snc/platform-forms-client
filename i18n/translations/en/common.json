@@ -106,14 +106,6 @@
   "title-full": "GC Forms - Formulaires GC",
   "title": "GC Forms",
   "loading": "We are processing your form submission. Please wait.",
-  "spam-error": {
-    "error-part-1": "Button cannot be used in less than",
-    "error-part-2": "seconds.",
-    "prompt-part-1": "Try again in",
-    "prompt-part-2": "seconds.",
-    "success-message": "The button is ready.",
-    "success-prompt": "You can try this button again now."
-  },
   "adminNav": {
     "dashboard": "Home",
     "formbuilder": "Form builder",

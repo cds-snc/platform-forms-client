@@ -26,7 +26,6 @@ import { Review } from "../Review/Review";
 import { StatusError } from "../StatusError/StatusError";
 import { filterValuesByVisibleElements } from "@lib/formContext";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
 import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
@@ -65,7 +64,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const { currentGroup, getGroupTitle } = useGCFormsContext();
   const isShowReviewPage = showReviewPage(form);
   const showIntro = currentGroup === LOCKED_GROUPS.START;
-  const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useSyncVisibleElementIds();
@@ -239,13 +237,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 saveAndResumeEnabled={props.saveAndResumeEnabled || false}
                 isShowReviewPage={isShowReviewPage}
                 language={language}
-                formId={formID}
-                formTitle={form.titleEn}
-                getFormDelay={() =>
-                  isShowReviewPage
-                    ? getFormDelayWithGroups()
-                    : getFormDelayWithoutGroups(form.elements)
-                }
                 props={props}
               />
             </FormActions>
