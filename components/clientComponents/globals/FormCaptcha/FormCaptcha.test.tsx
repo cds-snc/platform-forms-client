@@ -7,8 +7,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { HCaptchaExecutionResult } from "@gcforms/hcaptcha/client";
 import { FormCaptcha, type FormCaptchaHandle } from "./FormCaptcha";
 
-const { executeCaptcha, resetCaptcha } = vi.hoisted(() => ({
+const { executeCaptcha, logInfo, resetCaptcha } = vi.hoisted(() => ({
   executeCaptcha: vi.fn<() => Promise<HCaptchaExecutionResult>>(),
+  logInfo: vi.fn(),
   resetCaptcha: vi.fn(),
 }));
 
@@ -16,10 +17,19 @@ vi.mock("@gcforms/hcaptcha/client", () => ({
   useHCaptcha: () => ({ captcha: null, execute: executeCaptcha, reset: resetCaptcha }),
 }));
 
+vi.mock("@lib/logger", () => ({
+  logMessage: {
+    info: logInfo,
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
 describe("FormCaptcha", () => {
   beforeEach(() => {
     executeCaptcha.mockReset();
     executeCaptcha.mockResolvedValue({ verified: true, token: "captcha-token" });
+    logInfo.mockReset();
     resetCaptcha.mockClear();
   });
 
@@ -37,6 +47,9 @@ describe("FormCaptcha", () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledOnce());
     expect(captchaRef.current?.getToken()).toBe("captcha-token");
+    expect(logInfo).toHaveBeenCalledWith(
+      expect.stringMatching(/^hCaptcha: verified token received by form at .+$/)
+    );
   });
 
   it("clears the token and resets the captcha", async () => {

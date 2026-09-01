@@ -69,7 +69,12 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
           .then((result) => {
             if (!result.verified && !result.allowed) return;
 
-            if (result.verified) captchaToken.current = result.token;
+            if (result.verified) {
+              captchaToken.current = result.token;
+              logMessage.info(
+                `hCaptcha: verified token received by form at ${new Date().toISOString()}`
+              );
+            }
 
             return onSubmit(event);
           })
