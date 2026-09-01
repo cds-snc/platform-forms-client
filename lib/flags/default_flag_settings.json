@@ -1,7 +1,5 @@
 {
   "addressComplete": false,
-  "formTimer": false,
-  "hCaptcha": false,
   "notification": false,
   "topBanner": false,
   "responsesPilot": false,
