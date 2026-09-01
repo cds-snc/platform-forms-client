@@ -14,10 +14,6 @@
       "title": "Zitadel Auth",
       "description": "Enable API authentication with Zitadel"
     },
-    "addressComplete": {
-      "title": "Address Complete",
-      "description": "Enable CanadaPost address completion for forms"
-    },
     "topBanner": {
       "title": "Banner",
       "description": "Enable warning banner to be visible"
