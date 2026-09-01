@@ -312,18 +312,18 @@ describe("<ElementDialog />", () => {
     await addressElement.click();
 
     // Verify the description content is visible on the right side
-    const descriptionTitle = page.getByTestId("element-description-title");
+    const descriptionTitle = page.getByTestId("element-description-content");
     await expect.element(descriptionTitle).toBeVisible();
     await expect.element(descriptionTitle).toHaveTextContent("Address");
 
-    const descriptionText = page.getByTestId("element-description-text");
+    const descriptionText = page.getByTestId("element-description-content");
     await expect.element(descriptionText).toBeVisible();
 
     // Press Enter to confirm
     await userEvent.keyboard("{Enter}");
 
     // Verify the handlers were called correctly
-    expect(handleAddTypeSpy).toHaveBeenCalledWith("address");
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("addressComplete");
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
 
