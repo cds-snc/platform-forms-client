@@ -15,7 +15,6 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "paths": {
-      "@root/*": ["./*"],
       "@lib/*": ["./lib/*"],
       "@api/*": ["./app/api/*"],
       "@formBuilder/*": ["./app/(gcforms)/[locale]/(form administration)/form-builder/*"],
@@ -36,7 +35,8 @@
       "components/*": ["./components/*"],
       "lib/*": ["./lib/*"],
       "__fixtures__/*": ["./__fixtures__/*"],
-      "__utils__/*": ["./__utils__/*"]
+      "__utils__/*": ["./__utils__/*"],
+      "@root/*": ["./*"]
     },
     "incremental": true,
     "plugins": [
