@@ -72,10 +72,8 @@ export async function submitForm(
       const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
 
       if (shouldVerifyHCaptcha) {
-        const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
-        // hCaptcha runs regardless but only block submissions if the feature flag is enabled
         const captchaVerified = await verifyHCaptchaToken(captchaToken || "", formId);
-        if (hCaptchaBlockingMode && !captchaVerified) {
+        if (!captchaVerified) {
           return {
             id: formId,
             error: {
