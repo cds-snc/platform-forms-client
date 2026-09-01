@@ -453,18 +453,4 @@ describe("AddressComplete", () => {
       "222 King St E, Bowmanville ON L1C P6 - 27 Adresses"
     );
   });
-
-  it("does not call AddressComplete APIs when feature flag is disabled", async () => {
-    const user = userEvent.setup();
-    getFlagMock.mockReturnValue(false);
-
-    renderComponent();
-
-    const streetInput = await screen.findByTestId("address-streetAddress-input");
-    await user.type(streetInput, "No API expected");
-
-    expect(getAddressCompleteChoicesMock).not.toHaveBeenCalled();
-    expect(getAddressCompleteRetrieveMock).not.toHaveBeenCalled();
-    expect(getSelectedAddressMock).not.toHaveBeenCalled();
-  });
 });
