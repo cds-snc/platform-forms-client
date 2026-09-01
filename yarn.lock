@@ -472,6 +472,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/s3-request-presigner@npm:3.1092.0":
+  version: 3.1092.0
+  resolution: "@aws-sdk/s3-request-presigner@npm:3.1092.0"
+  dependencies:
+    "@aws-sdk/core": "npm:^3.976.0"
+    "@aws-sdk/signature-v4-multi-region": "npm:^3.996.41"
+    "@aws-sdk/types": "npm:^3.974.2"
+    "@smithy/core": "npm:^3.29.4"
+    "@smithy/types": "npm:^4.16.1"
+    tslib: "npm:^2.6.2"
+  checksum: 10c0/d5876642b4398fca7aa0bf52d79d436e5a52f1ff36b0c9525a7bafbba3375e9d44657c96637a8ce75d06fc6304ad50cd1ce85242f1ddab6bc1eb44c14d607066
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/signature-v4-multi-region@npm:^3.996.41":
   version: 3.996.41
   resolution: "@aws-sdk/signature-v4-multi-region@npm:3.996.41"
@@ -9120,9 +9134,11 @@ __metadata:
     "@aws-sdk/client-cognito-identity-provider": "npm:^3.1068.0"
     "@aws-sdk/client-dynamodb": "npm:^3.1068.0"
     "@aws-sdk/client-lambda": "npm:^3.1068.0"
+    "@aws-sdk/client-s3": "npm:3.1092.0"
     "@aws-sdk/client-sqs": "npm:^3.1068.0"
     "@aws-sdk/lib-dynamodb": "npm:^3.1068.0"
     "@aws-sdk/s3-presigned-post": "npm:^3.1068.0"
+    "@aws-sdk/s3-request-presigner": "npm:3.1092.0"
     "@aws-sdk/types": "npm:^3.973.12"
     "@axe-core/playwright": "npm:^4.11.3"
     "@babel/core": "npm:^7.28.0"

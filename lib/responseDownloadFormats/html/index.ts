@@ -20,6 +20,7 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
           t,
         })
       ),
+      ...(response.attachments?.length ? { attachments: response.attachments } : {}),
     };
   });
 

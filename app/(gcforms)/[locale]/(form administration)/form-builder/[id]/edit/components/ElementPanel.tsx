@@ -12,7 +12,6 @@ import { cn } from "@lib/utils";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { getTranslatedProperties } from "@formBuilder/actions";
 
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 export const ElementPanel = ({
@@ -63,9 +62,6 @@ export const ElementPanel = ({
     duplicateElement(item.id, groupId, en, fr);
   }, [duplicateElement, groupId, item.id, setFocusInput]);
 
-  const isFileUpload = item.type === "fileInput";
-  const { hasApiKeyId } = useFormBuilderConfig();
-
   return (
     <div
       id={`element-${item.id}`}
@@ -74,12 +70,11 @@ export const ElementPanel = ({
         `element-${item.index}`,
         "group",
         isWithin && "active",
-        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500  bg-white",
+        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500 bg-white",
         !hasSubPanel && isWithin && "focus-within:bg-violet-50 hover:bg-violet-50",
-        hasRules && "border-dashed border-1 border-slate-500",
+        hasRules && "border-1 border-dashed border-slate-500",
         hasSubPanel &&
-          "border border-slate-500 hover:outline hover:outline-2 hover:outline-indigo-700 hover:outline-offset-[-1px] focus-within:outline focus-within:outline-2 focus-within:outline-indigo-700 focus-within:outline-offset-[-1px]",
-        isFileUpload && !hasApiKeyId && "bg-red-50 hover:bg-red-50 focus-within:bg-red-50"
+          "border border-slate-500 focus-within:outline focus-within:outline-2 focus-within:outline-offset-[-1px] focus-within:outline-indigo-700 hover:outline hover:outline-2 hover:outline-offset-[-1px] hover:outline-indigo-700"
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;

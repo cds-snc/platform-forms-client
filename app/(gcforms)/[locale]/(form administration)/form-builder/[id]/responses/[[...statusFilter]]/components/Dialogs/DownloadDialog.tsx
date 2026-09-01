@@ -61,6 +61,7 @@ export const DownloadDialog = ({
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setZipAllFiles(true);
     }
   }, [selectedFormat]);
@@ -166,19 +167,18 @@ export const DownloadDialog = ({
         const zip = new JSZip();
         zip.file("_receipt-recu.html", response.receipt);
 
-        response.responses.forEach((response: { id: string; html: string }) => {
+        response.responses.forEach((response) => {
           zip.file(`${response.id}.html`, response.html);
         });
 
-        zip.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-          const fileName = getVersionedZipFileName(
-            `${filePrefix}responses-reponses.zip`,
-            selectedVersion
-          );
-          downloadFileFromBlob(blob, fileName);
+        const blob = await zip.generateAsync({ type: "blob", streamFiles: true });
+        const fileName = getVersionedZipFileName(
+          `${filePrefix}responses-reponses.zip`,
+          selectedVersion
+        );
+        downloadFileFromBlob(blob, fileName);
 
-          handleDownloadComplete(filteredIds);
-        });
+        handleDownloadComplete(filteredIds);
       }
 
       if (selectedFormat === DownloadFormat.CSV) {
@@ -202,15 +202,14 @@ export const DownloadDialog = ({
 
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
-          file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = getVersionedZipFileName(
-              `${filePrefix}responses-reponses.zip`,
-              selectedVersion
-            );
-            downloadFileFromBlob(blob, fileName);
+          const blob = await file.generateAsync({ type: "blob", streamFiles: true });
+          const fileName = getVersionedZipFileName(
+            `${filePrefix}responses-reponses.zip`,
+            selectedVersion
+          );
+          downloadFileFromBlob(blob, fileName);
 
-            handleDownloadComplete(filteredIds);
-          });
+          handleDownloadComplete(filteredIds);
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(
@@ -241,15 +240,14 @@ export const DownloadDialog = ({
           const file = new JSZip();
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.json", JSON.stringify(response.responses));
-          file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = getVersionedZipFileName(
-              `${filePrefix}responses-reponses.zip`,
-              selectedVersion
-            );
-            downloadFileFromBlob(blob, fileName);
+          const blob = await file.generateAsync({ type: "blob", streamFiles: true });
+          const fileName = getVersionedZipFileName(
+            `${filePrefix}responses-reponses.zip`,
+            selectedVersion
+          );
+          downloadFileFromBlob(blob, fileName);
 
-            handleDownloadComplete(filteredIds);
-          });
+          handleDownloadComplete(filteredIds);
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(

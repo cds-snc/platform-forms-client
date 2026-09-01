@@ -16,7 +16,6 @@ import { CustomizeSetButton } from "../CustomizeSetButton";
 import { AddToSetButton } from "../AddToSetButton";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useRefsContext } from "../../RefsContext";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { cn } from "@lib/utils";
 
 export const SubElement = ({
@@ -43,8 +42,6 @@ export const SubElement = ({
   const { refs } = useRefsContext();
 
   const subElements = item.properties.subElements;
-
-  const { hasApiKeyId } = useFormBuilderConfig();
 
   const { handleAddSubElement } = useHandleAdd();
 
@@ -80,7 +77,7 @@ export const SubElement = ({
 
   if (!subElements || subElements.length < 1)
     return (
-      <div className="ml-4 mt-10" data-id={item.id}>
+      <div className="mt-10 ml-4" data-id={item.id}>
         <AddToSetButton
           handleAdd={async (type?: FormElementTypes) => {
             const id = await handleAddSubElement(item.id, 0, type);
@@ -128,14 +125,7 @@ export const SubElement = ({
                 />
               }
             >
-              <div
-                className={cn(
-                  "pt-4",
-                  !hasApiKeyId &&
-                    item.type === FormElementTypes.fileInput &&
-                    "bg-red-50 hover:bg-red-50 focus-within:bg-red-50 px-4 py-2"
-                )}
-              >
+              <div className={cn("pt-4")}>
                 <PanelBodySub
                   elIndex={elIndex}
                   item={item}
@@ -150,7 +140,7 @@ export const SubElement = ({
       })}
 
       {subElements.length >= 1 && (
-        <div className="mb-2 ml-4 mt-4" data-id={item.id}>
+        <div className="mt-4 mb-2 ml-4" data-id={item.id}>
           <AddToSetButton
             handleAdd={async (type?: FormElementTypes) => {
               const id = await handleAddSubElement(item.id, subElements.length, type);

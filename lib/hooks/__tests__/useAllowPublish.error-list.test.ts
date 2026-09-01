@@ -37,7 +37,8 @@ vi.mock("../useFormBuilderConfig", () => ({
 }));
 
 vi.mock("../../store/useTemplateStore", () => ({
-  useTemplateStore: (selector: (state: typeof mockState.store) => unknown) => selector(mockState.store),
+  useTemplateStore: (selector: (state: typeof mockState.store) => unknown) =>
+    selector(mockState.store),
 }));
 
 const createTranslatedForm = (): MockForm => ({
@@ -139,17 +140,12 @@ describe("useAllowPublish error list coverage", () => {
 
     expect(getUncheckedItems(result.current.data)).toEqual(["translate"]);
     expect(
-      result.current.hasData([
-        "title",
-        "questions",
-        "privacyPolicy",
-        "confirmationMessage",
-      ])
+      result.current.hasData(["title", "questions", "privacyPolicy", "confirmationMessage"])
     ).toBe(true);
     expect(result.current.isPublishable()).toBe(false);
   });
 
-  it("adds the API key checklist error when file inputs are present without an API key", () => {
+  it("does not require an API key when file inputs are present", () => {
     getMockForm().elements.push({
       id: 2,
       type: FormElementTypes.fileInput,
@@ -166,9 +162,9 @@ describe("useAllowPublish error list coverage", () => {
 
     const { result } = renderHook(() => useAllowPublish());
 
-    expect(result.current.hasFileInputElement).toBe(true);
     expect(result.current.hasApiKeyId).toBe(false);
-    expect(getUncheckedItems(result.current.data)).toEqual(["hasFileInputAndApiKey"]);
-    expect(result.current.isPublishable()).toBe(false);
+    expect(result.current.data).not.toHaveProperty("hasFileInputAndApiKey");
+    expect(getUncheckedItems(result.current.data)).toEqual([]);
+    expect(result.current.isPublishable()).toBe(true);
   });
 });

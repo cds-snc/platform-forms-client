@@ -198,13 +198,7 @@
       "title": "File upload"
     },
     "fileInputDefault": {
-      "text1": "A way to add supporting documentation. Each file can be up to 10 MB in size. Files can be in PDF, Word, Excel, CSV, PNG, JPG, or TXT format.",
-      "text1x": "⚠️ You must",
-      "text2": "have an API key configured for data retrieval",
-      "text3": "to use this form element."
-    },
-    "fileInputWithApi": {
-      "description": "A way to add supporting documentation. Each file can be up to 10 MB in size. Files can be in PDF, Word, Excel, CSV, PNG, JPG, or TXT format."
+      "text1": "A way to add supporting documentation. Each file can be up to 10 MB in size. Files can be in PDF, Word, Excel, CSV, PNG, JPG, or TXT format."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
@@ -716,8 +710,6 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
-  "hasFileInputAndApiDelivery": "Retrieving responses from API endpoint",
-  "hasFileInputAndApiDeliveryNote": "API key required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -1704,9 +1696,6 @@
   "pilot": {
     "tag": "Pilot:",
     "text": "Trial feature "
-  },
-  "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
   },
   "publishViewEdit": {
     "title": "Update a published form",

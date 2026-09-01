@@ -8,6 +8,7 @@ import {
   isValidatedTextType,
   incrementSubElementId,
   removeGroupElement,
+  hasFileInputElement,
 } from "../index";
 import type { FormElement } from "@lib/types";
 import type { GroupsType } from "@gcforms/types";
@@ -15,10 +16,35 @@ import type { GroupsType } from "@gcforms/types";
 import { FormElementTypes } from "@gcforms/types";
 
 // minimal fixture helper — keep shallow to avoid deep fixtures
-const el = (id: number): FormElement =>
-  ({ id, type: FormElementTypes.textField }) as unknown as FormElement;
+const el = (id: number): FormElement => ({
+  id,
+  type: FormElementTypes.textField,
+  properties: { titleEn: "", titleFr: "", subElements: [] },
+});
 
 describe("Util", () => {
+  it("detects file inputs in top-level and nested elements", () => {
+    expect(hasFileInputElement([el(1)])).toBe(false);
+    expect(
+      hasFileInputElement([
+        {
+          ...el(1),
+          properties: {
+            titleEn: "",
+            titleFr: "",
+            subElements: [
+              {
+                ...el(2),
+                type: FormElementTypes.fileInput,
+              },
+            ],
+          },
+        },
+      ])
+    ).toBe(true);
+    expect(hasFileInputElement([{ ...el(3), type: FormElementTypes.fileInput }])).toBe(true);
+  });
+
   it("sorts using layout array", () => {
     const sorted1 = sortByLayout({
       layout: [4, 3, 2, 1],

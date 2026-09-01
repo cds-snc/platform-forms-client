@@ -12,7 +12,7 @@ export type VaultSubmission = {
   formID: string;
   submissionID: string;
   formSubmission: Responses;
-  fileAttachments?: { fileName: string }[];
+  fileAttachments?: VaultFileAttachment[];
   securityAttribute: string;
   createdAt: number;
   status: VaultStatus;
@@ -23,6 +23,16 @@ export type VaultSubmission = {
   confirmedAt?: number;
   downloadedAt?: number;
   removedAt?: number;
+};
+
+export type VaultFileAttachment = {
+  id: string;
+  name: string;
+  path: string;
+  scanStatus: string;
+  md5?: string;
+  downloadLink?: string;
+  isPotentiallyMalicious?: boolean;
 };
 
 export type VaultSubmissionOverview = {

@@ -15,6 +15,16 @@ export const getNextIndex = (items: number[] | FormElement[], index: number) => 
   return index === items.length - 1 ? 0 : index + 1;
 };
 
+export function hasFileInputElement(elements?: FormElement[]): boolean {
+  return (
+    elements?.some(
+      (element) =>
+        element.type === FormElementTypes.fileInput ||
+        hasFileInputElement(element.properties?.subElements)
+    ) ?? false
+  );
+}
+
 export const removeById = (items: number[], searchId: number) => {
   return items.filter((val) => {
     return searchId !== val;

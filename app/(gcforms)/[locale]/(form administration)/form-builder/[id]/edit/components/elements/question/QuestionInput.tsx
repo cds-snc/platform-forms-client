@@ -36,6 +36,7 @@ export const QuestionInput = ({
   const { refs } = useRefsContext();
   const getRef = (element: HTMLTextAreaElement) => {
     if (refs?.current && element && id) {
+      // eslint-disable-next-line react-hooks/immutability
       refs.current[id] = element;
     }
   };
@@ -57,6 +58,7 @@ export const QuestionInput = ({
   }, [getFocusInput, setFocusInput, id, refs]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setValue(initialValue);
   }, [initialValue]);
 
@@ -88,7 +90,7 @@ export const QuestionInput = ({
       name={`item${index}`}
       placeholder={t(placeholder)}
       wrapperClassName="w-full font-bold text-base"
-      className="font-bold text-slate-800 laptop:text-lg"
+      className="laptop:text-lg font-bold text-slate-800"
       value={value}
       describedBy={describedById ?? undefined}
       onBlur={() => {

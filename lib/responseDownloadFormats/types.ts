@@ -13,6 +13,19 @@ export interface Submission {
   createdAt: number;
   confirmationCode: string;
   answers: Answer[];
+  attachments?: ResponseAttachment[];
+}
+
+export interface ResponseAttachment {
+  id: string;
+  name: string;
+  downloadLink: string;
+  isPotentiallyMalicious?: boolean;
+}
+
+export interface ResponseAttachmentGroup {
+  responseId: string;
+  attachments: ResponseAttachment[];
 }
 
 export interface FormResponseSubmissions {
@@ -37,22 +50,27 @@ export const DownloadFormat = {
 } as const;
 export type DownloadFormat = (typeof DownloadFormat)[keyof typeof DownloadFormat];
 
-export type HtmlResponse = {
+export interface HtmlResponseRecord {
   id: string;
   created_at: number;
   html: string;
-}[];
+  attachments?: ResponseAttachment[];
+}
+
+export type HtmlResponse = HtmlResponseRecord[];
 
 export type HtmlAggregatedResponse = string;
 
 export type HtmlZippedResponse = {
   receipt: string;
-  responses: {
-    id: string;
-    created_at: number;
-    html: string;
-  }[];
+  responses: Omit<HtmlResponseRecord, "attachments">[];
 };
 
-export type CSVResponse = { receipt: string; responses: string };
-export type JSONResponse = { receipt: string; responses: object };
+export type CSVResponse = {
+  receipt: string;
+  responses: string;
+};
+export type JSONResponse = {
+  receipt: string;
+  responses: object;
+};

@@ -7,6 +7,9 @@ import { getSubmissionsByFormat } from "../actions";
 import { DownloadFormat, HtmlResponse } from "@lib/responseDownloadFormats/types";
 import { Language, ServerActionError } from "@lib/types/form-builder-types";
 import { FormBuilderError } from "../exceptions";
+import { ga } from "@lib/client/clientHelpers";
+import JSZip from "jszip";
+import { addResponseAttachmentsToZip } from "@lib/responseDownloadFormats/attachments";
 
 export const DownloadSingleButton = ({
   id,
@@ -44,10 +47,30 @@ export const DownloadSingleButton = ({
       const interval = 200;
       const submission = response[0];
       const fileName = `${submission.id}.html`;
-      const href = window.URL.createObjectURL(new Blob([submission.html]));
+      let downloadData: Blob;
+      let downloadFileName = fileName;
+
+      if (submission.attachments?.length) {
+        const zip = new JSZip();
+        zip.file(fileName, submission.html);
+        await addResponseAttachmentsToZip(zip, [
+          { responseId: submission.id, attachments: submission.attachments },
+        ]);
+        downloadData = await zip.generateAsync({ type: "blob", streamFiles: true });
+        downloadFileName = `${submission.id}.zip`;
+        ga("response_download_zip", {
+          formID: formId,
+          zipSizeBytes: downloadData.size,
+          attachmentCount: submission.attachments.length,
+        });
+      } else {
+        downloadData = new Blob([submission.html]);
+      }
+
+      const href = window.URL.createObjectURL(downloadData);
       const anchorElement = document.createElement("a");
       anchorElement.href = href;
-      anchorElement.download = fileName;
+      anchorElement.download = downloadFileName;
       document.body.appendChild(anchorElement);
       anchorElement.click();
       document.body.removeChild(anchorElement);
