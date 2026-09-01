@@ -6,7 +6,6 @@ export const UserFeatureFlags = {
 } as const;
 
 export const FeatureFlags = {
-  formTimer: "formTimer",
   notification: "notification",
   topBanner: "topBanner",
   zitadelLogin: "zitadelLogin",

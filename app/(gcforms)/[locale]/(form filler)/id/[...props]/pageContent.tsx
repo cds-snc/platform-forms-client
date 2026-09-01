@@ -3,7 +3,6 @@ import React from "react";
 import { TypeOmit, FormRecord } from "@lib/types";
 import { ClosedPage, TextPage } from "@clientComponents/forms";
 import { FormWrapper } from "./clientSide";
-import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
@@ -58,17 +57,15 @@ export const PageContent = ({
   // Form page (default)
   return (
     <div className={classes}>
-      <FormDelayProvider>
-        <FormWrapper
-          header={
-            <>
-              <ClosingNotice language={language} closingDate={formRecord.closingDate} />
-              <GcdsH1 tabIndex={-1}>{formTitle}</GcdsH1>
-            </>
-          }
-          formRecord={formRecord}
-        />
-      </FormDelayProvider>
+      <FormWrapper
+        header={
+          <>
+            <ClosingNotice language={language} closingDate={formRecord.closingDate} />
+            <GcdsH1 tabIndex={-1}>{formTitle}</GcdsH1>
+          </>
+        }
+        formRecord={formRecord}
+      />
     </div>
   );
 };
