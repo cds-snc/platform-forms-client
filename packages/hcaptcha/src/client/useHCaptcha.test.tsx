@@ -62,20 +62,17 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
 }));
 
 const HookHarness = ({
-  captchaEnabled,
   failureMode,
   onCaptchaExpired,
   onError,
   onResult,
 }: {
-  captchaEnabled?: boolean;
   failureMode?: "allow" | "block";
   onCaptchaExpired?: () => void;
   onError?: (code: string) => void;
   onResult: (result: HCaptchaExecutionResult) => void;
 }) => {
   const { captcha, execute, reset } = useHCaptcha({
-    captchaEnabled,
     siteKey: "site-key",
     failureMode,
     onCaptchaExpired,
@@ -114,21 +111,6 @@ describe("useHCaptcha", () => {
     );
   });
 
-  it("allows a disabled captcha", async () => {
-    const onResult = vi.fn();
-    const { getByRole } = render(<HookHarness captchaEnabled={false} onResult={onResult} />);
-
-    fireEvent.click(getByRole("button", { name: "Execute" }));
-
-    await waitFor(() =>
-      expect(onResult).toHaveBeenCalledWith({
-        verified: false,
-        allowed: true,
-        reason: "disabled",
-      })
-    );
-  });
-
   it("blocks provider failures in block mode", async () => {
     const onResult = vi.fn();
     const { getByRole, getByTestId } = render(
@@ -160,7 +142,7 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: true,
+        allowed: false,
         reason: "execution-error",
       })
     );
@@ -171,7 +153,7 @@ describe("useHCaptcha", () => {
     const onResult = vi.fn();
     const onCaptchaExpired = vi.fn();
     const { getByRole, getByTestId } = render(
-      <HookHarness onCaptchaExpired={onCaptchaExpired} onResult={onResult} />
+      <HookHarness failureMode="allow" onCaptchaExpired={onCaptchaExpired} onResult={onResult} />
     );
 
     fireEvent.click(getByRole("button", { name: "Execute" }));

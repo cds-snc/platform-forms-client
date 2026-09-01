@@ -7,7 +7,6 @@ import { useCallback, useRef } from "react";
 export type HCaptchaFailureMode = "allow" | "block";
 
 export type UseHCaptchaOptions = {
-  captchaEnabled?: boolean;
   // Controls whether a failed or unavailable CAPTCHA allows the submission to continue
   failureMode?: HCaptchaFailureMode;
   language?: string;
@@ -18,7 +17,6 @@ export type UseHCaptchaOptions = {
 };
 
 export type HCaptchaFailureReason =
-  | "disabled"
   | "configuration-error"
   | "captcha-error"
   | "expired"
@@ -44,8 +42,7 @@ const CONFIG_ERROR_CODES = ["invalid-sitekey", "missing-sitekey"];
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
 export const useHCaptcha = ({
-  captchaEnabled = true,
-  failureMode = "allow",
+  failureMode = "block",
   language,
   onError: onErrorCallback,
   onCaptchaExpired,
@@ -65,7 +62,7 @@ export const useHCaptcha = ({
   const failureResult = useCallback(
     (reason: HCaptchaFailureReason): HCaptchaExecutionResult => ({
       verified: false,
-      allowed: reason !== "cancelled" && (failureMode === "allow" || reason === "disabled"),
+      allowed: reason !== "cancelled" && failureMode === "allow",
       reason,
     }),
     [failureMode]
@@ -110,11 +107,6 @@ export const useHCaptcha = ({
     });
     pendingExecutionRef.current = { promise, resolve: resolveExecution };
 
-    if (!captchaEnabled) {
-      complete(failureResult("disabled"));
-      return promise;
-    }
-
     if (!hCaptchaRef.current || hasFatalErrorRef.current) {
       complete(failureResult(hasFatalErrorRef.current ? "configuration-error" : "not-ready"));
       return promise;
@@ -127,7 +119,7 @@ export const useHCaptcha = ({
     }
 
     return promise;
-  }, [captchaEnabled, complete, failureResult]);
+  }, [complete, failureResult]);
 
   const onVerify = useCallback(
     (verifiedToken: string) => {
@@ -136,7 +128,7 @@ export const useHCaptcha = ({
     [complete]
   );
 
-  const captcha = captchaEnabled ? (
+  const captcha = (
     <HCaptcha
       ref={hCaptchaRef}
       sitekey={siteKey}
@@ -148,7 +140,7 @@ export const useHCaptcha = ({
       size="invisible"
       loadAsync={true}
     />
-  ) : null;
+  );
 
   return { captcha, execute, reset };
 };
