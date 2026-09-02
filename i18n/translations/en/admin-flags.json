@@ -10,10 +10,6 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "zitadelAuth": {
-      "title": "Zitadel Auth",
-      "description": "Enable API authentication with Zitadel"
-    },
     "topBanner": {
       "title": "Banner",
       "description": "Enable warning banner to be visible"
