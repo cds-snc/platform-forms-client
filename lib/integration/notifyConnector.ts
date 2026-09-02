@@ -7,8 +7,6 @@ import {
 } from "@gcforms/connectors";
 import { logMessage } from "@lib/logger";
 import { traceFunction } from "../otel";
-import { checkOne } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
 
 type SendEmailOptions = ({ mode?: "immediate" } | { mode: "deferred"; notificationId: string }) & {
   bypassNotificationPipeline?: boolean;
@@ -49,9 +47,7 @@ async function sendEmail(
         return;
       }
 
-      const notificationEnabled = await checkOne(FeatureFlags.notification);
-
-      if (notificationEnabled && options?.bypassNotificationPipeline !== true) {
+      if (options?.bypassNotificationPipeline !== true) {
         logMessage.debug(
           `Sending email through notification pipeline with option: ${options?.mode === "deferred" ? "sendDeferred" : "sendImmediate"}`
         );
