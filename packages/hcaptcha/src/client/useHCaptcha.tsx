@@ -49,11 +49,14 @@ export const useHCaptcha = ({
   siteKey,
 }: UseHCaptchaOptions): UseHCaptchaResult => {
   const hCaptchaRef = useRef<HCaptcha>(null);
+
   const pendingExecutionRef = useRef<{
     promise: Promise<HCaptchaExecutionResult>;
     resolve: (result: HCaptchaExecutionResult) => void;
   } | null>(null);
+
   const hasFatalErrorRef = useRef(false);
+
   const complete = useCallback((result: HCaptchaExecutionResult) => {
     pendingExecutionRef.current?.resolve(result);
     pendingExecutionRef.current = null;

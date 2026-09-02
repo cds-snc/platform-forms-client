@@ -29,11 +29,15 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
     ref
   ) => {
     const captchaToken = useRef<string | undefined>(undefined);
+
     // Formik starts submitting only after captcha resolves, so guard native submit events here
     const captchaSubmissionPending = useRef(false);
+
     // Incremented when an execution is invalidated so late promise results are ignored
     const captchaExecutionId = useRef(0);
+
     const { language, onCaptchaExpired, onError, siteKey, ...formProps } = props;
+
     const { captcha, execute, reset } = useHCaptcha({
       language,
       siteKey,

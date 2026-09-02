@@ -8,7 +8,12 @@ export type HCaptchaVerificationResult =
   | {
       verified: false;
       reason:
-        "missing-token" | "missing-secret" | "invalid-response" | "score-too-high" | "api-error";
+        | "missing-token"
+        | "missing-secret"
+        | "invalid-response"
+        | "score-too-high"
+        | "score-missing"
+        | "api-error";
     };
 
 export type VerifyHCaptchaTokenOptions = {
@@ -71,32 +76,40 @@ export const verifyHCaptchaToken = async (
     return { verified: false, reason: "invalid-response" };
   }
 
-  if (captchaData["error-codes"] || typeof captchaData.success !== "boolean") {
+  if (
+    !captchaData ||
+    typeof captchaData !== "object" ||
+    captchaData["error-codes"] ||
+    typeof captchaData.success !== "boolean"
+  ) {
     logger?.info?.("hCaptcha: verification returned an invalid or rejected response");
     return { verified: false, reason: "invalid-response" };
   }
 
   const score = captchaData.score;
   const verificationSucceeded = captchaData.success;
-  const scoreLimitConfigured = maxAllowedScore !== undefined;
 
-  if (verificationSucceeded && scoreLimitConfigured) {
-    const scoreIsMissing = typeof score !== "number";
-    const scoreExceedsLimit = !scoreIsMissing && score > maxAllowedScore;
-
-    if (scoreIsMissing || scoreExceedsLimit) {
-      logger?.info?.(
-        scoreIsMissing
-          ? "hCaptcha: verification response was missing a score"
-          : `hCaptcha: verification score ${score} exceeded limit ${maxAllowedScore}`
-      );
-      return { verified: false, reason: "score-too-high" };
-    }
+  if (!verificationSucceeded) {
+    logger?.info?.("hCaptcha: verification failed");
+    return { verified: false, reason: "invalid-response" };
   }
 
-  return captchaData.success
-    ? { verified: true, score }
-    : { verified: false, reason: "invalid-response" };
+  // A score is optional when no score limit is configured
+  if (maxAllowedScore === undefined) {
+    return { verified: true, score };
+  }
+
+  if (typeof score !== "number") {
+    logger?.info?.("hCaptcha: verification response was missing a score");
+    return { verified: false, reason: "score-missing" };
+  }
+
+  if (score > maxAllowedScore) {
+    logger?.info?.(`hCaptcha: verification score ${score} exceeded limit ${maxAllowedScore}`);
+    return { verified: false, reason: "score-too-high" };
+  }
+
+  return { verified: true, score };
 };
 
 type VerificationAttemptResult = { response?: Response; error?: unknown };
@@ -126,6 +139,7 @@ const verifyWithRetry = (
 
         const attempt = retryIndex + 1;
         logger?.info?.(`hCaptcha: verification attempt ${attempt} failed`);
+
         // Cap the exponential delay to keep retries from waiting indefinitely
         const currentRetryDelay = Math.min(
           RETRY_BASE_DELAY_MS * 2 ** retryIndex,

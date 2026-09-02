@@ -446,6 +446,8 @@ const InternalForm = withFormik<InternalFormProps, FormikResponses>({
   },
 })(InnerForm);
 
+// Keep the CAPTCHA handle outside the Formik higher-order component so its submit handler
+// can access the token and reset it
 export const Form: React.FC<FormProps> = (props) => {
   const captchaFormRef = useRef<FormCaptchaHandle | null>(null);
   const setCaptchaFormHandle = useCallback((handle: FormCaptchaHandle | null) => {

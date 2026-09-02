@@ -74,7 +74,7 @@ export async function submitForm(
 
       if (shouldVerifyHCaptcha) {
         const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;
-        const captchaResult = await verifyHCaptchaToken(captchaToken || "", {
+        const captchaResult = await verifyHCaptchaToken(captchaToken, {
           secret: captchaSecret,
           // Avoid the lookup when the verifier will fail immediately
           remoteIp: captchaToken && captchaSecret ? String(await getClientIp()) : undefined,

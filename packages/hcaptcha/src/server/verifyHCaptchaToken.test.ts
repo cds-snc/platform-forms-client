@@ -90,10 +90,8 @@ describe("verifyHCaptchaToken", () => {
       fetchImpl,
     });
 
-    expect(result).toEqual({ verified: false, reason: "score-too-high" });
-    expect(logger.info).toHaveBeenCalledWith(
-      "hCaptcha: verification response was missing a score"
-    );
+    expect(result).toEqual({ verified: false, reason: "score-missing" });
+    expect(logger.info).toHaveBeenCalledWith("hCaptcha: verification response was missing a score");
   });
 
   it("does not retry a rejected 4xx response", async () => {
@@ -114,6 +112,14 @@ describe("verifyHCaptchaToken", () => {
 
   it("rejects a malformed verification response", async () => {
     const fetchImpl = vi.fn().mockResolvedValue(new Response("not-json", { status: 200 }));
+
+    const result = await verifyHCaptchaToken("token", { secret: "secret", fetchImpl });
+
+    expect(result).toEqual({ verified: false, reason: "invalid-response" });
+  });
+
+  it("rejects a null verification response", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(new Response("null", { status: 200 }));
 
     const result = await verifyHCaptchaToken("token", { secret: "secret", fetchImpl });
 
