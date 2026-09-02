@@ -8,8 +8,6 @@ import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosu
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
-import { checkOne } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
@@ -168,43 +166,26 @@ const scheduleFormSubmissionNotification = async (
     );
     if (!emailData) return undefined;
 
-    // The flag is checked here (not just inside sendEmail) because the notificationId must only
-    // be generated and returned when the pipeline is active — it is passed to processFormData so
-    // the reliability lambda can enqueue the deferred send after the submission is persisted.
-    const notificationEnabled = await checkOne(FeatureFlags.notification);
-
     // Notification flag ON: send deferred email via notification pipeline
-    if (notificationEnabled) {
-      const notificationId = randomUUID();
 
-      /**
-       * Not using await here to avoid adding extra latency in the submission flow.
-       * Because the infra pipeline does not process submissions right away, the notification data should have enough time to get in DynamoDB before the Reliability lambda request its processing
-       */
-      sendDefaultEmail({
-        to: emailData.emails,
-        subject: emailData.subject,
-        body: emailData.formResponse,
-        options: { mode: "deferred", notificationId },
-      }).catch((error) =>
-        logMessage.warn(
-          `scheduleFormSubmissionNotification: failed to send deferred email via notification pipeline. Form ID: ${formId}. Reason: ${(error as Error).message}`
-        )
-      );
+    const notificationId = randomUUID();
 
-      return notificationId;
-    }
-
-    // Notification flag OFF: send immediate email
+    /**
+     * Not using await here to avoid adding extra latency in the submission flow.
+     * Because the infra pipeline does not process submissions right away, the notification data should have enough time to get in DynamoDB before the Reliability lambda request its processing
+     */
     sendDefaultEmail({
       to: emailData.emails,
       subject: emailData.subject,
       body: emailData.formResponse,
+      options: { mode: "deferred", notificationId },
     }).catch((error) =>
       logMessage.warn(
-        `scheduleFormSubmissionNotification: failed to send immediate email. Form ID: ${formId}. Reason: ${(error as Error).message}`
+        `scheduleFormSubmissionNotification: failed to send deferred email via notification pipeline. Form ID: ${formId}. Reason: ${(error as Error).message}`
       )
     );
+
+    return notificationId;
 
     return undefined;
   } catch (error) {
