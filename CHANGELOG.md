@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.3](https://github.com/cds-snc/platform-forms-client/compare/v4.22.2...v4.22.3) (2026-09-02)
+
+
+### Bug Fixes
+
+* Clear relevant rules when removing an Element ([#7843](https://github.com/cds-snc/platform-forms-client/issues/7843)) ([57b2507](https://github.com/cds-snc/platform-forms-client/commit/57b25072757aa5b7c855b50432e6144ad1004035))
+* Re-uploading a form file with attachments results in missing upload ([0cd1490](https://github.com/cds-snc/platform-forms-client/commit/0cd1490be949df1b41b1e0ec83a9384622ad47b9))
+* Refresh treeview when deleting a page ([#7860](https://github.com/cds-snc/platform-forms-client/issues/7860)) ([2235b01](https://github.com/cds-snc/platform-forms-client/commit/2235b01de4a223a94791c9406135f2b68c6542d5))
+* Update missing i18n text for versioning. ([#7859](https://github.com/cds-snc/platform-forms-client/issues/7859)) ([4b55781](https://github.com/cds-snc/platform-forms-client/commit/4b557810f07480912c12b2df327e4dea1e7bb6b0))
+
+
+### Miscellaneous Chores
+
+* Address Complete Feature Flag Removal ([#7842](https://github.com/cds-snc/platform-forms-client/issues/7842)) ([1b2f810](https://github.com/cds-snc/platform-forms-client/commit/1b2f81017003facc49954312d93af8d686b5e806))
+* Cleanup remaining allowGroups related code ([#7805](https://github.com/cds-snc/platform-forms-client/issues/7805)) ([899e6fe](https://github.com/cds-snc/platform-forms-client/commit/899e6fe1e0751dd342fd269a090eaf1160a50889))
+* Cleanup template versioning feature flag and code forks ([#7828](https://github.com/cds-snc/platform-forms-client/issues/7828)) ([d4e475f](https://github.com/cds-snc/platform-forms-client/commit/d4e475fb517af85cb4421ad42aeb1bba0342c859))
+* hCaptcha module patch test ([#7844](https://github.com/cds-snc/platform-forms-client/issues/7844)) ([91deef3](https://github.com/cds-snc/platform-forms-client/commit/91deef36cf27a7b8685af2665261912835aba88a))
+* move hCaptcha related code to a module ([#7837](https://github.com/cds-snc/platform-forms-client/issues/7837)) ([415f88e](https://github.com/cds-snc/platform-forms-client/commit/415f88e0ce12ff7c817e906469be2db73ea94234))
+* move sso migration panel ([#7856](https://github.com/cds-snc/platform-forms-client/issues/7856)) ([b52c452](https://github.com/cds-snc/platform-forms-client/commit/b52c452b88c3f1f38d1875ed9a67f13c2e9ae113))
+* Refactor responseDownload server action to use mapAnswers ([#7804](https://github.com/cds-snc/platform-forms-client/issues/7804)) ([b9dbb7d](https://github.com/cds-snc/platform-forms-client/commit/b9dbb7da1e8a231a7e8d031a55ccc2d2e084fbea))
+* remove hCaptcha feature flag  ([#7834](https://github.com/cds-snc/platform-forms-client/issues/7834)) ([770ab93](https://github.com/cds-snc/platform-forms-client/commit/770ab9389b8d666505ad74c3fcd362c679cbe81a))
+* Remove notification flag ([#7857](https://github.com/cds-snc/platform-forms-client/issues/7857)) ([0a61638](https://github.com/cds-snc/platform-forms-client/commit/0a6163818c32c98e7d01b027c8fbf701923b1da3))
+* remove the Form Timer  ([#7835](https://github.com/cds-snc/platform-forms-client/issues/7835)) ([54a4017](https://github.com/cds-snc/platform-forms-client/commit/54a40174de9a8ae0ca71f58f47ca2b68c929f1ee))
+* Sort typescript aliases to prioritize more specific paths ([#7836](https://github.com/cds-snc/platform-forms-client/issues/7836)) ([44df8c8](https://github.com/cds-snc/platform-forms-client/commit/44df8c872a527f8bb84ff296d1e9114fd90e9549))
+* Transform/fix orphaned form elements ([#7256](https://github.com/cds-snc/platform-forms-client/issues/7256)) ([784ecb9](https://github.com/cds-snc/platform-forms-client/commit/784ecb97841e038d50fd13e9555a4d6e0e665298))
+* update Next.js latest 16.3.4 ([#7839](https://github.com/cds-snc/platform-forms-client/issues/7839)) ([180ad1e](https://github.com/cds-snc/platform-forms-client/commit/180ad1edf1d2acd0989a0614bdb1872996fa431e))
+
 ## [4.22.2](https://github.com/cds-snc/platform-forms-client/compare/v4.22.1...v4.22.2) (2026-08-31)
 
 
