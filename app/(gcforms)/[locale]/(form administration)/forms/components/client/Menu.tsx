@@ -197,7 +197,7 @@ export const Menu = ({
         },
       },
       {
-        filtered: !ttl ? true : false,
+        filtered: !ttl || status === TAB_STATUS.CLOSED,
         title: t("actions.unarchiveForm"),
         callback: restoreFormCallback,
       },
