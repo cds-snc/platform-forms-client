@@ -166,8 +166,6 @@ const scheduleFormSubmissionNotification = async (
     );
     if (!emailData) return undefined;
 
-    // Notification flag ON: send deferred email via notification pipeline
-
     const notificationId = randomUUID();
 
     /**
@@ -186,8 +184,6 @@ const scheduleFormSubmissionNotification = async (
     );
 
     return notificationId;
-
-    return undefined;
   } catch (error) {
     logMessage.warn(
       `scheduleFormSubmissionNotification processing failed for form ${formId}. Reason: ${(error as Error).message}`
