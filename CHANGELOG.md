@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.4](https://github.com/cds-snc/platform-forms-client/compare/v4.22.3...v4.22.4) (2026-09-02)
+
+
+### Bug Fixes
+
+* Remove addressComplete from Beta components ([#7863](https://github.com/cds-snc/platform-forms-client/issues/7863)) ([cac5ec2](https://github.com/cds-snc/platform-forms-client/commit/cac5ec23e45d98cd1a1f7124bd1dcf7bb7eea30d))
+
 ## [4.22.3](https://github.com/cds-snc/platform-forms-client/compare/v4.22.2...v4.22.3) (2026-09-02)
 
 
