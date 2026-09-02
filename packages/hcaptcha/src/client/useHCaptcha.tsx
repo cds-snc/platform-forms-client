@@ -50,13 +50,16 @@ export const useHCaptcha = ({
 }: UseHCaptchaOptions): UseHCaptchaResult => {
   const hCaptchaRef = useRef<HCaptcha>(null);
 
+  // Share one promise when multiple callers request verification at the same time
   const pendingExecutionRef = useRef<{
     promise: Promise<HCaptchaExecutionResult>;
     resolve: (result: HCaptchaExecutionResult) => void;
   } | null>(null);
 
+  // A configuration error will not recover without remounting the widget
   const hasFatalErrorRef = useRef(false);
 
+  // Provider callbacks complete the promise returned by execute()
   const complete = useCallback((result: HCaptchaExecutionResult) => {
     pendingExecutionRef.current?.resolve(result);
     pendingExecutionRef.current = null;
@@ -72,6 +75,7 @@ export const useHCaptcha = ({
   );
 
   const reset = useCallback(() => {
+    // Manual resets cancel the current execution without reporting expiration
     hCaptchaRef.current?.resetCaptcha();
     complete(failureResult("cancelled"));
   }, [complete, failureResult]);
@@ -118,6 +122,7 @@ export const useHCaptcha = ({
     try {
       hCaptchaRef.current.execute();
     } catch {
+      // The provider can throw before it reports an error through its callbacks
       complete(failureResult("execution-error"));
     }
 
@@ -137,6 +142,9 @@ export const useHCaptcha = ({
       sitekey={siteKey}
       onVerify={onVerify}
       onError={onError}
+      // hCaptcha reports challenge and token expiration through separate callbacks. Neither result
+      // can be submitted, so both callbacks reset the widget and complete the pending execution
+      // as expired
       onChalExpired={onExpired}
       onExpire={onExpired}
       languageOverride={language}

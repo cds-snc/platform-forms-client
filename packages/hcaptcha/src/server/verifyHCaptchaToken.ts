@@ -76,6 +76,7 @@ export const verifyHCaptchaToken = async (
     return { verified: false, reason: "invalid-response" };
   }
 
+  // Treat the provider response as untrusted input and fail closed for malformed payloads
   if (
     !captchaData ||
     typeof captchaData !== "object" ||
@@ -118,8 +119,8 @@ const HCAPTCHA_SITE_VERIFY_URL = "https://api.hcaptcha.com/siteverify";
 const RETRY_BASE_DELAY_MS = 1000;
 const RETRY_MAX_DELAY_MS = 10000;
 
-// Retries temporary network failures and retryable responses with exponential backoff,
-// returning the final result instead of throwing.
+// Retries network failures and 5xx responses with exponential backoff, while treating 4xx
+// responses as final provider rejections. Returns the final result instead of throwing.
 const verifyWithRetry = (
   requestBody: URLSearchParams,
   fetchImpl: typeof fetch,
@@ -166,6 +167,7 @@ const verifyAttempt = async (
       }),
     };
   } catch (error) {
+    // Return request errors as data so the retry loop can handle them
     return { error };
   }
 };

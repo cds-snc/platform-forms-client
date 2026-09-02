@@ -119,6 +119,7 @@ describe("verifyHCaptchaToken", () => {
   });
 
   it("rejects a null verification response", async () => {
+    // A syntactically valid JSON response can still have an invalid payload shape
     const fetchImpl = vi.fn().mockResolvedValue(new Response("null", { status: 200 }));
 
     const result = await verifyHCaptchaToken("token", { secret: "secret", fetchImpl });
@@ -140,6 +141,7 @@ describe("verifyHCaptchaToken", () => {
   });
 
   it("retries a server error", async () => {
+    // A score is optional here because no score limit is configured
     const fetchImpl = vi
       .fn()
       .mockResolvedValueOnce(new Response("", { status: 500 }))

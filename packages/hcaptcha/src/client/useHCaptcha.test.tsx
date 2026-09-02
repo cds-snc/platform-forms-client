@@ -31,6 +31,7 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
           execute: mockCaptcha.execute,
         }));
 
+        // Use buttons to simulate provider callbacks without loading the real hCaptcha widget
         return ["invalid-sitekey", "invalid-data", "network-error"]
           .map((code) => (
             <button
@@ -81,6 +82,7 @@ const HookHarness = ({
 
   return (
     <>
+      {/* Await execute so tests observe the result produced by a simulated provider callback */}
       <button type="button" onClick={async () => onResult(await execute())}>
         Execute
       </button>

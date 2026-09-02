@@ -28,6 +28,7 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
     { children, captchaEnabled = true, onCaptchaFailure, onSubmit, onUnexpectedError, ...props },
     ref
   ) => {
+    // Keep the token here so the parent submit flow can read it after verification succeeds
     const captchaToken = useRef<string | undefined>(undefined);
 
     // Formik starts submitting only after captcha resolves, so guard native submit events here
@@ -54,6 +55,7 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
         onError?.(code);
       },
       onCaptchaExpired: () => {
+        // An expired challenge invalidates any token that may have been received earlier
         captchaToken.current = undefined;
         logMessage.info("hCaptcha: challenge expired");
         onCaptchaExpired?.();
@@ -65,6 +67,7 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
       () => ({
         getToken: () => captchaToken.current,
         reset: () => {
+          // Invalidate late results before resetting the widget so they cannot submit the form
           captchaToken.current = undefined;
           captchaExecutionId.current += 1;
           captchaSubmissionPending.current = false;
