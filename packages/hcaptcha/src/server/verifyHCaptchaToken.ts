@@ -85,6 +85,11 @@ export const verifyHCaptchaToken = async (
     const scoreExceedsLimit = !scoreIsMissing && score > maxAllowedScore;
 
     if (scoreIsMissing || scoreExceedsLimit) {
+      logger?.info?.(
+        scoreIsMissing
+          ? "hCaptcha: verification response was missing a score"
+          : `hCaptcha: verification score ${score} exceeded limit ${maxAllowedScore}`
+      );
       return { verified: false, reason: "score-too-high" };
     }
   }

@@ -62,28 +62,38 @@ describe("verifyHCaptchaToken", () => {
       .mockResolvedValue(
         new Response(JSON.stringify({ success: true, score: 0.8 }), { status: 200 })
       );
+    const logger = { info: vi.fn() };
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
       maxAllowedScore: 0.79,
+      logger,
       fetchImpl,
     });
 
     expect(result).toEqual({ verified: false, reason: "score-too-high" });
+    expect(logger.info).toHaveBeenCalledWith(
+      "hCaptcha: verification score 0.8 exceeded limit 0.79"
+    );
   });
 
   it("rejects a configured score policy when the response has no score", async () => {
     const fetchImpl = vi
       .fn()
       .mockResolvedValue(new Response(JSON.stringify({ success: true }), { status: 200 }));
+    const logger = { info: vi.fn() };
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
       maxAllowedScore: 0.79,
+      logger,
       fetchImpl,
     });
 
     expect(result).toEqual({ verified: false, reason: "score-too-high" });
+    expect(logger.info).toHaveBeenCalledWith(
+      "hCaptcha: verification response was missing a score"
+    );
   });
 
   it("does not retry a rejected 4xx response", async () => {
