@@ -85,6 +85,7 @@ export const Upload = ({ formId }: { formId: string }) => {
     });
     // Needed to support a hard refresh of the page and not client side routing
 
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = `/${language}/id/${id}`;
   };
 
