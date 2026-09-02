@@ -78,9 +78,9 @@ export const verifyHCaptchaToken = async (
 
   const score = captchaData.score;
   const verificationSucceeded = captchaData.success;
-  const scorePolicyConfigured = maxAllowedScore !== undefined;
+  const scoreLimitConfigured = maxAllowedScore !== undefined;
 
-  if (verificationSucceeded && scorePolicyConfigured) {
+  if (verificationSucceeded && scoreLimitConfigured) {
     const scoreIsMissing = typeof score !== "number";
     const scoreExceedsLimit = !scoreIsMissing && score > maxAllowedScore;
 
@@ -110,7 +110,6 @@ const verifyWithRetry = (
 ): Promise<VerificationAttemptResult> => {
   // Ensure there is always an initial verification attempt
   const attempts = Math.max(1, maxAttempts);
-  let retryDelay = RETRY_BASE_DELAY_MS;
 
   // Chain attempts so each retry waits for the previous request to finish
   return Array.from({ length: attempts - 1 }).reduce<Promise<VerificationAttemptResult>>(
@@ -122,9 +121,11 @@ const verifyWithRetry = (
 
         const attempt = retryIndex + 1;
         logger?.info?.(`hCaptcha: verification attempt ${attempt} failed`);
-        const currentRetryDelay = retryDelay;
         // Cap the exponential delay to keep retries from waiting indefinitely
-        retryDelay = Math.min(retryDelay * 2, RETRY_MAX_DELAY_MS);
+        const currentRetryDelay = Math.min(
+          RETRY_BASE_DELAY_MS * 2 ** retryIndex,
+          RETRY_MAX_DELAY_MS
+        );
 
         return wait(currentRetryDelay).then(() => verifyAttempt(requestBody, fetchImpl));
       }),

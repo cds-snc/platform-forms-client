@@ -31,6 +31,8 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
     const captchaToken = useRef<string | undefined>(undefined);
     // Formik starts submitting only after captcha resolves, so guard native submit events here
     const captchaSubmissionPending = useRef(false);
+    // Incremented when an execution is invalidated so late promise results are ignored
+    const captchaExecutionId = useRef(0);
     const { language, onCaptchaExpired, onError, siteKey, ...formProps } = props;
     const { captcha, execute, reset } = useHCaptcha({
       language,
@@ -60,6 +62,7 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
         getToken: () => captchaToken.current,
         reset: () => {
           captchaToken.current = undefined;
+          captchaExecutionId.current += 1;
           captchaSubmissionPending.current = false;
           reset();
         },
@@ -81,10 +84,15 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
         if (captchaSubmissionPending.current) {
           return;
         }
+        const executionId = ++captchaExecutionId.current;
         captchaSubmissionPending.current = true;
 
         void execute()
           .then((result) => {
+            if (executionId !== captchaExecutionId.current) {
+              return;
+            }
+
             if (!result.verified) {
               onCaptchaFailure?.(result.reason);
               return;
@@ -98,6 +106,10 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
             return onSubmit(event);
           })
           .catch((error: unknown) => {
+            if (executionId !== captchaExecutionId.current) {
+              return;
+            }
+
             // Keep CAPTCHA and submission errors from escaping as unhandled rejections
             try {
               if (onUnexpectedError) {
@@ -110,7 +122,9 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
             }
           })
           .finally(() => {
-            captchaSubmissionPending.current = false;
+            if (executionId === captchaExecutionId.current) {
+              captchaSubmissionPending.current = false;
+            }
           });
       },
       [captchaEnabled, execute, onCaptchaFailure, onSubmit, onUnexpectedError]

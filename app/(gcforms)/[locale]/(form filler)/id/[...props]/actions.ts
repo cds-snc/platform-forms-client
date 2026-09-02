@@ -75,9 +75,11 @@ export async function submitForm(
       const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
 
       if (shouldVerifyHCaptcha) {
+        const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;
         const captchaResult = await verifyHCaptchaToken(captchaToken || "", {
-          secret: process.env.HCAPTCHA_SITE_VERIFY_KEY,
-          remoteIp: String(await getClientIp()),
+          secret: captchaSecret,
+          // Avoid the lookup when the verifier will fail immediately
+          remoteIp: captchaToken && captchaSecret ? String(await getClientIp()) : undefined,
           maxAllowedScore: HCAPTCHA_MAX_ALLOWED_SCORE,
           logger: {
             info: (message) => logMessage.info(`${message} for formId ${formId}`),

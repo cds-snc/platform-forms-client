@@ -140,6 +140,51 @@ describe("FormCaptcha", () => {
     await waitFor(() => expect(onSubmit).toHaveBeenCalledOnce());
   });
 
+  it("ignores an in-flight captcha result after reset", async () => {
+    // Keep both executions pending so reset and the replacement submission can be ordered explicitly.
+    let resolveFirstCaptcha: (result: HCaptchaExecutionResult) => void = () => {};
+    let resolveSecondCaptcha: (result: HCaptchaExecutionResult) => void = () => {};
+    executeCaptcha
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          resolveFirstCaptcha = resolve;
+        })
+      )
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          resolveSecondCaptcha = resolve;
+        })
+      );
+    const captchaRef = createRef<FormCaptchaHandle>();
+    const onSubmit = vi.fn();
+    const form = render(
+      <FormCaptcha ref={captchaRef} onSubmit={onSubmit} siteKey="site-key">
+        <button type="submit">Submit</button>
+      </FormCaptcha>
+    ).container.querySelector("form")!;
+
+    fireEvent.submit(form);
+    captchaRef.current?.reset();
+    // Reset invalidates the first execution and permits a new submission to begin.
+    fireEvent.submit(form);
+
+    // The old result must not submit or replace the token from the new execution.
+    resolveFirstCaptcha({ verified: true, token: "old-token" });
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(captchaRef.current?.getToken()).toBeUndefined();
+    // The stale finally handler must not clear the replacement execution's pending state.
+    fireEvent.submit(form);
+    expect(executeCaptcha).toHaveBeenCalledTimes(2);
+
+    // Only the current execution may submit the form.
+    resolveSecondCaptcha({ verified: true, token: "new-token" });
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledOnce());
+    expect(captchaRef.current?.getToken()).toBe("new-token");
+  });
+
   it("bypasses hCaptcha when the app disables it", () => {
     const onSubmit = vi.fn();
 
