@@ -147,7 +147,11 @@ export const GCFormsProvider = ({
   };
 
   const getProgressData = () => {
-    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values.current);
+    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(
+      values.current,
+      {},
+      true
+    );
 
     return {
       id: formRecord.id,

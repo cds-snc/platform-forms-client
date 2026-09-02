@@ -21,7 +21,7 @@ export const GcPlatformRegisterButton = ({ locale, label }: GcPlatformRegisterBu
   };
 
   return (
-    <Button type="button" theme="secondary" onClick={() => void handleClick()}>
+    <Button type="button" theme="primary" onClick={() => void handleClick()}>
       {label}
     </Button>
   );
