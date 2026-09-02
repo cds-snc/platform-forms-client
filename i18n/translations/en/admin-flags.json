@@ -10,10 +10,6 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "zitadelAuth": {
-      "title": "Zitadel Auth",
-      "description": "Enable API authentication with Zitadel"
-    },
     "topBanner": {
       "title": "Banner",
       "description": "Enable warning banner to be visible"
@@ -25,10 +21,6 @@
     "zitadelLogin": {
       "title": "Zitadel Login",
       "description": "Enable Zitadel as a login method for users"
-    },
-    "notification": {
-      "title": "Notification",
-      "description": "Enable sending emails immediately or deferred using the Notification flow. Disabling this will send emails directly to GC Notify."
     }
   },
   "addFlag": "Add user feature flag",

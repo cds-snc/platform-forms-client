@@ -10,10 +10,6 @@
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Désactivé",
   "features": {
-    "zitadelAuth": {
-      "title": "AuthenticationZitadel",
-      "description": "Authentification Zitadel pour API"
-    },
     "topBanner": {
       "title": "Bannière",
       "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
@@ -25,10 +21,6 @@
     "zitadelLogin": {
       "title": "Connexion via Zitadel",
       "description": "Activer Zitadel comme méthode de connexion pour les utilisateurs"
-    },
-    "notification": {
-      "title": "Système de notification",
-      "description": "Activer l'envoi de courriels immédiats ou différés via le système de notification. Si cette option est désactivée, les courriels seront envoyés directement à GC Notify."
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",
