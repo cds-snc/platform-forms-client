@@ -100,56 +100,60 @@ const HCAPTCHA_SITE_VERIFY_URL = "https://api.hcaptcha.com/siteverify";
 const RETRY_BASE_DELAY_MS = 1000;
 const RETRY_MAX_DELAY_MS = 10000;
 
-// Retry logic with progressive backoff for transient errors (network issues, 5xx responses)
+// Retries temporary network failures and retryable responses with exponential backoff,
+// returning the final result instead of throwing.
 const verifyWithRetry = (
   requestBody: URLSearchParams,
   fetchImpl: typeof fetch,
   logger: CaptchaLogger | undefined,
-  maxAttempts: number,
-  attempt = 1,
-  retryDelay = RETRY_BASE_DELAY_MS
-): Promise<VerificationAttemptResult> =>
-  fetchImpl(HCAPTCHA_SITE_VERIFY_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: requestBody,
-    signal: AbortSignal.timeout(5000),
-  })
-    .then((response) => {
-      if (response.ok || (response.status >= 400 && response.status < 500)) {
-        return { response };
-      }
+  maxAttempts: number
+): Promise<VerificationAttemptResult> => {
+  // Ensure there is always an initial verification attempt
+  const attempts = Math.max(1, maxAttempts);
+  let retryDelay = RETRY_BASE_DELAY_MS;
 
-      if (attempt >= maxAttempts) {
-        return { response };
-      }
+  // Chain attempts so each retry waits for the previous request to finish
+  return Array.from({ length: attempts - 1 }).reduce<Promise<VerificationAttemptResult>>(
+    (previousAttempt, _, retryIndex) =>
+      previousAttempt.then((attemptResult) => {
+        if (isNonRetryableResponse(attemptResult.response)) {
+          return attemptResult;
+        }
 
-      logger?.info?.(`hCaptcha: verification attempt ${attempt} failed`);
-      return new Promise((resolve) => setTimeout(resolve, retryDelay)).then(() =>
-        verifyWithRetry(
-          requestBody,
-          fetchImpl,
-          logger,
-          maxAttempts,
-          attempt + 1,
-          Math.min(retryDelay * 2, RETRY_MAX_DELAY_MS)
-        )
-      );
-    })
-    .catch((error) => {
-      if (attempt >= maxAttempts) {
-        return { error };
-      }
+        const attempt = retryIndex + 1;
+        logger?.info?.(`hCaptcha: verification attempt ${attempt} failed`);
+        const currentRetryDelay = retryDelay;
+        // Cap the exponential delay to keep retries from waiting indefinitely
+        retryDelay = Math.min(retryDelay * 2, RETRY_MAX_DELAY_MS);
 
-      logger?.info?.(`hCaptcha: verification attempt ${attempt} failed`);
-      return new Promise((resolve) => setTimeout(resolve, retryDelay)).then(() =>
-        verifyWithRetry(
-          requestBody,
-          fetchImpl,
-          logger,
-          maxAttempts,
-          attempt + 1,
-          Math.min(retryDelay * 2, RETRY_MAX_DELAY_MS)
-        )
-      );
-    });
+        return wait(currentRetryDelay).then(() => verifyAttempt(requestBody, fetchImpl));
+      }),
+    verifyAttempt(requestBody, fetchImpl)
+  );
+};
+
+const verifyAttempt = async (
+  requestBody: URLSearchParams,
+  fetchImpl: typeof fetch
+): Promise<VerificationAttemptResult> => {
+  try {
+    return {
+      response: await fetchImpl(HCAPTCHA_SITE_VERIFY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: requestBody,
+        signal: AbortSignal.timeout(5000),
+      }),
+    };
+  } catch (error) {
+    return { error };
+  }
+};
+
+const isNonRetryableResponse = (response?: Response) => {
+  return Boolean(response?.ok || (response && response.status >= 400 && response.status < 500));
+};
+
+const wait = (milliseconds: number) => {
+  return new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
+};

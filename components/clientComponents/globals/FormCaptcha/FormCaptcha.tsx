@@ -1,32 +1,42 @@
 import type { FormHTMLAttributes, ReactNode, SubmitEvent } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
-import { useHCaptcha, type UseHCaptchaOptions } from "@gcforms/hcaptcha/client";
+import {
+  useHCaptcha,
+  type HCaptchaFailureReason,
+  type UseHCaptchaOptions,
+} from "@gcforms/hcaptcha/client";
 import { logMessage } from "@lib/logger";
-
-const SUSPICIOUS_ERROR_CODES = ["invalid-data", "invalid-input-response"];
+import { isSuspiciousHCaptchaError } from "./isSuspiciousHCaptchaError";
 
 export interface FormCaptchaHandle {
   getToken: () => string | undefined;
   reset: () => void;
 }
 
-type FormCaptchaProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onSubmit"> &
+type FormCaptchaProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onError" | "onSubmit"> &
   Omit<UseHCaptchaOptions, "failureMode"> & {
     children: ReactNode;
     captchaEnabled?: boolean;
+    onCaptchaFailure?: (reason: HCaptchaFailureReason) => void;
     onUnexpectedError?: (error: unknown) => void;
     onSubmit: (event: SubmitEvent<HTMLFormElement>) => void;
   };
 
+// Integrates hCaptcha with a form and exposes token and reset controls to the parent flow
 export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
-  ({ children, captchaEnabled = true, onSubmit, onUnexpectedError, ...props }, ref) => {
+  (
+    { children, captchaEnabled = true, onCaptchaFailure, onSubmit, onUnexpectedError, ...props },
+    ref
+  ) => {
     const captchaToken = useRef<string | undefined>(undefined);
+    // Formik starts submitting only after captcha resolves, so guard native submit events here
+    const captchaSubmissionPending = useRef(false);
     const { language, onCaptchaExpired, onError, siteKey, ...formProps } = props;
     const { captcha, execute, reset } = useHCaptcha({
       language,
       siteKey,
       onError: (code) => {
-        if (SUSPICIOUS_ERROR_CODES.includes(code)) {
+        if (isSuspiciousHCaptchaError(code)) {
           logMessage.warn(
             `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
           );
@@ -38,6 +48,7 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
         onError?.(code);
       },
       onCaptchaExpired: () => {
+        captchaToken.current = undefined;
         logMessage.info("hCaptcha: challenge expired");
         onCaptchaExpired?.();
       },
@@ -49,6 +60,7 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
         getToken: () => captchaToken.current,
         reset: () => {
           captchaToken.current = undefined;
+          captchaSubmissionPending.current = false;
           reset();
         },
       }),
@@ -58,6 +70,7 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
     const handleSubmit = useCallback(
       (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
+        // Discard any previous token before starting a new verification attempt
         captchaToken.current = undefined;
 
         if (!captchaEnabled) {
@@ -65,30 +78,42 @@ export const FormCaptcha = forwardRef<FormCaptchaHandle, FormCaptchaProps>(
           return;
         }
 
+        if (captchaSubmissionPending.current) {
+          return;
+        }
+        captchaSubmissionPending.current = true;
+
         void execute()
           .then((result) => {
-            if (!result.verified && !result.allowed) return;
-
-            if (result.verified) {
-              captchaToken.current = result.token;
-              logMessage.info(
-                `hCaptcha: verified token received by form at ${new Date().toISOString()}`
-              );
+            if (!result.verified) {
+              onCaptchaFailure?.(result.reason);
+              return;
             }
+
+            captchaToken.current = result.token;
+            logMessage.info(
+              `hCaptcha: verified token received by form at ${new Date().toISOString()}`
+            );
 
             return onSubmit(event);
           })
           .catch((error: unknown) => {
+            // Keep CAPTCHA and submission errors from escaping as unhandled rejections
             try {
-              if (onUnexpectedError) return onUnexpectedError(error);
+              if (onUnexpectedError) {
+                return onUnexpectedError(error);
+              }
 
               logMessage.error(error as Error);
             } catch (handlerError) {
               logMessage.error(handlerError as Error);
             }
+          })
+          .finally(() => {
+            captchaSubmissionPending.current = false;
           });
       },
-      [captchaEnabled, execute, onSubmit, onUnexpectedError]
+      [captchaEnabled, execute, onCaptchaFailure, onSubmit, onUnexpectedError]
     );
 
     return (

@@ -5,6 +5,7 @@ import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
 import { Alert, RichText } from "@clientComponents/forms";
 import { validateOnSubmit } from "@gcforms/core";
+import type { HCaptchaFailureReason } from "@gcforms/hcaptcha/client";
 
 import { type FormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -45,6 +46,7 @@ import { uploadFile } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...pr
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
+import { isSuspiciousHCaptchaError } from "@clientComponents/globals/FormCaptcha/isSuspiciousHCaptchaError";
 
 type InternalCaptchaProps = {
   onCaptchaReset: () => void;
@@ -78,6 +80,18 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
   const { currentGroup, getGroupTitle } = useGCFormsContext();
   const isShowReviewPage = showReviewPage(form);
   const showIntro = currentGroup === LOCKED_GROUPS.START;
+
+  const handleCaptchaFailure = (reason: HCaptchaFailureReason) => {
+    if (reason !== "cancelled") {
+      props.setStatus(FormStatus.ERROR);
+    }
+  };
+
+  const handleCaptchaError = (code: string) => {
+    if (isSuspiciousHCaptchaError(code)) {
+      props.setCaptchaFail?.(true);
+    }
+  };
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useSyncVisibleElementIds();
@@ -222,6 +236,8 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
             noValidate={true}
             captchaEnabled={shouldCheckCaptcha(isPublished, props.isPreview ?? false)}
             siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+            onCaptchaFailure={handleCaptchaFailure}
+            onError={handleCaptchaError}
           >
             {isShowReviewPage &&
               currentGroup !== LOCKED_GROUPS.REVIEW &&

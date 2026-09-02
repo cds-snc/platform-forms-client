@@ -7,14 +7,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { HCaptchaExecutionResult } from "@gcforms/hcaptcha/client";
 import { FormCaptcha, type FormCaptchaHandle } from "./FormCaptcha";
 
-const { executeCaptcha, logInfo, resetCaptcha } = vi.hoisted(() => ({
+const { executeCaptcha, expireCaptcha, logInfo, resetCaptcha } = vi.hoisted(() => ({
   executeCaptcha: vi.fn<() => Promise<HCaptchaExecutionResult>>(),
+  expireCaptcha: vi.fn(),
   logInfo: vi.fn(),
   resetCaptcha: vi.fn(),
 }));
 
 vi.mock("@gcforms/hcaptcha/client", () => ({
-  useHCaptcha: () => ({ captcha: null, execute: executeCaptcha, reset: resetCaptcha }),
+  useHCaptcha: ({ onCaptchaExpired }: { onCaptchaExpired?: () => void }) => {
+    expireCaptcha.mockImplementation(() => onCaptchaExpired?.());
+    return { captcha: null, execute: executeCaptcha, reset: resetCaptcha };
+  },
 }));
 
 vi.mock("@lib/logger", () => ({
@@ -29,6 +33,7 @@ describe("FormCaptcha", () => {
   beforeEach(() => {
     executeCaptcha.mockReset();
     executeCaptcha.mockResolvedValue({ verified: true, token: "captcha-token" });
+    expireCaptcha.mockReset();
     logInfo.mockReset();
     resetCaptcha.mockClear();
   });
@@ -71,8 +76,27 @@ describe("FormCaptcha", () => {
     expect(resetCaptcha).toHaveBeenCalledOnce();
   });
 
+  it("clears the token when captcha expires", async () => {
+    const captchaRef = createRef<FormCaptchaHandle>();
+    const onSubmit = vi.fn();
+
+    render(
+      <FormCaptcha ref={captchaRef} onSubmit={onSubmit} siteKey="site-key">
+        <button type="submit">Submit</button>
+      </FormCaptcha>
+    );
+
+    fireEvent.submit(document.querySelector("form")!);
+    await waitFor(() => expect(captchaRef.current?.getToken()).toBe("captcha-token"));
+
+    expireCaptcha();
+
+    expect(captchaRef.current?.getToken()).toBeUndefined();
+  });
+
   it("does not submit when hCaptcha blocks the request", async () => {
     const onSubmit = vi.fn();
+    const onCaptchaFailure = vi.fn();
     executeCaptcha.mockResolvedValueOnce({
       verified: false,
       allowed: false,
@@ -80,15 +104,40 @@ describe("FormCaptcha", () => {
     });
 
     render(
-      <FormCaptcha onSubmit={onSubmit} siteKey="site-key">
+      <FormCaptcha onCaptchaFailure={onCaptchaFailure} onSubmit={onSubmit} siteKey="site-key">
         <button type="submit">Submit</button>
       </FormCaptcha>
     );
 
     fireEvent.submit(document.querySelector("form")!);
 
-    await waitFor(() => expect(executeCaptcha).toHaveBeenCalledOnce());
+    await waitFor(() => expect(onCaptchaFailure).toHaveBeenCalledWith("captcha-error"));
+    expect(executeCaptcha).toHaveBeenCalledOnce();
     expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("ignores a second submit while hCaptcha is pending", async () => {
+    let resolveCaptcha: (result: HCaptchaExecutionResult) => void = () => {};
+    executeCaptcha.mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolveCaptcha = resolve;
+      })
+    );
+    const onSubmit = vi.fn();
+    const form = render(
+      <FormCaptcha onSubmit={onSubmit} siteKey="site-key">
+        <button type="submit">Submit</button>
+      </FormCaptcha>
+    ).container.querySelector("form")!;
+
+    fireEvent.submit(form);
+    fireEvent.submit(form);
+
+    expect(executeCaptcha).toHaveBeenCalledOnce();
+    expect(onSubmit).not.toHaveBeenCalled();
+
+    resolveCaptcha({ verified: true, token: "captcha-token" });
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledOnce());
   });
 
   it("bypasses hCaptcha when the app disables it", () => {
