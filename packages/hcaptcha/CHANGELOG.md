@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2026-09-03
 
-- Adds a reusable React form wrapper to client reuse
+- Adds a reusable React form wrapper
 
 ## [1.0.3] - 2026-09-02
 
