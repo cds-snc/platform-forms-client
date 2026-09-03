@@ -2,7 +2,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import { SubmitButton } from "./SubmitButton";
-import { InnerFormProps } from "./types";
+import { FormWithFormikProps } from "./types";
 import { FormStatus } from "@gcforms/types";
 
 const isFormClosed = (status: FormStatus) => {
@@ -17,7 +17,7 @@ export const PrimaryFormButtons = ({
 }: {
   isShowReviewPage: boolean;
   language: string;
-  props: InnerFormProps;
+  props: FormWithFormikProps;
   saveAndResumeEnabled?: boolean;
 }) => {
   const submissionError =
