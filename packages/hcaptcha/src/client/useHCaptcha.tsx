@@ -28,6 +28,9 @@ export type HCaptchaFailureReason =
 
 export type HCaptchaExecutionResult =
   | { verified: true; token: string }
+  // `allowed` reflects the consumer's failureMode choice: with "allow", the caller may continue
+  // without a token after a provider failure. Use it for low-risk, best-effort CAPTCHA; protected
+  // actions should use "block" and enforce verification on the server.
   | { verified: false; allowed: boolean; reason: HCaptchaFailureReason };
 
 export type UseHCaptchaResult = {
@@ -65,10 +68,14 @@ export const useHCaptcha = ({
   const fatalErrorReasonRef = useRef<"configuration-error" | "load-error" | null>(null);
   const [captchaInstanceKey, setCaptchaInstanceKey] = useState(0);
 
-  // Provider callbacks complete the promise returned by execute()
-  const complete = useCallback((result: HCaptchaExecutionResult) => {
-    pendingExecutionRef.current?.resolve(result);
+  // Provider callbacks and the provider's async execute Promise complete the package Promise
+  const complete = useCallback((result: HCaptchaExecutionResult): boolean => {
+    const pendingExecution = pendingExecutionRef.current;
+    if (!pendingExecution) return false;
+
+    pendingExecution.resolve(result);
     pendingExecutionRef.current = null;
+    return true;
   }, []);
 
   const failureResult = useCallback(
@@ -140,19 +147,33 @@ export const useHCaptcha = ({
     }
 
     try {
-      hCaptchaRef.current.execute();
+      const providerExecution = hCaptchaRef.current.execute({ async: true });
+
+      // hCaptcha retries temporary network failures internally before rejecting this Promise
+      if (providerExecution && typeof providerExecution.then === "function") {
+        void providerExecution
+          .then(({ response }) => {
+            if (complete({ verified: true, token: response })) {
+              onCaptchaVerified?.();
+            }
+          })
+          .catch(() => {
+            complete(failureResult("execution-error"));
+          });
+      }
     } catch {
       // The provider can throw before it reports an error through its callbacks
       complete(failureResult("execution-error"));
     }
 
     return promise;
-  }, [complete, failureResult]);
+  }, [complete, failureResult, onCaptchaVerified]);
 
   const onVerify = useCallback(
     (verifiedToken: string) => {
-      complete({ verified: true, token: verifiedToken });
-      onCaptchaVerified?.();
+      if (complete({ verified: true, token: verifiedToken })) {
+        onCaptchaVerified?.();
+      }
     },
     [complete, onCaptchaVerified]
   );

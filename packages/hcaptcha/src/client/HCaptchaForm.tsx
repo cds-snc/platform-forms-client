@@ -10,8 +10,9 @@ export interface HCaptchaFormHandle {
 }
 
 export type HCaptchaFormProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onError" | "onSubmit"> &
-  Omit<UseHCaptchaOptions, "failureMode"> & {
+  UseHCaptchaOptions & {
     children: ReactNode;
+    // Disables CAPTCHA entirely; use for tests or deliberate feature flags, not as a security control.
     captchaEnabled?: boolean;
     onCaptchaFailure?: (reason: HCaptchaFailureReason) => void;
     onUnexpectedError: (error: unknown) => void;
@@ -35,12 +36,14 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
     const captchaSubmissionPending = useRef(false);
     const captchaExecutionId = useRef(0);
 
-    const { language, onError, siteKey, ...formProps } = props;
+    const { failureMode, language, onCaptchaVerified, onError, siteKey, ...formProps } = props;
 
     const { captcha, execute, reset } = useHCaptcha({
+      failureMode,
       language,
       siteKey,
       onError,
+      onCaptchaVerified,
       onCaptchaExpired: () => {
         captchaToken.current = undefined;
         onCaptchaExpired?.();
@@ -99,6 +102,9 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
 
             if (!result.verified) {
               onCaptchaFailure?.(result.reason);
+              // Report the failure either way. If the failureMode setting allows continuation, no
+              // token exists, so submit without one; otherwise, stop here.
+              if (result.allowed) return onSubmit(event);
               return;
             }
 

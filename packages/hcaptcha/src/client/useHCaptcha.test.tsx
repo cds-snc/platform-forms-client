@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useHCaptcha, type HCaptchaExecutionResult } from "./useHCaptcha";
 
 const mockCaptcha = vi.hoisted(() => ({
-  execute: vi.fn(() => undefined),
+  execute: vi.fn<() => void | Promise<{ response: string; key: string }>>(() => undefined),
   reset: vi.fn(),
 }));
 
@@ -116,6 +116,32 @@ describe("useHCaptcha", () => {
 
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({ verified: true, token: "captcha-token" })
+    );
+  });
+
+  it("uses the token returned by asynchronous provider execution", async () => {
+    mockCaptcha.execute.mockResolvedValueOnce({ response: "async-token", key: "response-key" });
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await waitFor(() => expect(onResult).toHaveBeenCalledWith({ verified: true, token: "async-token" }));
+  });
+
+  it("returns an execution failure when asynchronous provider execution rejects", async () => {
+    mockCaptcha.execute.mockRejectedValueOnce(new Error("provider failed"));
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: false,
+        reason: "execution-error",
+      })
     );
   });
 

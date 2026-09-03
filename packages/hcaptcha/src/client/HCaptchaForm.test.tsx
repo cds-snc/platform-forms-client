@@ -154,6 +154,35 @@ describe("HCaptchaForm", () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
+  it("submits without a token when hCaptcha allows the request", async () => {
+    const onSubmit = vi.fn();
+    const onCaptchaFailure = vi.fn();
+    const onUnexpectedError = vi.fn();
+    executeCaptcha.mockResolvedValueOnce({
+      verified: false,
+      allowed: true,
+      reason: "captcha-error",
+    });
+
+    render(
+      <HCaptchaForm
+        failureMode="allow"
+        onCaptchaFailure={onCaptchaFailure}
+        onSubmit={onSubmit}
+        onUnexpectedError={onUnexpectedError}
+        siteKey="site-key"
+      >
+        <button type="submit">Submit</button>
+      </HCaptchaForm>
+    );
+
+    fireEvent.submit(document.querySelector("form")!);
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith(expect.anything()));
+    expect(onCaptchaFailure).toHaveBeenCalledWith("captcha-error");
+    expect(onSubmit).not.toHaveBeenCalledWith(expect.anything(), expect.anything());
+  });
+
   it("contains errors thrown by the unexpected-error handler", async () => {
     const executionError = new Error("execution failed");
     const onSubmit = vi.fn();

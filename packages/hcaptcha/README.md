@@ -37,13 +37,17 @@ if (result.verified) {
 
 `failureMode` defaults to `"block"`. Set it to `"allow"` only when the consumer intentionally
 wants provider failures to permit the surrounding action to continue.
+hCaptcha retries temporary network failures internally when using async execution. Provider
+rejections are reported as `execution-error` failures.
 
 ## Form wrapper
 
 `HCaptchaForm` combines the hook with a native `<form>`. It prevents duplicate submissions,
 passes the verified token to `onSubmit`, and exposes `getToken()` and `reset()` through its ref.
-Consumers provide `onUnexpectedError` to handle errors from their submit callback. Use the hook
-directly when the consumer needs more control over the form or submission lifecycle.
+When `failureMode` is `"allow"`, it invokes `onSubmit` without a token if hCaptcha fails.
+Consumers provide `onUnexpectedError` to handle errors from their submit callback. The wrapper
+uses the same `failureMode` option as the hook and defaults to `"block"`. Use the hook directly
+when the consumer needs more control over the form or submission lifecycle.
 
 ## Server verification
 
