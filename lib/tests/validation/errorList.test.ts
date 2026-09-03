@@ -17,7 +17,7 @@ vi.mock("@clientComponents/forms/ErrorListItem/ErrorListMessage", () => ({
     React.createElement("span", { "data-testid": `error-message-${id}` }, defaultValue || id),
 }));
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, cleanup } from "@testing-library/react";
 
 import { getErrorList } from "@lib/validation/validation";
 
@@ -184,5 +184,85 @@ describe("getErrorList", () => {
     expect(links.map((link) => link.getAttribute("href"))).toEqual(["#1-city", "#1-postal"]);
     expect(links[0]).toHaveTextContent("input-validation.required: City or town");
     expect(links[1]).toHaveTextContent("input-validation.required: Postal code");
+  });
+
+  test("filters errors by current group on multi-page forms", () => {
+    const props = {
+      touched: true,
+      errors: {
+        1: "input-validation.required",
+        2: "input-validation.required",
+      },
+      language: "en",
+      currentGroup: "start",
+      formRecord: {
+        form: {
+          layout: [1, 2],
+          groups: {
+            start: {
+              name: "Start Group",
+              elements: ["1"],
+              nextAction: "page2",
+            },
+            page2: {
+              name: "Page 2 Group",
+              elements: ["2"],
+              nextAction: "review",
+            },
+          },
+          elements: [
+            {
+              id: 1,
+              type: "textField",
+              properties: {
+                titleEn: "First page question",
+                titleFr: "First page question FR",
+                validation: { required: true },
+              },
+            },
+            {
+              id: 2,
+              type: "textField",
+              properties: {
+                titleEn: "Second page question",
+                titleFr: "Second page question FR",
+                validation: { required: true },
+              },
+            },
+          ],
+        },
+      },
+    } as never;
+
+    // When on "start" group, only element 1 error should be shown
+    const startGroupErrorList = getErrorList(props);
+    expect(startGroupErrorList).not.toBeNull();
+    const { container: container1 } = render(startGroupErrorList);
+    const links1 = container1.querySelectorAll("a");
+    expect(links1).toHaveLength(1);
+    expect(links1[0]).toHaveAttribute("href", "#1");
+
+    cleanup();
+
+    // When on "page2" group, only element 2 error should be shown
+    const page2Props = { ...props, currentGroup: "page2" };
+    const page2ErrorList = getErrorList(page2Props);
+    expect(page2ErrorList).not.toBeNull();
+    const { container: container2 } = render(page2ErrorList);
+    const links2 = container2.querySelectorAll("a");
+    expect(links2).toHaveLength(1);
+    expect(links2[0]).toHaveAttribute("href", "#2");
+
+    cleanup();
+
+    // When on "review" group, errors for all groups should be shown
+    const reviewProps = { ...props, currentGroup: "review" };
+    const reviewErrorList = getErrorList(reviewProps);
+    expect(reviewErrorList).not.toBeNull();
+    const { container: container3 } = render(reviewErrorList);
+    const links3 = container3.querySelectorAll("a");
+    expect(links3).toHaveLength(2);
+    expect(links3[0]).toHaveAttribute("href", "#1");
+    expect(links3[1]).toHaveAttribute("href", "#2");
   });
 });
