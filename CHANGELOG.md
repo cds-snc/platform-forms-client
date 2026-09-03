@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.7](https://github.com/cds-snc/platform-forms-client/compare/v4.22.6...v4.22.7) (2026-09-03)
+
+
+### Miscellaneous Chores
+
+* update Forms to use hCaptcha module ([#7846](https://github.com/cds-snc/platform-forms-client/issues/7846)) ([7ae6ce9](https://github.com/cds-snc/platform-forms-client/commit/7ae6ce99a424c8fe820cfe15faa68d84a170a0df))
+
 ## [4.22.6](https://github.com/cds-snc/platform-forms-client/compare/v4.22.5...v4.22.6) (2026-09-03)
 
 
