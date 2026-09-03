@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { forwardRef, useImperativeHandle } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useHCaptcha, type HCaptchaExecutionResult } from "./useHCaptcha";
@@ -192,6 +192,41 @@ describe("useHCaptcha", () => {
     );
     expect(onError).toHaveBeenCalledOnce();
     expect(onError).toHaveBeenCalledWith("network-error");
+  });
+
+  it("ignores an asynchronous result from an execution cancelled by reset", async () => {
+    let resolveFirst: (result: { response: string; key: string }) => void = () => {};
+    let resolveSecond: (result: { response: string; key: string }) => void = () => {};
+    mockCaptcha.execute
+      .mockImplementationOnce(
+        () => new Promise((resolve) => {
+          resolveFirst = resolve;
+        })
+      )
+      .mockImplementationOnce(
+        () => new Promise((resolve) => {
+          resolveSecond = resolve;
+        })
+      );
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByRole("button", { name: "Reset" }));
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await act(async () => {
+      resolveFirst({ response: "stale-token", key: "stale-key" });
+    });
+    expect(onResult).toHaveBeenCalledWith({ verified: false, allowed: false, reason: "cancelled" });
+    expect(onResult).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      resolveSecond({ response: "current-token", key: "current-key" });
+    });
+    await waitFor(() =>
+      expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "current-token" })
+    );
   });
 
   it("maps an asynchronous challenge expiry to expiration", async () => {

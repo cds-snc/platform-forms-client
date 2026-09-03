@@ -58,7 +58,10 @@ export const useHCaptcha = ({
   const pendingExecutionRef = useRef<{
     promise: Promise<HCaptchaExecutionResult>;
     resolve: (result: HCaptchaExecutionResult) => void;
+    executionId: number;
   } | null>(null);
+  // Ignore provider results from executions invalidated by reset()
+  const executionIdRef = useRef(0);
 
   // Fatal widget errors will not recover without remounting the widget
   const hasFatalErrorRef = useRef(false);
@@ -66,9 +69,14 @@ export const useHCaptcha = ({
   const [captchaInstanceKey, setCaptchaInstanceKey] = useState(0);
 
   // Provider callbacks and the provider's async execute Promise complete the package Promise
-  const complete = useCallback((result: HCaptchaExecutionResult): boolean => {
+  const complete = useCallback((result: HCaptchaExecutionResult, executionId?: number): boolean => {
     const pendingExecution = pendingExecutionRef.current;
-    if (!pendingExecution) return false;
+    if (
+      !pendingExecution ||
+      (executionId !== undefined && pendingExecution.executionId !== executionId)
+    ) {
+      return false;
+    }
 
     pendingExecution.resolve(result);
     pendingExecutionRef.current = null;
@@ -87,6 +95,7 @@ export const useHCaptcha = ({
   const reset = useCallback(() => {
     // Manual resets cancel the current execution and recreate the widget so a failed SDK load can
     // be retried by the consumer.
+    executionIdRef.current += 1;
     hCaptchaRef.current?.resetCaptcha();
     hasFatalErrorRef.current = false;
     fatalErrorReasonRef.current = null;
@@ -142,35 +151,46 @@ export const useHCaptcha = ({
     [complete, failureResult, onClose, onErrorCallback, onExpired, resetAfterError]
   );
 
-  const startExecution = useCallback(() => {
-    if (!pendingExecutionRef.current || !hCaptchaRef.current || hasFatalErrorRef.current) {
-      return;
-    }
-
-    try {
-      const providerExecution = hCaptchaRef.current.execute({ async: true });
-
-      // hCaptcha automatically retries temporary network failures before rejecting this Promise.
-      if (providerExecution && typeof providerExecution.then === "function") {
-        void providerExecution
-          .then(({ response }) => {
-            if (complete({ verified: true, token: response })) {
-              onCaptchaVerified?.();
-            }
-          })
-          .catch((code: unknown) => {
-            // The provider may report the same failure through its callback and Promise. Only
-            // handle the rejection when the callback has not already completed this execution.
-            if (pendingExecutionRef.current) {
-              handleProviderError(typeof code === "string" ? code : "execution-error");
-            }
-          });
+  const startExecution = useCallback(
+    (executionId?: number) => {
+      const pendingExecution = pendingExecutionRef.current;
+      if (
+        !pendingExecution ||
+        !hCaptchaRef.current ||
+        hasFatalErrorRef.current ||
+        (executionId !== undefined && pendingExecution.executionId !== executionId)
+      ) {
+        return;
       }
-    } catch {
-      // The provider can throw before it reports an error through its callbacks
-      complete(failureResult("execution-error"));
-    }
-  }, [complete, failureResult, handleProviderError, onCaptchaVerified]);
+
+      const currentExecutionId = pendingExecution.executionId;
+
+      try {
+        const providerExecution = hCaptchaRef.current.execute({ async: true });
+
+        // hCaptcha automatically retries temporary network failures before rejecting this Promise.
+        if (providerExecution && typeof providerExecution.then === "function") {
+          void providerExecution
+            .then(({ response }) => {
+              if (complete({ verified: true, token: response }, currentExecutionId)) {
+                onCaptchaVerified?.();
+              }
+            })
+            .catch((code: unknown) => {
+              // The provider may report the same failure through its callback and Promise. Only
+              // handle the rejection when the callback has not already completed this execution.
+              if (pendingExecutionRef.current?.executionId === currentExecutionId) {
+                handleProviderError(typeof code === "string" ? code : "execution-error");
+              }
+            });
+        }
+      } catch {
+        // The provider can throw before it reports an error through its callbacks
+        complete(failureResult("execution-error"), currentExecutionId);
+      }
+    },
+    [complete, failureResult, handleProviderError, onCaptchaVerified]
+  );
 
   const onReady = useCallback(() => {
     startExecution();
@@ -190,12 +210,13 @@ export const useHCaptcha = ({
     const promise = new Promise<HCaptchaExecutionResult>((resolve) => {
       resolveExecution = resolve;
     });
-    pendingExecutionRef.current = { promise, resolve: resolveExecution };
+    const executionId = ++executionIdRef.current;
+    pendingExecutionRef.current = { promise, resolve: resolveExecution, executionId };
 
     if (!hCaptchaRef.current || hasFatalErrorRef.current) {
       complete(failureResult(fatalErrorReasonRef.current ?? "not-ready"));
     } else if (hCaptchaRef.current.isReady()) {
-      startExecution();
+      startExecution(executionId);
     }
 
     return promise;
