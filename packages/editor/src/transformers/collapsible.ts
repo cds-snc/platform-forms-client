@@ -3,7 +3,7 @@ import {
   MultilineElementTransformer,
   TRANSFORMERS,
 } from "@lexical/markdown";
-import { $createParagraphNode, $createTextNode, $isElementNode } from "lexical";
+import { $createParagraphNode, $createTextNode, $isElementNode, type ElementNode } from "lexical";
 import {
   $createCollapsibleContainerNode,
   $createCollapsibleContentNode,
@@ -13,9 +13,19 @@ import {
   $isCollapsibleTitleNode,
   CollapsibleContentNode,
 } from "../plugins/CollapsibleExtension";
-import { $isHeadingNode } from "@lexical/rich-text";
 
 const collapsibleTransformers = () => [...TRANSFORMERS, COLLAPSIBLE];
+
+const exportBlock = (node: ElementNode, traverseChildren: (node: ElementNode) => string) => {
+  for (const transformer of collapsibleTransformers()) {
+    if (transformer.type === "text-format" || transformer.type === "text-match") continue;
+
+    const markdown = transformer.export?.(node, traverseChildren);
+    if (markdown != null) return markdown;
+  }
+
+  return traverseChildren(node);
+};
 
 export const COLLAPSIBLE: MultilineElementTransformer = {
   dependencies: [CollapsibleContentNode],
@@ -34,10 +44,7 @@ export const COLLAPSIBLE: MultilineElementTransformer = {
       .map((child) => {
         if (!$isElementNode(child)) return child.getTextContent();
 
-        const markdown = traverseChildren(child);
-        return $isHeadingNode(child)
-          ? `${"#".repeat(Number(child.getTag().slice(1)))} ${markdown}`
-          : markdown;
+        return exportBlock(child, traverseChildren);
       })
       .join("\n\n");
 

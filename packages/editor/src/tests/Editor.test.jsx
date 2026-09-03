@@ -134,6 +134,76 @@ describe("Lexical Editor", () => {
     );
   });
 
+  it("preserves unordered and ordered list markup when formatting collapsible content", async () => {
+    const onChange = vi.fn();
+    const rendered = render(
+      <Editor
+        content={
+          ":::collapsible Privacy\n- First item\n- Second item\n\n1. Third item\n2. Fourth item\n:::"
+        }
+        ariaLabel="AriaLabel"
+        onChange={onChange}
+      />
+    );
+
+    await act(async () => {
+      await promise;
+    });
+
+    const contentArea = rendered.container.querySelector('[contenteditable="true"]');
+    expect(contentArea?.querySelector(".Collapsible__content ul")).toBeInTheDocument();
+    expect(contentArea?.querySelector(".Collapsible__content ol")).toBeInTheDocument();
+    contentArea?.__lexicalEditor.update(() => {
+      $getRoot()
+        .getFirstChild()
+        ?.getLastChild()
+        ?.getFirstChild()
+        ?.getFirstChild()
+        ?.getFirstChild()
+        ?.selectEnd();
+    });
+
+    await userEvent.click(screen.getByTestId("bold-button"));
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      ":::collapsible Privacy\n- First item\n- Second item\n\n1. Third item\n2. Fourth item\n:::"
+    );
+  });
+
+  it("preserves list nesting when indenting and outdenting collapsible content", async () => {
+    const onChange = vi.fn();
+    const rendered = render(
+      <Editor
+        content={":::collapsible Privacy\n- First item\n- Second item\n:::"}
+        ariaLabel="AriaLabel"
+        onChange={onChange}
+      />
+    );
+
+    await act(async () => {
+      await promise;
+    });
+
+    const contentArea = rendered.container.querySelector('[contenteditable="true"]');
+    contentArea?.__lexicalEditor.update(() => {
+      const list = $getRoot().getFirstChild()?.getLastChild()?.getFirstChild();
+      const secondListItem = list?.getChildren()[1];
+      secondListItem?.getFirstChild()?.selectEnd();
+    });
+
+    await userEvent.click(screen.getByTestId("indent-button"));
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      ":::collapsible Privacy\n- First item\n    - Second item\n:::"
+    );
+
+    await userEvent.click(screen.getByTestId("outdent-button"));
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      ":::collapsible Privacy\n- First item\n- Second item\n:::"
+    );
+  });
+
   it("can keyboard navigate the RichTextEditor", async () => {
     render(
       <div>
