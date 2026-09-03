@@ -38,7 +38,8 @@ export const getAttachmentZipPath = (
   filename: string,
   isPotentiallyMalicious: boolean,
   usedNames: Set<string>,
-  index: number
+  index: number,
+  flat = false
 ) => {
   const safeResponseId = safePathSegment(responseId, "response");
   const safeFilename = safePathSegment(
@@ -46,6 +47,8 @@ export const getAttachmentZipPath = (
     `attachment-${index + 1}`
   );
   const uniqueFilename = getUniqueAttachmentFilename(safeFilename, usedNames, index);
+  if (flat) return uniqueFilename;
+
   const folder = isPotentiallyMalicious
     ? [RESPONSE_ATTACHMENTS_FOLDER, safeResponseId, SUSPICIOUS_ATTACHMENTS_FOLDER]
     : [RESPONSE_ATTACHMENTS_FOLDER, safeResponseId];
@@ -55,7 +58,8 @@ export const getAttachmentZipPath = (
 
 export const addResponseAttachmentsToZip = async (
   zip: JSZip,
-  groups: ResponseAttachmentGroup[] | undefined
+  groups: ResponseAttachmentGroup[] | undefined,
+  flat = false
 ) => {
   const files = await Promise.all(
     (groups ?? []).flatMap((group) => {
@@ -74,7 +78,8 @@ export const addResponseAttachmentsToZip = async (
             attachment.name,
             Boolean(attachment.isPotentiallyMalicious),
             usedNames,
-            index
+            index,
+            flat
           ),
           data: await response.blob(),
         };

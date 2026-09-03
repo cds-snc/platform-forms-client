@@ -17,6 +17,7 @@ export interface ResponseSectionProps {
   formRecord: FormRecord;
   versionNumber?: number | null;
   showCodes?: boolean;
+  responseAttachmentsUrl?: string;
   t: TFunction<string | string[], undefined>;
 }
 
@@ -37,6 +38,7 @@ export const ResponseSection = ({
   formRecord,
   versionNumber,
   showCodes = true,
+  responseAttachmentsUrl,
   t,
 }: ResponseSectionProps) => {
   const capitalizedLang = capitalize(lang);
@@ -155,6 +157,13 @@ export const ResponseSection = ({
           versionText={t("responseTemplate.versionNumber", { lng: lang })}
         />
       </div>
+      {responseAttachmentsUrl && (
+        <p className="mt-4">
+          <a href={responseAttachmentsUrl}>
+            {t("responseTemplate.downloadAttachments", { lng: lang })}
+          </a>
+        </p>
+      )}
       <h3 id={`columnTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
       </h3>

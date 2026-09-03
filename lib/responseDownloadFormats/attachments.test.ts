@@ -67,4 +67,39 @@ describe("response attachment ZIP paths", () => {
         ?.async("string")
     ).toBe("attachment contents");
   });
+
+  it("fetches a single response's attachments at the ZIP root", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        statusText: "OK",
+        blob: async () => new TextEncoder().encode("attachment contents"),
+      })
+    );
+
+    const zip = new JSZip();
+    await addResponseAttachmentsToZip(
+      zip,
+      [
+        {
+          responseId: "response-1",
+          attachments: [
+            { id: "one", name: "document.pdf", downloadLink: "https://example.test/one" },
+            { id: "two", name: "document.pdf", downloadLink: "https://example.test/two" },
+          ],
+        },
+      ],
+      true
+    );
+
+    const generated = await zip.generateAsync({ type: "uint8array" });
+    const loadedZip = await JSZip.loadAsync(generated);
+
+    expect(Object.keys(loadedZip.files).filter((filename) => !filename.endsWith("/"))).toEqual([
+      "document.pdf",
+      "document (1).pdf",
+    ]);
+  });
 });

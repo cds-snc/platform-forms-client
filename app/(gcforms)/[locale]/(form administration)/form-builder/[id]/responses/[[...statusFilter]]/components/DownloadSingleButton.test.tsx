@@ -6,22 +6,12 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { getSubmissionsByFormat } from "../actions";
-import { ga } from "@lib/client/clientHelpers";
 
 vi.mock("../actions", () => ({
   getSubmissionsByFormat: vi.fn(),
 }));
 
-vi.mock("@lib/client/clientHelpers", async () => {
-  const actual = await vi.importActual<typeof import("@lib/client/clientHelpers")>(
-    "@lib/client/clientHelpers"
-  );
-
-  return { ...actual, ga: vi.fn() };
-});
-
 const mockedGetSubmissionsByFormat = vi.mocked(getSubmissionsByFormat);
-const mockedGa = vi.mocked(ga);
 
 const renderButton = () =>
   render(
@@ -38,7 +28,6 @@ const renderButton = () =>
 describe("DownloadSingleButton", () => {
   beforeEach(() => {
     mockedGetSubmissionsByFormat.mockReset();
-    mockedGa.mockReset();
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
@@ -52,7 +41,7 @@ describe("DownloadSingleButton", () => {
     vi.spyOn(window.URL, "revokeObjectURL").mockImplementation(() => {});
   });
 
-  it("tracks the generated ZIP payload size for a response with attachments", async () => {
+  it("downloads only the HTML response when attachments are present", async () => {
     const submission = {
       id: "response-1",
       created_at: 1,
@@ -71,17 +60,16 @@ describe("DownloadSingleButton", () => {
     renderButton();
     fireEvent.click(document.getElementById("download-response-1") as HTMLElement);
 
-    await waitFor(() => expect(mockedGa).toHaveBeenCalledOnce());
+    await waitFor(() => expect(window.URL.createObjectURL).toHaveBeenCalledOnce());
 
     const downloadedBlob = createObjectURL.mock.calls[0][0] as Blob;
-    expect(mockedGa).toHaveBeenCalledWith("response_download_zip", {
-      formID: "form-1",
-      zipSizeBytes: downloadedBlob.size,
-      attachmentCount: 1,
-    });
+    expect(downloadedBlob).toBeInstanceOf(Blob);
+    expect(downloadedBlob.type).toBe("");
+    expect(downloadedBlob.size).toBe(new Blob([submission.html]).size);
+    expect(vi.mocked(fetch)).not.toHaveBeenCalled();
   });
 
-  it("does not track a ZIP payload for a response without attachments", async () => {
+  it("downloads the HTML response when attachments are absent", async () => {
     mockedGetSubmissionsByFormat.mockResolvedValue([
       { id: "response-1", created_at: 1, html: "<p>Response</p>" },
     ]);
@@ -90,6 +78,5 @@ describe("DownloadSingleButton", () => {
     fireEvent.click(document.getElementById("download-response-1") as HTMLElement);
 
     await waitFor(() => expect(window.URL.createObjectURL).toHaveBeenCalledOnce());
-    expect(mockedGa).not.toHaveBeenCalled();
   });
 });

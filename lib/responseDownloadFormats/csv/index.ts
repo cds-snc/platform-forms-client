@@ -5,6 +5,8 @@ import { serverTranslation } from "@i18n";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
+import { getOrigin } from "@lib/origin";
+import { getResponseAttachmentsUrl } from "../attachmentDownloadUrl";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -13,6 +15,9 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
   const { t: tFr } = await serverTranslation("common", { lang: "fr" });
 
   const { submissions } = formResponseSubmissions;
+  const hasAttachments = submissions.some((response) => response.attachments?.length);
+  const configuredOrigin = process.env.HOST_URL?.trim().replace(/\/+$/, "");
+  const origin = hasAttachments ? (configuredOrigin ?? (await getOrigin())) : "";
 
   const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
 
@@ -52,7 +57,10 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
     "Date of submission \nDate de soumission"
   );
 
-  header.push("Receipt codes \nCodes de réception");
+  header.push(
+    "Receipt codes \nCodes de réception",
+    "Response attachments \nPièces jointes de la réponse"
+  );
 
   const csvStringifier = createCsvStringifier({
     header: header,
@@ -106,6 +114,14 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
       ...answers,
       "Receipt codes are in the Official receipt and record of responses\n" +
         "Les codes de réception sont dans le Reçu et registre officiel des réponses",
+      response.attachments?.length
+        ? getResponseAttachmentsUrl({
+            origin,
+            locale: "en",
+            formId: formResponseSubmissions.formRecord.id,
+            responseId: response.id,
+          })
+        : "-",
     ];
   });
 

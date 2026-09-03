@@ -56,4 +56,35 @@ describe("ResponseHtml", () => {
 
     expect(markup).toContain("Version 3");
   });
+
+  it("renders an attachment download link when attachments are present", () => {
+    const markup = renderToStaticMarkup(
+      ResponseHtml({
+        response: {
+          ...submission,
+          attachments: [
+            {
+              id: "attachment-1",
+              name: "document.pdf",
+              downloadLink: "https://example.test/document.pdf",
+            },
+          ],
+        },
+        formRecord,
+        confirmationCode: "ABC123",
+        responseID: "response-1",
+        createdAt: 1_700_000_000_000,
+        securityAttribute: "Protected A",
+        responseAttachmentsUrl:
+          "https://forms.example/en/form-builder/form-1/response-attachments/response-1",
+        showCodes: false,
+        t,
+      })
+    );
+
+    expect(markup).toContain(
+      'href="https://forms.example/en/form-builder/form-1/response-attachments/response-1"'
+    );
+    expect(markup).toContain("responseTemplate.downloadAttachments");
+  });
 });
