@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.6](https://github.com/cds-snc/platform-forms-client/compare/v4.22.5...v4.22.6) (2026-09-03)
+
+
+### Bug Fixes
+
+* Add Trigger to OnChange for Question Title Change. ([#7865](https://github.com/cds-snc/platform-forms-client/issues/7865)) ([cef8158](https://github.com/cds-snc/platform-forms-client/commit/cef81587ebe7127f1f0b153afa1360c3e8ebd401))
+* nested styles for details component maintain tag levels ([#7869](https://github.com/cds-snc/platform-forms-client/issues/7869)) ([ac3a60f](https://github.com/cds-snc/platform-forms-client/commit/ac3a60fb2132bfa4e7ebdcdac403211b1a17a8a3))
+
+
+### Miscellaneous Chores
+
+* add e2e test for edit published ([#7871](https://github.com/cds-snc/platform-forms-client/issues/7871)) ([62c9a31](https://github.com/cds-snc/platform-forms-client/commit/62c9a31e198a78bea2c4073034abbfc0c57183c0))
+* fix closed menu options + closed archive status ([#7858](https://github.com/cds-snc/platform-forms-client/issues/7858)) ([93d3d81](https://github.com/cds-snc/platform-forms-client/commit/93d3d814d4fd6e1895901de244ed281b65dfabf4))
+* Remove unused matchedIds props ([#7853](https://github.com/cds-snc/platform-forms-client/issues/7853)) ([4b3dcc5](https://github.com/cds-snc/platform-forms-client/commit/4b3dcc5526d4780919774344efc92360c681b393))
+
 ## [4.22.5](https://github.com/cds-snc/platform-forms-client/compare/v4.22.4...v4.22.5) (2026-09-02)
 
 
