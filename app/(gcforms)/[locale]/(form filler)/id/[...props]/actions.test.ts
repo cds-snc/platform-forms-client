@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
-import { NotificationsInterval } from "@gcforms/types";
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
+import { FormStatus, NotificationsInterval } from "@gcforms/types";
 import { submitForm } from "./actions";
 import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
@@ -102,6 +102,27 @@ describe("submitForm", () => {
     (updateNotificationMarker as Mock).mockResolvedValue(null);
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(null);
     (sendDefaultEmail as Mock).mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("should reject CAPTCHA verification when the site verify key is missing", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_APP_ENV", "production");
+    vi.stubEnv("HCAPTCHA_SITE_VERIFY_KEY", "");
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, false);
+
+    expect(result).toEqual({
+      id: mockFormId,
+      error: {
+        name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
+        message: "Captcha verification failure",
+      },
+    });
+    expect(verifyHCaptchaToken).not.toHaveBeenCalled();
   });
 
   it("should return MissingFormDataError when file input validation fails", async () => {

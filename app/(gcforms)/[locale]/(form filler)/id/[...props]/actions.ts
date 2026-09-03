@@ -74,10 +74,21 @@ export async function submitForm(
 
       if (shouldVerifyHCaptcha) {
         const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;
+        if (!captchaSecret) {
+          logMessage.info(`hCaptcha: missing siteVerifyKey for formId ${formId}`);
+          return {
+            id: formId,
+            error: {
+              name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
+              message: "Captcha verification failure",
+            },
+          };
+        }
+
         const captchaResult = await verifyHCaptchaToken(captchaToken, {
           secret: captchaSecret,
           // Avoid the lookup when the verifier will fail immediately
-          remoteIp: captchaToken && captchaSecret ? String(await getClientIp()) : undefined,
+          remoteIp: captchaToken ? String(await getClientIp()) : undefined,
           maxAllowedScore: HCAPTCHA_MAX_ALLOWED_SCORE,
           logger: {
             info: (message) => logMessage.info(`${message} for formId ${formId}`),
