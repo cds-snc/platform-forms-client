@@ -13,6 +13,7 @@ yarn add @gcforms/hcaptcha @hcaptcha/react-hcaptcha react
 The package provides separate entry points:
 
 - `@gcforms/hcaptcha/client` exports the `useHCaptcha` React hook
+- `@gcforms/hcaptcha/client` exports the `HCaptchaForm` native form wrapper
 - `@gcforms/hcaptcha/server` exports the `verifyHCaptchaToken` library
 
 ## Client lifecycle
@@ -35,6 +36,13 @@ if (result.verified) {
 
 `failureMode` defaults to `"block"`. Set it to `"allow"` only when the consumer intentionally
 wants provider failures to permit the surrounding action to continue.
+
+## Form wrapper
+
+`HCaptchaForm` combines the hook with a native `<form>`. It prevents duplicate submissions,
+passes the verified token to `onSubmit`, and exposes `getToken()` and `reset()` through its ref.
+Consumers provide `onUnexpectedError` to handle errors from their submit callback. Use the hook
+directly when the consumer needs more control over the form or submission lifecycle.
 
 ## Server verification
 

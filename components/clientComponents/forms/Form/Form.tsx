@@ -5,7 +5,11 @@ import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
 import { Alert, RichText } from "@clientComponents/forms";
 import { validateOnSubmit } from "@gcforms/core";
-import type { HCaptchaFailureReason } from "@gcforms/hcaptcha/client";
+import {
+  HCaptchaForm,
+  type HCaptchaFailureReason,
+  type HCaptchaFormHandle,
+} from "@gcforms/hcaptcha/client";
 
 import { type FormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
@@ -29,10 +33,6 @@ import { filterValuesByVisibleElements } from "@lib/formContext";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
-import {
-  FormCaptcha,
-  type FormCaptchaHandle,
-} from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { FormStatus, type FormValues } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
@@ -50,7 +50,7 @@ import { isSuspiciousHCaptchaError } from "@clientComponents/globals/FormCaptcha
 
 type InternalCaptchaProps = {
   onCaptchaReset: () => void;
-  setCaptchaFormHandle: (handle: FormCaptchaHandle | null) => void;
+  setCaptchaFormHandle: (handle: HCaptchaFormHandle | null) => void;
   getCaptchaToken: () => string | undefined;
 };
 
@@ -89,7 +89,14 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
 
   const handleCaptchaError = (code: string) => {
     if (isSuspiciousHCaptchaError(code)) {
+      logMessage.warn(
+        `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
+      );
       props.setCaptchaFail?.(true);
+    } else if (code === "invalid-sitekey" || code === "missing-sitekey") {
+      logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
+    } else {
+      logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
     }
   };
 
@@ -227,7 +234,7 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
             </RichText>
           )}
 
-          <FormCaptcha
+          <HCaptchaForm
             ref={setCaptchaFormHandle}
             id="form"
             data-testid="form"
@@ -238,6 +245,7 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
             siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
             onCaptchaFailure={handleCaptchaFailure}
             onError={handleCaptchaError}
+            onUnexpectedError={(error) => logMessage.error(error as Error)}
           >
             {isShowReviewPage &&
               currentGroup !== LOCKED_GROUPS.REVIEW &&
@@ -269,7 +277,7 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
                 props={props}
               />
             </FormActions>
-          </FormCaptcha>
+          </HCaptchaForm>
         </>
       }
     </>
@@ -449,8 +457,8 @@ const InternalForm = withFormik<InternalFormProps, FormikResponses>({
 // Keep the CAPTCHA handle outside the Formik higher-order component so its submit handler
 // can access the token and reset it
 export const Form: React.FC<FormProps> = (props) => {
-  const captchaFormRef = useRef<FormCaptchaHandle | null>(null);
-  const setCaptchaFormHandle = useCallback((handle: FormCaptchaHandle | null) => {
+  const captchaFormRef = useRef<HCaptchaFormHandle | null>(null);
+  const setCaptchaFormHandle = useCallback((handle: HCaptchaFormHandle | null) => {
     captchaFormRef.current = handle;
   }, []);
   const getCaptchaToken = useCallback(() => captchaFormRef.current?.getToken(), []);
