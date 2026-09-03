@@ -159,7 +159,11 @@ export const useHCaptcha = ({
             }
           })
           .catch((code: unknown) => {
-            handleProviderError(typeof code === "string" ? code : "execution-error");
+            // The provider may report the same failure through its callback and Promise. Only
+            // handle the rejection when the callback has not already completed this execution.
+            if (pendingExecutionRef.current) {
+              handleProviderError(typeof code === "string" ? code : "execution-error");
+            }
           });
       }
     } catch {

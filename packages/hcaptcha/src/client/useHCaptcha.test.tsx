@@ -170,6 +170,30 @@ describe("useHCaptcha", () => {
     expect(onError).toHaveBeenCalledWith("challenge-closed");
   });
 
+  it("reports a provider failure once when callback and Promise channels overlap", async () => {
+    let rejectProvider: (code: string) => void = () => {};
+    mockCaptcha.execute.mockImplementationOnce(
+      () => new Promise((_, reject) => (rejectProvider = reject))
+    );
+    const onResult = vi.fn();
+    const onError = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onError={onError} onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-error-network-error"));
+    rejectProvider("network-error");
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: false,
+        reason: "captcha-error",
+      })
+    );
+    expect(onError).toHaveBeenCalledOnce();
+    expect(onError).toHaveBeenCalledWith("network-error");
+  });
+
   it("maps an asynchronous challenge expiry to expiration", async () => {
     const onResult = vi.fn();
     const onCaptchaExpired = vi.fn();
