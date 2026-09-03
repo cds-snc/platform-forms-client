@@ -24,4 +24,9 @@ export interface FormProps {
   captchaFail?: boolean;
 }
 
-export type InnerFormProps = FormProps & FormikProps<Responses>;
+export type FormWithFormikProps = FormProps & FormikProps<Responses>;
+
+export type FormRenderProps = FormWithFormikProps & {
+  captcha: React.ReactNode;
+  captchaEnabled: boolean;
+};

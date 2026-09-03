@@ -298,7 +298,7 @@ describe("Form", () => {
     });
   });
 
-  it("does not submit when client validation fails", async () => {
+  it("does not execute hCaptcha or submit when client validation fails", async () => {
     mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
     mocks.getErrorList.mockReturnValue(<div>Required</div>);
 
@@ -308,6 +308,7 @@ describe("Form", () => {
 
     await waitFor(() => expect(mocks.validateOnSubmit).toHaveBeenCalled());
 
+    expect(mocks.executeCaptcha).not.toHaveBeenCalled();
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 
