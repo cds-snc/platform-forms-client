@@ -1,14 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { withFormik } from "formik";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { withFormik, type FormikProps } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
 import { Alert, RichText } from "@clientComponents/forms";
 import { validateOnSubmit } from "@gcforms/core";
+import {
+  HCaptchaForm,
+  type HCaptchaFailureReason,
+  type HCaptchaFormHandle,
+} from "@gcforms/hcaptcha/client";
 
-import { type FormProps, type InnerFormProps } from "./types";
+import { type FormProps } from "./types";
 import { type Language } from "@lib/types/form-builder-types";
-import { type Responses } from "@lib/types";
+import { type Responses as FormikResponses } from "@lib/types";
 
 import { EventKeys } from "@lib/hooks/useCustomEvent";
 
@@ -28,7 +33,6 @@ import { filterValuesByVisibleElements } from "@lib/formContext";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
-import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { FormStatus, type FormValues } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 import { ga } from "@lib/client/clientHelpers";
@@ -41,20 +45,33 @@ import { uploadFile } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...pr
 
 import { SaveAndResumeButton } from "@clientComponents/forms/SaveAndResume/SaveAndResumeButton";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
+import { isSuspiciousHCaptchaError } from "@clientComponents/globals/FormCaptcha/isSuspiciousHCaptchaError";
+
+type InternalCaptchaProps = {
+  onCaptchaReset: () => void;
+  setCaptchaToken: (token: string | undefined) => void;
+  setCaptchaFormHandle: (handle: HCaptchaFormHandle | null) => void;
+  getCaptchaToken: () => string | undefined;
+};
+
+type InternalFormProps = FormProps & InternalCaptchaProps;
+type InternalInnerFormProps = InternalFormProps & FormikProps<FormikResponses>;
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm: React.FC<InnerFormProps> = (props) => {
+const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
   const {
     children,
-    handleSubmit,
+    submitForm,
+    setCaptchaFormHandle,
     status,
     language,
     formRecord: { id: formID, form, isPublished },
     dirty,
-  }: InnerFormProps = props;
+  }: InternalInnerFormProps = props;
 
   const { t } = useTranslation();
   const [canFocusOnError, setCanFocusOnError] = useState(false);
@@ -64,6 +81,31 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const { currentGroup, getGroupTitle } = useGCFormsContext();
   const isShowReviewPage = showReviewPage(form);
   const showIntro = currentGroup === LOCKED_GROUPS.START;
+
+  const handleCaptchaFailure = (reason: HCaptchaFailureReason) => {
+    props.setCaptchaToken(undefined);
+
+    if (reason === "load-error") {
+      props.onCaptchaReset();
+    }
+
+    if (reason !== "cancelled") {
+      props.setStatus(FormStatus.ERROR);
+    }
+  };
+
+  const handleCaptchaError = (code: string) => {
+    if (isSuspiciousHCaptchaError(code)) {
+      logMessage.warn(
+        `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
+      );
+      props.setCaptchaFail?.(true);
+    } else if (code === "invalid-sitekey" || code === "missing-sitekey") {
+      logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
+    } else {
+      logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
+    }
+  };
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useSyncVisibleElementIds();
@@ -199,16 +241,26 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </RichText>
           )}
 
-          <FormCaptcha
+          <HCaptchaForm
+            ref={setCaptchaFormHandle}
             id="form"
-            dataTestId="form"
-            lang={language}
-            handleSubmit={handleSubmit}
+            data-testid="form"
+            language={language}
+            onSubmit={(_event, token) => {
+              props.setCaptchaToken(token);
+              return submitForm();
+            }}
+            onCaptchaVerified={() =>
+              logMessage.info(
+                `hCaptcha: verified token received by form at ${new Date().toISOString()}`
+              )
+            }
             noValidate={true}
-            isPublished={isPublished}
-            isPreview={props.isPreview}
-            captchaTokenRef={props.captchaToken}
-            resetCaptchaRef={props.resetCaptchaRef}
+            captchaEnabled={shouldCheckCaptcha(isPublished, props.isPreview ?? false)}
+            siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+            onCaptchaFailure={handleCaptchaFailure}
+            onError={handleCaptchaError}
+            onUnexpectedError={(error) => logMessage.error(error as Error)}
           >
             {isShowReviewPage &&
               currentGroup !== LOCKED_GROUPS.REVIEW &&
@@ -240,7 +292,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 props={props}
               />
             </FormActions>
-          </FormCaptcha>
+          </HCaptchaForm>
         </>
       }
     </>
@@ -251,7 +303,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
  * This is the main Form component that wraps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
-export const Form = withFormik<FormProps, Responses>({
+const InternalForm = withFormik<InternalFormProps, FormikResponses>({
   validateOnChange: false,
 
   validateOnBlur: false,
@@ -319,7 +371,7 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.language,
         formikBag.props.formRecord.id,
         formikBag.props.isPreview ?? false,
-        formikBag.props.captchaToken?.current,
+        formikBag.props.getCaptchaToken(),
         fileChecksums
       );
 
@@ -336,7 +388,7 @@ export const Form = withFormik<FormProps, Responses>({
         }
 
         // Avoid a potential error where a token could be reused by re-submitting after an error
-        formikBag.props.resetCaptchaRef?.current?.resetToken?.();
+        formikBag.props.onCaptchaReset();
 
         return;
       }
@@ -403,7 +455,7 @@ export const Form = withFormik<FormProps, Responses>({
       }
 
       // Avoid a potential error where a token could be reused by re-submitting after an error
-      formikBag.props.resetCaptchaRef?.current?.resetToken?.();
+      formikBag.props.onCaptchaReset();
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {
@@ -416,3 +468,31 @@ export const Form = withFormik<FormProps, Responses>({
     }
   },
 })(InnerForm);
+
+// Keep the CAPTCHA handle outside the Formik higher-order component so its submit handler
+// can access the token and reset it
+export const Form: React.FC<FormProps> = (props) => {
+  const captchaFormRef = useRef<HCaptchaFormHandle | null>(null);
+  const captchaTokenRef = useRef<string | undefined>(undefined);
+  const setCaptchaFormHandle = useCallback((handle: HCaptchaFormHandle | null) => {
+    captchaFormRef.current = handle;
+  }, []);
+  const getCaptchaToken = useCallback(() => captchaTokenRef.current, []);
+  const setCaptchaToken = useCallback((token: string | undefined) => {
+    captchaTokenRef.current = token;
+  }, []);
+  const onCaptchaReset = useCallback(() => {
+    captchaTokenRef.current = undefined;
+    captchaFormRef.current?.reset();
+  }, []);
+
+  return (
+    <InternalForm
+      {...props}
+      setCaptchaFormHandle={setCaptchaFormHandle}
+      setCaptchaToken={setCaptchaToken}
+      getCaptchaToken={getCaptchaToken}
+      onCaptchaReset={onCaptchaReset}
+    />
+  );
+};
