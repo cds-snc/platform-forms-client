@@ -231,6 +231,49 @@ describe("Form", () => {
     );
   });
 
+  it("submits without hCaptcha when captcha checks are disabled", async () => {
+    mocks.shouldCheckCaptcha.mockReturnValue(false);
+
+    renderForm();
+
+    expect(screen.queryByTestId("captcha")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => expect(mocks.submitForm).toHaveBeenCalled());
+
+    expect(mocks.executeCaptcha).not.toHaveBeenCalled();
+    expect(mocks.submitForm).toHaveBeenCalledWith({}, "en", "form-id", false, undefined, {});
+  });
+
+  it("does not submit when the form is closed", async () => {
+    mocks.isFormClosed.mockResolvedValue(true);
+
+    renderForm();
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => expect(mocks.isFormClosed).toHaveBeenCalledWith("form-id"));
+
+    expect(mocks.submitForm).not.toHaveBeenCalled();
+    expect(mocks.onSuccess).not.toHaveBeenCalled();
+  });
+
+  it("shows a generic server error when submission fails", async () => {
+    mocks.submitForm.mockResolvedValue({
+      id: "form-id",
+      error: { name: FormStatus.ERROR, message: "Submission failed" },
+    });
+
+    renderForm();
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    expect(await screen.findByTestId("alert")).toHaveTextContent("problem submitting your form");
+    expect(mocks.resetCaptcha).toHaveBeenCalledOnce();
+    expect(mocks.onSuccess).not.toHaveBeenCalled();
+  });
+
   it("passes Formik validateForm and fallback to custom submit renderers", async () => {
     const renderSubmit = vi.fn(({ validateForm, fallBack }) => (
       <button
