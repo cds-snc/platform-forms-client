@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "4.22.5",
+  "version": "4.22.6",
   "private": true,
   "workspaces": [
     "utils/*",
