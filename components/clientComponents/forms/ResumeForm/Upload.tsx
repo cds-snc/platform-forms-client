@@ -15,6 +15,7 @@ import { ErrorResuming } from "./ErrorResuming";
 import { ErrorLoading } from "./ErrorLoading";
 import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
+import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
 const cleaner = (key: string, value: string) =>
@@ -73,16 +74,18 @@ export const Upload = ({ formId }: { formId: string }) => {
     currentGroup,
     responseLanguage,
   }: ResumeFormResponse) => {
+    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values, {}, true);
+
     await saveSessionProgress({
       id,
-      values,
+      values: formValuesWithoutFileContent as FormValues,
       currentGroup,
       language: responseLanguage,
       restoredForm: true,
     });
     // Needed to support a hard refresh of the page and not client side routing
-    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
 
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = `/${language}/id/${id}`;
   };
 

@@ -26,7 +26,7 @@ export async function getTemplateVersionState(formID: string): Promise<{
     hasDraftVersion: template.isPublished
       ? Boolean(template.currentDraftVersionId)
       : Boolean(template.currentDraftVersionId),
-    currentPublishedVersionId: template.isPublished ? template.currentPublishedVersionId : null,
-    currentDraftVersionId: template.isPublished ? null : template.currentDraftVersionId,
+    currentPublishedVersionId: template.currentPublishedVersionId,
+    currentDraftVersionId: template.currentDraftVersionId,
   };
 }
