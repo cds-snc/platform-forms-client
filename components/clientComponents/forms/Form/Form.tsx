@@ -250,6 +250,11 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
               props.setCaptchaToken(token);
               return submitForm();
             }}
+            onCaptchaVerified={() =>
+              logMessage.info(
+                `hCaptcha: verified token received by form at ${new Date().toISOString()}`
+              )
+            }
             noValidate={true}
             captchaEnabled={shouldCheckCaptcha(isPublished, props.isPreview ?? false)}
             siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}

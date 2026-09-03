@@ -68,11 +68,13 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
 const HookHarness = ({
   failureMode,
   onCaptchaExpired,
+  onCaptchaVerified,
   onError,
   onResult,
 }: {
   failureMode?: "allow" | "block";
   onCaptchaExpired?: () => void;
+  onCaptchaVerified?: () => void;
   onError?: (code: string) => void;
   onResult: (result: HCaptchaExecutionResult) => void;
 }) => {
@@ -80,6 +82,7 @@ const HookHarness = ({
     siteKey: "site-key",
     failureMode,
     onCaptchaExpired,
+    onCaptchaVerified,
     onError,
   });
 
@@ -114,6 +117,18 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({ verified: true, token: "captcha-token" })
     );
+  });
+
+  it("reports the verified token through the callback", async () => {
+    const onCaptchaVerified = vi.fn();
+    const { getByRole, getByTestId } = render(
+      <HookHarness onCaptchaVerified={onCaptchaVerified} onResult={vi.fn()} />
+    );
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-verify"));
+
+    await waitFor(() => expect(onCaptchaVerified).toHaveBeenCalledOnce());
   });
 
   it("blocks provider failures in block mode", async () => {

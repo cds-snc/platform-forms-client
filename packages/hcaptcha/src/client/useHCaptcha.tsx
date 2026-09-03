@@ -12,6 +12,7 @@ export type UseHCaptchaOptions = {
   language?: string;
   // Fires for every error reported by hCaptcha
   onError?: (code: string) => void;
+  onCaptchaVerified?: () => void;
   onCaptchaExpired?: () => void;
   siteKey: string;
 };
@@ -47,6 +48,7 @@ export const useHCaptcha = ({
   failureMode = "block",
   language,
   onError: onErrorCallback,
+  onCaptchaVerified,
   onCaptchaExpired,
   siteKey,
 }: UseHCaptchaOptions): UseHCaptchaResult => {
@@ -150,8 +152,9 @@ export const useHCaptcha = ({
   const onVerify = useCallback(
     (verifiedToken: string) => {
       complete({ verified: true, token: verifiedToken });
+      onCaptchaVerified?.();
     },
-    [complete]
+    [complete, onCaptchaVerified]
   );
 
   const captcha = (
