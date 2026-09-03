@@ -107,8 +107,8 @@ const SubmittingForm = ({ title, hasFileValues }: { title: string; hasFileValues
 );
 
 /**
- * This is the "inner" form component that isn't connected to Formik and just renders a simple form
- * @param props
+ * The main content of the form, handling rendering of status alerts, form body, and submission states.
+ * @param props - The properties passed down from the parent form component.
  */
 const FormContent: React.FC<FormRenderProps> = (props) => {
   const {
