@@ -3,7 +3,7 @@ import {
   MultilineElementTransformer,
   TRANSFORMERS,
 } from "@lexical/markdown";
-import { $createParagraphNode, $createTextNode } from "lexical";
+import { $createParagraphNode, $createTextNode, $isElementNode } from "lexical";
 import {
   $createCollapsibleContainerNode,
   $createCollapsibleContentNode,
@@ -13,6 +13,7 @@ import {
   $isCollapsibleTitleNode,
   CollapsibleContentNode,
 } from "../plugins/CollapsibleExtension";
+import { $isHeadingNode } from "@lexical/rich-text";
 
 const collapsibleTransformers = () => [...TRANSFORMERS, COLLAPSIBLE];
 
@@ -28,7 +29,19 @@ export const COLLAPSIBLE: MultilineElementTransformer = {
     if (!$isCollapsibleTitleNode(title) || !$isCollapsibleContentNode(content)) return null;
 
     const titleText = title.getTextContent().trim();
-    return `:::collapsible${titleText ? ` ${titleText}` : ""}\n${traverseChildren(content)}\n:::`;
+    const contentText = content
+      .getChildren()
+      .map((child) => {
+        if (!$isElementNode(child)) return child.getTextContent();
+
+        const markdown = traverseChildren(child);
+        return $isHeadingNode(child)
+          ? `${"#".repeat(Number(child.getTag().slice(1)))} ${markdown}`
+          : markdown;
+      })
+      .join("\n\n");
+
+    return `:::collapsible${titleText ? ` ${titleText}` : ""}\n${contentText}\n:::`;
   },
   handleImportAfterStartMatch: ({ rootNode, startMatch, lines, startLineIndex }) => {
     const content: string[] = [];
