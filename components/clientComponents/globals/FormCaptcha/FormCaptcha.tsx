@@ -33,6 +33,8 @@ export const FormCaptcha = ({
   const doHCaptchaFlow = shouldCheckCaptcha(isPublished, isPreview);
 
   const { setToken, resetToken } = useCaptchaToken(captchaTokenRef, hCaptchaRef);
+ 
+  const HCAPTCHA_SITE_KEY = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
 
   const { onErrorCallback, hasFatalErrorRef } = useCaptchaErrorHandling({ resetToken });
 
@@ -96,7 +98,7 @@ export const FormCaptcha = ({
       {doHCaptchaFlow && (
         <HCaptcha
           ref={hCaptchaRef}
-          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
+          sitekey={HCAPTCHA_SITE_KEY || ""}
           onVerify={onTokenGeneratedCallback}
           onError={onErrorCallback}
           onChalExpired={onChallengeExpiredCallback}
