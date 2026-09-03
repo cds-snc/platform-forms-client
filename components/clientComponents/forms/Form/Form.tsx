@@ -36,7 +36,8 @@ import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headle
 import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
 import { isSuspiciousHCaptchaError } from "@clientComponents/globals/FormCaptcha/isSuspiciousHCaptchaError";
 import { FormBody } from "./FormBody";
-import { FormStatusAlerts, getFormStatusError } from "./FormStatusAlerts";
+import { FormStatusAlerts } from "./FormStatusAlerts";
+import { getFormStatusError } from "./getFormStatusError";
 
 type CaptchaControls = {
   captcha: React.ReactNode;
