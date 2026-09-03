@@ -18,6 +18,7 @@ export type HCaptchaVerificationResult =
 
 export type VerifyHCaptchaTokenOptions = {
   secret: string | undefined;
+  siteKey?: string;
   remoteIp?: string;
   logger?: CaptchaLogger;
   maxAllowedScore?: number;
@@ -39,6 +40,7 @@ export const verifyHCaptchaToken = async (
 ): Promise<HCaptchaVerificationResult> => {
   const {
     secret,
+    siteKey,
     remoteIp,
     logger,
     maxAllowedScore,
@@ -57,6 +59,9 @@ export const verifyHCaptchaToken = async (
   }
 
   const requestBody = new URLSearchParams({ secret, response: token });
+  if (siteKey) {
+    requestBody.set("sitekey", siteKey);
+  }
   if (remoteIp) {
     requestBody.set("remoteip", remoteIp);
   }

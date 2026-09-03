@@ -50,6 +50,7 @@ import { isSuspiciousHCaptchaError } from "@clientComponents/globals/FormCaptcha
 
 type InternalCaptchaProps = {
   onCaptchaReset: () => void;
+  setCaptchaToken: (token: string | undefined) => void;
   setCaptchaFormHandle: (handle: HCaptchaFormHandle | null) => void;
   getCaptchaToken: () => string | undefined;
 };
@@ -64,7 +65,7 @@ type InternalInnerFormProps = InternalFormProps & FormikProps<FormikResponses>;
 const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
   const {
     children,
-    handleSubmit,
+    submitForm,
     setCaptchaFormHandle,
     status,
     language,
@@ -82,6 +83,12 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
   const showIntro = currentGroup === LOCKED_GROUPS.START;
 
   const handleCaptchaFailure = (reason: HCaptchaFailureReason) => {
+    props.setCaptchaToken(undefined);
+
+    if (reason === "load-error") {
+      props.onCaptchaReset();
+    }
+
     if (reason !== "cancelled") {
       props.setStatus(FormStatus.ERROR);
     }
@@ -239,7 +246,10 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
             id="form"
             data-testid="form"
             language={language}
-            onSubmit={handleSubmit}
+            onSubmit={(_event, token) => {
+              props.setCaptchaToken(token);
+              return submitForm();
+            }}
             noValidate={true}
             captchaEnabled={shouldCheckCaptcha(isPublished, props.isPreview ?? false)}
             siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
@@ -458,16 +468,24 @@ const InternalForm = withFormik<InternalFormProps, FormikResponses>({
 // can access the token and reset it
 export const Form: React.FC<FormProps> = (props) => {
   const captchaFormRef = useRef<HCaptchaFormHandle | null>(null);
+  const captchaTokenRef = useRef<string | undefined>(undefined);
   const setCaptchaFormHandle = useCallback((handle: HCaptchaFormHandle | null) => {
     captchaFormRef.current = handle;
   }, []);
-  const getCaptchaToken = useCallback(() => captchaFormRef.current?.getToken(), []);
-  const onCaptchaReset = useCallback(() => captchaFormRef.current?.reset(), []);
+  const getCaptchaToken = useCallback(() => captchaTokenRef.current, []);
+  const setCaptchaToken = useCallback((token: string | undefined) => {
+    captchaTokenRef.current = token;
+  }, []);
+  const onCaptchaReset = useCallback(() => {
+    captchaTokenRef.current = undefined;
+    captchaFormRef.current?.reset();
+  }, []);
 
   return (
     <InternalForm
       {...props}
       setCaptchaFormHandle={setCaptchaFormHandle}
+      setCaptchaToken={setCaptchaToken}
       getCaptchaToken={getCaptchaToken}
       onCaptchaReset={onCaptchaReset}
     />

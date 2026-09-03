@@ -35,12 +35,14 @@ describe("verifyHCaptchaToken", () => {
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
+      siteKey: "site-key",
       remoteIp: "127.0.0.1",
       fetchImpl,
     });
 
     expect(result).toEqual({ verified: true, score: 0.2 });
     expect(fetchImpl).toHaveBeenCalledOnce();
+    expect(String(fetchImpl.mock.calls[0][1]?.body)).toContain("sitekey=site-key");
     expect(String(fetchImpl.mock.calls[0][1]?.body)).toContain("remoteip=127.0.0.1");
   });
 

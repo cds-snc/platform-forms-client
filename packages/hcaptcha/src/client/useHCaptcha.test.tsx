@@ -19,10 +19,12 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
           onError,
           onVerify,
           onChalExpired,
+          onClose,
         }: {
           onError: (code: string) => void;
           onVerify: (token: string) => void;
           onChalExpired: () => void;
+          onClose: () => void;
         },
         ref
       ) => {
@@ -32,7 +34,7 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
         }));
 
         // Use buttons to simulate provider callbacks without loading the real hCaptcha widget
-        return ["invalid-sitekey", "invalid-data", "network-error"]
+        return ["invalid-sitekey", "invalid-data", "network-error", "script-error"]
           .map((code) => (
             <button
               key={code}
@@ -53,7 +55,8 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
               type="button"
               data-testid="captcha-expired"
               onClick={onChalExpired}
-            />
+            />,
+            <button key="close" type="button" data-testid="captcha-close" onClick={onClose} />
           );
       }
     );
@@ -150,6 +153,66 @@ describe("useHCaptcha", () => {
     );
   });
 
+  it("fails fast after the hCaptcha script fails to load", async () => {
+    const onResult = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-error-script-error"));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: false,
+        reason: "load-error",
+      })
+    );
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    await waitFor(() => expect(onResult).toHaveBeenCalledTimes(2));
+    expect(onResult).toHaveBeenLastCalledWith({
+      verified: false,
+      allowed: false,
+      reason: "load-error",
+    });
+  });
+
+  it("keeps configuration failures distinct from script load failures", async () => {
+    const onResult = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByTestId("captcha-error-invalid-sitekey"));
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: false,
+        reason: "configuration-error",
+      })
+    );
+    expect(mockCaptcha.execute).not.toHaveBeenCalled();
+  });
+
+  it("allows a new execution after resetting a script load failure", async () => {
+    const onResult = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-error-script-error"));
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith(expect.objectContaining({ reason: "load-error" }))
+    );
+
+    fireEvent.click(getByRole("button", { name: "Reset" }));
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-verify"));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "captcha-token" })
+    );
+  });
+
   it("allows execution to be retried after a challenge expires", async () => {
     mockCaptcha.execute.mockImplementationOnce(() => undefined);
     const onResult = vi.fn();
@@ -195,6 +258,23 @@ describe("useHCaptcha", () => {
       })
     );
     expect(onCaptchaExpired).not.toHaveBeenCalled();
+  });
+
+  it("cancels an execution when the challenge is closed", async () => {
+    const onResult = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-close"));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: false,
+        reason: "cancelled",
+      })
+    );
+    expect(mockCaptcha.reset).toHaveBeenCalledOnce();
   });
 
   it("classifies errors and reports them through the catch-all callback", () => {

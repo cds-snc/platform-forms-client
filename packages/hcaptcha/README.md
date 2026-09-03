@@ -19,7 +19,8 @@ The package provides separate entry points:
 ## Client lifecycle
 
 The hook does not store the token. Consumers should submit a verified token immediately and
-discard any stored token when `onCaptchaExpired` runs or when `reset()` is called.
+discard any stored token when `onCaptchaExpired` runs or when `reset()` is called. Calling `reset()`
+also recreates the widget, allowing consumers to retry after a provider load failure.
 
 `execute()` resolves with a result rather than throwing for normal provider failures:
 
@@ -47,5 +48,13 @@ directly when the consumer needs more control over the form or submission lifecy
 ## Server verification
 
 `verifyHCaptchaToken` rejects missing credentials, invalid provider responses, and scores above
-`maxAllowedScore`. Network and 5xx failures are retried up to `maxAttempts` times, defaulting to
-three attempts.
+`maxAllowedScore`. When `maxAllowedScore` is configured, a successful response without a score is
+also rejected. Scores are an hCaptcha Enterprise-only response field, so configure a score limit
+only with an Enterprise sitekey; leave the option unset for standard sitekeys.
+
+Pass the public `siteKey` to bind verification to the expected hCaptcha sitekey.
+The browser needs this key to issue a token, but the server can verify a token with just the token
+and secret. Passing `siteKey` adds an extra check that the token belongs to the expected site and is
+useful when a secret is shared by more than one sitekey. It is public and should not be confused
+with the server-only `secret`. Network and 5xx failures are retried up to `maxAttempts` times,
+defaulting to three attempts.

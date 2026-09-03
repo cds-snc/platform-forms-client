@@ -26,6 +26,8 @@ import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 import { randomUUID } from "crypto";
 import { getClientIp } from "@lib/ip";
 
+// hCaptcha scores are an Enterprise-only response field. A missing score is rejected by the
+// verifier, so this score must only be used with an Enterprise sitekey.
 const HCAPTCHA_MAX_ALLOWED_SCORE = 0.79;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -87,6 +89,9 @@ export async function submitForm(
 
         const captchaResult = await verifyHCaptchaToken(captchaToken, {
           secret: captchaSecret,
+          // The public site key identifies this widget and lets hCaptcha check that the token
+          // belongs to the expected site; it is separate from the server-only secret above.
+          siteKey: process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY,
           // Avoid the lookup when the verifier will fail immediately
           remoteIp: captchaToken ? String(await getClientIp()) : undefined,
           maxAllowedScore: HCAPTCHA_MAX_ALLOWED_SCORE,

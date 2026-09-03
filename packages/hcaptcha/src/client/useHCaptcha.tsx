@@ -2,7 +2,7 @@
 
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import type { ReactNode } from "react";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export type HCaptchaFailureMode = "allow" | "block";
 
@@ -18,6 +18,7 @@ export type UseHCaptchaOptions = {
 
 export type HCaptchaFailureReason =
   | "configuration-error"
+  | "load-error"
   | "captcha-error"
   | "expired"
   | "cancelled"
@@ -38,6 +39,7 @@ export type UseHCaptchaResult = {
 };
 
 const CONFIG_ERROR_CODES = ["invalid-sitekey", "missing-sitekey"];
+const LOAD_ERROR_CODES = ["script-error"];
 
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
@@ -56,8 +58,10 @@ export const useHCaptcha = ({
     resolve: (result: HCaptchaExecutionResult) => void;
   } | null>(null);
 
-  // A configuration error will not recover without remounting the widget
+  // Fatal widget errors will not recover without remounting the widget
   const hasFatalErrorRef = useRef(false);
+  const fatalErrorReasonRef = useRef<"configuration-error" | "load-error" | null>(null);
+  const [captchaInstanceKey, setCaptchaInstanceKey] = useState(0);
 
   // Provider callbacks complete the promise returned by execute()
   const complete = useCallback((result: HCaptchaExecutionResult) => {
@@ -75,9 +79,13 @@ export const useHCaptcha = ({
   );
 
   const reset = useCallback(() => {
-    // Manual resets cancel the current execution without reporting expiration
+    // Manual resets cancel the current execution and recreate the widget so a failed SDK load can
+    // be retried by the consumer.
     hCaptchaRef.current?.resetCaptcha();
+    hasFatalErrorRef.current = false;
+    fatalErrorReasonRef.current = null;
     complete(failureResult("cancelled"));
+    setCaptchaInstanceKey((key) => key + 1);
   }, [complete, failureResult]);
 
   const onExpired = useCallback(() => {
@@ -85,6 +93,11 @@ export const useHCaptcha = ({
     complete(failureResult("expired"));
     onCaptchaExpired?.();
   }, [complete, failureResult, onCaptchaExpired]);
+
+  const onClose = useCallback(() => {
+    hCaptchaRef.current?.resetCaptcha();
+    complete(failureResult("cancelled"));
+  }, [complete, failureResult]);
 
   const resetAfterError = useCallback(() => {
     hCaptchaRef.current?.resetCaptcha();
@@ -95,7 +108,12 @@ export const useHCaptcha = ({
     (code: string) => {
       if (CONFIG_ERROR_CODES.includes(code)) {
         hasFatalErrorRef.current = true;
+        fatalErrorReasonRef.current = "configuration-error";
         complete(failureResult("configuration-error"));
+      } else if (LOAD_ERROR_CODES.includes(code)) {
+        hasFatalErrorRef.current = true;
+        fatalErrorReasonRef.current = "load-error";
+        complete(failureResult("load-error"));
       } else {
         resetAfterError();
       }
@@ -115,7 +133,7 @@ export const useHCaptcha = ({
     pendingExecutionRef.current = { promise, resolve: resolveExecution };
 
     if (!hCaptchaRef.current || hasFatalErrorRef.current) {
-      complete(failureResult(hasFatalErrorRef.current ? "configuration-error" : "not-ready"));
+      complete(failureResult(fatalErrorReasonRef.current ?? "not-ready"));
       return promise;
     }
 
@@ -138,15 +156,18 @@ export const useHCaptcha = ({
 
   const captcha = (
     <HCaptcha
+      key={captchaInstanceKey}
       ref={hCaptchaRef}
       sitekey={siteKey}
       onVerify={onVerify}
       onError={onError}
-      // hCaptcha reports challenge and token expiration through separate callbacks. Neither result
-      // can be submitted, so both callbacks reset the widget and complete the pending execution
-      // as expired
+      // A challenge timeout means the user did not complete the challenge, while token expiration
+      // means a previously issued token is no longer valid. Neither can produce a usable token,
+      // so both callbacks reset the widget and resolve the active execution as expired. Closing
+      // the challenge is handled separately as cancellation below.
       onChalExpired={onExpired}
       onExpire={onExpired}
+      onClose={onClose}
       languageOverride={language}
       size="invisible"
       loadAsync={true}

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2026-09-03
 
-- Adds a reusable native form wrapper to the client entrypoint
+- Adds a reusable React form wrapper to client reuse
 
 ## [1.0.3] - 2026-09-02
 

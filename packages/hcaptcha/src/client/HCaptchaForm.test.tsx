@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { createRef } from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { HCaptchaExecutionResult } from "./useHCaptcha";
 import { HCaptchaForm, type HCaptchaFormHandle } from "./HCaptchaForm";
@@ -48,6 +48,34 @@ describe("HCaptchaForm", () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledWith(expect.anything(), "captcha-token"));
     expect(captchaRef.current?.getToken()).toBe("captcha-token");
+  });
+
+  it("waits for the async submit callback before allowing another submission", async () => {
+    let resolveSubmit: () => void = () => {};
+    const onSubmit = vi.fn().mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveSubmit = resolve;
+        })
+    );
+    const onUnexpectedError = vi.fn();
+    const form = render(
+      <HCaptchaForm onSubmit={onSubmit} onUnexpectedError={onUnexpectedError} siteKey="site-key">
+        <button type="submit">Submit</button>
+      </HCaptchaForm>
+    ).container.querySelector("form")!;
+
+    fireEvent.submit(form);
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledOnce());
+
+    fireEvent.submit(form);
+    expect(executeCaptcha).toHaveBeenCalledOnce();
+
+    await act(async () => {
+      resolveSubmit();
+    });
+    fireEvent.submit(form);
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(2));
   });
 
   it("clears the token and resets the captcha", async () => {
@@ -135,11 +163,7 @@ describe("HCaptchaForm", () => {
     executeCaptcha.mockRejectedValueOnce(executionError);
 
     render(
-      <HCaptchaForm
-        onSubmit={onSubmit}
-        onUnexpectedError={onUnexpectedError}
-        siteKey="site-key"
-      >
+      <HCaptchaForm onSubmit={onSubmit} onUnexpectedError={onUnexpectedError} siteKey="site-key">
         <button type="submit">Submit</button>
       </HCaptchaForm>
     );
