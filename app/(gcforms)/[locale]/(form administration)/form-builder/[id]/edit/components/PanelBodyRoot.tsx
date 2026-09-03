@@ -33,6 +33,7 @@ export const PanelBodyRoot = ({
 
   const onQuestionChange = (itemId: number, val: string, lang: Language) => {
     updateField(propertyPath(itemId, LocalizedElementProperties.TITLE, lang), val);
+    onChangeMade();
   };
 
   const onRequiredChange = (itemId: number, checked: boolean) => {
