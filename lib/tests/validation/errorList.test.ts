@@ -232,10 +232,10 @@ describe("getErrorList", () => {
           ],
         },
       },
-    } as never;
+    };
 
     // When on "start" group, only element 1 error should be shown
-    const startGroupErrorList = getErrorList(props);
+    const startGroupErrorList = getErrorList(props as never);
     expect(startGroupErrorList).not.toBeNull();
     const { container: container1 } = render(startGroupErrorList);
     const links1 = container1.querySelectorAll("a");
@@ -246,7 +246,7 @@ describe("getErrorList", () => {
 
     // When on "page2" group, only element 2 error should be shown
     const page2Props = { ...props, currentGroup: "page2" };
-    const page2ErrorList = getErrorList(page2Props);
+    const page2ErrorList = getErrorList(page2Props as never);
     expect(page2ErrorList).not.toBeNull();
     const { container: container2 } = render(page2ErrorList);
     const links2 = container2.querySelectorAll("a");
@@ -257,7 +257,7 @@ describe("getErrorList", () => {
 
     // When on "review" group, errors for all groups should be shown
     const reviewProps = { ...props, currentGroup: "review" };
-    const reviewErrorList = getErrorList(reviewProps);
+    const reviewErrorList = getErrorList(reviewProps as never);
     expect(reviewErrorList).not.toBeNull();
     const { container: container3 } = render(reviewErrorList);
     const links3 = container3.querySelectorAll("a");
