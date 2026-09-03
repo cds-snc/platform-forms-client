@@ -131,19 +131,14 @@ export default async function Page(props: {
             // default published filter for other tabs
             isPublished: status === TAB_STATUS.PUBLISHED ? true : undefined,
           }),
-      // Archived filter: ttl: { not: null } for archived, null (must have no ttl) for all others except closed (no filter)
-      ttl:
-        status === TAB_STATUS.ARCHIVED
-          ? { not: null }
-          : status === TAB_STATUS.CLOSED
-            ? undefined
-            : null,
+      // Archived filter: archived forms have a TTL; all other tabs exclude archived forms.
+      ttl: status === TAB_STATUS.ARCHIVED ? { not: null } : null,
       // Closed filter: closingDate in the past
       ...(status === TAB_STATUS.CLOSED && {
         closingDate: { not: null, lt: new Date() },
       }),
-      // Published and Archived further filtering: remove templates that have a closing date in the past (closed forms)
-      ...((status === TAB_STATUS.PUBLISHED || status === TAB_STATUS.ARCHIVED) && {
+      // Published further filtering: remove templates that have a closing date in the past (closed forms)
+      ...(status === TAB_STATUS.PUBLISHED && {
         NOT: {
           AND: [{ closingDate: { not: null } }, { closingDate: { lt: new Date() } }],
         },
