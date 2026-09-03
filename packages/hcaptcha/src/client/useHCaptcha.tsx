@@ -42,9 +42,6 @@ export type UseHCaptchaResult = {
   reset: () => void;
 };
 
-const CONFIG_ERROR_CODES = ["invalid-sitekey", "missing-sitekey"];
-const LOAD_ERROR_CODES = ["script-error"];
-
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
 export const useHCaptcha = ({
@@ -113,23 +110,73 @@ export const useHCaptcha = ({
     complete(failureResult("captcha-error"));
   }, [complete, failureResult]);
 
-  const onError = useCallback(
+  const handleProviderError = useCallback(
     (code: string) => {
-      if (CONFIG_ERROR_CODES.includes(code)) {
-        hasFatalErrorRef.current = true;
-        fatalErrorReasonRef.current = "configuration-error";
-        complete(failureResult("configuration-error"));
-      } else if (LOAD_ERROR_CODES.includes(code)) {
-        hasFatalErrorRef.current = true;
-        fatalErrorReasonRef.current = "load-error";
-        complete(failureResult("load-error"));
-      } else {
-        resetAfterError();
+      switch (code) {
+        case "invalid-sitekey":
+        case "missing-sitekey":
+          hasFatalErrorRef.current = true;
+          fatalErrorReasonRef.current = "configuration-error";
+          complete(failureResult("configuration-error"));
+          break;
+        case "script-error":
+          hasFatalErrorRef.current = true;
+          fatalErrorReasonRef.current = "load-error";
+          complete(failureResult("load-error"));
+          break;
+        case "challenge-closed":
+          onClose();
+          break;
+        case "challenge-expired":
+          onExpired();
+          break;
+        case "execution-error":
+          complete(failureResult("execution-error"));
+          break;
+        default:
+          resetAfterError();
       }
 
       onErrorCallback?.(code);
     },
-    [complete, failureResult, onErrorCallback, resetAfterError]
+    [complete, failureResult, onClose, onErrorCallback, onExpired, resetAfterError]
+  );
+
+  const startExecution = useCallback(() => {
+    if (!pendingExecutionRef.current || !hCaptchaRef.current || hasFatalErrorRef.current) {
+      return;
+    }
+
+    try {
+      const providerExecution = hCaptchaRef.current.execute({ async: true });
+
+      // hCaptcha automatically retries temporary network failures before rejecting this Promise.
+      if (providerExecution && typeof providerExecution.then === "function") {
+        void providerExecution
+          .then(({ response }) => {
+            if (complete({ verified: true, token: response })) {
+              onCaptchaVerified?.();
+            }
+          })
+          .catch((code: unknown) => {
+            handleProviderError(typeof code === "string" ? code : "execution-error");
+          });
+      }
+    } catch {
+      // The provider can throw before it reports an error through its callbacks
+      complete(failureResult("execution-error"));
+    }
+  }, [complete, failureResult, handleProviderError, onCaptchaVerified]);
+
+  const onReady = useCallback(() => {
+    startExecution();
+  }, [startExecution]);
+
+  const onError = useCallback(
+    (code: string) => {
+      handleProviderError(code);
+    },
+    [handleProviderError]
   );
 
   const execute = useCallback((): Promise<HCaptchaExecutionResult> => {
@@ -143,31 +190,12 @@ export const useHCaptcha = ({
 
     if (!hCaptchaRef.current || hasFatalErrorRef.current) {
       complete(failureResult(fatalErrorReasonRef.current ?? "not-ready"));
-      return promise;
-    }
-
-    try {
-      const providerExecution = hCaptchaRef.current.execute({ async: true });
-
-      // hCaptcha retries temporary network failures internally before rejecting this Promise
-      if (providerExecution && typeof providerExecution.then === "function") {
-        void providerExecution
-          .then(({ response }) => {
-            if (complete({ verified: true, token: response })) {
-              onCaptchaVerified?.();
-            }
-          })
-          .catch(() => {
-            complete(failureResult("execution-error"));
-          });
-      }
-    } catch {
-      // The provider can throw before it reports an error through its callbacks
-      complete(failureResult("execution-error"));
+    } else if (hCaptchaRef.current.isReady()) {
+      startExecution();
     }
 
     return promise;
-  }, [complete, failureResult, onCaptchaVerified]);
+  }, [complete, failureResult, startExecution]);
 
   const onVerify = useCallback(
     (verifiedToken: string) => {
@@ -185,6 +213,7 @@ export const useHCaptcha = ({
       sitekey={siteKey}
       onVerify={onVerify}
       onError={onError}
+      onReady={onReady}
       // A challenge timeout means the user did not complete the challenge, while token expiration
       // means a previously issued token is no longer valid. Neither can produce a usable token,
       // so both callbacks reset the widget and resolve the active execution as expired. Closing

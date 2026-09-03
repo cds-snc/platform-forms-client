@@ -38,7 +38,8 @@ if (result.verified) {
 `failureMode` defaults to `"block"`. Set it to `"allow"` only when the consumer intentionally
 wants provider failures to permit the surrounding action to continue.
 hCaptcha retries temporary network failures internally when using async execution. Provider
-rejections are reported as `execution-error` failures.
+rejections are classified using the provider error code and reported through `onError`; execution
+waits for the widget to be ready before starting.
 
 ## Form wrapper
 
