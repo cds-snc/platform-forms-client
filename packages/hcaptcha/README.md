@@ -38,6 +38,10 @@ if (result.verified) {
 `failureMode` defaults to `"block"`. Set it to `"allow"` only when the consumer intentionally
 wants provider failures to permit the surrounding action to continue.
 
+Pass `logger` to record hCaptcha lifecycle messages. `onSuspiciousError` is called for provider
+errors that indicate a potentially tampered request, allowing the consumer to block or replace
+the surrounding UI without implementing hCaptcha error classification itself.
+
 ## Form wrapper
 
 `HCaptchaForm` combines the hook with a native `<form>`. It prevents duplicate submissions,

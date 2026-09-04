@@ -21,7 +21,6 @@ import { hasFiles } from "@lib/fileExtractor";
 
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
-import { isSuspiciousHCaptchaError } from "@clientComponents/globals/FormCaptcha/isSuspiciousHCaptchaError";
 import { FormBody } from "./FormBody";
 import { FormStatusAlerts } from "./FormStatusAlerts";
 import { getFormStatusError } from "./getFormStatusError";
@@ -115,24 +114,11 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
 export const Form: React.FC<FormProps> = (props) => {
   const { setCaptchaFail } = props;
   const captchaEnabled = shouldCheckCaptcha(props.formRecord.isPublished, props.isPreview ?? false);
-  const handleCaptchaError = (code: string) => {
-    if (isSuspiciousHCaptchaError(code)) {
-      logMessage.warn(
-        `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
-      );
-      setCaptchaFail?.(true);
-    } else if (code === "invalid-sitekey" || code === "missing-sitekey") {
-      logMessage.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
-    } else {
-      logMessage.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
-    }
-  };
 
   const { captcha, execute, reset } = useHCaptcha({
     language: props.language,
-    onCaptchaVerified: () =>
-      logMessage.info(`hCaptcha: verified token received by form at ${new Date().toISOString()}`),
-    onError: handleCaptchaError,
+    logger: logMessage,
+    onSuspiciousError: () => setCaptchaFail?.(true),
     siteKey: process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || "",
   });
 
