@@ -72,7 +72,7 @@ export async function submitForm(
         };
       }
 
-      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
+      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
 
       if (shouldVerifyHCaptcha) {
         const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;
