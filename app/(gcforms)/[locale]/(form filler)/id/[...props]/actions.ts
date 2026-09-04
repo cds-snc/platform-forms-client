@@ -72,6 +72,8 @@ export async function submitForm(
         };
       }
 
+      // TODO: Follow up by using the selected version's publication status here, so a draft
+      // preview of a published template can be distinguished from the published form.
       const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
 
       if (shouldVerifyHCaptcha) {
