@@ -1,13 +1,14 @@
 /**
  * @vitest-environment jsdom
  */
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { forwardRef, useImperativeHandle } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useHCaptcha, type HCaptchaExecutionResult } from "./useHCaptcha";
 
 const mockCaptcha = vi.hoisted(() => ({
-  execute: vi.fn(() => undefined),
+  execute: vi.fn<() => void | Promise<{ response: string; key: string }>>(() => undefined),
+  isReady: vi.fn(() => true),
   reset: vi.fn(),
 }));
 
@@ -20,17 +21,20 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
           onVerify,
           onChalExpired,
           onClose,
+          onReady,
         }: {
           onError: (code: string) => void;
           onVerify: (token: string) => void;
           onChalExpired: () => void;
           onClose: () => void;
+          onReady: () => void;
         },
         ref
       ) => {
         useImperativeHandle(ref, () => ({
           resetCaptcha: mockCaptcha.reset,
           execute: mockCaptcha.execute,
+          isReady: mockCaptcha.isReady,
         }));
 
         // Use buttons to simulate provider callbacks without loading the real hCaptcha widget
@@ -56,7 +60,8 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
               data-testid="captcha-expired"
               onClick={onChalExpired}
             />,
-            <button key="close" type="button" data-testid="captcha-close" onClick={onClose} />
+            <button key="close" type="button" data-testid="captcha-close" onClick={onClose} />,
+            <button key="ready" type="button" data-testid="captcha-ready" onClick={onReady} />
           );
       }
     );
@@ -104,6 +109,8 @@ describe("useHCaptcha", () => {
   beforeEach(() => {
     mockCaptcha.execute.mockReset();
     mockCaptcha.execute.mockImplementation(() => undefined);
+    mockCaptcha.isReady.mockReset();
+    mockCaptcha.isReady.mockReturnValue(true);
     mockCaptcha.reset.mockClear();
   });
 
@@ -117,6 +124,143 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({ verified: true, token: "captcha-token" })
     );
+  });
+
+  it("uses the token returned by asynchronous provider execution", async () => {
+    mockCaptcha.execute.mockResolvedValueOnce({ response: "async-token", key: "response-key" });
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await waitFor(() => expect(onResult).toHaveBeenCalledWith({ verified: true, token: "async-token" }));
+  });
+
+  it("returns an execution failure when asynchronous provider execution rejects", async () => {
+    mockCaptcha.execute.mockRejectedValueOnce(new Error("provider failed"));
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: false,
+        reason: "execution-error",
+      })
+    );
+  });
+
+  it("maps an asynchronous challenge close to cancellation and reports the provider code", async () => {
+    const onResult = vi.fn();
+    const onError = vi.fn();
+    mockCaptcha.execute.mockRejectedValueOnce("challenge-closed");
+    const { getByRole } = render(<HookHarness onError={onError} onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: false,
+        reason: "cancelled",
+      })
+    );
+    expect(onError).toHaveBeenCalledWith("challenge-closed");
+  });
+
+  it("reports a provider failure once when callback and Promise channels overlap", async () => {
+    let rejectProvider: (code: string) => void = () => {};
+    mockCaptcha.execute.mockImplementationOnce(
+      () => new Promise((_, reject) => (rejectProvider = reject))
+    );
+    const onResult = vi.fn();
+    const onError = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onError={onError} onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-error-network-error"));
+    rejectProvider("network-error");
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: false,
+        reason: "captcha-error",
+      })
+    );
+    expect(onError).toHaveBeenCalledOnce();
+    expect(onError).toHaveBeenCalledWith("network-error");
+  });
+
+  it("ignores an asynchronous result from an execution cancelled by reset", async () => {
+    let resolveFirst: (result: { response: string; key: string }) => void = () => {};
+    let resolveSecond: (result: { response: string; key: string }) => void = () => {};
+    mockCaptcha.execute
+      .mockImplementationOnce(
+        () => new Promise((resolve) => {
+          resolveFirst = resolve;
+        })
+      )
+      .mockImplementationOnce(
+        () => new Promise((resolve) => {
+          resolveSecond = resolve;
+        })
+      );
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByRole("button", { name: "Reset" }));
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await act(async () => {
+      resolveFirst({ response: "stale-token", key: "stale-key" });
+    });
+    expect(onResult).toHaveBeenCalledWith({ verified: false, allowed: false, reason: "cancelled" });
+    expect(onResult).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      resolveSecond({ response: "current-token", key: "current-key" });
+    });
+    await waitFor(() =>
+      expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "current-token" })
+    );
+  });
+
+  it("maps an asynchronous challenge expiry to expiration", async () => {
+    const onResult = vi.fn();
+    const onCaptchaExpired = vi.fn();
+    mockCaptcha.execute.mockRejectedValueOnce("challenge-expired");
+    const { getByRole } = render(
+      <HookHarness failureMode="allow" onCaptchaExpired={onCaptchaExpired} onResult={onResult} />
+    );
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await waitFor(() =>
+      expect(onResult).toHaveBeenCalledWith({
+        verified: false,
+        allowed: true,
+        reason: "expired",
+      })
+    );
+    expect(onCaptchaExpired).toHaveBeenCalledOnce();
+  });
+
+  it("waits for the provider to be ready before executing", async () => {
+    mockCaptcha.isReady.mockReturnValue(false);
+    const onResult = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    expect(mockCaptcha.execute).not.toHaveBeenCalled();
+
+    mockCaptcha.isReady.mockReturnValue(true);
+    fireEvent.click(getByTestId("captcha-ready"));
+
+    await waitFor(() => expect(mockCaptcha.execute).toHaveBeenCalledOnce());
   });
 
   it("reports the verified token through the callback", async () => {

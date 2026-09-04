@@ -256,7 +256,7 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
               )
             }
             noValidate={true}
-            captchaEnabled={shouldCheckCaptcha(isPublished, props.isPreview ?? false)}
+            captchaEnabled={shouldCheckCaptcha(isPublished)}
             siteKey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || ""}
             onCaptchaFailure={handleCaptchaFailure}
             onError={handleCaptchaError}

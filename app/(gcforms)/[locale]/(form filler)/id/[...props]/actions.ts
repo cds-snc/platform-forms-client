@@ -72,7 +72,9 @@ export async function submitForm(
         };
       }
 
-      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
+      // TODO: Follow up by using the selected version's publication status here, so a draft
+      // preview of a published template can be distinguished from the published form.
+      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
 
       if (shouldVerifyHCaptcha) {
         const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;
