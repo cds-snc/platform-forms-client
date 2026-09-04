@@ -42,11 +42,11 @@ export const invokeSubmissionLambda = async (
       );
     }
 
-    const { status, submissionId, fileURLMap } = JSON.parse(
+    const { submissionId, fileURLMap } = JSON.parse(
       lambdaInvokeResponse.Payload?.transformToString() ?? "{}"
     ) as { status?: boolean; submissionId?: string; fileURLMap?: SignedURLMap };
 
-    if (status === true && submissionId) {
+    if (submissionId !== undefined) {
       return { submissionId, fileURLMap };
     } else {
       throw new Error(
