@@ -1,36 +1,23 @@
 "use client";
-import React, { useEffect, useRef, useSyncExternalStore } from "react";
-import { FormikProvider, useFormik, type FormikHelpers } from "formik";
+import React from "react";
+import { FormikProvider, useFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
-import { getErrorList, setFocusOnErrorMessage } from "@lib/validation/validation";
+import { getErrorList } from "@lib/validation/validation";
 import { validateOnSubmit } from "@gcforms/core";
-import { useHCaptcha, type HCaptchaExecutionResult } from "@gcforms/hcaptcha/client";
+import { useHCaptcha } from "@gcforms/hcaptcha/client";
 
 import { type FormProps, type FormRenderProps } from "./types";
 import { type Responses as FormikResponses } from "@lib/types";
 
-import { EventKeys } from "@lib/hooks/useCustomEvent";
-
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
-import {
-  submitForm,
-  isFormClosed,
-} from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useSyncVisibleElementIds } from "@lib/hooks/useSyncVisibleElementIds";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { filterValuesByVisibleElements } from "@lib/formContext";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { FormStatus, type FormValues } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
-import { ga } from "@lib/client/clientHelpers";
 import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitProgress";
-import { handleUploadError } from "@lib/fileInput/handleUploadError";
 import { hasFiles } from "@lib/fileExtractor";
-import { generateFileChecksums } from "@lib/utils/fileChecksum";
-import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
-import { uploadFile } from "@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fileUploader";
 
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
@@ -38,66 +25,9 @@ import { isSuspiciousHCaptchaError } from "@clientComponents/globals/FormCaptcha
 import { FormBody } from "./FormBody";
 import { FormStatusAlerts } from "./FormStatusAlerts";
 import { getFormStatusError } from "./getFormStatusError";
-
-type CaptchaControls = {
-  captcha: React.ReactNode;
-  captchaEnabled: boolean;
-  executeCaptcha: () => Promise<HCaptchaExecutionResult>;
-  resetCaptcha: () => void;
-};
-
-const useFormErrorFocus = (
-  props: FormRenderProps,
-  formStatusError: string | true | null,
-  errorList: ReturnType<typeof getErrorList> | null,
-  errorId: string,
-  serverErrorId: string
-) => {
-  const lastSubmitCountRef = useRef(props.submitCount);
-  const focusOnValidationErrorRef = useRef(false);
-
-  useEffect(() => {
-    if (formStatusError) {
-      setFocusOnErrorMessage(props, serverErrorId);
-    }
-
-    if (props.isValid) {
-      lastSubmitCountRef.current = props.submitCount;
-      return;
-    }
-
-    const shouldFocusValidationError =
-      props.submitCount > lastSubmitCountRef.current || focusOnValidationErrorRef.current;
-
-    if (shouldFocusValidationError) {
-      lastSubmitCountRef.current = props.submitCount;
-      focusOnValidationErrorRef.current = false;
-      queueMicrotask(() => setFocusOnErrorMessage(props, errorId));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formStatusError, errorList, props.isValid, props.submitCount]);
-
-  useEffect(() => {
-    const handleContinueValidationError = () => {
-      focusOnValidationErrorRef.current = true;
-    };
-
-    document.addEventListener(EventKeys.continueValidationError, handleContinueValidationError);
-
-    return () => {
-      document.removeEventListener(
-        EventKeys.continueValidationError,
-        handleContinueValidationError
-      );
-    };
-  }, []);
-};
-
-const subscribeToHydration = () => () => {};
-const getHydratedSnapshot = () => true;
-const getServerSnapshot = () => false;
-const useIsHydrated = () =>
-  useSyncExternalStore(subscribeToHydration, getHydratedSnapshot, getServerSnapshot);
+import { submitFormValues } from "./submitFormValues";
+import { useFormErrorFocus } from "./useFormErrorFocus";
+import { useIsHydrated } from "./useIsHydrated";
 
 const SubmittingForm = ({ title, hasFileValues }: { title: string; hasFileValues: boolean }) => (
   <>
@@ -180,174 +110,6 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
       />
     </>
   );
-};
-
-const submitFormValues = async (
-  values: FormikResponses,
-  formikBag: FormikHelpers<FormikResponses>,
-  props: FormProps,
-  { captchaEnabled, executeCaptcha, resetCaptcha }: Omit<CaptchaControls, "captcha">
-) => {
-  // If the form is closed, do not allow submission
-  if (await isFormClosed(props.formRecord.id)) {
-    formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
-    return;
-  }
-
-  // For groups enabled forms only allow submitting on the Review page
-  const isShowReviewPage = showReviewPage(props.formRecord.form);
-  if (isShowReviewPage && props.currentGroup !== LOCKED_GROUPS.REVIEW) {
-    return;
-  }
-
-  try {
-    let captchaToken: string | undefined;
-    if (captchaEnabled) {
-      const captchaResult = await executeCaptcha();
-
-      if (!captchaResult.verified) {
-        if (captchaResult.reason === "load-error") {
-          resetCaptcha();
-        }
-
-        if (captchaResult.reason !== "cancelled") {
-          formikBag.setStatus(FormStatus.ERROR);
-        }
-
-        return;
-      }
-
-      captchaToken = captchaResult.token;
-    }
-
-    // Needed so the Loader is displayed after hCaptcha has completed and submission starts
-    formikBag.setStatus("submitting");
-
-    const formValues = filterValuesByVisibleElements(props.formRecord, values as FormValues);
-
-    // Extract file content from formValues so they are not part of the submission call to the submit action
-    const { formValuesWithoutFileContent, fileObjsRef } =
-      copyObjectExcludingFileContent(formValues);
-
-    const fileChecksums = await generateFileChecksums(fileObjsRef);
-    let submitProgress = 0;
-    let progressInterval: NodeJS.Timeout | undefined = undefined;
-
-    if (hasFiles(values)) {
-      progressInterval = setInterval(() => {
-        if (submitProgress <= 0.1) {
-          submitProgress += 0.02;
-          document.dispatchEvent(
-            new CustomEvent(EventKeys.submitProgress, {
-              detail: {
-                progress: submitProgress,
-                message: props.t("submitProgress.text"),
-              },
-            })
-          );
-        } else {
-          clearInterval(progressInterval);
-        }
-      }, 500);
-    }
-
-    const result = await submitForm(
-      formValuesWithoutFileContent,
-      props.language,
-      props.formRecord.id,
-      props.isPreview ?? false,
-      captchaToken,
-      fileChecksums
-    );
-
-    clearInterval(progressInterval);
-
-    // Start here to upload files and handle errors below into something easier to read
-
-    if (result.error) {
-      if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
-        formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-        props.setCaptchaFail && props.setCaptchaFail(true);
-      } else {
-        formikBag.setStatus(FormStatus.ERROR);
-      }
-
-      // Avoid a potential error where a token could be reused by re-submitting after an error
-      resetCaptcha();
-
-      return;
-    }
-
-    if (
-      (!result.fileURLMap ? 0 : Object.keys(result.fileURLMap).length) !==
-      Object.keys(fileObjsRef).length
-    ) {
-      logMessage.error("File Upload count mismatch");
-      formikBag.setStatus(FormStatus.ERROR);
-    }
-
-    // Handle if there are files to upload
-    if (result.fileURLMap && Object.keys(result?.fileURLMap).length > 0) {
-      const totalFiles = Object.keys(result.fileURLMap).length;
-      const fileProgress: { [key: string]: number } = {};
-
-      const uploadPromises = Object.entries(result.fileURLMap).map(async ([fileId, signedPost]) => {
-        fileProgress[fileId] = 0;
-        await uploadFile(fileObjsRef[fileId], signedPost, (ev) => {
-          if (!ev.progress || !document) return;
-
-          fileProgress[fileId] = ev.progress;
-          const totalProgress =
-            Object.values(fileProgress).reduce((acc, progress) => acc + progress, 0) / totalFiles;
-
-          if (totalProgress <= submitProgress) {
-            // Don't dispatch progress events if the total progress is less than what we've already dispatched
-            return;
-          }
-
-          document.dispatchEvent(
-            new CustomEvent(EventKeys.submitProgress, {
-              detail: {
-                progress: totalProgress,
-                message: props.t("submitProgress.uploadingFiles", {
-                  totalFiles,
-                }),
-              },
-            })
-          );
-        });
-      });
-
-      await Promise.all(uploadPromises);
-    }
-
-    props.onSuccess(result.id, result?.submissionId);
-  } catch (err) {
-    logMessage.error(err as Error);
-
-    const fileUploadError = handleUploadError(err as Error, props.t);
-
-    if (fileUploadError) {
-      formikBag.setStatus({
-        heading: fileUploadError.heading,
-        message: fileUploadError.message,
-      });
-    } else {
-      formikBag.setStatus("Error");
-    }
-
-    // Avoid a potential error where a token could be reused by re-submitting after an error
-    resetCaptcha();
-  } finally {
-    if (!props.isPreview) {
-      ga("form_submission_trigger", {
-        formID: props.formRecord.id,
-        formTitle: props.formRecord.form.titleEn,
-      });
-    }
-
-    formikBag.setSubmitting(false);
-  }
 };
 
 export const Form: React.FC<FormProps> = (props) => {
