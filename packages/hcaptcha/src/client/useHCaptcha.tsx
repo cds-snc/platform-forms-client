@@ -6,12 +6,20 @@ import { useCallback, useRef, useState } from "react";
 
 export type HCaptchaFailureMode = "allow" | "block";
 
+export type HCaptchaLogger = {
+  info(message: string): void;
+  warn(message: string): void;
+  error(message: string): void;
+};
+
 export type UseHCaptchaOptions = {
   // Controls whether a failed or unavailable CAPTCHA allows the submission to continue
   failureMode?: HCaptchaFailureMode;
   language?: string;
+  logger?: HCaptchaLogger;
   // Fires for every error reported by hCaptcha
   onError?: (code: string) => void;
+  onSuspiciousError?: (code: string) => void;
   onCaptchaVerified?: () => void;
   onCaptchaExpired?: () => void;
   siteKey: string;
@@ -41,13 +49,16 @@ export type UseHCaptchaResult = {
 
 const CONFIG_ERROR_CODES = ["invalid-sitekey", "missing-sitekey"];
 const LOAD_ERROR_CODES = ["script-error"];
+const SUSPICIOUS_ERROR_CODES = new Set(["invalid-data", "invalid-input-response"]);
 
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
 export const useHCaptcha = ({
   failureMode = "block",
   language,
+  logger,
   onError: onErrorCallback,
+  onSuspiciousError,
   onCaptchaVerified,
   onCaptchaExpired,
   siteKey,
@@ -108,21 +119,30 @@ export const useHCaptcha = ({
 
   const onError = useCallback(
     (code: string) => {
-      if (CONFIG_ERROR_CODES.includes(code)) {
+      if (SUSPICIOUS_ERROR_CODES.has(code)) {
+        logger?.warn(
+          `hCaptcha: suspicious error "${code}" detected - possible tampering. Submission blocked. Resetting widget state.`
+        );
+        onSuspiciousError?.(code);
+        resetAfterError();
+      } else if (CONFIG_ERROR_CODES.includes(code)) {
         hasFatalErrorRef.current = true;
         fatalErrorReasonRef.current = "configuration-error";
+        logger?.error(`hCaptcha: critical configuration error "${code}". Submission blocked.`);
         complete(failureResult("configuration-error"));
       } else if (LOAD_ERROR_CODES.includes(code)) {
         hasFatalErrorRef.current = true;
         fatalErrorReasonRef.current = "load-error";
+        logger?.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
         complete(failureResult("load-error"));
       } else {
+        logger?.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
         resetAfterError();
       }
 
       onErrorCallback?.(code);
     },
-    [complete, failureResult, onErrorCallback, resetAfterError]
+    [complete, failureResult, logger, onErrorCallback, onSuspiciousError, resetAfterError]
   );
 
   const execute = useCallback((): Promise<HCaptchaExecutionResult> => {
@@ -152,9 +172,10 @@ export const useHCaptcha = ({
   const onVerify = useCallback(
     (verifiedToken: string) => {
       complete({ verified: true, token: verifiedToken });
+      logger?.info(`hCaptcha: verified token received at ${new Date().toISOString()}`);
       onCaptchaVerified?.();
     },
-    [complete, onCaptchaVerified]
+    [complete, logger, onCaptchaVerified]
   );
 
   const captcha = (
