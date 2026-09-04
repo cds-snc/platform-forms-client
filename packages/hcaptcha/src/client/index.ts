@@ -5,6 +5,7 @@ export type {
   HCaptchaExecutionResult,
   HCaptchaFailureMode,
   HCaptchaFailureReason,
+  HCaptchaLogger,
   UseHCaptchaOptions,
   UseHCaptchaResult,
 } from "./useHCaptcha";

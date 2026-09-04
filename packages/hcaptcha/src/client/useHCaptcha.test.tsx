@@ -4,7 +4,7 @@
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { forwardRef, useImperativeHandle } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useHCaptcha, type HCaptchaExecutionResult } from "./useHCaptcha";
+import { useHCaptcha, type HCaptchaExecutionResult, type HCaptchaLogger } from "./useHCaptcha";
 
 const mockCaptcha = vi.hoisted(() => ({
   execute: vi.fn(() => undefined),
@@ -69,13 +69,17 @@ const HookHarness = ({
   failureMode,
   onCaptchaExpired,
   onCaptchaVerified,
+  onSuspiciousError,
   onError,
+  logger,
   onResult,
 }: {
   failureMode?: "allow" | "block";
   onCaptchaExpired?: () => void;
   onCaptchaVerified?: () => void;
+  onSuspiciousError?: (code: string) => void;
   onError?: (code: string) => void;
+  logger?: HCaptchaLogger;
   onResult: (result: HCaptchaExecutionResult) => void;
 }) => {
   const { captcha, execute, reset } = useHCaptcha({
@@ -83,7 +87,9 @@ const HookHarness = ({
     failureMode,
     onCaptchaExpired,
     onCaptchaVerified,
+    onSuspiciousError,
     onError,
+    logger,
   });
 
   return (
@@ -129,6 +135,42 @@ describe("useHCaptcha", () => {
     fireEvent.click(getByTestId("captcha-verify"));
 
     await waitFor(() => expect(onCaptchaVerified).toHaveBeenCalledOnce());
+  });
+
+  it("logs verification and provider errors", async () => {
+    const logger = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+    };
+    const onSuspiciousError = vi.fn();
+    const { getByRole, getByTestId } = render(
+      <HookHarness logger={logger} onSuspiciousError={onSuspiciousError} onResult={vi.fn()} />
+    );
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-verify"));
+    fireEvent.click(getByTestId("captcha-error-invalid-data"));
+    fireEvent.click(getByTestId("captcha-error-invalid-sitekey"));
+    fireEvent.click(getByTestId("captcha-error-network-error"));
+
+    await waitFor(() =>
+      expect(logger.info).toHaveBeenCalledWith(
+        expect.stringContaining("hCaptcha: verified token received")
+      )
+    );
+    expect(logger.warn).toHaveBeenNthCalledWith(
+      1,
+      'hCaptcha: suspicious error "invalid-data" detected - possible tampering. Submission blocked. Resetting widget state.'
+    );
+    expect(logger.warn).toHaveBeenNthCalledWith(
+      2,
+      'hCaptcha: recoverable error "network-error" - user can retry submission'
+    );
+    expect(logger.error).toHaveBeenCalledWith(
+      'hCaptcha: critical configuration error "invalid-sitekey". Submission blocked.'
+    );
+    expect(onSuspiciousError).toHaveBeenCalledWith("invalid-data");
   });
 
   it("blocks provider failures in block mode", async () => {
