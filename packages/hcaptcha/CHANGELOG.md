@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.1] - 2026-09-04
 
 - Fix a few edge cases related to retrying and security
+- Pass `logger` to record hCaptcha lifecycle messages.
 
 ## [1.1.0] - 2026-09-03
 

@@ -41,6 +41,10 @@ hCaptcha retries temporary network failures internally when using async executio
 rejections are classified using the provider error code and reported through `onError`; execution
 waits for the widget to be ready before starting.
 
+Pass `logger` to record hCaptcha lifecycle messages. `onSuspiciousError` is called for provider
+errors that indicate a potentially tampered request, allowing the consumer to block or replace
+the surrounding UI without implementing hCaptcha error classification itself.
+
 ## Form wrapper
 
 `HCaptchaForm` combines the hook with a native `<form>`. It prevents duplicate submissions,

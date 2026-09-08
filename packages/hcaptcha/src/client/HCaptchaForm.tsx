@@ -36,14 +36,25 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
     const captchaSubmissionPending = useRef(false);
     const captchaExecutionId = useRef(0);
 
-    const { failureMode, language, onCaptchaVerified, onError, siteKey, ...formProps } = props;
+    const {
+      failureMode,
+      language,
+      logger,
+      onCaptchaVerified,
+      onError,
+      onSuspiciousError,
+      siteKey,
+      ...formProps
+    } = props;
 
     const { captcha, execute, reset } = useHCaptcha({
       failureMode,
       language,
+      logger,
+      onCaptchaVerified,
       siteKey,
       onError,
-      onCaptchaVerified,
+      onSuspiciousError,
       onCaptchaExpired: () => {
         captchaToken.current = undefined;
         onCaptchaExpired?.();
