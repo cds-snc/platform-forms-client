@@ -44,6 +44,7 @@ export const PrimaryFormButtons = ({
                 )}
                 <SubmitButton
                   disabled={isFormClosed(props.status)}
+                  isSubmitting={props.isSubmitting}
                   submissionError={submissionError}
                 />
               </div>
@@ -51,7 +52,11 @@ export const PrimaryFormButtons = ({
           },
         })
       ) : (
-        <SubmitButton disabled={isFormClosed(props.status)} submissionError={submissionError} />
+        <SubmitButton
+          disabled={isFormClosed(props.status)}
+          isSubmitting={props.isSubmitting}
+          submissionError={submissionError}
+        />
       )}
     </div>
   );
