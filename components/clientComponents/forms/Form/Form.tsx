@@ -71,6 +71,7 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
     language,
     formRecord: { id: formID, form, isPublished },
     dirty,
+    setErrors,
   }: InternalInnerFormProps = props;
 
   const { t } = useTranslation();
@@ -82,6 +83,11 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
   const isShowReviewPage = showReviewPage(form);
   const showIntro = currentGroup === LOCKED_GROUPS.START;
 
+  // Clear validation errors when switching groups (pages)
+  useEffect(() => {
+    setErrors({});
+  }, [currentGroup, setErrors]);
+  
   const handleCaptchaFailure = (reason: HCaptchaFailureReason) => {
     props.setCaptchaToken(undefined);
 
@@ -110,7 +116,7 @@ const InnerForm: React.FC<InternalInnerFormProps> = (props) => {
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useSyncVisibleElementIds();
 
-  const errorList = props.errors ? getErrorList(props) : null;
+  const errorList = props.errors ? getErrorList({ ...props, currentGroup }) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
 
