@@ -7,25 +7,59 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { HCaptchaExecutionResult } from "./useHCaptcha";
 import { HCaptchaForm, type HCaptchaFormHandle } from "./HCaptchaForm";
 
-const { executeCaptcha, expireCaptcha, resetCaptcha } = vi.hoisted(() => ({
+const { executeCaptcha, expireCaptcha, resetCaptcha, useHCaptchaMock } = vi.hoisted(() => ({
   executeCaptcha: vi.fn<() => Promise<HCaptchaExecutionResult>>(),
   expireCaptcha: vi.fn(),
   resetCaptcha: vi.fn(),
+  useHCaptchaMock: vi.fn(),
 }));
 
 vi.mock("./useHCaptcha", () => ({
-  useHCaptcha: ({ onCaptchaExpired }: { onCaptchaExpired?: () => void }) => {
-    expireCaptcha.mockImplementation(() => onCaptchaExpired?.());
-    return { captcha: null, execute: executeCaptcha, reset: resetCaptcha };
-  },
+  useHCaptcha: useHCaptchaMock,
 }));
 
 describe("HCaptchaForm", () => {
   beforeEach(() => {
+    useHCaptchaMock.mockImplementation(
+      ({ onCaptchaExpired }: { onCaptchaExpired?: () => void }) => {
+        expireCaptcha.mockImplementation(() => onCaptchaExpired?.());
+        return { captcha: null, execute: executeCaptcha, reset: resetCaptcha };
+      }
+    );
     executeCaptcha.mockReset();
     executeCaptcha.mockResolvedValue({ verified: true, token: "captcha-token" });
     expireCaptcha.mockReset();
     resetCaptcha.mockClear();
+  });
+
+  it("passes hCaptcha lifecycle options to the hook", () => {
+    const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() };
+    const onCaptchaVerified = vi.fn();
+    const onSuspiciousError = vi.fn();
+
+    render(
+      <HCaptchaForm
+        logger={logger}
+        onCaptchaVerified={onCaptchaVerified}
+        onSuspiciousError={onSuspiciousError}
+        onSubmit={vi.fn()}
+        onUnexpectedError={vi.fn()}
+        siteKey="site-key"
+      >
+        <button type="submit">Submit</button>
+      </HCaptchaForm>
+    );
+
+    expect(useHCaptchaMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        language: undefined,
+        logger,
+        onCaptchaVerified,
+        onError: undefined,
+        onSuspiciousError,
+        siteKey: "site-key",
+      })
+    );
   });
 
   it("passes the verified token through the submit callback", async () => {
