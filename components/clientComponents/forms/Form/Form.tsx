@@ -99,13 +99,6 @@ const getServerSnapshot = () => false;
 const useIsHydrated = () =>
   useSyncExternalStore(subscribeToHydration, getHydratedSnapshot, getServerSnapshot);
 
-const SubmittingForm = ({ title, hasFileValues }: { title: string; hasFileValues: boolean }) => (
-  <>
-    <title>{title}</title>
-    <SubmitProgress spinner={!hasFileValues} />
-  </>
-);
-
 /**
  * The main content of the form, handling rendering of status alerts, form body, and submission states.
  * @param props - The properties passed down from the parent form component.
@@ -153,7 +146,12 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
   }
 
   if (status === "submitting") {
-    return <SubmittingForm title={t("loading")} hasFileValues={hasFiles(props.values)} />;
+    return (
+      <>
+        <title>{t("loading")}</title>
+        <SubmitProgress spinner={!hasFiles(props.values)} />
+      </>
+    );
   }
 
   return (
@@ -194,7 +192,7 @@ const submitFormValues = async (
     return;
   }
 
-  // For groups enabled forms only allow submitting on the Review page
+  // For forms with groups only allow submitting on the Review page
   const isShowReviewPage = showReviewPage(props.formRecord.form);
   if (isShowReviewPage && props.currentGroup !== LOCKED_GROUPS.REVIEW) {
     return;
