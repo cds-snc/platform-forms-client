@@ -24,8 +24,8 @@ test.describe("Form without groups submission", { tag: "@published-form" }, () =
   test("fills the required message and submits without a review page", async ({ page }) => {
     await page.goto(publishedFormPath);
 
-    await expect(page.getByText("== introduction ==", { exact: true })).toBeVisible();
-    await expect(page.getByText("== privacy policy ==", { exact: true })).toBeVisible();
+    await expect(page.getByText("introduction.", { exact: true })).toBeVisible();
+    await expect(page.getByText("privacy policy.", { exact: true })).toBeVisible();
 
     const message = page.getByRole("textbox", { name: "Message" });
     await page.getByRole("button", { name: "Submit" }).click();

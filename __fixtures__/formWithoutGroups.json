@@ -2,12 +2,12 @@
   "titleEn": "Form Without Groups",
   "titleFr": "Formulaire sans groupes",
   "introduction": {
-    "descriptionEn": "== introduction ==",
-    "descriptionFr": "== introduction =="
+    "descriptionEn": "introduction.",
+    "descriptionFr": "introduction."
   },
   "privacyPolicy": {
-    "descriptionEn": "== privacy policy ==",
-    "descriptionFr": "== privacy policy =="
+    "descriptionEn": "privacy policy.",
+    "descriptionFr": "privacy policy."
   },
   "confirmation": {
     "descriptionEn": "Confirmed",
