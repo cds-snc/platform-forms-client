@@ -24,6 +24,7 @@ const mocks = vi.hoisted(() => ({
   shouldCheckCaptcha: vi.fn(),
   onSuccess: vi.fn(),
   setCaptchaFail: vi.fn(),
+  gcFormsContext: { currentGroup: null as string | null },
 }));
 
 vi.mock("@gcforms/hcaptcha/client", () => ({
@@ -94,7 +95,7 @@ vi.mock("@lib/hooks/useSyncVisibleElementIds", () => ({
 
 vi.mock("@lib/hooks/useGCFormContext", () => ({
   useGCFormsContext: () => ({
-    currentGroup: null,
+    currentGroup: mocks.gcFormsContext.currentGroup,
     getGroupTitle: () => "Group title",
   }),
 }));
@@ -170,6 +171,7 @@ describe("Form", () => {
     }));
     mocks.generateFileChecksums.mockResolvedValue({});
     mocks.shouldCheckCaptcha.mockReturnValue(true);
+    mocks.gcFormsContext.currentGroup = null;
   });
 
   it("runs hCaptcha after validation and sends the verified token to the server action", async () => {
@@ -229,6 +231,39 @@ describe("Form", () => {
       undefined,
       {}
     );
+  });
+
+  it("clears validation error messages when navigating to a different group", async () => {
+    const validation = await vi.importActual<typeof import("@lib/validation/validation")>(
+      "@lib/validation/validation"
+    );
+    mocks.getErrorList.mockImplementation(validation.getErrorList);
+    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+
+    const formProps = createFormProps({
+      formRecord: {
+        id: "form-id",
+        isPublished: true,
+        form: {
+          titleEn: "Test form",
+          titleFr: "Formulaire test",
+          introduction: {},
+          privacyPolicy: {},
+          layout: ["field"],
+        },
+        closedDetails: {},
+      } as unknown as FormProps["formRecord"],
+    });
+    const { rerender } = render(<Form {...formProps} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
+
+    mocks.gcFormsContext.currentGroup = "next-page";
+    rerender(<Form {...formProps} />);
+
+    await waitFor(() => expect(screen.queryByRole("alert")).not.toBeInTheDocument());
   });
 
   it("submits without hCaptcha when captcha checks are disabled", async () => {
