@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { FormikProvider, useFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList } from "@lib/validation/validation";
@@ -47,10 +47,16 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
   const isShowReviewPage = showReviewPage(form);
   const showIntro = currentGroup === LOCKED_GROUPS.START;
 
+  // Clear stale validation errors when navigating between groups (pages)
+  useEffect(() => {
+    props.setErrors({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentGroup]);
+
   // Used to set any values we'd like available during Formik submission.
   useSyncVisibleElementIds();
 
-  const errorList = props.errors ? getErrorList(props) : null;
+  const errorList = props.errors ? getErrorList({ ...props, currentGroup }) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = getFormStatusError(
