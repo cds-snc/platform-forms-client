@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.7](https://github.com/cds-snc/platform-forms-client/compare/v4.22.6...v4.22.7) (2026-09-09)
+
+
+### Bug Fixes
+
+* restore clearing validation errors on group navigation ([#7880](https://github.com/cds-snc/platform-forms-client/issues/7880)) ([f04587e](https://github.com/cds-snc/platform-forms-client/commit/f04587ecae7827d52d51cbbaae511cf4be9c5f49))
+* Review end next action bug ([#7885](https://github.com/cds-snc/platform-forms-client/issues/7885)) ([cc8f7c9](https://github.com/cds-snc/platform-forms-client/commit/cc8f7c951e86a55671ce7e0661729825333a6261))
+* update filter for empty group ([#7883](https://github.com/cds-snc/platform-forms-client/issues/7883)) ([fb3688a](https://github.com/cds-snc/platform-forms-client/commit/fb3688a2ac3816f641a7ff1f37d9de232e65faad))
+* Validation error message persists when navigating back ([#7872](https://github.com/cds-snc/platform-forms-client/issues/7872)) ([9d92fd4](https://github.com/cds-snc/platform-forms-client/commit/9d92fd4e350964412d526e53e1c665260cf81176))
+
+
+### Miscellaneous Chores
+
+* add e2e test for form without groups ([#7881](https://github.com/cds-snc/platform-forms-client/issues/7881)) ([f7c4b5d](https://github.com/cds-snc/platform-forms-client/commit/f7c4b5dc7e0a4415335171c3b3da2d3ab8f2c83b))
+* characterize public form submission behavior ([#7874](https://github.com/cds-snc/platform-forms-client/issues/7874)) ([fcd14fa](https://github.com/cds-snc/platform-forms-client/commit/fcd14fa249d150715174eeaf88931963702faf31))
+* Refactor validation props ([#7852](https://github.com/cds-snc/platform-forms-client/issues/7852)) ([8cff726](https://github.com/cds-snc/platform-forms-client/commit/8cff726da8a92ef8ff74347f94f5d6beaa8f3a05))
+* update Forms to use hCaptcha module ([#7846](https://github.com/cds-snc/platform-forms-client/issues/7846)) ([7ae6ce9](https://github.com/cds-snc/platform-forms-client/commit/7ae6ce99a424c8fe820cfe15faa68d84a170a0df))
+
+
+### Code Refactoring
+
+* add logger to captcha ([#7879](https://github.com/cds-snc/platform-forms-client/issues/7879)) ([065a1c6](https://github.com/cds-snc/platform-forms-client/commit/065a1c6c8681a40213db1fb77b68930a61639c9f))
+* extract public form lifecycle helpers ([#7878](https://github.com/cds-snc/platform-forms-client/issues/7878)) ([b5e1fd0](https://github.com/cds-snc/platform-forms-client/commit/b5e1fd06e0c3b17b12021e4973cafc4d19ad88ef))
+* simplify public form submit flow ([#7875](https://github.com/cds-snc/platform-forms-client/issues/7875)) ([a31e683](https://github.com/cds-snc/platform-forms-client/commit/a31e68312bcd426ffae67ce32f283f39f9a2bb7e))
+
 ## [4.22.6](https://github.com/cds-snc/platform-forms-client/compare/v4.22.5...v4.22.6) (2026-09-03)
 
 
