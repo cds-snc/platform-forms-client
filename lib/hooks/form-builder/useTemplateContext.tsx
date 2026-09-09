@@ -11,6 +11,7 @@ import { UpdateTemplateAction } from "@root/lib/templates/types";
 import { FormProperties } from "@lib/types";
 import { useAppUpdate } from "../useAppUpdate";
 import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
+import { resetReviewEndNextAction } from "@lib/groups/utils/resetReviewEndNextAction";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -97,7 +98,10 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       return { status: "invalid" };
     }
 
-    const formConfig = autoFlowFormIfPossible(parsedFormConfig);
+    const formConfig = autoFlowFormIfPossible({
+      ...parsedFormConfig,
+      groups: resetReviewEndNextAction(parsedFormConfig.groups!),
+    });
 
     try {
       const operationResult = await createOrUpdateTemplate({
