@@ -12,6 +12,7 @@ import { FormProperties } from "@lib/types";
 import { useAppUpdate } from "../useAppUpdate";
 import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
 import { resetReviewEndNextAction } from "@lib/groups/utils/resetReviewEndNextAction";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -100,7 +101,9 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
 
     const formConfig = autoFlowFormIfPossible({
       ...parsedFormConfig,
-      groups: resetReviewEndNextAction(parsedFormConfig.groups!),
+      ...(formHasGroups(parsedFormConfig)
+        ? { groups: resetReviewEndNextAction(parsedFormConfig.groups!) }
+        : {}),
     });
 
     try {
