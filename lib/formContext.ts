@@ -11,6 +11,7 @@ import {
 import { ensureChoiceId, checkVisibilityRecursive } from "@gcforms/core";
 import { inGroup } from "@gcforms/core";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 /**
  * Checks if two arrays match.
@@ -388,7 +389,14 @@ export const getNextAction = (
   matchedIds: string[]
   // values: FormValues
 ) => {
+  if (currentGroup === LOCKED_GROUPS.END) return "";
+  if (currentGroup === LOCKED_GROUPS.REVIEW) return LOCKED_GROUPS.END;
+
   let nextAction = groups[currentGroup].nextAction || "";
+
+  if (currentGroup !== LOCKED_GROUPS.REVIEW && nextAction === LOCKED_GROUPS.END) {
+    nextAction = LOCKED_GROUPS.REVIEW;
+  }
 
   // Check to see if next action is an array
   /*
