@@ -28,7 +28,7 @@ test.describe("Form with empty groups submission", { tag: "@published-form" }, (
     await expect(page.getByText("privacy policy.", { exact: true })).toBeVisible();
 
     const message = page.getByRole("textbox", { name: "Message" });
-    await page.getByTestId("nextButton").click();
+    await page.getByRole("button", { name: "Submit" }).click();
     await expect(
       page.getByRole("heading", { name: "Please correct the errors on the page" })
     ).toBeVisible();
