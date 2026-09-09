@@ -34,6 +34,72 @@ describe("mapAnswers", () => {
     expect(mapped[0].answer).toBe('{"value":3,"numberOfStars":5}');
   });
 
+  it("preserves formatted date metadata while formatting the answer", () => {
+    const template = {
+      id: "formatted-date",
+      form: {
+        elements: [
+          {
+            id: 1,
+            type: "formattedDate",
+            properties: {
+              titleEn: "Date",
+              titleFr: "Date",
+              dateFormat: "DD-MM-YYYY",
+            },
+          },
+        ],
+      },
+      isPublished: true,
+      securityAttribute: "Unclassified",
+    } as unknown as PublicFormRecord;
+
+    const mapped = mapAnswers({
+      formTemplate: template.form as FormProperties,
+      rawAnswers: {
+        "1": { YYYY: 2026, MM: 8, DD: 25 } as unknown as Response,
+      },
+    });
+
+    expect(mapped[0].answer).toBe("25-08-2026");
+    expect(mapped[0].dateFormat).toBe("DD-MM-YYYY");
+  });
+
+  it("formats address complete answers stored as JSON strings", () => {
+    const template = {
+      id: "address-complete",
+      form: {
+        elements: [
+          {
+            id: 1,
+            type: "addressComplete",
+            properties: {
+              titleEn: "Address",
+              titleFr: "Adresse",
+            },
+          },
+        ],
+      },
+      isPublished: true,
+      securityAttribute: "Unclassified",
+    } as unknown as PublicFormRecord;
+
+    const mapped = mapAnswers({
+      formTemplate: template.form as FormProperties,
+      rawAnswers: {
+        "1": JSON.stringify({
+          streetAddress: "10 Wellington St",
+          city: "Ottawa",
+          province: "ON",
+          postalCode: "K1A 0A9",
+          country: "Canada",
+        }) as unknown as Response,
+      },
+    });
+
+    expect(mapped[0].answer).toBe("10 Wellington St, Ottawa, ON K1A 0A9 Canada");
+  });
+
   it("maps kitchen-sink fixture answers into mapped answer objects", () => {
     const template = {
       id: "kitchen",
@@ -117,6 +183,94 @@ describe("mapAnswers", () => {
     expect(typeof firstCell.answer === "string").toBe(true);
   });
 
+  it("maps object-shaped dynamicRow rows in property insertion order", () => {
+    const template = {
+      id: "dynamic-object-row",
+      form: {
+        elements: [
+          {
+            id: 7,
+            type: "dynamicRow",
+            properties: {
+              subElements: [
+                { id: 70, type: "textField", properties: { titleEn: "A" } },
+                { id: 71, type: "textField", properties: { titleEn: "B" } },
+              ],
+            },
+          },
+        ],
+      },
+      isPublished: true,
+      securityAttribute: "Unclassified",
+    } as unknown as PublicFormRecord;
+
+    const mapped = mapAnswers({
+      formTemplate: template.form as FormProperties,
+      rawAnswers: {
+        "7": [{ first: "row1col1", second: "row1col2" }],
+      } as unknown as Record<string, Response>,
+    });
+
+    const dynamicAnswer = mapped[0];
+    if (typeof dynamicAnswer === "string") throw new Error("expected object mapped answer");
+    const row = dynamicAnswer.answer as MappedAnswer[][];
+    expect(row[0][0]).toMatchObject({ questionId: 70, answer: "row1col1" });
+    expect(row[0][1]).toMatchObject({ questionId: 71, answer: "row1col2" });
+  });
+
+  it("filters rich text and creates fallbacks for unmapped dynamicRow cells", () => {
+    const template = {
+      id: "dynamic-fallback",
+      form: {
+        elements: [
+          {
+            id: 7,
+            type: "dynamicRow",
+            properties: {
+              subElements: [
+                { id: 70, type: "textField", properties: { titleEn: "A" } },
+                { id: 71, type: "richText", properties: { titleEn: "Instructions" } },
+              ],
+            },
+          },
+        ],
+      },
+      isPublished: true,
+      securityAttribute: "Unclassified",
+    } as unknown as PublicFormRecord;
+
+    const mapped = mapAnswers({
+      formTemplate: template.form as FormProperties,
+      rawAnswers: {
+        "7": [["mapped", "unmapped"]],
+      } as unknown as Record<string, Response>,
+    });
+
+    const dynamicAnswer = mapped[0];
+    if (typeof dynamicAnswer === "string") throw new Error("expected object mapped answer");
+    const row = dynamicAnswer.answer as MappedAnswer[][];
+    expect(row[0][0]).toMatchObject({ questionId: 70, answer: "mapped" });
+    expect(row[0][1]).toMatchObject({
+      type: "-",
+      questionId: 1,
+      answer: JSON.stringify("unmapped"),
+    });
+  });
+
+  it("returns fallback answers when the form has no elements", () => {
+    const mapped = mapAnswers({
+      formTemplate: {} as FormProperties,
+      rawAnswers: { "42": "orphaned answer" } as Record<string, Response>,
+    });
+
+    expect(mapped).toEqual([
+      expect.objectContaining({
+        type: "-",
+        answer: JSON.stringify("orphaned answer"),
+      }),
+    ]);
+  });
+
   it("handles file upload answers with potentially malicious attachments", () => {
     const template = {
       id: "file-upload",
@@ -159,7 +313,7 @@ describe("mapAnswers", () => {
     if (typeof fileAnswer === "string") throw new Error("expected object mapped answer");
     expect(fileAnswer.type).toBe("fileInput");
     expect(fileAnswer.questionId).toBe(1);
-    
+
     // Verify the answer contains the malicious flag
     expect(typeof fileAnswer.answer === "string").toBe(true);
     expect(String(fileAnswer.answer)).toContain("test.txt");
@@ -201,14 +355,14 @@ describe("mapAnswers", () => {
     });
 
     expect(mapped.length).toBe(2);
-    
+
     // First file should be malicious
     const file1 = mapped[0];
     if (typeof file1 === "string") throw new Error("expected object mapped answer");
     expect(file1.questionId).toBe(1);
     expect(String(file1.answer)).toContain("test.txt");
     expect(String(file1.answer)).toContain("⚠️");
-    
+
     // Second file should be safe
     const file2 = mapped[1];
     if (typeof file2 === "string") throw new Error("expected object mapped answer");
@@ -265,16 +419,16 @@ describe("mapAnswers", () => {
     if (typeof dynAnswer === "string") throw new Error("expected object mapped answer");
     expect(dynAnswer.type).toBe("dynamicRow");
     expect(Array.isArray(dynAnswer.answer)).toBe(true);
-    
+
     const rows = dynAnswer.answer as MappedAnswer[][];
     expect(rows.length).toBe(2);
-    
+
     // First row should have malicious file (output.txt)
     const firstRowFile = rows[0][0];
     if (typeof firstRowFile === "string") throw new Error("expected file answer object");
     expect(String(firstRowFile.answer)).toContain("output.txt");
     expect(String(firstRowFile.answer)).toContain("⚠️");
-    
+
     // Second row should have safe file (champ-cat.png)
     const secondRowFile = rows[1][0];
     if (typeof secondRowFile === "string") throw new Error("expected file answer object");

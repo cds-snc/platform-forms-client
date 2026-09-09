@@ -57,8 +57,9 @@ export const GCFormsProvider = ({
   children: ReactNode;
   formRecord: PublicFormRecord;
 }) => {
-  const groups: GroupsType = formRecord.form.groups || {};
-  const initialGroup = groups ? LOCKED_GROUPS.START : null;
+  const hasGroups = formHasGroups(formRecord.form);
+  const groups: GroupsType = hasGroups ? formRecord.form.groups! : {};
+  const initialGroup = LOCKED_GROUPS.START;
   const values = useRef({});
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
@@ -147,7 +148,11 @@ export const GCFormsProvider = ({
   };
 
   const getProgressData = () => {
-    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values.current);
+    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(
+      values.current,
+      {},
+      true
+    );
 
     return {
       id: formRecord.id,

@@ -204,7 +204,7 @@ const createTemplateStore = (
                   }
                 });
               }
-              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
+              return JSON.stringify(getSchemaFromState(get()), null, 2);
             },
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
@@ -214,7 +214,6 @@ const createTemplateStore = (
             getName: getName(set, get),
             getDeliveryOption: () => get().deliveryOption,
             getSecurityAttribute: () => get().securityAttribute,
-            getGroupsEnabled: () => get().allowGroupsFlag,
             setChangeKey: (key: string) => set({ changeKey: key }),
             setHasHydrated: () => set({ hasHydrated: true }),
             setId: (id) => set({ id }),

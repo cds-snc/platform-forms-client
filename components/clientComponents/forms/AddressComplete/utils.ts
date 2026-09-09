@@ -91,6 +91,18 @@ export const getAddressAsString = (address: AddressElements, split?: boolean): s
   return `${address.streetAddress}, ${address.city}, ${address.province} ${address.postalCode} ${address.country}`;
 };
 
+export const getAddressCompleteResponse = (answer: unknown, split?: boolean): string => {
+  try {
+    const addressObject =
+      typeof answer === "string"
+        ? (JSON.parse(answer) as AddressElements)
+        : (answer as AddressElements);
+    return getAddressAsString(addressObject, split);
+  } catch (e) {
+    return answer as string;
+  }
+};
+
 export const getAddressAsReviewElements = (
   address: AddressElements,
   element: FormElement,

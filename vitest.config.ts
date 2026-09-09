@@ -49,6 +49,8 @@ export default defineConfig({
     tsconfigPaths: true,
     alias: sharedAliases,
     extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
+    // Ensure all workspace packages share the same React instance during tests
+    dedupe: ["react", "react-dom"],
   },
   define: sharedDefine,
   css: { postcss: "./postcss.config.js" },

@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 import { getAppSetting } from "@lib/appSettings";
 import { FormProfile } from "./components/FormProfile";
-import { getFormattedDownloadableTemplateVersions } from "@lib/templates/versioning/queries/getDownloadableTemplateVersions";
+import { getFormattedDownloadableTemplateVersions } from "@lib/templates/queries/getDownloadableTemplateVersions";
 import { type DownloadableTemplateVersion } from "@lib/templates/types";
 
 export async function generateMetadata(props: {

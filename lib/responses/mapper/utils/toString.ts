@@ -1,25 +1,10 @@
-import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
-import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
-import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
-import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
+import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
+import { getFormattedDateResponse } from "@clientComponents/forms/FormattedDate/utils";
+import { getAddressCompleteResponse } from "@clientComponents/forms/AddressComplete/utils";
+import { getStarRatingResponse } from "@clientComponents/forms/StarRating/utils";
 
-import { FormElement, FormElementTypes } from "@root/packages/types/src/form-types";
-import { ResponseFilenameMapping } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses-pilot/lib/processResponse";
-import { StarRatingObject } from "@root/components/clientComponents/forms/StarRating/types";
-
-const getDateAsString = (answer: DateObject | string | object, dateFormat: DateFormat): string => {
-  try {
-    if (typeof answer === "object" && "YYYY" in answer && "MM" in answer && "DD" in answer) {
-      const dateObject = answer as unknown as DateObject;
-      return getFormattedDateFromObject(dateFormat, dateObject);
-    }
-
-    const dateObject = JSON.parse(answer as string) as DateObject;
-    return getFormattedDateFromObject(dateFormat, dateObject);
-  } catch (e) {
-    return answer as string;
-  }
-};
+import { FormElement, FormElementTypes } from "@gcforms/types";
+import { ResponseFilenameMapping } from "@formBuilder/[id]/responses-pilot/lib/processResponse";
 
 export const getAnswerAsString = (
   question: FormElement | undefined,
@@ -54,7 +39,7 @@ export const getAnswerAsString = (
 
     const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
 
-    return getDateAsString(answer, dateFormat);
+    return getFormattedDateResponse(answer as string | object, dateFormat);
   }
 
   if (question && question.type === FormElementTypes.addressComplete) {
@@ -62,22 +47,11 @@ export const getAnswerAsString = (
       return "";
     }
 
-    try {
-      const addressObject = answer as AddressElements;
-      return getAddressAsString(addressObject, question.properties.addressComponents?.splitAddress);
-    } catch (e) {
-      // If the answer is somehow not parseable as JSON, return it as is
-      return answer as string;
-    }
+    return getAddressCompleteResponse(answer, question.properties.addressComponents?.splitAddress);
   }
 
   if (question && question.type === FormElementTypes.starRating) {
-    if (answer === "") {
-      return "";
-    }
-
-    const starRatingObject = answer as StarRatingObject;
-    return JSON.stringify(starRatingObject);
+    return getStarRatingResponse(answer);
   }
 
   return answer as string;

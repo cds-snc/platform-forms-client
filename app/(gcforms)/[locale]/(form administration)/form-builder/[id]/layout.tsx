@@ -9,7 +9,6 @@ import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { RefStoreProvider } from "@lib/hooks/form-builder/useRefStore";
 import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPanel";
-import { allowGrouping } from "@root/lib/groups/utils/allowGrouping";
 import { GroupStoreProvider } from "@lib/groups/useGroupStore";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
@@ -55,7 +54,6 @@ export default async function Layout(props: {
 
   const formID = id || null;
 
-  const allowGroupsFlag = allowGrouping();
   const shareUsesManageAccess = formID !== "0000";
   const publishFormsEnabled = session
     ? await authorization.hasPublishFormsPrivilege().catch(() => false)
@@ -106,7 +104,7 @@ export default async function Layout(props: {
 
   return (
     <FormBuilderConfigProvider formBuilderConfig={formBuilderConfig}>
-      <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
+      <TemplateStoreProvider {...{ ...initialForm, locale }}>
         <SaveTemplateProvider>
           <RefStoreProvider>
             <EditLockProvider
@@ -163,7 +161,7 @@ export default async function Layout(props: {
                             >
                               {children}
                             </main>
-                            {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                            <RightPanel id={id} lang={locale as Language} />
                           </EditLockClient>
                         </div>
                       </div>

@@ -106,14 +106,6 @@
   "title-full": "Formulaires GC - GC Forms",
   "title": "Formulaires GC",
   "loading": "Nous traitons votre soumission de formulaire. Veuillez patienter.",
-  "spam-error": {
-    "error-part-1": "Impossible d'utiliser le bouton avant",
-    "error-part-2": "secondes de délai.",
-    "prompt-part-1": "Réessayez dans",
-    "prompt-part-2": "secondes.",
-    "success-message": "Le bouton est prêt à être utilisé.",
-    "success-prompt": "Vous pouvez maintenant réessayer le bouton."
-  },
   "adminNav": {
     "dashboard": "Accueil",
     "formbuilder": "Générateur de formulaires",

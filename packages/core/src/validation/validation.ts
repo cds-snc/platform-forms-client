@@ -21,10 +21,7 @@ export type TranslateFn = (key: string, options?: Record<string, unknown>) => st
 
 export const isFieldResponseValid = (
   value: unknown,
-  values: Responses,
-  componentType: string,
   formElement: FormElement,
-  validator: ValidationProperties,
   t: TranslateFn
 ): string | null | Record<string, unknown>[] | AddressValidationError => {
   // Note that this will ignore a file upload since the value is an object. We could check the
@@ -32,6 +29,9 @@ export const isFieldResponseValid = (
   if (isInputTooLong(value as string)) {
     return t("input-validation.too-many-characters");
   }
+
+  const componentType = formElement.type;
+  const validator = formElement.properties.validation as ValidationProperties;
 
   switch (componentType) {
     case FormElementTypes.textField:
@@ -199,14 +199,7 @@ export const isFieldResponseValid = (
 
         (formElement.properties.subElements || []).forEach((subElement, index) => {
           if (subElement.properties.validation) {
-            const validationError = isFieldResponseValid(
-              row[index],
-              values,
-              subElement.type,
-              subElement,
-              subElement.properties.validation,
-              t
-            );
+            const validationError = isFieldResponseValid(row[index], subElement, t);
 
             if (validationError !== null) {
               rowErrors[index] = validationError;

@@ -6,7 +6,6 @@ import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { PageContent } from "./pageContent";
-import { allowGrouping } from "@lib/groups/utils/allowGrouping";
 import { serverTranslation } from "@i18n";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
@@ -60,7 +59,6 @@ export default async function Page(props0: {
 
   const language = locale as "en" | "fr";
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
-  const isAllowGrouping = allowGrouping();
 
   let isPastClosingDate = false;
   if (formRecord.closingDate) {
@@ -95,7 +93,6 @@ export default async function Page(props0: {
             step={step}
             formId={formId}
             saveAndResume={saveAndResume}
-            isAllowGrouping={isAllowGrouping}
           />
         </GCFormsProvider>
       </FormDisplayLayout>

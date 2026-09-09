@@ -45,7 +45,7 @@ export const handleDelete = async (
     autoFlowAll();
     setOpenConfirmDeleteDialog(false);
 
-    tree.rebuildTree();
+    queueMicrotask(() => tree.rebuildTree());
 
     onSuccess && onSuccess();
 

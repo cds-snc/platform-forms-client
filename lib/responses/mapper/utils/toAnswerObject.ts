@@ -1,4 +1,4 @@
-import { FormElement } from "@gcforms/types";
+import { FormElement, FormElementTypes } from "@gcforms/types";
 import type { MappedAnswer } from "../types";
 import { Response } from "@gcforms/types";
 
@@ -7,7 +7,7 @@ export const createAnswerObject = ({
   answer,
 }: {
   question: FormElement;
-  answer: string | MappedAnswer[][];
+  answer: MappedAnswer["answer"];
 }): MappedAnswer => {
   return {
     type: String(question.type),
@@ -15,6 +15,9 @@ export const createAnswerObject = ({
     questionEn: question.properties?.titleEn,
     questionFr: question.properties?.titleFr,
     answer,
+    ...(question.type === FormElementTypes.formattedDate && {
+      dateFormat: question.properties.dateFormat,
+    }),
   };
 };
 

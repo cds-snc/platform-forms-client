@@ -15,6 +15,7 @@ import { ErrorResuming } from "./ErrorResuming";
 import { ErrorLoading } from "./ErrorLoading";
 import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
+import { copyObjectExcludingFileContent } from "@lib/fileExtractor";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
 const cleaner = (key: string, value: string) =>
@@ -24,6 +25,7 @@ type ResumeFormResponse = {
   id: string;
   values: FormValues;
   currentGroup: string;
+  responseLanguage: string;
 };
 
 type PendingMismatchResume = Omit<ResumeFormResponse, "id"> & {
@@ -66,8 +68,24 @@ export const Upload = ({ formId }: { formId: string }) => {
 
   useEffect(() => clearDragResetTimeout, []);
 
-  const restoreProgress = async ({ id, values, currentGroup }: ResumeFormResponse) => {
-    await saveSessionProgress({ id, values, currentGroup, language, restoredForm: true });
+  const restoreProgress = async ({
+    id,
+    values,
+    currentGroup,
+    responseLanguage,
+  }: ResumeFormResponse) => {
+    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values, {}, true);
+
+    await saveSessionProgress({
+      id,
+      values: formValuesWithoutFileContent as FormValues,
+      currentGroup,
+      language: responseLanguage,
+      restoredForm: true,
+    });
+    // Needed to support a hard refresh of the page and not client side routing
+
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = `/${language}/id/${id}`;
   };
 
@@ -81,6 +99,7 @@ export const Upload = ({ formId }: { formId: string }) => {
       id: pendingMismatchResume.sourceFormId,
       values: pendingMismatchResume.values,
       currentGroup: pendingMismatchResume.currentGroup,
+      responseLanguage: pendingMismatchResume.responseLanguage,
     });
     setPendingMismatchResume(null);
   };
@@ -118,6 +137,7 @@ export const Upload = ({ formId }: { formId: string }) => {
           errorCode = FormServerErrorCodes.FORM_RESUME_NO_ELEMENT;
           throw new Error(errorCode);
         }
+        const documentLang = htmlDoc.documentElement.lang;
 
         const jsonData = htmlDoc.getElementById("form-data")?.textContent;
 
@@ -160,11 +180,12 @@ export const Upload = ({ formId }: { formId: string }) => {
             sourceFormId: id,
             values: parsed.values,
             currentGroup: parsed.currentGroup,
+            responseLanguage: documentLang,
           });
           return;
         }
 
-        await restoreProgress(parsed);
+        await restoreProgress({ ...parsed, responseLanguage: documentLang });
       } catch (e) {
         const timestamp = Date.now();
 

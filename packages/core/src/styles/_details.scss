@@ -57,11 +57,3 @@
   margin: var(--gcds-details-panel-margin);
   border-left: var(--gcds-details-panel-border-width) solid var(--gcds-details-panel-border-color);
 }
-
-.gc-richText details .gc-details-content > :first-child {
-  margin-top: 0;
-}
-
-.gc-richText details .gc-details-content > :last-child {
-  margin-bottom: 0;
-}

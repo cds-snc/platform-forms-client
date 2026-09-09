@@ -33,6 +33,23 @@ export const getFormattedDateFromObject = (
   return formattedDate;
 };
 
+export const getFormattedDateResponse = (
+  answer: DateObject | string | object,
+  dateFormat: DateFormat
+): string => {
+  try {
+    if (typeof answer === "object" && "YYYY" in answer && "MM" in answer && "DD" in answer) {
+      const dateObject = answer as DateObject;
+      return getFormattedDateFromObject(dateFormat, dateObject);
+    }
+
+    const dateObject = JSON.parse(answer as string) as DateObject;
+    return getFormattedDateFromObject(dateFormat, dateObject);
+  } catch (e) {
+    return answer as string;
+  }
+};
+
 /**
  * Check that a DateObject is a valid date
  *

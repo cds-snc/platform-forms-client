@@ -15,7 +15,6 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "paths": {
-      "@root/*": ["./*"],
       "@lib/*": ["./lib/*"],
       "@api/*": ["./app/api/*"],
       "@formBuilder/*": ["./app/(gcforms)/[locale]/(form administration)/form-builder/*"],
@@ -30,13 +29,16 @@
       "@i18n/*": ["./i18n/*"],
       "@content/*": ["./public/static/content/*"],
       "@public/*": ["./public/*"],
+      "@gcforms/hcaptcha/client": ["./packages/hcaptcha/src/client/index.ts"],
+      "@gcforms/hcaptcha/server": ["./packages/hcaptcha/src/server/index.ts"],
       "@gcforms/*": ["./packages/*/src"],
       "@toast/*": ["./node_modules/react-toastify/dist/*"],
       "app/*": ["./app/*"],
       "components/*": ["./components/*"],
       "lib/*": ["./lib/*"],
       "__fixtures__/*": ["./__fixtures__/*"],
-      "__utils__/*": ["./__utils__/*"]
+      "__utils__/*": ["./__utils__/*"],
+      "@root/*": ["./*"]
     },
     "incremental": true,
     "plugins": [

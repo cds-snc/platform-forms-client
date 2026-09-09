@@ -18,7 +18,6 @@ import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/fo
 import { FormBuilderError } from "../../exceptions";
 import { useTemplateVersioning } from "./useTemplateVersioning";
 import { VersionSelector } from "./VersionSelector";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const getVersionedZipFileName = (baseFileName: string, version: string | null) => {
   if (!version) return baseFileName;
@@ -57,9 +56,6 @@ export const DownloadDialog = ({
   const [selectedVersionForDialog, setSelectedVersionForDialog] = React.useState<string | null>(
     null
   );
-
-  const { getFlag } = useFeatureFlags();
-  const templateVersioningEnabled = getFlag("templateVersioning");
 
   const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
 
@@ -134,26 +130,22 @@ export const DownloadDialog = ({
 
     let filteredIds = Array.from(checkedItems.keys());
 
-    if (templateVersioningEnabled) {
-      // Exclude items without a version; only download responses that have a matched version
-      const filteredIdsWithVersion = getFilteredIds(selectedVersionForDialog);
+    // Exclude items without a version; only download responses that have a matched version
+    const filteredIdsWithVersion = getFilteredIds(selectedVersionForDialog);
 
-      if (
-        filteredIdsWithVersion.length === 0 &&
-        (selectedFormat === DownloadFormat.CSV || selectedFormat === DownloadFormat.HTML_ZIPPED)
-      ) {
-        setDownloadError("missing_version");
-        setIsDownloading(false);
-        return;
-      }
-
-      // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
-      filteredIds = filteredIdsWithVersion;
+    if (
+      filteredIdsWithVersion.length === 0 &&
+      (selectedFormat === DownloadFormat.CSV || selectedFormat === DownloadFormat.HTML_ZIPPED)
+    ) {
+      setDownloadError("missing_version");
+      setIsDownloading(false);
+      return;
     }
 
-    const selectedVersion = templateVersioningEnabled
-      ? (selectedVersionForDialog ?? dialogVersions[0] ?? null)
-      : null;
+    // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
+    filteredIds = filteredIdsWithVersion;
+
+    const selectedVersion = selectedVersionForDialog ?? dialogVersions[0] ?? null;
 
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {

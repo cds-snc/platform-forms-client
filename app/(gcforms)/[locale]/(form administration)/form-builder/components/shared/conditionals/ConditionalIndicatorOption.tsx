@@ -55,10 +55,10 @@ export const ConditionalIndicatorOption = ({
 
   if (!questions.length) {
     return (
-      <div className="ml-2 mt-2">
+      <div className="mt-2 ml-2">
         {isFocused && (
           <div>
-            <ConditionalIcon className="mr-2  inline-block" />
+            <ConditionalIcon className="mr-2 inline-block" />
             <Button
               theme="link"
               className="cursor-pointer underline"
@@ -80,9 +80,9 @@ export const ConditionalIndicatorOption = ({
   }
 
   return (
-    <div className="ml-2 mt-2">
+    <div className="mt-2 ml-2">
       <div className="flex">
-        <ConditionalIcon className="mr-2  inline-block" />
+        <ConditionalIcon className="mr-2 inline-block" />
         <span id={rulesTitleId}>{t("addConditionalRules.show")}</span>
       </div>
       <ul className="list-none pl-4" aria-labelledby={rulesTitleId}>
@@ -96,37 +96,49 @@ export const ConditionalIndicatorOption = ({
           }
           return (
             <li key={`${elementId}-${index}`} className="py-1 pl-4">
-              {element?.properties?.[descriptionKey] && (
-                <>
-                  <Tooltip.CustomTrigger
-                    side="right"
-                    tooltipClassName="max-w-xl"
-                    trigger={
-                      <Button
-                        theme="link"
-                        onClick={() => {
-                          const id = Number(elementId);
+              {(() => {
+                const goToElement = () => {
+                  const id = Number(elementId);
 
-                          setId(parentGroup?.index.toString() || "start");
+                  setId(parentGroup?.index.toString() || "start");
 
-                          setTimeout(() => {
-                            if (!refs || !refs.current) {
-                              return;
-                            }
-
-                            refs.current[id] && refs.current[id].focus();
-                          }, 100);
-                        }}
-                      >
-                        {text}
-                      </Button>
+                  setTimeout(() => {
+                    if (!refs || !refs.current) {
+                      return;
                     }
-                  >
-                    <Markdown>{element?.properties?.[descriptionKey] || ""}</Markdown>
-                  </Tooltip.CustomTrigger>
-                  {" • "}
-                </>
-              )}
+
+                    refs.current[id] && refs.current[id].focus();
+                  }, 100);
+                };
+
+                if (element?.properties?.[descriptionKey]) {
+                  return (
+                    <>
+                      <Tooltip.CustomTrigger
+                        side="right"
+                        tooltipClassName="max-w-xl"
+                        trigger={
+                          <Button theme="link" onClick={goToElement}>
+                            {text}
+                          </Button>
+                        }
+                      >
+                        <Markdown>{element?.properties?.[descriptionKey] || ""}</Markdown>
+                      </Tooltip.CustomTrigger>
+                      {" • "}
+                    </>
+                  );
+                }
+
+                return (
+                  <>
+                    <Button theme="link" onClick={goToElement}>
+                      {text}
+                    </Button>
+                    {" • "}
+                  </>
+                );
+              })()}
 
               <Button
                 theme="link"

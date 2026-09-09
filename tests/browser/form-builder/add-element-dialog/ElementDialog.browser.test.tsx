@@ -301,29 +301,29 @@ describe("<ElementDialog />", () => {
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
 
-  it("adds an address element", async () => {
+  it("adds an address complete element", async () => {
     const handleCloseSpy = vi.fn();
     const handleAddTypeSpy = vi.fn();
 
     await render(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     // Click on the address element
-    const addressElement = page.getByTestId("address");
+    const addressElement = page.getByTestId("addressComplete");
     await addressElement.click();
 
     // Verify the description content is visible on the right side
-    const descriptionTitle = page.getByTestId("element-description-title");
+    const descriptionTitle = page.getByTestId("element-description-content");
     await expect.element(descriptionTitle).toBeVisible();
     await expect.element(descriptionTitle).toHaveTextContent("Address");
 
-    const descriptionText = page.getByTestId("element-description-text");
+    const descriptionText = page.getByTestId("element-description-content");
     await expect.element(descriptionText).toBeVisible();
 
     // Press Enter to confirm
     await userEvent.keyboard("{Enter}");
 
     // Verify the handlers were called correctly
-    expect(handleAddTypeSpy).toHaveBeenCalledWith("address");
+    expect(handleAddTypeSpy).toHaveBeenCalledWith("addressComplete");
     expect(handleCloseSpy).toHaveBeenCalledOnce();
   });
 
@@ -480,7 +480,7 @@ describe("<ElementDialog />", () => {
     await expect.element(contact).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");
-    const address = listbox.getByTestId("address");
+    const address = listbox.getByTestId("addressComplete");
     await expect.element(address).toHaveAttribute("aria-selected", "true");
 
     await userEvent.keyboard("{ArrowDown}");

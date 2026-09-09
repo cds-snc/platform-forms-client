@@ -7,9 +7,7 @@ import { logMessage } from "@lib/logger";
 import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { FormStatus } from "@gcforms/types";
-import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
-import { checkOne } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
+import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
@@ -26,6 +24,11 @@ import { valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 
 import { randomUUID } from "crypto";
+import { getClientIp } from "@lib/ip";
+
+// hCaptcha scores are an Enterprise-only response field. A missing score is rejected by the
+// verifier, so this score must only be used with an Enterprise sitekey.
+const HCAPTCHA_MAX_ALLOWED_SCORE = 0.79;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -72,10 +75,32 @@ export async function submitForm(
       const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
 
       if (shouldVerifyHCaptcha) {
-        const hCaptchaBlockingMode = await checkOne(FeatureFlags.hCaptcha);
-        // hCaptcha runs regardless but only block submissions if the feature flag is enabled
-        const captchaVerified = await verifyHCaptchaToken(captchaToken || "", formId);
-        if (hCaptchaBlockingMode && !captchaVerified) {
+        const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;
+        if (!captchaSecret) {
+          logMessage.info(`hCaptcha: missing siteVerifyKey for formId ${formId}`);
+          return {
+            id: formId,
+            error: {
+              name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
+              message: "Captcha verification failure",
+            },
+          };
+        }
+
+        const captchaResult = await verifyHCaptchaToken(captchaToken, {
+          secret: captchaSecret,
+          // The public site key identifies this widget and lets hCaptcha check that the token
+          // belongs to the expected site; it is separate from the server-only secret above.
+          siteKey: process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY,
+          // Avoid the lookup when the verifier will fail immediately
+          remoteIp: captchaToken ? String(await getClientIp()) : undefined,
+          maxAllowedScore: HCAPTCHA_MAX_ALLOWED_SCORE,
+          logger: {
+            info: (message) => logMessage.info(`${message} for formId ${formId}`),
+            warn: (message) => logMessage.warn(`${message} for formId ${formId}`),
+          },
+        });
+        if (!captchaResult.verified) {
           return {
             id: formId,
             error: {
@@ -170,45 +195,24 @@ const scheduleFormSubmissionNotification = async (
     );
     if (!emailData) return undefined;
 
-    // The flag is checked here (not just inside sendEmail) because the notificationId must only
-    // be generated and returned when the pipeline is active — it is passed to processFormData so
-    // the reliability lambda can enqueue the deferred send after the submission is persisted.
-    const notificationEnabled = await checkOne(FeatureFlags.notification);
+    const notificationId = randomUUID();
 
-    // Notification flag ON: send deferred email via notification pipeline
-    if (notificationEnabled) {
-      const notificationId = randomUUID();
-
-      /**
-       * Not using await here to avoid adding extra latency in the submission flow.
-       * Because the infra pipeline does not process submissions right away, the notification data should have enough time to get in DynamoDB before the Reliability lambda request its processing
-       */
-      sendDefaultEmail({
-        to: emailData.emails,
-        subject: emailData.subject,
-        body: emailData.formResponse,
-        options: { mode: "deferred", notificationId },
-      }).catch((error) =>
-        logMessage.warn(
-          `scheduleFormSubmissionNotification: failed to send deferred email via notification pipeline. Form ID: ${formId}. Reason: ${(error as Error).message}`
-        )
-      );
-
-      return notificationId;
-    }
-
-    // Notification flag OFF: send immediate email
+    /**
+     * Not using await here to avoid adding extra latency in the submission flow.
+     * Because the infra pipeline does not process submissions right away, the notification data should have enough time to get in DynamoDB before the Reliability lambda request its processing
+     */
     sendDefaultEmail({
       to: emailData.emails,
       subject: emailData.subject,
       body: emailData.formResponse,
+      options: { mode: "deferred", notificationId },
     }).catch((error) =>
       logMessage.warn(
-        `scheduleFormSubmissionNotification: failed to send immediate email. Form ID: ${formId}. Reason: ${(error as Error).message}`
+        `scheduleFormSubmissionNotification: failed to send deferred email via notification pipeline. Form ID: ${formId}. Reason: ${(error as Error).message}`
       )
     );
 
-    return undefined;
+    return notificationId;
   } catch (error) {
     logMessage.warn(
       `scheduleFormSubmissionNotification processing failed for form ${formId}. Reason: ${(error as Error).message}`

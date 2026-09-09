@@ -8,7 +8,7 @@ import { GroupStoreProvider, useGroupStore } from "../useGroupStore";
 import { TemplateStoreProvider, useTemplateStore } from "../../store/useTemplateStore";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <TemplateStoreProvider allowGroupsFlag={true}>
+  <TemplateStoreProvider>
     <GroupStoreProvider>{children}</GroupStoreProvider>
   </TemplateStoreProvider>
 );

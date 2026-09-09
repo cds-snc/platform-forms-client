@@ -1,15 +1,10 @@
 // TODO: in the future these could pulled in from default_flag_settings.json
 
 export const UserFeatureFlags = {
-  addressComplete: "addressComplete",
   responsesPilot: "responsesPilot",
-  templateVersioning: "templateVersioning",
 } as const;
 
 export const FeatureFlags = {
-  formTimer: "formTimer",
-  hCaptcha: "hCaptcha",
-  notification: "notification",
   topBanner: "topBanner",
   zitadelLogin: "zitadelLogin",
   ...UserFeatureFlags,
