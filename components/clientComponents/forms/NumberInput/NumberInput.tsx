@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
@@ -56,10 +56,8 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
   const locale = langToLocale(lang);
 
-  const formatOptions = useMemo<Intl.NumberFormatOptions>(
-    () => getNumberFormatOptions({ currencyCode, stepCount, useThousandsSeparator }),
-    [stepCount, currencyCode, useThousandsSeparator]
-  );
+  const formatOptions = getNumberFormatOptions({ currencyCode, stepCount, useThousandsSeparator });
+  const formatKey = `${locale}:${currencyCode ?? ""}:${stepCount ?? ""}:${useThousandsSeparator ?? ""}`;
 
   // The display value shown in the input (locale-formatted).
   // Formik holds the raw numeric string (e.g. "123.45") for DB storage.
@@ -70,13 +68,12 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
   });
 
   // When locale or format options change, reformat the display from the stable Formik number.
-  // formatOptions identity is stable across renders thanks to useMemo above.
-  const [prevFormat, setPrevFormat] = useState({ locale, formatOptions });
-  if (prevFormat.locale !== locale || prevFormat.formatOptions !== formatOptions) {
+  const [prevFormatKey, setPrevFormatKey] = useState(formatKey);
+  if (prevFormatKey !== formatKey) {
     if (field.value !== undefined && field.value !== "") {
       setInputValue(formatNumericStringForDisplay(String(field.value), locale, formatOptions));
     }
-    setPrevFormat({ locale, formatOptions });
+    setPrevFormatKey(formatKey);
   }
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,16 +95,13 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
     }
   };
 
-  const allowedKeys = useMemo(() => {
-    const keys = new Set(BASE_ALLOWED_KEYS);
-    if (allowNegativeNumbers) keys.add("-");
-    if (currencyCode) keys.add("$");
-    if (currencyCode || (stepCount && stepCount > 0)) {
-      keys.add(".");
-      keys.add(",");
-    }
-    return keys;
-  }, [allowNegativeNumbers, currencyCode, stepCount]);
+  const allowedKeys = new Set(BASE_ALLOWED_KEYS);
+  if (allowNegativeNumbers) allowedKeys.add("-");
+  if (currencyCode) allowedKeys.add("$");
+  if (currencyCode || (stepCount && stepCount > 0)) {
+    allowedKeys.add(".");
+    allowedKeys.add(",");
+  }
 
   const handleOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const isDigit = /^\d$/.test(event.key);
@@ -136,9 +130,7 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
       return;
     }
 
-    const rawNumber = isIntegerInput(rawValue)
-      ? String(BigInt(rawValue))
-      : String(Number(rawValue));
+    const rawNumber = isIntegerInput(rawValue) ? String(BigInt(rawValue)) : rawValue;
 
     // Store the clean number in Formik (for DB)
     helpers.setValue(rawNumber);

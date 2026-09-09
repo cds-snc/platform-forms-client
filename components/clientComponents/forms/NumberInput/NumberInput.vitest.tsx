@@ -372,6 +372,17 @@ describe("NumberInput Component", () => {
       expect(input.value).toBe("1236545454545454545454545454");
     });
 
+    it("preserves long decimals on blur without losing precision", async () => {
+      const user = userEvent.setup();
+      renderNumberInput({ stepCount: 2 });
+      const input = screen.getByTestId("numberInput") as HTMLInputElement;
+
+      await user.type(input, "525254542254224552445244.25");
+      await user.tab();
+
+      expect(input.value).toBe("525254542254224552445244.25");
+    });
+
     it("clears display on blur with invalid number", async () => {
       const user = userEvent.setup();
       renderNumberInput({ stepCount: 2 });

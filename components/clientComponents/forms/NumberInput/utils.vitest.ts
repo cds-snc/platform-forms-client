@@ -67,7 +67,6 @@ describe("NumberInput Utils", () => {
       });
       expect(options.style).toBe("currency");
       expect(options.currency).toBe("CAD");
-      // When currencyCode is set, stepCount is ignored
       expect(options.minimumFractionDigits).toBeUndefined();
     });
   });
@@ -77,7 +76,7 @@ describe("NumberInput Utils", () => {
       const result = formatNumberForDisplay(1234.56, "en", {
         stepCount: 0,
       });
-      expect(result).toBe("1235"); // Rounded to 0 decimals, no grouping
+      expect(result).toBe("1235");
     });
 
     it("formats number with en-CA locale with decimals and no grouping", () => {
@@ -102,7 +101,7 @@ describe("NumberInput Utils", () => {
         stepCount: 2,
         useThousandsSeparator: true,
       });
-      expect(result).toContain("1"); // Contains the number
+      expect(result).toContain("1");
     });
 
     it("formats currency", () => {
@@ -189,7 +188,7 @@ describe("NumberInput Utils", () => {
       ).toBe("-1,236,545,454,545,454,545,454,545,454");
     });
 
-    it("formats decimals with Number formatting", () => {
+    it("formats decimals with configured fraction digits", () => {
       expect(
         formatNumericStringForDisplay("1234.5", "en-CA", {
           minimumFractionDigits: 2,
@@ -199,12 +198,22 @@ describe("NumberInput Utils", () => {
       ).toBe("1,234.50");
     });
 
-    it("returns non-numeric values unchanged", () => {
+    it("formats long decimal strings without losing precision", () => {
       expect(
-        formatNumericStringForDisplay("abc", "en-CA", {
-          useGrouping: true,
+        formatNumericStringForDisplay("525254542254224552445244.25", "en-CA", {
+          useGrouping: false,
         })
-      ).toBe("abc");
+      ).toBe("525254542254224552445244.25");
+    });
+
+    it("groups long decimal strings without losing precision", () => {
+      expect(
+        formatNumericStringForDisplay("525254542254224552445244.25", "en-CA", { useGrouping: true })
+      ).toBe("525,254,542,254,224,552,445,244.25");
+    });
+
+    it("returns non-numeric values unchanged", () => {
+      expect(formatNumericStringForDisplay("abc", "en-CA", { useGrouping: true })).toBe("abc");
     });
 
     it("normalizes formatted input before display", () => {
@@ -256,8 +265,7 @@ describe("NumberInput Utils", () => {
       });
 
       it("removes thousands separator (narrow no-break space in fr-CA)", () => {
-        // French uses narrow no-break space for thousands separator
-        const frenchFormatted = "1 234"; // Space separator (could be narrow no-break space)
+        const frenchFormatted = "1 234";
         const result = normalizeLocaleInput(frenchFormatted, "fr-CA");
         expect(result).toBe("1234");
       });
@@ -301,7 +309,6 @@ describe("NumberInput Utils", () => {
       it("removes multiple decimals, keeping first", () => {
         const result = normalizeLocaleInput("12.34.56", "en-CA");
         expect(result).toContain(".");
-        // Note: This will have the decimal replaced, exact behavior depends on implementation
       });
 
       it("handles very large numbers", () => {
