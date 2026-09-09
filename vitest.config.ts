@@ -103,6 +103,7 @@ export default defineConfig({
                   "__vitests__/**/*.test.ts",
                   "lib/vitests/**/*.test.ts",
                   "**/*.test.+(ts|tsx|js|jsx)",
+                  "**/*.vitest.+(ts|tsx|js|jsx)",
                 ],
                 exclude: [...sharedExclude, "**/*.browser.test.+(ts|tsx|js|jsx)"],
                 setupFiles: ["./__utils__/vitest.setup.ts", "./__utils__/prismaConnector.ts"],
