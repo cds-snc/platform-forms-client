@@ -242,6 +242,25 @@ describe("formContext filterShownElements()", () => {
     expect(result).toEqual(expectedOutput);
   });
 
+  it("treats an empty groups object like a form without groups", () => {
+    const form = {
+      form: {
+        elements: withoutConditionalRules.elements as FormElement[],
+        titleEn: "",
+        titleFr: "",
+        layout: [],
+        groups: {},
+      },
+      id: "",
+      isPublished: false,
+      securityAttribute: "Unclassified" as const,
+    };
+
+    expect(filterShownElements(form, withoutConditionalRules.values, "start")).toEqual(
+      withoutConditionalRules.elements
+    );
+  });
+
   it("Handles bad input", () => {
     const expectedOutput: FormElement[] = [];
     // @ts-expect-error - testing invalid input

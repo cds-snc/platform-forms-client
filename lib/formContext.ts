@@ -10,6 +10,7 @@ import {
 
 import { ensureChoiceId, checkVisibilityRecursive } from "@gcforms/core";
 import { inGroup } from "@gcforms/core";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 /**
  * Checks if two arrays match.
@@ -313,10 +314,12 @@ export const filterShownElements = (
     return elements;
   }
 
+  const groups = formRecord.form.groups;
+
   return elements.filter((element) => {
-    if (currentGroup && formRecord.form.groups) {
+    if (currentGroup && groups && formHasGroups(formRecord.form)) {
       return (
-        inGroup(currentGroup, element.id, formRecord.form.groups) &&
+        inGroup(currentGroup, element.id, groups) &&
         checkVisibilityRecursive(formRecord, element, values)
       );
     }
