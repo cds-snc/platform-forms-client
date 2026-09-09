@@ -17,6 +17,24 @@ export const getNumberFormatOptions = (config: NumberFormatConfig): Intl.NumberF
         useGrouping: config.useThousandsSeparator ?? false,
       };
 
+export const isNumericInput = (value: string) => value !== "" && !Number.isNaN(Number(value));
+
+export const isIntegerInput = (value: string) => /^-?\d+$/.test(value);
+
+export const formatNumericStringForDisplay = (
+  value: string,
+  locale: string,
+  options: Intl.NumberFormatOptions
+): string => {
+  const normalized = normalizeLocaleInput(value, locale);
+
+  if (!isNumericInput(normalized)) return value;
+
+  const numericValue = isIntegerInput(normalized) ? BigInt(normalized) : Number(normalized);
+
+  return new Intl.NumberFormat(locale, options).format(numericValue);
+};
+
 /**
  * Format a numeric value into a locale-aware display string.
  *
@@ -26,11 +44,11 @@ export const getNumberFormatOptions = (config: NumberFormatConfig): Intl.NumberF
  * @returns The formatted string, or "" if the value is NaN
  */
 export const formatNumberForDisplay = (
-  value: number,
+  value: number | bigint,
   lang: Language,
   config: NumberFormatConfig
 ): string => {
-  if (Number.isNaN(value)) return "";
+  if (typeof value === "number" && Number.isNaN(value)) return "";
   const locale = langToLocale(lang);
   const options = getNumberFormatOptions(config);
   return new Intl.NumberFormat(locale, options).format(value);

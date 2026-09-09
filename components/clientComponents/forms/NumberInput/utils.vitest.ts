@@ -3,6 +3,9 @@ import {
   getNumberFormatOptions,
   formatNumberForDisplay,
   normalizeLocaleInput,
+  isNumericInput,
+  isIntegerInput,
+  formatNumericStringForDisplay,
 } from "./utils";
 
 describe("NumberInput Utils", () => {
@@ -125,6 +128,91 @@ describe("NumberInput Utils", () => {
         stepCount: 2,
       });
       expect(result).toContain("-");
+    });
+
+    it("formats BigInt values without losing precision", () => {
+      const result = formatNumberForDisplay(1236545454545454545454545454n, "en", {
+        useThousandsSeparator: true,
+      });
+
+      expect(result).toBe("1,236,545,454,545,454,545,454,545,454");
+    });
+  });
+
+  describe("isNumericInput", () => {
+    it("returns true for numeric strings", () => {
+      expect(isNumericInput("1236545454545454545454545454")).toBe(true);
+      expect(isNumericInput("-123.45")).toBe(true);
+    });
+
+    it("returns false for invalid numeric strings", () => {
+      expect(isNumericInput("")).toBe(false);
+      expect(isNumericInput("123abc")).toBe(false);
+      expect(isNumericInput("12.34.56")).toBe(false);
+    });
+  });
+
+  describe("isIntegerInput", () => {
+    it("returns true for integer strings", () => {
+      expect(isIntegerInput("1236545454545454545454545454")).toBe(true);
+      expect(isIntegerInput("-1236545454545454545454545454")).toBe(true);
+    });
+
+    it("returns false for decimals and invalid strings", () => {
+      expect(isIntegerInput("123.45")).toBe(false);
+      expect(isIntegerInput("123abc")).toBe(false);
+    });
+  });
+
+  describe("formatNumericStringForDisplay", () => {
+    it("formats long integer strings without losing precision", () => {
+      expect(
+        formatNumericStringForDisplay("1236545454545454545454545454", "en-CA", {
+          useGrouping: false,
+        })
+      ).toBe("1236545454545454545454545454");
+    });
+
+    it("groups long integer strings without converting them to Number", () => {
+      expect(
+        formatNumericStringForDisplay("1236545454545454545454545454", "en-CA", {
+          useGrouping: true,
+        })
+      ).toBe("1,236,545,454,545,454,545,454,545,454");
+    });
+
+    it("preserves the sign when grouping negative long integers", () => {
+      expect(
+        formatNumericStringForDisplay("-1236545454545454545454545454", "en-CA", {
+          useGrouping: true,
+        })
+      ).toBe("-1,236,545,454,545,454,545,454,545,454");
+    });
+
+    it("formats decimals with Number formatting", () => {
+      expect(
+        formatNumericStringForDisplay("1234.5", "en-CA", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+          useGrouping: true,
+        })
+      ).toBe("1,234.50");
+    });
+
+    it("returns non-numeric values unchanged", () => {
+      expect(
+        formatNumericStringForDisplay("abc", "en-CA", {
+          useGrouping: true,
+        })
+      ).toBe("abc");
+    });
+
+    it("normalizes formatted input before display", () => {
+      expect(
+        formatNumericStringForDisplay("1,236,545,454,545,454,545,454,545,454", "en-CA", {
+          useGrouping: false,
+        })
+      ).toBe("1236545454545454545454545454");
     });
   });
 
