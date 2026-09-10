@@ -22,7 +22,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   const { locale } = params;
 
-  const { t } = await serverTranslation(["admin-home", "common"]);
+  const { t } = await serverTranslation(["admin-home", "common"], { lang: locale });
 
   return (
     <>
@@ -73,6 +73,9 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
             </li>
             <li>
               <Link href={`/${locale}/admin/lexical`}>{t("lexical")}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/admin/branding`}>{t("brandingPreview")}</Link>
             </li>
           </ul>
         </div>
