@@ -20,7 +20,7 @@ import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitPro
 import { hasFiles } from "@lib/fileExtractor";
 
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
+import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 import { FormBody } from "./FormBody";
 import { FormStatusAlerts } from "./FormStatusAlerts";
 import { getFormStatusError } from "./getFormStatusError";
