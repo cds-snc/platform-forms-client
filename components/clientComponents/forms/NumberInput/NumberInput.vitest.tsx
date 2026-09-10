@@ -361,6 +361,17 @@ describe("NumberInput Component", () => {
       expect(input.value).toBe("999999999");
     });
 
+    it("preserves large integer precision on blur", async () => {
+      const user = userEvent.setup();
+      renderNumberInput({ useThousandsSeparator: true });
+      const input = screen.getByTestId("numberInput") as HTMLInputElement;
+
+      await user.type(input, "22222222222222222");
+      await user.tab();
+
+      expect(input.value).toBe("22,222,222,222,222,222");
+    });
+
     it("clears display on blur with invalid number", async () => {
       const user = userEvent.setup();
       renderNumberInput({ stepCount: 2 });

@@ -54,29 +54,38 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
     [stepCount, currencyCode, useThousandsSeparator]
   );
 
-  // Format a raw number into a locale-aware display string
+  // Format a numeric value into a locale-aware display string
   const formatForDisplay = useCallback(
-    (value: number) => {
-      if (Number.isNaN(value)) return "";
+    (value: number | bigint) => {
+      if (typeof value === "number" && Number.isNaN(value)) return "";
       return new Intl.NumberFormat(locale, formatOptions).format(value);
     },
     [locale, formatOptions]
   );
 
+  const formatRawValue = useCallback(
+    (value: string) => {
+      if (value === "") return "";
+
+      const numericValue = /^-?\d+$/.test(value) ? BigInt(value) : Number(value);
+      return Number.isNaN(numericValue) ? value : formatForDisplay(numericValue);
+    },
+    [formatForDisplay]
+  );
+
   // The display value shown in the input (locale-formatted).
   // Formik holds the raw numeric string (e.g. "123.45") for DB storage.
   const [inputValue, setInputValue] = useState(() => {
-    const num = Number(field.value);
-    return field.value && !Number.isNaN(num) ? formatForDisplay(num) : (field.value ?? "");
+    const value = field.value == null ? "" : String(field.value);
+    return formatRawValue(value);
   });
 
   // When locale or format options change, reformat the display from the stable Formik number.
   // formatOptions identity is stable across renders thanks to useMemo above.
   const [prevFormat, setPrevFormat] = useState({ locale, formatOptions });
   if (prevFormat.locale !== locale || prevFormat.formatOptions !== formatOptions) {
-    const num = Number(field.value);
-    if (field.value !== undefined && field.value !== "" && !Number.isNaN(num)) {
-      setInputValue(formatForDisplay(num));
+    if (field.value != null && field.value !== "") {
+      setInputValue(formatRawValue(String(field.value)));
     }
     setPrevFormat({ locale, formatOptions });
   }
@@ -95,9 +104,8 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
       return;
     }
 
-    const value = Number(normalized);
-    if (!Number.isNaN(value)) {
-      helpers.setValue(String(value));
+    if (!Number.isNaN(Number(normalized))) {
+      helpers.setValue(normalized);
     }
   };
 
@@ -133,16 +141,16 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
   const handleOnBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     field.onBlur(event);
 
-    const num = Number(field.value);
-    if (field.value === "" || Number.isNaN(num)) {
+    const value = field.value == null ? "" : String(field.value);
+    const normalized = normalizeLocaleInput(value, locale);
+    if (normalized === "" || Number.isNaN(Number(normalized))) {
       setInputValue(field.value ?? "");
       return;
     }
 
-    // Store the clean number in Formik (for DB)
-    helpers.setValue(String(num));
+    helpers.setValue(normalized);
     // Show the formatted version in the input
-    setInputValue(formatForDisplay(num));
+    setInputValue(formatRawValue(normalized));
   };
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
