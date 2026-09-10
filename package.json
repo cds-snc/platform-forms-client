@@ -20,7 +20,6 @@
   "type": "module",
   "scripts": {
     "accounts:seed:local": "tsx scripts/generate-local-accounts.ts",
-    "branding:snapshot": "tsx scripts/branding-snapshot.ts",
     "build": "yarn workspaces foreach --all --parallel --verbose run build && DATABASE_URL=dummy_placeholder_url_for_build next build",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",
     "dev": "yarn workspace @gcforms/core build:styles && yarn db:generate && yarn db:dev && next dev",
