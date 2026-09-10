@@ -34,6 +34,12 @@
   },
   "lang-toggle": "Language selection",
   "submitButton": "Submit",
+  "speechInput": {
+    "start": "Speak response",
+    "stop": "Stop recording",
+    "processing": "Transcribing...",
+    "error": "Speech input could not be processed. Try again or enter your response manually."
+  },
   "input-validation": {
     "heading": "Please correct the errors on the page",
     "required": "Complete the required field to continue.",

@@ -34,6 +34,12 @@
   },
   "lang-toggle": "Sélection de la langue",
   "submitButton": "Soumettre",
+  "speechInput": {
+    "start": "Dicter la réponse",
+    "stop": "Arrêter l'enregistrement",
+    "processing": "Transcription en cours...",
+    "error": "La réponse vocale n'a pas pu être traitée. Réessayez ou saisissez votre réponse manuellement."
+  },
   "input-validation": {
     "heading": "Veuillez corriger les erreurs sur la page",
     "required": "Compléter le champ obligatoire afin de continuer",
