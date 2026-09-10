@@ -15,7 +15,7 @@ export const applyIdentityClaimsToToken = (token: JWT, claims?: IdentityClaims |
 
   if (claims.iss) {
     token.issuer = claims.iss;
-    token.accountUrl = new URL("/ui/v2/account", claims.iss).toString();
+    token.accountUrl = new URL("/account", claims.iss).toString();
   }
 
   if (
