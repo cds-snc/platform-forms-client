@@ -4,7 +4,7 @@ export type CaptchaLogger = {
 };
 
 export type HCaptchaVerificationResult =
-  | { verified: true; score?: number }
+  | { verified: true; score: number }
   | {
       verified: false;
       reason:
@@ -23,7 +23,7 @@ export type VerifyHCaptchaTokenOptions = {
   siteKey?: string;
   remoteIp?: string;
   logger?: CaptchaLogger;
-  maxAllowedScore?: number;
+  maxAllowedScore: number;
   maxAttempts?: number;
   fetchImpl?: typeof fetch;
 };
@@ -102,11 +102,6 @@ export const verifyHCaptchaToken = async (
     return { verified: false, reason: "invalid-response" };
   }
 
-  // A score is optional when no score limit is configured
-  if (maxAllowedScore === undefined) {
-    return { verified: true, score };
-  }
-
   if (typeof score !== "number") {
     logger?.info?.("hCaptcha: verification response was missing a score");
     return { verified: false, reason: "score-missing" };
@@ -117,6 +112,7 @@ export const verifyHCaptchaToken = async (
     return { verified: false, reason: "score-too-high" };
   }
 
+  logger?.info?.(`hCaptcha: verification succeeded with score ${score}`);
   return { verified: true, score };
 };
 

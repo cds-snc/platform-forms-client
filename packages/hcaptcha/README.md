@@ -54,9 +54,8 @@ control over the form or submission lifecycle.
 ## Server verification
 
 `verifyHCaptchaToken` rejects missing credentials, invalid provider responses, and scores above
-`maxAllowedScore`. When `maxAllowedScore` is configured, a successful response without a score is
-also rejected. Scores are an hCaptcha Enterprise-only response field, so configure a score limit
-only with an Enterprise sitekey; leave the option unset for standard sitekeys.
+`maxAllowedScore`. The `maxAllowedScore` option is required because this package uses hCaptcha
+Enterprise, and successful responses without a score are rejected.
 
 Pass the public `siteKey` to bind verification to the expected hCaptcha sitekey.
 The browser needs this key to issue a token, but the server can verify a token with just the token
