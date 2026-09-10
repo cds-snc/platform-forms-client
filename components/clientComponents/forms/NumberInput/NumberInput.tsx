@@ -68,7 +68,9 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
       if (value === "") return "";
 
       const numericValue = /^-?\d+$/.test(value) ? BigInt(value) : Number(value);
-      return Number.isNaN(numericValue) ? value : formatForDisplay(numericValue);
+      return typeof numericValue === "number" && Number.isNaN(numericValue)
+        ? value
+        : formatForDisplay(numericValue);
     },
     [formatForDisplay]
   );
