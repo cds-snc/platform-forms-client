@@ -18,6 +18,8 @@ export type HCaptchaVerificationResult =
 
 export type VerifyHCaptchaTokenOptions = {
   secret: string | undefined;
+  // The public site key identifies this widget and lets hCaptcha check that the token
+  // belongs to the expected site; it is separate from the server-only secret above.
   siteKey?: string;
   remoteIp?: string;
   logger?: CaptchaLogger;

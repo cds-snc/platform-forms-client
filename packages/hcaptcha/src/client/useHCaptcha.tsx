@@ -4,8 +4,6 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import type { ReactNode } from "react";
 import { useCallback, useRef, useState } from "react";
 
-export type HCaptchaFailureMode = "allow" | "block";
-
 export type HCaptchaLogger = {
   info(message: string): void;
   warn(message: string): void;
@@ -13,8 +11,6 @@ export type HCaptchaLogger = {
 };
 
 export type UseHCaptchaOptions = {
-  // Controls whether a failed or unavailable CAPTCHA allows the submission to continue
-  failureMode?: HCaptchaFailureMode;
   language?: string;
   logger?: HCaptchaLogger;
   // Fires for every error reported by hCaptcha
@@ -35,11 +31,7 @@ export type HCaptchaFailureReason =
   | "execution-error";
 
 export type HCaptchaExecutionResult =
-  | { verified: true; token: string }
-  // `allowed` reflects the consumer's failureMode choice: with "allow", the caller may continue
-  // without a token after a provider failure. Use it for low-risk, best-effort CAPTCHA; protected
-  // actions should use "block" and enforce verification on the server.
-  | { verified: false; allowed: boolean; reason: HCaptchaFailureReason };
+  { verified: true; token: string } | { verified: false; reason: HCaptchaFailureReason };
 
 export type UseHCaptchaResult = {
   // The hCaptcha component to render alongside the form. It has no visible UI during normal use,
@@ -55,7 +47,6 @@ const SUSPICIOUS_ERROR_CODES = new Set(["invalid-data", "invalid-input-response"
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
 export const useHCaptcha = ({
-  failureMode = "block",
   language,
   logger,
   onError: onErrorCallback,
@@ -98,10 +89,9 @@ export const useHCaptcha = ({
   const failureResult = useCallback(
     (reason: HCaptchaFailureReason): HCaptchaExecutionResult => ({
       verified: false,
-      allowed: reason !== "cancelled" && failureMode === "allow",
       reason,
     }),
-    [failureMode]
+    []
   );
 
   const reset = useCallback(() => {

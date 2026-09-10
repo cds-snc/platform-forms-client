@@ -37,7 +37,6 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
     const captchaExecutionId = useRef(0);
 
     const {
-      failureMode,
       language,
       logger,
       onCaptchaVerified,
@@ -48,7 +47,6 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
     } = props;
 
     const { captcha, execute, reset } = useHCaptcha({
-      failureMode,
       language,
       logger,
       onCaptchaVerified,
@@ -113,9 +111,6 @@ export const HCaptchaForm = forwardRef<HCaptchaFormHandle, HCaptchaFormProps>(
 
             if (!result.verified) {
               onCaptchaFailure?.(result.reason);
-              // Report the failure either way. If the failureMode setting allows continuation, no
-              // token exists, so submit without one; otherwise, stop here.
-              if (result.allowed) return onSubmit(event);
               return;
             }
 

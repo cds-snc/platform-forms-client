@@ -25,7 +25,7 @@ also recreates the widget, allowing consumers to retry after a provider load fai
 `execute()` resolves with a result rather than throwing for normal provider failures:
 
 ```tsx
-const { captcha, execute, reset } = useHCaptcha({ siteKey, failureMode: "block" });
+const { captcha, execute, reset } = useHCaptcha({ siteKey });
 
 const result = await execute();
 if (result.verified) {
@@ -35,8 +35,6 @@ if (result.verified) {
 // Render `captcha` with the form and call `reset()` when abandoning the submission.
 ```
 
-`failureMode` defaults to `"block"`. Set it to `"allow"` only when the consumer intentionally
-wants provider failures to permit the surrounding action to continue.
 hCaptcha retries temporary network failures internally when using async execution. Provider
 rejections are classified using the provider error code and reported through `onError`; execution
 waits for the widget to be ready before starting.
@@ -49,10 +47,9 @@ the surrounding UI without implementing hCaptcha error classification itself.
 
 `HCaptchaForm` combines the hook with a native `<form>`. It prevents duplicate submissions,
 passes the verified token to `onSubmit`, and exposes `getToken()` and `reset()` through its ref.
-When `failureMode` is `"allow"`, it invokes `onSubmit` without a token if hCaptcha fails.
 Consumers provide `onUnexpectedError` to handle errors from their submit callback. The wrapper
-uses the same `failureMode` option as the hook and defaults to `"block"`. Use the hook directly
-when the consumer needs more control over the form or submission lifecycle.
+blocks submission when hCaptcha fails. Use the hook directly when the consumer needs more
+control over the form or submission lifecycle.
 
 ## Server verification
 

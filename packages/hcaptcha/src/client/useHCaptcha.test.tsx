@@ -71,7 +71,6 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
 }));
 
 const HookHarness = ({
-  failureMode,
   onCaptchaExpired,
   onCaptchaVerified,
   onSuspiciousError,
@@ -79,7 +78,6 @@ const HookHarness = ({
   logger,
   onResult,
 }: {
-  failureMode?: "allow" | "block";
   onCaptchaExpired?: () => void;
   onCaptchaVerified?: () => void;
   onSuspiciousError?: (code: string) => void;
@@ -89,7 +87,6 @@ const HookHarness = ({
 }) => {
   const { captcha, execute, reset } = useHCaptcha({
     siteKey: "site-key",
-    failureMode,
     onCaptchaExpired,
     onCaptchaVerified,
     onSuspiciousError,
@@ -152,7 +149,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "execution-error",
       })
     );
@@ -169,7 +165,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "cancelled",
       })
     );
@@ -192,7 +187,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "captcha-error",
       })
     );
@@ -224,7 +218,7 @@ describe("useHCaptcha", () => {
     await act(async () => {
       resolveFirst({ response: "stale-token", key: "stale-key" });
     });
-    expect(onResult).toHaveBeenCalledWith({ verified: false, allowed: false, reason: "cancelled" });
+    expect(onResult).toHaveBeenCalledWith({ verified: false, reason: "cancelled" });
     expect(onResult).toHaveBeenCalledTimes(1);
 
     await act(async () => {
@@ -240,7 +234,7 @@ describe("useHCaptcha", () => {
     const onCaptchaExpired = vi.fn();
     mockCaptcha.execute.mockRejectedValueOnce("challenge-expired");
     const { getByRole } = render(
-      <HookHarness failureMode="allow" onCaptchaExpired={onCaptchaExpired} onResult={onResult} />
+      <HookHarness onCaptchaExpired={onCaptchaExpired} onResult={onResult} />
     );
 
     fireEvent.click(getByRole("button", { name: "Execute" }));
@@ -248,7 +242,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: true,
         reason: "expired",
       })
     );
@@ -320,7 +313,7 @@ describe("useHCaptcha", () => {
   it("blocks provider failures in block mode", async () => {
     const onResult = vi.fn();
     const { getByRole, getByTestId } = render(
-      <HookHarness failureMode="block" onResult={onResult} />
+      <HookHarness onResult={onResult} />
     );
 
     fireEvent.click(getByRole("button", { name: "Execute" }));
@@ -329,7 +322,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "captcha-error",
       })
     );
@@ -348,7 +340,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "execution-error",
       })
     );
@@ -364,7 +355,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "load-error",
       })
     );
@@ -373,7 +363,6 @@ describe("useHCaptcha", () => {
     await waitFor(() => expect(onResult).toHaveBeenCalledTimes(2));
     expect(onResult).toHaveBeenLastCalledWith({
       verified: false,
-      allowed: false,
       reason: "load-error",
     });
   });
@@ -388,7 +377,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "configuration-error",
       })
     );
@@ -419,7 +407,7 @@ describe("useHCaptcha", () => {
     const onResult = vi.fn();
     const onCaptchaExpired = vi.fn();
     const { getByRole, getByTestId } = render(
-      <HookHarness failureMode="allow" onCaptchaExpired={onCaptchaExpired} onResult={onResult} />
+      <HookHarness onCaptchaExpired={onCaptchaExpired} onResult={onResult} />
     );
 
     fireEvent.click(getByRole("button", { name: "Execute" }));
@@ -428,7 +416,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: true,
         reason: "expired",
       })
     );
@@ -454,7 +441,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "cancelled",
       })
     );
@@ -471,7 +457,6 @@ describe("useHCaptcha", () => {
     await waitFor(() =>
       expect(onResult).toHaveBeenCalledWith({
         verified: false,
-        allowed: false,
         reason: "cancelled",
       })
     );
