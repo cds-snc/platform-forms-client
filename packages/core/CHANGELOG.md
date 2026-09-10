@@ -2,7 +2,7 @@
 
 ## [3.0.1] - 2026-09-10
 
-- Update Vitest to v5 for compatibility with the workspace test tooling
+- Update Vitest to v5 for compatibility with the primary repo
 
 ## [3.0.0] - 2026-09-03
 
