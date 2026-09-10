@@ -7,6 +7,7 @@ describe("verifyHCaptchaToken", () => {
 
     const result = await verifyHCaptchaToken(undefined, {
       secret: "secret",
+      maxAllowedScore: 0.79,
       fetchImpl,
     });
 
@@ -19,6 +20,7 @@ describe("verifyHCaptchaToken", () => {
 
     const result = await verifyHCaptchaToken("token", {
       secret: undefined,
+      maxAllowedScore: 0.79,
       fetchImpl,
     });
 
@@ -33,29 +35,37 @@ describe("verifyHCaptchaToken", () => {
         new Response(JSON.stringify({ success: true, score: 0.2 }), { status: 200 })
       );
 
+    const logger = { info: vi.fn() };
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
       siteKey: "site-key",
       remoteIp: "127.0.0.1",
+      maxAllowedScore: 0.79,
+      logger,
       fetchImpl,
     });
 
     expect(result).toEqual({ verified: true, score: 0.2 });
+    expect(logger.info).toHaveBeenCalledWith("hCaptcha: verification succeeded with score 0.2");
     expect(fetchImpl).toHaveBeenCalledOnce();
     expect(String(fetchImpl.mock.calls[0][1]?.body)).toContain("sitekey=site-key");
     expect(String(fetchImpl.mock.calls[0][1]?.body)).toContain("remoteip=127.0.0.1");
   });
 
-  it("accepts a successful response without applying a score policy", async () => {
+  it("accepts a successful response within the score policy", async () => {
     const fetchImpl = vi
       .fn()
       .mockResolvedValue(
-        new Response(JSON.stringify({ success: true, score: 0.8 }), { status: 200 })
+        new Response(JSON.stringify({ success: true, score: 0.2 }), { status: 200 })
       );
 
-    const result = await verifyHCaptchaToken("token", { secret: "secret", fetchImpl });
+    const result = await verifyHCaptchaToken("token", {
+      secret: "secret",
+      maxAllowedScore: 0.79,
+      fetchImpl,
+    });
 
-    expect(result).toEqual({ verified: true, score: 0.8 });
+    expect(result).toEqual({ verified: true, score: 0.2 });
   });
 
   it("rejects a suspicious score", async () => {
@@ -105,6 +115,7 @@ describe("verifyHCaptchaToken", () => {
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
+      maxAllowedScore: 0.79,
       fetchImpl,
     });
 
@@ -115,7 +126,11 @@ describe("verifyHCaptchaToken", () => {
   it("rejects a malformed verification response", async () => {
     const fetchImpl = vi.fn().mockResolvedValue(new Response("not-json", { status: 200 }));
 
-    const result = await verifyHCaptchaToken("token", { secret: "secret", fetchImpl });
+    const result = await verifyHCaptchaToken("token", {
+      secret: "secret",
+      maxAllowedScore: 0.79,
+      fetchImpl,
+    });
 
     expect(result).toEqual({ verified: false, reason: "invalid-response" });
   });
@@ -124,7 +139,11 @@ describe("verifyHCaptchaToken", () => {
     // A syntactically valid JSON response can still have an invalid payload shape
     const fetchImpl = vi.fn().mockResolvedValue(new Response("null", { status: 200 }));
 
-    const result = await verifyHCaptchaToken("token", { secret: "secret", fetchImpl });
+    const result = await verifyHCaptchaToken("token", {
+      secret: "secret",
+      maxAllowedScore: 0.79,
+      fetchImpl,
+    });
 
     expect(result).toEqual({ verified: false, reason: "invalid-response" });
   });
@@ -134,6 +153,7 @@ describe("verifyHCaptchaToken", () => {
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
+      maxAllowedScore: 0.79,
       maxAttempts: 1,
       fetchImpl,
     });
@@ -143,19 +163,21 @@ describe("verifyHCaptchaToken", () => {
   });
 
   it("retries a server error", async () => {
-    // A score is optional here because no score limit is configured
     const fetchImpl = vi
       .fn()
       .mockResolvedValueOnce(new Response("", { status: 500 }))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ success: true }), { status: 200 }));
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ success: true, score: 0.2 }), { status: 200 })
+      );
 
     const result = await verifyHCaptchaToken("token", {
       secret: "secret",
+      maxAllowedScore: 0.79,
       maxAttempts: 2,
       fetchImpl,
     });
 
-    expect(result).toEqual({ verified: true, score: undefined });
+    expect(result).toEqual({ verified: true, score: 0.2 });
     expect(fetchImpl).toHaveBeenCalledTimes(2);
   });
 });

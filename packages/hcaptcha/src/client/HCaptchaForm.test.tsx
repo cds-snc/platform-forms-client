@@ -167,7 +167,6 @@ describe("HCaptchaForm", () => {
     const onUnexpectedError = vi.fn();
     executeCaptcha.mockResolvedValueOnce({
       verified: false,
-      allowed: false,
       reason: "captcha-error",
     });
 
