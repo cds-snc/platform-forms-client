@@ -171,9 +171,9 @@
     "@types/react-transition-group": "^4",
     "@types/unorm": "^1",
     "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/browser": "^4.1.9",
-    "@vitest/browser-playwright": "^4.1.9",
-    "@vitest/ui": "^4.1.9",
+    "@vitest/browser": "^5.0.0",
+    "@vitest/browser-playwright": "^5.0.0",
+    "@vitest/ui": "^5.0.0",
     "aws-sdk-client-mock": "^3.0.0",
     "axe-core": "^4.10.3",
     "baseline-browser-mapping": "^2.10.12",
@@ -198,9 +198,10 @@
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.0",
-    "vitest": "^4.1.9",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.0",
     "vitest-browser-react": "^2.2.0",
-    "vitest-mock-extended": "^4.0.0"
+    "vitest-mock-extended": "^5.1.1"
   },
   "browserslist": [
     ">0.2%",

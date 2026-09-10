@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.2] - 2026-09-16
+
+- Update Vitest to v5 for compatibility with the workspace test tooling
+
 ## [3.0.1] - 2026-09-15
 
 - Add a focus indicator to the Toast close button on focus
