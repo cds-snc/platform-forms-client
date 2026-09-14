@@ -5,6 +5,7 @@ import { serverTranslation } from "@i18n";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
+import { formatNumberInputAnswer } from "@lib/responseDownloadFormats/utils/formatNumberInputAnswer";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -87,6 +88,11 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
 
       if (element.type === FormElementTypes.starRating) {
         return getScoreFromStarRatingObject(answer.answer);
+      }
+
+      if (element.type === FormElementTypes.numberInput) {
+        answerText =
+          formatNumberInputAnswer(answer, "en", formResponseSubmissions.formRecord) ?? answerText;
       }
 
       if (

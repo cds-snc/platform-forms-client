@@ -2,14 +2,17 @@ import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 import { getFormattedDateResponse } from "@clientComponents/forms/FormattedDate/utils";
 import { getAddressCompleteResponse } from "@clientComponents/forms/AddressComplete/utils";
 import { getStarRatingResponse } from "@clientComponents/forms/StarRating/utils";
+import { getNumberInputResponse } from "@clientComponents/forms/NumberInput/utils";
 
 import { FormElement, FormElementTypes } from "@gcforms/types";
+import { Language } from "@lib/types/form-builder-types";
 import { ResponseFilenameMapping } from "@formBuilder/[id]/responses-pilot/lib/processResponse";
 
 export const getAnswerAsString = (
   question: FormElement | undefined,
   answer: unknown,
-  attachments?: ResponseFilenameMapping
+  attachments?: ResponseFilenameMapping,
+  lang?: Language
 ): string => {
   if (question && question.type === FormElementTypes.checkbox) {
     return Array(answer).join(", ");
@@ -52,6 +55,10 @@ export const getAnswerAsString = (
 
   if (question && question.type === FormElementTypes.starRating) {
     return getStarRatingResponse(answer);
+  }
+
+  if (question && question.type === FormElementTypes.numberInput && lang) {
+    return getNumberInputResponse(answer, question.properties, lang);
   }
 
   return answer as string;
