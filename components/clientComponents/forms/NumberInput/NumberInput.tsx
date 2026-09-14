@@ -69,6 +69,7 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
   // When locale or format options change, reformat the display from the stable Formik number.
   const [prevFormatKey, setPrevFormatKey] = useState(formatKey);
+
   if (prevFormatKey !== formatKey) {
     if (field.value !== undefined && field.value !== "") {
       setInputValue(formatNumericStringForDisplay(String(field.value), locale, formatOptions));
