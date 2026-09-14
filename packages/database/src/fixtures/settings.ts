@@ -96,6 +96,17 @@ const addressCompleteRateLimitWindowSeconds: Setting = {
   value: "60",
 };
 
+const hCaptchaEnabledSetting: Setting = {
+  internalId: "hCaptchaEnabledSetting",
+  nameEn: "hCaptcha Enabled Setting",
+  nameFr: "Paramètre d'activation de hCaptcha",
+  descriptionEn:
+    "Enable or disabled hCaptcha for the app. Set to `true` for ON and `false` for OFF.",
+  descriptionFr:
+    "Activez ou désactivez hCaptcha pour l'application. Réglez sur `true` pour activer et sur `false` pour désactiver.",
+  value: "true",
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -106,6 +117,7 @@ const allSettings = [
   editLockRedirectIdleMs,
   addressCompleteRetrieveRateLimitMax,
   addressCompleteRateLimitWindowSeconds,
+  hCaptchaEnabledSetting,
 ];
 
 export default {

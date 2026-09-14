@@ -117,9 +117,12 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
 
 export const Form: React.FC<FormProps> = (props) => {
   const { setCaptchaFail } = props;
+
+  const { hCaptchaEnabledSetting } = useGCFormsContext();
+
   // TODO: Follow up by using the selected version's publication status here, so a draft
   // preview of a published template can be distinguished from the published form.
-  const captchaEnabled = shouldCheckCaptcha(props.formRecord.isPublished);
+  const captchaEnabled = shouldCheckCaptcha(props.formRecord.isPublished, hCaptchaEnabledSetting);
 
   const { captcha, execute, reset } = useHCaptcha({
     language: props.language,

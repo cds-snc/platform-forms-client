@@ -10,6 +10,7 @@ import { serverTranslation } from "@i18n";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Suspense } from "react";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -71,6 +72,8 @@ export default async function Page(props0: {
     <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
   );
 
+  const hCaptchaEnabledSetting: boolean = await getAppSettingAsBoolean("hCaptchaEnabledSetting");
+
   return (
     <Suspense>
       {/* Add meta data to the page to not store in BFCache */}
@@ -84,7 +87,7 @@ export default async function Page(props0: {
         saveAndResume={saveAndResume}
         footer={footer}
       >
-        <GCFormsProvider formRecord={formRecord}>
+        <GCFormsProvider formRecord={formRecord} hCaptchaEnabledSetting={hCaptchaEnabledSetting}>
           <PageContent
             formRecord={formRecord}
             language={language}
