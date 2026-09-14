@@ -47,7 +47,7 @@ assignees: ''
 _Feel free to create accounts, explore docs and play around in the app_
 - [ ] [Staging](https://forms-staging.cdssandbox.xyz/ )
 - [ ] [Production](https://forms-formulaires.alpha.canada.ca/en/auth/login)
-- [ ] [SSO portal](https://auth.cdssandbox.xyz/ui/v2) 
+- [ ] [SSO portal](https://auth.cdssandbox.xyz) 
 - [ ] [Marketing site](https://articles.alpha.canada.ca/forms-formulaires/)
 - [ ] [API documentation](https://cds-snc.github.io/forms-api/)
 

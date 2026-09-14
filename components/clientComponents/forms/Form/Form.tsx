@@ -20,7 +20,7 @@ import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitPro
 import { hasFiles } from "@lib/fileExtractor";
 
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
+import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 import { FormBody } from "./FormBody";
 import { FormStatusAlerts } from "./FormStatusAlerts";
 import { getFormStatusError } from "./getFormStatusError";
@@ -117,7 +117,9 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
 
 export const Form: React.FC<FormProps> = (props) => {
   const { setCaptchaFail } = props;
-  const captchaEnabled = shouldCheckCaptcha(props.formRecord.isPublished, props.isPreview ?? false);
+  // TODO: Follow up by using the selected version's publication status here, so a draft
+  // preview of a published template can be distinguished from the published form.
+  const captchaEnabled = shouldCheckCaptcha(props.formRecord.isPublished);
 
   const { captcha, execute, reset } = useHCaptcha({
     language: props.language,

@@ -88,7 +88,7 @@ describe("submitForm", () => {
 
     // Default successful mocks
     (getPublicTemplateByID as Mock).mockResolvedValue(mockTemplate);
-    (verifyHCaptchaToken as Mock).mockResolvedValue({ verified: true });
+    (verifyHCaptchaToken as Mock).mockResolvedValue({ verified: true, score: 0.2 });
     (dateHasPast as Mock).mockReturnValue(false);
     (serverTranslation as Mock).mockResolvedValue({ t: vi.fn() });
     (validateVisibleElements as Mock).mockReturnValue({ errors: {} });
