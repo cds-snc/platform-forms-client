@@ -18,7 +18,7 @@ export const AddressComplete = () => {
           src="/img/address-complete.png"
           width="149"
           height="120"
-          alt={t("addElementDialog.addressComplete.title")}
+          alt={t("addElementDialog.addressComplete.logoAltText")}
           priority
           className="ml-1 inline-block"
         />

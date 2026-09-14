@@ -78,6 +78,7 @@
       "description1": "A pattern to enter an address.  Canada Post can find and verify Canadian mailing addresses with",
       "description2": "People can enter or change the address themselves, including if AddressComplete does not work.",
       "label": "Address",
+      "logoAltText": "Address Complete",
       "postal": "Postal or zip code",
       "province": "Province, territory, or state",
       "street": {
