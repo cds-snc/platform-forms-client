@@ -11,22 +11,20 @@ export const AddressComplete = () => {
 
   return (
     <div>
-      <div className="my-4">
+      <h3 className="mb-4">{t("addElementDialog.addressComplete.title")}</h3>
+      <p className="mb-4">
+        <Trans ns="form-builder" i18nKey="addElementDialog.addressComplete.description1" />
         <Image
           src="/img/address-complete.png"
-          width="179"
-          height="150"
+          width="149"
+          height="120"
           alt={t("addElementDialog.addressComplete.title")}
           priority
+          className="ml-1 inline-block"
         />
-      </div>
-      <h3 className="mb-4">{t("addElementDialog.addressComplete.title")}</h3>
+      </p>
       <p>
-        <Trans
-          ns="form-builder"
-          i18nKey="addElementDialog.addressComplete.description"
-          components={{ br: <br />, span: <span className="mb-4 inline-block"></span> }}
-        />
+        <Trans ns="form-builder" i18nKey="addElementDialog.addressComplete.description2" />
       </p>
 
       <ExampleWrapper>
