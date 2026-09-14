@@ -19,7 +19,7 @@ export const AddressComplete = () => {
           width="149"
           height="120"
           alt={t("addElementDialog.addressComplete.logoAltText")}
-          priority
+          preload
           className="ml-1 inline-block"
         />
       </p>
