@@ -86,6 +86,7 @@
         "label": "Adresse municipale"
       },
       "title": "Adresse validée",
+      "title": "Adresse Complète",
       "select": "Sélectionner les éléments de l'adresse à inclure.",
       "fields": "Format",
       "fieldsDesc": "Définissez la façon dont les adresses s’affichent dans les réponses.",

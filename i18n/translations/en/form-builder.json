@@ -85,7 +85,7 @@
         "description": "Start with unit number if you have one, then street number and street name.",
         "label": "Street address"
       },
-      "title": "Address",
+      "title": "Address Complete",
       "select": "Select which component parts of the address to include.",
       "fields": "Format",
       "fieldsDesc": "Decide how addresses appear in responses.",
