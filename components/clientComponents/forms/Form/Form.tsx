@@ -121,7 +121,7 @@ export const Form: React.FC<FormProps> = (props) => {
 
   const captchaRequired = shouldCheckCaptcha(props.formRecord.isPublished, hCaptchaEnabledSetting);
   const siteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
-  // Sitekey controls client mounting, not server enforcement. Make this distinction clear.
+  // Avoid a hCaptcha browser error by checking for the required siteKey as well
   const captchaEnabled = captchaRequired && Boolean(siteKey);
   const { captcha, execute, reset } = useHCaptcha({
     enabled: captchaRequired && Boolean(siteKey),
