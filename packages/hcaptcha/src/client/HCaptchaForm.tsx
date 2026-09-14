@@ -10,8 +10,9 @@ export interface HCaptchaFormHandle {
 }
 
 export type HCaptchaFormProps = Omit<FormHTMLAttributes<HTMLFormElement>, "onError" | "onSubmit"> &
-  Omit<UseHCaptchaOptions, "failureMode"> & {
+  UseHCaptchaOptions & {
     children: ReactNode;
+    // Disables CAPTCHA entirely; use for tests or deliberate feature flags, not as a security control.
     captchaEnabled?: boolean;
     onCaptchaFailure?: (reason: HCaptchaFailureReason) => void;
     onUnexpectedError: (error: unknown) => void;
