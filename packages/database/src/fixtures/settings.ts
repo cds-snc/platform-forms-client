@@ -104,7 +104,7 @@ const hCaptchaEnabledSetting: Setting = {
     "Enable or disabled hCaptcha for the app. Set to `true` for ON and `false` for OFF.",
   descriptionFr:
     "Activez ou désactivez hCaptcha pour l'application. Réglez sur `true` pour activer et sur `false` pour désactiver.",
-  value: "true",
+  value: "false",
 };
 
 const allSettings = [

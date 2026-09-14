@@ -117,18 +117,18 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
 
 export const Form: React.FC<FormProps> = (props) => {
   const { setCaptchaFail } = props;
-
   const { hCaptchaEnabledSetting } = useGCFormsContext();
 
-  // TODO: Follow up by using the selected version's publication status here, so a draft
-  // preview of a published template can be distinguished from the published form.
-  const captchaEnabled = shouldCheckCaptcha(props.formRecord.isPublished, hCaptchaEnabledSetting);
-
+  const captchaRequired = shouldCheckCaptcha(props.formRecord.isPublished, hCaptchaEnabledSetting);
+  const siteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
+  // Sitekey controls client mounting, not server enforcement. Make this distinction clear.
+  const captchaEnabled = captchaRequired && Boolean(siteKey);
   const { captcha, execute, reset } = useHCaptcha({
+    enabled: captchaRequired && Boolean(siteKey),
     language: props.language,
     logger: logMessage,
     onSuspiciousError: () => setCaptchaFail?.(true),
-    siteKey: process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || "",
+    siteKey,
   });
 
   const formik = useFormik<FormikResponses>({

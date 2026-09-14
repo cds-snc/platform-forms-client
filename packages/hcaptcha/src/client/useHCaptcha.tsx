@@ -11,6 +11,7 @@ export type HCaptchaLogger = {
 };
 
 export type UseHCaptchaOptions = {
+  enabled?: boolean;
   language?: string;
   logger?: HCaptchaLogger;
   // Fires for every error reported by hCaptcha
@@ -47,6 +48,7 @@ const SUSPICIOUS_ERROR_CODES = new Set(["invalid-data", "invalid-input-response"
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
 export const useHCaptcha = ({
+  enabled = true,
   language,
   logger,
   onError: onErrorCallback,
@@ -254,7 +256,7 @@ export const useHCaptcha = ({
     [complete, logger, onCaptchaVerified]
   );
 
-  const captcha = (
+  const captcha = enabled ? (
     <HCaptcha
       key={captchaInstanceKey}
       ref={hCaptchaRef}
@@ -273,7 +275,7 @@ export const useHCaptcha = ({
       size="invisible"
       loadAsync={true}
     />
-  );
+  ) : null;
 
   return { captcha, execute, reset };
 };

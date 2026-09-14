@@ -3,7 +3,7 @@
  */
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Field } from "formik";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FormStatus } from "@gcforms/types";
 
 import { Form } from "./Form";
@@ -158,6 +158,7 @@ const renderForm = (props: Partial<FormProps> = {}) => render(<Form {...createFo
 describe("Form", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubEnv("NEXT_PUBLIC_HCAPTCHA_SITE_KEY", "test-site-key");
     mocks.executeCaptcha.mockResolvedValue({ verified: true, token: "captcha-token" });
     mocks.submitForm.mockResolvedValue({ id: "form-id", submissionId: "submission-id" });
     mocks.isFormClosed.mockResolvedValue(false);
@@ -172,6 +173,10 @@ describe("Form", () => {
     mocks.generateFileChecksums.mockResolvedValue({});
     mocks.shouldCheckCaptcha.mockReturnValue(true);
     mocks.gcFormsContext.currentGroup = null;
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("runs hCaptcha after validation and sends the verified token to the server action", async () => {
@@ -268,6 +273,21 @@ describe("Form", () => {
 
   it("submits without hCaptcha when captcha checks are disabled", async () => {
     mocks.shouldCheckCaptcha.mockReturnValue(false);
+
+    renderForm();
+
+    expect(screen.queryByTestId("captcha")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => expect(mocks.submitForm).toHaveBeenCalled());
+
+    expect(mocks.executeCaptcha).not.toHaveBeenCalled();
+    expect(mocks.submitForm).toHaveBeenCalledWith({}, "en", "form-id", false, undefined, {});
+  });
+
+  it("does not mount hCaptcha when the public sitekey is missing", async () => {
+    vi.stubEnv("NEXT_PUBLIC_HCAPTCHA_SITE_KEY", "");
 
     renderForm();
 
