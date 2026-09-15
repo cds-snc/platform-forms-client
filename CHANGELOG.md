@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.8](https://github.com/cds-snc/platform-forms-client/compare/v4.22.7...v4.22.8) (2026-09-15)
+
+
+### Bug Fixes
+
+* add focus indicator to toast close button ([#7919](https://github.com/cds-snc/platform-forms-client/issues/7919)) ([5397e31](https://github.com/cds-snc/platform-forms-client/commit/5397e3115ba6c3f195cdb3ca97eb64cec274c42c))
+
+
+### Miscellaneous Chores
+
+* add admin branding preview page ([#7905](https://github.com/cds-snc/platform-forms-client/issues/7905)) ([b0855b3](https://github.com/cds-snc/platform-forms-client/commit/b0855b308fa6beda65294a971211aebf82538466))
+* add hCaptcha app setting ([#7914](https://github.com/cds-snc/platform-forms-client/issues/7914)) ([23d4303](https://github.com/cds-snc/platform-forms-client/commit/23d4303e54574759550e16fbb5e5f2e9b1a75411))
+* fix links to sso  ([#7908](https://github.com/cds-snc/platform-forms-client/issues/7908)) ([eb4603a](https://github.com/cds-snc/platform-forms-client/commit/eb4603af6fe1c20ae9eb96e06564a3405ef21094))
+* hCaptcha update ([#7877](https://github.com/cds-snc/platform-forms-client/issues/7877)) ([9f86d93](https://github.com/cds-snc/platform-forms-client/commit/9f86d9363c95c2f17f2b8336517fb3844ab0d3f0))
+* Update alt text from 'Address' to 'Address Complete' ([#7915](https://github.com/cds-snc/platform-forms-client/issues/7915)) ([3ced356](https://github.com/cds-snc/platform-forms-client/commit/3ced356b5573f0d5cf63e80ce4a60a65721932e0))
+* update form-builder address complete content ([#7916](https://github.com/cds-snc/platform-forms-client/issues/7916)) ([c2b96b3](https://github.com/cds-snc/platform-forms-client/commit/c2b96b37927edfe42ef13c4d84361c7b6712bd50))
+
 ## [4.22.7](https://github.com/cds-snc/platform-forms-client/compare/v4.22.6...v4.22.7) (2026-09-09)
 
 
