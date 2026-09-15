@@ -43,6 +43,10 @@ Pass `logger` to record hCaptcha lifecycle messages. `onSuspiciousError` is call
 errors that indicate a potentially tampered request, allowing the consumer to block or replace
 the surrounding UI without implementing hCaptcha error classification itself.
 
+Set `enabled: false` to prevent `useHCaptcha` from mounting the hCaptcha widget. The option
+defaults to `true` and is useful when client configuration or an application setting disables
+CAPTCHA.
+
 ## Form wrapper
 
 `HCaptchaForm` combines the hook with a native `<form>`. It prevents duplicate submissions,

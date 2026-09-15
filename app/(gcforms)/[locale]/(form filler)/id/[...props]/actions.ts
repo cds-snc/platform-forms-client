@@ -25,6 +25,7 @@ import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 
 import { randomUUID } from "crypto";
 import { getClientIp } from "@lib/ip";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 
 // The maximum allowed score for hCaptcha verification. Scores above this threshold are considered suspicious.
 const HCAPTCHA_MAX_ALLOWED_SCORE = 0.79;
@@ -71,9 +72,15 @@ export async function submitForm(
         };
       }
 
+      const hCaptchaEnabledSetting: boolean =
+        await getAppSettingAsBoolean("hCaptchaEnabledSetting");
+
       // TODO: Follow up by using the selected version's publication status here, so a draft
       // preview of a published template can be distinguished from the published form.
-      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
+      const shouldVerifyHCaptcha = shouldCheckCaptcha(
+        template?.isPublished,
+        hCaptchaEnabledSetting
+      );
 
       if (shouldVerifyHCaptcha) {
         const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;

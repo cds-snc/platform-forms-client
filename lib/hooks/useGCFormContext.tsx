@@ -46,6 +46,7 @@ interface GCFormsContextValueType {
   };
   visibleElementIds: Set<string> | null;
   updateVisibleElementIds: (formValues: Record<string, string>) => void;
+  hCaptchaEnabledSetting?: boolean;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -53,9 +54,11 @@ const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefi
 export const GCFormsProvider = ({
   children,
   formRecord,
+  hCaptchaEnabledSetting = false,
 }: {
   children: ReactNode;
   formRecord: PublicFormRecord;
+  hCaptchaEnabledSetting?: boolean;
 }) => {
   const hasGroups = formHasGroups(formRecord.form);
   const groups: GroupsType = hasGroups ? formRecord.form.groups! : {};
@@ -206,6 +209,7 @@ export const GCFormsProvider = ({
         getProgressData,
         visibleElementIds,
         updateVisibleElementIds,
+        hCaptchaEnabledSetting,
       }}
     >
       {children}
@@ -246,6 +250,7 @@ export const useGCFormsContext = () => {
           versionNumber: 1,
         };
       },
+      hCaptchaEnabledSetting: false,
     };
   }
   return formsContext;

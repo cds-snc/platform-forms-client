@@ -12,6 +12,10 @@ vi.mock("@gcforms/hcaptcha/server", () => ({
   verifyHCaptchaToken: vi.fn(),
 }));
 
+vi.mock("@lib/appSettings", () => ({
+  getAppSettingAsBoolean: vi.fn(),
+}));
+
 vi.mock("@lib/utils", () => ({
   dateHasPast: vi.fn(),
 }));
@@ -49,6 +53,7 @@ vi.mock("./lib/server/processFormData", () => ({
 
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
@@ -89,6 +94,7 @@ describe("submitForm", () => {
     // Default successful mocks
     (getPublicTemplateByID as Mock).mockResolvedValue(mockTemplate);
     (verifyHCaptchaToken as Mock).mockResolvedValue({ verified: true, score: 0.2 });
+    (getAppSettingAsBoolean as Mock).mockResolvedValue(true);
     (dateHasPast as Mock).mockReturnValue(false);
     (serverTranslation as Mock).mockResolvedValue({ t: vi.fn() });
     (validateVisibleElements as Mock).mockReturnValue({ errors: {} });
