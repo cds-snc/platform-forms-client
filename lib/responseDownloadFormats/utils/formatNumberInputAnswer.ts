@@ -1,4 +1,9 @@
-import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
+import {
+  formatNumericStringForDisplay,
+  getNumberFormatOptions,
+  isNumericInput,
+  langToLocale,
+} from "@clientComponents/forms/NumberInput/utils";
 import { getElementOrSubElementById } from "@gcforms/core";
 import { Language } from "@lib/types/form-builder-types";
 import { FormElementTypes, FormRecord } from "@lib/types";
@@ -15,17 +20,21 @@ export const formatNumberInputAnswer = (
   }
 
   const element = getElementOrSubElementById(formRecord.form.elements, String(item.questionId));
-  const rawNumber = parseFloat(String(item.answer));
+  const rawAnswer = String(item.answer);
 
   // If the stored answer can't be parsed as a number (empty or invalid), fall back to the
   // raw answer so it isn't silently dropped from downloads.
-  if (Number.isNaN(rawNumber)) {
-    return String(item.answer);
+  if (!isNumericInput(rawAnswer)) {
+    return rawAnswer;
   }
 
-  return formatNumberForDisplay(rawNumber, lang, {
+  // Format from the raw string (not Number()) so large integers/decimals aren't rounded.
+  const locale = langToLocale(lang);
+  const options = getNumberFormatOptions({
     currencyCode: element?.properties.currencyCode,
     stepCount: element?.properties.stepCount,
     useThousandsSeparator: element?.properties.useThousandsSeparator,
   });
+
+  return formatNumericStringForDisplay(rawAnswer, locale, options);
 };

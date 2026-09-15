@@ -1,8 +1,13 @@
 import { formatUserInput } from "@lib/utils/strings";
 import { FormItem } from "../helpers";
-import { isNumberInput } from "@root/packages/core/src";
-import { formatNumberForDisplay } from "../../NumberInput/utils";
-import { Language } from "@root/lib/types/form-builder-types";
+import { isNumberInput } from "@gcforms/core";
+import {
+  formatNumericStringForDisplay,
+  getNumberFormatOptions,
+  isNumericInput,
+  langToLocale,
+} from "../../NumberInput/utils";
+import { Language } from "@lib/types/form-builder-types";
 
 export const NumberInput = ({
   formItem,
@@ -15,11 +20,18 @@ export const NumberInput = ({
     return <></>;
   }
 
-  const formattedNumber = formatNumberForDisplay(Number(formItem.values), lang, {
+  const rawValue = String(formItem.values);
+  const locale = langToLocale(lang);
+  const options = getNumberFormatOptions({
     currencyCode: formItem.element.properties.currencyCode,
     stepCount: formItem.element.properties.stepCount,
     useThousandsSeparator: formItem.element.properties.useThousandsSeparator,
   });
+
+  // Format from the raw string (not Number()) so large integers/decimals aren't rounded.
+  const formattedNumber = isNumericInput(rawValue)
+    ? formatNumericStringForDisplay(rawValue, locale, options)
+    : rawValue;
 
   return (
     <dl className="mb-8">
