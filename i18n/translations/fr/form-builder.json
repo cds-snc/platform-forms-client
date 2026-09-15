@@ -85,7 +85,7 @@
         "description": "Indiquez d’abord le numéro d’unité, le cas échéant, suivi du numéro municipal et du nom de la rue.",
         "label": "Adresse municipale"
       },
-      "title": "Adresse validée",
+      "title": "Adresse",
       "select": "Sélectionner les éléments de l'adresse à inclure.",
       "fields": "Format",
       "fieldsDesc": "Définissez la façon dont les adresses s’affichent dans les réponses.",
