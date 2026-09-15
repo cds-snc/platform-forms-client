@@ -6,9 +6,9 @@ import { formatNumericStringForDisplay } from "@clientComponents/forms/NumberInp
 import { getElementOrSubElementById } from "@gcforms/core";
 
 vi.mock("@clientComponents/forms/NumberInput/utils", async () => {
-  const actual = await vi.importActual<
-    typeof import("@clientComponents/forms/NumberInput/utils")
-  >("@clientComponents/forms/NumberInput/utils");
+  const actual = await vi.importActual<typeof import("@clientComponents/forms/NumberInput/utils")>(
+    "@clientComponents/forms/NumberInput/utils"
+  );
   return {
     ...actual,
     formatNumericStringForDisplay: vi.fn(),
@@ -122,5 +122,4 @@ describe("formatNumberInputAnswer", () => {
       { minimumFractionDigits: 0, maximumFractionDigits: 0, useGrouping: false }
     );
   });
-});
 });
