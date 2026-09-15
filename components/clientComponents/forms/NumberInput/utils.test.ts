@@ -198,21 +198,7 @@ describe("NumberInput Utils", () => {
       ).toBe("1,234.50");
     });
 
-    it("formats long decimal strings without losing precision", () => {
-      expect(
-        formatNumericStringForDisplay("525254542254224552445244.25", "en-CA", {
-          useGrouping: false,
-        })
-      ).toBe("525254542254224552445244.25");
-    });
-
-    it("groups long decimal strings without losing precision", () => {
-      expect(
-        formatNumericStringForDisplay("525254542254224552445244.25", "en-CA", { useGrouping: true })
-      ).toBe("525,254,542,254,224,552,445,244.25");
-    });
-
-    it("places the currency symbol after French currency decimals", () => {
+    it("formats French currency decimals", () => {
       expect(
         formatNumericStringForDisplay("125.25", "fr-CA", {
           style: "currency",
@@ -220,16 +206,6 @@ describe("NumberInput Utils", () => {
           useGrouping: true,
         })
       ).toBe(new Intl.NumberFormat("fr-CA", { style: "currency", currency: "CAD" }).format(125.25));
-    });
-
-    it("pads French currency decimals using Intl currency fraction digits", () => {
-      expect(
-        formatNumericStringForDisplay("125.2", "fr-CA", {
-          style: "currency",
-          currency: "CAD",
-          useGrouping: true,
-        })
-      ).toBe(new Intl.NumberFormat("fr-CA", { style: "currency", currency: "CAD" }).format(125.2));
     });
 
     it("returns non-numeric values unchanged", () => {

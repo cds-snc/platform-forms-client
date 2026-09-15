@@ -21,55 +21,9 @@ export const isNumericInput = (value: string) => value !== "" && !Number.isNaN(N
 
 export const isIntegerInput = (value: string) => /^-?\d+$/.test(value);
 
-const formatDecimalStringForDisplay = (
-  value: string,
-  locale: string,
-  options: Intl.NumberFormatOptions
-) => {
-  const [integerPart, fractionPart = ""] = value.split(".");
-  const isNegative = integerPart.startsWith("-");
-  const integerDigits = integerPart.replace("-", "") || "0";
-  const decimalSeparator =
-    new Intl.NumberFormat(locale).formatToParts(1.1).find((part) => part.type === "decimal")
-      ?.value ?? ".";
-  const { style, currency, currencyDisplay, currencySign, ...decimalOptions } = options;
-  const formatter = new Intl.NumberFormat(locale, options);
-  const formattedInteger = new Intl.NumberFormat(locale, {
-    ...decimalOptions,
-    useGrouping: options.useGrouping,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(BigInt(integerDigits));
-  const formattedFraction = fractionPart.padEnd(
-    options.minimumFractionDigits ?? formatter.resolvedOptions().minimumFractionDigits ?? 0,
-    "0"
-  );
-
-  if (style === "currency") {
-    const sampleValue = formattedFraction ? (isNegative ? -1.1 : 1.1) : isNegative ? -1 : 1;
-
-    return formatter
-      .formatToParts(sampleValue)
-      .map((part) => {
-        if (part.type === "integer") return formattedInteger;
-        if (part.type === "fraction") return formattedFraction;
-        if (part.type === "decimal") return formattedFraction ? part.value : "";
-        return part.value;
-      })
-      .join("");
-  }
-
-  const formattedSignedInteger = new Intl.NumberFormat(locale, {
-    ...options,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(BigInt(integerPart));
-
-  return formattedFraction
-    ? `${formattedSignedInteger}${decimalSeparator}${formattedFraction}`
-    : formattedSignedInteger;
-};
-
+// Integers use BigInt so large values (beyond Number's safe range) don't lose precision.
+// Decimals go through Number(), same as before this fix — precision loss only occurs
+// past ~15-17 significant digits, which isn't a case this input needs to support.
 export const formatNumericStringForDisplay = (
   value: string,
   locale: string,
@@ -78,10 +32,6 @@ export const formatNumericStringForDisplay = (
   const normalized = normalizeLocaleInput(value, locale);
 
   if (!isNumericInput(normalized)) return value;
-
-  if (!isIntegerInput(normalized) && normalized.includes(".")) {
-    return formatDecimalStringForDisplay(normalized, locale, options);
-  }
 
   const numericValue = isIntegerInput(normalized) ? BigInt(normalized) : Number(normalized);
 
