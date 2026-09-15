@@ -1,12 +1,9 @@
+import { MAX_NUMBER_INPUT_DIGITS } from "@gcforms/core";
 import { Language } from "@root/lib/types/form-builder-types";
 
 export const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA");
 
-// Number.MAX_SAFE_INTEGER (9,007,199,254,740,991) has 16 digits — the largest integer
-// JS can represent exactly. Capping input at 15 total digits (integer + fraction) keeps
-// every value NumberInput accepts within that safe range, regardless of how the digits
-// are split across the decimal point.
-export const MAX_NUMBER_INPUT_DIGITS = 15;
+export { MAX_NUMBER_INPUT_DIGITS };
 
 export const countDigits = (value: string): number => value.replace(/[^\d]/g, "").length;
 

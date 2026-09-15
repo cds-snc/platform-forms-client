@@ -9,6 +9,8 @@ export {
 
 export { isValidEmail } from "./validation/isValidEmail";
 
+export { MAX_NUMBER_INPUT_DIGITS } from "./validation/validation";
+
 export {
   type SubElementTypeMismatch,
   type ElementTypeMismatch,
