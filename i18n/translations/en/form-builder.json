@@ -75,8 +75,10 @@
       "whatIsYourAddress": "Address",
       "city": "City, town, or community",
       "country": "Country",
-      "description": "<span>A pattern to collect a Canadian address, including fields for address, city, province, and postal code.</span><span>Canada Post can find and verify Canadian addresses.</span>",
+      "description1": "A pattern to enter an address. Canada Post can find and verify Canadian mailing addresses with <image />.",
+      "description2": "People can enter or change the address themselves, including if AddressComplete does not work.",
       "label": "Address",
+      "logoAltText": "Address Complete",
       "postal": "Postal or zip code",
       "province": "Province, territory, or state",
       "street": {
