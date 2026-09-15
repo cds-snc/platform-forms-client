@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
@@ -56,7 +56,10 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
   const locale = langToLocale(lang);
 
-  const formatOptions = getNumberFormatOptions({ currencyCode, stepCount, useThousandsSeparator });
+  const formatOptions = useMemo<Intl.NumberFormatOptions>(
+    () => getNumberFormatOptions({ currencyCode, stepCount, useThousandsSeparator }),
+    [stepCount, currencyCode, useThousandsSeparator]
+  );
   const formatKey = `${locale}:${currencyCode ?? ""}:${stepCount ?? ""}:${useThousandsSeparator ?? ""}`;
 
   // The display value shown in the input (locale-formatted).
@@ -96,13 +99,16 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
     }
   };
 
-  const allowedKeys = new Set(BASE_ALLOWED_KEYS);
-  if (allowNegativeNumbers) allowedKeys.add("-");
-  if (currencyCode) allowedKeys.add("$");
-  if (currencyCode || (stepCount && stepCount > 0)) {
-    allowedKeys.add(".");
-    allowedKeys.add(",");
-  }
+  const allowedKeys = useMemo(() => {
+    const keys = new Set(BASE_ALLOWED_KEYS);
+    if (allowNegativeNumbers) keys.add("-");
+    if (currencyCode) keys.add("$");
+    if (currencyCode || (stepCount && stepCount > 0)) {
+      keys.add(".");
+      keys.add(",");
+    }
+    return keys;
+  }, [allowNegativeNumbers, currencyCode, stepCount]);
 
   const handleOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const isDigit = /^\d$/.test(event.key);
