@@ -98,23 +98,6 @@ export const useAllowPublish = () => {
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
   const { hasApiKeyId } = useFormBuilderConfig();
 
-  const hasFileInputElement = useMemo(() => {
-    // Helper function to recursively check for file input elements
-    const checkForFileInput = (elements?: FormElement[]): boolean => {
-      if (!elements) return false;
-
-      return elements.some(
-        (element) =>
-          // Check if the current element is a file input
-          element.type === FormElementTypes.fileInput ||
-          // Check sub-elements if they exist
-          (element.properties?.subElements && checkForFileInput(element.properties.subElements))
-      );
-    };
-
-    return checkForFileInput(form?.elements);
-  }, [form?.elements]);
-
   // Note the key names here can be anthing but
   // the values must be booleans
   const data = useMemo(
@@ -126,9 +109,8 @@ export const useAllowPublish = () => {
         !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
       purpose: !!formPurpose,
       translate: isFormTranslated(form),
-      hasFileInputAndApiKey: hasFileInputElement ? hasApiKeyId : true,
     }),
-    [form, formPurpose, hasApiKeyId, hasFileInputElement]
+    [form, formPurpose]
   );
 
   const hasData = useCallback(
@@ -148,7 +130,6 @@ export const useAllowPublish = () => {
   return {
     data,
     hasData,
-    hasFileInputElement,
     hasApiKeyId,
     isPublishable,
     userCanPublish,
