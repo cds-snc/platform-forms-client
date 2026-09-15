@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.1] - 2026-09-15
+
+- Add a focus indicator to the Toast close button on focus
+
 ## [3.0.0] - 2026-09-03
 
 - Remove unused values prop and simplify signature of isFieldResponseValid
