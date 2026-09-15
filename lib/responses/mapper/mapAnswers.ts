@@ -4,7 +4,6 @@ import { createFallbackMappedAnswer, createAnswerObject } from "./utils/toAnswer
 import { getAnswerAsString } from "./utils/toString";
 import { FormProperties } from "@gcforms/types";
 import { Response } from "@gcforms/types";
-import { Language } from "@lib/types/form-builder-types";
 import { ResponseFilenameMapping } from "@formBuilder/[id]/responses-pilot/lib/processResponse";
 
 /**
@@ -22,19 +21,17 @@ export const mapAnswers = ({
   formTemplate,
   rawAnswers,
   attachments,
-  lang,
 }: {
   formTemplate: FormProperties;
   rawAnswers: Record<string, Response>;
   attachments?: ResponseFilenameMapping;
-  lang?: Language;
 }): MappedAnswer[] => {
   const elementMap = getElementMap(formTemplate);
 
   const mappedAnswers: Array<MappedAnswer | null> = Object.entries(rawAnswers).map(
     ([questionId, rawAnswer]) => {
       const question = elementMap.get(Number(questionId));
-      return getMappedAnswer({ question, rawAnswer, attachments, lang });
+      return getMappedAnswer({ question, rawAnswer, attachments });
     }
   );
 
@@ -50,12 +47,10 @@ const getMappedAnswer = ({
   question,
   rawAnswer,
   attachments,
-  lang,
 }: {
   question?: FormElement;
   rawAnswer: Response;
   attachments?: ResponseFilenameMapping;
-  lang?: Language;
 }): MappedAnswer => {
   if (!question) {
     return createFallbackMappedAnswer({ rawAnswer });
@@ -66,13 +61,12 @@ const getMappedAnswer = ({
       question,
       rawAnswers: rawAnswer,
       attachments,
-      lang,
     });
   }
 
   return createAnswerObject({
     question,
-    answer: getAnswerAsString(question, rawAnswer as unknown, attachments, lang),
+    answer: getAnswerAsString(question, rawAnswer as unknown, attachments),
   });
 };
 
@@ -87,12 +81,10 @@ const handleAnswerArray = ({
   question,
   rawAnswers,
   attachments,
-  lang,
 }: {
   question?: FormElement;
   rawAnswers: Response[];
   attachments?: ResponseFilenameMapping;
-  lang?: Language;
 }): MappedAnswer => {
   if (!question || !Array.isArray(rawAnswers)) {
     throw new Error("Invalid input for handleAnswerArray");
@@ -117,7 +109,6 @@ const handleAnswerArray = ({
         question: subQuestion,
         rawAnswer: value,
         attachments,
-        lang,
       });
     });
 

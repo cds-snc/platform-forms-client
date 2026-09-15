@@ -28,7 +28,6 @@ import {
 } from "../components/Toasts";
 import { HTML_DOWNLOAD_FOLDER } from "../lib/constants";
 import { ResponseDownloadLogger } from "../lib/logger";
-import { Language } from "@root/lib/types/form-builder-types";
 import { processResponse } from "../lib/processResponse";
 import { importPrivateKeyDecrypt } from "../lib/utils";
 import { formatDuration } from "../lib/formatDuration";
@@ -117,7 +116,7 @@ export const ResponsesProvider = ({
   const [isProcessingInterrupted, setIsProcessingInterrupted] = useState(false);
   const interruptRef = useRef<boolean>(false);
 
-  const { t, i18n } = useTranslation("my-forms");
+  const { t } = useTranslation("my-forms");
 
   const setInterrupt: Dispatch<SetStateAction<boolean>> = useCallback(
     (value) => {
@@ -336,7 +335,6 @@ export const ResponsesProvider = ({
               formTemplate: formTemplate!,
               versionNumber: activeSelectedVersion ? parseInt(activeSelectedVersion, 10) : 1,
               t,
-              lang: (i18n.language as Language) ?? "en",
               logger: responseLogger,
             });
           } catch (error) {

@@ -13,7 +13,6 @@ import { GCFormsApiClient } from "./apiClient";
 import { writeHtml } from "./htmlWriter";
 import { writeRow } from "./csvWriter";
 import { TFunction } from "i18next";
-import { Language } from "@root/lib/types/form-builder-types";
 import { md5 } from "hash-wasm";
 import { withRetry } from "@root/lib/utils/retry";
 import { ResponseDownloadLogger } from "./logger";
@@ -32,7 +31,6 @@ export const processResponse = async ({
   formTemplate,
   versionNumber,
   t,
-  lang,
   logger,
 }: {
   incrementProcessedSubmissionsCount: () => void;
@@ -48,7 +46,6 @@ export const processResponse = async ({
   formTemplate: FormProperties;
   versionNumber?: number | null;
   t: TFunction<string | string[], undefined>;
-  lang: Language;
   logger: ResponseDownloadLogger;
 }) => {
   const confirmedResponse = await downloadAndConfirmResponse({
@@ -100,7 +97,6 @@ export const processResponse = async ({
         formId,
         versionNumber,
         t,
-        lang,
       });
       break;
     default:
@@ -115,7 +111,6 @@ export const processResponse = async ({
         csvFileHandle,
         rawAnswers: confirmedResponse.rawAnswers,
         attachments: confirmedResponse.attachments,
-        lang,
       });
       break;
   }

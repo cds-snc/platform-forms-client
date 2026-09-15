@@ -80,28 +80,6 @@ export const formatNumberForDisplay = (
 };
 
 /**
- * Format a numberInput answer for response downloads/exports, mirroring the
- * getXResponse helpers used by other element types (e.g. getStarRatingResponse).
- * Formats from the raw string (not Number()) so large integers/decimals aren't rounded.
- */
-export const getNumberInputResponse = (
-  answer: unknown,
-  config: NumberFormatConfig,
-  lang: Language
-): string => {
-  const rawAnswer = String(answer ?? "");
-
-  if (!isNumericInput(rawAnswer)) {
-    return rawAnswer;
-  }
-
-  const locale = langToLocale(lang);
-  const options = getNumberFormatOptions(config);
-
-  return formatNumericStringForDisplay(rawAnswer, locale, options);
-};
-
-/**
  * Normalize a locale-formatted input string into a plain numeric string
  * that `Number()` can parse.
  *

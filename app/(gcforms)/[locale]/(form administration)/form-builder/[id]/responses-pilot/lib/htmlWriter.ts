@@ -2,7 +2,6 @@ import { ResponseHtml } from "@root/lib/responseDownloadFormats/html/components/
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { mapAnswers } from "@root/lib/responses/mapper/mapAnswers";
 import { FormProperties, FormRecord, SecurityAttribute, Response } from "@root/lib/types";
-import { Language } from "@root/lib/types/form-builder-types";
 import { TFunction } from "i18next";
 import { Submission } from "@root/lib/responseDownloadFormats/types";
 import { ResponseFilenameMapping } from "./processResponse";
@@ -29,7 +28,6 @@ export const writeHtml = async ({
   formId,
   versionNumber,
   t,
-  lang,
 }: {
   htmlDirectoryHandle: FileSystemDirectoryHandle;
   formTemplate: FormProperties;
@@ -42,7 +40,6 @@ export const writeHtml = async ({
   formId: string;
   versionNumber?: number | null;
   t: TFunction<string | string[], undefined>;
-  lang: Language;
 }) => {
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
 
@@ -50,7 +47,6 @@ export const writeHtml = async ({
     formTemplate,
     rawAnswers: submission.rawAnswers,
     attachments,
-    lang,
   });
 
   const submissionObj = {
