@@ -27,19 +27,47 @@ const formatDecimalStringForDisplay = (
   options: Intl.NumberFormatOptions
 ) => {
   const [integerPart, fractionPart = ""] = value.split(".");
+  const isNegative = integerPart.startsWith("-");
+  const integerDigits = integerPart.replace("-", "") || "0";
   const decimalSeparator =
     new Intl.NumberFormat(locale).formatToParts(1.1).find((part) => part.type === "decimal")
       ?.value ?? ".";
+  const { style, currency, currencyDisplay, currencySign, ...decimalOptions } = options;
+  const formatter = new Intl.NumberFormat(locale, options);
   const formattedInteger = new Intl.NumberFormat(locale, {
+    ...decimalOptions,
+    useGrouping: options.useGrouping,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(BigInt(integerDigits));
+  const formattedFraction = fractionPart.padEnd(
+    options.minimumFractionDigits ?? formatter.resolvedOptions().minimumFractionDigits ?? 0,
+    "0"
+  );
+
+  if (style === "currency") {
+    const sampleValue = formattedFraction ? (isNegative ? -1.1 : 1.1) : isNegative ? -1 : 1;
+
+    return formatter
+      .formatToParts(sampleValue)
+      .map((part) => {
+        if (part.type === "integer") return formattedInteger;
+        if (part.type === "fraction") return formattedFraction;
+        if (part.type === "decimal") return formattedFraction ? part.value : "";
+        return part.value;
+      })
+      .join("");
+  }
+
+  const formattedSignedInteger = new Intl.NumberFormat(locale, {
     ...options,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(BigInt(integerPart));
-  const formattedFraction = fractionPart.padEnd(options.minimumFractionDigits ?? 0, "0");
 
   return formattedFraction
-    ? `${formattedInteger}${decimalSeparator}${formattedFraction}`
-    : formattedInteger;
+    ? `${formattedSignedInteger}${decimalSeparator}${formattedFraction}`
+    : formattedSignedInteger;
 };
 
 export const formatNumericStringForDisplay = (

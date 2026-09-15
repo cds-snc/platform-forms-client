@@ -212,6 +212,26 @@ describe("NumberInput Utils", () => {
       ).toBe("525,254,542,254,224,552,445,244.25");
     });
 
+    it("places the currency symbol after French currency decimals", () => {
+      expect(
+        formatNumericStringForDisplay("125.25", "fr-CA", {
+          style: "currency",
+          currency: "CAD",
+          useGrouping: true,
+        })
+      ).toBe(new Intl.NumberFormat("fr-CA", { style: "currency", currency: "CAD" }).format(125.25));
+    });
+
+    it("pads French currency decimals using Intl currency fraction digits", () => {
+      expect(
+        formatNumericStringForDisplay("125.2", "fr-CA", {
+          style: "currency",
+          currency: "CAD",
+          useGrouping: true,
+        })
+      ).toBe(new Intl.NumberFormat("fr-CA", { style: "currency", currency: "CAD" }).format(125.2));
+    });
+
     it("returns non-numeric values unchanged", () => {
       expect(formatNumericStringForDisplay("abc", "en-CA", { useGrouping: true })).toBe("abc");
     });
