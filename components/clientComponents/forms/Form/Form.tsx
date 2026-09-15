@@ -20,7 +20,7 @@ import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitPro
 import { hasFiles } from "@lib/fileExtractor";
 
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { shouldCheckCaptcha } from "@root/lib/utils/shouldCheckCaptcha";
+import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 import { FormBody } from "./FormBody";
 import { FormStatusAlerts } from "./FormStatusAlerts";
 import { getFormStatusError } from "./getFormStatusError";
@@ -117,13 +117,18 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
 
 export const Form: React.FC<FormProps> = (props) => {
   const { setCaptchaFail } = props;
-  const captchaEnabled = shouldCheckCaptcha(props.formRecord.isPublished, props.isPreview ?? false);
+  const { hCaptchaEnabledSetting } = useGCFormsContext();
 
+  const captchaRequired = shouldCheckCaptcha(props.formRecord.isPublished, hCaptchaEnabledSetting);
+  const siteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
+  // Avoid a hCaptcha browser error by checking for the required siteKey as well
+  const captchaEnabled = captchaRequired && Boolean(siteKey);
   const { captcha, execute, reset } = useHCaptcha({
+    enabled: captchaRequired && Boolean(siteKey),
     language: props.language,
     logger: logMessage,
     onSuspiciousError: () => setCaptchaFail?.(true),
-    siteKey: process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || "",
+    siteKey,
   });
 
   const formik = useFormik<FormikResponses>({

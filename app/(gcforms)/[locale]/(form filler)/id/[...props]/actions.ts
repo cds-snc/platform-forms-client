@@ -25,9 +25,9 @@ import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 
 import { randomUUID } from "crypto";
 import { getClientIp } from "@lib/ip";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 
-// hCaptcha scores are an Enterprise-only response field. A missing score is rejected by the
-// verifier, so this score must only be used with an Enterprise sitekey.
+// The maximum allowed score for hCaptcha verification. Scores above this threshold are considered suspicious.
 const HCAPTCHA_MAX_ALLOWED_SCORE = 0.79;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -72,7 +72,15 @@ export async function submitForm(
         };
       }
 
-      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished, isPreview);
+      const hCaptchaEnabledSetting: boolean =
+        await getAppSettingAsBoolean("hCaptchaEnabledSetting");
+
+      // TODO: Follow up by using the selected version's publication status here, so a draft
+      // preview of a published template can be distinguished from the published form.
+      const shouldVerifyHCaptcha = shouldCheckCaptcha(
+        template?.isPublished,
+        hCaptchaEnabledSetting
+      );
 
       if (shouldVerifyHCaptcha) {
         const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;
@@ -89,10 +97,7 @@ export async function submitForm(
 
         const captchaResult = await verifyHCaptchaToken(captchaToken, {
           secret: captchaSecret,
-          // The public site key identifies this widget and lets hCaptcha check that the token
-          // belongs to the expected site; it is separate from the server-only secret above.
           siteKey: process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY,
-          // Avoid the lookup when the verifier will fail immediately
           remoteIp: captchaToken ? String(await getClientIp()) : undefined,
           maxAllowedScore: HCAPTCHA_MAX_ALLOWED_SCORE,
           logger: {
