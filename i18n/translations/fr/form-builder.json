@@ -75,7 +75,7 @@
       "whatIsYourAddress": "Adresse",
       "city": "Ville ou communauté",
       "country": "Pays",
-      "description1": "Un modèle pour la collecte d’adresses. Postes Canada peut trouver et vérifier les adresses postales au Canada à l’aide d’",
+      "description1": "Un modèle pour la collecte d’adresses. Postes Canada peut trouver et vérifier les adresses postales au Canada à l’aide d’<image />.",
       "description2": "Les gens peuvent également saisir ou modifier l’adresse eux-mêmes, notamment si AdresseComplète ne fonctionne pas.",
       "label": "Adresse",
       "logoAltText": "Adresse Complète",
