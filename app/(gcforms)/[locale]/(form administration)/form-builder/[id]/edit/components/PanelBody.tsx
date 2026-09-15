@@ -12,7 +12,6 @@ import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { cn } from "@lib/utils";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { ManagedDataDetails } from "./ManagedDataDetails";
 
 export const PanelBody = ({
@@ -33,11 +32,8 @@ export const PanelBody = ({
   const isDynamicRow = item.type === "dynamicRow";
 
   const isAddressComplete = item.type === "addressComplete";
-  const isFileUpload = item.type === "fileInput";
   const hasCustomRegex =
     item.properties.validation?.type === "custom" && item.properties.validation.regex;
-
-  const { hasApiKeyId } = useFormBuilderConfig();
 
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
@@ -53,14 +49,12 @@ export const PanelBody = ({
   const describedById = description ? `item${item.id}-describedby` : undefined;
   const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
 
-  const isInvalid = isFileUpload && !hasApiKeyId;
-
   return (
     <>
       {isRichText || isDynamicRow ? (
         <div className="my-4">
           <div className={cn(isDynamicRow && "mt-8 mb-2 px-4")}>
-            <Question item={item} onQuestionChange={onQuestionChange} isInvalid={isInvalid} />
+            <Question item={item} onQuestionChange={onQuestionChange} />
           </div>
 
           <div className={cn(isDynamicRow && "mb-2")}>
@@ -80,7 +74,6 @@ export const PanelBody = ({
                 item={item}
                 onQuestionChange={onQuestionChange}
                 describedById={describedById}
-                isInvalid={isInvalid}
               />
             </div>
           </div>
@@ -148,16 +141,6 @@ export const PanelBody = ({
               />
             </div>
           </div>
-
-          {isFileUpload && (
-            <div className="mt-4 border-t border-dotted border-slate-800 pt-4">
-              {!hasApiKeyId && (
-                <strong className="ml-2 inline-block text-sm font-bold text-red-700">
-                  {t("fileUploadApiWarning.text")}
-                </strong>
-              )}
-            </div>
-          )}
         </div>
       )}
     </>
