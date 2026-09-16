@@ -383,6 +383,25 @@ describe("Form", () => {
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 
+  it("re-enables the submit button after hCaptcha is cancelled", async () => {
+    let resolveCaptcha: (result: { verified: false; reason: "cancelled" }) => void = () => {};
+    mocks.executeCaptcha.mockImplementation(
+      () => new Promise((resolve) => (resolveCaptcha = resolve))
+    );
+
+    renderForm({ renderSubmit: undefined });
+
+    const submitButton = screen.getByRole("button", { name: /Submit/ });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => expect(submitButton).toBeDisabled());
+
+    resolveCaptcha({ verified: false, reason: "cancelled" });
+
+    await waitFor(() => expect(submitButton).toBeEnabled());
+    expect(mocks.submitForm).not.toHaveBeenCalled();
+  });
+
   it("shows the captcha failure flow when server verification rejects the token", async () => {
     mocks.submitForm.mockResolvedValue({
       id: "form-id",
