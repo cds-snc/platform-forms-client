@@ -92,7 +92,7 @@ describe("<EditLockBanner />", () => {
       />
     );
 
-    const status = page.getByText("Inactive");
+    const status = page.getByText("Inactive session", { exact: false });
     await expect.element(status).toBeVisible();
 
     const statusText = await status.element().textContent;
