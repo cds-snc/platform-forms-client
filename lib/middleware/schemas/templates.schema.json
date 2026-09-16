@@ -84,29 +84,26 @@
       "examples": [[2, 3, 4, 6, 9, 5]]
     },
     "groups": {
+      "description": "Groups keyed by group ID. Grouped templates must include the reserved start, review, and end groups.",
       "type": "object",
       "properties": {
-        "name": {
-          "description": "The name of the group.",
-          "type": "string"
+        "start": {
+          "$ref": "#/definitions/group"
         },
-        "titleEn": {
-          "description": "The title of the group in English.",
-          "type": "string"
+        "review": {
+          "$ref": "#/definitions/reviewGroup"
         },
-        "titleFr": {
-          "description": "The title of the group in French.",
-          "type": "string"
-        },
-        "nextAction": {
-          "description": "The next action to take i.e. next group or submit.",
-          "type": "string"
-        },
-        "elements": {
-          "description": "A list of elements contained within the form group.",
-          "type": "array"
+        "end": {
+          "$ref": "#/definitions/endGroup"
         }
-      }
+      },
+      "patternProperties": {
+        ".+": {
+          "$ref": "#/definitions/group"
+        }
+      },
+      "required": ["start", "review", "end"],
+      "additionalProperties": false
     },
     "groupsLayout": {
       "description": "A list of group IDs that determines the order of the groups in the form.",
@@ -208,6 +205,132 @@
   "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],
   "additionalProperties": false,
   "definitions": {
+    "group": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The name of the group.",
+          "type": "string"
+        },
+        "titleEn": {
+          "description": "The title of the group in English.",
+          "type": "string"
+        },
+        "titleFr": {
+          "description": "The title of the group in French.",
+          "type": "string"
+        },
+        "elements": {
+          "description": "A list of top-level element IDs contained within the form group.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "autoFlow": {
+          "description": "Whether the group advances automatically after its elements are complete.",
+          "type": "boolean"
+        },
+        "nextAction": {
+          "description": "The next group, a reserved destination, or conditional navigation rules.",
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "description": "Conditional navigation rules evaluated against one source choice element.",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/nextActionRule"
+              }
+            }
+          ]
+        },
+        "exitUrlEn": {
+          "description": "English URL used when nextAction is exit.",
+          "type": "string",
+          "minLength": 1,
+          "format": "uri"
+        },
+        "exitUrlFr": {
+          "description": "French URL used when nextAction is exit.",
+          "type": "string",
+          "minLength": 1,
+          "format": "uri"
+        }
+      },
+      "required": ["name", "titleEn", "titleFr", "elements"],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "nextAction": {
+                  "const": "exit"
+                }
+              },
+              "required": ["nextAction", "exitUrlEn", "exitUrlFr"]
+            },
+            {
+              "properties": {
+                "nextAction": {
+                  "not": {
+                    "const": "exit"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "reviewGroup": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/group"
+        },
+        {
+          "properties": {
+            "nextAction": {
+              "const": "end"
+            }
+          },
+          "required": ["nextAction"]
+        }
+      ]
+    },
+    "endGroup": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/group"
+        },
+        {
+          "not": {
+            "required": ["nextAction"]
+          }
+        }
+      ]
+    },
+    "nextActionRule": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "description": "The destination group ID or permitted reserved destination.",
+          "type": "string",
+          "minLength": 1
+        },
+        "choiceId": {
+          "description": "A source element ID and zero-based choice index, or a navigation catch-all.",
+          "type": "string",
+          "pattern": "^[1-9][0-9]*\\.(?:[0-9]+|catch-all)$"
+        }
+      },
+      "required": ["groupId", "choiceId"],
+      "additionalProperties": false
+    },
     "element": {
       "type": "object",
       "properties": {
