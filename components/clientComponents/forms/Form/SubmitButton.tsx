@@ -5,8 +5,14 @@ interface SubmitButtonProps {
   disabled: boolean;
   isSubmitting?: boolean;
   submissionError?: boolean;
+  buttonRef?: (element: HTMLButtonElement) => void;
 }
-export const SubmitButton = ({ disabled, isSubmitting, submissionError }: SubmitButtonProps) => {
+export const SubmitButton = ({
+  disabled,
+  isSubmitting,
+  submissionError,
+  buttonRef,
+}: SubmitButtonProps) => {
   const { t } = useTranslation();
   // Formik's submitting state covers validation and hCAPTCHA execution.
   const loading = Boolean(isSubmitting) && !submissionError;
@@ -16,6 +22,7 @@ export const SubmitButton = ({ disabled, isSubmitting, submissionError }: Submit
       id="form-submit-button"
       type="submit"
       disabled={disabled || isSubmitting}
+      buttonRef={buttonRef}
       loading={loading}
     >
       {t("submitButton")}

@@ -24,7 +24,10 @@ export interface FormProps {
   captchaFail?: boolean;
 }
 
-export type FormWithFormikProps = FormProps & FormikProps<Responses>;
+export type FormWithFormikProps = FormProps &
+  FormikProps<Responses> & {
+    submitButtonRef: (element: HTMLButtonElement) => void;
+  };
 
 export type FormRenderProps = FormWithFormikProps & {
   captcha: React.ReactNode;
