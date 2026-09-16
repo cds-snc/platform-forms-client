@@ -119,8 +119,11 @@ export const Form: React.FC<FormProps> = (props) => {
   const { setCaptchaFail } = props;
   const { hCaptchaEnabledSetting } = useGCFormsContext();
 
+  // TEMP TESTING
+  const TEMP_HCAPTCHA_SITE_KEY = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
+
   const captchaRequired = shouldCheckCaptcha(props.formRecord.isPublished, hCaptchaEnabledSetting);
-  const siteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
+  const siteKey = TEMP_HCAPTCHA_SITE_KEY; //process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
   // Avoid a hCaptcha browser error by checking for the required siteKey as well
   const captchaEnabled = captchaRequired && Boolean(siteKey);
   const { captcha, execute, reset } = useHCaptcha({
