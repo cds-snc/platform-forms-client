@@ -4,6 +4,25 @@ import { FormProperties } from "@lib/types";
 import { validateTemplate } from "./validate";
 
 describe("validateTemplate", () => {
+  it("requires groups and groupsLayout to be provided together", () => {
+    const templateWithGroupsOnly = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
+    delete templateWithGroupsOnly.groupsLayout;
+
+    const templateWithGroupsLayoutOnly = JSON.parse(
+      JSON.stringify(navigationFocus)
+    ) as FormProperties;
+    delete templateWithGroupsLayoutOnly.groups;
+
+    expect(validateTemplate(templateWithGroupsOnly).errors).toContainEqual({
+      property: "groupsLayout",
+      message: "formMissingProperty",
+    });
+    expect(validateTemplate(templateWithGroupsLayoutOnly).errors).toContainEqual({
+      property: "groups",
+      message: "formMissingProperty",
+    });
+  });
+
   it("reports full paths for invalid grouped navigation", () => {
     const invalidTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
     delete invalidTemplate.groups?.review.nextAction;

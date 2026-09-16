@@ -204,6 +204,24 @@
   },
   "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],
   "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "required": ["groups"]
+      },
+      "then": {
+        "required": ["groupsLayout"]
+      }
+    },
+    {
+      "if": {
+        "required": ["groupsLayout"]
+      },
+      "then": {
+        "required": ["groups"]
+      }
+    }
+  ],
   "definitions": {
     "group": {
       "type": "object",

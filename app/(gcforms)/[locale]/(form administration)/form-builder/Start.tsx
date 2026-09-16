@@ -58,14 +58,23 @@ export const Start = () => {
           return;
         }
 
-        const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
+        const parsedData = safeJSONParse<FormProperties>(result, cleaner);
 
-        if (!data) {
+        if (!parsedData) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
           return;
         }
 
+        const sourceValidationResult = validateTemplate(parsedData);
+
+        if (!sourceValidationResult.valid) {
+          setErrors(sourceValidationResult.errors);
+          target.value = "";
+          return;
+        }
+
+        const data = transformFormProperties(parsedData);
         const validationResult = validateTemplate(data);
 
         if (!validationResult.valid) {
