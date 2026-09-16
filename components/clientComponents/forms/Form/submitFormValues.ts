@@ -25,6 +25,7 @@ export type CaptchaSubmitControls = {
   captchaEnabled: boolean;
   executeCaptcha: () => Promise<HCaptchaExecutionResult>;
   resetCaptcha: () => void;
+  onCaptchaCancelled: () => void;
 };
 
 type CaptchaSubmitResult = { status: "verified"; token?: string } | { status: "blocked" };
@@ -41,7 +42,7 @@ export const submitFormValues = async (
   values: FormikResponses,
   formikBag: FormikHelpers<FormikResponses>,
   props: FormProps,
-  { captchaEnabled, executeCaptcha, resetCaptcha }: CaptchaSubmitControls
+  { captchaEnabled, executeCaptcha, resetCaptcha, onCaptchaCancelled }: CaptchaSubmitControls
 ) => {
   // If the form is closed, do not allow submission
   if (await isFormClosed(props.formRecord.id)) {
@@ -57,7 +58,7 @@ export const submitFormValues = async (
 
   try {
     const captchaResult = await getCaptchaTokenForSubmission(
-      { captchaEnabled, executeCaptcha, resetCaptcha },
+      { captchaEnabled, executeCaptcha, resetCaptcha, onCaptchaCancelled },
       formikBag
     );
     if (captchaResult.status === "blocked") {
@@ -129,7 +130,7 @@ export const submitFormValues = async (
 };
 
 const getCaptchaTokenForSubmission = async (
-  { captchaEnabled, executeCaptcha, resetCaptcha }: CaptchaSubmitControls,
+  { captchaEnabled, executeCaptcha, resetCaptcha, onCaptchaCancelled }: CaptchaSubmitControls,
   formikBag: FormikHelpers<FormikResponses>
 ): Promise<CaptchaSubmitResult> => {
   if (!captchaEnabled) {
@@ -144,6 +145,10 @@ const getCaptchaTokenForSubmission = async (
 
   if (captchaResult.reason === "load-error") {
     resetCaptcha();
+  }
+
+  if (captchaResult.reason === "cancelled") {
+    onCaptchaCancelled();
   }
 
   if (captchaResult.reason !== "cancelled") {

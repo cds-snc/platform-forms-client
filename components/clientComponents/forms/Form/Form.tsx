@@ -118,6 +118,8 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
 export const Form: React.FC<FormProps> = (props) => {
   const { setCaptchaFail } = props;
   const { hCaptchaEnabledSetting } = useGCFormsContext();
+  const submitButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const captchaCancelledRef = React.useRef(false);
 
   const captchaRequired = shouldCheckCaptcha(props.formRecord.isPublished, hCaptchaEnabledSetting);
   const siteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
@@ -142,12 +144,30 @@ export const Form: React.FC<FormProps> = (props) => {
         captchaEnabled,
         executeCaptcha: execute,
         resetCaptcha: reset,
+        onCaptchaCancelled: () => {
+          captchaCancelledRef.current = true;
+        },
       }),
   });
 
+  useEffect(() => {
+    if (!formik.isSubmitting && captchaCancelledRef.current) {
+      captchaCancelledRef.current = false;
+      submitButtonRef.current?.focus();
+    }
+  }, [formik.isSubmitting]);
+
   return (
     <FormikProvider value={formik}>
-      <FormContent {...props} {...formik} captcha={captcha} captchaEnabled={captchaEnabled} />
+      <FormContent
+        {...props}
+        {...formik}
+        captcha={captcha}
+        captchaEnabled={captchaEnabled}
+        submitButtonRef={(element) => {
+          submitButtonRef.current = element;
+        }}
+      />
     </FormikProvider>
   );
 };
