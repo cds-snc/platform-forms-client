@@ -259,6 +259,7 @@
       "limitNumberOfDigits": "Limit number of digits",
       "invalidValueRange": "The minimum value must be less than the maximum value.",
       "invalidDigitRange": "The minimum number of digits must be less than the maximum number of digits.",
+      "digitLimitExceedsMax": "The number of digits cannot be greater than {{max}}.",
       "minDigits": "Minimum number of digits",
       "maxDigits": "Maximum number of digits",
       "currency": "Currency ($)",
