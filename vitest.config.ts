@@ -28,7 +28,7 @@ const sharedDefine = {
   "process.env.VITEST_WATCH": JSON.stringify(process.env.VITEST_WATCH || "false"),
   "process.env.APP_ENV": JSON.stringify(process.env.APP_ENV || "test"),
   "process.env.DATABASE_URL": JSON.stringify("dummy_test_url"),
-  global: "globalThis",
+  ...(process.env.VITEST_BROWSER !== "true" ? { global: "globalThis" } : {}),
 };
 
 const sharedExclude = [
