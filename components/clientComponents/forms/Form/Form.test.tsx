@@ -383,7 +383,7 @@ describe("Form", () => {
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 
-  it("re-enables the submit button after hCaptcha is cancelled", async () => {
+  it("restores focus and enables retry after hCaptcha is cancelled", async () => {
     let resolveCaptcha: (result: { verified: false; reason: "cancelled" }) => void = () => {};
     mocks.executeCaptcha.mockImplementation(
       () => new Promise((resolve) => (resolveCaptcha = resolve))
