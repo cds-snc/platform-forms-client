@@ -7,15 +7,25 @@ import { validateCustomRegex } from "@lib/regex/validateCustomRegex";
 
 export type errorMessage = { property?: string; message: string };
 
+const getValidationPath = (error: ValidationError) => error.path.map(String).join(".");
+
 const getErrorMessageTranslationString = (error: ValidationError) => {
-  let property = error.path[error.path.length - 1]
-    ? error.path[error.path.length - 1].toString()
-    : error.argument;
+  const validationPath = getValidationPath(error);
+  let property = validationPath || error.argument;
   let message = "formInvalidProperty";
 
   if (error.name === "required") {
-    property = error.argument;
+    property = validationPath ? `${validationPath}.${error.argument}` : error.argument;
     message = "formMissingProperty";
+  } else if (
+    error.name === "not" &&
+    typeof error.argument === "object" &&
+    error.argument !== null &&
+    "required" in error.argument &&
+    Array.isArray(error.argument.required) &&
+    error.argument.required.length === 1
+  ) {
+    property = `${validationPath}.${error.argument.required[0]}`;
   }
 
   return {
@@ -39,7 +49,10 @@ export const validateTemplate = (data: FormProperties) => {
   const validatorResult: ValidatorResult = validator.validate(data, templatesSchema, {
     preValidateProperty: cleanAngleBrackets,
   });
-  errors.push(...validatorResult.errors.map(getErrorMessageTranslationString));
+  const validationErrors = validatorResult.errors.filter(
+    ({ name }) => !["allOf", "anyOf", "oneOf"].includes(name)
+  );
+  errors.push(...validationErrors.map(getErrorMessageTranslationString));
 
   return {
     valid: errors.length === 0,
