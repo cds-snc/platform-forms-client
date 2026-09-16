@@ -37,7 +37,10 @@ const submission = {
   answers: [],
 } as Submission;
 
-const t = ((key: string) => key) as TFunction<string | string[], undefined>;
+const t = ((key: string) => {
+  if (key === "responseTemplate.versionNumber") return "Version";
+  return key;
+}) as TFunction<string | string[], undefined>;
 
 describe("ResponseHtml", () => {
   it("renders the version badge in the html output", () => {
