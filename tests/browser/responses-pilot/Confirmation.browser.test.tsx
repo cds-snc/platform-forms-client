@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, vi } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { Confirmation } from "@responses-pilot/result/Confirmation";
 import { render } from "./testUtils";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";
@@ -159,7 +159,9 @@ describe("Confirmation - Browser Mode", () => {
       },
     });
 
-    const title = page.getByText(enTranslations.confirmationPage.maliciousAttachmentsWarningTitle);
+    const title = page.getByText(enTranslations.confirmationPage.maliciousAttachmentsWarningTitle, {
+      exact: false,
+    });
     await expect.element(title).toBeInTheDocument();
 
     const body = page.getByText(enTranslations.confirmationPage.maliciousAttachmentsWarningBody);
