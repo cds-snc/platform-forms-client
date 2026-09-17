@@ -552,6 +552,12 @@
       "message2": "This form will be available to restore from the archive folder for 30 days before being deleted permanently.",
       "message3": "Download a copy of the form file for your records. You can upload it again in GC Forms to re-create the form later."
     },
+    "draftVersion": {
+      "message1": "Deleting this draft version will leave the published form unchanged.",
+      "message2": "This draft version will be permanently deleted and cannot be restored.",
+      "okay": "Delete draft version",
+      "title": "Delete this draft version?"
+    },
     "okay": "Archive form",
     "published": {
       "message1": "Archiving will move this published form to the “Archived” section of your forms.",

@@ -69,7 +69,8 @@
       "cloneSuccess": "Form was duplicated.",
       "cloneFailed": "Form could not be duplicated.",
       "ariaLabel": "Menu for form {{name}}",
-      "createDraftVersion": "Edit published form"
+      "createDraftVersion": "Edit published form",
+      "deleteDraftVersion": "Delete draft version"
     },
     "actionRequired": "Responses overdue",
     "editLock": {
