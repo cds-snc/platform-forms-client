@@ -95,6 +95,10 @@
     "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
     "submissionID": "Identifiant de soumission",
     "copyResponse": "Copier la ligne de réponse dans le presse-papiers",
+    "downloadAttachments": "Obtenir les pièces jointes de la réponse",
+    "attachmentsDownloading": "Téléchargement des pièces jointes de la réponse",
+    "attachmentsUnavailableTitle": "Les pièces jointes de la réponse ne sont plus disponibles",
+    "attachmentsUnavailableMessage": "La réponse a peut-être été approuvée pour suppression ou les fichiers ont peut-être déjà été supprimés de Formulaires GC.",
     "versionNumber": "Version"
   },
   "responseAggregatedTemplate": {
