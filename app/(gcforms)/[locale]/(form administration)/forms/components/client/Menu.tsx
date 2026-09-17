@@ -15,6 +15,7 @@ import {
 } from "./MenuDropdown/MenuDropdown";
 import { FormTabStatus, TAB_STATUS } from "../types";
 import { EventKeys } from "@root/lib/hooks/useCustomEvent";
+import { useRouter } from "next/navigation";
 
 export const Menu = ({
   id,
@@ -39,6 +40,7 @@ export const Menu = ({
     t,
     i18n: { language },
   } = useTranslation("my-forms");
+  const router = useRouter();
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const isEmailDelivery = deliveryOption && deliveryOption.emailAddress;
@@ -109,7 +111,7 @@ export const Menu = ({
           toast.error(t("errors.formUnarchiveFailed"));
         } else {
           clearTemplateStorage(id);
-          window.location.href = `/${language}/form-builder/${id}/edit`;
+          router.push(`/${language}/form-builder/${id}/edit`);
         }
       } catch (e) {
         toast.error(t("errors.formUnarchiveFailed"));
@@ -117,7 +119,7 @@ export const Menu = ({
     })();
     return { message: "" };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language, id]);
+  }, [language, id, router]);
 
   const unfilteredMenuItemList = useMemo(
     () => [
@@ -165,7 +167,7 @@ export const Menu = ({
               const res = await cloneForm(id, status === TAB_STATUS.ARCHIVED, language);
               if (res && res.formRecord && !res.error) {
                 toast.success(t("card.menu.cloneSuccess"));
-                window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
+                router.push(`/${language}/form-builder/${res.formRecord.id}/edit`);
                 return;
               }
               throw new Error(res?.error || "Clone failed");
@@ -221,6 +223,7 @@ export const Menu = ({
       hasDraft,
       isEmailDelivery,
       isPublishedDraft,
+      router,
     ]
   );
 
