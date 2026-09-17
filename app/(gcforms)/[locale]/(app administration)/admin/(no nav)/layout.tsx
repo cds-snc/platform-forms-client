@@ -58,7 +58,9 @@ export default AuthenticatedLayout(
             <ToastContainer />
             <>
               <div>
-                <main id="content">{children}</main>
+                <main id="content" tabIndex={-1}>
+                  {children}
+                </main>
               </div>
             </>
           </div>
