@@ -39,6 +39,21 @@ const submission = {
 
 const t = ((key: string) => {
   if (key === "responseTemplate.versionNumber") return "Version";
+  if (key === "responseTemplate.attachmentsSectionTitle") {
+    return "Response attachments";
+  }
+  if (key === "my-forms:responseTemplate.attachmentsSectionTitle") {
+    return "Response attachments";
+  }
+  if (key === "responseTemplate.attachmentsWarningTitle") {
+    return "This response includes attachments";
+  }
+  if (key === "responseTemplate.attachmentsWarningMessage") {
+    return "Ensure you download the attachments before you confirm removal of this response.";
+  }
+  if (key === "responseTemplate.downloadAttachments") {
+    return "Get response attachments";
+  }
   return key;
 }) as TFunction<string | string[], undefined>;
 
@@ -88,6 +103,8 @@ describe("ResponseHtml", () => {
     expect(markup).toContain(
       'href="https://forms.example/en/form-builder/form-1/response-attachments/response-1"'
     );
-    expect(markup).toContain("responseTemplate.downloadAttachments");
+    expect(markup).toContain("Response attachments");
+    expect(markup).toContain("This response includes attachments");
+    expect(markup).toContain("Get response attachments");
   });
 });
