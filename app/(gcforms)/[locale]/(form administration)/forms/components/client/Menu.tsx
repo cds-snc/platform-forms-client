@@ -42,6 +42,10 @@ export const Menu = ({
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const isEmailDelivery = deliveryOption && deliveryOption.emailAddress;
+  const isPublishedDraft =
+    (status === TAB_STATUS.DRAFT || status === TAB_STATUS.RECENTLY_EDITED) &&
+    isPublished &&
+    hasDraft;
 
   const handleDelete = useCallback(() => {
     setShowConfirm(true);
@@ -188,7 +192,7 @@ export const Menu = ({
       },
       {
         filtered: ttl ? true : false,
-        title: t("card.menu.archive"),
+        title: isPublishedDraft ? t("card.menu.deleteDraftVersion") : t("card.menu.archive"),
         callback: () => {
           handleDelete();
           return {
@@ -216,6 +220,7 @@ export const Menu = ({
       handleDelete,
       hasDraft,
       isEmailDelivery,
+      isPublishedDraft,
     ]
   );
 
@@ -241,6 +246,7 @@ export const Menu = ({
         show={showConfirm}
         id={id}
         isPublished={isPublished}
+        isDraftVersion={isPublishedDraft}
         handleClose={setShowConfirm}
       />
       <div className="sticky top-0">

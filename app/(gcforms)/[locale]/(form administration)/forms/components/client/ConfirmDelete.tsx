@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { ConfirmFormDeleteDialog } from "@formBuilder/components/shared/ConfirmFormDeleteDialog";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
-import { deleteForm } from "../../actions";
+import { deleteDraftForm, deleteForm } from "../../actions";
 import { clearTemplateStorage } from "@lib/store/utils";
 
 // Note: copied from accounts manage-forms.
@@ -11,19 +11,21 @@ export const ConfirmDelete = ({
   show,
   id,
   isPublished,
+  isDraftVersion = false,
   handleClose,
   onDeleted,
 }: {
   show: string | boolean | string[] | undefined;
   id: string;
   isPublished: boolean;
+  isDraftVersion?: boolean;
   handleClose: (arg: boolean) => void;
   onDeleted: (arg: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
   const handleConfirm = useCallback(async () => {
-    const { error } = (await deleteForm(id)) ?? {};
+    const { error } = (await (isDraftVersion ? deleteDraftForm(id) : deleteForm(id))) ?? {};
     if (error) {
       if (error === "Responses Exist") {
         toast.error(t("formDeletedResponsesExist"));
@@ -41,7 +43,7 @@ export const ConfirmDelete = ({
       el.remove();
     }
     onDeleted(id);
-  }, [id, onDeleted, t]);
+  }, [id, isDraftVersion, onDeleted, t]);
 
   return (
     <>
@@ -50,7 +52,8 @@ export const ConfirmDelete = ({
           formId={id}
           handleClose={() => handleClose(false)}
           handleConfirm={handleConfirm}
-          isPublished={isPublished}
+          isPublished={isPublished && !isDraftVersion}
+          isDraftVersion={isDraftVersion}
         />
       )}
       <div className="sticky top-0">

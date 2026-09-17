@@ -11,6 +11,7 @@ import { updateTemplate } from "@lib/templates/mutations/updateTemplate";
 import { syncAssignedUsersForTemplate } from "@lib/templates/mutations/syncAssignedUsersForTemplate";
 import { removeDeliveryOption } from "@lib/templates/mutations/removeDeliveryOption";
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
+import { deleteDraftVersionForTemplate } from "@lib/templates/mutations/deleteDraftVersionForTemplate";
 import { mapTemplateToPublicFormRecord } from "@lib/templates/internal";
 import {
   TemplateAlreadyPublishedError,
@@ -793,6 +794,36 @@ describe("Template CRUD functions", () => {
         "DeleteForm"
       );
       expect(mockedDeleteKey).toHaveBeenCalledTimes(1);
+    });
+
+    it("Deletes a published draft version without archiving its parent template", async () => {
+      (prismaMock.$transaction as MockedFunction<any>).mockImplementation(
+        (callback: (transaction: typeof prismaMock) => Promise<unknown>) => callback(prismaMock)
+      );
+      (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+        isPublished: true,
+        currentDraftVersionId: "draft-version-2",
+      });
+      (prismaMock.template.update as MockedFunction<any>).mockResolvedValue({});
+      (prismaMock.templateVersion.delete as MockedFunction<any>).mockResolvedValue({});
+
+      await expect(deleteDraftVersionForTemplate("formtestID")).resolves.toBe(true);
+
+      expect(prismaMock.template.update).toHaveBeenCalledWith({
+        where: { id: "formtestID" },
+        data: {
+          currentDraftVersionId: null,
+          lastEditedByUserId: userID,
+        },
+      });
+      expect(prismaMock.template.update).not.toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ ttl: expect.any(Date) }),
+        })
+      );
+      expect(prismaMock.templateVersion.delete).toHaveBeenCalledWith({
+        where: { id: "draft-version-2" },
+      });
     });
 
     // Test for published template with unprocessed submissions
