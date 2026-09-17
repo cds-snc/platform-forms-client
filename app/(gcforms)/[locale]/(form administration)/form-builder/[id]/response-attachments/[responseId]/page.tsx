@@ -65,6 +65,9 @@ export default async function Page({
       downloadingTitle={t("responseTemplate.attachmentsDownloading")}
       unavailableTitle={t("responseTemplate.attachmentsUnavailableTitle")}
       unavailableMessage={t("responseTemplate.attachmentsUnavailableMessage")}
+      progressLabel={t("responseTemplate.attachmentsProgress")}
+      preparingLabel={t("responseTemplate.attachmentsPreparing")}
+      completedLabel={t("responseTemplate.attachmentsComplete")}
     />
   );
 }
