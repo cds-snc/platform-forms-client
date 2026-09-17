@@ -15,6 +15,7 @@ import { transformFormProperties } from "@lib/store/helpers/elements/transformFo
 import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/betaCheck";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { setImportedTemplate } from "@lib/store/importBuffer";
+import { logMessage } from "@lib/logger";
 
 export const Start = () => {
   const {
@@ -58,15 +59,33 @@ export const Start = () => {
           return;
         }
 
-        const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
+        const parsedData = safeJSONParse<FormProperties>(result, cleaner);
 
-        if (!data) {
+        if (!parsedData) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
           return;
         }
 
+        const sourceValidationResult = validateTemplate(parsedData);
+        let data: FormProperties;
+
+        try {
+          data = transformFormProperties(parsedData);
+        } catch (error) {
+          logMessage.error(`Unable to normalize imported form: ${String(error)}`);
+          setErrors(sourceValidationResult.errors);
+          target.value = "";
+          return;
+        }
+
         const validationResult = validateTemplate(data);
+
+        if (!sourceValidationResult.valid && validationResult.valid) {
+          logMessage.info(
+            `Auto-fixed imported form validation errors: ${JSON.stringify(sourceValidationResult.errors)}`
+          );
+        }
 
         if (!validationResult.valid) {
           setErrors(validationResult.errors);
