@@ -1,7 +1,7 @@
 "use client";
 
 import JSZip from "jszip";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { addResponseAttachmentsToZip } from "@lib/responseDownloadFormats/attachments";
 import type { ResponseAttachment } from "@lib/responseDownloadFormats/types";
 import { GcFormsIcon } from "@clientComponents/forms/SubmitProgress/GCFormsIcon";
@@ -30,8 +30,12 @@ export const AttachmentDownload = ({
   const [progress, setProgress] = useState(0);
   const [downloadedAttachments, setDownloadedAttachments] = useState(0);
   const [status, setStatus] = useState<"downloading" | "preparing" | "completed">("downloading");
+  const downloadStarted = useRef(false);
 
   useEffect(() => {
+    if (downloadStarted.current) return;
+    downloadStarted.current = true;
+
     const downloadAttachments = async () => {
       try {
         const zip = new JSZip();
