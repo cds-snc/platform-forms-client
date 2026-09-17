@@ -13,6 +13,8 @@ import { ProtectedLevel } from "./ProtectedLevel";
 import { formatDateTimeUTC, formatDateTimeUTCFr } from "@lib/utils/form-builder";
 import { VersionBadge } from "../../html/components/VersionBadge";
 import { getLocalizedProperty, LocalizedElementProperties, Language } from "@lib/utils";
+import { ResponseAttachmentsWarning } from "../../html/components/ResponseAttachmentsWarning";
+import { getResponseAttachmentsUrl } from "../../attachmentDownloadUrl";
 
 interface HTMLDownloadProps {
   lang: Language;
@@ -148,6 +150,18 @@ export const ResponseHtmlAggregated = ({
                         {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
                         {submission.id}
                       </h3>
+                      {submission.attachments?.length && (
+                        <ResponseAttachmentsWarning
+                          responseAttachmentsUrl={getResponseAttachmentsUrl({
+                            origin: host,
+                            locale: lang,
+                            formId: formResponseSubmissions.formRecord.id,
+                            responseId: submission.id,
+                          })}
+                          lang={lang}
+                          t={t}
+                        />
+                      )}
                       <ColumnTable
                         responseID={submission.id}
                         submissionDate={submission.createdAt}
