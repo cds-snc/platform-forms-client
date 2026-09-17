@@ -1,6 +1,5 @@
 "use client";
 import { useTranslation } from "@i18n/client";
-import Link from "next/link";
 
 export const SkipLink = () => {
   const { t } = useTranslation("common");
@@ -9,9 +8,9 @@ export const SkipLink = () => {
 
   return (
     <div id="skip-link-container">
-      <Link href="#content" id="skip-link" prefetch={false} className={bannerCSS}>
+      <a href="#content" id="skip-link" className={bannerCSS}>
         {t("skip-link")}
-      </Link>
+      </a>
     </div>
   );
 };

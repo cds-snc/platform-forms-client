@@ -75,7 +75,7 @@ export default AuthenticatedLayout(
                   >
                     <LeftNavigation />
                   </div>
-                  <main id="content" className="w-full">
+                  <main id="content" className="w-full" tabIndex={-1}>
                     {children}
                   </main>
                 </div>

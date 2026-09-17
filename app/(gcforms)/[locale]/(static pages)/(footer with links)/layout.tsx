@@ -16,9 +16,11 @@ export default async function Layout(props: {
   return (
     <div className="gcds-page flex h-full flex-col bg-white">
       <SkipLink />
-      <GcdsHeader language={locale as Language} pathname={pathname} />
-      <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
-        <main id="content">{children}</main>
+      <GcdsHeader language={locale as Language} pathname={pathname} skipLink={false} />
+      <div className="container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
+        <main id="content" tabIndex={-1}>
+          {children}
+        </main>
       </div>
       <Footer displayFormBuilderFooter={true} />
     </div>
