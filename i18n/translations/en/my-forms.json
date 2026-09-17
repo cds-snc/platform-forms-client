@@ -99,7 +99,10 @@
     "attachmentsWarningTitle": "This response includes attachments",
     "attachmentsWarningMessage": "Ensure you download the attachments before you confirm removal of this response.",
     "downloadAttachments": "Get response attachments",
-    "attachmentsDownloading": "Downloading response attachments",
+    "attachmentsDownloading": "Download response attachments",
+    "attachmentsProgress": "Downloaded {{current}} attachment(s)",
+    "attachmentsPreparing": "Preparing your download",
+    "attachmentsComplete": "Download complete",
     "attachmentsUnavailableTitle": "Response attachments are no longer available",
     "attachmentsUnavailableMessage": "The response may have been signed off for removal, or the files may already have been removed from GC Forms.",
     "versionNumber": "Version"
