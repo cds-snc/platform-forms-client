@@ -7,6 +7,12 @@ import { validateCustomRegex } from "@lib/regex/validateCustomRegex";
 
 export type errorMessage = { property?: string; message: string };
 
+const deduplicatePropertyErrors = (errors: errorMessage[]) =>
+  errors.filter(
+    (error, index) =>
+      !error.property || errors.findIndex(({ property }) => property === error.property) === index
+  );
+
 const getValidationPath = (error: ValidationError) => error.path.map(String).join(".");
 
 const getErrorMessageTranslationString = (error: ValidationError) => {
@@ -49,10 +55,10 @@ export const validateTemplate = (data: FormProperties) => {
   const validatorResult: ValidatorResult = validator.validate(data, templatesSchema, {
     preValidateProperty: cleanAngleBrackets,
   });
-  const validationErrors = validatorResult.errors.filter(
-    ({ name }) => !["allOf", "anyOf", "oneOf"].includes(name)
-  );
-  errors.push(...validationErrors.map(getErrorMessageTranslationString));
+  const validationErrors = validatorResult.errors
+    .filter(({ name }) => !["allOf", "anyOf", "oneOf"].includes(name))
+    .map(getErrorMessageTranslationString);
+  errors.push(...deduplicatePropertyErrors(validationErrors));
 
   return {
     valid: errors.length === 0,

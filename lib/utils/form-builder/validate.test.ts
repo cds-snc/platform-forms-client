@@ -33,4 +33,22 @@ describe("validateTemplate", () => {
       { property: "groups.end.nextAction", message: "formInvalidProperty" },
     ]);
   });
+
+  it("reports each invalid property once", () => {
+    const invalidTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
+    invalidTemplate.groups!["exit-page"] = {
+      name: "Exit page",
+      titleEn: "Exit page",
+      titleFr: "Page de sortie",
+      elements: [],
+      nextAction: "exit",
+      exitUrlEn: "not-a-url",
+      exitUrlFr: "",
+    };
+
+    expect(validateTemplate(invalidTemplate).errors).toEqual([
+      { property: "groups.exit-page.exitUrlEn", message: "formInvalidProperty" },
+      { property: "groups.exit-page.exitUrlFr", message: "formInvalidProperty" },
+    ]);
+  });
 });
