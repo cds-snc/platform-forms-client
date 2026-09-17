@@ -60,8 +60,11 @@ export const getAttachmentZipPath = (
 export const addResponseAttachmentsToZip = async (
   zip: JSZip,
   groups: ResponseAttachmentGroup[] | undefined,
-  flat = false
+  flat = false,
+  onAttachmentProgress?: (completed: number, total: number) => void
 ) => {
+  const attachments = (groups ?? []).flatMap((group) => group.attachments);
+  let completed = 0;
   const files = await Promise.all(
     (groups ?? []).flatMap((group) => {
       const usedNames = new Set<string>();
@@ -74,7 +77,7 @@ export const addResponseAttachmentsToZip = async (
           );
         }
 
-        return {
+        const file = {
           path: getAttachmentZipPath(
             group.responseId,
             attachment.name,
@@ -85,6 +88,10 @@ export const addResponseAttachmentsToZip = async (
           ),
           data: await response.blob(),
         };
+
+        completed += 1;
+        onAttachmentProgress?.(completed, attachments.length);
+        return file;
       });
     })
   );
