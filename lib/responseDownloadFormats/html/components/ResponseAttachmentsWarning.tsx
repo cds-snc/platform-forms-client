@@ -29,7 +29,7 @@ export const ResponseAttachmentsWarning = ({
         </p>
         <a
           href={responseAttachmentsUrl}
-          className={`${themes.base} ${themes.secondary} ${themes.htmlLink} !bg-white-default`}
+          className={`${themes.base} ${themes.secondary} ${themes.htmlLink}`}
         >
           {t("responseTemplate.downloadAttachments", { lng: lang, ns: "my-forms" })}
         </a>
