@@ -16,6 +16,7 @@ interface HTMLDownloadProps {
   createdAt: number;
   securityAttribute: SecurityAttribute;
   showCodes?: boolean;
+  responseAttachmentsUrl?: string;
   t: TFunction<string | string[], undefined>;
 }
 
@@ -27,6 +28,7 @@ export const ResponseHtml = ({
   createdAt,
   securityAttribute,
   showCodes = true,
+  responseAttachmentsUrl,
   t,
 }: HTMLDownloadProps) => {
   return (
@@ -66,6 +68,7 @@ export const ResponseHtml = ({
                 formResponse={response}
                 versionNumber={formRecord.versionNumber}
                 showCodes={showCodes}
+                responseAttachmentsUrl={responseAttachmentsUrl}
                 t={t}
               />
             </div>
@@ -88,6 +91,7 @@ export const ResponseHtml = ({
                   formResponse={response}
                   versionNumber={formRecord.versionNumber}
                   showCodes={showCodes}
+                  responseAttachmentsUrl={responseAttachmentsUrl}
                   t={t}
                 />
               </div>
