@@ -40,6 +40,7 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { traceFunction } from "@lib/otel";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import type { Response } from "@gcforms/types";
+import { getSubmissionData } from "./submissionData";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -189,7 +190,11 @@ export const getSubmissionsByFormat = AuthenticatedAction(
         const responses = queryResult
           .sort((a, b) => a.createdAt - b.createdAt)
           .map((item) => {
-            const filteredSubmissionData = JSON.parse(String(item.formSubmission));
+            const { answers: submissionAnswers, attachments } = getSubmissionData(
+              item.formSubmission,
+              item.fileAttachments
+            );
+            const filteredSubmissionData = { ...submissionAnswers };
             // Remove ignored keys from the submission data
             Object.keys(filteredSubmissionData).forEach((key) => {
               if (IGNORED_KEYS.includes(key)) {
@@ -213,6 +218,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
               createdAt: parseInt(item.createdAt.toString()),
               confirmationCode: item.confirmationCode,
               answers: sorted,
+              ...(attachments.length > 0 && { attachments }),
             };
           }) as FormResponseSubmissions["submissions"];
 

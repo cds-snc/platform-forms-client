@@ -95,6 +95,10 @@
     "errorrCopyingToClipboard": "Error copying to clipboard",
     "submissionID": "Submission ID",
     "copyResponse": "Copy answer row to clipboard",
+    "downloadAttachments": "Get response attachments",
+    "attachmentsDownloading": "Downloading response attachments",
+    "attachmentsUnavailableTitle": "Response attachments are no longer available",
+    "attachmentsUnavailableMessage": "The response may have been signed off for removal, or the files may already have been removed from GC Forms.",
     "versionNumber": "Version"
   },
   "responseAggregatedTemplate": {
