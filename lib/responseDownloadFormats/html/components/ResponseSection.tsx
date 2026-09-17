@@ -7,6 +7,7 @@ import { FormRecord } from "@gcforms/types";
 import { TFunction } from "i18next";
 import { Language } from "@root/lib/types/form-builder-types";
 import { VersionBadge } from "./VersionBadge";
+import { ResponseAttachmentsWarning } from "./ResponseAttachmentsWarning";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -137,6 +138,13 @@ export const ResponseSection = ({
               {t("responseTemplate.rowTable", { lng: lang })}
             </a>
           </li>
+          {responseAttachmentsUrl && (
+            <li className="mr-4">
+              <a href={`#attachmentsHeading${capitalizedLang}`}>
+                {t("responseTemplate.attachmentsSectionTitle", { lng: lang })}
+              </a>
+            </li>
+          )}
           {showCodes && (
             <li className="mr-4">
               <a href={`#confirmReceipt${capitalizedLang}`}>
@@ -169,11 +177,16 @@ export const ResponseSection = ({
         formRecord={formRecord}
       />
       {responseAttachmentsUrl && (
-        <p className="mt-4">
-          <a href={responseAttachmentsUrl}>
-            {t("responseTemplate.downloadAttachments", { lng: lang })}
-          </a>
-        </p>
+        <section aria-labelledby={`attachmentsHeading${capitalizedLang}`}>
+          <h3 id={`attachmentsHeading${capitalizedLang}`} className="gc-h2 mt-20">
+            {t("responseTemplate.attachmentsSectionTitle", { lng: lang })}
+          </h3>
+          <ResponseAttachmentsWarning
+            responseAttachmentsUrl={responseAttachmentsUrl}
+            lang={lang}
+            t={t}
+          />
+        </section>
       )}
 
       <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
