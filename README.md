@@ -53,11 +53,17 @@ yarn dev
 
 Browse web application on `http://localhost:3000`.
 
-### Speech input prototype
+### Speech input proof of concept
 
-The optional speech input prototype records audio in the browser and sends it to the
-application's `/api/speech-to-text` route. That route forwards the request to a service
-you operate; audio is never sent to the browser's Web Speech provider.
+This experiment answers the question: can a respondent record a short answer in the
+browser and receive a usable English or French transcription through a self-hosted service?
+
+The proof of concept records audio in the browser and sends it to the application's
+`/api/speech-to-text` route. That route forwards the request to a service you operate;
+audio is never sent to the browser's Web Speech provider. The initial scope is one real
+public form text field and a working end-to-end request. Production rollout, broad field
+coverage, GPU infrastructure, monitoring, retention policy, and polished accessibility
+or error-recovery flows are intentionally out of scope until the path is shown to work.
 
 Enable it with these server environment variables:
 
@@ -69,6 +75,21 @@ SPEECH_TO_TEXT_URL=http://your-private-stt-service/transcribe
 The speech service must accept multipart form data with an `audio` file and optional
 `language` field, and return JSON in the form `{ "text": "..." }`. The prototype limits
 audio uploads to 25 MB and does not log audio or transcripts in this application.
+
+#### Proof-of-concept steps
+
+The smallest useful implementation has two steps:
+
+1. Run a pinned faster-whisper service locally or in a disposable development environment,
+	connect it through the proxy, and verify a real English and French answer reaches one
+	public form text field.
+2. If the software path works, run the same service as one private, development-only CDS
+	workload and verify private connectivity, health checks, and one transcription request.
+
+The first step does not require Terraform, GPU capacity, service discovery, an internal
+load balancer, or deployment automation. Those become relevant only to the second step,
+and only as much as needed to validate the private deployment. Autoscaling, production
+hardening, dashboards, and broad form-field rollout are outside this proof of concept.
 
 ### Edit `@gcforms/core` styles locally
 
