@@ -75,6 +75,7 @@ SPEECH_TO_TEXT_URL=http://your-private-stt-service/transcribe
 The speech service must accept multipart form data with an `audio` file and optional
 `language` field, and return JSON in the form `{ "text": "..." }`. The prototype limits
 audio uploads to 25 MB and does not log audio or transcripts in this application.
+The local service implementation and setup instructions are in `speech-service/README.md`.
 
 #### Proof-of-concept steps
 
