@@ -3,12 +3,16 @@ import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
 import { defaultForm } from "../../defaults";
 import { NotificationsIntervalDefault } from "@gcforms/types";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
 export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (jsonConfig) => {
+  // Migrate before merging with defaultForm, so a missing version is read as version 1.
+  const migratedForm = migrateTemplate(jsonConfig);
+
   set((state) => {
     state.id = "";
     state.lang = "en";
-    state.form = initializeGroups({ ...defaultForm, ...jsonConfig });
+    state.form = initializeGroups({ ...defaultForm, ...migratedForm });
 
     // Ensure order by groups layout
     if (!state.form.groupsLayout) {

@@ -129,6 +129,29 @@ and is out of scope here — it stays as-is.
   code, only for deleting *rendering* tolerance).
 - Full inventory/classification of every transform currently in
   `transformFormProperties.ts` into migration vs. schema-tightening buckets.
+- **`getSchemaFromState` hardcodes its exported field list instead of
+  deriving it from `templates.schema.json`.** This is the same class of bug
+  as the `version`-dropped-on-download issue: a hand-maintained allowlist
+  drifting from its source of truth, just one layer up (schema vs. allowlist,
+  rather than `state.form` vs. allowlist). Deriving the allowlist from
+  `Object.keys(templatesSchema.properties)` would mean future schema
+  properties flow through the export automatically. Complications to work
+  out before doing this:
+  - The function isn't a pure field copy — it also derives `form.layout` from
+    `groups` when `formHasGroups(form)` is true, so a schema-driven rewrite
+    needs to keep that transform separate from "which fields are allowed."
+  - `securityAttribute` is currently in the exported allowlist but is **not**
+    a property in `templates.schema.json`. Need to double check: this
+    property may have moved from the template `jsonConfig` to the database
+    (`Template.securityAttribute` in `schema.prisma`) at some point, and its
+    presence in `getSchemaFromState`'s export could just be leftover cruft
+    that should be removed rather than something to add to the schema.
+    Needs review before deciding whether the schema or the export function
+    is wrong.
+  - Lower-risk interim option instead of a full refactor: add a contract test
+    asserting `Object.keys(templatesSchema.properties)` matches the
+    allowlist in `getSchemaFromState`, so any future divergence fails loudly
+    instead of silently dropping fields.
 
 ## Progress log
 
@@ -178,3 +201,54 @@ and is out of scope here — it stays as-is.
   is "introducing the version field" as a migration in its own right, per the
   earlier design decision — it doesn't depend on the groups PR.
   `CURRENT_TEMPLATE_VERSION` is now `2` and registered in `migrations/index.ts`.
+- 2026-09-18: Wired `migrateTemplate` into the builder-side load/import paths
+  (confirmed via usage search that `TemplateStoreProvider`/`useTemplateStore`
+  is exclusively used under the form-builder routes, never the public
+  form-viewer):
+  - `initialize.ts` (brand new template): stamps `CURRENT_TEMPLATE_VERSION`
+    directly, no migration — there's nothing to migrate for a fresh form.
+  - `initStore.ts` (SSR initial builder state when opening an existing
+    template's draft): migrates `initProps.form` before merging with
+    `defaultForm`.
+  - `setFromRecord.ts` (re-syncing the store from a server record, e.g. after
+    edit-lock changes): migrates `record.form` before merging with
+    `defaultForm`.
+  - `importTemplate.ts` (store action that loads the file-upload import
+    buffer): migrates the incoming `jsonConfig` before merging with
+    `defaultForm`.
+  - `Start.tsx` (file import UI): migrates right after the existing
+    `transformFormProperties` cleanup and before `validateTemplate`, so
+    imported templates are validated against the current schema shape.
+  - `createDraftForTemplate.ts` (server-side, copies
+    `currentPublishedVersion.jsonConfig` into a new draft
+    `TemplateVersion` row): migrates the copied JSON before it's persisted as
+    the new draft. `currentPublishedVersion.jsonConfig` itself is never
+    touched.
+  - Important ordering note: in every merge-with-`defaultForm` call site,
+    migration runs on the *raw* incoming data first, then the result is
+    spread over `defaultForm`. `defaultForm` intentionally does not carry a
+    `version` field — if it did, the `{...defaultForm, ...incoming}` merge
+    pattern used to backfill missing fields on old templates would silently
+    stamp the current version on old data without actually migrating it,
+    defeating the "missing version means version 1" detection.
+  - Not yet done: public render/submission path is untouched (correct — it
+    must never migrate); no dedicated test added for
+    `createDraftForTemplate.ts` (pre-existing gap, not introduced by this
+    change).
+- 2026-09-18: Bug found via manual testing (new template and imported
+  template both lost `version` on download while not logged in). Root cause:
+  `getSchemaFromState` (`lib/utils/form-builder/index.ts`), used by the
+  builder's JSON download/export (`DownloadFileButton.tsx` → `getSchema()`),
+  manually destructures a fixed allowlist of fields off `state.form` rather
+  than spreading it — any field not explicitly named is silently dropped from
+  the exported JSON, including `version`. Fixed by adding `version` to the
+  destructure and the reconstructed object. Added
+  `getSchemaFromState.test.ts` (no prior test coverage existed for this
+  function). This is a good reminder to audit for other manual
+  allowlist/reconstruction of `FormProperties` that could similarly drop new
+  fields (e.g. save/publish paths) as this work continues.
+- 2026-09-18: Follow-up discussion on the `getSchemaFromState` fix — logged
+  as an open question above: should its exported field list be derived from
+  `templates.schema.json` instead of hardcoded, and what to do about
+  `securityAttribute` (currently exported but not in the schema — possibly
+  leftover from before it moved to the `Template` DB column, needs review).
