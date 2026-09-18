@@ -15,12 +15,10 @@ import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@gcforms/database";
 import { getTemplateIdsWithEditLocks, getEditLockInfoWithCollaborators } from "@lib/editLockUtils";
 import { EDIT_LOCK_POLL_INTERVAL_MS } from "./components/constants";
-import { CoEditingHelp } from "./components/server/CoEditingHelp";
 import { UpdatePublishedHelp } from "./components/server/UpdatePublishedHelp";
 import type { FormsTemplate, FormsTemplateWithLockInfo, FormTabStatus } from "./components/types";
 import { TAB_STATUS } from "./components/types";
 import { CreateDraftConfirmDialog } from "../form-builder/[id]/components/dialogs/CreateDraftConfirmDialog/CreateDraftConfirmDialog";
-import { isTemplateVersioningEnabled } from "@lib/templates/versioning/internal";
 
 const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => string): string => {
   const statusTitleMap: Record<string, string> = {
@@ -99,8 +97,6 @@ export default async function Page(props: {
 }) {
   const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
 
-  const templateVersioningEnabled = await isTemplateVersioningEnabled();
-
   const { status = TAB_STATUS.RECENTLY_EDITED } = searchParams;
 
   const { locale } = params;
@@ -135,19 +131,14 @@ export default async function Page(props: {
             // default published filter for other tabs
             isPublished: status === TAB_STATUS.PUBLISHED ? true : undefined,
           }),
-      // Archived filter: ttl: { not: null } for archived, null (must have no ttl) for all others except closed (no filter)
-      ttl:
-        status === TAB_STATUS.ARCHIVED
-          ? { not: null }
-          : status === TAB_STATUS.CLOSED
-            ? undefined
-            : null,
+      // Archived filter: archived forms have a TTL; all other tabs exclude archived forms.
+      ttl: status === TAB_STATUS.ARCHIVED ? { not: null } : null,
       // Closed filter: closingDate in the past
       ...(status === TAB_STATUS.CLOSED && {
         closingDate: { not: null, lt: new Date() },
       }),
-      // Published and Archived further filtering: remove templates that have a closing date in the past (closed forms)
-      ...((status === TAB_STATUS.PUBLISHED || status === TAB_STATUS.ARCHIVED) && {
+      // Published further filtering: remove templates that have a closing date in the past (closed forms)
+      ...(status === TAB_STATUS.PUBLISHED && {
         NOT: {
           AND: [{ closingDate: { not: null } }, { closingDate: { lt: new Date() } }],
         },
@@ -260,8 +251,7 @@ export default async function Page(props: {
         </div>
         <div className="mt-6 ml-2">
           {status === TAB_STATUS.DRAFT && <ResumeEditingForm />}
-          {!templateVersioningEnabled && <CoEditingHelp />}
-          {templateVersioningEnabled && <UpdatePublishedHelp />}
+          <UpdatePublishedHelp />
         </div>
       </div>
       <div className="flex h-full min-h-0 flex-col">

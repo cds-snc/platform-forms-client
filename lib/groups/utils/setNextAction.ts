@@ -1,3 +1,4 @@
+import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { type GroupsType, type Group } from "@gcforms/types";
 import { type NextActionRule } from "@gcforms/types";
 
@@ -13,10 +14,24 @@ export const autoFlowAllNextActions = (formGroups: GroupsType, force: boolean = 
   const keys = Object.keys(formGroups);
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
+
+    if (key === LOCKED_GROUPS.END) {
+      continue;
+    }
+
+    if (key === LOCKED_GROUPS.REVIEW) {
+      continue;
+    }
+
     const nextKey = keys[i + 1];
 
     // Set the nextAction if there is no next group
-    if (force || !formGroups[key].nextAction || formGroups[key].nextAction === "") {
+    if (
+      force ||
+      !formGroups[key].nextAction ||
+      formGroups[key].nextAction === "" ||
+      formGroups[key].nextAction === undefined
+    ) {
       formGroups[key] = {
         ...formGroups[key],
         nextAction: nextKey,

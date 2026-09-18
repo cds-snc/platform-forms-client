@@ -38,7 +38,7 @@ export const PublishedFormLink = ({
         href={href}
         target="_blank"
         rel="noreferrer"
-        className="min-w-0 flex-1 truncate text-base font-semibold text-slate-900 no-underline hover:underline focus:underline"
+        className="min-w-0 flex-1 truncate text-base font-semibold text-slate-900 no-underline hover:underline"
       >
         {label}
       </a>

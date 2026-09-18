@@ -45,7 +45,6 @@ export const Header = ({
 
   const { getFlag } = useFeatureFlags();
   const isEnabled = getFlag(FeatureFlags.topBanner);
-  const templateVersioningEnabled = getFlag(FeatureFlags.templateVersioning);
 
   useEffect(() => {
     async function fetchBannerData() {
@@ -89,9 +88,7 @@ export const Header = ({
                 {t("title", { ns: "common" })}
               </div>
             )}
-            {isFormBuilder && (
-              <FileNameInput templateVersioningEnabled={templateVersioningEnabled} />
-            )}
+            {isFormBuilder && <FileNameInput />}
           </div>
           <div className="ml-auto rounded-xl bg-white px-4 py-2">
             <nav aria-label={t("mainNavAriaLabel", { ns: "common" })}>

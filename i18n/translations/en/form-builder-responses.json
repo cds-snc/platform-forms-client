@@ -35,7 +35,7 @@
         "title": "Next steps",
         "body": "Since GC Forms does not store responses indefinitely, you’ll need to retrieve and clear all response data within 45 days of submission."
       },
-      "": {
+      "version": {
         "title": "Form version",
         "body": "Shows version used by form filler."
       }

@@ -21,11 +21,9 @@ import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
 export const FormWrapper = ({
   formRecord,
   header,
-  allowGrouping,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   header: React.ReactNode;
-  allowGrouping?: boolean | undefined;
 }) => {
   // TODO cast language as "en" | "fr" in TS below
   const {
@@ -42,10 +40,6 @@ export const FormWrapper = ({
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
   const { cachedSession } = useResponsesCache();
-  const captchaToken = React.useRef("");
-  // TODO : If the formRecord contains file inputs Save and Resume is not available
-  const resetCaptchaRef = React.useRef<{ resetToken: () => void }>({ resetToken: () => {} });
-
   const saveAndResume = formRecord?.saveAndResume;
 
   // Generate form elements on the client to ensure Formik context is available
@@ -135,13 +129,10 @@ export const FormWrapper = ({
             />
           );
         }}
-        allowGrouping={allowGrouping}
         // Used in Formik handleSubmit where there is no access to useGCFormsContext
         currentGroup={currentGroup}
         setCaptchaFail={setCaptchaFail}
         captchaFail={captchaFail}
-        captchaToken={captchaToken}
-        resetCaptchaRef={resetCaptchaRef}
       >
         {currentForm}
       </Form>

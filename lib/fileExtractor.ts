@@ -8,7 +8,7 @@ import {
 
 import { v4 as uuid } from "uuid";
 
-const isFileInput = (response: unknown): response is FileInputResponseWithContent => {
+export const isFileInput = (response: unknown): response is FileInputResponseWithContent => {
   return (
     response !== null &&
     typeof response === "object" &&
@@ -106,6 +106,18 @@ export const copyObjectExcludingFileContent = (
         id,
         name: originalState.name,
         size: originalState.size,
+      } as T;
+    }
+
+    if (
+      nullifyFileInput &&
+      "id" in originalState &&
+      "name" in originalState &&
+      "size" in originalState
+    ) {
+      return {
+        name: null,
+        size: null,
       } as T;
     }
 

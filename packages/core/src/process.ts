@@ -90,14 +90,7 @@ export const validateVisibleElements = (
     visibilityMap.set(String(formElement.id), isVisible);
 
     if (formElement.properties.validation) {
-      const result = isFieldResponseValid(
-        responseValue,
-        values,
-        formElement.type,
-        formElement,
-        formElement.properties.validation,
-        props.t
-      );
+      const result = isFieldResponseValid(responseValue, formElement, props.t);
 
       if (result) {
         errors[formElement.id] = result;

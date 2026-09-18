@@ -10,22 +10,6 @@
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Désactivé",
   "features": {
-    "zitadelAuth": {
-      "title": "AuthenticationZitadel",
-      "description": "Authentification Zitadel pour API"
-    },
-    "addressComplete": {
-      "title": "Adresse complète",
-      "description": "Activer la complétion d'adresse CanadaPost pour les formulaires"
-    },
-    "formTimer": {
-      "title": "formTimer",
-      "description": "Activer formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
-    },
-    "hCaptcha": {
-      "title": "hCaptcha",
-      "description": "Activer la prévention anti-spam hCaptcha"
-    },
     "topBanner": {
       "title": "Bannière",
       "description": "Activer la bannière d'avertissement pour qu'elle soit visible"
@@ -37,14 +21,6 @@
     "zitadelLogin": {
       "title": "Connexion via Zitadel",
       "description": "Activer Zitadel comme méthode de connexion pour les utilisateurs"
-    },
-    "templateVersioning": {
-      "title": "Gestion des versions de formulaires",
-      "description": "Activer le flux de version d'ébauches et de republication pour les modèles de formulaire"
-    },
-    "notification": {
-      "title": "Système de notification",
-      "description": "Activer l'envoi de courriels immédiats ou différés via le système de notification. Si cette option est désactivée, les courriels seront envoyés directement à GC Notify."
     }
   },
   "addFlag": "Ajouter un indicateur de fonctionnalité",

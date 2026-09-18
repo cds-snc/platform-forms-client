@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
-import { NotificationsInterval } from "@gcforms/types";
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
+import { FormStatus, NotificationsInterval } from "@gcforms/types";
 import { submitForm } from "./actions";
 import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
@@ -8,12 +8,12 @@ vi.mock("@lib/templates/queries/getPublicTemplateByID", () => ({
   getPublicTemplateByID: vi.fn(),
 }));
 
-vi.mock("@lib/validation/hCaptcha", () => ({
+vi.mock("@gcforms/hcaptcha/server", () => ({
   verifyHCaptchaToken: vi.fn(),
 }));
 
-vi.mock("@lib/cache/flags", () => ({
-  checkOne: vi.fn(),
+vi.mock("@lib/appSettings", () => ({
+  getAppSettingAsBoolean: vi.fn(),
 }));
 
 vi.mock("@lib/utils", () => ({
@@ -52,8 +52,8 @@ vi.mock("./lib/server/processFormData", () => ({
 }));
 
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
-import { verifyHCaptchaToken } from "@lib/validation/hCaptcha";
-import { checkOne } from "@lib/cache/flags";
+import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
 import { serverTranslation } from "@root/i18n";
@@ -93,8 +93,8 @@ describe("submitForm", () => {
 
     // Default successful mocks
     (getPublicTemplateByID as Mock).mockResolvedValue(mockTemplate);
-    (checkOne as Mock).mockResolvedValue(false);
-    (verifyHCaptchaToken as Mock).mockResolvedValue(true);
+    (verifyHCaptchaToken as Mock).mockResolvedValue({ verified: true, score: 0.2 });
+    (getAppSettingAsBoolean as Mock).mockResolvedValue(true);
     (dateHasPast as Mock).mockReturnValue(false);
     (serverTranslation as Mock).mockResolvedValue({ t: vi.fn() });
     (validateVisibleElements as Mock).mockReturnValue({ errors: {} });
@@ -108,6 +108,27 @@ describe("submitForm", () => {
     (updateNotificationMarker as Mock).mockResolvedValue(null);
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(null);
     (sendDefaultEmail as Mock).mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("should reject CAPTCHA verification when the site verify key is missing", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_APP_ENV", "production");
+    vi.stubEnv("HCAPTCHA_SITE_VERIFY_KEY", "");
+
+    const result = await submitForm(mockValues, mockLanguage, mockFormId, false);
+
+    expect(result).toEqual({
+      id: mockFormId,
+      error: {
+        name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
+        message: "Captcha verification failure",
+      },
+    });
+    expect(verifyHCaptchaToken).not.toHaveBeenCalled();
   });
 
   it("should return MissingFormDataError when file input validation fails", async () => {
@@ -173,7 +194,6 @@ describe("submitForm", () => {
       subject: "You have a new submission",
       formResponse: "Email body",
     };
-    (checkOne as Mock).mockResolvedValue(true);
     (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
     (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
@@ -213,7 +233,6 @@ describe("submitForm", () => {
       subject: "You have multiple new submissions",
       formResponse: "Email body",
     };
-    (checkOne as Mock).mockResolvedValue(true);
     (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
     (updateNotificationMarker as Mock).mockResolvedValue("SECOND_EMAIL");
     (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
@@ -248,7 +267,6 @@ describe("submitForm", () => {
   });
 
   it("should not send a notification when form is eligible but marker limit is reached", async () => {
-    (checkOne as Mock).mockResolvedValue(true);
     (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
     (updateNotificationMarker as Mock).mockResolvedValue(null);
 
@@ -343,38 +361,5 @@ describe("submitForm", () => {
 
     expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId, "draft");
     expect(result).toEqual({ id: mockFormId, submissionId: "test-submission-id", fileURLMap: {} });
-  });
-
-  it("should fall back to GC Notify (sendEmail without deferred mode) and return undefined notificationId when the notification flag is off", async () => {
-    const mockEmailData = {
-      emails: ["user@example.com"],
-      subject: "You have a new submission",
-      formResponse: "Email body",
-    };
-    // Flag OFF
-    (checkOne as Mock).mockResolvedValue(false);
-    (getFormNotificationInterval as Mock).mockResolvedValue(NotificationsInterval.DAY);
-    (updateNotificationMarker as Mock).mockResolvedValue("FIRST_EMAIL");
-    (prepareFormSubmissionEmail as Mock).mockResolvedValue(mockEmailData);
-
-    const result = await submitForm(mockValues, mockLanguage, mockFormId, false);
-
-    expect(result).toEqual({
-      id: mockFormId,
-      submissionId: "test-submission-id",
-      fileURLMap: {},
-    });
-
-    // sendEmail is called without deferred mode — falls back to GC Notify
-    expect(sendDefaultEmail).toHaveBeenCalledWith({
-      to: mockEmailData.emails,
-      subject: mockEmailData.subject,
-      body: mockEmailData.formResponse,
-    });
-
-    // No notificationId is generated or forwarded to processFormData when the flag is off
-    expect(processFormData).toHaveBeenCalledWith(
-      expect.objectContaining({ notificationId: undefined })
-    );
   });
 });

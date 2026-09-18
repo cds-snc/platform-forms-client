@@ -17,12 +17,10 @@ export const PreviewFormWrapper = ({
   children,
   formRecord,
   disableSubmit,
-  allowGrouping,
   setSent,
 }: {
   children: React.JSX.Element[];
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
-  allowGrouping: boolean;
   disableSubmit: boolean;
   setSent: React.Dispatch<React.SetStateAction<string | null | undefined>>;
 }) => {
@@ -58,9 +56,7 @@ export const PreviewFormWrapper = ({
                 fallBack={() => {
                   return (
                     <>
-                      {allowGrouping && isShowReviewPage && (
-                        <BackButton language={translationLanguagePriority} />
-                      )}
+                      {isShowReviewPage && <BackButton language={translationLanguagePriority} />}
                       <Button
                         type="submit"
                         id="SubmitButton"
@@ -87,7 +83,6 @@ export const PreviewFormWrapper = ({
           </div>
         );
       }}
-      allowGrouping={allowGrouping}
       currentGroup={currentGroup}
     >
       {children}

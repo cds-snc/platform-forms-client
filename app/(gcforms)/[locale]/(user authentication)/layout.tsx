@@ -46,6 +46,8 @@ export default async function Layout(props: {
       </header>
       <div id="page-container" className="gc-authpages">
         <div className="account-wrapper mt-10 flex items-start justify-center gap-8">
+          <GcPlatformMigrationPanel locale={locale} />
+
           <div
             className={`tablet:w-[768px] has-[#auth-panel]:tablet:w-[658px] laptop:w-[850px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
           >
@@ -65,7 +67,6 @@ export default async function Layout(props: {
               <ToastContainer autoClose={false} containerId="default" />
             </main>
           </div>
-          <GcPlatformMigrationPanel locale={locale} />
         </div>
       </div>
       <Footer displayFormBuilderFooter />

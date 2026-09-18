@@ -2,7 +2,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import { SubmitButton } from "./SubmitButton";
-import { InnerFormProps } from "./types";
+import { FormWithFormikProps } from "./types";
 import { FormStatus } from "@gcforms/types";
 
 const isFormClosed = (status: FormStatus) => {
@@ -10,29 +10,21 @@ const isFormClosed = (status: FormStatus) => {
 };
 
 export const PrimaryFormButtons = ({
-  isGroupsCheck,
   isShowReviewPage,
   language,
-  formId,
-  formTitle,
   props,
-  getFormDelay,
   saveAndResumeEnabled,
 }: {
-  isGroupsCheck: boolean;
   isShowReviewPage: boolean;
   language: string;
-  formId: string;
-  formTitle: string;
-  props: InnerFormProps;
-  getFormDelay: () => number;
+  props: FormWithFormikProps;
   saveAndResumeEnabled?: boolean;
 }) => {
   const submissionError =
     Object.entries(props.errors).length > 0 || props.status === FormStatus.ERROR;
   return (
     <div className="flex">
-      {isGroupsCheck && isShowReviewPage && (
+      {isShowReviewPage && (
         <BackButtonGroup
           saveAndResumeEnabled={saveAndResumeEnabled}
           language={language as Language}
@@ -44,7 +36,7 @@ export const PrimaryFormButtons = ({
           fallBack: () => {
             return (
               <div className="flex">
-                {isGroupsCheck && isShowReviewPage && (
+                {isShowReviewPage && (
                   <BackButton
                     saveAndResumeEnabled={saveAndResumeEnabled}
                     language={language as Language}
@@ -52,10 +44,9 @@ export const PrimaryFormButtons = ({
                 )}
                 <SubmitButton
                   disabled={isFormClosed(props.status)}
-                  getFormDelay={getFormDelay}
-                  formID={formId}
-                  formTitle={formTitle}
+                  isSubmitting={props.isSubmitting}
                   submissionError={submissionError}
+                  buttonRef={props.submitButtonRef}
                 />
               </div>
             );
@@ -64,10 +55,9 @@ export const PrimaryFormButtons = ({
       ) : (
         <SubmitButton
           disabled={isFormClosed(props.status)}
-          getFormDelay={getFormDelay}
-          formID={formId}
-          formTitle={formTitle}
+          isSubmitting={props.isSubmitting}
           submissionError={submissionError}
+          buttonRef={props.submitButtonRef}
         />
       )}
     </div>

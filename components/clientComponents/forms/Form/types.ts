@@ -18,14 +18,18 @@ export interface FormProps {
   onSuccess: (id: string, submissionId?: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
-  allowGrouping?: boolean | undefined;
-  matchedIds?: string[];
   saveAndResumeEnabled?: boolean;
   currentGroup: string | null;
   setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;
   captchaFail?: boolean;
-  captchaToken?: React.RefObject<string>;
-  resetCaptchaRef?: React.RefObject<{ resetToken: () => void }>;
 }
 
-export type InnerFormProps = FormProps & FormikProps<Responses>;
+export type FormWithFormikProps = FormProps &
+  FormikProps<Responses> & {
+    submitButtonRef: (element: HTMLButtonElement) => void;
+  };
+
+export type FormRenderProps = FormWithFormikProps & {
+  captcha: React.ReactNode;
+  captchaEnabled: boolean;
+};

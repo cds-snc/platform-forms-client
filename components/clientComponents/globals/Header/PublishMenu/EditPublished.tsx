@@ -1,14 +1,10 @@
 type Translate = (key: string) => string;
 import { Button } from "@clientComponents/globals";
 import { EventKeys } from "@root/lib/hooks/useCustomEvent";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { useTemplateStore } from "@root/lib/store/useTemplateStore";
 import { isEmailDelivery } from "@root/lib/utils/form-builder";
 
 export const EditPublished = ({ formId, t }: { formId: string; t: Translate }) => {
-  const { getFlag } = useFeatureFlags();
-  const templateVersioningEnabled = getFlag("templateVersioning");
-
   const { deliveryOption } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -16,10 +12,6 @@ export const EditPublished = ({ formId, t }: { formId: string; t: Translate }) =
   }));
 
   if (deliveryOption && isEmailDelivery(deliveryOption)) {
-    return null;
-  }
-
-  if (!templateVersioningEnabled) {
     return null;
   }
 

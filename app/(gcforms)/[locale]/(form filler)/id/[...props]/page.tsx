@@ -6,11 +6,11 @@ import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { PageContent } from "./pageContent";
-import { allowGrouping } from "@lib/groups/utils/allowGrouping";
 import { serverTranslation } from "@i18n";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Suspense } from "react";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -60,7 +60,6 @@ export default async function Page(props0: {
 
   const language = locale as "en" | "fr";
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
-  const isAllowGrouping = allowGrouping();
 
   let isPastClosingDate = false;
   if (formRecord.closingDate) {
@@ -72,6 +71,8 @@ export default async function Page(props0: {
   const footer = (
     <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
   );
+
+  const hCaptchaEnabledSetting: boolean = await getAppSettingAsBoolean("hCaptchaEnabledSetting");
 
   return (
     <Suspense>
@@ -86,7 +87,7 @@ export default async function Page(props0: {
         saveAndResume={saveAndResume}
         footer={footer}
       >
-        <GCFormsProvider formRecord={formRecord}>
+        <GCFormsProvider formRecord={formRecord} hCaptchaEnabledSetting={hCaptchaEnabledSetting}>
           <PageContent
             formRecord={formRecord}
             language={language}
@@ -95,7 +96,6 @@ export default async function Page(props0: {
             step={step}
             formId={formId}
             saveAndResume={saveAndResume}
-            isAllowGrouping={isAllowGrouping}
           />
         </GCFormsProvider>
       </FormDisplayLayout>

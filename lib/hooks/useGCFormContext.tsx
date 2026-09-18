@@ -46,6 +46,7 @@ interface GCFormsContextValueType {
   };
   visibleElementIds: Set<string> | null;
   updateVisibleElementIds: (formValues: Record<string, string>) => void;
+  hCaptchaEnabledSetting?: boolean;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -53,12 +54,15 @@ const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefi
 export const GCFormsProvider = ({
   children,
   formRecord,
+  hCaptchaEnabledSetting = false,
 }: {
   children: ReactNode;
   formRecord: PublicFormRecord;
+  hCaptchaEnabledSetting?: boolean;
 }) => {
-  const groups: GroupsType = formRecord.form.groups || {};
-  const initialGroup = groups ? LOCKED_GROUPS.START : null;
+  const hasGroups = formHasGroups(formRecord.form);
+  const groups: GroupsType = hasGroups ? formRecord.form.groups! : {};
+  const initialGroup = LOCKED_GROUPS.START;
   const values = useRef({});
   const [currentGroup, setCurrentGroup] = useState<string | null>(initialGroup);
   const [submissionId, setSubmissionId] = useState<string | undefined>(undefined);
@@ -147,7 +151,11 @@ export const GCFormsProvider = ({
   };
 
   const getProgressData = () => {
-    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(values.current);
+    const { formValuesWithoutFileContent } = copyObjectExcludingFileContent(
+      values.current,
+      {},
+      true
+    );
 
     return {
       id: formRecord.id,
@@ -201,6 +209,7 @@ export const GCFormsProvider = ({
         getProgressData,
         visibleElementIds,
         updateVisibleElementIds,
+        hCaptchaEnabledSetting,
       }}
     >
       {children}
@@ -241,6 +250,7 @@ export const useGCFormsContext = () => {
           versionNumber: 1,
         };
       },
+      hCaptchaEnabledSetting: false,
     };
   }
   return formsContext;

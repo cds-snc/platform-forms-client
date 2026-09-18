@@ -22,8 +22,6 @@ import dynamic from "next/dynamic";
 import { useIsAdminUser } from "./useIsAdminUser";
 
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
-import { useFeatureFlags } from "../useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
 
 // Loading component for lazy-loaded descriptions
 const DescriptionLoading = () => (
@@ -100,13 +98,6 @@ const Attestation = dynamic(
   () =>
     import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Attestation").then(
       (mod) => ({ default: mod.Attestation })
-    ),
-  { ssr: false, loading: () => <DescriptionLoading /> }
-);
-const Address = dynamic(
-  () =>
-    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Address").then(
-      (mod) => ({ default: mod.Address })
     ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
@@ -196,8 +187,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     });
   };
 
-  const { getFlag } = useFeatureFlags();
-
   const isAdminUser = useIsAdminUser();
 
   // Custom json is only available to admin users
@@ -212,23 +201,11 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     group: groups.other,
   };
 
-  // Check feature flag for Address Complete
-  const allowAddressComplete = getFlag(FeatureFlags.addressComplete);
-
   const addressCompleteOptions: ElementOption = {
     id: "addressComplete",
     value: t("addElementDialog.addressComplete.label"),
     icon: AddressIcon,
     description: AddressComplete,
-    className: "",
-    group: groups.preset,
-  };
-
-  const addressOptions: ElementOption = {
-    id: "address",
-    value: t("addElementDialog.address.label"),
-    icon: AddressIcon,
-    description: Address,
     className: "",
     group: groups.preset,
   };
@@ -343,9 +320,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       description: Contact,
       group: groups.preset,
     },
-    ...(allowAddressComplete
-      ? [{ ...(addressCompleteOptions as ElementOption) }]
-      : [{ ...(addressOptions as ElementOption) }]),
+    ...[{ ...(addressCompleteOptions as ElementOption) }],
     {
       id: "departments",
       value: t("addElementDialog.departments.title"),

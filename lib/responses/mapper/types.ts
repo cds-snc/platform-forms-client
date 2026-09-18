@@ -1,7 +1,3 @@
-export type MappedAnswer = {
-  type: string;
-  questionId: number;
-  questionEn?: string;
-  questionFr?: string;
-  answer: string | MappedAnswer[][];
-};
+import type { Answer } from "@lib/responseDownloadFormats/types";
+
+export type MappedAnswer = Answer;

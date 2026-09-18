@@ -28,7 +28,6 @@ const sharedDefine = {
   "process.env.VITEST_WATCH": JSON.stringify(process.env.VITEST_WATCH || "false"),
   "process.env.APP_ENV": JSON.stringify(process.env.APP_ENV || "test"),
   "process.env.DATABASE_URL": JSON.stringify("dummy_test_url"),
-  global: "globalThis",
 };
 
 const sharedExclude = [
@@ -49,6 +48,8 @@ export default defineConfig({
     tsconfigPaths: true,
     alias: sharedAliases,
     extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
+    // Ensure all workspace packages share the same React instance during tests
+    dedupe: ["react", "react-dom"],
   },
   define: sharedDefine,
   css: { postcss: "./postcss.config.js" },

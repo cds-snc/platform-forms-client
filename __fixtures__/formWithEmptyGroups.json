@@ -1,0 +1,44 @@
+{
+  "titleEn": "Form Without Groups",
+  "titleFr": "Formulaire sans groupes",
+  "introduction": {
+    "descriptionEn": "introduction.",
+    "descriptionFr": "introduction."
+  },
+  "privacyPolicy": {
+    "descriptionEn": "privacy policy.",
+    "descriptionFr": "privacy policy."
+  },
+  "confirmation": {
+    "descriptionEn": "Confirmed",
+    "descriptionFr": "Confirmé",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [1],
+  "groups": {},
+  "elements": [
+    {
+      "id": 1,
+      "type": "textArea",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Message",
+        "titleFr": "Message",
+        "validation": {
+          "required": true
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    }
+  ]
+}

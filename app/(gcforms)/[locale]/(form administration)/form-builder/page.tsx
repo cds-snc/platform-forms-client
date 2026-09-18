@@ -7,7 +7,6 @@ import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
-import { allowGrouping } from "@lib/groups/utils/allowGrouping";
 import { authorization } from "@root/lib/privileges";
 
 export async function generateMetadata(props: {
@@ -30,12 +29,10 @@ export default async function StartPage(props: { params: Promise<{ locale: strin
 
   const { locale } = params;
 
-  const allowGroupsFlag = allowGrouping();
-
   const publishFormsEnabled = await authorization.hasPublishFormsPrivilege().catch(() => false);
 
   return (
-    <TemplateStoreProvider {...{ locale, allowGroupsFlag }}>
+    <TemplateStoreProvider {...{ locale }}>
       <SaveTemplateProvider>
         <div className="bg-gray-soft flex h-full flex-col">
           <SkipLink />

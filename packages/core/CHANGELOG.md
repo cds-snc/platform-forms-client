@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.0.2] - 2026-09-16
+
+- Update Vitest to v5 for compatibility with the primary repo
+
+## [3.0.1] - 2026-09-15
+
+- Add a focus indicator to the Toast close button on focus
+
+## [3.0.0] - 2026-09-03
+
+- Remove unused values prop and simplify signature of isFieldResponseValid
+
+## [2.2.28] - 2026-09-03
+
+- Remove unneeded styles for details component based on editor package update
+
 ## [2.2.27] - 2026-08-26
 
 - Remove references to groupHistory

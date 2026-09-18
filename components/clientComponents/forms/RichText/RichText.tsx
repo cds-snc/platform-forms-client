@@ -116,7 +116,20 @@ const markdownOptions = {
   },
 };
 
-const MarkdownContent = ({ content }: { content: string }): React.ReactElement | null => {
+// Markdown adds a wrapper by default. Nested content already has a block container,
+// so use a fragment to keep its semantic block elements direct children.
+const nestedMarkdownOptions = {
+  ...markdownOptions,
+  wrapper: React.Fragment,
+};
+
+const MarkdownContent = ({
+  content,
+  isNestedContent = false,
+}: {
+  content: string;
+  isNestedContent?: boolean;
+}): React.ReactElement | null => {
   const blocks = splitCollapsibleBlocks(content);
 
   return (
@@ -127,14 +140,17 @@ const MarkdownContent = ({ content }: { content: string }): React.ReactElement |
             <details key={`collapsible-${index}`} open>
               <summary>{stripEntities(block.summary)}</summary>
               <div className="gc-details-content">
-                <MarkdownContent content={block.content} />
+                <MarkdownContent content={block.content} isNestedContent />
               </div>
             </details>
           );
         }
 
         return block.content ? (
-          <Markdown key={`markdown-${index}`} options={markdownOptions}>
+          <Markdown
+            key={`markdown-${index}`}
+            options={isNestedContent ? nestedMarkdownOptions : markdownOptions}
+          >
             {block.content}
           </Markdown>
         ) : null;

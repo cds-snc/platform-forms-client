@@ -38,6 +38,14 @@ export const getFormattedStarRatingFromObject = (
     : `${starRatingObject.value} sur ${starRatingObject.numberOfStars}`;
 };
 
+export const getStarRatingResponse = (answer: unknown): string => {
+  if (!answer) {
+    return "";
+  }
+
+  return JSON.stringify(answer as StarRatingObject);
+};
+
 export const getScoreFromStarRatingObject = (
   starRatingObject: StarRatingObject | string
 ): number | undefined => {

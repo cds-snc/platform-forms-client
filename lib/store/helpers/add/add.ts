@@ -13,8 +13,6 @@ export const add: TemplateStore<"add"> =
 
     return new Promise((resolve) => {
       set((state) => {
-        const allowGroups = state.allowGroupsFlag;
-
         const item = {
           ...defaultField,
           ...data,
@@ -22,9 +20,9 @@ export const add: TemplateStore<"add"> =
           type,
         };
 
-        groupId = allowGroups && groupId ? groupId : "";
+        groupId = groupId ? groupId : "";
 
-        if (allowGroups && groupId) {
+        if (groupId) {
           if (!state.form.groups) state.form.groups = {};
           if (!state.form.groups[groupId])
             state.form.groups[groupId] = {

@@ -24,7 +24,6 @@ import { useField } from "formik";
 import { cn } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { countries } from "@lib/managedData/countries";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { isValidAddressSubFieldInvalid, getAddressSubFieldError } from "@gcforms/core";
 import {
   MIN_ADDRESS_SEARCH_LENGTH,
@@ -77,15 +76,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const provinceError = getAddressSubFieldError(meta.error, "province");
   const postalError = getAddressSubFieldError(meta.error, "postalCode");
 
-  // Check if addressComplete is allowed.
-  const { getFlag } = useFeatureFlags();
-  const featureFlags = {
-    addressComplete: getFlag("addressComplete"),
-  };
-
+  // Check if addressComplete is allowed, do not allow in preview mode.
   const isNoAuthPreviewMode = useMemo(() => window.location.href.includes("/0000/"), []);
 
-  const allowAddressComplete = featureFlags.addressComplete && !isNoAuthPreviewMode;
+  const allowAddressComplete = !isNoAuthPreviewMode;
 
   //Form fillers address elements
   const [addressObject, setAddressObject] = useState<AddressElements>(

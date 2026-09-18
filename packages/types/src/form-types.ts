@@ -61,8 +61,9 @@ export const FormElementTypes = {
 } as const;
 export type FormElementTypes = (typeof FormElementTypes)[keyof typeof FormElementTypes];
 
+// format: [FormElementTypes.addressComplete]: { flag: "addressComplete" },
 export const BetaFormElementTypes = {
-  [FormElementTypes.addressComplete]: { flag: "addressComplete" },
+  ["placeholder"]: { flag: "" },
 };
 
 export type ConditionalRule = {
