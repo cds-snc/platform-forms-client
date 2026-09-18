@@ -4,6 +4,7 @@ import { defaultForm } from "../../defaults";
 import { Language } from "../../../types/form-builder-types";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { NotificationsIntervalDefault } from "@gcforms/types";
+import { CURRENT_TEMPLATE_VERSION } from "@lib/templates/schemaVersioning/migrations";
 
 export const initialize: TemplateStore<"initialize"> =
   (set) =>
@@ -13,6 +14,8 @@ export const initialize: TemplateStore<"initialize"> =
       state.lang = language as Language;
       state.translationLanguagePriority = language as Language;
       state.form = initializeGroups({ ...defaultForm });
+      // Brand new template, not migrated data - stamp the current version directly.
+      state.form.version = CURRENT_TEMPLATE_VERSION;
 
       // Ensure order by groups layout
       if (!state.form.groupsLayout) {

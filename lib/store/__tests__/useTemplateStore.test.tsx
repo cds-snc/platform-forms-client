@@ -8,6 +8,8 @@ import { render, renderHook, act, waitFor } from "@testing-library/react";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 import { FormRecord } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
+import { CURRENT_TEMPLATE_VERSION } from "@lib/templates/schemaVersioning/migrations";
 
 const createStore = async () => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
@@ -30,6 +32,13 @@ const createStore = async () => {
 const promise = Promise.resolve();
 
 describe("TemplateStore", () => {
+  it("creates a form that conforms to the current template schema version", async () => {
+    const result = await createStore();
+
+    expect(result.current!.form.version).toBe(CURRENT_TEMPLATE_VERSION);
+    expect(validateTemplate(structuredClone(result.current!.form)).valid).toBe(true);
+  });
+
   it("Syncs published state and template version IDs from provider props", async () => {
     const observedRef = {
       current: undefined as

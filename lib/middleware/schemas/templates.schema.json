@@ -19,6 +19,12 @@
     }
   ],
   "properties": {
+    "version": {
+      "description": "The template schema version this form was authored/migrated against. Absent means version 1.",
+      "id": "#/properties/version",
+      "type": "integer",
+      "minimum": 1
+    },
     "titleEn": {
       "description": "The displayed title of the form to the user in English",
       "id": "#/properties/titleEn",

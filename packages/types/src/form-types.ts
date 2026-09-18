@@ -186,6 +186,8 @@ export interface FormElement {
 
 // defines the fields for the main form configuration object
 export interface FormProperties {
+  // template schema version this form was authored/migrated against; absent means version 1
+  version?: number;
   titleEn: string;
   titleFr: string;
   introduction?: Record<string, string>;
