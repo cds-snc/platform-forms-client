@@ -1,9 +1,6 @@
 import { type FormProperties } from "@gcforms/types";
-import {
-  CURRENT_TEMPLATE_VERSION,
-  migrations as defaultMigrations,
-  type TemplateMigration,
-} from "./migrations";
+import { CURRENT_TEMPLATE_VERSION, migrations as defaultMigrations } from "./migrations";
+import { type TemplateMigration } from "./migrations/types";
 
 // Missing version is not a special case, it's implicitly version 1.
 export const getTemplateVersion = (template: FormProperties): number => template.version ?? 1;
