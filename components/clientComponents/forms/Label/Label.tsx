@@ -15,6 +15,7 @@ interface LabelProps {
   required?: boolean;
   validation?: ValidationProperties;
   group?: boolean;
+  includeRequiredInAccessibleName?: boolean;
   lang?: string;
 }
 
@@ -30,6 +31,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
     validation,
     id,
     group,
+    includeRequiredInAccessibleName = true,
     lang,
   } = props;
 
@@ -53,7 +55,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
           ({validation?.all ? t("all-required") : t("required")})
         </span>
       )}
-      {group && required && (
+      {group && required && includeRequiredInAccessibleName && (
         <i className="visually-hidden">
           {validation?.all ? t("all-required") : t("required-field")}
         </i>

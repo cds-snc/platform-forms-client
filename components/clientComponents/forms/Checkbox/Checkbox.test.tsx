@@ -84,5 +84,28 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
     );
 
     expect(screen.queryByTestId("required")).toBeInTheDocument();
+    screen.getAllByRole("checkbox").forEach((input) => {
+      expect(input).not.toBeRequired();
+    });
+
+    checkboxData.properties.validation!.required = false;
+  });
+
+  it("marks every checkbox required when all choices are required", () => {
+    checkboxData.properties.validation!.required = true;
+    checkboxData.properties.validation!.all = true;
+
+    render(
+      <Formik onSubmit={() => {}} initialValues={{}}>
+        <GenerateElement element={checkboxData} language={lang} isTestMode={true} />
+      </Formik>
+    );
+
+    screen.getAllByRole("checkbox").forEach((input) => {
+      expect(input).toBeRequired();
+    });
+
+    checkboxData.properties.validation!.required = false;
+    delete checkboxData.properties.validation!.all;
   });
 });

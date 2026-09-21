@@ -59,6 +59,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
       choices.forEach((choice) => expect(screen.getByText(choice[lang])).toBeInTheDocument());
       // Field is required
       expect(screen.queryByTestId("required")).toBeInTheDocument();
+      expect(screen.getByRole("group")).toHaveAccessibleName(title);
       screen.getAllByRole("radio").forEach((input) => {
         expect(input).toBeRequired();
       });
