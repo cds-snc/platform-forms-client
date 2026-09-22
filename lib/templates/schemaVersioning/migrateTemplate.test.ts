@@ -24,7 +24,7 @@ describe("migrateTemplate", () => {
   it("migrates a template with no version to the current version via the real migration chain", () => {
     const migrated = migrateTemplate(baseTemplate);
     expect(migrated.version).toBe(CURRENT_TEMPLATE_VERSION);
-    expect(migrated.version).toBe(2);
+    expect(migrated.version).toBe(3);
   });
 
   it("is a no-op (aside from stamping) when already at the target version", () => {
