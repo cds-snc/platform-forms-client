@@ -16,7 +16,7 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
   };
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 flex flex-wrap items-center gap-x-12 gap-y-4">
       <ReportDialog
         apiUrl={`/api/id/${formId}/submission/report`}
         maxEntries={MAX_REPORT_COUNT}
@@ -24,9 +24,15 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
       />
       <Link
         href={`/${i18n.language}/form-builder/${formId}/responses/problem`}
-        className="ml-12 text-black visited:text-black"
+        className="text-black visited:text-black"
       >
         {t("responses.viewAllProblemResponses")}
+      </Link>
+      <Link
+        href={`/${i18n.language}/form-builder/${formId}/response-attachments`}
+        className="text-black visited:text-black"
+      >
+        {t("responses.downloadAttachments")}
       </Link>
     </div>
   );

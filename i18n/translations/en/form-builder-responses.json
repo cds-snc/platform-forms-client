@@ -81,7 +81,8 @@
       "deleted": "Signed off for removal",
       "problem": "Problems"
     },
-    "viewAllProblemResponses": "View reported responses"
+    "viewAllProblemResponses": "View reported responses",
+    "downloadAttachments": "Download attachments"
   },
   "supportWillContact": "Support will contact you",
   "reportedAsProblem": "Response reported as a problem",
