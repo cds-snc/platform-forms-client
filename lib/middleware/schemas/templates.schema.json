@@ -213,6 +213,19 @@
   },
   "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],
   "additionalProperties": false,
+  "if": {
+    "description": "Templates at schema version 3+ get per-element-type strict validation. Missing/lower version is treated as version 1, and keeps the legacy tolerant element schema.",
+    "required": ["version"],
+    "properties": { "version": { "minimum": 3 } }
+  },
+  "then": {
+    "properties": {
+      "elements": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/elementStrict" }
+      }
+    }
+  },
   "definitions": {
     "element": {
       "type": "object",
@@ -469,6 +482,435 @@
         }
       },
       "required": ["id", "type", "properties"]
+    },
+    "elementCommonProperties": {
+      "description": "Properties every element type may carry, regardless of its type-specific shape.",
+      "type": "object",
+      "properties": {
+        "questionId": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "titleEn": { "type": "string" },
+        "titleFr": { "type": "string" },
+        "placeholderEn": { "type": "string" },
+        "placeholderFr": { "type": "string" },
+        "descriptionEn": { "type": "string" },
+        "descriptionFr": { "type": "string" },
+        "conditionalRules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": { "choiceId": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "choicesArray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "en": { "type": "string" },
+          "fr": { "type": "string" }
+        }
+      }
+    },
+    "sortOrderEnum": {
+      "type": "string",
+      "enum": ["none", "ascending", "descending"]
+    },
+    "managedChoicesType": {
+      "type": ["array", "string"]
+    },
+    "validationSimple": {
+      "description": "Validation shape for element types with no type-specific validation options.",
+      "type": "object",
+      "properties": { "required": { "type": "boolean" } },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "validationCheckboxLike": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "all": { "type": "boolean" }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "validationTextInput": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "type": {
+          "type": "string",
+          "enum": ["email", "alphanumeric", "text", "name", "phone", "tel", "date", "custom"]
+        },
+        "regex": { "type": "string" },
+        "maxLength": { "type": "integer", "minimum": 1 },
+        "descriptionEn": { "type": "string" },
+        "descriptionFr": { "type": "string" }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "validationNumberInput": {
+      "description": "numberInput must not carry a validation.type - the element type itself conveys that.",
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "minValue": { "type": "number" },
+        "maxValue": { "type": "number" },
+        "minDigits": { "type": "integer", "minimum": 1 },
+        "maxDigits": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "validationFormattedDate": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "type": { "type": "string", "const": "date" }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "elementStrict": {
+      "description": "Discriminated, per-type element schema. Only applies to templates at schema version >= 3.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "textField" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": { "validation": { "$ref": "#/definitions/validationTextInput" } },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "textArea" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": { "validation": { "$ref": "#/definitions/validationTextInput" } },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "numberInput" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationNumberInput" },
+                    "allowNegativeNumbers": { "type": "boolean" },
+                    "stepCount": { "type": "integer", "minimum": 0 },
+                    "currencyCode": { "type": "string" },
+                    "useThousandsSeparator": { "type": "boolean" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "dropdown" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "choices": { "$ref": "#/definitions/choicesArray" },
+                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" },
+                    "managedChoices": { "$ref": "#/definitions/managedChoicesType" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "radio" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "choices": { "$ref": "#/definitions/choicesArray" },
+                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" },
+                    "managedChoices": { "$ref": "#/definitions/managedChoicesType" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "checkbox" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationCheckboxLike" },
+                    "choices": { "$ref": "#/definitions/choicesArray" },
+                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" },
+                    "managedChoices": { "$ref": "#/definitions/managedChoicesType" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "combobox" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "choices": { "$ref": "#/definitions/choicesArray" },
+                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" },
+                    "managedChoices": { "$ref": "#/definitions/managedChoicesType" },
+                    "strictValue": { "type": "boolean" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "fileInput" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "fileType": { "type": ["string", "array"] }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "dynamicRow" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "maxNumberOfRows": { "type": "integer", "minimum": 1 },
+                    "dynamicRow": {
+                      "type": "object",
+                      "properties": {
+                        "rowTitleEn": { "type": "string" },
+                        "rowTitleFr": { "type": "string" },
+                        "addButtonTextEn": { "type": "string" },
+                        "removeButtonTextEn": { "type": "string" },
+                        "addButtonTextFr": { "type": "string" },
+                        "removeButtonTextFr": { "type": "string" }
+                      }
+                    },
+                    "subElements": {
+                      "type": "array",
+                      "items": { "$ref": "#/definitions/elementStrict" }
+                    }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "richText" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": { "validation": { "$ref": "#/definitions/validationSimple" } },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "attestation" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationCheckboxLike" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "addressComplete" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "addressComponents": {
+                      "type": "object",
+                      "properties": {
+                        "canadianOnly": { "type": "boolean" },
+                        "splitAddress": { "type": "boolean" }
+                      }
+                    }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "formattedDate" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationFormattedDate" },
+                    "dateFormat": { "type": "string" },
+                    "autoComplete": { "type": "string" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "starRating" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "numberOfStars": { "type": "integer", "minimum": 3, "maximum": 10 }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        }
+      ]
     }
   }
 }
