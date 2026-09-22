@@ -107,7 +107,7 @@ export const sortByGroups = ({
 export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
     form: {
-      version,
+      schemaVersion,
       titleEn,
       titleFr,
       introduction,
@@ -124,7 +124,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
   } = state;
 
   const form: FormProperties = {
-    version,
+    schemaVersion,
     titleEn,
     titleFr,
     introduction,

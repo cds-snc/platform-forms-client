@@ -13,7 +13,7 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
   const publishDesc = typeof record.publishDesc === "string" ? record.publishDesc : "";
   const closingDate = typeof record.closingDate === "string" ? record.closingDate : null;
 
-  // Migrate before merging with defaultForm, so a missing version is read as version 1.
+  // Migrate before merging with defaultForm, so a missing schemaVersion is read as version 0.
   const migratedForm = migrateTemplate(record.form);
 
   set((state) => {

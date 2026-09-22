@@ -15,7 +15,7 @@ export const initialize: TemplateStore<"initialize"> =
       state.translationLanguagePriority = language as Language;
       state.form = initializeGroups({ ...defaultForm });
       // Brand new template, not migrated data - stamp the current version directly.
-      state.form.version = CURRENT_TEMPLATE_VERSION;
+      state.form.schemaVersion = CURRENT_TEMPLATE_VERSION;
 
       // Ensure order by groups layout
       if (!state.form.groupsLayout) {

@@ -41,7 +41,7 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
   if (initProps?.form) {
-    // Migrate before merging with defaultForm, so a missing version is read as version 1.
+    // Migrate before merging with defaultForm, so a missing schemaVersion is read as version 0.
     initProps.form = {
       ...defaultForm,
       ...migrateTemplate(initProps.form),

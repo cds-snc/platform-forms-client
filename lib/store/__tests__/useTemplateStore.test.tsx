@@ -35,7 +35,7 @@ describe("TemplateStore", () => {
   it("creates a form that conforms to the current template schema version", async () => {
     const result = await createStore();
 
-    expect(result.current!.form.version).toBe(CURRENT_TEMPLATE_VERSION);
+    expect(result.current!.form.schemaVersion).toBe(CURRENT_TEMPLATE_VERSION);
     expect(validateTemplate(structuredClone(result.current!.form)).valid).toBe(true);
   });
 

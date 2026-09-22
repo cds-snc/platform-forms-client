@@ -4,7 +4,7 @@ import { type TemplateStoreState } from "@lib/store/types";
 
 const baseState = {
   form: {
-    version: 2,
+    schemaVersion: 2,
     titleEn: "Title",
     titleFr: "Titre",
     layout: [],
@@ -15,6 +15,6 @@ const baseState = {
 describe("getSchemaFromState", () => {
   it("includes the template version in the exported schema", () => {
     const schema = getSchemaFromState(baseState);
-    expect(schema.version).toBe(2);
+    expect(schema.schemaVersion).toBe(2);
   });
 });

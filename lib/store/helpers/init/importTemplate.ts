@@ -6,7 +6,7 @@ import { NotificationsIntervalDefault } from "@gcforms/types";
 import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
 export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (jsonConfig) => {
-  // Migrate before merging with defaultForm, so a missing version is read as version 1.
+  // Migrate before merging with defaultForm, so a missing schemaVersion is read as version 0.
   const migratedForm = migrateTemplate(jsonConfig);
 
   set((state) => {

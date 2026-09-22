@@ -2,8 +2,9 @@ import { type FormProperties } from "@gcforms/types";
 import { CURRENT_TEMPLATE_VERSION, migrations as defaultMigrations } from "./migrations";
 import { type TemplateMigration } from "./migrations/types";
 
-// Missing version is not a special case, it's implicitly version 1.
-export const getTemplateVersion = (template: FormProperties): number => template.version ?? 0;
+// Missing schemaVersion is not a special case, it's implicitly version 0.
+export const getTemplateSchemaVersion = (template: FormProperties): number =>
+  template.schemaVersion ?? 0;
 
 /**
  * Migrates a template's jsonConfig up to the target version by applying
@@ -20,7 +21,7 @@ export const migrateTemplate = (
   const { migrations = defaultMigrations, targetVersion = CURRENT_TEMPLATE_VERSION } = options;
 
   let migrated = template;
-  let version = getTemplateVersion(migrated);
+  let version = getTemplateSchemaVersion(migrated);
 
   while (version < targetVersion) {
     // migrations is keyed by the version it upgrades TO, e.g. migrations[1] takes version 0 to 1.
@@ -31,12 +32,12 @@ export const migrateTemplate = (
 
     migrated = migrate(migrated);
 
-    const nextVersion = getTemplateVersion(migrated);
+    const nextVersion = getTemplateSchemaVersion(migrated);
     if (nextVersion <= version) {
       throw new Error(`Migration from version ${version} did not advance the template version`);
     }
     version = nextVersion;
   }
 
-  return { ...migrated, version: targetVersion };
+  return { ...migrated, schemaVersion: targetVersion };
 };
