@@ -1,37 +1,60 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "id": "https://forms-formulaires.alpha.canada.ca/",
-  "type": "object",
-  "title": "GC Forms Schema - Alpha",
-  "description": "A schema to define a Forms configuration.",
-  "default": {},
-  "examples": [
-    {
-      "titleEn": "",
-      "titleFr": "",
-      "introduction": {},
-      "privacyPolicy": {},
-      "confirmation": {},
-      "layout": [],
-      "elements": [],
-      "startPage": {},
-      "brand": {}
-    }
-  ],
-  "properties": {
-    "titleEn": {
-      "description": "The displayed title of the form to the user in English",
-      "id": "#/properties/titleEn",
-      "type": "string"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/DownloadableFormTemplate",
+  "definitions": {
+    "DownloadableFormTemplate": {
+      "type": "object",
+      "properties": {
+        "titleEn": {
+          "type": "string"
+        },
+        "titleFr": {
+          "type": "string"
+        },
+        "introduction": {
+          "$ref": "#/definitions/TemplateLocalizedText"
+        },
+        "privacyPolicy": {
+          "$ref": "#/definitions/TemplateLocalizedText"
+        },
+        "confirmation": {
+          "$ref": "#/definitions/TemplateConfirmation"
+        },
+        "layout": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateElement"
+          }
+        },
+        "groups": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/TemplateGroup"
+          }
+        },
+        "groupsLayout": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "brand": {
+          "$ref": "#/definitions/TemplateBrand"
+        },
+        "lastGeneratedElementId": {
+          "type": "number"
+        }
+      },
+      "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],
+      "additionalProperties": false
     },
-    "titleFr": {
-      "description": "The displayed title of the form to the user in French",
-      "id": "#/properties/titleFr",
-      "type": "string"
-    },
-    "introduction": {
-      "description": "Form introduction",
-      "id": "#/properties/introduction",
+    "TemplateLocalizedText": {
       "type": "object",
       "properties": {
         "descriptionEn": {
@@ -40,429 +63,995 @@
         "descriptionFr": {
           "type": "string"
         }
-      }
+      },
+      "required": ["descriptionEn", "descriptionFr"],
+      "additionalProperties": false,
+      "description": "Types for the JSON document exchanged as a downloadable form template."
     },
-    "privacyPolicy": {
-      "description": "Form privacy policy",
-      "id": "#/properties/privacyPolicy",
+    "TemplateConfirmation": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "descriptionEn": {
-          "type": "string"
-        },
-        "descriptionFr": {
-          "type": "string"
-        }
-      }
-    },
-    "confirmation": {
-      "description": "Content that will be displayed after a form is submitted.",
-      "id": "#/properties/confirmation",
-      "type": "object",
-      "properties": {
-        "descriptionEn": {
-          "type": "string"
-        },
-        "descriptionFr": {
-          "type": "string"
-        },
         "referrerUrlEn": {
           "type": "string"
         },
         "referrerUrlFr": {
           "type": "string"
+        },
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
         }
-      }
-    },
-    "layout": {
-      "description": "A list of element IDs that determines the order or elements in the form.",
-      "type": "array",
-      "items": {
-        "type": "number"
       },
-      "uniqueItems": true,
-      "examples": [[2, 3, 4, 6, 9, 5]]
+      "required": ["descriptionEn", "descriptionFr"]
     },
-    "groups": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "description": "The name of the group.",
-          "type": "string"
-        },
-        "titleEn": {
-          "description": "The title of the group in English.",
-          "type": "string"
-        },
-        "titleFr": {
-          "description": "The title of the group in French.",
-          "type": "string"
-        },
-        "nextAction": {
-          "description": "The next action to take i.e. next group or submit.",
-          "type": "string"
-        },
-        "elements": {
-          "description": "A list of elements contained within the form group.",
-          "type": "array"
-        }
-      }
-    },
-    "groupsLayout": {
-      "description": "A list of group IDs that determines the order of the groups in the form.",
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "uniqueItems": true,
-      "examples": [["one", "two"]]
-    },
-    "elements": {
-      "description": "A list of elements contained within the form.",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/element"
-      },
-      "examples": [
+    "TemplateElement": {
+      "anyOf": [
         {
-          "id": 1,
-          "type": "richText",
-          "properties": {
-            "validation": {
-              "required": false
-            },
-            "descriptionEn": "#### Section 1: Nomination Category",
-            "descriptionFr": "#### Section 1: Catégorie de la nomination"
-          }
+          "$ref": "#/definitions/TemplateTextElement"
         },
         {
-          "id": 2,
-          "uuid": "12345678-1234-1234-1234-123456789012",
-          "type": "radio",
-          "properties": {
-            "questionId": "my_custom_id",
-            "tags": ["radio", "nomination"],
-            "choices": [
-              {
-                "en": "Team nomination",
-                "fr": "Mise en candidature d’une équipe"
-              },
-              {
-                "en": "Individual Nomination",
-                "fr": "Mise en candidature d’une personne"
-              }
-            ],
-            "titleEn": "Is this a Team or Individual Nomination?",
-            "titleFr": "Is this a Team or Individual Nomination?",
-            "validation": {
-              "required": true
-            },
-            "descriptionEn": "",
-            "descriptionFr": ""
-          }
+          "$ref": "#/definitions/TemplateChoiceElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateComboboxElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateRichTextElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateFileElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateDynamicRowElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateAttestationElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateAddressElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateDateElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateNumberElement"
+        },
+        {
+          "$ref": "#/definitions/TemplateStarRatingElement"
         }
       ]
     },
-    "brand": {
+    "TemplateTextElement": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "name": {
-          "description": "The brand name.",
-          "type": "string"
-        },
-        "urlEn": {
-          "description": "URL for English version of the site.",
-          "type": "string"
-        },
-        "urlFr": {
-          "description": "URL for a French version of the site.",
-          "type": "string"
-        },
-        "logoEn": {
-          "description": "English logo path.",
-          "type": "string"
-        },
-        "logoFr": {
-          "description": "French logo path.",
-          "type": "string"
-        },
-        "logoTitleEn": {
-          "description": "logo title.",
-          "type": "string"
-        },
-        "logoTitleFr": {
-          "description": "logo title.",
-          "type": "string"
-        },
-        "disableGCBranding": {
-          "description": "If set to true, GC branding will not be rendered in the footer.",
-          "type": "boolean"
-        }
-      }
-    },
-    "lastGeneratedElementId": {
-      "description": "The last generated element id",
-      "type": "number"
-    }
-  },
-  "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],
-  "additionalProperties": false,
-  "definitions": {
-    "element": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "description": "The unique id for the object",
-          "type": "integer",
-          "minimum": 1
-        },
-        "uuid": {
-          "description": "A unique id for the object (future use)",
-          "type": "string",
-          "format": "uuid"
-        },
         "type": {
           "type": "string",
-          "enum": [
-            "textField",
-            "textArea",
-            "dropdown",
-            "radio",
-            "checkbox",
-            "fileInput",
-            "dynamicRow",
-            "richText",
-            "attestation",
-            "combobox",
-            "addressComplete",
-            "formattedDate",
-            "numberInput",
-            "starRating"
-          ]
+          "enum": ["textField", "textArea"]
         },
         "properties": {
           "type": "object",
+          "additionalProperties": false,
           "properties": {
+            "autoComplete": {
+              "type": "string"
+            },
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
             "questionId": {
-              "description": "A user-defined unique id for the question",
               "type": "string"
             },
             "tags": {
-              "description": "A list of tags that can be used to group elements together.",
               "type": "array",
               "items": {
                 "type": "string"
               }
             },
-            "titleEn": {
-              "description": "Input label in English",
-              "type": "string"
-            },
-            "titleFr": {
-              "description": "Input label in French",
-              "type": "string"
-            },
             "placeholderEn": {
-              "description": "Text that will appear in the text input field as a placeholder in English",
               "type": "string"
             },
             "placeholderFr": {
-              "description": "Text that will appear in the text input field as a placeholder in French",
+              "type": "string"
+            },
+            "description": {
               "type": "string"
             },
             "descriptionEn": {
-              "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in English",
               "type": "string"
             },
             "descriptionFr": {
-              "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
               "type": "string"
             },
-            "dynamicRow": {
-              "type": "object",
-              "properties": {
-                "rowTitleEn": {
-                  "type": "string",
-                  "description": "The title of the row in English"
-                },
-                "rowTitleFr": {
-                  "type": "string",
-                  "description": "The title of the row in French"
-                },
-                "addButtonTextEn": {
-                  "type": "string",
-                  "description": "Text for the add button in English"
-                },
-                "removeButtonTextEn": {
-                  "type": "string",
-                  "description": "Text for the remove button in English"
-                },
-                "addButtonTextFr": {
-                  "type": "string",
-                  "description": "Text for the add button in French"
-                },
-                "removeButtonTextFr": {
-                  "type": "string",
-                  "description": "Text for the remove button in French"
-                }
-              }
-            },
-            "choices": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "en": {
-                    "description": "English choice",
-                    "type": "string"
-                  },
-                  "fr": {
-                    "description": "French choice",
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "sortOrder": {
-              "type": "string",
-              "description": "Controls how choices are displayed",
-              "enum": ["none", "ascending", "descending"],
-              "default": "none"
-            },
-            "managedChoices": {
-              "type": ["array", "string"],
-              "description": "The name of the data file(s) containing the choices for this element."
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
             },
             "conditionalRules": {
               "type": "array",
               "items": {
-                "type": "object",
-                "properties": {
-                  "choiceId": {
-                    "description": "The id of the element that will trigger the conditional rule",
-                    "type": "string",
-                    "minimum": 1
-                  }
-                }
+                "$ref": "#/definitions/TemplateConditionalRule"
+              }
+            }
+          },
+          "required": ["titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateValidation": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["text", "email", "name", "number", "custom", "alphanumeric", "phone", "date"]
+        },
+        "regex": {
+          "type": "string"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "minValue": {
+          "type": "number"
+        },
+        "maxValue": {
+          "type": "number"
+        },
+        "minDigits": {
+          "type": "number"
+        },
+        "maxDigits": {
+          "type": "number"
+        },
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
+        },
+        "all": {
+          "type": "boolean"
+        }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "TemplateConditionalRule": {
+      "type": "object",
+      "properties": {
+        "choiceId": {
+          "type": "string"
+        }
+      },
+      "required": ["choiceId"],
+      "additionalProperties": false
+    },
+    "TemplateChoiceElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["dropdown", "radio", "checkbox"]
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "choices": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateChoice"
               }
             },
-            "maxNumberOfRows": {
-              "type": "integer",
-              "minimum": 1
+            "sortOrder": {
+              "type": "string",
+              "enum": ["none", "ascending", "descending"]
             },
-            "strictValue": {
-              "description": "If set to true, the element will only accept values that are in the choices list.",
-              "type": "boolean"
-            },
-            "allowNegativeNumbers": {
-              "description": "If set to true, the number input will allow negative numbers.",
-              "type": "boolean"
-            },
-            "stepCount": {
-              "description": "The number of decimals allowed for a number input.",
-              "type": "integer",
-              "minimum": 0
-            },
-            "currencyCode": {
-              "description": "The ISO 4217 currency code used to format the number input as currency (e.g. CAD, USD).",
+            "titleEn": {
               "type": "string"
             },
-            "useThousandsSeparator": {
-              "description": "If set to true, the number input will format numbers with a thousands separator.",
-              "type": "boolean"
+            "titleFr": {
+              "type": "string"
             },
-            "numberOfStars": {
-              "description": "The number of stars to display in a star rating element.",
-              "type": "integer",
-              "minimum": 3,
-              "maximum": 10
+            "questionId": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
             },
             "validation": {
-              "type": "object",
-              "properties": {
-                "required": {
-                  "type": "boolean"
-                },
-                "type": {
-                  "type": "string",
-                  "enum": [
-                    "email",
-                    "alphanumeric",
-                    "text",
-                    "name",
-                    "number",
-                    "phone",
-                    "date",
-                    "custom"
-                  ]
-                },
-                "regex": {
-                  "type": "string"
-                },
-                "maxLength": {
-                  "description": "The maximum number of characters that can be entered in a textinput or textarea.",
-                  "type": "integer",
-                  "minimum": 1
-                },
-                "minValue": {
-                  "description": "The minimum allowed numeric value for a number input.",
-                  "type": "number"
-                },
-                "maxValue": {
-                  "description": "The maximum allowed numeric value for a number input.",
-                  "type": "number"
-                },
-                "minDigits": {
-                  "description": "The minimum number of digits required for a number input.",
-                  "type": "integer",
-                  "minimum": 1
-                },
-                "maxDigits": {
-                  "description": "The maximum number of digits allowed for a number input.",
-                  "type": "integer",
-                  "minimum": 1
-                },
-                "descriptionEn": {
-                  "type": "string"
-                },
-                "descriptionFr": {
-                  "type": "string"
-                },
-                "all": {
-                  "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
-                  "type": "boolean"
-                }
-              },
-              "examples": [
+              "$ref": "#/definitions/TemplateValidation"
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateConditionalRule"
+              }
+            }
+          },
+          "required": ["choices", "titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateChoice": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "fr": {
+          "type": "string"
+        }
+      },
+      "required": ["en", "fr"],
+      "additionalProperties": false
+    },
+    "TemplateComboboxElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "combobox"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "managedChoices": {
+              "anyOf": [
                 {
-                  "validation": {
-                    "required": true,
-                    "type": "email",
-                    "descriptionEn": "Enter a valid email address.",
-                    "descriptionFr": "Veuillez entrer une adresse courriel valide."
-                  }
+                  "type": "string"
                 },
                 {
-                  "validation": {
-                    "required": false,
-                    "type": "alphanumeric",
-                    "descriptionEn": "Please enter your home street address.",
-                    "descriptionFr": "Veuillez entrer votre adresse postale."
+                  "type": "array",
+                  "items": {
+                    "type": "string"
                   }
                 }
               ]
             },
-            "subElements": {
-              "description": "A list of subElements contained within a dynamicRow",
+            "strictValue": {
+              "type": "boolean"
+            },
+            "sortOrder": {
+              "type": "string",
+              "enum": ["none", "ascending", "descending"]
+            },
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
+            "questionId": {
+              "type": "string"
+            },
+            "tags": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/element"
+                "type": "string"
+              }
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateConditionalRule"
               }
             }
+          },
+          "required": ["managedChoices", "titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateRichTextElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "richText"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "headingLevel": {
+              "type": "string"
+            },
+            "isSectional": {
+              "type": "boolean"
+            },
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
+            }
+          },
+          "additionalProperties": false
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateFileElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "fileInput"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fileType": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
+            "questionId": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateConditionalRule"
+              }
+            }
+          },
+          "required": ["fileType", "titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateDynamicRowElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "dynamicRow"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "subElements": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateElement"
+              }
+            },
+            "maxNumberOfRows": {
+              "type": "number"
+            },
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
+            "questionId": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateConditionalRule"
+              }
+            }
+          },
+          "required": ["subElements", "titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateAttestationElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "attestation"
+        },
+        "properties": {
+          "$ref": "#/definitions/TemplateQuestionProperties"
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateQuestionProperties": {
+      "type": "object",
+      "properties": {
+        "titleEn": {
+          "type": "string"
+        },
+        "titleFr": {
+          "type": "string"
+        },
+        "questionId": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "placeholderEn": {
+          "type": "string"
+        },
+        "placeholderFr": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
+        },
+        "validation": {
+          "$ref": "#/definitions/TemplateValidation"
+        },
+        "conditionalRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateConditionalRule"
           }
         }
       },
-      "required": ["id", "type", "properties"]
+      "required": ["titleEn", "titleFr"],
+      "additionalProperties": false
+    },
+    "TemplateAddressElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "addressComplete"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "addressComponents": {
+              "$ref": "#/definitions/TemplateAddressComponents"
+            },
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
+            "questionId": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateConditionalRule"
+              }
+            }
+          },
+          "required": ["titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateAddressComponents": {
+      "type": "object",
+      "properties": {
+        "canadianOnly": {
+          "type": "boolean"
+        },
+        "splitAddress": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TemplateDateElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "formattedDate"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dateFormat": {
+              "type": "string"
+            },
+            "autoComplete": {
+              "type": "string"
+            },
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
+            "questionId": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateConditionalRule"
+              }
+            }
+          },
+          "required": ["titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateNumberElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "numberInput"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allowNegativeNumbers": {
+              "type": "boolean"
+            },
+            "stepCount": {
+              "type": "number"
+            },
+            "currencyCode": {
+              "type": "string"
+            },
+            "useThousandsSeparator": {
+              "type": "boolean"
+            },
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
+            "questionId": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateConditionalRule"
+              }
+            }
+          },
+          "required": ["titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateStarRatingElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "starRating"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "numberOfStars": {
+              "type": "number"
+            },
+            "titleEn": {
+              "type": "string"
+            },
+            "titleFr": {
+              "type": "string"
+            },
+            "questionId": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "placeholderEn": {
+              "type": "string"
+            },
+            "placeholderFr": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "validation": {
+              "$ref": "#/definitions/TemplateValidation"
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateConditionalRule"
+              }
+            }
+          },
+          "required": ["numberOfStars", "titleEn", "titleFr"]
+        },
+        "id": {
+          "type": "number"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "properties", "type"]
+    },
+    "TemplateGroup": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "titleEn": {
+          "type": "string"
+        },
+        "titleFr": {
+          "type": "string"
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nextAction": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TemplateNextActionRule"
+              }
+            }
+          ]
+        },
+        "autoFlow": {
+          "type": "boolean"
+        },
+        "exitUrlEn": {
+          "type": "string"
+        },
+        "exitUrlFr": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "titleEn", "titleFr", "elements"],
+      "additionalProperties": false
+    },
+    "TemplateNextActionRule": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "type": "string"
+        },
+        "choiceId": {
+          "type": "string"
+        }
+      },
+      "required": ["groupId", "choiceId"],
+      "additionalProperties": false
+    },
+    "TemplateBrand": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "urlEn": {
+          "type": "string"
+        },
+        "urlFr": {
+          "type": "string"
+        },
+        "logoEn": {
+          "type": "string"
+        },
+        "logoFr": {
+          "type": "string"
+        },
+        "logoTitleEn": {
+          "type": "string"
+        },
+        "logoTitleFr": {
+          "type": "string"
+        },
+        "disableGCBranding": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
     }
-  }
+  },
+  "$id": "https://forms-formulaires.alpha.canada.ca/template.schema.json"
 }

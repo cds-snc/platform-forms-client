@@ -92,3 +92,29 @@ export type {
 
 export type { FileInput };
 export type { ValidationInputType };
+
+export type {
+  DownloadableFormTemplate,
+  TemplateAddressComponents,
+  TemplateAttestationElement,
+  TemplateBrand,
+  TemplateChoice,
+  TemplateChoiceElement,
+  TemplateConditionalRule,
+  TemplateConfirmation,
+  TemplateDateElement,
+  TemplateDynamicRow,
+  TemplateDynamicRowElement,
+  TemplateElement,
+  TemplateElementBase,
+  TemplateFileElement,
+  TemplateGroup,
+  TemplateLocalizedText,
+  TemplateNextActionRule,
+  TemplateNumberElement,
+  TemplateQuestionProperties,
+  TemplateRichTextElement,
+  TemplateStarRatingElement,
+  TemplateTextElement,
+  TemplateValidation,
+} from "./template-types";
