@@ -31,10 +31,7 @@ export const Publish = ({ id }: { id: string }) => {
     id: s.id,
     currentPublishedVersionId: s.currentPublishedVersionId,
   }));
-
-  if (storeId && storeId !== id) {
-    id = storeId;
-  }
+  const formId = storeId && storeId !== id ? storeId : id;
 
   const supportHref = `/${i18n.language}/support`;
 
@@ -70,12 +67,12 @@ export const Publish = ({ id }: { id: string }) => {
 
       const { formRecord, error } = await updateTemplate({
         action: UpdateTemplateAction.IsPublished,
-        formId: id,
+        formId,
         isPublished: true,
         publishFormType: formType,
         publishDescription: description,
         publishReason: reasonForPublish,
-        redirectAfter: `/${i18n.language}/form-builder/${id}/published`,
+        redirectAfter: `/${i18n.language}/form-builder/${formId}/published`,
       });
       if (error || !formRecord) {
         throw new Error(error);
@@ -150,7 +147,7 @@ export const Publish = ({ id }: { id: string }) => {
         </Alert.Warning>
       )}
 
-      <CheckList lang={i18n.language as Language} formId={id} />
+      <CheckList lang={i18n.language as Language} formId={formId} />
 
       {userCanPublish && isPublishable() && (
         <>
