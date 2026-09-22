@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Label } from "@clientComponents/forms";
 import { Button, Alert } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
@@ -37,7 +37,7 @@ export const EditSecurityQuestionButton = ({
           setShowModal(true);
         }}
         theme="link"
-        className="self-start !px-2 text-lg"
+        className="self-start px-2! text-lg"
       >
         {t("securityPanel.edit")}
       </Button>
@@ -85,19 +85,28 @@ const EditSecurityQuestionModal = ({
 
   const langKey = i18n.language === "en" ? "questionEn" : "questionFr";
 
-  const _debouncedAnswerCheck = debounce(
-    useCallback(() => {
-      if (!isAnswerInputValid(answerRef.current?.value)) {
-        setIsFormWarning(false);
-        setIsAnswerInputError(true);
-        return;
-      }
+  const debouncedAnswerCheck = useMemo(
+    () =>
+      debounce((answer: string) => {
+        if (!isAnswerInputValid(answer)) {
+          setIsFormWarning(false);
+          setIsAnswerInputError(true);
+          return;
+        }
 
-      setIsAnswerInputError(false);
-      setIsFormWarning(true);
-    }, []),
-    500
+        setIsAnswerInputError(false);
+        setIsFormWarning(true);
+      }, 500),
+    []
   );
+
+  useEffect(() => {
+    return () => debouncedAnswerCheck.cancel();
+  }, [debouncedAnswerCheck]);
+
+  const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedAnswerCheck(event.target.value);
+  };
 
   const reset = () => {
     setIsFormError(false);
@@ -231,7 +240,7 @@ const EditSecurityQuestionModal = ({
               aria-invalid={isAnswerInputError}
               aria-describedby="answerHint"
               ref={answerRef}
-              onChange={_debouncedAnswerCheck}
+              onChange={handleAnswerChange}
             />
           </div>
         </div>
