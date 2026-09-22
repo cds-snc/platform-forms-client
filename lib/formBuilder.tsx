@@ -102,7 +102,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       required={isRequired}
       validation={element.properties.validation}
       group={["radio", "checkbox", "starRating"].indexOf(element.type) !== -1}
-      // TODO add see PR#
+      // See #7944
       includeRequiredInAccessibleName={element.type !== FormElementTypes.radio}
       lang={lang}
     >
@@ -212,7 +212,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           id: `${id}.${index}`,
           name: `${id}`,
           label: choice,
-          // TODO add see PR#
+          // See #7944
           required: isRequired && element.properties.validation?.all === true,
         };
       });
