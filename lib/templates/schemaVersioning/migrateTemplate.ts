@@ -3,7 +3,7 @@ import { CURRENT_TEMPLATE_VERSION, migrations as defaultMigrations } from "./mig
 import { type TemplateMigration } from "./migrations/types";
 
 // Missing version is not a special case, it's implicitly version 1.
-export const getTemplateVersion = (template: FormProperties): number => template.version ?? 1;
+export const getTemplateVersion = (template: FormProperties): number => template.version ?? 0;
 
 /**
  * Migrates a template's jsonConfig up to the target version by applying
@@ -23,7 +23,8 @@ export const migrateTemplate = (
   let version = getTemplateVersion(migrated);
 
   while (version < targetVersion) {
-    const migrate = migrations[version];
+    // migrations is keyed by the version it upgrades TO, e.g. migrations[1] takes version 0 to 1.
+    const migrate = migrations[version + 1];
     if (!migrate) {
       throw new Error(`No migration registered to upgrade template from version ${version}`);
     }

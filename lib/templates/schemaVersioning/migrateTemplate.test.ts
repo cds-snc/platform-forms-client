@@ -11,8 +11,8 @@ const baseTemplate = {
 } as unknown as FormProperties;
 
 describe("getTemplateVersion", () => {
-  it("treats a missing version as version 1", () => {
-    expect(getTemplateVersion(baseTemplate)).toBe(1);
+  it("treats a missing version as version 0", () => {
+    expect(getTemplateVersion(baseTemplate)).toBe(0);
   });
 
   it("returns the explicit version when present", () => {
@@ -24,7 +24,7 @@ describe("migrateTemplate", () => {
   it("migrates a template with no version to the current version via the real migration chain", () => {
     const migrated = migrateTemplate(baseTemplate);
     expect(migrated.version).toBe(CURRENT_TEMPLATE_VERSION);
-    expect(migrated.version).toBe(2);
+    expect(migrated.version).toBe(1);
   });
 
   it("is a no-op (aside from stamping) when already at the target version", () => {
@@ -34,11 +34,12 @@ describe("migrateTemplate", () => {
   });
 
   it("applies registered migrations in sequence up to the target version", () => {
-    const migrated = migrateTemplate(baseTemplate, {
+    const template = { ...baseTemplate, version: 1 };
+    const migrated = migrateTemplate(template, {
       targetVersion: 3,
       migrations: {
-        1: (template) => ({ ...template, version: 2, titleEn: "migrated-to-2" }),
-        2: (template) => ({ ...template, version: 3, titleEn: "migrated-to-3" }),
+        2: (template) => ({ ...template, version: 2, titleEn: "migrated-to-2" }),
+        3: (template) => ({ ...template, version: 3, titleEn: "migrated-to-3" }),
       },
     });
 
