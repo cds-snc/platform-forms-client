@@ -107,6 +107,7 @@
     "attachmentsInputLabel": "Attachment URLs",
     "attachmentsInputHint": "Paste one URL per line. Up to {{limit}} unique HTTP or HTTPS links are supported.",
     "attachmentsEmptyLinks": "Enter at least one valid attachment URL.",
+    "attachmentsResolveError": "The attachment links could not be resolved. They may no longer be available.",
     "attachmentsFailed": "Download failed",
     "attachmentsUnavailableTitle": "Response attachments are no longer available",
     "attachmentsUnavailableMessage": "The response may have been signed off for removal, or the files may already have been removed from GC Forms.",

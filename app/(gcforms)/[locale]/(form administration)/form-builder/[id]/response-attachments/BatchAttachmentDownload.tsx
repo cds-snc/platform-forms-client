@@ -4,6 +4,7 @@
 
 import JSZip from "jszip";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { useParams } from "next/navigation";
 import { Button } from "@clientComponents/globals";
 import { ProgressBar } from "@clientComponents/forms/SubmitProgress/ProgressBar";
 import { CancelIcon, CircleCheckIcon } from "@serverComponents/icons";
@@ -16,6 +17,7 @@ type LinkStatus = "waiting" | "downloading" | "completed" | "failed";
 
 type BatchLink = {
   url: string;
+  attachments: { name: string; downloadLink: string }[];
   status: LinkStatus;
 };
 
@@ -72,6 +74,7 @@ const archivePath = (sourceDirectory: string, filename: string) =>
 
 export const BatchAttachmentDownload = () => {
   const { t } = useTranslation("my-forms");
+  const { id: formId } = useParams<{ id: string }>();
   const title = t("responseTemplate.attachmentsBatchTitle");
   const inputLabel = t("responseTemplate.attachmentsInputLabel");
   const inputHint = t("responseTemplate.attachmentsInputHint");
@@ -81,6 +84,7 @@ export const BatchAttachmentDownload = () => {
   const completedLabel = t("responseTemplate.attachmentsComplete");
   const failedLabel = t("responseTemplate.attachmentsFailed");
   const emptyLinksMessage = t("responseTemplate.attachmentsEmptyLinks");
+  const resolveLinksErrorMessage = t("responseTemplate.attachmentsResolveError");
   const [linkText, setLinkText] = useState("");
   const [batchLinks, setBatchLinks] = useState<BatchLink[]>([]);
   const [progress, setProgress] = useState(0);
@@ -106,7 +110,34 @@ export const BatchAttachmentDownload = () => {
     }
 
     setError(null);
-    setBatchLinks(links.map((url) => ({ url, status: "waiting" })));
+    const resolvedResponse = await fetch(`${window.location.pathname}/batch`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ links, formId }),
+    });
+    if (!resolvedResponse.ok) {
+      const errorBody = (await resolvedResponse.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+      setError(errorBody?.error ?? resolveLinksErrorMessage);
+      return;
+    }
+
+    const { sources } = (await resolvedResponse.json()) as {
+      sources: { sourceUrl: string; attachments: { name: string; downloadLink: string }[] }[];
+    };
+    if (!sources.length || sources.some((source) => source.attachments.length === 0)) {
+      setError(resolveLinksErrorMessage);
+      return;
+    }
+    setBatchLinks(
+      sources.map(({ sourceUrl, attachments }) => ({
+        url: sourceUrl,
+        attachments,
+        status: "waiting",
+      }))
+    );
     setCompleted(0);
     setProgress(0);
     setPhase("downloading");
@@ -117,9 +148,10 @@ export const BatchAttachmentDownload = () => {
     const sourceCounts = new Map<string, number>();
 
     const downloadNext = async () => {
-      while (nextIndex < links.length) {
+      while (nextIndex < sources.length) {
         const index = nextIndex++;
-        const url = links[index];
+        const source = sources[index];
+        const url = source.sourceUrl;
         setBatchLinks((current) =>
           current.map((link, linkIndex) =>
             linkIndex === index ? { ...link, status: "downloading" } : link
@@ -127,28 +159,46 @@ export const BatchAttachmentDownload = () => {
         );
 
         try {
-          const response = await fetch(url);
-          if (!response.ok) throw new Error(`Download failed with status ${response.status}`);
-
-          const blob = await response.blob();
           const baseSourceId = sourceIdFromUrl(url, index);
           const sourceCount = sourceCounts.get(baseSourceId) ?? 0;
           sourceCounts.set(baseSourceId, sourceCount + 1);
           const sourceId = sourceCount ? `${baseSourceId}-${sourceCount + 1}` : baseSourceId;
           const sourceDirectory = `attachments/${sourceId}`;
 
-          try {
-            const sourceZip = await JSZip.loadAsync(blob);
-            const files = Object.values(sourceZip.files).filter((file) => !file.dir);
-            if (!files.length) throw new Error("Empty archive");
-            await Promise.all(
-              files.map(async (file) => {
-                zip.file(archivePath(sourceDirectory, file.name), await file.async("blob"));
-              })
-            );
-          } catch {
-            zip.file(`${sourceDirectory}/${filenameFromUrl(url, index)}`, blob);
-          }
+          const usedNames = new Set<string>();
+          if (!source.attachments.length) throw new Error("No attachments resolved");
+          await Promise.all(
+            source.attachments.map(async (attachment, attachmentIndex) => {
+              const response = await fetch(attachment.downloadLink);
+              if (!response.ok) {
+                throw new Error(`Download failed with status ${response.status}`);
+              }
+
+              const blob = await response.blob();
+              try {
+                const sourceZip = await JSZip.loadAsync(blob);
+                const files = Object.values(sourceZip.files).filter((file) => !file.dir);
+                if (!files.length) throw new Error("Empty archive");
+                await Promise.all(
+                  files.map(async (file) => {
+                    zip.file(archivePath(sourceDirectory, file.name), await file.async("blob"));
+                  })
+                );
+              } catch {
+                const filename = safePathSegment(
+                  attachment.name,
+                  filenameFromUrl(attachment.downloadLink, attachmentIndex)
+                );
+                let uniqueFilename = filename;
+                let duplicateIndex = 1;
+                while (usedNames.has(uniqueFilename)) {
+                  uniqueFilename = `${filename} (${duplicateIndex++})`;
+                }
+                usedNames.add(uniqueFilename);
+                zip.file(`${sourceDirectory}/${uniqueFilename}`, blob);
+              }
+            })
+          );
 
           successfulDownloads += 1;
           setCompleted(successfulDownloads);
@@ -169,7 +219,7 @@ export const BatchAttachmentDownload = () => {
     };
 
     await Promise.all(
-      Array.from({ length: Math.min(CONCURRENT_DOWNLOADS, links.length) }, downloadNext)
+      Array.from({ length: Math.min(CONCURRENT_DOWNLOADS, sources.length) }, downloadNext)
     );
 
     if (!successfulDownloads) {
