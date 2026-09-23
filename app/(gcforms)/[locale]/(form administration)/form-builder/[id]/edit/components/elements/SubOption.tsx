@@ -64,6 +64,7 @@ export const SubOption = ({
 
   // Sync local state with prop changes when array operations occur
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize local input state
     setValue(initialValue);
   }, [initialValue]);
 
@@ -126,7 +127,7 @@ export const SubOption = ({
         className="group"
         id={`remove--${id}--${index + 1}`}
         icon={
-          <Close className="bg-gray-selected hover:bg-gray-600 group-focus:fill-white-default" />
+          <Close className="bg-gray-selected group-focus:fill-white-default hover:bg-gray-600" />
         }
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
