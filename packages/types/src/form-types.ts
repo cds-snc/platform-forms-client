@@ -129,8 +129,6 @@ export interface ElementProperties {
   managedChoices?: string | string[];
   subElements?: FormElement[];
   fileType?: string | string[] | undefined;
-  headingLevel?: string | undefined;
-  isSectional?: boolean;
   maxNumberOfRows?: number;
   autoComplete?: string;
   dateFormat?: string;
@@ -140,7 +138,6 @@ export interface ElementProperties {
   useThousandsSeparator?: boolean;
   numberOfStars?: number;
   conditionalRules?: ConditionalRule[];
-  full?: boolean;
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
   sortOrder?: SortValue;
