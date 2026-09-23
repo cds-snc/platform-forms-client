@@ -104,7 +104,7 @@ export const FormWrapper = ({
       <Form
         initialValues={initialValues || undefined}
         formRecord={formRecord}
-        language={language}
+        language={language as Language}
         onSuccess={(formID, submissionId) => {
           // Set submissionId in context
           // which will trigger confirmation page content to render
