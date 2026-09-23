@@ -327,8 +327,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       const props = element.properties.dynamicRow;
 
       if (typeof props !== "undefined") {
-        const rowTitleProp = getLocalizedProperty(LocalizedElementProperties.ROW_TITLE, lang) as
-          "rowTitleEn" | "rowTitleFr";
+        const rowTitleProp = getLocalizedProperty(LocalizedElementProperties.ROW_TITLE, lang);
         const addButtonProp = getLocalizedProperty(
           LocalizedElementProperties.ADD_BUTTON_TEXT,
           lang
