@@ -10,7 +10,7 @@ const baseTemplate = {
   elements: [],
 } as unknown as FormProperties;
 
-describe("getTemplateVersion", () => {
+describe("getTemplateSchemaVersion", () => {
   it("treats a missing version as version 0", () => {
     expect(getTemplateSchemaVersion(baseTemplate)).toBe(0);
   });
