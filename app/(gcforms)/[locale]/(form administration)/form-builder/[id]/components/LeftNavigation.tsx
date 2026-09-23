@@ -43,10 +43,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
     id: s.id,
     currentDraftVersionId: s.currentDraftVersionId,
   }));
-
-  if (storeId && storeId !== id) {
-    id = storeId;
-  }
+  const formId = storeId && storeId !== id ? storeId : id;
 
   const segment = useSelectedLayoutSegment();
 
@@ -57,7 +54,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
           <li>
             <LeftNav
               testid="edit"
-              {...linkHelper({ route: "edit", id, segment, language })}
+              {...linkHelper({ route: "edit", id: formId, segment, language })}
               title={t("edit")}
             >
               <NavEditIcon />
@@ -67,7 +64,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="preview"
-            {...linkHelper({ route: "preview", id, segment, language })}
+            {...linkHelper({ route: "preview", id: formId, segment, language })}
             title={t("test")}
           >
             <NavPreviewIcon />
@@ -78,7 +75,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
             testid="settings"
             {...linkHelper({
               route: isPublished ? "settings/manage" : "settings",
-              id,
+              id: formId,
               segment,
               language,
             })}
@@ -91,7 +88,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
           <li>
             <LeftNav
               testid="publish"
-              {...linkHelper({ route: "publish", id, segment, language })}
+              {...linkHelper({ route: "publish", id: formId, segment, language })}
               title={t("publish")}
             >
               <NavPublishIcon />
@@ -101,7 +98,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="responses"
-            {...linkHelper({ route: "responses", id, segment, language })}
+            {...linkHelper({ route: "responses", id: formId, segment, language })}
             title={t("responsesNavLabel")}
           >
             <NavResponsesIcon />
