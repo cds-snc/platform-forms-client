@@ -1,5 +1,5 @@
 import { type GroupsType } from "@gcforms/types";
-import { getLocalizedProperty, LocalizedElementProperties, Language } from "@root/lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties, Language } from "@lib/utils";
 
 export type GroupTitleProps = {
   groups: GroupsType;

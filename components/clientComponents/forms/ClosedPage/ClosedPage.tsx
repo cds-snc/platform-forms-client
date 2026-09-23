@@ -9,7 +9,7 @@ import { ClosedFormIcon } from "@serverComponents/icons";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 
-import { getLocalizedProperty, LocalizedElementProperties } from "@root/lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties } from "@lib/utils";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
