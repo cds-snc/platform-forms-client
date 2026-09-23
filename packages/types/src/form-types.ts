@@ -142,18 +142,6 @@ export interface ElementProperties {
   dynamicRow?: dynamicRowType;
   sortOrder?: SortValue;
   strictValue?: boolean;
-  [key: string]:
-    | string
-    | string[]
-    | number
-    | boolean
-    | Array<PropertyChoices>
-    | Array<FormElement>
-    | ValidationProperties
-    | Array<ConditionalRule>
-    | AddressComponents
-    | dynamicRowType
-    | undefined;
 }
 
 // defines the fields in the object that controls form branding

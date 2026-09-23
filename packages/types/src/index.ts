@@ -93,3 +93,5 @@ export type {
 
 export type { FileInput };
 export type { ValidationInputType };
+
+export type Language = "en" | "fr";

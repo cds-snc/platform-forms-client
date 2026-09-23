@@ -1,6 +1,6 @@
 "use client";
 import { useState, FormEvent } from "react";
-import { getLocalizedProperty } from "@lib/utils";
+import { getLocalizedProperty, Language } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
@@ -22,8 +22,8 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
   const { t, i18n } = useTranslation("admin-templates");
 
   const sortedByTitle = templates.sort((a, b) => {
-    return (a[getLocalizedProperty("title", i18n.language)] as string).localeCompare(
-      b[getLocalizedProperty("title", i18n.language)] as string
+    return (a[getLocalizedProperty("title", i18n.language as Language)] as string).localeCompare(
+      b[getLocalizedProperty("title", i18n.language as Language)] as string
     );
   });
   const [dataView, setDataView] = useState<DataViewObject[]>(sortedByTitle);
@@ -73,7 +73,7 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
           {t("view.latestPublished")}
         </Button>
       </div>
-      <table className="w-full table-auto  border-4 border-gray-400">
+      <table className="w-full table-auto border-4 border-gray-400">
         <thead className="border-4 border-gray-400">
           <tr>
             <th>{t("view.formID")}</th>
@@ -87,9 +87,11 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
         <tbody>
           {dataView.map((template) => {
             return (
-              <tr key={template.id} className="border-b-1 border-t-4 border-gray-400">
+              <tr key={template.id} className="border-t-4 border-b-1 border-gray-400">
                 <td className="pl-4">{template.id} </td>
-                <td className="pl-4">{template[getLocalizedProperty("title", i18n.language)]} </td>
+                <td className="pl-4">
+                  {template[getLocalizedProperty("title", i18n.language as Language)]}{" "}
+                </td>
                 <td className="text-center">
                   {template.isPublished ? t("view.published") : t("view.draft")}
                 </td>

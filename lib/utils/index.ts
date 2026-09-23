@@ -1,5 +1,9 @@
 import { twMerge } from "tailwind-merge";
 import { clsx, ClassValue } from "clsx";
+import { Language } from "@lib/types/form-builder-types";
+
+export { LocalizedElementProperties } from "@lib/types/form-builder-types";
+export type { Language };
 
 export function chunkArray<T>(arr: T[], size: number): T[][] {
   return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -11,8 +15,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getLocalizedProperty(field = "", lang = "en"): string {
-  return field + lang.charAt(0).toUpperCase() + lang.slice(1);
+export function getLocalizedProperty<LocalizedProperty extends string>(
+  field: LocalizedProperty,
+  lang: Language = "en"
+): `${LocalizedProperty}${Capitalize<Language>}` {
+  const langUpperCaseFirst = (lang.charAt(0).toUpperCase() + lang.slice(1)) as Capitalize<Language>;
+  return `${field}${langUpperCaseFirst}`;
 }
 
 export function dateHasPast(timestamp: number) {
