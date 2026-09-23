@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, vi } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { SelectLocation } from "@responses-pilot/location/SelectLocation";
 import { render } from "./testUtils";
 import { setupFonts } from "./testHelpers";
