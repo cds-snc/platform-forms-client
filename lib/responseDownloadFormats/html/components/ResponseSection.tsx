@@ -2,7 +2,7 @@ import React from "react";
 import { Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
-import { getLocalizedProperty, LocalizedElementProperties, Language } from "@root/lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties, Language } from "@lib/utils";
 import { FormRecord } from "@gcforms/types";
 import { TFunction } from "i18next";
 import { VersionBadge } from "./VersionBadge";

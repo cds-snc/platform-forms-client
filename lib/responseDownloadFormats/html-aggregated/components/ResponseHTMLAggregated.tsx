@@ -12,7 +12,7 @@ import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
 import { formatDateTimeUTC, formatDateTimeUTCFr } from "@lib/utils/form-builder";
 import { VersionBadge } from "../../html/components/VersionBadge";
-import { getLocalizedProperty, LocalizedElementProperties, Language } from "@root/lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties, Language } from "@lib/utils";
 
 interface HTMLDownloadProps {
   lang: Language;
