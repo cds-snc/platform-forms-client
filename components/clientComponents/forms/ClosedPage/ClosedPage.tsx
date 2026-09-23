@@ -9,6 +9,8 @@ import { ClosedFormIcon } from "@serverComponents/icons";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 
+import { getLocalizedProperty, LocalizedElementProperties } from "@lib/utils";
+
 /*
   This is the component for text pages within the form flow (start pages, end pages)
 */
@@ -63,7 +65,7 @@ const ClosedHeading = ({ language }: { language: "en" | "fr" }) => {
 
   return (
     <>
-      <ClosedFormIcon className="mr-5 mt-[-5px] inline-block" />{" "}
+      <ClosedFormIcon className="mt-[-5px] mr-5 inline-block" />{" "}
       <h1 tabIndex={-1} className="!mb-6 inline-block">
         <span>{language === "en" ? enTitle : frTitle}</span>
       </h1>
@@ -91,7 +93,7 @@ export const ClosedPage = (props: TextPageProps): React.ReactElement => {
 
   // Check for legacy closedMessage field
   let pageText = closedMessage
-    ? (closedMessage[getProperty("description", language)] as string)
+    ? closedMessage[getLocalizedProperty(LocalizedElementProperties.DESCRIPTION, language)]
     : "";
 
   // If the page text is empty, look for a custom closed message
@@ -109,14 +111,14 @@ export const ClosedPage = (props: TextPageProps): React.ReactElement => {
 
   return (
     <div className="mx-2 mb-36">
-      <div className="mb-10 rounded-md border-1 border-blue-dark bg-gray-soft p-10">
+      <div className="border-blue-dark bg-gray-soft mb-10 rounded-md border-1 p-10">
         <PageContent
           language={language}
           title={language === "en" ? titleEn : titleFr}
           pageText={pageText}
         />
       </div>
-      <LinkButton.Primary href={homeHref} target={target} className="mb-2 mr-3">
+      <LinkButton.Primary href={homeHref} target={target} className="mr-3 mb-2">
         <span>
           <BackArrowIcon className="mr-2 inline-block self-stretch fill-white" />
           {t("backButton", { lng: language })}

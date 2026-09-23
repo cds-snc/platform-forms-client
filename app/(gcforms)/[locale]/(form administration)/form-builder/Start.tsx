@@ -16,6 +16,7 @@ import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/bet
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { setImportedTemplate } from "@lib/store/importBuffer";
 import { logMessage } from "@lib/logger";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
 export const Start = () => {
   const {
@@ -78,6 +79,8 @@ export const Start = () => {
           target.value = "";
           return;
         }
+
+        data = migrateTemplate(data);
 
         const validationResult = validateTemplate(data);
 
