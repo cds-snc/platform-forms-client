@@ -250,7 +250,9 @@ export default async function Page(props: {
           <Navigation filter={status} />
         </div>
         <div className="mt-6 ml-2">
-          {status === TAB_STATUS.DRAFT && <ResumeEditingForm />}
+          {(status === TAB_STATUS.DRAFT || status === TAB_STATUS.RECENTLY_EDITED) && (
+            <ResumeEditingForm />
+          )}
           <UpdatePublishedHelp />
         </div>
       </div>
