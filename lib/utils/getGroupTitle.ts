@@ -1,6 +1,5 @@
 import { type GroupsType } from "@gcforms/types";
-import { getProperty } from "@lib/i18nHelpers";
-import { type Language } from "@lib/types/form-builder-types";
+import { getLocalizedProperty, LocalizedElementProperties, Language } from "@root/lib/utils";
 
 export type GroupTitleProps = {
   groups: GroupsType;
@@ -10,6 +9,7 @@ export type GroupTitleProps = {
 
 export const getGroupTitle = ({ groups, groupId, language }: GroupTitleProps) => {
   if (!groupId) return "";
-  const titleLanguageKey = getProperty("title", language) as "titleEn" | "titleFr";
-  return groups?.[groupId]?.[titleLanguageKey] || "";
+  return (
+    groups?.[groupId]?.[getLocalizedProperty(LocalizedElementProperties.TITLE, language)] || ""
+  );
 };
