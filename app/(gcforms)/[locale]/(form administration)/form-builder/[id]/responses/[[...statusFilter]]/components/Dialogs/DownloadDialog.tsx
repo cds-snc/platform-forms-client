@@ -61,6 +61,7 @@ export const DownloadDialog = ({
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset dependent download option
       setZipAllFiles(true);
     }
   }, [selectedFormat]);
