@@ -15,6 +15,7 @@ import { transformFormProperties } from "@lib/store/helpers/elements/transformFo
 import { BetaComponentsError, checkForBetaComponents } from "@lib/validation/betaCheck";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { setImportedTemplate } from "@lib/store/importBuffer";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
 export const Start = () => {
   const {
@@ -58,13 +59,15 @@ export const Start = () => {
           return;
         }
 
-        const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
+        const parsed = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
 
-        if (!data) {
+        if (!parsed) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
           return;
         }
+
+        const data = migrateTemplate(parsed);
 
         const validationResult = validateTemplate(data);
 
