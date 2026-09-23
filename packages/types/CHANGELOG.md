@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix ts config
 
+## [1.0.41] - 2026-09-23
+
+- Add a schemaVersion to template properties
+
 ## [1.0.40] - 2026-09-22
 
 - Fix exports for value types for FormattedDate and AddressComplete
