@@ -65,7 +65,8 @@ export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };
 export { BetaFormElementTypes };
-export type { DateFormat, DateObject, DatePart };
+export { DatePart };
+export type { DateFormat, DateObject };
 export type { GroupsType };
 export type { FormValues };
 
@@ -81,9 +82,9 @@ import {
   AddressCompleteLabels,
 } from "./address-complete";
 
+export { AddressCompleNext };
 export type {
   AddressCompleteChoice,
-  AddressCompleNext,
   AddressCompleteResult,
   AddressCompleteProps,
   AddressElements,

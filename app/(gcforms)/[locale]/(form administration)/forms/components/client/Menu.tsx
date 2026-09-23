@@ -111,7 +111,8 @@ export const Menu = ({
           toast.error(t("errors.formUnarchiveFailed"));
         } else {
           clearTemplateStorage(id);
-          router.push(`/${language}/form-builder/${id}/edit`);
+          // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- force a full page reload after restoring
+          window.location.href = `/${language}/form-builder/${id}/edit`;
         }
       } catch (e) {
         toast.error(t("errors.formUnarchiveFailed"));
@@ -167,7 +168,8 @@ export const Menu = ({
               const res = await cloneForm(id, status === TAB_STATUS.ARCHIVED, language);
               if (res && res.formRecord && !res.error) {
                 toast.success(t("card.menu.cloneSuccess"));
-                router.push(`/${language}/form-builder/${res.formRecord.id}/edit`);
+                // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- force a full page reload after cloning
+                window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
                 return;
               }
               throw new Error(res?.error || "Clone failed");
