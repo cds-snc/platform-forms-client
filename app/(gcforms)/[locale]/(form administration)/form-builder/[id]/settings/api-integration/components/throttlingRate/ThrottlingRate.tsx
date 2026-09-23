@@ -28,6 +28,34 @@ const THROTTLE_EXPIRY = {
 type ObjectValues<T> = T[keyof T];
 export type ThrottleExpiry = ObjectValues<typeof THROTTLE_EXPIRY>;
 
+const dateFormat: Intl.DateTimeFormatOptions = {
+  timeZone: "America/New_York",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+};
+
+const formatDate = (weeks: number, language: string, now: number) => {
+  try {
+    const weeksInSeconds = getWeeksInSeconds(weeks);
+    const futureTimeInSeconds = now + weeksInSeconds;
+    const dateInUTC = new Date(futureTimeInSeconds).toUTCString();
+    const { month, day, year } = formClosingDateEst(dateInUTC, language, dateFormat);
+
+    if (day && month && year) {
+      return `${year}-${month}-${day}`;
+    }
+
+    throw new Error("Failed to parse out day, month or year.");
+  } catch (error) {
+    logMessage.info(`Unable to parse throttling in weeks: ${weeks}`);
+    return null;
+  }
+};
+
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const {
     t,
@@ -43,34 +71,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const [permanent, setPermanent] = useState(false);
 
   const [success, setSuccess] = useState<ThrottleExpiry | "">("");
-
-  const dateFormat: Intl.DateTimeFormatOptions = {
-    timeZone: "America/New_York",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  };
-
-  const formatDate = (weeks: number, language: string) => {
-    try {
-      const weeksInSeconds = getWeeksInSeconds(weeks);
-      const futureTimeInSeconds = Date.now() + weeksInSeconds;
-      const dateInUTC = new Date(futureTimeInSeconds).toUTCString();
-      const { month, day, year } = formClosingDateEst(dateInUTC, language, dateFormat);
-
-      if (day && month && year) {
-        return `${year}-${month}-${day}`;
-      }
-
-      throw new Error("Failed to parse out day, month or year.");
-    } catch (error) {
-      logMessage.info(`Unable to parse throttling in weeks: ${weeks}`);
-      return null;
-    }
-  };
+  const [successDate, setSuccessDate] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -83,6 +84,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           throw new Error("Failed to permanently increase throttling rate");
         }
 
+        setSuccessDate(null);
         setSuccess(THROTTLE_EXPIRY.permanent);
         return;
       }
@@ -94,6 +96,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           throw new Error("Failed to temporarily increase throttling rate");
         }
 
+        setSuccessDate(formatDate(Number(weeks), language, Date.now()));
         setSuccess(THROTTLE_EXPIRY.weeks);
         return;
       }
@@ -105,6 +108,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
         throw new Error("Failed to reset throttling rate");
       }
 
+      setSuccessDate(null);
       setSuccess(THROTTLE_EXPIRY.default);
     } catch (error) {
       toast.error(t("throttling.error"));
@@ -140,6 +144,8 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
         setLoadedSetting(true);
       }
     };
+    // Reset loading while synchronizing settings for the current form.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize external form settings
     setLoadedSetting(false);
     getThrottlingSetting();
   }, [formId, throttlingErrorString]);
@@ -161,10 +167,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
               >
                 <p>
                   {t("throttling.succcessUpdate.description", {
-                    success:
-                      success === THROTTLE_EXPIRY.weeks
-                        ? formatDate(Number(weeks), language)
-                        : success,
+                    success: success === THROTTLE_EXPIRY.weeks ? successDate : success,
                   })}
                 </p>
               </Alert.Success>
@@ -185,7 +188,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             {hasHydrated && loadedSetting ? (
               <>
                 <Input
-                  className="w-16 disabled:!border-none disabled:bg-gray-light"
+                  className="disabled:bg-gray-light w-16 disabled:border-none!"
                   id="throttling-weeks"
                   name="throttling-weeks"
                   value={weeks}
