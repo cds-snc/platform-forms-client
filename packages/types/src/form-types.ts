@@ -90,7 +90,6 @@ export interface ValidationProperties {
 export interface PropertyChoices {
   en: string;
   fr: string;
-  [key: string]: string;
 }
 
 export type AddressComponents = {

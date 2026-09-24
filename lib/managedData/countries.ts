@@ -1,5 +1,4 @@
 import { ManagedDataSet } from ".";
-import { PropertyChoices } from "@lib/types";
 import countriesData from "./data/countries.json";
 
 export type Country = {
@@ -14,8 +13,14 @@ export const countryDataSet: ManagedDataSet<Country[]> = {
   filters: {},
 };
 
+type ManagedDataChoice = {
+  en: string;
+  fr: string;
+  id: string;
+};
+
 type ManagedData = {
-  [key: string]: PropertyChoices[];
+  [key: string]: ManagedDataChoice[];
 };
 
 export const countries: ManagedData = {
