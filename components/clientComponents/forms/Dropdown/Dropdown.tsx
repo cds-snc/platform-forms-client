@@ -50,16 +50,23 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const classes = cn("gc-dropdown", className, meta.error && "gcds-error");
 
+  const errorMessageId = `errorMessage${id}`;
+  // No character count so avoiding ariaDescribedByIds()
+  const describedByIds = [meta.error ? errorMessageId : undefined, ariaDescribedBy]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div className={cn("gcds-select-wrapper", meta.error && "gcds-error")}>
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       <select
         data-testid="dropdown"
         className={classes}
         id={id}
         {...(name && { name })}
-        required={required}
-        aria-describedby={ariaDescribedBy}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
+        aria-describedby={describedByIds || undefined}
         {...field}
       >
         {children ? (

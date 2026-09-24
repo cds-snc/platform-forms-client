@@ -165,7 +165,8 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
         onChange={handleOnChange}
         onKeyDown={handleOnKeyDown}
         onBlur={handleOnBlur}
-        required={required}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
         inputMode="numeric"
       />
     </>

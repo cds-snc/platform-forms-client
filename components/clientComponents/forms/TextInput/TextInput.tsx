@@ -55,7 +55,8 @@ export const TextInput = (
         type={type}
         key={id}
         spellCheck={spellCheck}
-        required={required}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
         {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}

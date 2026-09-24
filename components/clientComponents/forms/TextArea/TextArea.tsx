@@ -41,7 +41,8 @@ export const TextArea = (
         data-testid="textarea"
         className={classes}
         id={id}
-        required={required}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
         placeholder={placeholder}
         {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}
         {...field}
