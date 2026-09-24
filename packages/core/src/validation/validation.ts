@@ -19,6 +19,11 @@ import type { AddressValidationError } from "./isValidAddress";
 // Minimal translation function type to avoid i18next dependency
 export type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 
+// Number.MAX_SAFE_INTEGER (9,007,199,254,740,991) has 16 digits — the largest integer JS
+// can represent exactly. This hard cap (independent of any form-configured maxDigits) keeps
+// every accepted NumberInput value exactly representable, regardless of how it was submitted.
+export const MAX_NUMBER_INPUT_DIGITS = 15;
+
 export const isFieldResponseValid = (
   value: unknown,
   formElement: FormElement,
@@ -86,6 +91,11 @@ export const isFieldResponseValid = (
           }
 
           if (validator.maxDigits && digitCount > validator.maxDigits) {
+            return t("input-validation.too-many-digits");
+          }
+
+          // Hard cap, independent of any form-configured maxDigits
+          if (digitCount > MAX_NUMBER_INPUT_DIGITS) {
             return t("input-validation.too-many-digits");
           }
         }

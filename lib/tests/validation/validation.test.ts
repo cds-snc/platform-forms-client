@@ -196,6 +196,14 @@ const testCases: TestCase[] = [
     },
   },
   {
+    // Hard cap applies even without a form-configured maxDigits
+    fieldType: "numberInput",
+    subType: "number",
+    passConditions: [{ 1: "123456789012345" }],
+    failConditions: [{ 1: "1234567890123456" }],
+    expectedError: { 1: "input-validation.too-many-digits" },
+  },
+  {
     fieldType: "textField",
     subType: "date",
     passConditions: [{ 1: "06/05/1950" }],

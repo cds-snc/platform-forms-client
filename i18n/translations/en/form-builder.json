@@ -242,7 +242,7 @@
       "title": "Full name"
     },
     "number": {
-      "description": "A field that only accepts a numeric value.",
+      "description": "A field for numbers of no more than 15 digits. Format options include currency, decimals, negatives, range and thousands separator. Zero cannot be the first in a series of digits.",
       "title": "Number",
       "amount": "Amount",
       "enterOnlyNumbers": "Enter a number.",
@@ -259,6 +259,7 @@
       "limitNumberOfDigits": "Limit number of digits",
       "invalidValueRange": "The minimum value must be less than the maximum value.",
       "invalidDigitRange": "The minimum number of digits must be less than the maximum number of digits.",
+      "digitLimitExceedsMax": "Cannot exceed {{max}} digits.",
       "minDigits": "Minimum number of digits",
       "maxDigits": "Maximum number of digits",
       "currency": "Currency ($)",
