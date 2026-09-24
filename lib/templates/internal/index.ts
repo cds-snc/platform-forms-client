@@ -15,6 +15,7 @@ import {
 
 import { authorization } from "@lib/privileges";
 import { checkOne } from "@lib/cache/flags";
+import { FormPurpose } from "@root/packages/types/dist";
 
 export const checkFlag = async (flag: string) => {
   return (await Promise.all([checkOne(flag), authorization.checkUserFlag(flag)])).reduce(
@@ -82,7 +83,7 @@ export const parseTemplate = (
         }),
       },
     }),
-    formPurpose: template.formPurpose,
+    formPurpose: template.formPurpose as FormPurpose,
     publishReason: template.publishReason,
     publishFormType: template.publishFormType,
     publishDesc: template.publishDesc,

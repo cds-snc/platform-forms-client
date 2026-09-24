@@ -225,21 +225,16 @@ export type FormRecord = {
   saveAndResume?: boolean;
   notificationsInterval?: NotificationsInterval;
   lastEditedBy?: string | null;
+  publishReason?: string;
+  formPurpose?: FormPurpose;
+  publishFormType?: string;
+  publishDesc?: string;
+  currentPublishedVersion?: number | null;
+  currentDraftVersion?: number | null;
   _count?: {
     users: number;
     invitations: number;
   };
-  [key: string]:
-    | string
-    | boolean
-    | number
-    | Date
-    | FormProperties
-    | DeliveryOption
-    | ClosedDetails
-    | { users: number; invitations: number }
-    | undefined
-    | null;
 };
 
 export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";

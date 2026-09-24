@@ -555,10 +555,6 @@ describe("TemplateStore", () => {
       name: "Rehydrated form",
       isPublished: true,
       securityAttribute: "Protected B",
-      formPurpose: null,
-      publishReason: null,
-      publishFormType: null,
-      publishDesc: null,
       form: {
         titleEn: "Server title",
         titleFr: "Titre serveur",
