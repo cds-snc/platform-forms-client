@@ -65,7 +65,9 @@ export const parseTemplate = (
       updatedAt: template.updated_at.toString(),
     }),
     name: template.name,
-    form: version ? parseJsonConfig(version.jsonConfig) : getResolvedTemplateFormConfig(template),
+    form: version
+      ? jsonToFormProperties(version.jsonConfig)
+      : getResolvedTemplateFormConfig(template),
     isPublished: options?.isPublished ?? template.isPublished,
     currentPublishedVersionId: template.currentPublishedVersionId ?? null,
     currentDraftVersionId: template.currentDraftVersionId ?? null,
@@ -128,12 +130,16 @@ export const getBuilderVersion = (
   return template.currentDraftVersion ?? template.currentPublishedVersion ?? null;
 };
 
-const parseJsonConfig = (raw: Prisma.JsonValue): FormProperties => {
-  if (typeof raw === "string") {
-    return JSON.parse(raw);
+export const formPropertiesToJson = (formProperties: FormProperties): Prisma.JsonObject => {
+  return JSON.parse(JSON.stringify(formProperties));
+};
+
+export const jsonToFormProperties = (json: Prisma.JsonValue): FormProperties => {
+  if (typeof json === "string") {
+    return JSON.parse(json);
   }
 
-  return raw as unknown as FormProperties;
+  return json as unknown as FormProperties;
 };
 
 const getResolvedTemplateFormConfig = (
@@ -147,7 +153,7 @@ const getResolvedTemplateFormConfig = (
     allowTemplateFallback?: boolean;
   }
 ) => {
-  return parseJsonConfig(getResolvedTemplateRawConfig(template, options));
+  return jsonToFormProperties(getResolvedTemplateRawConfig(template, options));
 };
 
 const getResolvedTemplateRawConfig = (
