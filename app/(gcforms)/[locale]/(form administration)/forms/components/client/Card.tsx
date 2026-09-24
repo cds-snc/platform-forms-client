@@ -125,7 +125,7 @@ const CardBanner = memo(
     const publishedLabel = isClosed
       ? t("card.states.closed")
       : isPublished
-        ? t("card.states.published") + t(publishedVersionText ? `${publishedVersionText}` : "")
+        ? t(publishedVersionText ? `${publishedVersionText}` : "") + t("card.states.published")
         : t("card.states.draft");
 
     return (

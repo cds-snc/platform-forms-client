@@ -52,8 +52,8 @@
       "email": "Réponses envoyées à :",
       "vault": "Page Réponses"
     },
-    "draftVersion": "Ébauche - version {{draftVersionNumber}}",
-    "versionNumber": "- version {{publishedVersionNumber}}",
+    "draftVersion": "Version {{draftVersionNumber}} - Ébauche",
+    "versionNumber": "Version {{publishedVersionNumber}} - ",
     "menu": {
       "more": "Plus",
       "save": "Télécharger une copie",
