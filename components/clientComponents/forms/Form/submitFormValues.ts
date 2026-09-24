@@ -143,7 +143,7 @@ const getCaptchaTokenForSubmission = async (
     return { status: "verified", token: captchaResult.token };
   }
 
-  if (captchaResult.reason === "load-error") {
+  if (captchaResult.reason === "load-error" || captchaResult.reason === "timeout") {
     resetCaptcha();
   }
 

@@ -3,7 +3,7 @@
  */
 import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { forwardRef, useImperativeHandle } from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useHCaptcha, type HCaptchaExecutionResult, type HCaptchaLogger } from "./useHCaptcha";
 
 const mockCaptcha = vi.hoisted(() => ({
@@ -115,6 +115,10 @@ describe("useHCaptcha", () => {
     mockCaptcha.isReady.mockReset();
     mockCaptcha.isReady.mockReturnValue(true);
     mockCaptcha.reset.mockClear();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("returns the verified token", async () => {
@@ -260,6 +264,75 @@ describe("useHCaptcha", () => {
     fireEvent.click(getByTestId("captcha-ready"));
 
     await waitFor(() => expect(mockCaptcha.execute).toHaveBeenCalledOnce());
+  });
+
+  it("times out when the provider never becomes ready", async () => {
+    vi.useFakeTimers();
+    mockCaptcha.isReady.mockReturnValue(false);
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(15000);
+    });
+
+    expect(onResult).toHaveBeenCalledWith({
+      verified: false,
+      reason: "timeout",
+    });
+  });
+
+  it("times out when provider execution never settles", async () => {
+    vi.useFakeTimers();
+    mockCaptcha.execute.mockImplementationOnce(() => new Promise(() => undefined));
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(15000);
+    });
+
+    expect(onResult).toHaveBeenCalledWith({
+      verified: false,
+      reason: "timeout",
+    });
+  });
+
+  it("ignores a late provider result after timeout", async () => {
+    vi.useFakeTimers();
+    let resolveFirst: (result: { response: string; key: string }) => void = () => {};
+    let resolveSecond: (result: { response: string; key: string }) => void = () => {};
+    mockCaptcha.execute
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          resolveFirst = resolve;
+        })
+      )
+      .mockReturnValueOnce(
+        new Promise((resolve) => {
+          resolveSecond = resolve;
+        })
+      );
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(15000);
+    });
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    resolveFirst({ response: "stale-token", key: "stale-key" });
+    await act(async () => {});
+    expect(onResult).toHaveBeenCalledTimes(1);
+
+    resolveSecond({ response: "current-token", key: "current-key" });
+    await act(async () => {});
+    expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "current-token" });
   });
 
   it("reports the verified token through the callback", async () => {
