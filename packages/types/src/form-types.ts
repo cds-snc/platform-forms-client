@@ -103,7 +103,6 @@ export interface DeliveryOption {
   emailAddress: string;
   emailSubjectEn?: string;
   emailSubjectFr?: string;
-  [key: string]: string | undefined;
 }
 
 export const SortOption = {
@@ -155,7 +154,6 @@ export interface BrandProperties {
   urlFr?: string;
   // if set to true the GC branding will be removed from the footer
   disableGcBranding?: boolean;
-  [key: string]: string | boolean | undefined;
 }
 
 // used to define attributes for a form element or field
