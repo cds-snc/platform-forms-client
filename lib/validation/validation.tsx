@@ -1,4 +1,5 @@
 import React, { type JSX } from "react";
+import type { Language } from "lib/types/form-builder-types";
 import { FormElement, Responses, PublicFormRecord, GroupsType } from "@gcforms/types";
 import { inGroup } from "@gcforms/core";
 import { FormikProps } from "formik";
@@ -29,7 +30,7 @@ export const getFieldType = (formElement: FormElement) => {
 export const getErrorList = (
   props: {
     formRecord: PublicFormRecord;
-    language: string;
+    language: Language;
     currentGroup?: string | null;
   } & FormikProps<Responses>
 ): JSX.Element | null => {

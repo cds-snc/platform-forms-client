@@ -78,7 +78,7 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
       form: { confirmation },
     },
   } = props;
-  const language = i18n.language as string;
+  const language = i18n.language as Language;
 
   const pageText = confirmation ? confirmation[getLocalizedProperty("description", language)] : "";
 
