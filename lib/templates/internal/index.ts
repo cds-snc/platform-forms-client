@@ -15,7 +15,7 @@ import {
 
 import { authorization } from "@lib/privileges";
 import { checkOne } from "@lib/cache/flags";
-import { FormPurpose } from "@root/packages/types/dist";
+import { FormPurpose } from "@gcforms/types";
 
 export const checkFlag = async (flag: string) => {
   return (await Promise.all([checkOne(flag), authorization.checkUserFlag(flag)])).reduce(
