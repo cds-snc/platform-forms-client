@@ -81,9 +81,7 @@ export interface ValidationProperties {
   maxValue?: number;
   minDigits?: number;
   maxDigits?: number;
-  descriptionEN?: string;
-  descriptionFR?: string;
-  [key: string]: unknown;
+  all?: boolean;
 }
 
 // the choices available for fields with multiple options like dropdowns or radio buttons
