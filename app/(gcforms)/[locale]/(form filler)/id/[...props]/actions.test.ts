@@ -1,11 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
 import { FormStatus, NotificationsInterval } from "@gcforms/types";
-import { submitForm } from "./actions";
+import { isFormClosed, submitForm } from "./actions";
 import { PublicFormRecord, Responses, FormElementTypes } from "@lib/types";
 
 // Mock all the dependencies
 vi.mock("@lib/templates/queries/getPublicTemplateByID", () => ({
   getPublicTemplateByID: vi.fn(),
+}));
+
+vi.mock("@lib/templates/queries/getTemplateClosureState", () => ({
+  getTemplateClosureState: vi.fn(),
 }));
 
 vi.mock("@gcforms/hcaptcha/server", () => ({
@@ -52,6 +56,7 @@ vi.mock("./lib/server/processFormData", () => ({
 }));
 
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
+import { getTemplateClosureState } from "@lib/templates/queries/getTemplateClosureState";
 import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
 import { getAppSettingAsBoolean } from "@lib/appSettings";
 import { dateHasPast } from "@lib/utils";
@@ -361,5 +366,25 @@ describe("submitForm", () => {
 
     expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId, "draft");
     expect(result).toEqual({ id: mockFormId, submissionId: "test-submission-id", fileURLMap: {} });
+  });
+});
+
+describe("isFormClosed", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("fails to open when the form closure lookup does not complete", async () => {
+    (getTemplateClosureState as Mock).mockReturnValue(new Promise(() => undefined));
+
+    const resultPromise = isFormClosed("test-form-id");
+
+    await vi.advanceTimersByTimeAsync(5000);
+
+    await expect(resultPromise).resolves.toBe(false);
   });
 });

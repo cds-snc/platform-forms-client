@@ -403,6 +403,24 @@ describe("Form", () => {
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 
+  it("focuses the error and enables retry after hCaptcha times out", async () => {
+    mocks.executeCaptcha.mockResolvedValue({
+      verified: false,
+      allowed: false,
+      reason: "timeout",
+    });
+
+    renderForm({ renderSubmit: undefined });
+
+    const submitButton = screen.getByRole("button", { name: /Submit/ });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => expect(submitButton).toBeEnabled());
+    expect(document.activeElement).toBe(screen.getByTestId("alert"));
+    expect(mocks.resetCaptcha).toHaveBeenCalledOnce();
+    expect(mocks.submitForm).not.toHaveBeenCalled();
+  });
+
   it("shows the captcha failure flow when server verification rejects the token", async () => {
     mocks.submitForm.mockResolvedValue({
       id: "form-id",

@@ -29,6 +29,7 @@ export type HCaptchaFailureReason =
   | "expired"
   | "cancelled"
   | "not-ready"
+  | "timeout"
   | "execution-error";
 
 export type HCaptchaExecutionResult =
@@ -44,6 +45,7 @@ export type UseHCaptchaResult = {
 };
 
 const SUSPICIOUS_ERROR_CODES = new Set(["invalid-data", "invalid-input-response"]);
+const HCAPTCHA_EXECUTION_TIMEOUT_MS = 15000;
 
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
@@ -64,6 +66,7 @@ export const useHCaptcha = ({
     promise: Promise<HCaptchaExecutionResult>;
     resolve: (result: HCaptchaExecutionResult) => void;
     executionId: number;
+    timeoutId: ReturnType<typeof setTimeout>;
   } | null>(null);
   // Ignore provider results from executions invalidated by reset()
   const executionIdRef = useRef(0);
@@ -83,6 +86,7 @@ export const useHCaptcha = ({
       return false;
     }
 
+    clearTimeout(pendingExecution.timeoutId);
     pendingExecution.resolve(result);
     pendingExecutionRef.current = null;
     return true;
@@ -235,7 +239,17 @@ export const useHCaptcha = ({
       resolveExecution = resolve;
     });
     const executionId = ++executionIdRef.current;
-    pendingExecutionRef.current = { promise, resolve: resolveExecution, executionId };
+    // On timeout resets hCaptcha to allow showing a recoverable submission error so the user can retry
+    const timeoutId = setTimeout(() => {
+      logger?.warn?.(`hCaptcha: execution timed out after ${HCAPTCHA_EXECUTION_TIMEOUT_MS}ms`);
+      complete(failureResult("timeout"), executionId);
+    }, HCAPTCHA_EXECUTION_TIMEOUT_MS);
+    pendingExecutionRef.current = {
+      promise,
+      resolve: resolveExecution,
+      executionId,
+      timeoutId,
+    };
 
     if (!hCaptchaRef.current || hasFatalErrorRef.current) {
       complete(failureResult(fatalErrorReasonRef.current ?? "not-ready"));
@@ -244,7 +258,7 @@ export const useHCaptcha = ({
     }
 
     return promise;
-  }, [complete, failureResult, startExecution]);
+  }, [complete, failureResult, logger, startExecution]);
 
   const onVerify = useCallback(
     (verifiedToken: string) => {
