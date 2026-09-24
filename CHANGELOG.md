@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.23.0](https://github.com/cds-snc/platform-forms-client/compare/v4.22.7...v4.23.0) (2026-09-24)
+
+
+### Features
+
+* Template schema versioning ([#7939](https://github.com/cds-snc/platform-forms-client/issues/7939)) ([355892f](https://github.com/cds-snc/platform-forms-client/commit/355892f779a1edf4cbe66fd49eacbb5a946eb46d))
+
+
+### Bug Fixes
+
+* add focus indicator to toast close button ([#7919](https://github.com/cds-snc/platform-forms-client/issues/7919)) ([5397e31](https://github.com/cds-snc/platform-forms-client/commit/5397e3115ba6c3f195cdb3ca97eb64cec274c42c))
+* improve form submission timeout handling ([#7970](https://github.com/cds-snc/platform-forms-client/issues/7970)) ([4910ec4](https://github.com/cds-snc/platform-forms-client/commit/4910ec4774c8804e9081793f321b5cac35959786))
+* remove widths and heights from problematic brand logos ([#7907](https://github.com/cds-snc/platform-forms-client/issues/7907)) ([0c60f02](https://github.com/cds-snc/platform-forms-client/commit/0c60f02241aff7fe6a6c20ee195748af057d1393))
+* Tighten form-types ([#7971](https://github.com/cds-snc/platform-forms-client/issues/7971)) ([129c45e](https://github.com/cds-snc/platform-forms-client/commit/129c45e16c4c3905f1d52581bcad48376ad51cc9))
+* Tighten Locale related types ([#7966](https://github.com/cds-snc/platform-forms-client/issues/7966)) ([5b8cf85](https://github.com/cds-snc/platform-forms-client/commit/5b8cf85babff8cea4ee55d299b559d87216eafec))
+
+
+### Miscellaneous Chores
+
+* add admin branding preview page ([#7905](https://github.com/cds-snc/platform-forms-client/issues/7905)) ([b0855b3](https://github.com/cds-snc/platform-forms-client/commit/b0855b308fa6beda65294a971211aebf82538466))
+* add hCaptcha app setting ([#7914](https://github.com/cds-snc/platform-forms-client/issues/7914)) ([23d4303](https://github.com/cds-snc/platform-forms-client/commit/23d4303e54574759550e16fbb5e5f2e9b1a75411))
+* add initial doc around templates / validation ([#7920](https://github.com/cds-snc/platform-forms-client/issues/7920)) ([48f817e](https://github.com/cds-snc/platform-forms-client/commit/48f817e747fd2ab85a78e19f2ef93f02555662c6))
+* add lint ignores ([#7963](https://github.com/cds-snc/platform-forms-client/issues/7963)) ([4694e9e](https://github.com/cds-snc/platform-forms-client/commit/4694e9ebbc5b690c1acda5b7a0b25a65b57b2edc))
+* bump aws packages ([#7930](https://github.com/cds-snc/platform-forms-client/issues/7930)) ([0ee1d23](https://github.com/cds-snc/platform-forms-client/commit/0ee1d23c474290f3a8b436b466b6e497386d7400))
+* bump Next.js ([#7923](https://github.com/cds-snc/platform-forms-client/issues/7923)) ([6b077c3](https://github.com/cds-snc/platform-forms-client/commit/6b077c38fc27c19da51ef5b953762bc8c15595b1))
+* Create local shims for element type-specific types ([#7958](https://github.com/cds-snc/platform-forms-client/issues/7958)) ([e62c475](https://github.com/cds-snc/platform-forms-client/commit/e62c475c3344c38c7bb0a919a9e9d5e69b538383))
+* fix links to sso  ([#7908](https://github.com/cds-snc/platform-forms-client/issues/7908)) ([eb4603a](https://github.com/cds-snc/platform-forms-client/commit/eb4603af6fe1c20ae9eb96e06564a3405ef21094))
+* fix lint for edit lock ([#7952](https://github.com/cds-snc/platform-forms-client/issues/7952)) ([5b3ee27](https://github.com/cds-snc/platform-forms-client/commit/5b3ee276ad1136ef98316cc7240eb129bef985a2))
+* fix lint for list box ([#7961](https://github.com/cds-snc/platform-forms-client/issues/7961)) ([6bb45c7](https://github.com/cds-snc/platform-forms-client/commit/6bb45c7da3ba167efc412dd43f38903e63e9168d))
+* fix lint for menu ([#7965](https://github.com/cds-snc/platform-forms-client/issues/7965)) ([5c6b474](https://github.com/cds-snc/platform-forms-client/commit/5c6b474d1a6a11aff5badb1f7c4d96c10eb707ae))
+* fix lint for resume ([#7959](https://github.com/cds-snc/platform-forms-client/issues/7959)) ([1968510](https://github.com/cds-snc/platform-forms-client/commit/19685109cb771db4d1701d3d1f0e40c03347a24c))
+* fix lint for security questions ([#7955](https://github.com/cds-snc/platform-forms-client/issues/7955)) ([a93ffdc](https://github.com/cds-snc/platform-forms-client/commit/a93ffdcceca6badb15d7fd2c7fa28a0c92789bf9))
+* fix lint for throttle ([#7962](https://github.com/cds-snc/platform-forms-client/issues/7962)) ([22f8e0f](https://github.com/cds-snc/platform-forms-client/commit/22f8e0fcacbadf7728e17486eb3f4834e7aa952f))
+* fix lint issues for dialog ([#7956](https://github.com/cds-snc/platform-forms-client/issues/7956)) ([d15af24](https://github.com/cds-snc/platform-forms-client/commit/d15af24b2e00157cbdd2d05265769b3385cf19e9))
+* fix local dialog lint errors ([#7951](https://github.com/cds-snc/platform-forms-client/issues/7951)) ([63a0c6c](https://github.com/cds-snc/platform-forms-client/commit/63a0c6c36f789e2545f55d5fc4b7ab5d2f66d181))
+* Fix reassign component prop warning from react compiler ([#7957](https://github.com/cds-snc/platform-forms-client/issues/7957)) ([d955fac](https://github.com/cds-snc/platform-forms-client/commit/d955fac85c36fe66b1c27208d5fd2e3508edf272))
+* fix test names ([#7926](https://github.com/cds-snc/platform-forms-client/issues/7926)) ([b15a0b4](https://github.com/cds-snc/platform-forms-client/commit/b15a0b4c38c163bf80c75fcddbba44f656646359))
+* fix try catch pattern for template store ([#7960](https://github.com/cds-snc/platform-forms-client/issues/7960)) ([ea89299](https://github.com/cds-snc/platform-forms-client/commit/ea89299843ae614fa952752215af7754ef9f1476))
+* hCaptcha update ([#7877](https://github.com/cds-snc/platform-forms-client/issues/7877)) ([9f86d93](https://github.com/cds-snc/platform-forms-client/commit/9f86d9363c95c2f17f2b8336517fb3844ab0d3f0))
+* Remove unused component ([#7954](https://github.com/cds-snc/platform-forms-client/issues/7954)) ([7704618](https://github.com/cds-snc/platform-forms-client/commit/770461854848b3ba9d0acb2ac592cc7b5e7800d6))
+* Update alt text from 'Address' to 'Address Complete' ([#7915](https://github.com/cds-snc/platform-forms-client/issues/7915)) ([3ced356](https://github.com/cds-snc/platform-forms-client/commit/3ced356b5573f0d5cf63e80ce4a60a65721932e0))
+* update form-builder address complete content ([#7916](https://github.com/cds-snc/platform-forms-client/issues/7916)) ([c2b96b3](https://github.com/cds-snc/platform-forms-client/commit/c2b96b37927edfe42ef13c4d84361c7b6712bd50))
+* update schema for groups ([#7928](https://github.com/cds-snc/platform-forms-client/issues/7928)) ([0a7fad3](https://github.com/cds-snc/platform-forms-client/commit/0a7fad333b42bef14b97827d4682b8db34a30423))
+* upgrade vitest ([#7911](https://github.com/cds-snc/platform-forms-client/issues/7911)) ([f97b747](https://github.com/cds-snc/platform-forms-client/commit/f97b7475df680d0c77f536ae0620afb836e41d5b))
+
 ## [4.22.7](https://github.com/cds-snc/platform-forms-client/compare/v4.22.6...v4.22.7) (2026-09-09)
 
 
