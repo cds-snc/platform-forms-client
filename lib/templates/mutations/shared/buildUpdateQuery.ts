@@ -1,4 +1,5 @@
 import { Prisma } from "@gcforms/database";
+import { formPropertiesToJson } from "../../internal";
 import { ClosedDetails } from "@gcforms/types";
 import { isValidISODate } from "@lib/utils/date/isValidISODate";
 import { UpdateTemplateCommand, UpdateTemplateAction } from "../../types";
@@ -31,7 +32,7 @@ export const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => 
           isPublished: false,
         },
         data: {
-          jsonConfig: command.formConfig as Prisma.JsonObject,
+          jsonConfig: formPropertiesToJson(command.formConfig),
         },
       };
     case UpdateTemplateAction.ClosedData:
@@ -60,7 +61,7 @@ export const buildUpdateQuery = (command: UpdateTemplateCommand): UpdatePlan => 
       return {
         ...basePlan,
         data: {
-          jsonConfig: command.formConfig as Prisma.JsonObject,
+          jsonConfig: formPropertiesToJson(command.formConfig),
         },
       };
     case UpdateTemplateAction.FormPurpose:

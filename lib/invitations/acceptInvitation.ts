@@ -12,6 +12,7 @@ import { notifyOwnerAdded } from "@lib/templates/internal/notifications";
 import { logMessage } from "@lib/logger";
 import { AccessControlError } from "@lib/auth/errors";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
+import { safeJSONParse } from "@lib/utils";
 
 /**
  * Accept an invitation.
@@ -96,7 +97,13 @@ export const acceptInvitation = async (invitationId: string) => {
     { userEmail: user.email }
   );
 
-  notifyOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+  const formJson = safeJSONParse<FormProperties>(
+    typeof updatedTemplate.jsonConfig === "string"
+      ? updatedTemplate.jsonConfig
+      : (JSON.stringify(updatedTemplate.jsonConfig) ?? "")
+  );
+
+  notifyOwnerAdded(user, formJson?.titleEn || "", formJson?.titleFr || "", updatedTemplate.users);
 
   _deleteInvitation(invitationId).catch((e) => {
     logMessage.error(`Error deleting invitation: ${e}`);
