@@ -130,10 +130,10 @@ export const getBuilderVersion = (
 
 const parseJsonConfig = (raw: Prisma.JsonValue): FormProperties => {
   if (typeof raw === "string") {
-    return JSON.parse(raw) as FormProperties;
+    return JSON.parse(raw);
   }
 
-  return raw as FormProperties;
+  return raw as unknown as FormProperties;
 };
 
 const getResolvedTemplateFormConfig = (

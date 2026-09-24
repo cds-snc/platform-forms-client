@@ -186,15 +186,6 @@ export interface FormProperties {
   lastGeneratedElementId?: number;
   brand?: BrandProperties;
   formPurpose?: string;
-  [key: string]:
-    | string
-    | number
-    | boolean
-    | Array<string | number | FormElement>
-    | Record<string, string>
-    | BrandProperties
-    | GroupsType
-    | undefined;
 }
 
 export type dynamicRowType = {
