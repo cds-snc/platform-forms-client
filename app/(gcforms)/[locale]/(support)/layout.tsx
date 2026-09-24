@@ -18,14 +18,16 @@ export default async function Layout(props: {
   return (
     <div className="flex h-full flex-col">
       <SkipLink />
-      <GcdsHeader pathname={pathname} language={locale as Language} />
+      <GcdsHeader pathname={pathname} language={locale as Language} skipLink={false} />
       <div
         className={cn(
           "gc-formview",
-          "container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0"
+          "container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]"
         )}
       >
-        <main id="content">{children}</main>
+        <main id="content" tabIndex={-1}>
+          {children}
+        </main>
       </div>
       <Footer />
     </div>

@@ -28,7 +28,7 @@ const SiteLink = ({
       <span className="">
         <SiteLogo title={languageT[browserLanguage]("title")} />
       </span>
-      <h1 className="!mb-6 !ml-3 inline-block whitespace-nowrap border-none !font-noto-sans !text-[24px] font-semibold leading-10 text-[#1B00C2]">
+      <h1 className="!font-noto-sans !mb-6 !ml-3 inline-block border-none !text-[24px] leading-10 font-semibold whitespace-nowrap text-[#1B00C2]">
         <span lang={browserLanguage}>{languageT[browserLanguage]("title")}</span> -{" "}
         <span lang={secondLanguage}>{languageT[secondLanguage]("title")}</span>
       </h1>
@@ -54,14 +54,19 @@ const Home = () => {
 
   return (
     <>
-      <GcdsHeader showLanguageToggle={false} pathname="" language={browserLanguage as Language} />
+      <GcdsHeader
+        showLanguageToggle={false}
+        pathname=""
+        language={browserLanguage as Language}
+        skipLink={false}
+      />
       <ReactHydrationCheck />
       <div className="flex h-full flex-col">
         <div id="page-container">
-          <main id="content">
+          <main id="content" tabIndex={-1}>
             <div className="container-xl mt-10 flex items-center justify-center">
               <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
-                <div className="flex  flex-col items-center">
+                <div className="flex flex-col items-center">
                   <SiteLink
                     browserLanguage={browserLanguage}
                     i18nLanguage={i18n.language}

@@ -3,6 +3,7 @@ import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Footer } from "@serverComponents/globals/Footer";
 import { Header } from "@clientComponents/globals/Header/Header";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { AccessControlError } from "@lib/auth/errors";
 import { getTemplateWithAssignedUsers } from "@lib/templates/queries/getTemplateWithAssignedUsers";
 import { redirect } from "next/navigation";
@@ -117,10 +118,12 @@ export default async function Layout(props: {
 
                 <div className="h-full">
                   <div className="flex min-h-screen flex-col">
+                    <SkipLink />
                     <Header
                       context="formBuilder"
                       className="mb-0"
                       shareUsesManageAccess={shareUsesManageAccess}
+                      skipLink={false}
                     />
                     <div className="bg-gray-soft flex shrink-0 grow basis-auto flex-col">
                       <ToastContainer containerId="default" />

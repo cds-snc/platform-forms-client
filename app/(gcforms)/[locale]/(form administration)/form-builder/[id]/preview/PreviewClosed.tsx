@@ -58,7 +58,7 @@ export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails 
       <PreviewNavigation />
       <div className="h-12"></div>
       <div
-        className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
+        className={`border-blue-focus mb-8 border-3 border-dashed bg-white p-4 ${
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
@@ -70,9 +70,15 @@ export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails 
               pathname={""}
               language={language}
               showLanguageToggle={false}
+              skipLink={false}
             />
           ) : (
-            <GcdsHeader pathname={""} language={language} showLanguageToggle={false} />
+            <GcdsHeader
+              pathname={""}
+              language={language}
+              showLanguageToggle={false}
+              skipLink={false}
+            />
           )}
         </div>
         <div className="gc-formview">
