@@ -14,8 +14,7 @@ import {
   type PublicFormRecord,
 } from "@gcforms/types";
 
-import { getLocalizedProperty } from "@lib/utils";
-import { Language } from "@lib/types/form-builder-types";
+import { getLocalizedProperty, LocalizedElementProperties, type Language } from "@lib/utils";
 import { DateObject } from "../FormattedDate/types";
 
 import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
@@ -115,7 +114,7 @@ export const getGroupsWithElementIds = (
 export const createFormItems = (
   formElements: (FormElement | undefined)[],
   formValues: FormValues,
-  language: string
+  language: Language
 ) => {
   if (!Array.isArray(formElements) || !formValues) {
     return [];
@@ -124,7 +123,9 @@ export const createFormItems = (
   return formElements.map((formElement) => {
     return {
       type: formElement?.type,
-      label: formElement?.properties?.[getLocalizedProperty("title", language)] as string,
+      label: formElement?.properties?.[
+        getLocalizedProperty(LocalizedElementProperties.TITLE, language)
+      ] as string,
       values: formValues[formElement?.id as unknown as keyof typeof formValues] as string,
       element: formElement,
     } as FormItem;

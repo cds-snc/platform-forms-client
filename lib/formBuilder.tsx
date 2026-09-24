@@ -28,14 +28,14 @@ import {
   Responses,
   Response,
 } from "@lib/types";
-import { getLocalizedProperty } from "@lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties, type Language } from "@lib/utils";
 import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 import { isNumberInput } from "@gcforms/core";
 
 // This function is used for select/radio/checkbox i18n change of form labels
-function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
+function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: Language) {
   try {
     if (!choices || !choices.length) {
       return [];
@@ -51,7 +51,7 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 }
 
 // This function renders the form elements with passed in properties.
-function _buildForm(element: FormElement, lang: string): ReactElement {
+function _buildForm(element: FormElement, lang: Language): ReactElement {
   const id = element.subId ?? element.id;
 
   let choices =
@@ -92,7 +92,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     ? element.properties.validation.required
     : false;
 
-  const labelText = element.properties[getLocalizedProperty("title", lang)]?.toString();
+  const labelText =
+    element.properties[getLocalizedProperty(LocalizedElementProperties.TITLE, lang)]?.toString();
   const labelComponent = labelText ? (
     <Label
       key={`label-${id}`}
@@ -135,10 +136,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       ? false
       : undefined;
 
-  const placeHolderPerLocale = element.properties[getLocalizedProperty("placeholder", lang)];
+  const placeHolderPerLocale =
+    element.properties[getLocalizedProperty(LocalizedElementProperties.PLACEHOLDER, lang)];
   const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
 
-  const descriptionPerLocale = element.properties[getLocalizedProperty("description", lang)];
+  const descriptionPerLocale =
+    element.properties[getLocalizedProperty(LocalizedElementProperties.DESCRIPTION, lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   const sortOrder = element.properties.sortOrder ? element.properties.sortOrder.toString() : "none";
@@ -327,12 +330,15 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       const props = element.properties.dynamicRow;
 
       if (typeof props !== "undefined") {
-        const rowTitleProp = getLocalizedProperty("rowTitle", lang) as "rowTitleEn" | "rowTitleFr";
-
-        const addButtonProp = getLocalizedProperty("addButtonText", lang) as
-          "addButtonTextEn" | "addButtonTextFr";
-        const removeButtonProp = getLocalizedProperty("removeButtonText", lang) as
-          "removeButtonTextEn" | "removeButtonTextFr";
+        const rowTitleProp = getLocalizedProperty(LocalizedElementProperties.ROW_TITLE, lang);
+        const addButtonProp = getLocalizedProperty(
+          LocalizedElementProperties.ADD_BUTTON_TEXT,
+          lang
+        ) as "addButtonTextEn" | "addButtonTextFr";
+        const removeButtonProp = getLocalizedProperty(
+          LocalizedElementProperties.REMOVE_BUTTON_TEXT,
+          lang
+        ) as "removeButtonTextEn" | "removeButtonTextFr";
 
         rowTitle = props[rowTitleProp];
         addButtonText = props[addButtonProp];
@@ -421,7 +427,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
  * @param formRecord
  * @param language
  */
-export const getRenderedForm = (formRecord: PublicFormRecord, language: string) => {
+export const getRenderedForm = (formRecord: PublicFormRecord, language: Language) => {
   return formRecord.form.layout
     .map((item: number) => {
       const element = formRecord.form.elements.find((element: FormElement) => element.id === item);
@@ -437,7 +443,7 @@ export const getRenderedForm = (formRecord: PublicFormRecord, language: string) 
  * @param element
  * @param language
  */
-const _getElementInitialValue = (element: FormElement, language: string): Response => {
+const _getElementInitialValue = (element: FormElement, language: Language): Response => {
   switch (element.type) {
     // Radio and dropdown resolve to string values
     case FormElementTypes.radio:
@@ -477,7 +483,10 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
  * @param formRecord
  * @param language
  */
-export const getFormInitialValues = (formRecord: PublicFormRecord, language: string): Responses => {
+export const getFormInitialValues = (
+  formRecord: PublicFormRecord,
+  language: Language
+): Responses => {
   if (!formRecord?.form) {
     return {};
   }
@@ -500,7 +509,7 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
 
 export const mergeFormValuesWithInitialValues = (
   formRecord: PublicFormRecord,
-  language: string,
+  language: Language,
   values: Responses
 ): Responses => {
   const initialValues = getFormInitialValues(formRecord, language);
@@ -516,7 +525,7 @@ export const mergeFormValuesWithInitialValues = (
 
 type GenerateElementProps = {
   element: FormElement;
-  language: string;
+  language: Language;
   isTestMode?: boolean;
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
