@@ -5,6 +5,7 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
 import { useCharacterCount } from "@lib/hooks/useCharacterCount";
+import { getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface TextAreaProps extends InputFieldProps {
   children?: React.ReactNode;
@@ -33,10 +34,11 @@ export const TextArea = (
   };
 
   const classes = cn("gcds-textarea", className, meta.error && "gcds-error");
+  const errorMessageId = getErrorMessageId(id);
 
   return (
     <>
-      {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       <textarea
         data-testid="textarea"
         className={classes}

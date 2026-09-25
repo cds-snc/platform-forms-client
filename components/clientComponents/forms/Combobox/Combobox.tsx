@@ -175,7 +175,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           spellCheck={false}
         />
 
-        <AllowDuplicateAnnouncer id={id} bump={bump} announcedMessage={announcedMessage} />
+        <AllowDuplicateAnnouncer id={id ?? name} bump={bump} announcedMessage={announcedMessage} />
 
         {/* Ensure UL remains in the DOM so the aria-controls reference is never broken. */}
         {/* Note: downshift sets role="listbox"/"option". */}

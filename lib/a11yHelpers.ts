@@ -1,4 +1,4 @@
-export const getErrorMessageId = (id: string): string | undefined =>
+export const getErrorMessageId = (id?: string): string | undefined =>
   id ? `errorMessage-${id}` : undefined;
 
 export const getDescribedByIds = (...ids: Array<string | undefined>): string | undefined => {
