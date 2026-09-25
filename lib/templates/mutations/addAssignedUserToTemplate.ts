@@ -11,6 +11,7 @@ import { logMessage } from "@lib/logger";
 import { TemplateNotFoundError, UserNotFoundError } from "../internal/errors";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 import { notifyOwnerAdded } from "../internal/notifications";
+import { safeJSONParse } from "@lib/utils";
 
 /**
  * Assign a user to a form
@@ -94,5 +95,16 @@ export async function addAssignedUserToTemplate(formID: string, userID: string):
     { userEmail: user.email }
   );
 
-  notifyOwnerAdded(userToAdd, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+  const formJson = safeJSONParse<FormProperties>(
+    typeof updatedTemplate.jsonConfig === "string"
+      ? updatedTemplate.jsonConfig
+      : (JSON.stringify(updatedTemplate.jsonConfig) ?? "")
+  );
+
+  notifyOwnerAdded(
+    userToAdd,
+    formJson?.titleEn || "",
+    formJson?.titleFr || "",
+    updatedTemplate.users
+  );
 }

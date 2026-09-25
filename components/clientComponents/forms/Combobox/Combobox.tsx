@@ -53,8 +53,9 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
         (value) => typeof value === "string" && value.toLowerCase() === lowerValue
       )
     );
-    if (bilingualEntry && bilingualEntry[lang]) {
-      setValue(bilingualEntry[lang]);
+    const translatedValue = bilingualEntry?.[lang as keyof PropertyChoices];
+    if (typeof translatedValue === "string" && translatedValue) {
+      setValue(translatedValue);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   // ^ Intentional: run once on mount. Combobox will remount on language change via key prop key={`${id}-${lang}`}.

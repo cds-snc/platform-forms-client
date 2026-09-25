@@ -11,6 +11,7 @@ import { TemplateNotFoundError, UserNotFoundError } from "../internal/errors";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 import { notifyOwnerRemoved } from "../internal/notifications";
 import { FormProperties } from "@lib/types";
+import { safeJSONParse } from "@lib/utils";
 
 /**
  * Remove a user from a form
@@ -99,9 +100,16 @@ export async function removeAssignedUserFromTemplate(
     { userList: userToRemove.email }
   );
 
+  const formJson = safeJSONParse<FormProperties>(
+    typeof updatedTemplate.jsonConfig === "string"
+      ? updatedTemplate.jsonConfig
+      : (JSON.stringify(updatedTemplate.jsonConfig) ?? "")
+  );
+
   notifyOwnerRemoved(
     userToRemove,
-    updatedTemplate.jsonConfig as FormProperties,
+    formJson?.titleEn || "",
+    formJson?.titleFr || "",
     updatedTemplate.users
   );
 }

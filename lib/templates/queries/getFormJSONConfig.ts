@@ -1,9 +1,10 @@
 import { prisma, prismaErrors } from "@gcforms/database";
 import { FormProperties } from "@lib/types";
+import { jsonToFormProperties } from "../internal";
 import { authorization } from "@lib/privileges";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 
-export const getFormJSONConfig = async (formId: string) => {
+export const getFormJSONConfig = async (formId: string): Promise<FormProperties> => {
   await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
@@ -46,5 +47,5 @@ export const getFormJSONConfig = async (formId: string) => {
     return JSON.parse(raw) as FormProperties;
   }
 
-  return raw as FormProperties;
+  return jsonToFormProperties(raw);
 };

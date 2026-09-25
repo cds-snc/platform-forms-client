@@ -1,4 +1,3 @@
-import { FormProperties } from "@lib/types";
 import { youHaveBeenRemovedEmailTemplate } from "@lib/invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
 import { ownerRemovedEmailTemplate } from "@lib/invitations/emailTemplates/ownerRemovedEmailTemplate";
 import { ownerAddedEmailTemplate } from "@lib/invitations/emailTemplates/ownerAddedEmailTemplate";
@@ -13,14 +12,12 @@ import { sendDefaultEmail } from "@lib/integration/notifyConnector";
  */
 export const notifyOwnerRemoved = async (
   userToRemove: { name: string | null; email: string },
-  form: FormProperties,
+  titleEn: string,
+  titleFr: string,
   users: { id: string; email: string }[]
 ) => {
   // Send email to person who was removed
-  const youHaveBeenRemovedEmailContent = youHaveBeenRemovedEmailTemplate(
-    form.titleEn,
-    form.titleFr
-  );
+  const youHaveBeenRemovedEmailContent = youHaveBeenRemovedEmailTemplate(titleEn, titleFr);
 
   sendDefaultEmail({
     to: [userToRemove.email],
@@ -30,13 +27,13 @@ export const notifyOwnerRemoved = async (
 
   // Send email to remaining owners
   const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
-    form.titleEn,
-    form.titleFr,
+    titleEn,
+    titleFr,
     userToRemove.name || "An owner"
   );
 
   sendDefaultEmail({
-    to: users.map((u) => u.email),
+    to: users?.map((u) => u.email) || [],
     subject: "Form access removed | Accès au formulaire supprimé",
     body: ownerRemovedEmailContent,
   });
@@ -51,17 +48,14 @@ export const notifyOwnerRemoved = async (
  */
 export const notifyOwnerAdded = async (
   userToAdd: { name: string | null; email: string },
-  form: FormProperties,
+  titleEn: string,
+  titleFr: string,
   users: { id: string; email: string }[]
 ) => {
-  const emailContent = ownerAddedEmailTemplate(
-    form.titleEn,
-    form.titleFr,
-    userToAdd.name || userToAdd.email
-  );
+  const emailContent = ownerAddedEmailTemplate(titleEn, titleFr, userToAdd.name || userToAdd.email);
 
   sendDefaultEmail({
-    to: users.map((u) => u.email),
+    to: users?.map((u) => u.email) || [],
     subject: "Ownership change notification | Notification de changement de propriété",
     body: emailContent,
   });
