@@ -3,8 +3,7 @@ import {
   AddressCompleteLabels,
   AddressElements,
 } from "@clientComponents/forms/AddressComplete/types";
-import { Language } from "@lib/types/form-builder-types";
-import { getLocalizedProperty } from "@lib/utils";
+import { getLocalizedProperty, Language, LocalizedElementProperties } from "@lib/utils";
 import { getAddressAsReviewElements } from "@clientComponents/forms/AddressComplete/utils";
 import { FormItem } from "../../helpers";
 
@@ -17,7 +16,8 @@ export const getCombinedAddressAsFormItem = (
     return;
   }
 
-  const parentTitle = element?.properties?.[getLocalizedProperty("title", language)];
+  const parentTitle =
+    element?.properties?.[getLocalizedProperty(LocalizedElementProperties.TITLE, language)];
   const addressValuesCombined = Object.values(addressValues);
 
   return {

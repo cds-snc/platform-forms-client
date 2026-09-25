@@ -1,5 +1,4 @@
-import { type Language } from "@lib/types/form-builder-types";
-import { getLocalizedProperty } from "@lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties, type Language } from "@lib/utils";
 import { FormItem } from "../../helpers";
 import { FormElementTypes } from "@gcforms/types";
 
@@ -17,10 +16,14 @@ export const getReviewSectionFromDynamicRows = (formItem: FormItem, language: La
   }
 
   //const parentId = element.id;
-  const parentTitle = element.properties?.[getLocalizedProperty("title", language)];
+  const parentTitle =
+    element.properties?.[getLocalizedProperty(LocalizedElementProperties.TITLE, language)];
   const childTitle =
     element.properties?.dynamicRow?.[
-      getLocalizedProperty("rowTitle", language) as keyof typeof getLocalizedProperty
+      getLocalizedProperty(
+        LocalizedElementProperties.ROW_TITLE,
+        language
+      ) as keyof typeof getLocalizedProperty
     ];
   const subElements = element.properties?.subElements?.filter(
     (sub) => sub.type !== FormElementTypes.richText
@@ -38,7 +41,8 @@ export const getReviewSectionFromDynamicRows = (formItem: FormItem, language: La
     const childFormItems = valueRowsAsArray.map((formValue, childRowIndex) => {
       const subElement = subElements?.[childRowIndex];
       // Match the FormValue index to the subElement index to assign the label
-      const label = subElement?.properties?.[getLocalizedProperty("title", language)];
+      const label =
+        subElement?.properties?.[getLocalizedProperty(LocalizedElementProperties.TITLE, language)];
       return {
         type: subElement?.type,
         label,

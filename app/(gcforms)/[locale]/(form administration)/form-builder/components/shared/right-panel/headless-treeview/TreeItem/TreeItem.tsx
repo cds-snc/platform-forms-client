@@ -82,6 +82,7 @@ export const TreeItem = ({ item, tree, onFocus, onBlur, handleDelete }: TreeItem
     return {
       ...itemProps,
       onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+        // eslint-disable-next-line react-hooks/refs -- invoked only by the click handler
         showOpeningFeedback();
         itemProps.onClick?.(e);
       },

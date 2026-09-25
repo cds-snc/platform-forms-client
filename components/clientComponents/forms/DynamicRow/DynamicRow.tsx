@@ -4,7 +4,7 @@ import React, { useState, useEffect, createRef, useRef } from "react";
 import { cn } from "@lib/utils";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, Language } from "@gcforms/types";
 import { Description } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
@@ -18,7 +18,7 @@ interface DynamicGroupProps {
   addButtonText?: string;
   removeButtonText?: string;
   rowElements: Array<FormElement>;
-  lang: string;
+  lang: Language;
 
   className?: string;
   error?: boolean;
@@ -28,7 +28,7 @@ interface DynamicGroupProps {
 
 interface DynamicRowProps {
   elements: Array<FormElement>;
-  lang: string;
+  lang: Language;
   name: string;
 }
 

@@ -2,10 +2,9 @@ import React from "react";
 import { Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
-import { getProperty } from "@lib/i18nHelpers";
+import { getLocalizedProperty, LocalizedElementProperties, Language } from "@lib/utils";
 import { FormRecord } from "@gcforms/types";
 import { TFunction } from "i18next";
-import { Language } from "@root/lib/types/form-builder-types";
 import { VersionBadge } from "./VersionBadge";
 
 export interface ResponseSectionProps {
@@ -147,7 +146,7 @@ export const ResponseSection = ({
 
       <div className="mt-20 flex flex-wrap items-start justify-between gap-4">
         <h2 className="gc-h1" aria-describedby={`version-badge-${lang}`}>
-          {String(formRecord.form[getProperty("title", lang)])}
+          {String(formRecord.form[getLocalizedProperty(LocalizedElementProperties.TITLE, lang)])}
         </h2>
         <VersionBadge
           id={`version-badge-${lang}`}
