@@ -99,7 +99,7 @@ test.describe("Publishing a form", () => {
     await page.goto("/en/forms?status=published");
     const formCard = page.getByTestId(`card-${formId}`);
     await expect(formCard).toBeVisible();
-    await expect(formCard.getByText("Published- version 1")).toBeVisible();
+    await expect(formCard.getByText("Version 1 - Published")).toBeVisible();
 
     const moreButton = formCard.getByRole("button", { name: /^Menu for form / });
     await expect(moreButton).toHaveAttribute("popovertarget", `menu-${formId}`);
@@ -118,8 +118,8 @@ test.describe("Publishing a form", () => {
     // Verify that editing the published form created the next draft version.
     await page.goto("/en/forms?status=published");
     const publishedFormCard = page.getByTestId(`card-${formId}`);
-    await expect(publishedFormCard.getByText("Draft - version 2")).toBeVisible();
-    await publishedFormCard.getByText("Draft - version 2").click();
+    await expect(publishedFormCard.getByText("Version 2 - Draft")).toBeVisible();
+    await publishedFormCard.getByText("Version 2 - Draft").click();
     await page.waitForURL(new RegExp(`/form-builder/${formId}/edit$`));
 
     // Make a known question edit and save the draft.

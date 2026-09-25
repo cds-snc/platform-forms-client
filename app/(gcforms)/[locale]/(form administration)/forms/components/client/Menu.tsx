@@ -15,6 +15,7 @@ import {
 } from "./MenuDropdown/MenuDropdown";
 import { FormTabStatus, TAB_STATUS } from "../types";
 import { EventKeys } from "@root/lib/hooks/useCustomEvent";
+import { useRouter } from "next/navigation";
 
 export const Menu = ({
   id,
@@ -39,9 +40,14 @@ export const Menu = ({
     t,
     i18n: { language },
   } = useTranslation("my-forms");
+  const router = useRouter();
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const isEmailDelivery = deliveryOption && deliveryOption.emailAddress;
+  const isPublishedDraft =
+    (status === TAB_STATUS.DRAFT || status === TAB_STATUS.RECENTLY_EDITED) &&
+    isPublished &&
+    hasDraft;
 
   const handleDelete = useCallback(() => {
     setShowConfirm(true);
@@ -114,7 +120,7 @@ export const Menu = ({
     })();
     return { message: "" };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language, id]);
+  }, [language, id, router]);
 
   const unfilteredMenuItemList = useMemo(
     () => [
@@ -190,7 +196,7 @@ export const Menu = ({
       },
       {
         filtered: ttl ? true : false,
-        title: t("card.menu.archive"),
+        title: isPublishedDraft ? t("card.menu.deleteDraftVersion") : t("card.menu.archive"),
         callback: () => {
           handleDelete();
           return {
@@ -218,6 +224,8 @@ export const Menu = ({
       handleDelete,
       hasDraft,
       isEmailDelivery,
+      isPublishedDraft,
+      router,
     ]
   );
 
@@ -243,6 +251,7 @@ export const Menu = ({
         show={showConfirm}
         id={id}
         isPublished={isPublished}
+        isDraftVersion={isPublishedDraft}
         handleClose={setShowConfirm}
       />
       <div className="sticky top-0">

@@ -552,6 +552,12 @@
       "message2": "Ce formulaire pourra être désarchivé à partir des formulaires « Archivés » pendant 30 jours avant d'être définitivement supprimé.",
       "message3": " Téléchargez une copie du fichier du formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer le formulaire plus tard."
     },
+    "draftVersion": {
+      "message1": "La suppression de cette version ébauche ne modifiera pas le formulaire publié.",
+      "message2": "Cette version ébauche sera supprimée définitivement et ne pourra pas être restaurée.",
+      "okay": "Supprimer la version ébauche",
+      "title": "Supprimer cette version ébauche?"
+    },
     "okay": "Archiver le formulaire",
     "published": {
       "message1": "L'archivage de ce formulaire publié ne peut être annulée. Votre formulaire publié sera définitivement enlevé de l'Internet, ce qui risque de créer des liens brisés.",
