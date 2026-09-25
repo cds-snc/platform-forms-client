@@ -6,8 +6,10 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
 import { orderChoices } from "@lib/utils/orderChoices";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 interface DropdownProps extends InputFieldProps {
+  id: string;
   children?: React.ReactElement;
   choices?: string[];
   sortOrder?: string;
@@ -50,11 +52,11 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const classes = cn("gc-dropdown", className, meta.error && "gcds-error");
 
-  const errorMessageId = `errorMessage${id}`;
-  // No character count so avoiding ariaDescribedByIds()
-  const describedByIds = [meta.error ? errorMessageId : undefined, ariaDescribedBy]
-    .filter(Boolean)
-    .join(" ");
+  const errorMessageId = getErrorMessageId(id);
+  const describedByIds = getDescribedByIds(
+    meta.error ? errorMessageId : undefined,
+    ariaDescribedBy
+  );
 
   return (
     <div className={cn("gcds-select-wrapper", meta.error && "gcds-error")}>
@@ -66,7 +68,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
         {...(name && { name })}
         aria-required={required ? "true" : undefined}
         aria-invalid={meta.error ? "true" : undefined}
-        aria-describedby={describedByIds || undefined}
+        aria-describedby={describedByIds}
         {...field}
       >
         {children ? (
