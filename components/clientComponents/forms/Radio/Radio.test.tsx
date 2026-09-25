@@ -62,6 +62,8 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
       expect(screen.getByRole("group")).toHaveAccessibleName(title);
       screen.getAllByRole("radio").forEach((input) => {
         expect(input).toBeRequired();
+        expect(input).toHaveAttribute("aria-required", "true");
+        expect(input).not.toHaveAttribute("required");
       });
       // Proper linked description to element
       expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
@@ -77,6 +79,8 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
       expect(screen.queryByTestId("required")).not.toBeInTheDocument();
       screen.getAllByRole("radio").forEach((input) => {
         expect(input).not.toBeRequired();
+        expect(input).not.toHaveAttribute("aria-required");
+        expect(input).not.toHaveAttribute("required");
       });
       // restore for other iterations
       radioButtonData.properties.validation!.required = true as boolean;

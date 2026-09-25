@@ -1,5 +1,5 @@
 export interface InputFieldProps {
-  id?: string;
+  id: string;
   className?: string;
   name: string;
   label?: string;

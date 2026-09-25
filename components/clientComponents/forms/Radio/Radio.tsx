@@ -1,6 +1,6 @@
 "use client";
 import React, { type JSX } from "react";
-import { Field } from "formik";
+import { Field, useField } from "formik";
 import { Description } from "@clientComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";
 
@@ -8,6 +8,7 @@ export const Radio = (
   props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name, ariaDescribedBy } = props;
+  const [, meta] = useField(name);
   return (
     <div className="gc-input-radio">
       {ariaDescribedBy ? (
@@ -21,7 +22,8 @@ export const Radio = (
         className="gc-radio__input"
         id={id}
         type="radio"
-        required={required}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
         value={label} // This needs to be static... the actual label...
         name={name}
       />

@@ -222,6 +222,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
+            id={`${id}`}
             type={FormElementTypes.checkbox}
             name={`${id}`}
             choicesProps={checkboxItems}
@@ -245,6 +246,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
+            id={`${id}`}
             type={FormElementTypes.radio}
             name={`${id}`}
             choicesProps={radioItems}
