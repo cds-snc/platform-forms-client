@@ -81,7 +81,8 @@
       "deleted": "Pour suppression",
       "problem": "Problème"
     },
-    "viewAllProblemResponses": "Afficher les réponses signalées"
+    "viewAllProblemResponses": "Afficher les réponses signalées",
+    "downloadAttachments": "Télécharger les pièces jointes"
   },
   "supportWillContact": "L'équipe de soutien vous contactera",
   "reportedAsProblem": "Réponse signalée avec problème",
