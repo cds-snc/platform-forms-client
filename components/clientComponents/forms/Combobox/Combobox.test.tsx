@@ -51,6 +51,24 @@ const comboboxData = {
   },
 } as const as FormElement;
 
+const renderCombobox = (options: { required?: boolean; error?: string } = {}) => {
+  vi.mocked(useField).mockReturnValueOnce([
+    { value: "", name: "province", onBlur: vi.fn() },
+    { touched: Boolean(options.error), error: options.error },
+    { setValue: vi.fn(), setError: vi.fn(), setTouched: vi.fn() },
+  ] as unknown as ReturnType<typeof useField>);
+
+  render(
+    <Combobox
+      id="province"
+      name="province"
+      choices={["Alberta", "Ontario"]}
+      required={options.required}
+      ariaDescribedBy="description-province"
+    />
+  );
+};
+
 describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang: Language) => {
   afterEach(() => cleanup());
 
@@ -229,5 +247,44 @@ describe("Combobox language switch", () => {
 
     // setValue should NOT be called without allChoices
     expect(setValueMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("Combobox validation accessibility", () => {
+  afterEach(() => cleanup());
+
+  it("uses group-owned application validation without native required", () => {
+    renderCombobox({ required: true });
+
+    const input = screen.getByTestId("combobox-input");
+    expect(input).not.toHaveAttribute("required");
+    expect(input).toHaveAttribute("aria-required", "true");
+    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input).toHaveAttribute("aria-describedby", "description-province province-hint");
+  });
+
+  it("omits required state when optional", () => {
+    renderCombobox();
+
+    const input = screen.getByTestId("combobox-input");
+    expect(input).not.toHaveAttribute("required");
+    expect(input).not.toHaveAttribute("aria-required");
+    expect(input).not.toHaveAttribute("aria-invalid");
+  });
+
+  it("associates the rendered validation error with the input", () => {
+    renderCombobox({ required: true, error: "Choose a province" });
+
+    const input = screen.getByTestId("combobox-input");
+    expect(input).toHaveAttribute("aria-required", "true");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      "errorMessage-province description-province province-hint"
+    );
+
+    const error = screen.getByRole("alert");
+    expect(error).toHaveAttribute("id", "errorMessage-province");
+    expect(error).toHaveTextContent("Choose a province");
   });
 });
