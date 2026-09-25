@@ -3,6 +3,7 @@ import React from "react";
 import { useField } from "formik";
 import { ErrorMessage, Checkbox, Radio } from "@clientComponents/forms";
 import { ChoiceFieldProps, InputFieldProps } from "@lib/types";
+import { getErrorMessageId } from "@lib/a11yHelpers";
 
 interface MultipleChoiceGroupProps extends InputFieldProps {
   choicesProps: Array<ChoiceFieldProps>;
@@ -23,10 +24,12 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
     );
   });
 
+  const errorMessageId = getErrorMessageId(field.name);
+
   // map checkboxes
   return (
     <>
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       {choices}
     </>
   );

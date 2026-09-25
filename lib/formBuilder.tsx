@@ -103,6 +103,8 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       required={isRequired}
       validation={element.properties.validation}
       group={["radio", "checkbox", "starRating"].indexOf(element.type) !== -1}
+      // See #7944
+      includeRequiredInAccessibleName={element.type !== FormElementTypes.radio}
       lang={lang}
     >
       {labelText}
@@ -213,7 +215,8 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
           id: `${id}.${index}`,
           name: `${id}`,
           label: choice,
-          required: isRequired,
+          // See #7944
+          required: isRequired && element.properties.validation?.all === true,
         };
       });
 
@@ -222,6 +225,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
+            id={`${id}`}
             type={FormElementTypes.checkbox}
             name={`${id}`}
             choicesProps={checkboxItems}
@@ -245,6 +249,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
+            id={`${id}`}
             type={FormElementTypes.radio}
             name={`${id}`}
             choicesProps={radioItems}

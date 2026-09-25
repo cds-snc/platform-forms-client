@@ -37,7 +37,7 @@ const {
   matchesAddressPatternMock: vi.fn(() => false),
   formikState: {
     value: "",
-    error: undefined as string | undefined,
+    error: undefined as unknown,
   },
 }));
 
@@ -127,6 +127,9 @@ vi.mock("@clientComponents/forms", () => {
             data-testid={`${props.id}-input`}
             value={inputValue}
             placeholder={props.placeholderText || ""}
+            aria-required={props.required ? "true" : undefined}
+            aria-invalid={props.overrideError ? "true" : undefined}
+            aria-describedby={props.ariaDescribedBy}
             onChange={(e) => {
               setInputValue(e.target.value);
               props.onChange?.(e);
@@ -155,11 +158,23 @@ vi.mock("@clientComponents/forms", () => {
   ManagedCombobox.displayName = "ManagedCombobox";
 
   return {
-    Label: ({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) => (
-      <label htmlFor={htmlFor}>{children}</label>
+    Label: ({ htmlFor, children, required }: {
+      htmlFor: string;
+      children: React.ReactNode;
+      required?: boolean;
+    }) => (
+      <label htmlFor={htmlFor}>
+        {children}
+        {required && <span data-testid="required"> (required)</span>}
+      </label>
     ),
     Description: ({ id, children }: { id: string; children: React.ReactNode }) => (
       <p id={id}>{children}</p>
+    ),
+    ErrorMessage: ({ id, children }: { id?: string; children: React.ReactNode }) => (
+      <p id={id} role="alert">
+        {children}
+      </p>
     ),
     ManagedCombobox,
   };
@@ -217,6 +232,42 @@ describe("AddressComplete", () => {
     expect(screen.queryByTestId("addresscomplete-input-country")).not.toBeInTheDocument();
     const hiddenCountry = document.querySelector('input[type="hidden"][name="address-country"]');
     expect(hiddenCountry).toHaveAttribute("value", "CAN");
+  });
+
+  it("exposes required and invalid state on the address subfields", async () => {
+    formikState.error = {
+      fields: {
+        city: "City is required",
+        postalCode: "Postal code is required",
+      },
+    };
+
+    renderComponent({ required: true, canadianOnly: true });
+
+    expect(screen.getAllByTestId("required")).toHaveLength(4);
+
+    const fieldset = screen.getByTestId("addressComplete");
+    const cityInput = screen.getByTestId("addresscomplete-input-city");
+    const provinceInput = screen.getByTestId("addresscomplete-input-province");
+    const postalInput = screen.getByTestId("addresscomplete-input-postalCode");
+
+    expect(fieldset).toHaveAttribute("aria-describedby", "desc-address");
+    expect(screen.getByText("Address help text")).toHaveAttribute("id", "desc-address");
+
+    expect(cityInput).not.toHaveAttribute("required");
+    expect(cityInput).toHaveAttribute("aria-required", "true");
+    expect(cityInput).toHaveAttribute("aria-invalid", "true");
+    expect(cityInput).toHaveAttribute("aria-describedby", "errorMessage-address-city");
+    expect(screen.getByText("City is required")).toHaveAttribute(
+      "id",
+      "errorMessage-address-city"
+    );
+
+    expect(provinceInput).toHaveAttribute("aria-required", "true");
+    expect(provinceInput).not.toHaveAttribute("aria-invalid");
+
+    expect(postalInput).toHaveAttribute("aria-invalid", "true");
+    expect(postalInput).toHaveAttribute("aria-describedby", "errorMessage-address-postal");
   });
 
   it("uses AddressComplete search when feature flag is enabled", async () => {

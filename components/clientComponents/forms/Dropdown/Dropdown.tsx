@@ -6,8 +6,10 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
 import { orderChoices } from "@lib/utils/orderChoices";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 interface DropdownProps extends InputFieldProps {
+  id: string;
   children?: React.ReactElement;
   choices?: string[];
   sortOrder?: string;
@@ -50,16 +52,23 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const classes = cn("gc-dropdown", className, meta.error && "gcds-error");
 
+  const errorMessageId = getErrorMessageId(id);
+  const describedByIds = getDescribedByIds(
+    meta.error ? errorMessageId : undefined,
+    ariaDescribedBy
+  );
+
   return (
     <div className={cn("gcds-select-wrapper", meta.error && "gcds-error")}>
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       <select
         data-testid="dropdown"
         className={classes}
         id={id}
         {...(name && { name })}
-        required={required}
-        aria-describedby={ariaDescribedBy}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
+        aria-describedby={describedByIds}
         {...field}
       >
         {children ? (

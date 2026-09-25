@@ -128,6 +128,9 @@ export const NextButton = ({
           }
         }}
         dataTestId="nextButton"
+        // Override the button label to ensure the label is announced once to screen readers (AT)
+        // Otherwise above the laptop breakpoint would announce Continue twice - both the text and SVG title
+        aria-label={t("next", { lng: language })}
       >
         {!saveAndResumeEnabled ? (
           t("next", { lng: language })

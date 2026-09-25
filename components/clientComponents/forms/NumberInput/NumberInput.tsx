@@ -5,6 +5,7 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
 import { langToLocale, getNumberFormatOptions, normalizeLocaleInput } from "./utils";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface NumberInputProps extends InputFieldProps {
   placeholder?: string;
@@ -147,13 +148,15 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
 
-  const ariaDescribedByValue = [meta.error ? `errorMessage${id}` : null, ariaDescribedBy]
-    .filter(Boolean)
-    .join(" ");
+  const errorMessageId = getErrorMessageId(id);
+  const ariaDescribedByValue = getDescribedByIds(
+    meta.error ? errorMessageId : undefined,
+    ariaDescribedBy
+  );
 
   return (
     <>
-      {meta.error && <ErrorMessage id={`errorMessage${id}`}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       <input
         data-testid="numberInput"
         className={classes}
@@ -165,7 +168,8 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
         onChange={handleOnChange}
         onKeyDown={handleOnKeyDown}
         onBlur={handleOnBlur}
-        required={required}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
         inputMode="numeric"
       />
     </>

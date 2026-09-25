@@ -1,11 +1,11 @@
 import { Fragment, memo } from "react";
 import { StarRatingIcon } from "@root/components/serverComponents/icons";
 
+// Note: required is handled by the parent role="radiogroup" with an aria-required
 interface StarItemProps {
   starValue: number;
-  inputId: string;
+  id: string;
   name: string;
-  required: boolean | undefined;
   checked: boolean;
   tabIndex: number;
   ariaLabel: string;
@@ -22,9 +22,8 @@ interface StarItemProps {
 
 export const StarItem = memo(function StarItem({
   starValue,
-  inputId,
+  id,
   name,
-  required,
   checked,
   tabIndex,
   ariaLabel,
@@ -43,10 +42,9 @@ export const StarItem = memo(function StarItem({
       <input
         type="radio"
         className="sr-only"
-        id={inputId}
+        id={id}
         name={name}
         value={String(starValue)}
-        required={required}
         checked={checked}
         tabIndex={tabIndex}
         aria-label={ariaLabel}
@@ -57,7 +55,7 @@ export const StarItem = memo(function StarItem({
         onKeyDown={onKeyDown}
       />
       <label
-        htmlFor={inputId}
+        htmlFor={id}
         className={`relative cursor-pointer text-4xl leading-none select-none rounded${
           focused ? "outline-blue-focus outline-[3px] outline-offset-2 outline-solid" : ""
         }`}

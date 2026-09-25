@@ -5,6 +5,7 @@ import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
 import { cn } from "@lib/utils";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface ManagedComboboxProps extends InputFieldProps {
   choices?: string[];
@@ -37,6 +38,12 @@ export const ManagedCombobox = React.forwardRef(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [field, meta, helpers] = useField(props);
     const { setValue } = helpers;
+    const hasError = Boolean(overrideError || meta.error);
+    const errorMessageId = getErrorMessageId(id);
+    const describedByIds = getDescribedByIds(
+      hasError ? errorMessageId : undefined,
+      ariaDescribedBy
+    );
 
     const [isOpen, setIsOpen] = useState(false);
     const [items, setItems] = useState(choices);
@@ -95,9 +102,10 @@ export const ManagedCombobox = React.forwardRef(
     const inputProps = getInputProps({
       id,
       name,
-      required,
       maxLength,
-      ...(ariaDescribedBy && { "aria-describedby": `desc-${ariaDescribedBy}` }),
+      "aria-required": required ? "true" : undefined,
+      "aria-invalid": hasError ? "true" : undefined,
+      "aria-describedby": describedByIds,
       onFocus: () => setIsOpen(true),
       onBlur: () => setIsOpen(false),
       onChange: (e) => {
@@ -113,9 +121,7 @@ export const ManagedCombobox = React.forwardRef(
 
     return (
       <div className={classes} data-testid="combobox">
-        {(overrideError || meta.error) && (
-          <ErrorMessage id={"errorMessage" + id}>{overrideError ?? meta.error}</ErrorMessage>
-        )}
+        {hasError && <ErrorMessage id={errorMessageId}>{overrideError ?? meta.error}</ErrorMessage>}
 
         <input {...inputProps} data-testid="combobox-input" placeholder={placeholderText} />
 
