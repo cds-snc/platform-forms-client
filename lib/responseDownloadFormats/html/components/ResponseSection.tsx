@@ -6,6 +6,7 @@ import { getLocalizedProperty, LocalizedElementProperties, Language } from "@lib
 import { FormRecord } from "@gcforms/types";
 import { TFunction } from "i18next";
 import { VersionBadge } from "./VersionBadge";
+import { ResponseAttachmentsWarning } from "./ResponseAttachmentsWarning";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -16,6 +17,7 @@ export interface ResponseSectionProps {
   formRecord: FormRecord;
   versionNumber?: number | null;
   showCodes?: boolean;
+  responseAttachmentsUrl?: string;
   t: TFunction<string | string[], undefined>;
 }
 
@@ -36,6 +38,7 @@ export const ResponseSection = ({
   formRecord,
   versionNumber,
   showCodes = true,
+  responseAttachmentsUrl,
   t,
 }: ResponseSectionProps) => {
   const capitalizedLang = capitalize(lang);
@@ -134,6 +137,13 @@ export const ResponseSection = ({
               {t("responseTemplate.rowTable", { lng: lang })}
             </a>
           </li>
+          {responseAttachmentsUrl && (
+            <li className="mr-4">
+              <a href={`#attachmentsHeading${capitalizedLang}`}>
+                {t("responseTemplate.attachmentsSectionTitle", { lng: lang })}
+              </a>
+            </li>
+          )}
           {showCodes && (
             <li className="mr-4">
               <a href={`#confirmReceipt${capitalizedLang}`}>
@@ -165,6 +175,18 @@ export const ResponseSection = ({
         data-clipboard-text=""
         formRecord={formRecord}
       />
+      {responseAttachmentsUrl && (
+        <section aria-labelledby={`attachmentsHeading${capitalizedLang}`}>
+          <h3 id={`attachmentsHeading${capitalizedLang}`} className="gc-h2 mt-20">
+            {t("responseTemplate.attachmentsSectionTitle", { lng: lang })}
+          </h3>
+          <ResponseAttachmentsWarning
+            responseAttachmentsUrl={responseAttachmentsUrl}
+            lang={lang}
+            t={t}
+          />
+        </section>
+      )}
 
       <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.rowTable", { lng: lang })}

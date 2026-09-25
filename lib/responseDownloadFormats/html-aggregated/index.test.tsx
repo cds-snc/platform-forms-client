@@ -53,4 +53,33 @@ describe("ResponseHtmlAggregated", () => {
 
     expect(markup).toContain("Version 3");
   });
+
+  it("renders an attachment warning for each response with attachments", () => {
+    const markup = renderToStaticMarkup(
+      ResponseHtmlAggregated({
+        lang: "en",
+        formResponseSubmissions: {
+          ...formResponseSubmissions,
+          submissions: [
+            {
+              ...formResponseSubmissions.submissions[0],
+              attachments: [
+                {
+                  id: "attachment-1",
+                  name: "document.pdf",
+                  downloadLink: "https://example.test/document.pdf",
+                },
+              ],
+            },
+          ],
+        },
+        host: "https://example.com",
+      })
+    );
+
+    expect(markup).toContain("This response includes attachments");
+    expect(markup).toContain(
+      'href="https://example.com/en/form-builder/form-1/response-attachments/response-1"'
+    );
+  });
 });

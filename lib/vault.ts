@@ -11,6 +11,7 @@ import {
   VaultSubmissionOverview,
   VaultStatus,
   VaultSubmission,
+  VaultFileAttachment,
   StartFromExclusiveResponse,
 } from "@lib/types";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
@@ -26,6 +27,7 @@ import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates/internal/errors";
 import { getAppSetting } from "./appSettings";
 import { delay, getExponentialBackoffTimeInMS } from "./utils/retryability";
+import { getFormSubmissionAttachmentDownloadLink } from "./vault/getFormSubmissionAttachmentDownloadLink";
 
 /**
  * Checks if any submissions exist for a given form and type
@@ -326,7 +328,7 @@ export async function retrieveSubmissions(
             Vault: {
               Keys: keys,
               ProjectionExpression:
-                "FormID,SubmissionID,FormSubmission,ConfirmationCode,#statusCreatedAtKey,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+                "FormID,SubmissionID,FormSubmission,SubmissionAttachments,ConfirmationCode,#statusCreatedAtKey,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
               ExpressionAttributeNames: {
                 "#name": "Name",
                 "#statusCreatedAtKey": "Status#CreatedAt",
@@ -340,22 +342,38 @@ export async function retrieveSubmissions(
 
         if (response.Responses?.Vault.length) {
           accumulatedResponses = accumulatedResponses.concat(
-            response.Responses.Vault.map((item) => {
-              return {
-                formID: item.FormID,
-                submissionID: item.SubmissionID,
-                formSubmission: item.FormSubmission,
-                confirmationCode: item.ConfirmationCode,
-                status: vaultStatusFromStatusCreatedAt(item["Status#CreatedAt"]),
-                securityAttribute: item.SecurityAttribute,
-                name: item.Name,
-                createdAt: item.CreatedAt,
-                lastDownloadedBy: item.LastDownloadedBy ?? null,
-                confirmedAt: item.ConfirmTimestamp ?? null,
-                downloadedAt: item.DownloadedAt ?? null,
-                removedAt: item.RemovalDate ?? null,
-              } as VaultSubmission;
-            })
+            // eslint-disable-next-line no-await-in-loop
+            await Promise.all(
+              response.Responses.Vault.map(async (item) => {
+                const partialAttachments = parseSubmissionAttachments(item.SubmissionAttachments);
+                const fileAttachments = partialAttachments
+                  ? await Promise.all(
+                      partialAttachments.map(async (attachment) => ({
+                        ...attachment,
+                        downloadLink: await getFormSubmissionAttachmentDownloadLink(
+                          attachment.path
+                        ),
+                      }))
+                    )
+                  : undefined;
+
+                return {
+                  formID: item.FormID,
+                  submissionID: item.SubmissionID,
+                  formSubmission: item.FormSubmission,
+                  fileAttachments,
+                  confirmationCode: item.ConfirmationCode,
+                  status: vaultStatusFromStatusCreatedAt(item["Status#CreatedAt"]),
+                  securityAttribute: item.SecurityAttribute,
+                  name: item.Name,
+                  createdAt: item.CreatedAt,
+                  lastDownloadedBy: item.LastDownloadedBy ?? null,
+                  confirmedAt: item.ConfirmTimestamp ?? null,
+                  downloadedAt: item.DownloadedAt ?? null,
+                  removedAt: item.RemovalDate ?? null,
+                } as VaultSubmission;
+              })
+            )
           );
         }
 
@@ -403,6 +421,38 @@ export async function retrieveSubmissions(
     return [];
   }
 }
+
+const parseSubmissionAttachments = (value: unknown): VaultFileAttachment[] | undefined => {
+  if (typeof value !== "string") return undefined;
+
+  try {
+    const attachments = JSON.parse(value);
+    if (!Array.isArray(attachments)) return undefined;
+
+    return attachments.flatMap((attachment): VaultFileAttachment[] => {
+      if (
+        typeof attachment !== "object" ||
+        attachment === null ||
+        typeof attachment.name !== "string" ||
+        typeof attachment.path !== "string" ||
+        typeof attachment.scanStatus !== "string"
+      ) {
+        return [];
+      }
+
+      return [
+        {
+          ...attachment,
+          id: typeof attachment.id === "string" ? attachment.id : attachment.path,
+          isPotentiallyMalicious: attachment.scanStatus !== "NO_THREATS_FOUND",
+        },
+      ];
+    });
+  } catch {
+    logMessage.warn("Failed to parse SubmissionAttachments from Vault response");
+    return undefined;
+  }
+};
 
 /**
  * Sets who last downloaded the Form Submission on the Vault Submission record
