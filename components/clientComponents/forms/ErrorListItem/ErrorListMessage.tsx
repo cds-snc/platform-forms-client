@@ -1,5 +1,5 @@
 import { useTranslation } from "@i18n/client";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, ValidationCheckboxLike } from "@lib/types";
 import { truncateString } from "@lib/client/clientHelpers";
 import { getLocalizedProperty, Language, LocalizedElementProperties } from "@lib/utils";
 
@@ -45,7 +45,7 @@ export const ErrorListMessage = ({
 
     elementType = element?.type;
 
-    if (element.properties.validation?.all === true) {
+    if ((element.properties.validation as ValidationCheckboxLike | undefined)?.all === true) {
       elementType = FormElementTypes.attestation;
     }
   }

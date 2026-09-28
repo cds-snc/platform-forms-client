@@ -70,19 +70,49 @@ export type ConditionalRule = {
   choiceId: string;
 };
 
-// used to define attributes on the validation object which controls form validation for
-// individual field
-export interface ValidationProperties {
+// validation shape for element types with no type-specific validation options
+// (dropdown, radio, fileInput, richText, dynamicRow, addressComplete, combobox, starRating)
+export interface ValidationSimple {
+  required: boolean;
+}
+
+// validation shape for checkbox-like element types (checkbox, attestation)
+export interface ValidationCheckboxLike {
+  required: boolean;
+  all?: boolean;
+}
+
+// validation shape for textField/textArea
+export interface ValidationTextInput {
   required: boolean;
   type?: ValidationInputType;
   regex?: string;
   maxLength?: number;
+}
+
+// validation shape for numberInput
+export interface ValidationNumberInput {
+  required: boolean;
   minValue?: number;
   maxValue?: number;
   minDigits?: number;
   maxDigits?: number;
-  all?: boolean;
 }
+
+// validation shape for formattedDate
+export interface ValidationFormattedDate {
+  required: boolean;
+  type?: "date";
+}
+
+// used to define attributes on the validation object which controls form validation for
+// individual field; the concrete shape depends on the containing element's FormElementTypes
+export type ValidationProperties =
+  | ValidationSimple
+  | ValidationCheckboxLike
+  | ValidationTextInput
+  | ValidationNumberInput
+  | ValidationFormattedDate;
 
 // the choices available for fields with multiple options like dropdowns or radio buttons
 export interface PropertyChoices {

@@ -1,6 +1,11 @@
 "use client";
 import React from "react";
-import { FormElementTypes, ValidationInputType } from "@lib/types";
+import {
+  FormElementTypes,
+  ValidationInputType,
+  ValidationTextInput,
+  ValidationCheckboxLike,
+} from "@lib/types";
 import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
@@ -21,7 +26,7 @@ const filterSelected = (
    * Attestation is a special case. It is a checkbox, but it has a special validation type.
    * We want to check for that validation type and return the attestation type if it exists.
    */
-  if (item.properties.validation?.all) {
+  if ((item.properties.validation as ValidationCheckboxLike | undefined)?.all) {
     const selected = elementOptions.filter((item) => item.id === FormElementTypes.attestation);
     return selected && selected.length ? selected[0] : currentSelectedItem;
   }
@@ -40,7 +45,7 @@ const filterSelected = (
 const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
 
-  const validationType = item.properties?.validation?.type;
+  const validationType = (item.properties?.validation as ValidationTextInput | undefined)?.type;
   const type = item.type;
 
   let selectedType: FormElementTypes | ValidationInputType = type;

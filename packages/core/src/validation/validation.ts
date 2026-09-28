@@ -3,6 +3,9 @@ import {
   FormElement,
   FormElementTypes,
   ValidationProperties,
+  ValidationTextInput,
+  ValidationNumberInput,
+  ValidationCheckboxLike,
   FileInputResponse,
   DateObject,
 } from "@gcforms/types";
@@ -44,6 +47,7 @@ export const isFieldResponseValid = (
       // for legacy number inputs that were stored as text fields
       // with validation.type "number"
       if (isNumberInput(formElement)) {
+        const numberValidator = validator as ValidationNumberInput;
         // Number validation
         let currentRegex = getRegexByType("number", t);
 
@@ -71,21 +75,21 @@ export const isFieldResponseValid = (
           }
 
           // MinValue and Max Value validation
-          if (validator.minValue != null && numericValue < validator.minValue) {
-            return t("input-validation.too-small", { min: String(validator.minValue) });
+          if (numberValidator.minValue != null && numericValue < numberValidator.minValue) {
+            return t("input-validation.too-small", { min: String(numberValidator.minValue) });
           }
 
-          if (validator.maxValue != null && numericValue > validator.maxValue) {
-            return t("input-validation.too-large", { max: String(validator.maxValue) });
+          if (numberValidator.maxValue != null && numericValue > numberValidator.maxValue) {
+            return t("input-validation.too-large", { max: String(numberValidator.maxValue) });
           }
 
           // minDigits and maxDigits validation
           const digitCount = typedValue.replace(/[^\d]/g, "").length;
-          if (validator.minDigits && digitCount < validator.minDigits) {
+          if (numberValidator.minDigits && digitCount < numberValidator.minDigits) {
             return t("input-validation.too-few-digits");
           }
 
-          if (validator.maxDigits && digitCount > validator.maxDigits) {
+          if (numberValidator.maxDigits && digitCount > numberValidator.maxDigits) {
             return t("input-validation.too-many-digits");
           }
         }
@@ -93,9 +97,10 @@ export const isFieldResponseValid = (
         break;
       }
 
-      const currentRegex = getRegexByType(validator.type, t, validator.regex);
+      const textValidator = validator as ValidationTextInput;
+      const currentRegex = getRegexByType(textValidator.type, t, textValidator.regex);
 
-      if (validator.type && currentRegex && currentRegex.regex) {
+      if (textValidator.type && currentRegex && currentRegex.regex) {
         // Check regex for safety before using it.
         if (!isSafeRegex(currentRegex.regex.source)) {
           return t("input-validation.invalidRegex");
@@ -108,7 +113,7 @@ export const isFieldResponseValid = (
         }
       }
 
-      if (validator.maxLength && (value as string).length > validator.maxLength) {
+      if (textValidator.maxLength && (value as string).length > textValidator.maxLength) {
         return t("input-validation.too-many-characters");
       }
 
@@ -116,15 +121,17 @@ export const isFieldResponseValid = (
     }
     case FormElementTypes.textArea: {
       const typedValue = String(value).trim();
-      if (validator.required && !typedValue) return t("input-validation.required");
-      if (validator.maxLength && (value as string).length > validator.maxLength)
+      const textValidator = validator as ValidationTextInput;
+      if (textValidator.required && !typedValue) return t("input-validation.required");
+      if (textValidator.maxLength && (value as string).length > textValidator.maxLength)
         return t("input-validation.too-many-characters");
       break;
     }
     case FormElementTypes.checkbox: {
-      if (validator.required) {
+      const checkboxValidator = validator as ValidationCheckboxLike;
+      if (checkboxValidator.required) {
         if (
-          validator.all &&
+          checkboxValidator.all &&
           (value === undefined ||
             !Array.isArray(value) ||
             (value as Array<string>).length != formElement.properties.choices?.length)

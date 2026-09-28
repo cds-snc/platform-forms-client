@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, ValidationTextInput } from "@lib/types";
 import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
 import { ErrorMessage } from "@clientComponents/forms";
@@ -23,6 +23,9 @@ export const CustomRegexOptions = ({
 
   const elements = useTemplateStore((s) => s.form.elements);
 
+  // only rendered for textField, so validation is narrowed accordingly
+  const validation = item.properties.validation as ValidationTextInput | undefined;
+
   if (item.type !== FormElementTypes.textField) {
     return null;
   }
@@ -30,13 +33,15 @@ export const CustomRegexOptions = ({
   const previousPatterns = (() => {
     const patterns = new Set<string>();
     for (const el of elements) {
-      if (el.id !== item.id && el.properties.validation?.type === "custom") {
-        const regex = el.properties.validation?.regex;
+      const elValidation = el.properties.validation as ValidationTextInput | undefined;
+      if (el.id !== item.id && elValidation?.type === "custom") {
+        const regex = elValidation?.regex;
         if (regex) patterns.add(regex);
       }
       for (const sub of el.properties.subElements ?? []) {
-        if (sub.id !== item.id && sub.properties.validation?.type === "custom") {
-          const regex = sub.properties.validation?.regex;
+        const subValidation = sub.properties.validation as ValidationTextInput | undefined;
+        if (sub.id !== item.id && subValidation?.type === "custom") {
+          const regex = subValidation?.regex;
           if (regex) patterns.add(regex);
         }
       }
@@ -61,10 +66,10 @@ export const CustomRegexOptions = ({
       properties: {
         ...item.properties,
         validation: {
-          ...item.properties.validation,
+          ...validation,
           regex: value || undefined,
           type: value ? "custom" : undefined,
-          required: item.properties.validation?.required ?? false,
+          required: validation?.required ?? false,
         },
       },
     });
@@ -93,7 +98,7 @@ export const CustomRegexOptions = ({
           <Input
             id={`customRegexPattern-${item.id}`}
             name={`item${item.id}`}
-            value={item.properties.validation?.regex || ""}
+            value={validation?.regex || ""}
             className={`w-11/12` + (error ? " !border-red-700 outline-2 !outline-red-700" : "")}
             aria-invalid={error}
             aria-describedby={error ? `customRegexPattern-error-${item.id}` : undefined}

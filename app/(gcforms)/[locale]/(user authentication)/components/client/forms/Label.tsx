@@ -12,7 +12,8 @@ interface LabelProps {
   hint?: React.ReactNode;
   srOnly?: boolean;
   required?: boolean;
-  validation?: ValidationProperties;
+  // `all` only applies to checkbox-like validation; harmless/undefined for other types
+  validation?: ValidationProperties & { all?: boolean };
   group?: boolean;
   lang?: string;
 }

@@ -6,7 +6,7 @@ import React, { useContext, useEffect } from "react";
 import { useTemplateStore, TemplateStoreProvider, TemplateStoreContext } from "../useTemplateStore";
 import { render, renderHook, act, waitFor } from "@testing-library/react";
 import { NotificationsIntervalDefault } from "@gcforms/types";
-import { FormRecord } from "@lib/types";
+import { FormRecord, ValidationTextInput } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { CURRENT_TEMPLATE_VERSION } from "@lib/templates/schemaVersioning/migrations";
@@ -442,8 +442,10 @@ describe("TemplateStore", () => {
 
     expect(result.current.form.elements[0].type).toBe("textField");
     if (result.current.form.elements[0].properties.validation) {
-      expect(result.current.form.elements[0].properties.validation.required).toBe(false);
-      expect(result.current.form.elements[0].properties.validation.type).toBe("email");
+      const validation = result.current.form.elements[0].properties
+        .validation as ValidationTextInput;
+      expect(validation.required).toBe(false);
+      expect(validation.type).toBe("email");
     } else {
       expect(result.current.form.elements[0].properties.validation).not.toBeFalsy(); // fails if it is called
     }
@@ -465,8 +467,10 @@ describe("TemplateStore", () => {
 
     expect(result.current.form.elements[0].type).toBe("textField");
     if (result.current.form.elements[0].properties.validation) {
-      expect(result.current.form.elements[0].properties.validation.required).toBe(false);
-      expect(result.current.form.elements[0].properties.validation.type).toBe("email");
+      const validation = result.current.form.elements[0].properties
+        .validation as ValidationTextInput;
+      expect(validation.required).toBe(false);
+      expect(validation.type).toBe("email");
     } else {
       expect(result.current.form.elements[0].properties.validation).not.toBeFalsy(); // fails if it is called
     }
@@ -476,8 +480,10 @@ describe("TemplateStore", () => {
     });
 
     if (result.current.form.elements[0].properties.validation) {
-      expect(result.current.form.elements[0].properties.validation.required).toBe(false);
-      expect(result.current.form.elements[0].properties.validation.type).toBeUndefined();
+      const validation = result.current.form.elements[0].properties
+        .validation as ValidationTextInput;
+      expect(validation.required).toBe(false);
+      expect(validation.type).toBeUndefined();
     } else {
       expect(result.current.form.elements[0].properties.validation).not.toBeFalsy(); // fails if it is called
     }
