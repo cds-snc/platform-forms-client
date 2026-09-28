@@ -89,6 +89,8 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
   return (
     <div>
       {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
+      {/* Custom widget with own roving tabindex and arrow-key focus management. So use 
+          role="radiogroup" as an exception over the best practcie Fieldset+legend. */}
       <div
         className="flex gap-1"
         role="radiogroup"
