@@ -242,7 +242,7 @@
       "title": "Full name"
     },
     "number": {
-      "description": "A field for numbers of no more than 15 digits. Format options include currency, decimals, negatives, range and thousands separator. Zero cannot be the first in a series of digits.",
+      "description": "A field for numbers of no more than 15 digits.<br>Format options include currency, decimals, negatives, range and thousands separator.<br>Zero cannot be the first in a series of digits.",
       "title": "Number",
       "amount": "Amount",
       "enterOnlyNumbers": "Enter a number.",
