@@ -1,10 +1,11 @@
 {
-  "title": "Votre formulaire n'a pas pu être soumis",
+  "title": "Nous n’avons pas reçu votre message",
   "helpOptions": {
-    "title": "Vous pouvez essayer de :",
-    "item1": "Désactiver un réseau privé virtuel (VPN), un pare-feu ou un serveur proxy, si vous en utilisez un.",
-    "item2": "Utiliser un autre navigateur, un autre appareil ou un autre réseau, si disponible.",
-    "item3": "Vérifiez qu'aucun plugin de navigateur ne bloque involontairement les cookies ou les scripts.",
-    "item4": "Soumettre à nouveau votre formulaire plus tard ou contacter directement le programme ou le service."
+    "title": "Essayez les choses suivantes :",
+    "item1": "Désactivez tout réseau privé virtuel (VPN), pare-feu ou serveur proxy.",
+    "item2": "Utilisez un autre navigateur, un autre appareil ou un autre réseau.",
+    "item3": "Vérifiez si un plugiciel de navigateur bloque les messages.",
+    
+  "Vous pouvez également ressayer de soumettre votre message."
   }
 }
