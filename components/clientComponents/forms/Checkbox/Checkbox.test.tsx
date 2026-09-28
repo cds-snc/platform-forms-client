@@ -85,7 +85,8 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
 
     expect(screen.queryByTestId("required")).toBeInTheDocument();
     screen.getAllByRole("checkbox").forEach((input) => {
-      expect(input).not.toBeRequired();
+      expect(input).not.toHaveAttribute("aria-required");
+      expect(input).not.toHaveAttribute("required");
     });
 
     checkboxData.properties.validation!.required = false;
@@ -102,7 +103,8 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
     );
 
     screen.getAllByRole("checkbox").forEach((input) => {
-      expect(input).toBeRequired();
+      expect(input).toHaveAttribute("aria-required", "true");
+      expect(input).not.toHaveAttribute("required");
     });
 
     checkboxData.properties.validation!.required = false;
