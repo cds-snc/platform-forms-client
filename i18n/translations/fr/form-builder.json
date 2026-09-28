@@ -259,7 +259,7 @@
       "limitNumberOfDigits": "Limiter le nombre de s",
       "invalidValueRange": "La valeur minimale doit être inférieure à la valeur maximale.",
       "invalidDigitRange": "Le nombre minimum de s doit être inférieur au nombre maximum de s.",
-      "digitLimitExceedsMax": "Le nombre de s ne peut pas dépasser {{max}}.",
+      "digitLimitExceedsMax": "Ne peut dépasser {{max}} chiffres.",
       "minDigits": "Nombre minimum de s",
       "maxDigits": "Nombre maximum de s",
       "currency": "Devise ($)",
