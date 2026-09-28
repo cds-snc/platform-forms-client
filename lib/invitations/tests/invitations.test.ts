@@ -236,7 +236,6 @@ describe("Invitations", () => {
           form: {
             titleEn: "form-name",
             titleFr: "form-name",
-            id: "form-id",
             layout: [],
             elements: [],
           },
