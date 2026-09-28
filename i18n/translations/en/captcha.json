@@ -1,10 +1,11 @@
 {
-  "title": "Your form could not be submitted",
+  "title": "We did not receive your message",
   "helpOptions": {
-    "title": "You might try to:",
-    "item1": "Turn off a virtual private network (VPN), firewall, or proxy server, if you use one.",
-    "item2": "Use a different browser, device, or network, if an alternate is available.",
-    "item3": "Check that any browser plugins aren't inadvertently blocking cookies or scripts.",
-    "item4": "Submit your form again later or contact the program or service directly."
+    "title": "Try:",
+    "item1": "Turning off any virtual private network (VPN), firewall or proxy server.",
+    "item2": "Using a different browser, device or network.",
+    "item3": "Checking browser plugins as some may block messages.",
+    
+  "You can also try to submit the message again."
   }
 }
