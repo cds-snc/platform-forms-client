@@ -5,7 +5,6 @@
     "item1": "Turning off any virtual private network (VPN), firewall or proxy server.",
     "item2": "Using a different browser, device or network.",
     "item3": "Checking browser plugins as some may block messages.",
-    
-  "You can also try to submit the message again."
+    "tryAgain": "You can also try to submit the message again."
   }
 }

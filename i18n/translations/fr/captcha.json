@@ -5,7 +5,6 @@
     "item1": "Désactivez tout réseau privé virtuel (VPN), pare-feu ou serveur proxy.",
     "item2": "Utilisez un autre navigateur, un autre appareil ou un autre réseau.",
     "item3": "Vérifiez si un plugiciel de navigateur bloque les messages.",
-    
-  "Vous pouvez également ressayer de soumettre votre message."
+    "tryAgain": "Vous pouvez également ressayer de soumettre votre message."
   }
 }
