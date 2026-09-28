@@ -82,7 +82,7 @@
       "postal": "Postal or zip code",
       "province": "Province, territory, or state",
       "street": {
-        "description": "Start with unit  if you have one, then street  and street name.",
+        "description": "Start with unit number if you have one, then street number and street name.",
         "label": "Street address"
       },
       "title": "Address",
@@ -91,8 +91,8 @@
       "fieldsDesc": "Decide how addresses appear in responses.",
       "multipleAddresses": "Addresses",
       "components": {
-        "unit": "Unit ",
-        "civic": "Civic ",
+        "unitNumber": "Unit number",
+        "civicNumber": "Civic number",
         "city": "City, town, or community",
         "province": "Province or territory",
         "provinceOrState": "Province, territory, or state",
@@ -146,7 +146,7 @@
     "condition3": "Condition 3",
     "contact": {
       "howCanWeContactYou": "How can we contact you?",
-      "description": "A pattern to collect information for follow-up communication, including phone , email, and language of correspondence.",
+      "description": "A pattern to collect information for follow-up communication, including phone number, email, and language of correspondence.",
       "email": {
         "description": "For example: name@example.com",
         "label": "Email address"
@@ -159,7 +159,7 @@
       },
       "phone": {
         "description": "For example: 111-222-3333",
-        "label": "Phone "
+        "label": "Phone number"
       },
       "title": "Contact"
     },
@@ -241,8 +241,8 @@
       "label": "Full name",
       "title": "Full name"
     },
-    "": {
-      "description": "A field for numerical values of no more than 15 digits.<br>Format options include currency, decimals, negatives, range and thousands separator.<br>Zero cannot be the first in a series of digits.",
+    "number": {
+      "description": "A field for numbers of no more than 15 digits. Format options include currency, decimals, negatives, range and thousands separator. Zero cannot be the first in a series of digits.",
       "title": "Number",
       "amount": "Amount",
       "enterOnlyNumbers": "Enter a number.",
