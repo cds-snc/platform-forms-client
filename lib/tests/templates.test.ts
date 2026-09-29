@@ -824,6 +824,11 @@ describe("Template CRUD functions", () => {
       expect(prismaMock.templateVersion.delete).toHaveBeenCalledWith({
         where: { id: "draft-version-2" },
       });
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        userID,
+        { id: "formtestID", type: "Form" },
+        AuditLogEvent.DeleteDraftVersion
+      );
     });
 
     // Test for published template with unprocessed submissions
