@@ -1,6 +1,7 @@
 import { FormProperties } from "@lib/types";
 import { getStartLabels, getReviewLabels, getEndLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
+import { resetReviewEndNextAction } from "./resetReviewEndNextAction";
 
 export const initializeGroups = (form: FormProperties): FormProperties => {
   if (!form.groups) {
@@ -47,5 +48,7 @@ export const initializeGroups = (form: FormProperties): FormProperties => {
     };
   }
 
-  return form;
+  const fixedGroups = resetReviewEndNextAction(form.groups);
+
+  return { ...form, groups: fixedGroups };
 };

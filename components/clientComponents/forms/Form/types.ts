@@ -2,11 +2,12 @@ import { type JSX } from "react";
 import type { TFunction } from "i18next";
 import { FormikProps } from "formik";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
+import { Language } from "@lib/utils";
 
 export interface FormProps {
   formRecord: PublicFormRecord;
   initialValues?: Responses | undefined;
-  language: string;
+  language: Language;
   isPreview?: boolean;
   renderSubmit?: ({
     validateForm,

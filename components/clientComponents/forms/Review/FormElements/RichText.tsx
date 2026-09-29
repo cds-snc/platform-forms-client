@@ -1,8 +1,7 @@
 import Markdown from "markdown-to-jsx";
 import { stripMarkdown as removeMarkdown } from "@lib/utils/strings";
-import { Language } from "@lib/types/form-builder-types";
 import { FormItem } from "../helpers";
-import { getLocalizedProperty } from "@lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties, type Language } from "@lib/utils";
 
 export const RichText = ({
   formItem,
@@ -16,7 +15,7 @@ export const RichText = ({
   showNothing?: boolean;
 }): React.ReactElement => {
   const text = formItem?.element?.properties?.[
-    getLocalizedProperty("description", language)
+    getLocalizedProperty(LocalizedElementProperties.DESCRIPTION, language)
   ] as string;
 
   if (!text || showNothing) {

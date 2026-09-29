@@ -4,7 +4,6 @@ import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
-import { Language } from "@lib/types/form-builder-types";
 import React, { useMemo, useState } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
@@ -14,7 +13,7 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
 import { showReviewPage } from "@root/lib/utils/form-builder/showReviewPage";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
-import { getLocalizedProperty } from "@root/lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties, Language } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
 
@@ -53,7 +52,9 @@ export const FormWrapper = ({
   // Single-page forms will be skipped since since the title set in page.tsx is sufficient
   // Updating the confirmation page title is handled in the TextPage component
   const getPageTitle = () => {
-    const formTitle = String(formRecord.form[getLocalizedProperty("title", language)]);
+    const formTitle = String(
+      formRecord.form[getLocalizedProperty(LocalizedElementProperties.TITLE, language as Language)]
+    );
 
     if (currentGroup === LOCKED_GROUPS.START) {
       return formTitle;
@@ -80,7 +81,7 @@ export const FormWrapper = ({
 
     // Merge restored answers onto the current form defaults so any newly added
     // elements still get an explicit empty initial value and participate in validation.
-    return mergeFormValuesWithInitialValues(formRecord, language, cachedSession.values);
+    return mergeFormValuesWithInitialValues(formRecord, language as Language, cachedSession.values);
   }, [cachedSession, formRecord, language]);
 
   // Show confirmation page if submissionId is present
@@ -103,7 +104,7 @@ export const FormWrapper = ({
       <Form
         initialValues={initialValues || undefined}
         formRecord={formRecord}
-        language={language}
+        language={language as Language}
         onSuccess={(formID, submissionId) => {
           // Set submissionId in context
           // which will trigger confirmation page content to render

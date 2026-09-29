@@ -105,6 +105,7 @@ export const Menu = ({
           toast.error(t("errors.formUnarchiveFailed"));
         } else {
           clearTemplateStorage(id);
+          // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- force a full page reload after restoring
           window.location.href = `/${language}/form-builder/${id}/edit`;
         }
       } catch (e) {
@@ -161,6 +162,7 @@ export const Menu = ({
               const res = await cloneForm(id, status === TAB_STATUS.ARCHIVED, language);
               if (res && res.formRecord && !res.error) {
                 toast.success(t("card.menu.cloneSuccess"));
+                // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- force a full page reload after cloning
                 window.location.href = `/${language}/form-builder/${res.formRecord.id}/edit`;
                 return;
               }

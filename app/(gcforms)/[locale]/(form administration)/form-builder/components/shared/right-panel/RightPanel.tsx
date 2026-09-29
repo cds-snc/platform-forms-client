@@ -77,10 +77,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
     id: s.id,
     isLockedByOther: s.isLockedByOther,
   }));
-
-  if (storeId && storeId !== id) {
-    id = storeId;
-  }
+  const formId = storeId && storeId !== id ? storeId : id;
 
   const { activePathname } = useActivePathname();
   const { togglePanel, open } = useTreeRef();
@@ -207,13 +204,13 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                       <TabButton
                         text={t("rightPanel.pages")}
                         onClick={() => {
-                          router.push(`/${i18n.language}/form-builder/${id}/edit`);
+                          router.push(`/${i18n.language}/form-builder/${formId}/edit`);
                         }}
                       />
                       <TabButton
                         text={t("rightPanel.translation")}
                         onClick={() => {
-                          router.push(`/${i18n.language}/form-builder/${id}/edit/translate`);
+                          router.push(`/${i18n.language}/form-builder/${formId}/edit/translate`);
                         }}
                       />
                       <TabButton
@@ -221,7 +218,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         onClick={() => {
                           // Set the active group to the start group before navigating to the logic tab
                           setId("start");
-                          router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
+                          router.push(`/${i18n.language}/form-builder/${formId}/edit/logic`);
                         }}
                       />
                     </TabList>
@@ -259,7 +256,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
                           {activePathname.endsWith("/logic") && (
-                            <SelectNextAction id={id} lang={lang} item={item} />
+                            <SelectNextAction id={formId} lang={lang} item={item} />
                           )}
                         </div>
                         {/* end logic */}
