@@ -86,7 +86,7 @@ describe("StarRating", () => {
     renderStarRating({ error: "Select a rating" });
 
     const group = screen.getByRole("radiogroup", { name: "Rating" });
-    const error = screen.getByRole("alert");
+    const error = screen.getByTestId("errorMessage");
 
     expect(group).toHaveAttribute("aria-invalid", "true");
     expect(group).toHaveAttribute("aria-describedby", "errorMessage-rating");

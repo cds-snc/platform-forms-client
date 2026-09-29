@@ -15,16 +15,28 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
 
   // field contains name, value, onChange, and other required Form attributes.
   const [field, meta] = useField(props);
+  const errorMessageId = meta.error ? getErrorMessageId(field.name) : undefined;
 
   const choices = choicesProps.map((choice, index) => {
+    const firstChoiceErrorDescription = index === 0 ? errorMessageId : undefined;
     return type == "checkbox" ? (
-      <Checkbox {...choice} key={index} name={field.name} className={className} />
+      <Checkbox
+        {...choice}
+        key={index}
+        name={field.name}
+        className={className}
+        aria-describedby={firstChoiceErrorDescription}
+      />
     ) : (
-      <Radio {...choice} key={index} name={field.name} className={className} />
+      <Radio
+        {...choice}
+        key={index}
+        name={field.name}
+        className={className}
+        aria-describedby={firstChoiceErrorDescription}
+      />
     );
   });
-
-  const errorMessageId = getErrorMessageId(field.name);
 
   // map checkboxes
   return (

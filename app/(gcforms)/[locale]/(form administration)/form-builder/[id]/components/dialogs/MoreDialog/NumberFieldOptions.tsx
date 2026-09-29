@@ -331,7 +331,7 @@ export const NumberFieldOptions = ({
               </LabelledInput>
             </div>
             {hasInvalidValueRange && (
-              <ErrorMessage id={`numberField-${item.id}-error-valueRange`}>
+              <ErrorMessage id={`numberField-${item.id}-error-valueRange`} role="alert">
                 {t("addElementDialog.number.invalidValueRange")}
               </ErrorMessage>
             )}
@@ -443,7 +443,7 @@ export const NumberFieldOptions = ({
               </LabelledInput>
             </div>
             {hasInvalidDigitRange && (
-              <ErrorMessage id={`numberField-${item.id}-error-digitRange`}>
+              <ErrorMessage id={`numberField-${item.id}-error-digitRange`} role="alert">
                 {t("addElementDialog.number.invalidDigitRange")}
               </ErrorMessage>
             )}

@@ -8,6 +8,7 @@ export const Checkbox = (
   props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name, ariaDescribedBy } = props;
+  const describedBy = props["aria-describedby"];
   const [, meta] = useField(props);
   const hasError = Boolean(meta.error);
   return (
@@ -24,6 +25,7 @@ export const Checkbox = (
         value={label}
         aria-required={required ? "true" : undefined}
         aria-invalid={hasError ? "true" : undefined}
+        aria-describedby={describedBy}
         name={name}
       />
       {/* Set tabIndex to -1 see https://stackoverflow.com/questions/49662769/focus-within-styles-flash-when-clicking-an-input-label  */}

@@ -52,7 +52,7 @@ describe("ManagedCombobox", () => {
     renderManagedCombobox({ error: "Choose a province" });
 
     const input = screen.getByTestId("combobox-input");
-    const error = screen.getByRole("alert");
+    const error = screen.getByTestId("errorMessage");
 
     expect(input).toHaveAttribute("aria-required", "true");
     expect(input).toHaveAttribute("aria-invalid", "true");

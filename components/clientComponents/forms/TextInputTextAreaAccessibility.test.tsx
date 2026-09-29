@@ -29,7 +29,7 @@ describe("TextInput and TextArea error associations", () => {
 
     expect(input).toHaveAttribute("aria-invalid", "true");
     expect(input).toHaveAttribute("aria-describedby", "errorMessage-name");
-    expect(screen.getByRole("alert")).toHaveAttribute("id", "errorMessage-name");
+    expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-name");
   });
 
   it("associates TextArea errors with the textarea", () => {
@@ -50,6 +50,9 @@ describe("TextInput and TextArea error associations", () => {
 
     expect(textarea).toHaveAttribute("aria-invalid", "true");
     expect(textarea).toHaveAttribute("aria-describedby", "errorMessage-description");
-    expect(screen.getByRole("alert")).toHaveAttribute("id", "errorMessage-description");
+    expect(screen.getByTestId("errorMessage")).toHaveAttribute(
+      "id",
+      "errorMessage-description"
+    );
   });
 });

@@ -83,5 +83,27 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
       // restore for other iterations
       radioButtonData.properties.validation!.required = true as boolean;
     });
+
+    test("associates the group error with the first radio only", () => {
+      const errorMessage = "Choose an option to continue.";
+
+      render(
+        <Formik
+          onSubmit={() => {}}
+          initialValues={{}}
+          initialErrors={{ "1": errorMessage }}
+          initialTouched={{ "1": true }}
+        >
+          <GenerateElement element={radioButtonData} language={lang} isTestMode={true} />
+        </Formik>
+      );
+
+      const radios = screen.getAllByRole("radio");
+      expect(radios[0]).toHaveAttribute("aria-describedby", "errorMessage-1");
+      radios.slice(1).forEach((radio) => {
+        expect(radio).not.toHaveAttribute("aria-describedby");
+      });
+      expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-1");
+    });
   }
 );

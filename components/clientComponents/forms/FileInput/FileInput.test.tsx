@@ -61,6 +61,6 @@ describe("FileInput component", () => {
     expect(fileInput).toHaveAttribute("aria-required", "true");
     expect(fileInput).toHaveAttribute("aria-invalid", "true");
     expect(fileInput).toHaveAttribute("aria-describedby", "pdf_file_selected errorMessage-pdf");
-    expect(screen.getByRole("alert")).toHaveAttribute("id", "errorMessage-pdf");
+    expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-pdf");
   });
 });

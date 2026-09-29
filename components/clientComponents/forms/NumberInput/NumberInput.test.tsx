@@ -10,8 +10,12 @@ import { Formik, Form } from "formik";
 import { NumberInput } from "./NumberInput";
 
 vi.mock("@clientComponents/forms", () => ({
-  ErrorMessage: ({ children, id }: { children: React.ReactNode; id: string }) => (
-    <div id={id} role="alert">
+  ErrorMessage: ({ children, id, role = false }: {
+    children: React.ReactNode;
+    id: string;
+    role?: "alert" | false;
+  }) => (
+    <div id={id} data-testid="errorMessage" {...(role ? { role } : {})}>
       {children}
     </div>
   ),
@@ -280,7 +284,7 @@ describe("NumberInput Component", () => {
 
       expect(input).toHaveAttribute("aria-invalid", "true");
       expect(input).toHaveAttribute("aria-describedby", "errorMessage-amount");
-      expect(screen.getByRole("alert")).toHaveAttribute("id", "errorMessage-amount");
+      expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-amount");
     });
 
     it("applies error class when field has error", () => {

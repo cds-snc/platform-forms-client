@@ -8,6 +8,7 @@ export const Radio = (
   props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name, ariaDescribedBy } = props;
+  const describedBy = props["aria-describedby"];
   const [, meta] = useField(name);
   return (
     <div className="gc-input-radio">
@@ -24,6 +25,7 @@ export const Radio = (
         type="radio"
         aria-required={required ? "true" : undefined}
         aria-invalid={meta.error ? "true" : undefined}
+        aria-describedby={describedBy}
         value={label} // This needs to be static... the actual label...
         name={name}
       />

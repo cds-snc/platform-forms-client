@@ -14,8 +14,16 @@ vi.mock("@i18n/client", () => ({
 }));
 
 vi.mock("@clientComponents/forms", () => ({
-  ErrorMessage: ({ children, id }: { children: React.ReactNode; id?: string }) => (
-    <p id={id} role="alert">
+  ErrorMessage: ({
+    children,
+    id,
+    role = false,
+  }: {
+    children: React.ReactNode;
+    id?: string;
+    role?: "alert" | false;
+  }) => (
+    <p id={id} data-testid="errorMessage" {...(role ? { role } : {})}>
       {children}
     </p>
   ),
@@ -100,7 +108,7 @@ describe("FormattedDate accessibility", () => {
       expect(screen.getByTestId(testId)).toHaveAttribute("aria-invalid", "true");
     });
 
-    const error = screen.getByRole("alert");
+    const error = screen.getByTestId("errorMessage");
     expect(error).toHaveAttribute("id", "errorMessage-date");
     expect(error).toHaveTextContent("Enter a valid date");
   });

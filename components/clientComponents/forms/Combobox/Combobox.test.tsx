@@ -283,7 +283,7 @@ describe("Combobox validation accessibility", () => {
       "errorMessage-province description-province province-hint"
     );
 
-    const error = screen.getByRole("alert");
+    const error = screen.getByTestId("errorMessage");
     expect(error).toHaveAttribute("id", "errorMessage-province");
     expect(error).toHaveTextContent("Choose a province");
   });

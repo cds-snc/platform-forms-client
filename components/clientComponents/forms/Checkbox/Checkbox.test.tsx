@@ -110,4 +110,26 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
     checkboxData.properties.validation!.required = false;
     delete checkboxData.properties.validation!.all;
   });
+
+  it("associates the group error with the first checkbox only", () => {
+    const errorMessage = "Complete the required field to continue.";
+
+    render(
+      <Formik
+        onSubmit={() => {}}
+        initialValues={{}}
+        initialErrors={{ "8": errorMessage }}
+        initialTouched={{ "8": true }}
+      >
+        <GenerateElement element={checkboxData} language={lang} isTestMode={true} />
+      </Formik>
+    );
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    expect(checkboxes[0]).toHaveAttribute("aria-describedby", "errorMessage-8");
+    checkboxes.slice(1).forEach((checkbox) => {
+      expect(checkbox).not.toHaveAttribute("aria-describedby");
+    });
+    expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-8");
+  });
 });
