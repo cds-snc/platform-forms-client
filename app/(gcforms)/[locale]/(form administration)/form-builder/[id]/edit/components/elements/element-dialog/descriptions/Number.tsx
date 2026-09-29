@@ -18,7 +18,7 @@ export const Number = () => {
         i18nKey="addElementDialog.number.description"
         defaults="<br />"
         components={{ br: <br /> }}
-        id="element-description-text"
+        data-testid="element-description-text"
       />
 
       <ExampleWrapper className="gcds-input-wrapper">
