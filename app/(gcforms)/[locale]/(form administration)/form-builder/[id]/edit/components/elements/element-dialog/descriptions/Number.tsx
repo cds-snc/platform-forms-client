@@ -3,6 +3,7 @@ import React from "react";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { Description, Label, NumberInput } from "@clientComponents/forms";
 import { useTranslation } from "@i18n/client";
+import { Trans } from "react-i18next";
 
 export const Number = () => {
   const { t } = useTranslation("form-builder");
@@ -12,7 +13,14 @@ export const Number = () => {
       <h3 data-testid="element-description-title" className="mb-0">
         {t("addElementDialog.number.title")}
       </h3>
-      <p data-testid="element-description-text">{t("addElementDialog.number.description")}</p>
+      <p data-testid="element-description-text">
+        <Trans
+          ns="form-builder"
+          i18nKey="addElementDialog.number.description"
+          defaults="<br />"
+          components={{ br: <br /> }}
+        />
+      </p>
 
       <ExampleWrapper className="gcds-input-wrapper">
         <Label htmlFor="name" className="gcds-label">
