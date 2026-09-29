@@ -398,8 +398,10 @@ describe("Form", () => {
 
     resolveCaptcha({ verified: false, reason: "cancelled" });
 
-    await waitFor(() => expect(submitButton).toBeEnabled());
-    expect(document.activeElement).toBe(submitButton);
+    await waitFor(() => {
+      expect(submitButton).toBeEnabled();
+      expect(document.activeElement).toBe(submitButton);
+    });
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 

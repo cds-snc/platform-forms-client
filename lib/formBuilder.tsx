@@ -104,7 +104,9 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       validation={element.properties.validation}
       group={["radio", "checkbox", "starRating"].indexOf(element.type) !== -1}
       // See #7944
-      includeRequiredInAccessibleName={element.type !== FormElementTypes.radio}
+      includeRequiredInAccessibleName={
+        element.type !== FormElementTypes.radio && element.type !== FormElementTypes.starRating
+      }
       lang={lang}
     >
       {labelText}
