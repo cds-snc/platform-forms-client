@@ -169,7 +169,7 @@ vi.mock("@clientComponents/forms", () => {
       </label>
     ),
     Description: ({ id, children }: { id: string; children: React.ReactNode }) => (
-      <p id={id}>{children}</p>
+      <p id={`desc-${id}`}>{children}</p>
     ),
     ErrorMessage: ({ id, children }: { id?: string; children: React.ReactNode }) => (
       <p id={id} role="alert">
@@ -254,6 +254,11 @@ describe("AddressComplete", () => {
     expect(fieldset).toHaveAttribute("aria-describedby", "desc-address");
     expect(screen.getByText("Address help text")).toHaveAttribute("id", "desc-address");
 
+    expect(screen.getByTestId("address-streetAddress-input")).toHaveAttribute(
+      "aria-describedby",
+      "desc-address-streetDesc"
+    );
+
     expect(cityInput).not.toHaveAttribute("required");
     expect(cityInput).toHaveAttribute("aria-required", "true");
     expect(cityInput).toHaveAttribute("aria-invalid", "true");
@@ -268,6 +273,23 @@ describe("AddressComplete", () => {
 
     expect(postalInput).toHaveAttribute("aria-invalid", "true");
     expect(postalInput).toHaveAttribute("aria-describedby", "errorMessage-address-postal");
+  });
+
+  it("uses the same street description ID for free-text street input", () => {
+    formikState.value = JSON.stringify({
+      streetAddress: "",
+      city: "",
+      province: "",
+      postalCode: "",
+      country: "France",
+    });
+
+    renderComponent({ canadianOnly: false });
+
+    expect(screen.getByTestId("addresscomplete-streetAddress-input")).toHaveAttribute(
+      "aria-describedby",
+      "desc-address-streetDesc"
+    );
   });
 
   it("uses AddressComplete search when feature flag is enabled", async () => {

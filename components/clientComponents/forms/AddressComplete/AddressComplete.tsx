@@ -83,7 +83,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const postalErrorId = getErrorMessageId(`${name}-postal`);
   const streetDescribedBy = getDescribedByIds(
     streetError ? streetErrorId : undefined,
-    `${name}-streetDesc`
+    `desc-${name}-streetDesc`
   );
 
   // Check if addressComplete is allowed, do not allow in preview mode.
@@ -344,7 +344,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           {label}
         </legend>
 
-        {ariaDescribedBy && <Description id={`desc-${id}`}>{ariaDescribedBy}</Description>}
+        {ariaDescribedBy && <Description id={id}>{ariaDescribedBy}</Description>}
 
         {props.canadianOnly && (
           <div>
@@ -404,7 +404,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
                 onSetValue={onAddressSet}
                 baseValue={addressObject.streetAddress}
                 required={required}
-                ariaDescribedBy={`${name}-streetDesc`}
+                ariaDescribedBy={`desc-${name}-streetDesc`}
                 maxLength={MAX_SEARCH_QUERY_LENGTH}
                 className={cn(
                   isValidAddressSubFieldInvalid(meta.error, "streetAddress") && "gc-error-input"
