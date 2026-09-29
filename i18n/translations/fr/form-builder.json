@@ -556,7 +556,7 @@
       "message1": "La suppression d'une ébauche n'affecte pas le formulaire publié.",
       "message2": "Mais vous ne pouvez pas restaurer une ébauche supprimée, alors envisagez de télécharger une copie d'abord.",
       "okay": "Supprimer l'ébauche",
-      "title": "Supprimer {{version}}?"
+      "title": "Supprimer l'ébauche version {{version}} ?"
     },
     "okay": "Archiver le formulaire",
     "published": {

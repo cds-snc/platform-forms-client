@@ -50,10 +50,6 @@ export const Menu = ({
     (status === TAB_STATUS.DRAFT || status === TAB_STATUS.RECENTLY_EDITED) &&
     isPublished &&
     hasDraft;
-  const draftVersionLabel =
-    currentDraftVersion == null
-      ? undefined
-      : t("card.draftVersion", { draftVersionNumber: currentDraftVersion });
 
   const handleDelete = useCallback(() => {
     setShowConfirm(true);
@@ -257,7 +253,7 @@ export const Menu = ({
         id={id}
         isPublished={isPublished}
         isDraftVersion={isPublishedDraft}
-        draftVersionLabel={draftVersionLabel}
+        draftVersionNumber={currentDraftVersion}
         handleClose={setShowConfirm}
       />
       <div className="sticky top-0">

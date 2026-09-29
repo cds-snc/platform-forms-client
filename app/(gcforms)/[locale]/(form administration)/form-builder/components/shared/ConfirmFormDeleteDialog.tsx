@@ -34,14 +34,14 @@ export const ConfirmFormDeleteDialog = ({
   handleClose,
   isPublished,
   isDraftVersion = false,
-  draftVersionLabel,
+  draftVersionNumber,
 }: {
   formId: string;
   handleConfirm: () => void;
   handleClose: () => void;
   isPublished?: boolean;
   isDraftVersion?: boolean;
-  draftVersionLabel?: string;
+  draftVersionNumber?: number | null;
 }) => {
   const dialog = useDialogRef();
   const { t, i18n } = useTranslation("form-builder");
@@ -163,7 +163,7 @@ export const ConfirmFormDeleteDialog = ({
       title={
         isDraftVersion
           ? t("formDelete.draftVersion.title", {
-              version: draftVersionLabel ?? "",
+              version: draftVersionNumber ?? "",
             })
           : t("formDelete.title")
       }
