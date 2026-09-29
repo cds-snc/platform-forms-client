@@ -57,11 +57,19 @@ export const writeHtml = async ({
   } as Submission;
 
   const securityAttribute = getSecurityAttribute(formTemplate);
+
+  /**
+   * NOTE: Creating a fake FormRecord object for rendering the HTML response
+   * We do this because the templates API only returns the template itself.
+   * ResponseHtml wants a full FormRecord but doesn't use all of its
+   * properties so we force isPublished to true even though it
+   * might not reflect the actual state of the form.
+   */
   const formRecord: FormRecord = {
     id: formId,
     name: String((formTemplate as { name?: string }).name ?? formTemplate.titleEn ?? ""),
     form: formTemplate,
-    isPublished: Boolean(formTemplate.isPublished),
+    isPublished: true,
     securityAttribute,
     versionNumber,
   };

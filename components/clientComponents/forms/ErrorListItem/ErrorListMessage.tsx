@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
-import { getProperty } from "@lib/i18nHelpers";
 import { truncateString } from "@lib/client/clientHelpers";
+import { getLocalizedProperty, Language, LocalizedElementProperties } from "@lib/utils";
 
 export const ErrorListMessage = ({
   id,
@@ -13,7 +13,7 @@ export const ErrorListMessage = ({
   id: string | number | undefined;
   defaultValue: string | number | undefined;
   elements: FormElement[];
-  language: string;
+  language: Language;
   subElement?: FormElement;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -22,7 +22,9 @@ export const ErrorListMessage = ({
   let elementType;
 
   if (subElement) {
-    question = subElement.properties?.[getProperty("title", language)] as string;
+    question = subElement.properties?.[
+      getLocalizedProperty(LocalizedElementProperties.TITLE, language)
+    ] as string;
     elementType = subElement.type;
   } else {
     let element: FormElement | null = null;
@@ -33,7 +35,9 @@ export const ErrorListMessage = ({
         throw new Error("Invalid element");
       }
 
-      question = element.properties?.[getProperty("title", language)] as string;
+      question = element.properties?.[
+        getLocalizedProperty(LocalizedElementProperties.TITLE, language)
+      ] as string;
       question = truncateString(question);
     } catch (error) {
       return defaultValue;

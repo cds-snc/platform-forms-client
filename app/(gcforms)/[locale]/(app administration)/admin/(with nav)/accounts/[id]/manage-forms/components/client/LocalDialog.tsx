@@ -1,11 +1,11 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { use, useCallback, useEffect, useId, useRef, useState } from "react";
+import { browser } from "react-dom";
 import { CDSHTMLDialogElement } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Close } from "@serverComponents/icons/Close";
 import { cn } from "@lib/utils";
-import { randomId } from "@lib/client/clientHelpers";
 
 export const useLocalDialogRef = () => {
   const ref = useRef<CDSHTMLDialogElement>(null);
@@ -27,6 +27,7 @@ export const LocalDialog = ({
   className?: string;
   handleClose?: () => void;
 }) => {
+  use(browser("This component requires browser APIs."));
   const { t } = useTranslation("form-builder");
   const [isOpen, changeOpen] = useState(true);
   const close = useCallback(() => {
@@ -58,14 +59,12 @@ export const LocalDialog = ({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [close, handleClose]);
 
-  const modalRandomId = useRef(randomId());
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const modalId = `modal-title-${useId()}`;
 
   return (
     <dialog
       className="size-full bg-transparent bg-clip-padding p-0"
-      {...(title && mounted ? { "aria-labelledby": `modal-title-${modalRandomId.current}` } : {})}
+      {...(title ? { "aria-labelledby": modalId } : {})}
       ref={dialogRef}
       data-testid="local-dialog"
     >
@@ -82,7 +81,7 @@ export const LocalDialog = ({
             <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
               <h2
                 className="mt-4! mb-4! ml-2! inline-block px-4 text-2xl!"
-                {...(mounted ? { id: `modal-title-${modalRandomId.current}` } : {})}
+                id={modalId}
                 tabIndex={-1}
               >
                 {title}

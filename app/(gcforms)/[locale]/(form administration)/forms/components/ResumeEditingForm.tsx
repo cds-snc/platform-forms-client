@@ -1,5 +1,6 @@
 "use client";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { use, useCallback, useEffect, useRef } from "react";
+import { browser } from "react-dom";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import Skeleton from "react-loading-skeleton";
@@ -16,19 +17,16 @@ type FormStateType = {
 };
 
 export const ResumeEditingForm = () => {
+  use(browser("ResumeEditingForm requires session storage."));
   const [hasSession, setHasSession] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [formId, setFormId] = React.useState("");
 
   const { t, i18n } = useTranslation("my-forms");
 
   const formIdRef = useRef("");
 
   useEffect(() => {
-    if (typeof sessionStorage === "undefined") {
-      setLoading(false);
-      return;
-    }
-
     try {
       // check if there is a valid form session
       const data = sessionStorage.getItem("form-storage");
@@ -45,6 +43,9 @@ export const ResumeEditingForm = () => {
       } = parsedData;
 
       formIdRef.current = id;
+      // The form ID comes from external session storage and drives the resume link.
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize external session storage
+      setFormId(id);
 
       if (titleEn !== "" || titleFr !== "") {
         setHasSession(true);
@@ -67,8 +68,8 @@ export const ResumeEditingForm = () => {
 
   return hasSession ? (
     <Link
-      id={formIdRef.current}
-      href={`/${i18n.language}/form-builder/${formIdRef.current}/edit`}
+      id={formId}
+      href={`/${i18n.language}/form-builder/${formId}/edit`}
       className="mb-4 inline-block"
       onClick={handleResumeClick}
     >

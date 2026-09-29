@@ -1,6 +1,6 @@
 import { getPublicTemplateByID } from "@lib/templates/queries/getPublicTemplateByID";
 import { dateHasPast } from "@lib/utils";
-import { getLocalizedProperty } from "@lib/utils";
+import { getLocalizedProperty, LocalizedElementProperties, Language } from "@lib/utils";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
@@ -13,7 +13,7 @@ import { Suspense } from "react";
 import { getAppSettingAsBoolean } from "@lib/appSettings";
 
 export async function generateMetadata(props0: {
-  params: Promise<{ locale: string; props: string[] }>;
+  params: Promise<{ locale: Language; props: string[] }>;
 }): Promise<Metadata> {
   const params = await props0.params;
 
@@ -28,7 +28,7 @@ export async function generateMetadata(props0: {
 
   // Update the browser title so AT users know they are on the confirmation page
   const title = `${step === "confirmation" ? t("confirmationPage") + ": " : ""}${
-    publicForm.form[getLocalizedProperty("title", locale)]
+    publicForm.form[getLocalizedProperty(LocalizedElementProperties.TITLE, locale)]
   }`;
 
   return {
@@ -37,7 +37,7 @@ export async function generateMetadata(props0: {
 }
 
 export default async function Page(props0: {
-  params: Promise<{ locale: string; props: string[] }>;
+  params: Promise<{ locale: Language; props: string[] }>;
 }) {
   const pathname = (await headers()).get("x-path") ?? "";
   const params = await props0.params;
@@ -59,7 +59,9 @@ export default async function Page(props0: {
   }
 
   const language = locale as "en" | "fr";
-  const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
+  const formTitle = formRecord.form[
+    getLocalizedProperty(LocalizedElementProperties.TITLE, language)
+  ] as string;
 
   let isPastClosingDate = false;
   if (formRecord.closingDate) {

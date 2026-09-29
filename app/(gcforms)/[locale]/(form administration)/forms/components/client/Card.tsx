@@ -6,7 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import { useTranslation } from "@i18n/client";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { cn, dateHasPast } from "@root/lib/utils";
+import { cn, dateHasPast } from "@lib/utils";
 
 import {
   CARD_STATE,

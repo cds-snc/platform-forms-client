@@ -5,14 +5,14 @@ import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
-import { customTranslate, getProperty, orderLanguageStrings } from "@lib/i18nHelpers";
+import { customTranslate, orderLanguageStrings } from "@lib/i18nHelpers";
 import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
 import { formatDateTimeUTC, formatDateTimeUTCFr } from "@lib/utils/form-builder";
-import { Language } from "@root/lib/types/form-builder-types";
 import { VersionBadge } from "../../html/components/VersionBadge";
+import { getLocalizedProperty, LocalizedElementProperties, Language } from "@lib/utils";
 
 interface HTMLDownloadProps {
   lang: Language;
@@ -73,7 +73,7 @@ export const ResponseHtmlAggregated = ({
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="utf-8" />
-        <title>{`${formRecord.form[getProperty("title", lang)]}`}</title>
+        <title>{`${formRecord.form[getLocalizedProperty(LocalizedElementProperties.TITLE, lang)]}`}</title>
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
       <body className="gcds-page flex h-full flex-col bg-white">
@@ -91,7 +91,7 @@ export const ResponseHtmlAggregated = ({
                 <h1
                   id="main-header"
                   aria-describedby="version-badge"
-                >{`${formRecord.form[getProperty("title", lang)]}`}</h1>
+                >{`${formRecord.form[getLocalizedProperty(LocalizedElementProperties.TITLE, lang)]}`}</h1>
                 <VersionBadge
                   id="version-badge"
                   versionNumber={formRecord.versionNumber}
