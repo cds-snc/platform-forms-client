@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { FormElement } from "@lib/types";
+import { FormElement, ValidationTextInput, ValidationCheckboxLike } from "@lib/types";
 import { setDescription, setTitle, createElement } from "../itemHelper";
 
 function getItem() {
@@ -48,21 +48,21 @@ describe("Update elements", () => {
   it("sets properties for phone", () => {
     const item = createElement(getItem(), "tel");
     expect(item.type).toEqual("textField");
-    expect(item.properties.validation?.type).toEqual("tel");
+    expect((item.properties.validation as ValidationTextInput | undefined)?.type).toEqual("tel");
     expect(item.properties.autoComplete).toEqual("tel");
   });
 
   it("sets properties for email", () => {
     const item = createElement(getItem(), "email");
     expect(item.type).toEqual("textField");
-    expect(item.properties.validation?.type).toEqual("email");
+    expect((item.properties.validation as ValidationTextInput | undefined)?.type).toEqual("email");
     expect(item.properties.autoComplete).toEqual("email");
   });
 
   it("sets properties for date field", () => {
     const item = createElement(getItem(), "date");
     expect(item.type).toEqual("textField");
-    expect(item.properties.validation?.type).toEqual("date");
+    expect((item.properties.validation as ValidationTextInput | undefined)?.type).toEqual("date");
   });
 
   it("sets properties for number", () => {
@@ -74,7 +74,7 @@ describe("Update elements", () => {
   it("sets properties for attestation", () => {
     const item = createElement(getItem(), "attestation");
     expect(item.type).toEqual("checkbox");
-    expect(item.properties.validation?.all).toEqual(true);
+    expect((item.properties.validation as ValidationCheckboxLike | undefined)?.all).toEqual(true);
     expect(item.properties.validation?.required).toEqual(true);
   });
 

@@ -1,5 +1,10 @@
 import { type TemplateStore } from "../../types";
-import { FormElementTypes, type FormElement, type FormProperties } from "@gcforms/types";
+import {
+  FormElementTypes,
+  type FormElement,
+  type FormProperties,
+  type ValidationTextInput,
+} from "@gcforms/types";
 import { cleanRules } from "@gcforms/core";
 import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
@@ -27,10 +32,8 @@ const ensureUUID = (element: FormElement) => {
 };
 
 const updateNumberInputType = (element: FormElement) => {
-  if (
-    element.type === FormElementTypes.textField &&
-    element.properties.validation?.type === "number"
-  ) {
+  const validation = element.properties.validation as ValidationTextInput | undefined;
+  if (element.type === FormElementTypes.textField && validation?.type === "number") {
     element.type = FormElementTypes.numberInput;
   }
 };

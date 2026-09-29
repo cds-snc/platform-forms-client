@@ -7,6 +7,7 @@ import {
   Language,
   LocalizedElementProperties,
 } from "@lib/types/form-builder-types";
+import { ValidationTextInput } from "@lib/types";
 import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
@@ -34,13 +35,14 @@ export const PanelBody = ({
 
   const isAddressComplete = item.type === "addressComplete";
   const isFileUpload = item.type === "fileInput";
-  const hasCustomRegex =
-    item.properties.validation?.type === "custom" && item.properties.validation.regex;
+  // only meaningful for textField/textArea; undefined otherwise
+  const textValidation = item.properties.validation as ValidationTextInput | undefined;
+  const hasCustomRegex = textValidation?.type === "custom" && textValidation.regex;
 
   const { hasApiKeyId } = useFormBuilderConfig();
 
   const properties = item.properties;
-  const maxLength = properties?.validation?.maxLength;
+  const maxLength = textValidation?.maxLength;
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,

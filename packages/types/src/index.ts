@@ -14,6 +14,11 @@ import {
   FormPurpose,
   PublicFormRecord,
   ValidationProperties,
+  ValidationSimple,
+  ValidationCheckboxLike,
+  ValidationTextInput,
+  ValidationNumberInput,
+  ValidationFormattedDate,
   FormProperties,
   AddressComponents,
   ClosedDetails,
@@ -57,6 +62,11 @@ export type { SecurityAttribute };
 export type { FormPurpose };
 export type { PublicFormRecord };
 export type { ValidationProperties };
+export type { ValidationSimple };
+export type { ValidationCheckboxLike };
+export type { ValidationTextInput };
+export type { ValidationNumberInput };
+export type { ValidationFormattedDate };
 export type { FormProperties };
 export type { AddressComponents };
 export type { ClosedDetails };

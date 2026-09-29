@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { FormElementTypes, FormElement } from "@lib/types";
+import { FormElementTypes, FormElement, ValidationNumberInput } from "@lib/types";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { ErrorMessage } from "@clientComponents/forms";
 import { LabelledInput } from "../../../../components/shared/LabelledInput";
@@ -17,17 +17,18 @@ export const NumberFieldOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
+  // only rendered for numberInput, so validation is narrowed accordingly
+  const validation = item.properties.validation as ValidationNumberInput | undefined;
+
   const isCurrency = !!item.properties.currencyCode;
   const [decimalsEnabled, setDecimalsEnabled] = useState(
     isCurrency || (typeof item.properties.stepCount === "number" && item.properties.stepCount > 0)
   );
   const [valueRangeEnabled, setValueRangeEnabled] = useState(
-    typeof item.properties.validation?.minValue === "number" ||
-      typeof item.properties.validation?.maxValue === "number"
+    typeof validation?.minValue === "number" || typeof validation?.maxValue === "number"
   );
   const [digitLimitEnabled, setDigitLimitEnabled] = useState(
-    typeof item.properties.validation?.minDigits === "number" ||
-      typeof item.properties.validation?.maxDigits === "number"
+    typeof validation?.minDigits === "number" || typeof validation?.maxDigits === "number"
   );
   const showDecimals = isCurrency || decimalsEnabled;
 
@@ -36,30 +37,22 @@ export const NumberFieldOptions = ({
       return false;
     }
 
-    const minValue = item.properties.validation?.minValue;
-    const maxValue = item.properties.validation?.maxValue;
+    const minValue = validation?.minValue;
+    const maxValue = validation?.maxValue;
 
     return typeof minValue === "number" && typeof maxValue === "number" && minValue >= maxValue;
-  }, [
-    item.properties.validation?.maxValue,
-    item.properties.validation?.minValue,
-    valueRangeEnabled,
-  ]);
+  }, [validation?.maxValue, validation?.minValue, valueRangeEnabled]);
 
   const hasInvalidDigitRange = useMemo(() => {
     if (!digitLimitEnabled) {
       return false;
     }
 
-    const minDigits = item.properties.validation?.minDigits;
-    const maxDigits = item.properties.validation?.maxDigits;
+    const minDigits = validation?.minDigits;
+    const maxDigits = validation?.maxDigits;
 
     return typeof minDigits === "number" && typeof maxDigits === "number" && minDigits >= maxDigits;
-  }, [
-    item.properties.validation?.maxDigits,
-    item.properties.validation?.minDigits,
-    digitLimitEnabled,
-  ]);
+  }, [validation?.maxDigits, validation?.minDigits, digitLimitEnabled]);
 
   const isValid = useMemo(
     () => !hasInvalidValueRange && !hasInvalidDigitRange,
@@ -297,7 +290,7 @@ export const NumberFieldOptions = ({
                       },
                     });
                   }}
-                  value={item.properties.validation?.minValue ?? ""}
+                  value={validation?.minValue ?? ""}
                 />
               </LabelledInput>
               <LabelledInput classNames="w-1/2" label={t("addElementDialog.number.maxShort")}>
@@ -326,7 +319,7 @@ export const NumberFieldOptions = ({
                       },
                     });
                   }}
-                  value={item.properties.validation?.maxValue ?? ""}
+                  value={validation?.maxValue ?? ""}
                 />
               </LabelledInput>
             </div>
@@ -404,7 +397,7 @@ export const NumberFieldOptions = ({
                       },
                     });
                   }}
-                  value={item.properties.validation?.minDigits ?? ""}
+                  value={validation?.minDigits ?? ""}
                   min={1}
                   step={1}
                 />
@@ -436,7 +429,7 @@ export const NumberFieldOptions = ({
                       },
                     });
                   }}
-                  value={item.properties.validation?.maxDigits ?? ""}
+                  value={validation?.maxDigits ?? ""}
                   min={1}
                   step={1}
                 />

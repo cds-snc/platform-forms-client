@@ -27,6 +27,8 @@ import {
   PublicFormRecord,
   Responses,
   Response,
+  ValidationTextInput,
+  ValidationNumberInput,
 } from "@lib/types";
 import { getLocalizedProperty, LocalizedElementProperties, type Language } from "@lib/utils";
 import { managedData } from "@lib/managedData";
@@ -109,12 +111,12 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
     </Label>
   ) : null;
 
+  const textValidation = element.properties.validation as ValidationTextInput | undefined;
+
   const textType: Exclude<HTMLTextInputTypeAttribute, "number"> =
-    element.properties?.validation?.type &&
-    ["email", "name", "password", "search", "tel", "url"].includes(
-      element.properties.validation.type
-    )
-      ? (element.properties.validation.type as Exclude<HTMLTextInputTypeAttribute, "number">)
+    textValidation?.type &&
+    ["email", "name", "password", "search", "tel", "url"].includes(textValidation.type)
+      ? (textValidation.type as Exclude<HTMLTextInputTypeAttribute, "number">)
       : "text";
 
   const spellCheck =
@@ -165,8 +167,12 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
               stepCount={element.properties.stepCount}
               currencyCode={element.properties.currencyCode}
               useThousandsSeparator={element.properties.useThousandsSeparator}
-              minValue={element.properties.validation?.minValue}
-              maxValue={element.properties.validation?.maxValue}
+              minValue={
+                (element.properties.validation as ValidationNumberInput | undefined)?.minValue
+              }
+              maxValue={
+                (element.properties.validation as ValidationNumberInput | undefined)?.maxValue
+              }
               lang={lang}
             />
           </div>
@@ -185,7 +191,9 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
-            maxLength={element.properties.validation?.maxLength}
+            maxLength={
+              (element.properties.validation as ValidationTextInput | undefined)?.maxLength
+            }
             lang={lang}
           />
         </div>
@@ -201,7 +209,9 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
             required={isRequired}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
-            maxLength={element.properties.validation?.maxLength}
+            maxLength={
+              (element.properties.validation as ValidationTextInput | undefined)?.maxLength
+            }
             lang={lang}
           />
         </div>

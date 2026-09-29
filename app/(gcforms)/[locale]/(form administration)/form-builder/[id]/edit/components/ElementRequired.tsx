@@ -4,12 +4,18 @@ import { useTranslation } from "@i18n/client";
 
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { ValidationCheckboxLike } from "@lib/types";
+
+// renders for every element type; `all` only applies to checkbox-like ones
+type RequiredElement = FormElementWithIndex & {
+  properties: { validation?: ValidationCheckboxLike };
+};
 
 export const ElementRequired = ({
   item,
   onRequiredChange,
 }: {
-  item: FormElementWithIndex;
+  item: RequiredElement;
   onRequiredChange: (itemId: number, checked: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");

@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { Input } from "@formBuilder/components/shared/Input";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, ValidationTextInput } from "@lib/types";
 import { Label } from "./Label";
 import { Hint } from "./Hint";
 
@@ -15,11 +15,10 @@ export const CharacterLimitOptions = ({
   const { t } = useTranslation("form-builder");
 
   const allowedTypes: FormElementTypes[] = [FormElementTypes.textField, FormElementTypes.textArea];
+  // only rendered for textField/textArea, so validation is narrowed accordingly
+  const validation = item.properties.validation as ValidationTextInput | undefined;
 
-  if (
-    !allowedTypes.includes(item.type) ||
-    (item.properties.validation?.type && item.properties.validation?.type !== "text")
-  ) {
+  if (!allowedTypes.includes(item.type) || (validation?.type && validation?.type !== "text")) {
     return null;
   }
 
@@ -33,7 +32,7 @@ export const CharacterLimitOptions = ({
           type="number"
           min="1"
           className="w-1/4"
-          value={item.properties.validation?.maxLength || ""}
+          value={validation?.maxLength || ""}
           onKeyDown={(e) => {
             if (["-", "+", ".", "e"].includes(e.key)) {
               e.preventDefault();
@@ -75,7 +74,7 @@ export const CharacterLimitOptions = ({
         />
       </div>
       <InfoDetails summary={t("characterLimitWhenToUse.title")}>
-        <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
+        <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
           <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
           <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
           <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>
