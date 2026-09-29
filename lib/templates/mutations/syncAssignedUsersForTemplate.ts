@@ -11,6 +11,7 @@ import { logMessage } from "@lib/logger";
 import { invalidateTemplateEditLockUserCountCache } from "@lib/editLocks";
 import { notifyOwnerAdded, notifyOwnerRemoved } from "../internal/notifications";
 import { parseTemplate } from "../internal";
+import { safeJSONParse } from "@lib/utils";
 
 /**
  * Add/remove (sync) users to a form
@@ -111,14 +112,25 @@ export async function syncAssignedUsersForTemplate(
 
   const usersToAdd = await getUsersFromUserIds(toAdd.map((u) => u.id));
 
+  const formJson = safeJSONParse<FormProperties>(
+    typeof updatedTemplate.jsonConfig === "string"
+      ? updatedTemplate.jsonConfig
+      : (JSON.stringify(updatedTemplate.jsonConfig) ?? "")
+  );
+
   usersToAdd.forEach((user) => {
-    notifyOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+    notifyOwnerAdded(user, formJson?.titleEn || "", formJson?.titleFr || "", updatedTemplate.users);
   });
 
   const usersToRemove = await getUsersFromUserIds(toRemove.map((u) => u.id));
 
   usersToRemove.forEach((user) => {
-    notifyOwnerRemoved(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+    notifyOwnerRemoved(
+      user,
+      formJson?.titleEn || "",
+      formJson?.titleFr || "",
+      updatedTemplate.users
+    );
   });
 
   usersToAdd.length > 0 &&

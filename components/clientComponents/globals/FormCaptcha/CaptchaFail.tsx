@@ -9,13 +9,13 @@ export const CaptchaFail = () => {
   return (
     <>
       <h2>{t("title")}</h2>
-      <p>{t("helpOptions.title")}</p>
-      <ul>
+      <p className="mb-4">{t("helpOptions.title")}</p>
+      <ul className="mb-4">
         <li>{t("helpOptions.item1")}</li>
         <li>{t("helpOptions.item2")}</li>
         <li>{t("helpOptions.item3")}</li>
-        <li>{t("helpOptions.item4")}</li>
       </ul>
+      <p>{t("helpOptions.tryAgain")}</p>
     </>
   );
 };
