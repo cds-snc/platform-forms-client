@@ -18,6 +18,10 @@
       "title": "Réponses (Pilote)",
       "description": "Activer le nouveau flux pour le téléchargement des réponses dans le navigateur avec une clé API."
     },
+    "fileUpload": {
+      "title": "Fichiers joints",
+      "description": "Activer les fichiers joints dans l’interface des formulaires"
+    },
     "zitadelLogin": {
       "title": "Connexion via Zitadel",
       "description": "Activer Zitadel comme méthode de connexion pour les utilisateurs"
