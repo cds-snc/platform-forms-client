@@ -14,13 +14,18 @@ const renderManagedCombobox = ({ error }: { error?: string } = {}) =>
       initialErrors={error ? { province: error } : undefined}
       onSubmit={() => {}}
     >
-      <ManagedCombobox
-        id="province"
-        name="province"
-        choices={["Ontario", "Quebec"]}
-        required
-        ariaDescribedBy="province-help"
-      />
+      <>
+        <label id="label-province" htmlFor="province">
+          Province
+        </label>
+        <ManagedCombobox
+          id="province"
+          name="province"
+          choices={["Ontario", "Quebec"]}
+          required
+          ariaDescribedBy="province-help"
+        />
+      </>
     </Formik>
   );
 
@@ -36,6 +41,11 @@ describe("ManagedCombobox", () => {
     expect(input).toHaveAttribute("aria-required", "true");
     expect(input).not.toHaveAttribute("aria-invalid");
     expect(input).toHaveAttribute("aria-describedby", "province-help");
+    expect(screen.getByTestId("combobox-listbox")).toHaveAttribute(
+      "aria-labelledby",
+      "label-province"
+    );
+    expect(document.getElementById("label-province")).toBe(screen.getByText("Province"));
   });
 
   it("associates validation errors with the input", () => {

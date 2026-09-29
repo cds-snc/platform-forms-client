@@ -129,6 +129,7 @@ export const ManagedCombobox = React.forwardRef(
           className={cn({ hidden: !isOpen || items.length === 0 })}
           {...getMenuProps()}
           data-testid="combobox-listbox"
+          aria-labelledby={id ? `label-${id}` : undefined}
         >
           {isOpen &&
             items.map((item, index) => (
