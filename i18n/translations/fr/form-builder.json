@@ -553,10 +553,10 @@
       "message3": " Téléchargez une copie du fichier du formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer le formulaire plus tard."
     },
     "draftVersion": {
-      "message1": "La suppression de cette version ébauche ne modifiera pas le formulaire publié.",
-      "message2": "Cette version ébauche sera supprimée définitivement et ne pourra pas être restaurée.",
-      "okay": "Supprimer la version ébauche",
-      "title": "Supprimer cette version ébauche?"
+      "message1": "La suppression d'une ébauche n'affecte pas le formulaire publié.",
+      "message2": "Mais vous ne pouvez pas restaurer une ébauche supprimée, alors envisagez de télécharger une copie d'abord.",
+      "okay": "Supprimer l'ébauche",
+      "title": "Supprimer {{version}}?"
     },
     "okay": "Archiver le formulaire",
     "published": {

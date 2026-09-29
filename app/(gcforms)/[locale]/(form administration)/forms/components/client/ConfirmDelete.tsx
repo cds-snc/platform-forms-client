@@ -12,6 +12,7 @@ export const ConfirmDelete = ({
   id,
   isPublished,
   isDraftVersion = false,
+  draftVersionLabel,
   handleClose,
   onDeleted,
 }: {
@@ -19,6 +20,7 @@ export const ConfirmDelete = ({
   id: string;
   isPublished: boolean;
   isDraftVersion?: boolean;
+  draftVersionLabel?: string;
   handleClose: (arg: boolean) => void;
   onDeleted: (arg: string) => void;
 }) => {
@@ -54,6 +56,7 @@ export const ConfirmDelete = ({
           handleConfirm={handleConfirm}
           isPublished={isPublished && !isDraftVersion}
           isDraftVersion={isDraftVersion}
+          draftVersionLabel={draftVersionLabel}
         />
       )}
       <div className="sticky top-0">

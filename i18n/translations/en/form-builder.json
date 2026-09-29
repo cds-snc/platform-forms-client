@@ -553,10 +553,10 @@
       "message3": "Download a copy of the form file for your records. You can upload it again in GC Forms to re-create the form later."
     },
     "draftVersion": {
-      "message1": "Deleting this draft version will leave the published form unchanged.",
-      "message2": "This draft version will be permanently deleted and cannot be restored.",
-      "okay": "Delete draft version",
-      "title": "Delete this draft version?"
+      "message1": "Deleting a draft does not affect the published form.",
+      "message2": "But you cannot restore a deleted draft so consider downloading a copy first.",
+      "okay": "Delete draft",
+      "title": "Delete {{version}}?"
     },
     "okay": "Archive form",
     "published": {

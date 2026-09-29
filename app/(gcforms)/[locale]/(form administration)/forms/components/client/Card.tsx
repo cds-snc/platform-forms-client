@@ -525,6 +525,7 @@ const CardComponent = ({
           id={card.id}
           name={card.name}
           hasDraft={card.hasDraft}
+          currentDraftVersion={card.currentDraftVersion}
           isPublished={card.isPublished}
           ttl={card.ttl ? card.ttl : undefined}
           status={status}
