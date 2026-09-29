@@ -231,7 +231,6 @@ export const Menu = ({
       hasDraft,
       isEmailDelivery,
       isPublishedDraft,
-      router,
     ]
   );
 
