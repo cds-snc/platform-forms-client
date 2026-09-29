@@ -13,13 +13,14 @@ export const Number = () => {
       <h3 data-testid="element-description-title" className="mb-0">
         {t("addElementDialog.number.title")}
       </h3>
-      <Trans
-        ns="form-builder"
-        i18nKey="addElementDialog.number.description"
-        defaults="<br />"
-        components={{ br: <br /> }}
-        data-testid="element-description-text"
-      />
+      <p data-testid="element-description-text">
+        <Trans
+          ns="form-builder"
+          i18nKey="addElementDialog.number.description"
+          defaults="<br />"
+          components={{ br: <br /> }}
+        />
+      </p>
 
       <ExampleWrapper className="gcds-input-wrapper">
         <Label htmlFor="name" className="gcds-label">
