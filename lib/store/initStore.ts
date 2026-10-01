@@ -4,6 +4,7 @@ import { defaultForm } from "./defaults";
 import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { NotificationsIntervalDefault } from "@gcforms/types";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
 export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const initializedDefaultForm = initializeGroups({ ...defaultForm });
@@ -40,9 +41,10 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
   if (initProps?.form) {
+    // Migrate before merging with defaultForm, so a missing schemaVersion is read as version 0.
     initProps.form = {
       ...defaultForm,
-      ...initProps?.form,
+      ...migrateTemplate(initProps.form),
     };
 
     initProps.form = initializeGroups(initProps.form);

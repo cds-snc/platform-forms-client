@@ -56,6 +56,8 @@ export const ListBox = ({
 
   // Reset focusIndex when the group changes
   useEffect(() => {
+    // The selected group is external state, so reset the keyboard position after it changes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize selected group state
     setFocusIndex(0);
   }, [selectedGroup]);
 
@@ -70,8 +72,6 @@ export const ListBox = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusIndex]);
-
-  let listGroup = "";
 
   return (
     <div
@@ -103,17 +103,17 @@ export const ListBox = ({
           ) => {
             const focussed = focusIndex === index;
             let groupOption = null;
+            const previousGroup = options[index - 1]?.group?.value;
 
-            if (group && listGroup != group.value) {
+            if (group && previousGroup !== group.value) {
               groupOption = (
                 <li
                   role="presentation"
-                  className="mb-2 pl-4 text-[1.1rem] font-bold uppercase text-[#6A6D7B]"
+                  className="mb-2 pl-4 text-[1.1rem] font-bold text-[#6A6D7B] uppercase"
                 >
                   {group.value}
                 </li>
               );
-              listGroup = group.value;
             }
 
             if (!id) return null;
@@ -149,7 +149,7 @@ export const ListBox = ({
                   </span>
                 </li>
                 {className && className === "separator" ? (
-                  <li role="separator" className="mb-2 border-1 border-b border-gray" />
+                  <li role="separator" className="border-gray mb-2 border-1 border-b" />
                 ) : null}
               </React.Fragment>
             );

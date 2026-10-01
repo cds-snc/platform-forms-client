@@ -4,7 +4,13 @@ import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
-import { langToLocale, getNumberFormatOptions, normalizeLocaleInput } from "./utils";
+import {
+  langToLocale,
+  getNumberFormatOptions,
+  normalizeLocaleInput,
+  countDigits,
+  MAX_NUMBER_INPUT_DIGITS,
+} from "./utils";
 
 export interface NumberInputProps extends InputFieldProps {
   placeholder?: string;
@@ -83,11 +89,18 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const raw = event.target.value;
-    setInputValue(raw);
 
     // Normalize locale-specific formatting (grouping separators, locale decimal,
     // currency symbols) so that Number() can parse the result reliably.
     const normalized = normalizeLocaleInput(raw, locale);
+
+    // Reject changes (e.g. paste) that would push the value past the digit cap.
+    // Keystrokes are already blocked before they get here — see handleOnKeyDown.
+    if (countDigits(normalized) > MAX_NUMBER_INPUT_DIGITS) {
+      return;
+    }
+
+    setInputValue(raw);
 
     // Allow incomplete intermediate states while typing
     if (normalized === "" || normalized === "-" || normalized === "." || normalized === "-.") {
@@ -121,6 +134,12 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
     // Block a second decimal separator if one already exists
     if ((event.key === "." || event.key === ",") && normalizedInputValue.includes(".")) {
+      event.preventDefault();
+      return;
+    }
+
+    // Block additional digits once the hard cap is reached
+    if (isDigit && countDigits(normalizedInputValue) >= MAX_NUMBER_INPUT_DIGITS) {
       event.preventDefault();
       return;
     }

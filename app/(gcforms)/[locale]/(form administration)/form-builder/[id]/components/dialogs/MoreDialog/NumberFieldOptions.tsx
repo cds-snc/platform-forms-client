@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
+import { MAX_NUMBER_INPUT_DIGITS } from "@gcforms/core";
 import { FormElementTypes, FormElement } from "@lib/types";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { ErrorMessage } from "@clientComponents/forms";
@@ -61,9 +62,30 @@ export const NumberFieldOptions = ({
     digitLimitEnabled,
   ]);
 
+  // Numbers with more than MAX_NUMBER_INPUT_DIGITS digits are rejected at submission
+  // regardless of how this field is configured, so don't let a form builder configure
+  // a limit respondents could never actually reach.
+  const hasDigitLimitExceedingMax = useMemo(() => {
+    if (!digitLimitEnabled) {
+      return false;
+    }
+
+    const minDigits = item.properties.validation?.minDigits;
+    const maxDigits = item.properties.validation?.maxDigits;
+
+    return (
+      (typeof minDigits === "number" && minDigits > MAX_NUMBER_INPUT_DIGITS) ||
+      (typeof maxDigits === "number" && maxDigits > MAX_NUMBER_INPUT_DIGITS)
+    );
+  }, [
+    item.properties.validation?.maxDigits,
+    item.properties.validation?.minDigits,
+    digitLimitEnabled,
+  ]);
+
   const isValid = useMemo(
-    () => !hasInvalidValueRange && !hasInvalidDigitRange,
-    [hasInvalidDigitRange, hasInvalidValueRange]
+    () => !hasInvalidValueRange && !hasInvalidDigitRange && !hasDigitLimitExceedingMax,
+    [hasDigitLimitExceedingMax, hasInvalidDigitRange, hasInvalidValueRange]
   );
 
   useEffect(() => {
@@ -382,12 +404,16 @@ export const NumberFieldOptions = ({
                   type="number"
                   className={
                     "gc-input-text mt-0!" +
-                    (hasInvalidDigitRange ? " border-red-700! outline-2 outline-red-700!" : "")
+                    (hasInvalidDigitRange || hasDigitLimitExceedingMax
+                      ? " border-red-700! outline-2 outline-red-700!"
+                      : "")
                   }
                   id={`numberField-${item.id}-id-minDigits`}
-                  aria-invalid={hasInvalidDigitRange}
+                  aria-invalid={hasInvalidDigitRange || hasDigitLimitExceedingMax}
                   aria-describedby={
-                    hasInvalidDigitRange ? `numberField-${item.id}-error-digitRange` : undefined
+                    hasInvalidDigitRange || hasDigitLimitExceedingMax
+                      ? `numberField-${item.id}-error-digitRange`
+                      : undefined
                   }
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const minDigits =
@@ -406,6 +432,7 @@ export const NumberFieldOptions = ({
                   }}
                   value={item.properties.validation?.minDigits ?? ""}
                   min={1}
+                  max={MAX_NUMBER_INPUT_DIGITS}
                   step={1}
                 />
               </LabelledInput>
@@ -414,12 +441,16 @@ export const NumberFieldOptions = ({
                   type="number"
                   className={
                     "gc-input-text mt-0!" +
-                    (hasInvalidDigitRange ? " border-red-700! outline-2 outline-red-700!" : "")
+                    (hasInvalidDigitRange || hasDigitLimitExceedingMax
+                      ? " border-red-700! outline-2 outline-red-700!"
+                      : "")
                   }
                   id={`numberField-${item.id}-id-maxDigits`}
-                  aria-invalid={hasInvalidDigitRange}
+                  aria-invalid={hasInvalidDigitRange || hasDigitLimitExceedingMax}
                   aria-describedby={
-                    hasInvalidDigitRange ? `numberField-${item.id}-error-digitRange` : undefined
+                    hasInvalidDigitRange || hasDigitLimitExceedingMax
+                      ? `numberField-${item.id}-error-digitRange`
+                      : undefined
                   }
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const maxDigits =
@@ -438,6 +469,7 @@ export const NumberFieldOptions = ({
                   }}
                   value={item.properties.validation?.maxDigits ?? ""}
                   min={1}
+                  max={MAX_NUMBER_INPUT_DIGITS}
                   step={1}
                 />
               </LabelledInput>
@@ -445,6 +477,13 @@ export const NumberFieldOptions = ({
             {hasInvalidDigitRange && (
               <ErrorMessage id={`numberField-${item.id}-error-digitRange`}>
                 {t("addElementDialog.number.invalidDigitRange")}
+              </ErrorMessage>
+            )}
+            {!hasInvalidDigitRange && hasDigitLimitExceedingMax && (
+              <ErrorMessage id={`numberField-${item.id}-error-digitRange`}>
+                {t("addElementDialog.number.digitLimitExceedsMax", {
+                  max: MAX_NUMBER_INPUT_DIGITS,
+                })}
               </ErrorMessage>
             )}
           </div>

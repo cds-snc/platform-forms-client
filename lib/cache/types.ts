@@ -6,6 +6,7 @@ export const UserFeatureFlags = {
 
 export const FeatureFlags = {
   topBanner: "topBanner",
+  fileUpload: "fileUpload",
   zitadelLogin: "zitadelLogin",
   ...UserFeatureFlags,
 } as const;

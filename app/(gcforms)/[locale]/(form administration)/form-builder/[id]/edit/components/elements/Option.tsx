@@ -69,6 +69,7 @@ export const Option = ({
 
   // Sync local state with prop changes when array operations occur
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize local input state
     setValue(initialValue);
   }, [initialValue]);
 

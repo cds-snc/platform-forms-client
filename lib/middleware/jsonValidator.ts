@@ -10,6 +10,29 @@ export type ValidateOptions = {
   noValidateMethods?: string[];
 };
 
+type JsonValidationDetail = {
+  path: string;
+  keyword: string;
+  message: string;
+};
+
+const getValidationPath = (error: ValidatorResult["errors"][number]): string => {
+  const path = error.property.replace(/^instance\.?/, "");
+  const requiredProperty =
+    error.name === "required"
+      ? error.argument
+      : error.name === "not" &&
+          typeof error.argument === "object" &&
+          error.argument !== null &&
+          "required" in error.argument &&
+          Array.isArray(error.argument.required) &&
+          error.argument.required.length === 1
+        ? error.argument.required[0]
+        : undefined;
+
+  return typeof requiredProperty === "string" ? `${path}.${requiredProperty}` : path;
+};
+
 /**
  * This function when passed into the jsonschema validate function
  * will receive all possible key value pairs defined in the schema
@@ -87,7 +110,25 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
       if (validatorResult.valid) {
         return { next: true };
       } else {
-        throw new Error(validatorResult.errors.toString());
+        const validationErrors = validatorResult.errors.filter(
+          ({ name }) => !["allOf", "anyOf", "oneOf"].includes(name)
+        );
+        const validationDetails: JsonValidationDetail[] = validationErrors.map((error) => ({
+          path: getValidationPath(error),
+          keyword: error.name,
+          message: error.message,
+        }));
+
+        return {
+          next: false,
+          response: NextResponse.json(
+            {
+              error: `JSON Validation Error: ${validationErrors.toString()}`,
+              details: validationDetails,
+            },
+            { status: 400 }
+          ),
+        };
       }
     } catch (e) {
       const validationError = e as Error;

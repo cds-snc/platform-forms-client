@@ -1,7 +1,7 @@
 import { formCache } from "@lib/cache/formCache";
 import { prisma, prismaErrors } from "@gcforms/database";
-import { FormRecord, FormProperties } from "@lib/types";
-import { parseTemplate, templateRecordInclude } from "../internal";
+import { FormRecord } from "@lib/types";
+import { jsonToFormProperties, parseTemplate, templateRecordInclude } from "../internal";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
 import { UpdateTemplateCommand, UpdateTemplateAction } from "../types";
 import { authorizeForCommand } from "../mutations/shared/authorizeForCommand";
@@ -259,7 +259,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     user,
     beforeContext: {
       name: currentTemplate?.name,
-      jsonConfig: currentTemplate?.jsonConfig as FormProperties,
+      jsonConfig: jsonToFormProperties(currentTemplate?.jsonConfig || {}),
     },
   });
 

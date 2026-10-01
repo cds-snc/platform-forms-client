@@ -16,22 +16,20 @@ export const EditNavigation = ({ id }: { id: string }) => {
   const { id: storeId } = useTemplateStore((s) => ({
     id: s.id,
   }));
-  if (storeId && storeId !== id) {
-    id = storeId;
-  }
+  const formId = storeId && storeId !== id ? storeId : id;
   return (
-    <div className="relative flex max-w-[800px] flex-col tablet:flex-row">
+    <div className="tablet:flex-row relative flex max-w-[800px] flex-col">
       <div className="flex">
-        <nav className="flex flex-wrap laptop:mb-4" aria-label={t("navLabelEditor")}>
-          <SubNavLink href={`/${language}/form-builder/${id}/edit`}>
-            <span className="text-sm laptop:text-base">
-              <QuestionsIcon className="mr-2 inline-block laptop:mt-[-2px]" />
+        <nav className="laptop:mb-4 flex flex-wrap" aria-label={t("navLabelEditor")}>
+          <SubNavLink href={`/${language}/form-builder/${formId}/edit`}>
+            <span className="laptop:text-base text-sm">
+              <QuestionsIcon className="laptop:mt-[-2px] mr-2 inline-block" />
               {t("questions")}
             </span>
           </SubNavLink>
-          <SubNavLink href={`/${language}/form-builder/${id}/edit/translate`}>
-            <span className="text-sm laptop:text-base">
-              <TranslateIcon className="mr-2 inline-block laptop:mt-[-2px]" />
+          <SubNavLink href={`/${language}/form-builder/${formId}/edit/translate`}>
+            <span className="laptop:text-base text-sm">
+              <TranslateIcon className="laptop:mt-[-2px] mr-2 inline-block" />
               {t("translate")}
             </span>
           </SubNavLink>
@@ -39,7 +37,7 @@ export const EditNavigation = ({ id }: { id: string }) => {
       </div>
 
       {activePathname.endsWith("/edit") && (
-        <div className="flex tablet:absolute tablet:right-0 tablet:top-0 tablet:mt-1">
+        <div className="tablet:absolute tablet:right-0 tablet:top-0 tablet:mt-1 flex">
           <LangSwitcher descriptionLangKey="editingIn" />
         </div>
       )}
