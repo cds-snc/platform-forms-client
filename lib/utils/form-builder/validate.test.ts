@@ -51,4 +51,14 @@ describe("validateTemplate", () => {
       { property: "groups.exit-page.exitUrlFr", message: "formInvalidProperty" },
     ]);
   });
+
+  it("reports navigation cycles", () => {
+    const cyclicTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
+    const firstPageId = cyclicTemplate.groupsLayout?.[0];
+    cyclicTemplate.groups![firstPageId!].nextAction = "start";
+
+    expect(validateTemplate(cyclicTemplate).errors).toContainEqual({
+      message: "startErrorNavigationCycle",
+    });
+  });
 });

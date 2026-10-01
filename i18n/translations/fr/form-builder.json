@@ -1246,6 +1246,7 @@
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",
   "startErrorInvalidCustomRegex": "Modèle regex personnalisé invalide ou non sécurisé",
+  "startErrorNavigationCycle": "Le formulaire contient une règle de navigation circulaire entre les pages",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",
@@ -1457,6 +1458,11 @@
     "translateTitle": "Titre de la page",
     "addRule": "Ajouter un embranchement",
     "saveRule": "Enregistrer",
+    "invalidNextAction": {
+      "title": "La règle de navigation ne peut pas être enregistrée",
+      "message": "Vous ne pouvez pas faire passer {{source}} à {{target}}, car cela créerait un cycle.",
+      "okay": "OK"
+    },
     "saveNote": "Les embranchements désactivent l'enchaînement linéaire automatique entre les pages du formulaire.",
     "resetRules": "Réinitialiser l'enchaînement linéaire",
     "resetRulesHelp": "Aide pour la réinitialisation",
