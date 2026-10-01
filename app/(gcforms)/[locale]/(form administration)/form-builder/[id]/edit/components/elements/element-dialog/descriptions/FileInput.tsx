@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { Label, FileInput as FileInputComponent } from "@clientComponents/forms";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { useFileUploadEnabled } from "@lib/hooks/form-builder/useFileUploadEnabled";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const FileInput = ({ title }: { title: string }) => {
-  const { hasApiKeyId } = useFormBuilderConfig();
+  const fileUploadEnabled = useFileUploadEnabled();
 
   const { translationLanguagePriority, id } = useTemplateStore((s) => ({
     id: s.id,
@@ -20,7 +20,7 @@ export const FileInput = ({ title }: { title: string }) => {
 
   const link = `/${translationLanguagePriority}/form-builder/${formId}/settings/api-integration`;
 
-  return hasApiKeyId ? (
+  return fileUploadEnabled ? (
     <WithApiDescription title={title} />
   ) : (
     <DefaultDescription title={title} link={link} />

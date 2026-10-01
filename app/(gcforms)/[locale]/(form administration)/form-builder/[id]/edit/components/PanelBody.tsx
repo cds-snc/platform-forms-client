@@ -12,8 +12,8 @@ import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { cn } from "@lib/utils";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { ManagedDataDetails } from "./ManagedDataDetails";
+import { useFileUploadEnabled } from "@lib/hooks/form-builder/useFileUploadEnabled";
 
 export const PanelBody = ({
   item,
@@ -37,7 +37,7 @@ export const PanelBody = ({
   const hasCustomRegex =
     item.properties.validation?.type === "custom" && item.properties.validation.regex;
 
-  const { hasApiKeyId } = useFormBuilderConfig();
+  const fileUploadEnabled = useFileUploadEnabled();
 
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
@@ -53,7 +53,7 @@ export const PanelBody = ({
   const describedById = description ? `item${item.id}-describedby` : undefined;
   const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
 
-  const isInvalid = isFileUpload && !hasApiKeyId;
+  const isInvalid = isFileUpload && !fileUploadEnabled;
 
   return (
     <>
@@ -151,7 +151,7 @@ export const PanelBody = ({
 
           {isFileUpload && (
             <div className="mt-4 border-t border-dotted border-slate-800 pt-4">
-              {!hasApiKeyId && (
+              {!fileUploadEnabled && (
                 <strong className="ml-2 inline-block text-sm font-bold text-red-700">
                   {t("fileUploadApiWarning.text")}
                 </strong>
