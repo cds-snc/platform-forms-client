@@ -16,7 +16,11 @@ import { TFunction } from "i18next";
 import { md5 } from "hash-wasm";
 import { withRetry } from "@root/lib/utils/retry";
 import { ResponseDownloadLogger } from "./logger";
-import { collectAttachments, CollectedAttachment } from "@lib/responseAttachments/collectAttachments";
+import {
+  collectAttachments,
+  CollectedAttachment,
+} from "@lib/responseAttachments/collectAttachments";
+import { getUniqueAttachmentFilename } from "@lib/responseDownloadFormats/attachmentFilenames";
 
 export const processResponse = async ({
   incrementProcessedSubmissionsCount,
@@ -131,6 +135,8 @@ export type AttachmentDownloadResult = {
   isPotentiallyMalicious: boolean;
 };
 
+type RenamedAttachment = CollectedAttachment & { renameTo: string };
+
 const downloadAndConfirmResponse = async ({
   workingDirectoryHandle,
   apiClient,
@@ -237,26 +243,19 @@ const downloadAndConfirmResponse = async ({
   };
 };
 
-export const deduplicateAttachmentFilenames = (attachments: CollectedAttachment[]) => {
-  const nameCount: Record<string, number> = {};
-  return attachments.map((attachment) => {
-    const lastDot = attachment.name.lastIndexOf(".");
-    const base = lastDot !== -1 ? attachment.name.substring(0, lastDot) : attachment.name;
-    const ext = lastDot !== -1 ? attachment.name.substring(lastDot) : "";
-    const key = attachment.name;
-    const count = nameCount[key] || 0;
-    nameCount[key] = count + 1;
-    let renameTo = attachment.name;
-    if (count > 0) {
-      renameTo = `${base} (${count})${ext}`;
-    }
-    return { ...attachment, renameTo };
-  });
+export const deduplicateAttachmentFilenames = (
+  attachments: CollectedAttachment[]
+): RenamedAttachment[] => {
+  const usedNames = new Set<string>();
+  return attachments.map((attachment, index) => ({
+    ...attachment,
+    renameTo: getUniqueAttachmentFilename(attachment.name, usedNames, index),
+  }));
 };
 
 const downloadAttachment = async (
   responseAttachmentsDirectoryHandle: FileSystemDirectoryHandle,
-  attachment: CollectedAttachment
+  attachment: RenamedAttachment
 ): Promise<AttachmentDownloadResult> => {
   const response = await fetch(attachment.downloadLink);
 
@@ -288,7 +287,7 @@ const downloadAttachment = async (
     id: attachment.id,
     originalName: attachment.name,
     actualName: attachment.renameTo || attachment.name,
-    isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+    isPotentiallyMalicious: attachment.isPotentiallyMalicious ?? false,
   };
 };
 
