@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.4] - 2026-10-01
+
+- Update _forms.scss hint text to be more screen magnifier friendly
+
 ## [3.0.3] - 2026-09-23
 
 - Setting maximum digits for numberInput
