@@ -1246,6 +1246,7 @@
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",
   "startErrorInvalidCustomRegex": "Modèle regex personnalisé invalide ou non sécurisé",
+  "startErrorNavigationCycle": "Le formulaire contient une règle de navigation circulaire entre les pages",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",

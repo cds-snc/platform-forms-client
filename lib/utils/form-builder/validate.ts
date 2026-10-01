@@ -4,6 +4,7 @@ import { FormProperties } from "@lib/types";
 import { cleanAngleBrackets } from "@lib/client/jsonFormatting";
 import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
 import { validateCustomRegex } from "@lib/regex/validateCustomRegex";
+import { createsNextActionCycle } from "@lib/groups/utils/validateGroups";
 
 export type errorMessage = { property?: string; message: string };
 
@@ -49,6 +50,15 @@ export const validateTemplate = (data: FormProperties) => {
 
   if (!validateCustomRegex(data.elements)) {
     errors.push({ message: "startErrorInvalidCustomRegex" });
+  }
+
+  if (
+    data.groups &&
+    Object.entries(data.groups).some(([groupId, group]) =>
+      createsNextActionCycle(data.groups!, groupId, group.nextAction)
+    )
+  ) {
+    errors.push({ message: "startErrorNavigationCycle" });
   }
 
   const validator = new Validator();
