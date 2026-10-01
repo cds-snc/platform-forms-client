@@ -361,6 +361,35 @@ describe("NumberInput Component", () => {
       expect(input.value).toBe("999999999");
     });
 
+    it("stops accepting digits once the 15-digit cap is reached while typing", async () => {
+      const user = userEvent.setup();
+      renderNumberInput();
+      const input = screen.getByTestId("numberInput") as HTMLInputElement;
+
+      await user.type(input, "1234567890123456789");
+      expect(input.value).toBe("123456789012345");
+    });
+
+    it("rejects a paste that would exceed the 15-digit cap", async () => {
+      const user = userEvent.setup();
+      renderNumberInput();
+      const input = screen.getByTestId("numberInput") as HTMLInputElement;
+
+      await user.click(input);
+      await user.paste("1234567890123456789");
+      expect(input.value).toBe("");
+    });
+
+    it("allows a pasted value exactly at the 15-digit cap", async () => {
+      const user = userEvent.setup();
+      renderNumberInput();
+      const input = screen.getByTestId("numberInput") as HTMLInputElement;
+
+      await user.click(input);
+      await user.paste("123456789012345");
+      expect(input.value).toBe("123456789012345");
+    });
+
     it("clears display on blur with invalid number", async () => {
       const user = userEvent.setup();
       renderNumberInput({ stepCount: 2 });
