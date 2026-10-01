@@ -40,10 +40,11 @@ export default async function StartPage(props: { params: Promise<{ locale: strin
             className="mb-0"
             showAccountMenu
             accountMenuPublishingEnabled={publishFormsEnabled}
+            skipLink={false}
           />
           <div className="shrink-0 grow basis-auto">
             <div className="flex flex-row gap-10">
-              <main id="content" className={cn("form-builder mt-5 mb-10 w-full")}>
+              <main id="content" className={cn("form-builder mt-5 mb-10 w-full")} tabIndex={-1}>
                 <Start />
               </main>
             </div>

@@ -5,6 +5,7 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
 import { cn } from "@lib/utils";
 import { useCharacterCount } from "@lib/hooks/useCharacterCount";
+import { getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface TextInputProps extends InputFieldProps {
   type: Exclude<HTMLTextInputTypeAttribute, "number">;
@@ -44,10 +45,11 @@ export const TextInput = (
   };
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
+  const errorMessageId = getErrorMessageId(id);
 
   return (
     <>
-      {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       <input
         data-testid="textInput"
         className={classes}
@@ -55,7 +57,8 @@ export const TextInput = (
         type={type}
         key={id}
         spellCheck={spellCheck}
-        required={required}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
         {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}

@@ -1,12 +1,12 @@
 // TODO: in the future these could pulled in from default_flag_settings.json
 
 export const UserFeatureFlags = {
+  fileUpload: "fileUpload",
   responsesPilot: "responsesPilot",
 } as const;
 
 export const FeatureFlags = {
   topBanner: "topBanner",
-  fileUpload: "fileUpload",
   zitadelLogin: "zitadelLogin",
   ...UserFeatureFlags,
 } as const;

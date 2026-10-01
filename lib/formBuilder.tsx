@@ -103,6 +103,10 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       required={isRequired}
       validation={element.properties.validation}
       group={["radio", "checkbox", "starRating"].indexOf(element.type) !== -1}
+      // See #7944
+      includeRequiredInAccessibleName={
+        element.type !== FormElementTypes.radio && element.type !== FormElementTypes.starRating
+      }
       lang={lang}
     >
       {labelText}
@@ -213,18 +217,21 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
           id: `${id}.${index}`,
           name: `${id}`,
           label: choice,
-          required: isRequired,
+          // See #7944
+          required: isRequired && element.properties.validation?.all === true,
         };
       });
 
       return (
-        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+        <FormGroup name={`${id}`}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
+            id={`${id}`}
             type={FormElementTypes.checkbox}
             name={`${id}`}
             choicesProps={checkboxItems}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
           />
         </FormGroup>
       );
@@ -241,13 +248,15 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       });
 
       return (
-        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+        <FormGroup name={`${id}`}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
+            id={`${id}`}
             type={FormElementTypes.radio}
             name={`${id}`}
             choicesProps={radioItems}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
           />
         </FormGroup>
       );
@@ -255,13 +264,14 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
     case FormElementTypes.starRating: {
       const numberOfStars = element.properties.numberOfStars ?? 5;
       return (
-        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+        <FormGroup name={`${id}`}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <StarRating
             id={`${id}`}
             name={`${id}`}
             required={isRequired}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             numberOfStars={numberOfStars}
             lang={lang}
           />

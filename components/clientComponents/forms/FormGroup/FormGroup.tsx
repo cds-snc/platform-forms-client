@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { cn } from "@lib/utils";
+import { useField } from "formik";
 
 interface FormGroupProps {
   children: React.ReactNode;
@@ -15,6 +16,8 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
   const { children, name, className, ariaDescribedBy, ariaLabelledBy, error } = props;
 
   const classes = cn("gc-form-group", "focus-group", { "gc-form-group--error": error }, className);
+
+  useField(name); // note name=id
 
   return (
     <fieldset

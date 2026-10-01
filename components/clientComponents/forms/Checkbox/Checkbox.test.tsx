@@ -60,7 +60,12 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
       expect(input).not.toBeChecked();
     });
 
-    expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
+    // Check linked description on the first focusable choice
+    const checkboxes = screen.getAllByRole("checkbox");
+    expect(checkboxes[0]).toHaveAccessibleDescription(description);
+    checkboxes.slice(1).forEach((checkbox) => {
+      expect(checkbox).not.toHaveAccessibleDescription(description);
+    });
 
     // Check the boxes
     for (const input of screen.getAllByRole("checkbox")) {
@@ -84,5 +89,53 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
     );
 
     expect(screen.queryByTestId("required")).toBeInTheDocument();
+    screen.getAllByRole("checkbox").forEach((input) => {
+      expect(input).not.toHaveAttribute("aria-required");
+      expect(input).not.toHaveAttribute("required");
+    });
+
+    checkboxData.properties.validation!.required = false;
+  });
+
+  it("marks every checkbox required when all choices are required", () => {
+    checkboxData.properties.validation!.required = true;
+    checkboxData.properties.validation!.all = true;
+
+    render(
+      <Formik onSubmit={() => {}} initialValues={{}}>
+        <GenerateElement element={checkboxData} language={lang} isTestMode={true} />
+      </Formik>
+    );
+
+    screen.getAllByRole("checkbox").forEach((input) => {
+      expect(input).toHaveAttribute("aria-required", "true");
+      expect(input).not.toHaveAttribute("required");
+    });
+
+    checkboxData.properties.validation!.required = false;
+    delete checkboxData.properties.validation!.all;
+  });
+
+  it("associates the group error with the first checkbox only", () => {
+    const errorMessage = "Complete the required field to continue.";
+
+    render(
+      <Formik
+        onSubmit={() => {}}
+        initialValues={{}}
+        initialErrors={{ "8": errorMessage }}
+        initialTouched={{ "8": true }}
+      >
+        <GenerateElement element={checkboxData} language={lang} isTestMode={true} />
+      </Formik>
+    );
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    expect(checkboxes[0]).toHaveAttribute("aria-describedby", "errorMessage-8 desc-8");
+    checkboxes.slice(1).forEach((checkbox) => {
+      expect(checkbox).not.toHaveAttribute("aria-describedby");
+    });
+    expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-8");
+    expect(screen.getByRole("group")).not.toHaveAttribute("aria-describedby");
   });
 });
