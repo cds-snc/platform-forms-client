@@ -67,7 +67,7 @@ describe("ResponseHtml", () => {
         responseID: "response-1",
         createdAt: 1_700_000_000_000,
         securityAttribute: "Protected A",
-        showCodes: false,
+        showCodes: true,
         t,
       })
     );
@@ -95,7 +95,7 @@ describe("ResponseHtml", () => {
         securityAttribute: "Protected A",
         responseAttachmentsUrl:
           "https://forms.example/en/form-builder/form-1/response-attachments/response-1",
-        showCodes: false,
+        showCodes: true,
         t,
       })
     );
@@ -106,5 +106,34 @@ describe("ResponseHtml", () => {
     expect(markup).toContain("Response attachments");
     expect(markup).toContain("This response includes attachments");
     expect(markup).toContain("Get response attachments");
+  });
+
+  it("does not render attachment links when response codes are hidden", () => {
+    const markup = renderToStaticMarkup(
+      ResponseHtml({
+        response: {
+          ...submission,
+          attachments: [
+            {
+              id: "attachment-1",
+              name: "document.pdf",
+              downloadLink: "https://example.test/document.pdf",
+            },
+          ],
+        },
+        formRecord,
+        confirmationCode: "ABC123",
+        responseID: "response-1",
+        createdAt: 1_700_000_000_000,
+        securityAttribute: "Protected A",
+        responseAttachmentsUrl:
+          "https://forms.example/en/form-builder/form-1/response-attachments/response-1",
+        showCodes: false,
+        t,
+      })
+    );
+
+    expect(markup).not.toContain("Response attachments");
+    expect(markup).not.toContain("Get response attachments");
   });
 });

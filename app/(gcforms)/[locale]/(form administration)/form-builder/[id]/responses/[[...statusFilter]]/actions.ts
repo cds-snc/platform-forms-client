@@ -41,6 +41,8 @@ import { traceFunction } from "@lib/otel";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import type { Response } from "@gcforms/types";
 import { getSubmissionData } from "./submissionData";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -186,6 +188,8 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           );
         }
 
+        const fileUploadEnabled = await checkOne(FeatureFlags.fileUpload);
+
         // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
         const responses = queryResult
           .sort((a, b) => a.createdAt - b.createdAt)
@@ -218,7 +222,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
               createdAt: parseInt(item.createdAt.toString()),
               confirmationCode: item.confirmationCode,
               answers: sorted,
-              ...(attachments.length > 0 && { attachments }),
+              ...(fileUploadEnabled && attachments.length > 0 && { attachments }),
             };
           }) as FormResponseSubmissions["submissions"];
 

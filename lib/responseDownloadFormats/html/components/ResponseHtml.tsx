@@ -68,7 +68,7 @@ export const ResponseHtml = ({
                 formResponse={response}
                 versionNumber={formRecord.versionNumber}
                 showCodes={showCodes}
-                responseAttachmentsUrl={responseAttachmentsUrl}
+                responseAttachmentsUrl={showCodes ? responseAttachmentsUrl : undefined}
                 t={t}
               />
             </div>
@@ -91,7 +91,7 @@ export const ResponseHtml = ({
                   formResponse={response}
                   versionNumber={formRecord.versionNumber}
                   showCodes={showCodes}
-                  responseAttachmentsUrl={responseAttachmentsUrl}
+                  responseAttachmentsUrl={showCodes ? responseAttachmentsUrl : undefined}
                   t={t}
                 />
               </div>
