@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.3] - 2026-09-23
+
+- Setting maximum digits for numberInput
+
 ## [3.0.2] - 2026-09-16
 
 - Update Vitest to v5 for compatibility with the primary repo

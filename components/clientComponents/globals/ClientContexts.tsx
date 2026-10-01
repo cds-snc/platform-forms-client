@@ -4,16 +4,13 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { AccessControlProvider } from "@lib/hooks/useAccessControl";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
-import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
-import { Flags } from "@lib/cache/types";
 import { Announce } from "@gcforms/announce";
 import { AppUpdateProvider } from "@lib/hooks/useAppUpdate";
 
 export const ClientContexts: React.FC<{
   session: Session | null;
   children: React.ReactNode;
-  featureFlags: Flags;
-}> = ({ session, children, featureFlags }) => {
+}> = ({ session, children }) => {
   return (
     <AppUpdateProvider>
       <SessionProvider
@@ -25,9 +22,7 @@ export const ClientContexts: React.FC<{
         refetchOnWindowFocus={false}
       >
         <AccessControlProvider>
-          <RefsProvider>
-            <FeatureFlagsProvider featureFlags={featureFlags}>{children}</FeatureFlagsProvider>
-          </RefsProvider>
+          <RefsProvider>{children}</RefsProvider>
         </AccessControlProvider>
       </SessionProvider>
       <Announce />
