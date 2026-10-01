@@ -1,7 +1,7 @@
 import { ResponseHtml } from "./components/ResponseHtml";
 import { FormResponseSubmissions } from "../types";
 import { serverTranslation } from "@i18n";
-import { getOrigin } from "@lib/origin";
+import { allowedOrigin, getOrigin } from "@lib/origin";
 import { getResponseAttachmentsUrl } from "../attachmentDownloadUrl";
 
 export const transform = async (formResponseSubmissions: FormResponseSubmissions) => {
@@ -9,8 +9,7 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
   const hasAttachments = formResponseSubmissions.submissions.some(
     (response) => response.attachments?.length
   );
-  const configuredOrigin = process.env.HOST_URL?.trim().replace(/\/+$/, "");
-  const origin = hasAttachments ? (configuredOrigin ?? (await getOrigin())) : "";
+  const origin = hasAttachments ? (allowedOrigin ?? (await getOrigin())) : "";
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
   const records = formResponseSubmissions.submissions.map((response) => {
     const responseAttachmentsUrl = response.attachments?.length

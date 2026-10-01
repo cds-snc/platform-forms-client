@@ -5,7 +5,7 @@ import { serverTranslation } from "@i18n";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
-import { getOrigin } from "@lib/origin";
+import { allowedOrigin, getOrigin } from "@lib/origin";
 import { getResponseAttachmentsUrl } from "../attachmentDownloadUrl";
 
 const specialChars = ["=", "+", "-", "@"];
@@ -16,8 +16,7 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
 
   const { submissions } = formResponseSubmissions;
   const hasAttachments = submissions.some((response) => response.attachments?.length);
-  const configuredOrigin = process.env.HOST_URL?.trim().replace(/\/+$/, "");
-  const origin = hasAttachments ? (configuredOrigin ?? (await getOrigin())) : "";
+  const origin = hasAttachments ? (allowedOrigin ?? (await getOrigin())) : "";
 
   const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
 
