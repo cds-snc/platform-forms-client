@@ -50,7 +50,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   return (
     <>
-      {validationError && <ErrorMessage>{validationError}</ErrorMessage>}
+      {validationError && <ErrorMessage role="alert">{validationError}</ErrorMessage>}
 
       <select
         data-testid="dropdown"

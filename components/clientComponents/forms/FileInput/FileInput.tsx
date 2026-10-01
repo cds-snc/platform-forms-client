@@ -11,6 +11,7 @@ import { ALLOWED_FILE_TYPES, htmlInputAccept, isMimeTypeValid } from "@gcforms/c
 import { themes } from "@clientComponents/globals/Buttons/themes";
 import { bytesToKbOrMbString, bytesToMb } from "@lib/utils/fileSize";
 import { announce } from "@gcforms/announce";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -32,7 +33,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue, setError, setTouched } = helpers;
 
-  const { name, disabled, allowMulti, required, ariaDescribedBy, lang } = props;
+  const { id, name, disabled, allowMulti, required, ariaDescribedBy, lang } = props;
 
   const { t } = useTranslation("common", { lng: lang });
 
@@ -148,17 +149,16 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     allowedFileTypes = htmlInputAccept;
   }
 
-  const describedBy = [
+  const errorMessageId = getErrorMessageId(id);
+  const describedBy = getDescribedByIds(
     `${name}_file_selected`,
     ariaDescribedBy,
-    meta.error ? `${name}_error` : null,
-  ]
-    .filter(Boolean)
-    .join(" ");
+    meta.error ? errorMessageId : undefined
+  );
 
   return (
     <>
-      {meta.error && <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
 
       <div className={classes} data-testid="file">
         <div
@@ -176,7 +176,6 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
           className={cn(themes.base, themes.secondary, "mr-4")}
           aria-disabled={disabled}
           aria-labelledby="file-input-button-text"
-          aria-describedby={describedBy}
         >
           <span id="file-input-button-text" aria-hidden={true}>
             {t("file-upload-button-text")}
@@ -191,9 +190,10 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             onChange={_onChange}
             onClick={(e) => e.stopPropagation()}
             disabled={disabled}
-            required={required}
+            aria-required={required ? "true" : undefined}
+            aria-invalid={meta.error ? "true" : undefined}
+            aria-describedby={describedBy}
             multiple={allowMulti}
-            aria-hidden={true}
           />
         </div>
         <span id={`${name}_file_selected`} className="block">

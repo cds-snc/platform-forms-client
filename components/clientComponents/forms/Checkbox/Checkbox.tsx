@@ -1,6 +1,6 @@
 "use client";
 import React, { type JSX } from "react";
-import { Field } from "formik";
+import { Field, useField } from "formik";
 import { Description } from "@clientComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";
 
@@ -8,6 +8,9 @@ export const Checkbox = (
   props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name, ariaDescribedBy } = props;
+  const describedBy = props["aria-describedby"];
+  const [, meta] = useField(props);
+  const hasError = Boolean(meta.error);
   return (
     <div className="gc-input-checkbox" data-testid={id}>
       {ariaDescribedBy && (
@@ -20,7 +23,9 @@ export const Checkbox = (
         id={id}
         type="checkbox"
         value={label}
-        required={required}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={hasError ? "true" : undefined}
+        aria-describedby={describedBy}
         name={name}
       />
       {/* Set tabIndex to -1 see https://stackoverflow.com/questions/49662769/focus-within-styles-flash-when-clicking-an-input-label  */}

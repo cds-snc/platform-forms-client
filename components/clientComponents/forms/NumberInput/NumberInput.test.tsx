@@ -10,8 +10,12 @@ import { Formik, Form } from "formik";
 import { NumberInput } from "./NumberInput";
 
 vi.mock("@clientComponents/forms", () => ({
-  ErrorMessage: ({ children, id }: { children: React.ReactNode; id: string }) => (
-    <div id={id} role="alert">
+  ErrorMessage: ({ children, id, role = false }: {
+    children: React.ReactNode;
+    id: string;
+    role?: "alert" | false;
+  }) => (
+    <div id={id} data-testid="errorMessage" {...(role ? { role } : {})}>
       {children}
     </div>
   ),
@@ -59,10 +63,11 @@ describe("NumberInput Component", () => {
       expect(screen.getByPlaceholderText("Enter amount")).toBeInTheDocument();
     });
 
-    it("renders with required attribute when required is true", () => {
+    it("renders with ARIA required state without native required", () => {
       renderNumberInput({ required: true });
       const input = screen.getByTestId("numberInput") as HTMLInputElement;
-      expect(input.required).toBe(true);
+      expect(input).not.toHaveAttribute("required");
+      expect(input).toHaveAttribute("aria-required", "true");
     });
 
     it("renders with inputMode set to numeric", () => {
@@ -261,11 +266,8 @@ describe("NumberInput Component", () => {
   });
 
   describe("Error Display", () => {
-    it("displays error message when validation fails", async () => {
-      const { rerender } = renderNumberInput({ required: true }, { initialValue: "" });
-
-      // Force error state by triggering validation
-      rerender(
+    it("associates validation errors with the input", () => {
+      render(
         <Formik
           initialValues={{ amount: "" }}
           onSubmit={vi.fn()}
@@ -277,6 +279,12 @@ describe("NumberInput Component", () => {
           </Form>
         </Formik>
       );
+
+      const input = screen.getByTestId("numberInput");
+
+      expect(input).toHaveAttribute("aria-invalid", "true");
+      expect(input).toHaveAttribute("aria-describedby", "errorMessage-amount");
+      expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-amount");
     });
 
     it("applies error class when field has error", () => {
