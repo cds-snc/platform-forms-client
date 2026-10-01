@@ -1,5 +1,5 @@
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
-import { CompleteAttachment, FormSubmission } from "./types";
+import { FormSubmission } from "./types";
 import { decryptFormSubmission } from "./utils";
 import {
   ATTACHMENTS_FOLDER,
@@ -16,6 +16,7 @@ import { TFunction } from "i18next";
 import { md5 } from "hash-wasm";
 import { withRetry } from "@root/lib/utils/retry";
 import { ResponseDownloadLogger } from "./logger";
+import { collectAttachments, CollectedAttachment } from "@lib/responseAttachments/collectAttachments";
 
 export const processResponse = async ({
   incrementProcessedSubmissionsCount,
@@ -189,7 +190,9 @@ const downloadAndConfirmResponse = async ({
   const fileNameMapping: ResponseFilenameMapping = new Map();
 
   // check if there are files to download
-  if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
+  const responseAttachments = collectAttachments(decryptedResponse.attachments);
+
+  if (responseAttachments.length > 0) {
     const attachmentsDirectoryHandle = await workingDirectoryHandle.getDirectoryHandle(
       ATTACHMENTS_FOLDER,
       {
@@ -207,9 +210,7 @@ const downloadAndConfirmResponse = async ({
 
     const downloadResults: AttachmentDownloadResult[] = [];
 
-    const responseAttachmentsWithRenameTo = deduplicateAttachmentFilenames(
-      decryptedResponse.attachments
-    );
+    const responseAttachmentsWithRenameTo = deduplicateAttachmentFilenames(responseAttachments);
 
     // async download all attachments
     await Promise.all(
@@ -236,7 +237,7 @@ const downloadAndConfirmResponse = async ({
   };
 };
 
-export const deduplicateAttachmentFilenames = (attachments: CompleteAttachment[]) => {
+export const deduplicateAttachmentFilenames = (attachments: CollectedAttachment[]) => {
   const nameCount: Record<string, number> = {};
   return attachments.map((attachment) => {
     const lastDot = attachment.name.lastIndexOf(".");
@@ -255,7 +256,7 @@ export const deduplicateAttachmentFilenames = (attachments: CompleteAttachment[]
 
 const downloadAttachment = async (
   responseAttachmentsDirectoryHandle: FileSystemDirectoryHandle,
-  attachment: CompleteAttachment
+  attachment: CollectedAttachment
 ): Promise<AttachmentDownloadResult> => {
   const response = await fetch(attachment.downloadLink);
 
