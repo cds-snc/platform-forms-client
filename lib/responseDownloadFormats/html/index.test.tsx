@@ -39,6 +39,21 @@ const submission = {
 
 const t = ((key: string) => {
   if (key === "responseTemplate.versionNumber") return "Version";
+  if (key === "responseTemplate.attachmentsSectionTitle") {
+    return "Response attachments";
+  }
+  if (key === "my-forms:responseTemplate.attachmentsSectionTitle") {
+    return "Response attachments";
+  }
+  if (key === "responseTemplate.attachmentsWarningTitle") {
+    return "This response includes attachments";
+  }
+  if (key === "responseTemplate.attachmentsWarningMessage") {
+    return "Ensure you download the attachments before you confirm removal of this response.";
+  }
+  if (key === "responseTemplate.downloadAttachments") {
+    return "Get response attachments";
+  }
   return key;
 }) as TFunction<string | string[], undefined>;
 
@@ -52,11 +67,73 @@ describe("ResponseHtml", () => {
         responseID: "response-1",
         createdAt: 1_700_000_000_000,
         securityAttribute: "Protected A",
-        showCodes: false,
+        showCodes: true,
         t,
       })
     );
 
     expect(markup).toContain("Version 3");
+  });
+
+  it("renders an attachment download link when attachments are present", () => {
+    const markup = renderToStaticMarkup(
+      ResponseHtml({
+        response: {
+          ...submission,
+          attachments: [
+            {
+              id: "attachment-1",
+              name: "document.pdf",
+              downloadLink: "https://example.test/document.pdf",
+            },
+          ],
+        },
+        formRecord,
+        confirmationCode: "ABC123",
+        responseID: "response-1",
+        createdAt: 1_700_000_000_000,
+        securityAttribute: "Protected A",
+        responseAttachmentsUrl:
+          "https://forms.example/en/form-builder/form-1/response-attachments/response-1",
+        showCodes: true,
+        t,
+      })
+    );
+
+    expect(markup).toContain(
+      'href="https://forms.example/en/form-builder/form-1/response-attachments/response-1"'
+    );
+    expect(markup).toContain("Response attachments");
+    expect(markup).toContain("This response includes attachments");
+    expect(markup).toContain("Get response attachments");
+  });
+
+  it("does not render attachment links when response codes are hidden", () => {
+    const markup = renderToStaticMarkup(
+      ResponseHtml({
+        response: {
+          ...submission,
+          attachments: [
+            {
+              id: "attachment-1",
+              name: "document.pdf",
+              downloadLink: "https://example.test/document.pdf",
+            },
+          ],
+        },
+        formRecord,
+        confirmationCode: "ABC123",
+        responseID: "response-1",
+        createdAt: 1_700_000_000_000,
+        securityAttribute: "Protected A",
+        responseAttachmentsUrl:
+          "https://forms.example/en/form-builder/form-1/response-attachments/response-1",
+        showCodes: false,
+        t,
+      })
+    );
+
+    expect(markup).not.toContain("Response attachments");
+    expect(markup).not.toContain("Get response attachments");
   });
 });
