@@ -223,7 +223,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       });
 
       return (
-        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+        <FormGroup name={`${id}`}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
@@ -231,6 +231,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
             type={FormElementTypes.checkbox}
             name={`${id}`}
             choicesProps={checkboxItems}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
           />
         </FormGroup>
       );
@@ -247,7 +248,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       });
 
       return (
-        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+        <FormGroup name={`${id}`}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
@@ -255,6 +256,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
             type={FormElementTypes.radio}
             name={`${id}`}
             choicesProps={radioItems}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
           />
         </FormGroup>
       );

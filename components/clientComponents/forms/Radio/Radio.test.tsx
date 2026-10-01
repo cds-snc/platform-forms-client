@@ -64,8 +64,12 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
         expect(input).toHaveAttribute("aria-required", "true");
         expect(input).not.toHaveAttribute("required");
       });
-      // Proper linked description to element
-      expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
+      // Check linked description on the first focusable choice
+      const radios = screen.getAllByRole("radio");
+      expect(radios[0]).toHaveAccessibleDescription(description);
+      radios.slice(1).forEach((radio) => {
+        expect(radio).not.toHaveAccessibleDescription(description);
+      });
     });
     test("not required displays properly", () => {
       // mutate for not required test
@@ -99,7 +103,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
       );
 
       const radios = screen.getAllByRole("radio");
-      expect(radios[0]).toHaveAttribute("aria-describedby", "errorMessage-1");
+      expect(radios[0]).toHaveAttribute("aria-describedby", "errorMessage-1 desc-1");
       radios.slice(1).forEach((radio) => {
         expect(radio).not.toHaveAttribute("aria-describedby");
       });

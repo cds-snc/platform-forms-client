@@ -60,7 +60,12 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
       expect(input).not.toBeChecked();
     });
 
-    expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
+    // Check linked description on the first focusable choice
+    const checkboxes = screen.getAllByRole("checkbox");
+    expect(checkboxes[0]).toHaveAccessibleDescription(description);
+    checkboxes.slice(1).forEach((checkbox) => {
+      expect(checkbox).not.toHaveAccessibleDescription(description);
+    });
 
     // Check the boxes
     for (const input of screen.getAllByRole("checkbox")) {
@@ -126,7 +131,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
     );
 
     const checkboxes = screen.getAllByRole("checkbox");
-    expect(checkboxes[0]).toHaveAttribute("aria-describedby", "errorMessage-8");
+    expect(checkboxes[0]).toHaveAttribute("aria-describedby", "errorMessage-8 desc-8");
     checkboxes.slice(1).forEach((checkbox) => {
       expect(checkbox).not.toHaveAttribute("aria-describedby");
     });
