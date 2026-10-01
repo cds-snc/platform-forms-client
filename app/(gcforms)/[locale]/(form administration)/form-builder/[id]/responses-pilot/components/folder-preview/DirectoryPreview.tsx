@@ -12,6 +12,7 @@ import {
 } from "../../lib/constants";
 import { useResponsesApp } from "../../context";
 import { FormElement, FormElementTypes } from "@root/packages/types/src/form-types";
+import { getSubElements } from "@gcforms/core";
 
 export const hasFileInputElement = ({ elements }: { elements?: FormElement[] }) => {
   // Helper function to recursively check for file input elements
@@ -23,7 +24,7 @@ export const hasFileInputElement = ({ elements }: { elements?: FormElement[] }) 
         // Check if the current element is a file input
         element.type === FormElementTypes.fileInput ||
         // Check sub-elements if they exist
-        (element.properties?.subElements && checkForFileInput(element.properties.subElements))
+        (getSubElements(element) && checkForFileInput(getSubElements(element)))
     );
   };
 
@@ -82,7 +83,7 @@ export const FileIcon = () => {
       aria-hidden="true"
       width="20"
       height="20"
-      className={cn("inline-block mr-2")}
+      className={cn("mr-2 inline-block")}
     />
   );
 };
@@ -103,7 +104,7 @@ export const FolderIcon = ({ level }: { level?: number }) => {
       aria-hidden="true"
       width="20"
       height="20"
-      className={cn("inline-block mr-2", levelClass)}
+      className={cn("mr-2 inline-block", levelClass)}
     />
   );
 };

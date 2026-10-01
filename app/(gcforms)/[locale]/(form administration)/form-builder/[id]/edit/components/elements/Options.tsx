@@ -6,7 +6,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
 import { ChoiceOptionsCsvUpload } from "@clientComponents/forms/ChoiceOptionsCsvUpload";
-import { FormElementTypes, type PropertyChoices } from "@lib/types";
+import { FormElementTypes, type PropertyChoices, type ElementProperties } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared/conditionals/ConditionalIndicatorOption";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
@@ -142,7 +142,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
   if (!element?.properties) {
     return null;
   }
-  const { choices } = element.properties;
+  const { choices } = element.properties as ElementProperties<"dropdown">;
   const allowCsvUpload = [
     FormElementTypes.radio,
     FormElementTypes.checkbox,
@@ -174,10 +174,13 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
     );
   }
 
-  const options = choices.map((child, index) => {
+  const options = choices.map((child: PropertyChoices, index: number) => {
     if (!child || !item) return null;
 
-    const initialValue = element.properties.choices?.[index][translationLanguagePriority] ?? "";
+    const initialValue =
+      (element.properties as ElementProperties<"dropdown">).choices?.[index][
+        translationLanguagePriority
+      ] ?? "";
 
     return (
       <fieldset key={`child-${item.id}-${index}-${translationLanguagePriority}`} aria-live="polite">

@@ -3,7 +3,7 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Button } from "@clientComponents/globals";
-import { FormElement } from "@lib/types";
+import { FormElement, ElementProperties } from "@lib/types";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 
@@ -24,7 +24,7 @@ export const DownloadCSVWithGroups = () => {
         formatText(element.properties.titleFr),
       ]);
 
-      element.properties.subElements?.map((subElement) => {
+      (element.properties as ElementProperties<"dynamicRow">).subElements?.map((subElement) => {
         parseElement(subElement, data);
       });
 
@@ -46,16 +46,18 @@ export const DownloadCSVWithGroups = () => {
       ]);
     }
 
-    if (element.properties.choices) {
-      element.properties.choices.map((choice, choiceIndex) => {
-        if (choice.en || choice.fr) {
-          data.push([
-            `${description} Option ${choiceIndex + 1}`,
-            formatText(choice.en),
-            formatText(choice.fr),
-          ]);
+    if ((element.properties as ElementProperties<"dropdown">).choices) {
+      (element.properties as ElementProperties<"dropdown">).choices?.map(
+        (choice: { en: string; fr: string }, choiceIndex: number) => {
+          if (choice.en || choice.fr) {
+            data.push([
+              `${description} Option ${choiceIndex + 1}`,
+              formatText(choice.en),
+              formatText(choice.fr),
+            ]);
+          }
         }
-      });
+      );
     }
   };
 

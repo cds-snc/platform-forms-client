@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 
 import { CopyIcon } from "@serverComponents/icons/CopyIcon";
 import { CheckIcon } from "@serverComponents/icons/CheckIcon";
-import { FormElement } from "@lib/types";
+import { FormElement, ElementProperties } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "react-i18next";
 import { useIsAdminUser } from "@lib/hooks/form-builder/useIsAdminUser";
@@ -16,11 +16,14 @@ export const CopyItem = ({ item }: { item: FormElement | undefined }) => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = useCallback(() => {
+    // generic across every type; choices/autoComplete only apply to some
+    const properties = item?.properties as
+      (ElementProperties<"dropdown"> & ElementProperties<"textField">) | undefined;
     const itemJson = {
       type: item?.type,
       properties: {
         subElements: [],
-        choices: item?.properties.choices || [{ en: "", fr: "" }],
+        choices: properties?.choices || [{ en: "", fr: "" }],
         titleEn: item?.properties.titleEn || "",
         titleFr: item?.properties.titleFr || "",
         validation: item?.properties.validation || {
@@ -31,7 +34,7 @@ export const CopyItem = ({ item }: { item: FormElement | undefined }) => {
         placeholderEn: item?.properties.placeholderEn || "",
         placeholderFr: item?.properties.placeholderFr || "",
         conditionalRules: undefined,
-        autoComplete: item?.properties.autoComplete,
+        autoComplete: properties?.autoComplete,
       },
     };
 

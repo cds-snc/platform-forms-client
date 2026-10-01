@@ -140,8 +140,8 @@ export const SortOption = {
 
 export type SortValue = (typeof SortOption)[keyof typeof SortOption];
 
-// used to define attributes for the properties of an element in the form
-export interface ElementProperties {
+// used to define attributes for the properties of an element in the form; common to every type
+export interface ElementPropertiesBase {
   questionId?: string;
   tags?: string[];
   titleEn: string;
@@ -150,25 +150,73 @@ export interface ElementProperties {
   placeholderFr?: string;
   descriptionEn?: string;
   descriptionFr?: string;
-  validation?: ValidationProperties | undefined;
-  choices?: PropertyChoices[];
-  managedChoices?: string | string[];
-  subElements?: FormElement[];
-  fileType?: string | string[] | undefined;
-  maxNumberOfRows?: number;
-  autoComplete?: string;
-  dateFormat?: string;
-  allowNegativeNumbers?: boolean;
-  stepCount?: number;
-  currencyCode?: string;
-  useThousandsSeparator?: boolean;
-  numberOfStars?: number;
   conditionalRules?: ConditionalRule[];
-  addressComponents?: AddressComponents | undefined;
-  dynamicRow?: dynamicRowType;
-  sortOrder?: SortValue;
-  strictValue?: boolean;
 }
+
+// per-type property additions, keyed by FormElementTypes; see documentation/assets/template-validation.md
+export interface ElementTypePropertiesMap {
+  textField: { validation?: ValidationTextInput; autoComplete?: string };
+  textArea: { validation?: ValidationTextInput };
+  dropdown: {
+    validation?: ValidationSimple;
+    choices?: PropertyChoices[];
+    sortOrder?: SortValue;
+    managedChoices?: string | string[];
+  };
+  radio: {
+    validation?: ValidationSimple;
+    choices?: PropertyChoices[];
+    sortOrder?: SortValue;
+    managedChoices?: string | string[];
+  };
+  checkbox: {
+    validation?: ValidationCheckboxLike;
+    choices?: PropertyChoices[];
+    sortOrder?: SortValue;
+    managedChoices?: string | string[];
+  };
+  fileInput: { validation?: ValidationSimple; fileType?: string | string[] };
+  dynamicRow: {
+    validation?: ValidationSimple;
+    subElements?: FormElement[];
+    maxNumberOfRows?: number;
+    dynamicRow?: dynamicRowType;
+  };
+  richText: { validation?: ValidationSimple };
+  attestation: { validation?: ValidationCheckboxLike };
+  combobox: {
+    validation?: ValidationSimple;
+    choices?: PropertyChoices[];
+    sortOrder?: SortValue;
+    managedChoices?: string | string[];
+    strictValue?: boolean;
+  };
+  addressComplete: { validation?: ValidationSimple; addressComponents?: AddressComponents };
+  formattedDate: {
+    validation?: ValidationFormattedDate;
+    dateFormat?: string;
+    autoComplete?: string;
+  };
+  numberInput: {
+    validation?: ValidationNumberInput;
+    allowNegativeNumbers?: boolean;
+    stepCount?: number;
+    currencyCode?: string;
+    useThousandsSeparator?: boolean;
+  };
+  starRating: { validation?: ValidationSimple; numberOfStars?: number };
+  // UI-only block-template/picker ids - expand into real element types before insertion
+  // (see blockLoader.ts), never persisted as an element's own `type`
+  address: Record<string, never>;
+  name: Record<string, never>;
+  firstMiddleLastName: Record<string, never>;
+  departments: Record<string, never>;
+  contact: Record<string, never>;
+  customJson: Record<string, never>;
+}
+
+export type ElementProperties<T extends FormElementTypes = FormElementTypes> =
+  ElementPropertiesBase & ElementTypePropertiesMap[T];
 
 // defines the fields in the object that controls form branding
 export interface BrandProperties {
@@ -183,16 +231,18 @@ export interface BrandProperties {
   disableGcBranding?: boolean;
 }
 
-// used to define attributes for a form element or field
-export interface FormElement {
-  id: number;
-  uuid?: string;
-  subId?: string;
-  type: FormElementTypes;
-  properties: ElementProperties;
-  onchange?: (event: FormChangeEvent) => void;
-  brand?: BrandProperties;
-}
+// used to define attributes for a form element or field; shape of `properties` depends on `type`
+export type FormElement<T extends FormElementTypes = FormElementTypes> = T extends FormElementTypes
+  ? {
+      id: number;
+      uuid?: string;
+      subId?: string;
+      type: T;
+      properties: ElementProperties<T>;
+      onchange?: (event: FormChangeEvent) => void;
+      brand?: BrandProperties;
+    }
+  : never;
 
 // defines the fields for the main form configuration object
 export interface FormProperties {

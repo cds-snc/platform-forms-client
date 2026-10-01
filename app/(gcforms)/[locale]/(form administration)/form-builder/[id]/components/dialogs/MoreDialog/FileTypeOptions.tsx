@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FormElement } from "@lib/types";
+import { FormElement, ElementProperties } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { FILE_GROUPS } from "@lib/fileInput/constants";
 
@@ -17,12 +17,15 @@ export const FileTypeOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
+  // only rendered for fileInput, so properties is narrowed accordingly
+  const properties = item.properties as ElementProperties<"fileInput">;
+
   // item.properties.fileType = types of files ["xls","xlsx","csv"]
   // First ensure fileType is an array
-  const fileTypes: string[] = Array.isArray(item.properties.fileType)
-    ? item.properties.fileType
-    : item.properties.fileType
-      ? [item.properties.fileType]
+  const fileTypes: string[] = Array.isArray(properties.fileType)
+    ? properties.fileType
+    : properties.fileType
+      ? [properties.fileType]
       : [];
 
   // Convert file types to file groups ["documents", "images", "spreadsheets"]

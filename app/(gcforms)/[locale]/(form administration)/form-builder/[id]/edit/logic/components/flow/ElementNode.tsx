@@ -4,7 +4,7 @@ import { cn } from "@lib/utils";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useElementTitle } from "@lib/hooks/useElementTitle";
 import { useTranslation } from "@i18n/client";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, ElementProperties } from "@lib/types";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
 
 interface ElementNodeData {
@@ -62,7 +62,9 @@ export const ElementNode = ({ data }: NodeProps) => {
   const element =
     typeof nodeData.elementId === "number" ? getElement(nodeData.elementId) : undefined;
   const isBranchable =
-    !!element && branchableTypes.has(element.type) && (element.properties.choices?.length ?? 0) > 0;
+    !!element &&
+    branchableTypes.has(element.type) &&
+    ((element.properties as ElementProperties<"dropdown">).choices?.length ?? 0) > 0;
   const showsRuleAffordance = isBranchable;
   const showsConnector = showsRuleAffordance && !!nodeData.hasRules;
   const isSelected =

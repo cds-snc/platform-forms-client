@@ -1,5 +1,5 @@
 import { type TemplateStore } from "../../types";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, FormElement, ElementProperties } from "@lib/types";
 import { defaultField } from "../../defaults";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
 import { incrementSubElementId } from "@lib/utils/form-builder";
@@ -17,20 +17,25 @@ export const addSubItem: TemplateStore<"addSubItem"> =
 
         // remove subElements array property given we're adding a sub item
         const subDefaultField = { ...defaultField };
-        const { subElements, ...rest } = subDefaultField.properties;
+        const { subElements, ...rest } =
+          subDefaultField.properties as ElementProperties<"dynamicRow">;
         subDefaultField.properties = rest;
 
+        const parentProperties = state.form.elements[parentIndex]
+          .properties as ElementProperties<"dynamicRow">;
+
         const id = incrementSubElementId(
-          state.form.elements[parentIndex].properties.subElements || [],
+          parentProperties.subElements || [],
           state.form.elements[parentIndex].id
         );
 
-        state.form.elements[parentIndex].properties.subElements?.splice(subIndex + 1, 0, {
+        // caller is responsible for keeping `type` and `data.properties` consistent
+        parentProperties.subElements?.splice(subIndex + 1, 0, {
           ...subDefaultField,
           ...data,
           id,
           type,
-        });
+        } as FormElement);
 
         resolve(id);
       });

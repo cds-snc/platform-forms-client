@@ -12,7 +12,7 @@ import { GroupStoreProps, GroupStoreState } from "./types";
 import { findNextGroup } from "./utils/findNextGroup";
 import { findPreviousGroup } from "./utils/findPreviousGroup";
 import { getGroupFromId } from "./utils/getGroupFromId";
-import { type Group, type GroupsType } from "@gcforms/types";
+import { type Group, type GroupsType, type ElementProperties } from "@gcforms/types";
 import { autoFlowAllNextActions } from "./utils/setNextAction";
 import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
@@ -244,7 +244,8 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       getSubElements: (parentId: number) => {
         const elements = get().templateStore.getState().form.elements;
         const parentElement = elements.find((el) => el.id === parentId);
-        return parentElement?.properties.subElements;
+        return (parentElement?.properties as ElementProperties<"dynamicRow"> | undefined)
+          ?.subElements;
       },
       updateSubElements: (elements: FormElement[], parentId: number) => {
         // Find the parent element
@@ -255,7 +256,9 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         // Write the updated subElements array back to the parent element
         get().templateStore.setState((s) => {
           if (s.form.elements) {
-            s.form.elements[parentElementIndex].properties.subElements = [...elements];
+            (
+              s.form.elements[parentElementIndex].properties as ElementProperties<"dynamicRow">
+            ).subElements = [...elements];
           }
         });
       },

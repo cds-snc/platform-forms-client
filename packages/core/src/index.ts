@@ -53,6 +53,8 @@ export {
   getElementsUsingChoiceId,
   normalizeString,
   truncateField,
+  getSubElements,
+  getChoices,
 } from "./helpers";
 
 export { isSafeRegex } from "./validation/regex";

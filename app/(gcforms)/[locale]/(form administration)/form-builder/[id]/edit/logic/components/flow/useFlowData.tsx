@@ -8,7 +8,7 @@ import {
 import { type Group } from "@gcforms/types";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { FormElement } from "@lib/types";
+import { FormElement, ElementProperties } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import {
   getEndNode,
@@ -102,18 +102,19 @@ const getChoiceLabel = (
   const [elementId, choiceIndex] = choiceId.split(".");
   const element = elements.find((item) => item.id === Number(elementId));
 
-  if (!element?.properties?.choices || typeof choiceIndex === "undefined") {
+  const choices = (element?.properties as ElementProperties<"dropdown"> | undefined)?.choices;
+  if (!choices || typeof choiceIndex === "undefined") {
     return undefined;
   }
 
-  return element.properties.choices[Number(choiceIndex)]?.[lang];
+  return choices[Number(choiceIndex)]?.[lang];
 };
 
 const isBranchableElement = (element?: FormElement) => {
   return (
     !!element &&
     branchableElementTypes.has(element.type) &&
-    (element.properties.choices?.length ?? 0) > 0
+    ((element.properties as ElementProperties<"dropdown">).choices?.length ?? 0) > 0
   );
 };
 

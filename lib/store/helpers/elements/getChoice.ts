@@ -1,4 +1,5 @@
 import { type TemplateStore } from "../../types";
+import { ElementProperties } from "@lib/types";
 
 export const getChoice: TemplateStore<"getChoice"> = (set, get) => (elId, choiceIndex) => {
   if (!get) {
@@ -6,5 +7,7 @@ export const getChoice: TemplateStore<"getChoice"> = (set, get) => (elId, choice
   }
 
   const elIndex = get().form.elements.findIndex((el) => el.id === elId);
-  return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
+  const properties = get().form.elements[elIndex]?.properties as
+    ElementProperties<"dropdown"> | undefined;
+  return properties?.choices?.[choiceIndex];
 };

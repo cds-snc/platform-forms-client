@@ -1,6 +1,12 @@
 import React, { type JSX } from "react";
 import type { Language } from "lib/types/form-builder-types";
-import { FormElement, Responses, PublicFormRecord, GroupsType } from "@gcforms/types";
+import {
+  FormElement,
+  ElementProperties,
+  Responses,
+  PublicFormRecord,
+  GroupsType,
+} from "@gcforms/types";
 import { inGroup } from "@gcforms/core";
 import { FormikProps } from "formik";
 import { ErrorListItem } from "@clientComponents/forms";
@@ -15,7 +21,7 @@ import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 
 export const getFieldType = (formElement: FormElement) => {
-  if (formElement.properties.autoComplete === "email") {
+  if ((formElement.properties as ElementProperties<"textField">).autoComplete === "email") {
     return "email";
   }
 
@@ -73,7 +79,9 @@ export const getErrorList = (
                   let subElement;
 
                   if (dyanamicRowElementErrorValue) {
-                    const subElements = parentElement?.properties.subElements;
+                    const subElements = (
+                      parentElement?.properties as ElementProperties<"dynamicRow"> | undefined
+                    )?.subElements;
                     subElement = subElements && subElements[Number(dynamicRowElementKey)];
                   }
 

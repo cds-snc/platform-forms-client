@@ -3,7 +3,7 @@ import { FieldsetLegend } from ".";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { FormElement } from "@lib/types";
+import { FormElement, ElementProperties } from "@lib/types";
 
 export const TranslateCustomizeSet = ({
   element,
@@ -22,7 +22,7 @@ export const TranslateCustomizeSet = ({
     propertyPath: s.propertyPath,
   }));
 
-  const dynamicRowProps = element.properties.dynamicRow;
+  const dynamicRowProps = (element.properties as ElementProperties<"dynamicRow">).dynamicRow;
 
   if (!dynamicRowProps) {
     return null;
@@ -68,7 +68,7 @@ export const TranslateCustomizeSet = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`row-title-text-french-${element.id}`}
               aria-describedby={`row-title-text-english-desc-${element.id}`}
               value={rowTitleEnValue}
@@ -88,7 +88,7 @@ export const TranslateCustomizeSet = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`row-title-text-french-${element.id}`}
               aria-describedby={`row-title-text-french-desc-${element.id}`}
               value={rowTitleFrValue}
@@ -119,7 +119,7 @@ export const TranslateCustomizeSet = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`add-button-text-english-${element.id}`}
               aria-describedby={`add-button-text-english-desc-${element.id}`}
               value={addButtonEnValue}
@@ -143,7 +143,7 @@ export const TranslateCustomizeSet = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`add-button-text-french-${element.id}`}
               aria-describedby={`add-button-text-french-desc-${element.id}`}
               value={addButtonFrValue}
@@ -177,7 +177,7 @@ export const TranslateCustomizeSet = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`remove-button-text-french-${element.id}`}
               aria-describedby={`remove-button-text-english-desc-${element.id}`}
               value={removeButtonEnValue}
@@ -200,7 +200,7 @@ export const TranslateCustomizeSet = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`remove-button-text-french-${element.id}`}
               aria-describedby={`remove-button-text-french-desc-${element.id}`}
               value={removeButtonFrValue}

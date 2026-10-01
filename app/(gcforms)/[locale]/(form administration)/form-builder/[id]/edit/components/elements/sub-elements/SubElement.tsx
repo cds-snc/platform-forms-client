@@ -3,7 +3,7 @@ import React from "react";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelBodySub } from "../../PanelBodySub";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, ElementProperties } from "@lib/types";
 import {
   LocalizedElementProperties,
   Language,
@@ -42,7 +42,7 @@ export const SubElement = ({
 
   const { refs } = useRefsContext();
 
-  const subElements = item.properties.subElements;
+  const subElements = (item.properties as ElementProperties<"dynamicRow">).subElements;
 
   const { hasApiKeyId } = useFormBuilderConfig();
 
@@ -80,7 +80,7 @@ export const SubElement = ({
 
   if (!subElements || subElements.length < 1)
     return (
-      <div className="ml-4 mt-10" data-id={item.id}>
+      <div className="mt-10 ml-4" data-id={item.id}>
         <AddToSetButton
           handleAdd={async (type?: FormElementTypes) => {
             const id = await handleAddSubElement(item.id, 0, type);
@@ -133,7 +133,7 @@ export const SubElement = ({
                   "pt-4",
                   !hasApiKeyId &&
                     item.type === FormElementTypes.fileInput &&
-                    "bg-red-50 hover:bg-red-50 focus-within:bg-red-50 px-4 py-2"
+                    "bg-red-50 px-4 py-2 focus-within:bg-red-50 hover:bg-red-50"
                 )}
               >
                 <PanelBodySub
@@ -150,7 +150,7 @@ export const SubElement = ({
       })}
 
       {subElements.length >= 1 && (
-        <div className="mb-2 ml-4 mt-4" data-id={item.id}>
+        <div className="mt-4 mb-2 ml-4" data-id={item.id}>
           <AddToSetButton
             handleAdd={async (type?: FormElementTypes) => {
               const id = await handleAddSubElement(item.id, subElements.length, type);

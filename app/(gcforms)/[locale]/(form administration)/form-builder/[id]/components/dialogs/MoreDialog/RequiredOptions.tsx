@@ -1,19 +1,18 @@
 import { useTranslation } from "@i18n/client";
 import { FormElement, ValidationCheckboxLike } from "@lib/types";
 
-// this dialog renders for every element type; `all` only applies to checkbox-like ones
-type RequiredElement = FormElement & { properties: { validation?: ValidationCheckboxLike } };
-
 export const RequiredOptions = ({
   item,
   setItem,
 }: {
-  item: RequiredElement;
+  item: FormElement;
   setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const checked = item.properties.validation?.required;
-  const allRequired = item.properties.validation?.all;
+  // renders for every element type; `all` only applies to checkbox-like ones
+  const validation = item.properties.validation as ValidationCheckboxLike | undefined;
+  const checked = validation?.required;
+  const allRequired = validation?.all;
 
   return (
     <section className="mb-4">
@@ -38,7 +37,7 @@ export const RequiredOptions = ({
                 ...item.properties,
                 ...{ validation },
               },
-            });
+            } as FormElement);
           }}
         />
         <label

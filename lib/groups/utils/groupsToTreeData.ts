@@ -1,6 +1,7 @@
 import { type GroupsType } from "@gcforms/types";
 import { TreeItems } from "@formBuilder/components/shared/right-panel/headless-treeview/types";
 import { FormElement } from "@lib/types";
+import { getSubElements } from "@gcforms/core";
 import { resetLockedSections } from "@lib/formContext";
 
 export type TreeDataOptions = {
@@ -135,8 +136,9 @@ export const groupsToTreeData = (
       // Build tree data for sub elements if they exist
       const itemChildren: string[] = [];
 
-      if (element.properties.subElements && element.properties.subElements.length > 0) {
-        const treeItems = subElementsToTreeData(element.id, element.properties.subElements);
+      const subElements = getSubElements(element);
+      if (subElements && subElements.length > 0) {
+        const treeItems = subElementsToTreeData(element.id, subElements);
 
         for (const treeItem of treeItems) {
           items[treeItem.index] = treeItem;

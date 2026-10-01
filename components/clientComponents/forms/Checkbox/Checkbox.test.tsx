@@ -7,7 +7,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, it, expect, afterEach } from "vitest";
 import { GenerateElement } from "@lib/formBuilder";
 import { Formik } from "formik";
-import type { FormElement } from "@gcforms/types";
+import type { FormElement, ElementProperties } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 
 type Choice = { en: string; fr: string };
@@ -50,7 +50,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
     const description =
       lang === "en" ? checkboxData.properties.descriptionEn : checkboxData.properties.descriptionFr;
 
-    const choices = checkboxData.properties.choices as Choice[];
+    const choices = (checkboxData.properties as ElementProperties<"checkbox">).choices as Choice[];
     choices.forEach((input) => {
       expect(screen.getByText(input[lang])).toBeInTheDocument();
     });

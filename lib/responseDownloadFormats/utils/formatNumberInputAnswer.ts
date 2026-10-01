@@ -1,7 +1,7 @@
 import { formatNumberForDisplay } from "@clientComponents/forms/NumberInput/utils";
 import { getElementOrSubElementById } from "@gcforms/core";
 import { Language } from "@lib/types/form-builder-types";
-import { FormElementTypes, FormRecord } from "@lib/types";
+import { FormElementTypes, FormRecord, ElementProperties } from "@lib/types";
 
 import { Answer } from "../types";
 
@@ -23,9 +23,10 @@ export const formatNumberInputAnswer = (
     return String(item.answer);
   }
 
+  const numberProperties = element?.properties as ElementProperties<"numberInput"> | undefined;
   return formatNumberForDisplay(rawNumber, lang, {
-    currencyCode: element?.properties.currencyCode,
-    stepCount: element?.properties.stepCount,
-    useThousandsSeparator: element?.properties.useThousandsSeparator,
+    currencyCode: numberProperties?.currencyCode,
+    stepCount: numberProperties?.stepCount,
+    useThousandsSeparator: numberProperties?.useThousandsSeparator,
   });
 };

@@ -1,6 +1,8 @@
 import { FormElement, FormElementTypes } from "../types";
 
-export const defaultField: FormElement = {
+// seeds every possible per-type optional field; downstream type changes (createElement)
+// determine which of them end up meaningful - see lib/utils/form-builder/itemHelper.ts
+export const defaultField = {
   id: 0,
   type: FormElementTypes.textField,
   properties: {
@@ -17,7 +19,7 @@ export const defaultField: FormElement = {
     placeholderFr: "",
     conditionalRules: undefined,
   },
-};
+} as unknown as FormElement;
 
 export const defaultForm = {
   titleEn: "",

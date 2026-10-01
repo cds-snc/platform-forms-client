@@ -44,7 +44,7 @@ export const Question = ({
                   e.target.value,
               },
             },
-          });
+          } as FormElement);
         }}
       />
     </div>

@@ -1,4 +1,4 @@
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, ElementProperties } from "@lib/types";
 import { useTranslation } from "@root/i18n/client";
 import { useState } from "react";
 
@@ -12,17 +12,20 @@ export const ManagedDataOptions = ({
   const { t } = useTranslation("form-builder");
   let initialManagedChoices: string[] = [];
 
-  if (typeof item.properties.managedChoices === "string") {
-    initialManagedChoices = [item.properties.managedChoices];
+  // only rendered for combobox, so properties is narrowed accordingly
+  const properties = item.properties as ElementProperties<"combobox">;
+
+  if (typeof properties.managedChoices === "string") {
+    initialManagedChoices = [properties.managedChoices];
   }
 
-  if (Array.isArray(item.properties.managedChoices)) {
-    initialManagedChoices = item.properties.managedChoices;
+  if (Array.isArray(properties.managedChoices)) {
+    initialManagedChoices = properties.managedChoices;
   }
 
   const [managedChoices, setManagedChoices] = useState<string[]>(initialManagedChoices);
 
-  if (item.type !== FormElementTypes.combobox || !item.properties.managedChoices) {
+  if (item.type !== FormElementTypes.combobox || !properties.managedChoices) {
     return null;
   }
 

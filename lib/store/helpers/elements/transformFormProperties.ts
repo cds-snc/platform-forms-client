@@ -34,7 +34,8 @@ const ensureUUID = (element: FormElement) => {
 const updateNumberInputType = (element: FormElement) => {
   const validation = element.properties.validation as ValidationTextInput | undefined;
   if (element.type === FormElementTypes.textField && validation?.type === "number") {
-    element.type = FormElementTypes.numberInput;
+    // retype in place; properties still carry the legacy validation.type marker
+    (element as { type: FormElementTypes }).type = FormElementTypes.numberInput;
   }
 };
 

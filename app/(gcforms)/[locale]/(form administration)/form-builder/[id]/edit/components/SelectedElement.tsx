@@ -5,6 +5,7 @@ import {
   ValidationInputType,
   ValidationTextInput,
   ValidationCheckboxLike,
+  ElementProperties,
 } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 
@@ -34,8 +35,9 @@ const filterSelected = (
   /**
    * If the item has an autoComplete property, set selected item to its corresponding pseudo-type
    */
-  if (item.properties.autoComplete) {
-    const autoCompleteValue = item.properties.autoComplete;
+  const autoComplete = (item.properties as ElementProperties<"textField">).autoComplete;
+  if (autoComplete) {
+    const autoCompleteValue = autoComplete;
     const selected = elementOptions.filter((item) => item.id === autoCompleteValue);
     return selected && selected.length ? selected[0] : currentSelectedItem;
   }
@@ -154,7 +156,7 @@ export const SelectedElement = ({
       if (elIndex !== -1) {
         element = <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />;
       } else {
-        const sortOrder = item.properties.sortOrder;
+        const sortOrder = (item.properties as ElementProperties<"dropdown">).sortOrder;
         const sortOptions = sortOrder ? t(`sortOptions.${sortOrder}`) : t("sortOptions.none");
         element = (
           <>
@@ -163,14 +165,15 @@ export const SelectedElement = ({
               <span className="mr-2 inline-block">{t("sortOptions.label")}</span>
               {sortOptions}
             </div>
-            {!item.properties.managedChoices && (
+            {!(item.properties as ElementProperties<"dropdown">).managedChoices && (
               <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
             )}
           </>
         );
       }
       break;
-    case "combobox":
+    case "combobox": {
+      const comboboxProperties = item.properties as ElementProperties<"combobox">;
       if (elIndex !== -1) {
         element = (
           <>
@@ -178,7 +181,7 @@ export const SelectedElement = ({
               <>
                 {t("addElementDialog.combobox.title")}
 
-                {item.properties.strictValue && (
+                {comboboxProperties.strictValue && (
                   <div className="ml-2 inline-block text-sm text-slate-600">
                     - {t("strictValue.description")}
                   </div>
@@ -186,7 +189,7 @@ export const SelectedElement = ({
               </>
             </ShortAnswer>
 
-            {!item.properties.managedChoices && <SubOptions item={item} />}
+            {!comboboxProperties.managedChoices && <SubOptions item={item} />}
           </>
         );
       } else {
@@ -196,7 +199,7 @@ export const SelectedElement = ({
               <>
                 {t("addElementDialog.combobox.title")}
 
-                {item.properties.strictValue && (
+                {comboboxProperties.strictValue && (
                   <div className="ml-2 inline-block text-sm text-slate-600">
                     - {t("strictValue.description")}
                   </div>
@@ -204,11 +207,12 @@ export const SelectedElement = ({
               </>
             </ShortAnswer>
 
-            {!item.properties.managedChoices && <Options item={item} formId={formId} />}
+            {!comboboxProperties.managedChoices && <Options item={item} formId={formId} />}
           </>
         );
       }
       break;
+    }
     case "email":
       element = <ShortAnswer data-testid="email">name@example.com</ShortAnswer>;
       break;
@@ -223,7 +227,9 @@ export const SelectedElement = ({
         <DateElement
           data-testid="formattedDate"
           dateFormat={
-            item.properties.dateFormat ? (item.properties.dateFormat as DateFormat) : undefined
+            (item.properties as ElementProperties<"formattedDate">).dateFormat
+              ? ((item.properties as ElementProperties<"formattedDate">).dateFormat as DateFormat)
+              : undefined
           }
         />
       );

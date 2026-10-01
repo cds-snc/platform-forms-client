@@ -3,7 +3,7 @@ import React, { useMemo, useState, useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
-import { FormElement } from "@lib/types";
+import { FormElement, ElementProperties } from "@lib/types";
 import { type GroupsType } from "@gcforms/types";
 
 import { GroupSelect } from "./GroupSelect";
@@ -74,10 +74,12 @@ const GroupAndChoiceSelect = ({
   groupItems = groupItems.filter((item) => item.value !== currentGroup && item.value !== "end");
 
   const choices = useMemo(() => {
-    return choiceElement?.properties.choices?.map((choice, index) => {
-      const result = { label: choice[language], value: `${choiceElement.id}.${index}` };
-      return result;
-    });
+    return (choiceElement?.properties as ElementProperties<"dropdown"> | undefined)?.choices?.map(
+      (choice, index) => {
+        const result = { label: choice[language], value: `${choiceElement?.id}.${index}` };
+        return result;
+      }
+    );
   }, [choiceElement, language]);
 
   // Filter out choices that are already used in other rules

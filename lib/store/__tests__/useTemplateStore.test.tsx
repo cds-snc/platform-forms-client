@@ -6,7 +6,7 @@ import React, { useContext, useEffect } from "react";
 import { useTemplateStore, TemplateStoreProvider, TemplateStoreContext } from "../useTemplateStore";
 import { render, renderHook, act, waitFor } from "@testing-library/react";
 import { NotificationsIntervalDefault } from "@gcforms/types";
-import { FormRecord, ValidationTextInput } from "@lib/types";
+import { FormRecord, ValidationTextInput, ElementProperties } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { CURRENT_TEMPLATE_VERSION } from "@lib/templates/schemaVersioning/migrations";
@@ -257,7 +257,9 @@ describe("TemplateStore", () => {
     expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements).toHaveLength(1);
     expect(result.current.form.elements[0].properties.titleEn).toBe("");
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(0);
+    expect(
+      (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices
+    ).toHaveLength(0);
 
     // Add a choice to the element
     act(() => {
@@ -265,12 +267,18 @@ describe("TemplateStore", () => {
     });
 
     // Default choice expectations
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
+    expect(
+      (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices
+    ).toHaveLength(1);
 
-    if (result.current.form.elements[0].properties.choices) {
-      expect(result.current.form.elements[0].properties.choices[0]).toEqual({ en: "", fr: "" });
+    if ((result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices) {
+      expect(
+        (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices?.[0]
+      ).toEqual({ en: "", fr: "" });
     } else {
-      expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
+      expect(
+        (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices
+      ).not.toBeFalsy(); // fails if it is called
     }
 
     await act(async () => {
@@ -289,7 +297,9 @@ describe("TemplateStore", () => {
       }
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(MAX_CHOICE_AMOUNT);
+    expect(
+      (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices
+    ).toHaveLength(MAX_CHOICE_AMOUNT);
 
     await act(async () => {
       await promise;
@@ -307,13 +317,17 @@ describe("TemplateStore", () => {
       result.current.updateField(`form.elements[0].properties.choices[0].fr`, "l'option 1!!");
     });
 
-    if (result.current.form.elements[0].properties.choices) {
-      expect(result.current.form.elements[0].properties.choices[0]).toEqual({
+    if ((result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices) {
+      expect(
+        (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices?.[0]
+      ).toEqual({
         en: "option 1!!",
         fr: "l'option 1!!",
       });
     } else {
-      expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
+      expect(
+        (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices
+      ).not.toBeFalsy(); // fails if it is called
     }
 
     await act(async () => {
@@ -332,14 +346,18 @@ describe("TemplateStore", () => {
       result.current.addChoice(0);
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
+    expect(
+      (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices
+    ).toHaveLength(2);
 
     // Remove one choice
     act(() => {
       result.current.removeChoice(0, 0);
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
+    expect(
+      (result.current.form.elements[0].properties as ElementProperties<"dropdown">).choices
+    ).toHaveLength(1);
 
     await act(async () => {
       await promise;

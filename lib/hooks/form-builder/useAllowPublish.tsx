@@ -1,7 +1,13 @@
 "use client";
 import { useCallback, useMemo } from "react";
 
-import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "@lib/types";
+import {
+  FormElement,
+  FormElementTypes,
+  FormProperties,
+  PropertyChoices,
+  ElementProperties,
+} from "@lib/types";
 import { Description, publishRequiredFields, Title } from "../../types/form-builder-types";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useAccessControl } from "../useAccessControl";
@@ -59,8 +65,9 @@ export const isFormElementTranslated = (element: FormElement) => {
     ];
     if (allowedTypes.includes(element.type)) {
       // Check choices if there are any
-      if (element.properties.choices) {
-        areChoicesTranslated(element.properties.choices);
+      const choices = (element.properties as ElementProperties<"dropdown">).choices;
+      if (choices) {
+        areChoicesTranslated(choices);
       }
     }
   }
@@ -108,7 +115,10 @@ export const useAllowPublish = () => {
           // Check if the current element is a file input
           element.type === FormElementTypes.fileInput ||
           // Check sub-elements if they exist
-          (element.properties?.subElements && checkForFileInput(element.properties.subElements))
+          (() => {
+            const subElements = (element.properties as ElementProperties<"dynamicRow">).subElements;
+            return subElements && checkForFileInput(subElements);
+          })()
       );
     };
 

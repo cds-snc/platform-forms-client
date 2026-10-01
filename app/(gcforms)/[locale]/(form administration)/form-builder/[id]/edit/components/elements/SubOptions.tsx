@@ -6,7 +6,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SubOption } from "./SubOption";
 import { Button } from "@clientComponents/globals";
 import { ChoiceOptionsCsvUpload } from "@clientComponents/forms/ChoiceOptionsCsvUpload";
-import { FormElementTypes, type PropertyChoices } from "@lib/types";
+import { FormElementTypes, type PropertyChoices, type ElementProperties } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 import { CopyChoiceOptionsCsvButton } from "@formBuilder/[id]/edit/components/CopyChoiceOptionsCsvButton";
@@ -102,7 +102,7 @@ export const SubOptions = ({
   const subIndex = item.index;
 
   const element = getFormElementById(item.id);
-  const choices = element?.properties.choices;
+  const choices = (element?.properties as ElementProperties<"dropdown"> | undefined)?.choices;
   const indexes = getFormElementIndexes(item.id);
   const allowCsvUpload = [
     FormElementTypes.radio,
@@ -142,7 +142,7 @@ export const SubOptions = ({
     );
   }
 
-  const options = choices.map((child, choiceIndex) => {
+  const options = choices.map((child: PropertyChoices, choiceIndex: number) => {
     if (!child || !item) return null;
 
     const initialValue = choices?.[choiceIndex][translationLanguagePriority] ?? "";

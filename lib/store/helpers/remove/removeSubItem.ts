@@ -1,4 +1,5 @@
 import { type TemplateStore } from "../../types";
+import { ElementProperties } from "@lib/types";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
 import { removeElementById } from "@lib/utils/form-builder";
 
@@ -8,12 +9,11 @@ export const removeSubItem: TemplateStore<"removeSubItem"> = (set) => (elId, ele
 
     if (parentIndex === undefined) return;
 
-    const subElements = state.form.elements[parentIndex].properties?.subElements;
+    const parentProperties = state.form.elements[parentIndex]
+      .properties as ElementProperties<"dynamicRow">;
+    const subElements = parentProperties.subElements;
     if (subElements) {
-      state.form.elements[parentIndex].properties.subElements = removeElementById(
-        subElements,
-        elementId
-      );
+      parentProperties.subElements = removeElementById(subElements, elementId);
     }
   });
 };

@@ -1,4 +1,4 @@
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, ElementProperties } from "@lib/types";
 import {
   AddressCompleteLabels,
   AddressElements,
@@ -37,7 +37,8 @@ export const getSplitAddressAsFormItem = (
     return;
   }
 
-  const canadaOnly = element.properties.addressComponents?.canadianOnly;
+  const canadaOnly = (element.properties as ElementProperties<"addressComplete">).addressComponents
+    ?.canadianOnly;
   const titleSet = {
     streetAddress: `${addressCompleteStrings.streetAddress}`,
     city: `${addressCompleteStrings.city}`,

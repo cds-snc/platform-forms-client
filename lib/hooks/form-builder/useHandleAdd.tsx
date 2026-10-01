@@ -1,6 +1,6 @@
 "use client";
 import { useCallback } from "react";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, FormElement } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { blockLoader } from "../../utils/form-builder/blockLoader";
 import { elementLoader } from "@lib/utils/form-builder/elementLoader";
@@ -40,11 +40,12 @@ export const useHandleAdd = () => {
   const groupId = useGroupStore((state) => state.id);
 
   const create = useCallback(async (type: FormElementTypes) => {
+    // seeded the same way as defaultField/createElement - see itemHelper.ts
     const defaults = {
       ...defaultField,
       uuid: uuid(),
       properties: { ...defaultField.properties, validation: { required: false } },
-    };
+    } as unknown as FormElement;
 
     const labels = await getTranslatedElementProperties(type);
     const descriptionEn = labels.description.en;

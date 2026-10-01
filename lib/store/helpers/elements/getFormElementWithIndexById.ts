@@ -1,4 +1,5 @@
 import { type TemplateStore } from "../../types";
+import { getSubElements } from "@gcforms/core";
 
 export const getFormElementWithIndexById: TemplateStore<"getFormElementWithIndexById"> =
   (set, get) => (id) => {
@@ -15,9 +16,10 @@ export const getFormElementWithIndexById: TemplateStore<"getFormElementWithIndex
         return { ...element, index };
       }
 
-      if (element.properties?.subElements) {
-        for (let subIndex = 0; subIndex < element.properties.subElements.length; subIndex++) {
-          const subElement = element.properties.subElements[subIndex];
+      const subElements = getSubElements(element);
+      if (subElements) {
+        for (let subIndex = 0; subIndex < subElements.length; subIndex++) {
+          const subElement = subElements[subIndex];
           if (subElement && subElement.id === id) {
             return { ...subElement, index: subIndex };
           }

@@ -3,7 +3,7 @@ import {
   type AddressElements,
 } from "@clientComponents/forms/AddressComplete/types";
 import { LocalizedFormProperties, type Language } from "@lib/types/form-builder-types";
-import { type AddressComponents } from "@lib/types";
+import { type AddressComponents, type ElementProperties } from "@lib/types";
 import { FormItem } from "../../helpers";
 import { getLocalizedProperty, safeJSONParse } from "@lib/utils";
 import { BaseElementArray } from "../BaseElementArray";
@@ -22,7 +22,9 @@ export const AddressComplete = ({
 }): React.ReactElement => {
   const { t } = customTranslate("review");
   const element = formItem.element;
-  const addressComponents = element?.properties?.addressComponents as AddressComponents;
+  const addressComponents = (
+    element?.properties as ElementProperties<"addressComplete"> | undefined
+  )?.addressComponents as AddressComponents;
   const addressFormValue = formItem.values;
   const addressValues = safeJSONParse(addressFormValue as string) as AddressElements;
 

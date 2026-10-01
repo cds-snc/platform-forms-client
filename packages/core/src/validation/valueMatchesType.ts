@@ -1,4 +1,10 @@
-import { FormElement, FormElementTypes, Responses, DateObject } from "@gcforms/types";
+import {
+  FormElement,
+  ElementProperties,
+  FormElementTypes,
+  Responses,
+  DateObject,
+} from "@gcforms/types";
 import { isValidDate } from "../validation/date";
 import { isValidEmail } from "../validation/isValidEmail";
 import { isFileExtensionValid } from "../validation/file";
@@ -66,7 +72,7 @@ export const valueMatches = (
       return false;
     case FormElementTypes.textField:
       // Email validation
-      if (formElement.properties.autoComplete === "email") {
+      if ((formElement.properties as ElementProperties<"textField">).autoComplete === "email") {
         if (typeof value !== "string" || (value && !isValidEmail(value))) {
           return false;
         }
@@ -114,15 +120,16 @@ export const valueMatches = (
         return false;
       }
 
+      const dynamicRowProperties = formElement.properties as ElementProperties<"dynamicRow">;
       const rowErrors = [];
       let rowCounter = 0;
       for (const row of value as Array<Responses>) {
         for (const [responseKey, responseValue] of Object.entries(row)) {
           if (
-            formElement.properties.subElements &&
-            formElement.properties.subElements[parseInt(responseKey)]
+            dynamicRowProperties.subElements &&
+            dynamicRowProperties.subElements[parseInt(responseKey)]
           ) {
-            const subElement = formElement.properties.subElements[parseInt(responseKey)];
+            const subElement = dynamicRowProperties.subElements[parseInt(responseKey)];
 
             if (!hasValue(responseValue)) {
               // We don't have a value to validate

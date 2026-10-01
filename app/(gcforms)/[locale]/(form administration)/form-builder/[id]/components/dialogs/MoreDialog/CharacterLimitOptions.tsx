@@ -52,7 +52,7 @@ export const CharacterLimitOptions = ({
                     },
                   },
                 },
-              });
+              } as FormElement);
               return;
             }
 
@@ -68,7 +68,7 @@ export const CharacterLimitOptions = ({
                   ...item.properties,
                   ...{ validation },
                 },
-              });
+              } as FormElement);
             }
           }}
         />
