@@ -56,10 +56,12 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
     "Date of submission \nDate de soumission"
   );
 
-  header.push(
-    "Receipt codes \nCodes de réception",
-    "Response attachments \nPièces jointes de la réponse"
-  );
+  if (hasAttachments) {
+    header.push(
+      "Receipt codes \nCodes de réception",
+      "Response attachments \nPièces jointes de la réponse"
+    );
+  }
 
   const csvStringifier = createCsvStringifier({
     header: header,
@@ -107,21 +109,24 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
       }
       return answerText;
     });
-    return [
-      response.id,
-      new Date(response.createdAt).toISOString(),
-      ...answers,
-      "Receipt codes are in the Official receipt and record of responses\n" +
-        "Les codes de réception sont dans le Reçu et registre officiel des réponses",
-      response.attachments?.length
-        ? getResponseAttachmentsUrl({
-            origin,
-            locale: "en",
-            formId: formResponseSubmissions.formRecord.id,
-            responseId: response.id,
-          })
-        : "-",
-    ];
+    const record = [response.id, new Date(response.createdAt).toISOString(), ...answers];
+
+    if (hasAttachments) {
+      record.push(
+        "Receipt codes are in the Official receipt and record of responses\n" +
+          "Les codes de réception sont dans le Reçu et registre officiel des réponses",
+        response.attachments?.length
+          ? getResponseAttachmentsUrl({
+              origin,
+              locale: "en",
+              formId: formResponseSubmissions.formRecord.id,
+              responseId: response.id,
+            })
+          : "-"
+      );
+    }
+
+    return record;
   });
 
   return csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records);
