@@ -51,7 +51,7 @@ export default async function Layout(props: {
           <div
             className={`tablet:w-[768px] has-[#auth-panel]:tablet:w-[658px] laptop:w-[850px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
           >
-            <main id="content">
+            <main id="content" tabIndex={-1}>
               <Link
                 className="mr-10 mb-6 inline-flex no-underline focus:bg-white"
                 href={`/${locale}/form-builder`}

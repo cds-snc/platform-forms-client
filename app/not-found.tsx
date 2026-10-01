@@ -5,6 +5,7 @@ import { Metadata } from "next";
 
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { Footer } from "@serverComponents/globals/Footer";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { languages } from "@i18n/settings";
 import { cookies } from "next/headers";
@@ -26,9 +27,15 @@ export default async function NotFound() {
 
   return (
     <div className="flex h-full flex-col">
-      <GcdsHeader pathname="" showLanguageToggle={false} language={locale as Language} />
+      <SkipLink />
+      <GcdsHeader
+        pathname=""
+        showLanguageToggle={false}
+        language={locale as Language}
+        skipLink={false}
+      />
       <div id="page-container">
-        <main id="content">
+        <main id="content" tabIndex={-1}>
           <div className="mt-10">
             <ErrorPanel headingTag="h1" title={t("404.title")}>
               <p>{t("404.body")}</p>
