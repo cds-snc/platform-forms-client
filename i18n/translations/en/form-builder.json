@@ -1448,6 +1448,11 @@
     "translateTitle": "Page title",
     "addRule": "Add branch",
     "saveRule": "Save",
+    "invalidNextAction": {
+      "title": "Cannot save navigation rule",
+      "message": "You cannot set {{source}} to go to {{target}} because it would create a cycle.",
+      "okay": "OK"
+    },
     "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
