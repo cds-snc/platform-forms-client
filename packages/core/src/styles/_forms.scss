@@ -52,7 +52,8 @@
 }
 
 .gc-description {
-  @apply text-gray-text mb-3 w-3/4 text-sm md:text-xs xl:w-full;
+  @apply mb-3 w-full text-base leading-7;
+  color: var(--gcds-hint-text);
 }
 
 .gc-formview .gc-richText p:has(+ ul, + ol) {
