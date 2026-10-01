@@ -108,6 +108,7 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
         expect(radio).not.toHaveAttribute("aria-describedby");
       });
       expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-1");
+      expect(screen.getByRole("group")).not.toHaveAttribute("aria-describedby");
     });
   }
 );

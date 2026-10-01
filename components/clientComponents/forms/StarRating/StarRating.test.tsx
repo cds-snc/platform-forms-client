@@ -110,4 +110,19 @@ describe("StarRating", () => {
     expect(error).toHaveAttribute("id", "errorMessage-rating");
     expect(error).toHaveTextContent("Select a rating");
   });
+
+  it("does not duplicate the validation error on the generated fieldset", () => {
+    render(
+      <Formik
+        initialValues={{ "1": "" }}
+        initialErrors={{ "1": "Select a rating" }}
+        initialTouched={{ "1": true }}
+        onSubmit={vi.fn()}
+      >
+        <GenerateElement element={starRatingData} language={"en" as Language} isTestMode={true} />
+      </Formik>
+    );
+
+    expect(screen.getByRole("group")).not.toHaveAttribute("aria-describedby");
+  });
 });

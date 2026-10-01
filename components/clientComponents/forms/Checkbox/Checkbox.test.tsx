@@ -136,5 +136,6 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Checkbox component", (lang
       expect(checkbox).not.toHaveAttribute("aria-describedby");
     });
     expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-8");
+    expect(screen.getByRole("group")).not.toHaveAttribute("aria-describedby");
   });
 });
