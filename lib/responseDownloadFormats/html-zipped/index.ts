@@ -4,7 +4,7 @@ import { FormResponseSubmissions } from "../types";
 import { Language } from "@root/lib/types/form-builder-types";
 import { transform as transformAggregated } from "../html-aggregated";
 import { serverTranslation } from "@root/i18n";
-import { getOrigin } from "@lib/origin";
+import { allowedOrigin, getOrigin } from "@lib/origin";
 import { getResponseAttachmentsUrl } from "../attachmentDownloadUrl";
 
 export const transform = async (
@@ -15,7 +15,7 @@ export const transform = async (
 
   const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
   const receipt = await transformAggregated(formResponseSubmissions, lang);
-  const origin = await getOrigin();
+  const origin = allowedOrigin ?? (await getOrigin());
   const responses = formResponseSubmissions.submissions.map((response) => {
     const responseAttachmentsUrl = response.attachments?.length
       ? getResponseAttachmentsUrl({
