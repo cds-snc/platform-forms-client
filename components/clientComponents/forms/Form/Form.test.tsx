@@ -1,13 +1,14 @@
 /**
  * @vitest-environment jsdom
  */
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Field } from "formik";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FormStatus } from "@gcforms/types";
 
 import { Form } from "./Form";
 import { type FormProps } from "./types";
+import { EventKeys } from "@lib/hooks/useCustomEvent";
 
 const mocks = vi.hoisted(() => ({
   executeCaptcha: vi.fn(),
@@ -365,6 +366,30 @@ describe("Form", () => {
 
     expect(mocks.executeCaptcha).not.toHaveBeenCalled();
     expect(mocks.submitForm).not.toHaveBeenCalled();
+  });
+
+  it("does not refocus the validation summary on a later render", async () => {
+    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+    mocks.getErrorList.mockReturnValue(<div>Required</div>);
+
+    const formProps = createFormProps();
+    const { rerender } = render(<Form {...formProps} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
+    mocks.setFocusOnErrorMessage.mockClear();
+
+    act(() => {
+      document.dispatchEvent(new Event(EventKeys.continueValidationError));
+    });
+
+    await waitFor(() => expect(mocks.setFocusOnErrorMessage).toHaveBeenCalledOnce());
+    mocks.setFocusOnErrorMessage.mockClear();
+
+    rerender(<Form {...formProps} />);
+
+    expect(mocks.setFocusOnErrorMessage).not.toHaveBeenCalled();
   });
 
   it("does not submit when hCaptcha blocks the request", async () => {
