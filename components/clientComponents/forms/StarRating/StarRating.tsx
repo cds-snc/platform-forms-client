@@ -13,7 +13,7 @@ interface StarRatingProps extends InputFieldProps {
 }
 
 export const StarRating = (props: StarRatingProps): React.ReactElement => {
-  const { name, required, numberOfStars = 5, id, lang } = props;
+  const { ariaDescribedBy, name, required, numberOfStars = 5, id, lang } = props;
   const [field, meta, helpers] = useField(name);
   const [hovered, setHovered] = useState<number | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
@@ -84,7 +84,10 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
   );
 
   const errorMessageId = getErrorMessageId(id);
-  const describedByIds = getDescribedByIds(meta.error ? errorMessageId : undefined);
+  const describedByIds = getDescribedByIds(
+    meta.error ? errorMessageId : undefined,
+    ariaDescribedBy
+  );
 
   return (
     <div>

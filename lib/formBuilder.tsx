@@ -264,13 +264,14 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
     case FormElementTypes.starRating: {
       const numberOfStars = element.properties.numberOfStars ?? 5;
       return (
-        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+        <FormGroup name={`${id}`}>
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <StarRating
             id={`${id}`}
             name={`${id}`}
             required={isRequired}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             numberOfStars={numberOfStars}
             lang={lang}
           />

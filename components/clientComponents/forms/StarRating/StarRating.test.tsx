@@ -16,6 +16,8 @@ const starRatingData = {
   properties: {
     titleEn: "Rating",
     titleFr: "Évaluation",
+    descriptionEn: "Choose a rating from one to five stars.",
+    descriptionFr: "Choisissez une note de une à cinq étoiles.",
     validation: {
       required: true,
     },
@@ -80,6 +82,21 @@ describe("StarRating", () => {
     expect(group).toHaveAccessibleName("Rating");
     expect(group).toHaveAttribute("aria-required", "true");
     expect(screen.getByTestId("label").querySelector(".visually-hidden")).not.toBeInTheDocument();
+  });
+
+  it("associates the generated hint with the radiogroup", () => {
+    render(
+      <Formik onSubmit={vi.fn()} initialValues={{}}>
+        <GenerateElement element={starRatingData} language={"en" as Language} isTestMode={true} />
+      </Formik>
+    );
+
+    const group = screen.getByRole("radiogroup");
+    const fieldset = screen.getByRole("group");
+
+    expect(group).toHaveAccessibleDescription("Choose a rating from one to five stars.");
+    expect(group).toHaveAttribute("aria-describedby", "desc-1");
+    expect(fieldset).not.toHaveAttribute("aria-describedby");
   });
 
   it("associates a validation error with the radiogroup", () => {
