@@ -5,7 +5,7 @@ import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import { GenerateElement } from "@lib/formBuilder";
 import { Formik } from "formik";
-import type { FormElement } from "@gcforms/types";
+import type { FormElement, ElementProperties } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 
 type Choice = { en: string; fr: string };
@@ -55,7 +55,8 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)(
         expect(radio).toBeInTheDocument();
       });
       // Choices properly render
-      const choices = radioButtonData.properties.choices as Choice[];
+      const choices = (radioButtonData.properties as ElementProperties<"radio">)
+        .choices as Choice[];
       choices.forEach((choice) => expect(screen.getByText(choice[lang])).toBeInTheDocument());
       // Field is required
       expect(screen.queryByTestId("required")).toBeInTheDocument();

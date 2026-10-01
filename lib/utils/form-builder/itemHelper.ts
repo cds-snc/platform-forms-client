@@ -18,6 +18,19 @@ type ElementType =
   | "contact"
   | "address";
 
+// `defaultField`/`createElement`/`updateTextElement` transmute one shared template into any of
+// the 14+ element shapes by reassigning `type` and adding/removing type-specific properties - a
+// loosened internal shape is used here rather than per-call casts at every mutation site.
+type MutableElement = {
+  id: number;
+  uuid?: string;
+  subId?: string;
+  type: FormElementTypes;
+  properties: Record<string, unknown>;
+  onchange?: FormElement["onchange"];
+  brand?: FormElement["brand"];
+};
+
 function isTextField(type: string) {
   return (
     ["textArea", "textField"].includes(type) ||
@@ -26,7 +39,9 @@ function isTextField(type: string) {
   );
 }
 
-export const defaultField: FormElement = {
+// seeds every possible per-type optional field (choices, subElements, etc.); the `type` assigned
+// by createElement below determines which of them end up meaningful
+export const defaultField = {
   id: 0,
   type: FormElementTypes.textField,
   properties: {
@@ -44,7 +59,7 @@ export const defaultField: FormElement = {
     placeholderEn: "",
     placeholderFr: "",
   },
-};
+} as unknown as FormElement;
 
 export const localizeField = <LocalizedProperty extends string>(
   field: LocalizedProperty,
@@ -59,11 +74,11 @@ const setLocalizedProperty = (
   lang: Language = "en",
   property: LocalizedElementProperties,
   value: string
-) => {
+): FormElement => {
   return {
     ...element,
     properties: { ...element.properties, [localizeField(property, lang)]: value },
-  };
+  } as FormElement;
 };
 
 export const setTitle = (
@@ -82,54 +97,57 @@ export const setDescription = (
   return setLocalizedProperty(element, lang, LocalizedElementProperties.DESCRIPTION, value);
 };
 
-const updateTextElement = (element: FormElement, type: ElementType) => {
-  const newElement = { ...element };
+const updateTextElement = (element: FormElement, type: ElementType): FormElement => {
+  const newElement = { ...element } as unknown as MutableElement;
   if (type === "textArea" || type === "textField") {
     newElement.type = type as FormElementTypes;
-    return newElement;
+    return newElement as unknown as FormElement;
   }
+
+  const validation = newElement.properties.validation as { required?: boolean } | undefined;
 
   if (isValidatedTextType(type as FormElementTypes) && isAutoCompleteField(type)) {
     newElement.properties.validation = {
-      ...newElement.properties.validation,
-      required: newElement.properties.validation?.required || false,
+      ...validation,
+      required: validation?.required || false,
       type: type as ValidationInputType,
     };
 
     newElement.properties.autoComplete = type;
-    return newElement;
+    return newElement as unknown as FormElement;
   }
 
   if (isAutoCompleteField(type)) {
     newElement.properties.autoComplete = type;
-    return newElement;
+    return newElement as unknown as FormElement;
   }
 
   if (isValidatedTextType(type as FormElementTypes)) {
     newElement.properties.validation = {
-      ...newElement.properties.validation,
-      required: newElement.properties.validation?.required || false,
+      ...validation,
+      required: validation?.required || false,
       type: type as ValidationInputType,
     };
   }
 
-  return newElement;
+  return newElement as unknown as FormElement;
 };
 
-export const createElement = (element: FormElement, type: string) => {
-  const newElement = { ...element };
+export const createElement = (element: FormElement, type: string): FormElement => {
+  const newElement = { ...element } as unknown as MutableElement;
 
   if (type === "number") {
     newElement.type = FormElementTypes.numberInput;
+    const validation = newElement.properties.validation as { required?: boolean } | undefined;
     newElement.properties.validation = {
-      ...newElement.properties.validation,
-      required: newElement.properties.validation?.required || false,
+      ...validation,
+      required: validation?.required || false,
     };
-    return newElement;
+    return newElement as unknown as FormElement;
   }
 
   if (isTextField(type as FormElementTypes)) {
-    return updateTextElement(newElement, type as ElementType);
+    return updateTextElement(newElement as unknown as FormElement, type as ElementType);
   }
 
   if (type === FormElementTypes.attestation) {
@@ -164,5 +182,5 @@ export const createElement = (element: FormElement, type: string) => {
 
   newElement.type = type as FormElementTypes;
 
-  return newElement;
+  return newElement as unknown as FormElement;
 };

@@ -1,11 +1,22 @@
 import {
   FormElement,
+  ElementProperties,
+  PropertyChoices,
   PublicFormRecord,
   GroupsType,
   FormValues,
   ConditionalRule,
   ChoiceRule,
 } from "@gcforms/types";
+
+// `subElements` only exists on dynamicRow; this narrows generically for tree-walking code
+// that doesn't care about the specific element type.
+export const getSubElements = (element: FormElement): FormElement[] | undefined =>
+  (element.properties as ElementProperties<"dynamicRow">).subElements;
+
+// `choices` only exists on choice-bearing element types (dropdown/radio/checkbox/combobox).
+export const getChoices = (element: FormElement): PropertyChoices[] | undefined =>
+  (element.properties as ElementProperties<"dropdown">).choices;
 
 /**
  * Finds a top-level element by id in the form elements array.
@@ -29,8 +40,9 @@ export const getElementOrSubElementById = (elements: FormElement[], id: string) 
       return element;
     }
 
-    if (element.properties?.subElements) {
-      const subElement = element.properties.subElements.find((subElement) => {
+    const subElements = getSubElements(element);
+    if (subElements) {
+      const subElement = subElements.find((subElement) => {
         return subElement?.id.toString() === id;
       });
 
@@ -59,12 +71,12 @@ export function findChoiceIndexByValue(
   const element = formElements.find((element) => element.id === elementId);
 
   // If the element was not found or it doesn't have choices, return -1
-  if (!element || !Array.isArray(element.properties.choices)) {
+  if (!element || !Array.isArray(getChoices(element))) {
     return -1;
   }
 
   // Find the index of the choice with the specified value
-  const choiceIndex = element.properties.choices.findIndex(
+  const choiceIndex = (getChoices(element) || []).findIndex(
     (choice) => choice.en === value || choice.fr === value
   );
 
@@ -159,7 +171,7 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
     if (["currentGroup", "matchedIds"].includes(key)) return;
 
     const el = getElementById(formElements, key);
-    const choices = el?.properties?.choices;
+    const choices = el && getChoices(el);
 
     if (!el) {
       return;

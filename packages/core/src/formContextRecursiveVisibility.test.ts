@@ -28,7 +28,6 @@ describe("Recursive visibility check", () => {
             id: 1,
             type: "radio",
             properties: {
-              subElements: [],
               choices: [
                 {
                   en: "In Canada",
@@ -55,7 +54,6 @@ describe("Recursive visibility check", () => {
             id: 2,
             type: "radio",
             properties: {
-              subElements: [],
               choices: [
                 {
                   en: "Ottawa",
@@ -90,7 +88,6 @@ describe("Recursive visibility check", () => {
             id: 6,
             type: "combobox",
             properties: {
-              subElements: [],
               choices: [
                 {
                   en: "First location",
@@ -221,7 +218,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -244,7 +240,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: true,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -271,7 +266,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: true,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -306,7 +300,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: true,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -333,7 +326,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: true,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -360,7 +352,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: true,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -395,7 +386,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -422,7 +412,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: true,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -449,7 +438,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: true,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -476,7 +464,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: true,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -660,7 +647,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -686,7 +672,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -716,7 +701,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -750,7 +734,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -772,7 +755,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               autoComplete: "tel",
               descriptionEn: "For example: 111-222-3333",
               descriptionFr: "Par exemple : 111-222-3333",
@@ -797,7 +779,6 @@ describe("Recursive visibility check", () => {
                 type: "email",
                 required: false,
               },
-              subElements: [],
               autoComplete: "email",
               descriptionEn: "For example: name@example.com",
               descriptionFr: "Par exemple : nom@exemple.com",
@@ -825,7 +806,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -848,7 +828,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               autoComplete: "tel",
               descriptionEn: "For example: 111-222-3333",
               descriptionFr: "Par exemple : 111-222-3333",
@@ -873,7 +852,6 @@ describe("Recursive visibility check", () => {
                 type: "email",
                 required: false,
               },
-              subElements: [],
               autoComplete: "email",
               descriptionEn: "For example: name@example.com",
               descriptionFr: "Par exemple : nom@exemple.com",
@@ -901,7 +879,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -931,7 +908,6 @@ describe("Recursive visibility check", () => {
               validation: {
                 required: false,
               },
-              subElements: [],
               descriptionEn: "",
               descriptionFr: "",
               placeholderEn: "",
@@ -1105,7 +1081,6 @@ describe("Recursive visibility check", () => {
                 { en: "No", fr: "Non" },
               ],
               conditionalRules: [],
-              subElements: [],
               validation: { required: false },
             },
           },
@@ -1121,7 +1096,6 @@ describe("Recursive visibility check", () => {
               ],
               // Element 7 depends on element 5 AND element 11
               conditionalRules: [{ choiceId: "5.0" }, { choiceId: "11.0" }],
-              subElements: [],
               validation: { required: false },
             },
           },
@@ -1137,7 +1111,6 @@ describe("Recursive visibility check", () => {
               ],
               // Element 11 depends on element 7 - CIRCULAR!
               conditionalRules: [{ choiceId: "7.0" }],
-              subElements: [],
               validation: { required: false },
             },
           },

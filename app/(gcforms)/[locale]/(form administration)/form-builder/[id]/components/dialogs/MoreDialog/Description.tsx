@@ -42,7 +42,7 @@ export const Description = ({
                 )]: description,
               },
             },
-          });
+          } as FormElement);
         }}
         value={
           item.properties[

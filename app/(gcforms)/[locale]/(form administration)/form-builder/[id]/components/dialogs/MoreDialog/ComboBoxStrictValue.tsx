@@ -1,5 +1,5 @@
 import { useTranslation } from "@i18n/client";
-import { FormElement } from "@lib/types";
+import { FormElement, ElementProperties } from "@lib/types";
 
 export const ComboboxStrictValue = ({
   item,
@@ -9,7 +9,9 @@ export const ComboboxStrictValue = ({
   setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const checked = item.properties.strictValue;
+  // only rendered for combobox, so properties is narrowed accordingly
+  const properties = item.properties as ElementProperties<"combobox">;
+  const checked = properties.strictValue;
 
   if (item.type !== "combobox") {
     return null;

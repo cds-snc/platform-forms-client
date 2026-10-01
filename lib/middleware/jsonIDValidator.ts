@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, ElementProperties } from "@lib/types";
 
 export type ValidateOptions = {
   runValidationIf?: (body: Record<string, unknown>) => Promise<boolean>;
@@ -142,8 +142,10 @@ export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareReq
     let unmatchedSubElementIDs: Array<number> = [];
 
     dynamicRowElements.forEach((dynamicRow: FormElement) => {
-      if (dynamicRow.properties.subElements) {
-        const subElementIDs: Array<number> = dynamicRow.properties.subElements.map((subElement) => {
+      const dynamicRowSubElements = (dynamicRow.properties as ElementProperties<"dynamicRow">)
+        .subElements;
+      if (dynamicRowSubElements) {
+        const subElementIDs: Array<number> = dynamicRowSubElements.map((subElement) => {
           return subElement.id;
         });
 

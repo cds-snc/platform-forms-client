@@ -4,10 +4,10 @@ export type Language = "en" | "fr";
 
 import { FormElementTypes } from "@lib/types";
 
-export interface FormElementWithIndex extends FormElement {
+export type FormElementWithIndex = FormElement & {
   index: number;
   questionNumber?: number | string;
-}
+};
 
 export interface UpdatePayload {
   key: keyof ElementProperties;

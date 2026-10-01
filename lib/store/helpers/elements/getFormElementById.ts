@@ -1,4 +1,5 @@
 import { type TemplateStore } from "../../types";
+import { getSubElements } from "@gcforms/core";
 
 export const getFormElementById: TemplateStore<"getFormElementById"> = (set, get) => (id) => {
   if (!get) {
@@ -12,8 +13,9 @@ export const getFormElementById: TemplateStore<"getFormElementById"> = (set, get
       return element;
     }
 
-    if (element.properties?.subElements) {
-      for (const subElement of element.properties.subElements) {
+    const subElements = getSubElements(element);
+    if (subElements) {
+      for (const subElement of subElements) {
         if (subElement && subElement.id === id) {
           return subElement;
         }

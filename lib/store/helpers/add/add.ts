@@ -1,5 +1,5 @@
 import { type TemplateStore } from "../../types";
-import { FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { defaultField } from "../../defaults";
 
 export const add: TemplateStore<"add"> =
@@ -13,12 +13,13 @@ export const add: TemplateStore<"add"> =
 
     return new Promise((resolve) => {
       set((state) => {
+        // caller is responsible for keeping `type` and `data.properties` consistent
         const item = {
           ...defaultField,
           ...data,
           id,
           type,
-        };
+        } as FormElement;
 
         groupId = groupId ? groupId : "";
 

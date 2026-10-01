@@ -3,6 +3,7 @@ import { FormItem } from "../helpers";
 import { isNumberInput } from "@root/packages/core/src";
 import { formatNumberForDisplay } from "../../NumberInput/utils";
 import { Language } from "@root/lib/types/form-builder-types";
+import { type ElementProperties } from "@root/lib/types";
 
 export const NumberInput = ({
   formItem,
@@ -15,10 +16,11 @@ export const NumberInput = ({
     return <></>;
   }
 
+  const numberProperties = formItem.element.properties as ElementProperties<"numberInput">;
   const formattedNumber = formatNumberForDisplay(Number(formItem.values), lang, {
-    currencyCode: formItem.element.properties.currencyCode,
-    stepCount: formItem.element.properties.stepCount,
-    useThousandsSeparator: formItem.element.properties.useThousandsSeparator,
+    currencyCode: numberProperties.currencyCode,
+    stepCount: numberProperties.stepCount,
+    useThousandsSeparator: numberProperties.useThousandsSeparator,
   });
 
   return (

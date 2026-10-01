@@ -4,7 +4,7 @@
 import { renderHook } from "@testing-library/react";
 
 import { defaultForm } from "../../store/defaults";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, ElementProperties } from "@lib/types";
 import { useAllowPublish } from "../form-builder/useAllowPublish";
 
 type MockForm = Omit<typeof defaultForm, "elements"> & {
@@ -37,7 +37,8 @@ vi.mock("../useFormBuilderConfig", () => ({
 }));
 
 vi.mock("../../store/useTemplateStore", () => ({
-  useTemplateStore: (selector: (state: typeof mockState.store) => unknown) => selector(mockState.store),
+  useTemplateStore: (selector: (state: typeof mockState.store) => unknown) =>
+    selector(mockState.store),
 }));
 
 const createTranslatedForm = (): MockForm => ({
@@ -68,7 +69,6 @@ const createTranslatedForm = (): MockForm => ({
           { en: "Option 2", fr: "Option 2 FR" },
         ],
         validation: { required: false },
-        subElements: [],
       },
     },
   ],
@@ -131,7 +131,8 @@ describe("useAllowPublish error list coverage", () => {
   });
 
   it("keeps the translation error in the checklist when localized content is incomplete", () => {
-    const firstChoice = getMockForm().elements[0]?.properties.choices?.[0];
+    const firstChoice = (getMockForm().elements[0]?.properties as ElementProperties<"dropdown">)
+      ?.choices?.[0];
     expect(firstChoice).toBeDefined();
     firstChoice!.fr = "";
 
@@ -139,12 +140,7 @@ describe("useAllowPublish error list coverage", () => {
 
     expect(getUncheckedItems(result.current.data)).toEqual(["translate"]);
     expect(
-      result.current.hasData([
-        "title",
-        "questions",
-        "privacyPolicy",
-        "confirmationMessage",
-      ])
+      result.current.hasData(["title", "questions", "privacyPolicy", "confirmationMessage"])
     ).toBe(true);
     expect(result.current.isPublishable()).toBe(false);
   });
@@ -158,9 +154,7 @@ describe("useAllowPublish error list coverage", () => {
         titleFr: "Televerser un fichier",
         descriptionEn: "",
         descriptionFr: "",
-        choices: [],
         validation: { required: false },
-        subElements: [],
       },
     });
 

@@ -16,7 +16,7 @@ export const QuestionTagOptions = ({
   }
 
   return (
-    <section className="mb-4 mt-8">
+    <section className="mt-8 mb-4">
       <TagInput
         locale={i18n.language}
         label={t("moreDialog.tags.title")}
@@ -28,7 +28,7 @@ export const QuestionTagOptions = ({
               ...item.properties,
               tags: [...(item.properties.tags || []), tag],
             },
-          });
+          } as FormElement);
         }}
         onTagRemove={(tag) => {
           setItem({
@@ -37,7 +37,7 @@ export const QuestionTagOptions = ({
               ...item.properties,
               tags: (item.properties.tags || []).filter((t) => t !== tag),
             },
-          });
+          } as FormElement);
         }}
         initialTags={item.properties.tags || []}
         restrictDuplicates={true}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { FormElement, FormElementTypes, ValidationTextInput } from "@lib/types";
+import { FormElement, FormElementTypes, ValidationTextInput, ElementProperties } from "@lib/types";
 import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
 import { ErrorMessage } from "@clientComponents/forms";
@@ -38,7 +38,7 @@ export const CustomRegexOptions = ({
         const regex = elValidation?.regex;
         if (regex) patterns.add(regex);
       }
-      for (const sub of el.properties.subElements ?? []) {
+      for (const sub of (el.properties as ElementProperties<"dynamicRow">).subElements ?? []) {
         const subValidation = sub.properties.validation as ValidationTextInput | undefined;
         if (sub.id !== item.id && subValidation?.type === "custom") {
           const regex = subValidation?.regex;

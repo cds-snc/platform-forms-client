@@ -1,6 +1,7 @@
 import {
   Responses,
   FormElement,
+  ElementProperties,
   FormElementTypes,
   ValidationProperties,
   ValidationTextInput,
@@ -52,7 +53,7 @@ export const isFieldResponseValid = (
         let currentRegex = getRegexByType("number", t);
 
         // Check if negative numbers are allowed.
-        if (formElement.properties.allowNegativeNumbers) {
+        if ((formElement.properties as ElementProperties<"numberInput">).allowNegativeNumbers) {
           currentRegex = getRegexByType("canBeNegativeNumber", t);
         }
 

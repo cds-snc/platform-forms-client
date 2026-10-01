@@ -174,7 +174,6 @@ describe("useAllowPublish", () => {
             titleFr: "",
             descriptionEn: "description",
             descriptionFr: "descriptionfr",
-            choices: [],
             validation: { required: false },
           },
         });
@@ -191,7 +190,6 @@ describe("useAllowPublish", () => {
             titleFr: "",
             descriptionEn: "description",
             descriptionFr: "",
-            choices: [],
             validation: { required: false },
           },
         });
@@ -208,7 +206,6 @@ describe("useAllowPublish", () => {
             titleFr: "",
             descriptionEn: "",
             descriptionFr: "",
-            choices: [],
             validation: { required: false },
           },
         });

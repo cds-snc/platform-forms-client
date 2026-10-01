@@ -31,7 +31,6 @@ const elements: FormElement[] = [
         },
       ],
       conditionalRules: [],
-      subElements: [],
     },
   },
   {
@@ -45,7 +44,6 @@ const elements: FormElement[] = [
         { en: "No", fr: "" },
       ],
       conditionalRules: [],
-      subElements: [],
     },
   },
   {
@@ -59,7 +57,6 @@ const elements: FormElement[] = [
         { en: "No", fr: "" },
       ],
       conditionalRules: [],
-      subElements: [],
     },
   },
   {
@@ -68,9 +65,7 @@ const elements: FormElement[] = [
     properties: {
       titleEn: "First name",
       titleFr: "",
-      choices: [{ en: "", fr: "" }],
       conditionalRules: [],
-      subElements: [],
     },
   },
 ];

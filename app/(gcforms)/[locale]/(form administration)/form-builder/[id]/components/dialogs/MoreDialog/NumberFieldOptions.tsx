@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { FormElementTypes, FormElement, ValidationNumberInput } from "@lib/types";
+import { FormElementTypes, FormElement, ElementProperties } from "@lib/types";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { ErrorMessage } from "@clientComponents/forms";
 import { LabelledInput } from "../../../../components/shared/LabelledInput";
@@ -17,12 +17,13 @@ export const NumberFieldOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
-  // only rendered for numberInput, so validation is narrowed accordingly
-  const validation = item.properties.validation as ValidationNumberInput | undefined;
+  // only rendered for numberInput, so properties is narrowed accordingly
+  const properties = item.properties as ElementProperties<"numberInput">;
+  const validation = properties.validation;
 
-  const isCurrency = !!item.properties.currencyCode;
+  const isCurrency = !!properties.currencyCode;
   const [decimalsEnabled, setDecimalsEnabled] = useState(
-    isCurrency || (typeof item.properties.stepCount === "number" && item.properties.stepCount > 0)
+    isCurrency || (typeof properties.stepCount === "number" && properties.stepCount > 0)
   );
   const [valueRangeEnabled, setValueRangeEnabled] = useState(
     typeof validation?.minValue === "number" || typeof validation?.maxValue === "number"
@@ -78,16 +79,14 @@ export const NumberFieldOptions = ({
             type="checkbox"
             className="gc-input-checkbox__input"
             id={`numberField-${item.id}-id-allowNegative`}
-            value={
-              `numberField-${item.id}-value-allowNegative-` + item.properties.allowNegativeNumbers
-            }
-            defaultChecked={item.properties.allowNegativeNumbers}
+            value={`numberField-${item.id}-value-allowNegative-` + properties.allowNegativeNumbers}
+            defaultChecked={properties.allowNegativeNumbers}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const allowNegativeNumbers = e.target.checked;
               setItem({
                 ...item,
                 properties: {
-                  ...item.properties,
+                  ...properties,
                   allowNegativeNumbers,
                 },
               });
@@ -114,9 +113,9 @@ export const NumberFieldOptions = ({
               setItem({
                 ...item,
                 properties: {
-                  ...item.properties,
+                  ...properties,
                   currencyCode,
-                  stepCount: e.target.checked ? 2 : item.properties.stepCount,
+                  stepCount: e.target.checked ? 2 : properties.stepCount,
                   useThousandsSeparator: e.target.checked,
                 },
               });
@@ -135,7 +134,7 @@ export const NumberFieldOptions = ({
             type="checkbox"
             className="gc-input-checkbox__input"
             id={`numberField-${item.id}-id-thousandsSeparator`}
-            checked={isCurrency || !!item.properties.useThousandsSeparator}
+            checked={isCurrency || !!properties.useThousandsSeparator}
             disabled={isCurrency}
             aria-disabled={isCurrency}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +142,7 @@ export const NumberFieldOptions = ({
               setItem({
                 ...item,
                 properties: {
-                  ...item.properties,
+                  ...properties,
                   useThousandsSeparator,
                 },
               });
@@ -172,7 +171,7 @@ export const NumberFieldOptions = ({
               setItem({
                 ...item,
                 properties: {
-                  ...item.properties,
+                  ...properties,
                   stepCount: e.target.checked ? 1 : 0,
                 },
               });
@@ -207,7 +206,7 @@ export const NumberFieldOptions = ({
                 setItem({
                   ...item,
                   properties: {
-                    ...item.properties,
+                    ...properties,
                     stepCount,
                   },
                 });
@@ -215,8 +214,8 @@ export const NumberFieldOptions = ({
               value={
                 isCurrency
                   ? 2
-                  : typeof item.properties.stepCount === "number"
-                    ? item.properties.stepCount
+                  : typeof properties.stepCount === "number"
+                    ? properties.stepCount
                     : ""
               }
               min={1}

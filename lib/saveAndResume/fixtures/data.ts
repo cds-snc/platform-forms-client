@@ -367,7 +367,6 @@ export const reviewItems = [
             validation: {
               required: true,
             },
-            subElements: [],
             descriptionEn: "Start typing to narrow down the list",
             descriptionFr: "Commencez à taper pour réduire la liste",
             placeholderEn: "",

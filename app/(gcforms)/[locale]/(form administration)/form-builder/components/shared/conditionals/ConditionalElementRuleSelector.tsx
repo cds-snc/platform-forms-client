@@ -2,7 +2,7 @@
 import React, { useId } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
-import { FormElement } from "@lib/types";
+import { FormElement, ElementProperties } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
@@ -169,7 +169,9 @@ export const ConditionalElementRuleSelector = ({
   // The selected element "parent" of the choice
   const selectedElement = elements.find((element) => element.id === Number(choiceParentQuestion));
 
-  const choices = selectedElement?.properties.choices?.map((choice, index) => {
+  const choices = (
+    selectedElement?.properties as ElementProperties<"dropdown"> | undefined
+  )?.choices?.map((choice, index) => {
     return { label: choice[language], value: `${choiceParentQuestion}.${index}` };
   });
 

@@ -1,4 +1,4 @@
-import { type FormElement, FormElementTypes } from "@gcforms/types";
+import { type FormElement, FormElementTypes, type ElementProperties } from "@gcforms/types";
 import type { MappedAnswer } from "./types";
 import { createFallbackMappedAnswer, createAnswerObject } from "./utils/toAnswerObject";
 import { getAnswerAsString } from "./utils/toString";
@@ -90,7 +90,8 @@ const handleAnswerArray = ({
     throw new Error("Invalid input for handleAnswerArray");
   }
 
-  const subElements = question.properties?.subElements ?? [];
+  const subElements =
+    (question.properties as ElementProperties<"dynamicRow"> | undefined)?.subElements ?? [];
   const subQuestions = subElements.filter((sub) => sub.type !== FormElementTypes.richText);
 
   // Map each row of answers

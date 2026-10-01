@@ -6,7 +6,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { GenerateElement } from "@lib/formBuilder";
-import type { FormElement } from "@gcforms/types";
+import type { FormElement, ElementProperties } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 
 vi.mock("formik", async () => {
@@ -67,7 +67,10 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Dropdown component", (lang
     ).toBeInTheDocument();
 
     // Change value
-    const choiceObj = dropdownData.properties.choices?.[2] ?? { en: "", fr: "" };
+    const choiceObj = (dropdownData.properties as ElementProperties<"dropdown">).choices?.[2] ?? {
+      en: "",
+      fr: "",
+    };
     const choiceValue = choiceObj[lang as "en" | "fr"];
     await user.selectOptions(screen.getByTestId("dropdown"), [choiceValue]);
     expect(screen.getByTestId("dropdown")).toHaveDisplayValue(choiceValue);

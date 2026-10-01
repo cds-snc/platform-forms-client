@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, ElementProperties } from "@lib/types";
 import { getTranslatedProperties } from "../../../actions";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { BoltIcon } from "@serverComponents/icons";
@@ -27,10 +27,12 @@ export const AddOther = ({
   }));
 
   const groupId = useGroupStore((state) => state.id);
-  const isLimitReached = (item.properties.choices?.length ?? 0) >= MAX_CHOICE_AMOUNT;
+  // only meaningful for choice-bearing element types
+  const properties = item.properties as ElementProperties<"dropdown">;
+  const isLimitReached = (properties.choices?.length ?? 0) >= MAX_CHOICE_AMOUNT;
 
   const addOther = useCallback(async () => {
-    if (!item.properties.choices || isLimitReached) return;
+    if (!properties.choices || isLimitReached) return;
 
     const otherLabel: { en: string; fr: string } = await getTranslatedProperties(
       "addConditionalRules.other"
@@ -63,7 +65,7 @@ export const AddOther = ({
 
     const newRule = { elementId: `${itemId}`, choiceId: `${item.id}.${lastChoice - 1}` };
     onComplete(newRule);
-  }, [add, addLabeledChoice, groupId, isLimitReached, item, onComplete]);
+  }, [add, addLabeledChoice, groupId, isLimitReached, item, onComplete, properties.choices]);
 
   return (
     <>

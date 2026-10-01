@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import { AutocompleteOptions } from "./AutocompleteOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes, ElementProperties } from "@lib/types";
 import { Label } from "./Label";
 import { Hint } from "./Hint";
 
@@ -13,7 +13,9 @@ export const TextFieldOptions = ({
   setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const autocompleteSelectedValue = item.properties.autoComplete || "";
+  // only rendered for textField, so properties is narrowed accordingly
+  const properties = item.properties as ElementProperties<"textField">;
+  const autocompleteSelectedValue = properties.autoComplete || "";
 
   if (item.type !== FormElementTypes.textField) {
     return null;
@@ -30,7 +32,7 @@ export const TextFieldOptions = ({
             setItem({
               ...item,
               properties: {
-                ...item.properties,
+                ...properties,
                 ...{ autoComplete: e.target.value },
               },
             });

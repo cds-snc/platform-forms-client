@@ -7,7 +7,7 @@ import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-import { dynamicRowType } from "@gcforms/types";
+import { dynamicRowType, ElementProperties } from "@gcforms/types";
 
 type DynamicRowDialogEventDetails = {
   item: FormElementWithIndex;
@@ -36,6 +36,9 @@ export const DynamicRowDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [error, setError] = useState<boolean | null>(null);
+
+  // this dialog only ever opens for dynamicRow elements
+  const dynamicRowProps = item?.properties as ElementProperties<"dynamicRow"> | undefined;
 
   const { updateField, setChangeKey } = useTemplateStore((s) => ({
     elements: s.form.elements,
@@ -66,11 +69,11 @@ export const DynamicRowDialog = () => {
       properties: {
         ...item.properties,
         dynamicRow: {
-          ...(item.properties.dynamicRow as dynamicRowType),
+          ...(dynamicRowProps?.dynamicRow as dynamicRowType),
           [property]: value || "",
         },
       },
-    });
+    } as FormElementWithIndex);
   };
 
   const rowTitleTextA11yEn = t("dynamicRow.rowTitleTextA11yEn");
@@ -107,12 +110,12 @@ export const DynamicRowDialog = () => {
         onClick={() => {
           setError(null);
           if (
-            item?.properties.dynamicRow?.rowTitleEn === "" ||
-            item?.properties.dynamicRow?.rowTitleFr === "" ||
-            item?.properties.dynamicRow?.addButtonTextEn === "" ||
-            item?.properties.dynamicRow?.addButtonTextFr === "" ||
-            item?.properties.dynamicRow?.removeButtonTextEn === "" ||
-            item?.properties.dynamicRow?.removeButtonTextFr === ""
+            dynamicRowProps?.dynamicRow?.rowTitleEn === "" ||
+            dynamicRowProps?.dynamicRow?.rowTitleFr === "" ||
+            dynamicRowProps?.dynamicRow?.addButtonTextEn === "" ||
+            dynamicRowProps?.dynamicRow?.addButtonTextFr === "" ||
+            dynamicRowProps?.dynamicRow?.removeButtonTextEn === "" ||
+            dynamicRowProps?.dynamicRow?.removeButtonTextFr === ""
           ) {
             setError(true);
             return;
@@ -155,7 +158,7 @@ export const DynamicRowDialog = () => {
               <TextInput label={t("dynamicRow.dialog.english")}>
                 <input
                   aria-label={rowTitleTextA11yEn}
-                  value={item.properties.dynamicRow?.rowTitleEn}
+                  value={dynamicRowProps?.dynamicRow?.rowTitleEn}
                   onChange={(e) => {
                     updateDynamicRowProperty("rowTitleEn", e.target.value);
                   }}
@@ -164,7 +167,7 @@ export const DynamicRowDialog = () => {
               <TextInput label={t("dynamicRow.dialog.french")}>
                 <input
                   aria-label={rowTitleTextA11yFr}
-                  value={item.properties.dynamicRow?.rowTitleFr}
+                  value={dynamicRowProps?.dynamicRow?.rowTitleFr}
                   onChange={(e) => {
                     updateDynamicRowProperty("rowTitleFr", e.target.value);
                   }}
@@ -179,7 +182,7 @@ export const DynamicRowDialog = () => {
               <TextInput label={t("dynamicRow.dialog.english")}>
                 <input
                   aria-label={addButtonTextA11yEn}
-                  value={item.properties.dynamicRow?.addButtonTextEn}
+                  value={dynamicRowProps?.dynamicRow?.addButtonTextEn}
                   onChange={(e) => {
                     updateDynamicRowProperty("addButtonTextEn", e.target.value);
                   }}
@@ -188,7 +191,7 @@ export const DynamicRowDialog = () => {
               <TextInput label={t("dynamicRow.dialog.french")}>
                 <input
                   aria-label={addButtonTextA11yFr}
-                  value={item.properties.dynamicRow?.addButtonTextFr}
+                  value={dynamicRowProps?.dynamicRow?.addButtonTextFr}
                   onChange={(e) => {
                     updateDynamicRowProperty("addButtonTextFr", e.target.value);
                   }}
@@ -205,7 +208,7 @@ export const DynamicRowDialog = () => {
               <TextInput label={t("dynamicRow.dialog.english")}>
                 <input
                   aria-label={removeButtonTextA11yEn}
-                  value={item.properties.dynamicRow?.removeButtonTextEn}
+                  value={dynamicRowProps?.dynamicRow?.removeButtonTextEn}
                   onChange={(e) => {
                     updateDynamicRowProperty("removeButtonTextEn", e.target.value);
                   }}
@@ -214,7 +217,7 @@ export const DynamicRowDialog = () => {
               <TextInput label={t("dynamicRow.dialog.french")}>
                 <input
                   aria-label={removeButtonTextA11yFr}
-                  value={item.properties.dynamicRow?.removeButtonTextFr}
+                  value={dynamicRowProps?.dynamicRow?.removeButtonTextFr}
                   onChange={(e) => {
                     updateDynamicRowProperty("removeButtonTextFr", e.target.value);
                   }}

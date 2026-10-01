@@ -21,6 +21,7 @@ import {
 } from "@clientComponents/forms";
 import {
   FormElement,
+  ElementProperties,
   FormElementTypes,
   HTMLTextInputTypeAttribute,
   PropertyChoices,
@@ -56,20 +57,22 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: Lan
 function _buildForm(element: FormElement, lang: Language): ReactElement {
   const id = element.subId ?? element.id;
 
-  let choices =
-    element.properties && element.properties.choices
-      ? getLocaleChoices(element.properties.choices, lang)
-      : [];
+  // generic across every type; fields below only apply to some
+  const properties = element.properties as ElementProperties<"dropdown"> &
+    ElementProperties<"textField"> &
+    ElementProperties<"dynamicRow">;
+
+  let choices = properties && properties.choices ? getLocaleChoices(properties.choices, lang) : [];
 
   // allow a bilingual translation - match entry from one language to another
   let allManagedChoices: PropertyChoices[] | undefined;
 
   // Retrieve managed data from static json file if specified
-  if (element.properties.managedChoices) {
-    if (Array.isArray(element.properties.managedChoices)) {
+  if (properties.managedChoices) {
+    if (Array.isArray(properties.managedChoices)) {
       // Handle multiple managed data files - merge and sort alphabetically
       allManagedChoices = [];
-      element.properties.managedChoices.forEach((dataFile) => {
+      properties.managedChoices.forEach((dataFile: string) => {
         const data = managedData[dataFile];
         const fileChoices = data ? getLocaleChoices(data, lang) : [];
         choices = choices.concat(fileChoices);
@@ -80,15 +83,14 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       choices.sort((a, b) => a.localeCompare(b, lang));
     } else {
       // Backwards compatibility for single managed data file
-      const dataFile = element.properties.managedChoices;
+      const dataFile = properties.managedChoices;
       const data = managedData[dataFile];
       choices = data ? getLocaleChoices(data, lang) : [];
       allManagedChoices = data;
     }
   }
 
-  const subElements =
-    element.properties && element.properties.subElements ? element.properties.subElements : [];
+  const subElements = properties && properties.subElements ? properties.subElements : [];
 
   const isRequired: boolean = element.properties.validation
     ? element.properties.validation.required
@@ -120,7 +122,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       : "text";
 
   const spellCheck =
-    element.properties?.autoComplete &&
+    properties?.autoComplete &&
     [
       "email",
       "name",
@@ -132,7 +134,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       "address-level2",
       "address-level1",
       "postal-code",
-    ].includes(element.properties?.autoComplete)
+    ].includes(properties?.autoComplete)
       ? false
       : undefined;
 
@@ -144,7 +146,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
     element.properties[getLocalizedProperty(LocalizedElementProperties.DESCRIPTION, lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
-  const sortOrder = element.properties.sortOrder ? element.properties.sortOrder.toString() : "none";
+  const sortOrder = properties.sortOrder ? properties.sortOrder.toString() : "none";
 
   switch (element.type) {
     case FormElementTypes.textField:
@@ -153,6 +155,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       // for legacy number inputs that were stored as
       // text fields with validation.type "number"
       if (isNumberInput(element)) {
+        const numberProperties = element.properties as ElementProperties<"numberInput">;
         return (
           <div className="focus-group gcds-input-wrapper">
             {labelComponent}
@@ -163,10 +166,10 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
               required={isRequired}
               ariaDescribedBy={description ? `desc-${id}` : undefined}
               placeholder={placeHolder.toString()}
-              allowNegativeNumbers={element.properties.allowNegativeNumbers}
-              stepCount={element.properties.stepCount}
-              currencyCode={element.properties.currencyCode}
-              useThousandsSeparator={element.properties.useThousandsSeparator}
+              allowNegativeNumbers={numberProperties.allowNegativeNumbers}
+              stepCount={numberProperties.stepCount}
+              currencyCode={numberProperties.currencyCode}
+              useThousandsSeparator={numberProperties.useThousandsSeparator}
               minValue={
                 (element.properties.validation as ValidationNumberInput | undefined)?.minValue
               }
@@ -190,7 +193,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
             required={isRequired}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
-            autoComplete={element.properties.autoComplete?.toString()}
+            autoComplete={properties.autoComplete?.toString()}
             maxLength={
               (element.properties.validation as ValidationTextInput | undefined)?.maxLength
             }

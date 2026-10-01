@@ -6,6 +6,7 @@ import {
   FormElementTypes,
   Response,
 } from "@lib/types";
+import { getSubElements } from "@gcforms/core";
 import { logMessage } from "@lib/logger";
 
 interface FileInputObj extends FileInputResponse {
@@ -33,7 +34,7 @@ const dynamicRowFiller = (values: Responses[], element: FormElement): Responses[
     return [];
   }
 
-  const subElements = element.properties?.subElements || [];
+  const subElements = getSubElements(element) || [];
   const newValues = [...values];
 
   newValues.forEach((value) => {

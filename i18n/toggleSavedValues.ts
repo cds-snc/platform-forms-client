@@ -1,4 +1,10 @@
-import { Response, FormElement, Responses, FormElementTypes } from "@gcforms/types";
+import {
+  Response,
+  FormElement,
+  Responses,
+  FormElementTypes,
+  ElementProperties,
+} from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 
 export const findElement = (form: FormElement[], elId: string | number) => {
@@ -14,12 +20,13 @@ export const findChoiceByValue = (
   lang: Language
 ): boolean | { en: string; fr: string } => {
   const choiceTypes = ["radio", "checkbox", "dropdown", "combobox"];
+  const choices = (element.properties as ElementProperties<"dropdown">).choices;
 
-  if (!element || !element.properties.choices || !choiceTypes.includes(element.type)) {
+  if (!element || !choices || !choiceTypes.includes(element.type)) {
     return false;
   }
 
-  const found = element.properties.choices.find(
+  const found = choices.find(
     (choice) => choice[lang]?.toLowerCase() === value?.toString().toLowerCase()
   );
 

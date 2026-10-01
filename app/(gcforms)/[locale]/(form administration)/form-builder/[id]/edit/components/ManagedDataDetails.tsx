@@ -1,10 +1,12 @@
 import { Trans } from "react-i18next";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { FormElement } from "@root/lib/types";
+import { FormElement, ElementProperties } from "@root/lib/types";
 import { useTranslation } from "@root/i18n/client";
 
 export const ManagedDataDetails = ({ item }: { item: FormElement }) => {
   const { t } = useTranslation("form-builder");
+  // only rendered for combobox, so properties is narrowed accordingly
+  const managedChoices = (item.properties as ElementProperties<"combobox">).managedChoices;
 
   return (
     <div data-testid={`managedChoices-${item.id}`} className="mt-5 text-sm">
@@ -20,15 +22,15 @@ export const ManagedDataDetails = ({ item }: { item: FormElement }) => {
           />
         </Tooltip.Info>
       </div>
-      {Array.isArray(item.properties.managedChoices) ? (
+      {Array.isArray(managedChoices) ? (
         <ul>
-          {item.properties.managedChoices.map((choice) => (
+          {managedChoices.map((choice) => (
             <li key={choice}>{t(`managedList.${choice}`)}</li>
           ))}
         </ul>
       ) : (
         <a href="https://github.com/cds-snc/gc-organisations" className="ml-2" target="_blank">
-          {t(`managedList.${item.properties.managedChoices}`)}
+          {t(`managedList.${managedChoices}`)}
         </a>
       )}
     </div>

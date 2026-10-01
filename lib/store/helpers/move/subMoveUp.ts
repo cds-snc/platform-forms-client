@@ -1,4 +1,5 @@
 import { type TemplateStore } from "../../types";
+import { ElementProperties } from "@lib/types";
 import { moveElementUp } from "@lib/utils/form-builder";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
 
@@ -8,9 +9,11 @@ export const subMoveUp: TemplateStore<"subMoveUp"> = (set) => (elId, subIndex) =
 
     if (parentIndex === undefined) return;
 
-    const elements = state.form.elements[parentIndex].properties.subElements;
+    const parentProperties = state.form.elements[parentIndex]
+      .properties as ElementProperties<"dynamicRow">;
+    const elements = parentProperties.subElements;
 
     if (elements) {
-      state.form.elements[parentIndex].properties.subElements = moveElementUp(elements, subIndex);
+      parentProperties.subElements = moveElementUp(elements, subIndex);
     }
   });

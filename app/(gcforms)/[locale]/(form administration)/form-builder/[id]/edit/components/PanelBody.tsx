@@ -7,7 +7,7 @@ import {
   Language,
   LocalizedElementProperties,
 } from "@lib/types/form-builder-types";
-import { ValidationTextInput } from "@lib/types";
+import { ValidationTextInput, ElementProperties } from "@lib/types";
 import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
@@ -53,7 +53,9 @@ export const PanelBody = ({
     properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
 
   const describedById = description ? `item${item.id}-describedby` : undefined;
-  const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
+  const isCanadianOnly =
+    (item.properties as ElementProperties<"addressComplete">).addressComponents?.canadianOnly ??
+    true;
 
   const isInvalid = isFileUpload && !hasApiKeyId;
 
@@ -136,13 +138,17 @@ export const PanelBody = ({
               )}
             </div>
             <div className="w-64">
-              {item.properties.autoComplete && (
+              {(item.properties as ElementProperties<"textField">).autoComplete && (
                 <div data-testid={`autocomplete-${item.id}`} className="mt-5 text-sm">
                   <strong>{t("autocompleteIsSetTo")}</strong>{" "}
-                  {t(`autocompleteOptions.${item.properties.autoComplete}`)}
+                  {t(
+                    `autocompleteOptions.${(item.properties as ElementProperties<"textField">).autoComplete}`
+                  )}
                 </div>
               )}
-              {item.properties.managedChoices && <ManagedDataDetails item={item} />}
+              {(item.properties as ElementProperties<"combobox">).managedChoices && (
+                <ManagedDataDetails item={item} />
+              )}
               <ElementRequired
                 onRequiredChange={onRequiredChange}
                 item={item}
