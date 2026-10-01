@@ -149,9 +149,15 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
               pathname={""}
               language={language}
               showLanguageToggle={true}
+              skipLink={false}
             />
           ) : (
-            <GcdsHeader pathname={""} language={language} showLanguageToggle={false} />
+            <GcdsHeader
+              pathname={""}
+              language={language}
+              showLanguageToggle={false}
+              skipLink={false}
+            />
           )}
         </div>
 
