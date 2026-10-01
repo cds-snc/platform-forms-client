@@ -1,5 +1,8 @@
 import type JSZip from "jszip";
 import type { ResponseAttachmentGroup } from "./types";
+import { getUniqueAttachmentFilename } from "./attachmentFilenames";
+
+export { getUniqueAttachmentFilename } from "./attachmentFilenames";
 
 export const RESPONSE_ATTACHMENTS_FOLDER = "file_attachments-fichiers_joints";
 export const SUSPICIOUS_ATTACHMENTS_FOLDER = "suspicious_files-fichiers_suspects";
@@ -11,26 +14,6 @@ const safePathSegment = (value: string, fallback: string) => {
     .trim();
 
   return segment || fallback;
-};
-
-export const getUniqueAttachmentFilename = (
-  filename: string,
-  usedNames: Set<string>,
-  index: number
-) => {
-  const lastDot = filename.lastIndexOf(".");
-  const base = lastDot > 0 ? filename.slice(0, lastDot) : filename;
-  const extension = lastDot > 0 ? filename.slice(lastDot) : "";
-
-  let candidate = filename || `attachment-${index + 1}`;
-  let duplicateIndex = 1;
-  while (usedNames.has(candidate)) {
-    candidate = `${base} (${duplicateIndex})${extension}`;
-    duplicateIndex += 1;
-  }
-
-  usedNames.add(candidate);
-  return candidate;
 };
 
 export const getAttachmentZipPath = (

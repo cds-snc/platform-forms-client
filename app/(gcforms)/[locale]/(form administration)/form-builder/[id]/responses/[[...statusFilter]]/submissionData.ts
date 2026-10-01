@@ -1,61 +1,31 @@
-import type { ResponseAttachment } from "@lib/responseDownloadFormats/types";
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
+import { collectAttachments } from "@lib/responseAttachments/collectAttachments";
 
 const parseRecord = (value: unknown): Record<string, unknown> => {
-  if (isRecord(value)) return value;
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    return value as Record<string, unknown>;
+  }
   if (typeof value !== "string") return {};
 
   try {
     const parsed = JSON.parse(value);
-    return isRecord(parsed) ? parsed : {};
+    return typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>)
+      : {};
   } catch {
     return {};
   }
 };
 
-const isResponseAttachment = (value: unknown): value is ResponseAttachment =>
-  isRecord(value) &&
-  typeof value.id === "string" &&
-  typeof value.name === "string" &&
-  typeof value.downloadLink === "string";
-
 export const getSubmissionData = (formSubmission: unknown, fileAttachments?: unknown) => {
   const parsedSubmission = parseRecord(formSubmission);
   const answers = parseRecord(parsedSubmission.answers ?? parsedSubmission);
-  const attachments = new Map<string, ResponseAttachment>();
 
-  const addAttachment = (value: unknown) => {
-    if (!isResponseAttachment(value)) return;
-
-    attachments.set(value.id, {
-      id: value.id,
-      name: value.name,
-      downloadLink: value.downloadLink,
-      ...(typeof value.isPotentiallyMalicious === "boolean" && {
-        isPotentiallyMalicious: value.isPotentiallyMalicious,
-      }),
-    });
+  return {
+    answers,
+    attachments: collectAttachments(
+      parsedSubmission.attachments,
+      parsedSubmission.fileAttachments,
+      fileAttachments
+    ),
   };
-
-  const collectAttachments = (value: unknown) => {
-    if (isResponseAttachment(value)) {
-      addAttachment(value);
-      return;
-    }
-
-    if (Array.isArray(value)) {
-      value.forEach(addAttachment);
-      return;
-    }
-
-    if (isRecord(value)) Object.values(value).forEach(addAttachment);
-  };
-
-  collectAttachments(parsedSubmission.attachments);
-  collectAttachments(parsedSubmission.fileAttachments);
-  collectAttachments(fileAttachments);
-
-  return { answers, attachments: Array.from(attachments.values()) };
 };
