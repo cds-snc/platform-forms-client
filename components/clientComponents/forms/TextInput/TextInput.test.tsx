@@ -61,7 +61,8 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Generate a text input", (l
     expect(screen.getByText(description)).toBeInTheDocument();
 
     const renderedTextBox = screen.getByRole("textbox");
-    expect(renderedTextBox).toBeRequired();
+  expect(renderedTextBox).toHaveAttribute("aria-required", "true");
+  expect(renderedTextBox).not.toHaveAttribute("required");
     expect(renderedTextBox).toHaveAccessibleDescription(description);
     expect(screen.queryByTestId("required"))!.toBeInTheDocument();
     expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();

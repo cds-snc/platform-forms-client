@@ -39,7 +39,7 @@ export const MultipleChoiceGroup = ({
   });
   return (
     <>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
       {choices}
     </>
   );

@@ -23,7 +23,11 @@ export const TextInput = ({
   const classes = cn("gc-input-text", className);
   return (
     <>
-      {error && <ErrorMessage id={"errorMessage" + id}>{error}</ErrorMessage>}
+      {error && (
+        <ErrorMessage id={"errorMessage" + id} role="alert">
+          {error}
+        </ErrorMessage>
+      )}
       <input
         data-testid="textInput"
         className={classes}

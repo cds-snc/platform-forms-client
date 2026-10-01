@@ -6,13 +6,14 @@ import { InputFieldProps } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { StarItem } from "./StarItem";
 import { StarRatingObject } from "./types";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 interface StarRatingProps extends InputFieldProps {
   numberOfStars?: number;
 }
 
 export const StarRating = (props: StarRatingProps): React.ReactElement => {
-  const { name, required, numberOfStars = 5, id, lang } = props;
+  const { ariaDescribedBy, name, required, numberOfStars = 5, id, lang } = props;
   const [field, meta, helpers] = useField(name);
   const [hovered, setHovered] = useState<number | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
@@ -82,26 +83,31 @@ export const StarRating = (props: StarRatingProps): React.ReactElement => {
     [stars, helpers, numberOfStars]
   );
 
-  const errorId = meta.error ? `error-${id}` : undefined;
+  const errorMessageId = getErrorMessageId(id);
+  const describedByIds = getDescribedByIds(
+    meta.error ? errorMessageId : undefined,
+    ariaDescribedBy
+  );
 
   return (
     <div>
-      {meta.error && <ErrorMessage id={errorId}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
+      {/* Custom widget with own roving tabindex and arrow-key focus management. So use 
+          role="radiogroup" as an exception over the best practcie Fieldset+legend. */}
       <div
         className="flex gap-1"
         role="radiogroup"
         aria-labelledby={`label-${id}`}
-        aria-required={required || undefined}
+        aria-required={required ? "true" : undefined}
         aria-invalid={meta.error ? "true" : undefined}
-        aria-describedby={errorId}
+        aria-describedby={describedByIds}
       >
         {stars.map((starValue, index) => (
           <StarItem
             key={starValue}
             starValue={starValue}
-            inputId={`${id}.${starValue - 1}`}
+            id={`${id}.${starValue - 1}`}
             name={name}
-            required={required}
             checked={isClient && currentValue === starValue}
             tabIndex={getTabIndex(starValue)}
             ariaLabel={t("starRating.starLabel", { count: starValue })}

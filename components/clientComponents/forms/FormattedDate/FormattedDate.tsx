@@ -9,6 +9,7 @@ import { isValidDateFormat } from "./utils";
 import { ErrorMessage } from "@clientComponents/forms";
 import { cn } from "@lib/utils";
 import { logMessage } from "@lib/logger";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 interface FormattedDateProps extends InputFieldProps {
   dateFormat?: DateFormat;
@@ -69,6 +70,12 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
 
   const unsetDate = () => setDateObject(null);
 
+  const errorMessageId = getErrorMessageId(id);
+  const fieldsetDescribedByIds = getDescribedByIds(
+    meta.error ? errorMessageId : undefined,
+    description ? `desc-${id}` : undefined
+  );
+
   const setSelectedYear = (year: string) =>
     setDateObject((prev) => {
       const newObj = { ...prev };
@@ -115,6 +122,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     <fieldset
       aria-roledescription={t("formattedDate.roleDescription")}
       aria-labelledby={`label-${id}`}
+      aria-describedby={fieldsetDescribedByIds}
       data-testid="formattedDate"
       id={id}
       tabIndex={-1}
@@ -130,7 +138,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       </legend>
 
       {description && <Description id={id}>{description}</Description>}
-      {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
 
       <div className="flex flex-wrap items-start gap-2" data-testid="formattedDate-parts">
         <input type="hidden" {...field} value={field.value || ""} />
@@ -146,7 +154,9 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 id={`${name}-${part}`}
                 className={cn("gc-dropdown", "w-36", meta.error && "gc-error-input")}
                 onChange={(e) => setSelectedMonth(e.target.value)}
-                required={required}
+                aria-required={required ? "true" : undefined}
+                aria-invalid={meta.error ? "true" : undefined}
+                aria-describedby={meta.error ? errorMessageId : undefined}
                 data-testid="month-select"
               >
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
@@ -169,12 +179,16 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 id={`${name}-${part}`}
                 // Trying removing type=number  for better UX See: #4897
                 inputMode="numeric"
-                aria-describedby={`${id}-description-month`}
+                aria-required={required ? "true" : undefined}
+                aria-invalid={meta.error ? "true" : undefined}
+                aria-describedby={getDescribedByIds(
+                  meta.error ? errorMessageId : undefined,
+                  `${id}-description-month`
+                )}
                 autoComplete={autocomplete ? "bday-month" : undefined}
                 className={cn("w-16!", meta.error && "gc-error-input")}
                 value={dateObject?.MM || ""}
                 onChange={(e) => setSelectedMonth(e.target.value)}
-                required={required}
                 data-testid="month-number"
               />
             </div>
@@ -191,12 +205,16 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 id={`${name}-${part}`}
                 // Trying removing type=number for better UX See: #4897
                 inputMode="numeric"
-                aria-describedby={`${id}-description-year`}
+                aria-required={required ? "true" : undefined}
+                aria-invalid={meta.error ? "true" : undefined}
+                aria-describedby={getDescribedByIds(
+                  meta.error ? errorMessageId : undefined,
+                  `${id}-description-year`
+                )}
                 autoComplete={autocomplete ? "bday-year" : undefined}
                 className={cn("w-28!", meta.error && "gc-error-input")}
                 value={dateObject?.YYYY || ""}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                required={required}
                 data-testid="year-number"
               />
             </div>
@@ -213,12 +231,16 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 id={`${name}-${part}`}
                 // Trying removing number for better UX See: #4897
                 inputMode="numeric"
-                aria-describedby={`${id}-description-day`}
+                aria-required={required ? "true" : undefined}
+                aria-invalid={meta.error ? "true" : undefined}
+                aria-describedby={getDescribedByIds(
+                  meta.error ? errorMessageId : undefined,
+                  `${id}-description-day`
+                )}
                 autoComplete={autocomplete ? "bday-day" : undefined}
                 className={cn("mr-2! w-16!", meta.error && "gc-error-input")}
                 value={dateObject?.DD || ""}
                 onChange={(e) => setSelectedDay(e.target.value)}
-                required={required}
                 data-testid="day-number"
               />
             </div>

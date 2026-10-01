@@ -22,7 +22,11 @@ export const TextArea = ({
   const classes = cn("gc-textarea", className);
   return (
     <>
-      {error && <ErrorMessage id={"errorMessage" + id}>{error}</ErrorMessage>}
+      {error && (
+        <ErrorMessage id={"errorMessage" + id} role="alert">
+          {error}
+        </ErrorMessage>
+      )}
       <textarea
         id={id}
         name={name}

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
 import { useTranslation } from "@i18n/client";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 interface UseCharacterCountOptions {
   maxLength?: number;
@@ -24,13 +25,16 @@ export const useCharacterCount = ({
 
   const ariaDescribedByIds = useCallback(
     (hasError: boolean, ariaDescribedBy?: string): Record<string, string> => {
-      const returnValue: string[] = [];
-      if (hasError) returnValue.push("errorMessage" + id);
-      if (maxLength && (remainingCharacters < 0 || remainingCharacters < maxLength * 0.25)) {
-        returnValue.push("characterCountMessage" + id);
-      }
-      if (ariaDescribedBy) returnValue.push(ariaDescribedBy);
-      return returnValue.length > 0 ? { "aria-describedby": returnValue.join(" ") } : {};
+      const characterCountMessageId =
+        maxLength && (remainingCharacters < 0 || remainingCharacters < maxLength * 0.25)
+          ? `characterCountMessage${id}`
+          : undefined;
+      const describedBy = getDescribedByIds(
+        hasError ? getErrorMessageId(id) : undefined,
+        characterCountMessageId,
+        ariaDescribedBy
+      );
+      return describedBy ? { "aria-describedby": describedBy } : {};
     },
     [maxLength, remainingCharacters, id]
   );
