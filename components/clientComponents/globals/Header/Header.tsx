@@ -22,6 +22,7 @@ type HeaderParams = {
   alwaysShowLoginLink?: boolean;
   showAccountMenu?: boolean;
   accountMenuPublishingEnabled?: boolean;
+  skipLink?: boolean;
 };
 
 export const Header = ({
@@ -31,6 +32,7 @@ export const Header = ({
   alwaysShowLoginLink = false,
   showAccountMenu = false,
   accountMenuPublishingEnabled = false,
+  skipLink = true,
 }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const { status } = useSession();
@@ -61,7 +63,7 @@ export const Header = ({
   return (
     <>
       <header className={cn("bg-gray-soft relative px-2", className, paddingTop)}>
-        <SkipLink />
+        {skipLink && <SkipLink />}
         {isBannerEnabled && (
           <div className="bg-slate-800 p-4 text-white">
             <div className="mr-4 inline-block border-2 px-2 py-1">{bannerType}</div>
