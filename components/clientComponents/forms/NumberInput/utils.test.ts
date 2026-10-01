@@ -3,6 +3,8 @@ import {
   getNumberFormatOptions,
   formatNumberForDisplay,
   normalizeLocaleInput,
+  countDigits,
+  MAX_NUMBER_INPUT_DIGITS,
 } from "./utils";
 
 describe("NumberInput Utils", () => {
@@ -125,6 +127,23 @@ describe("NumberInput Utils", () => {
         stepCount: 2,
       });
       expect(result).toContain("-");
+    });
+  });
+
+  describe("countDigits", () => {
+    it("counts digits only, ignoring sign and separators", () => {
+      expect(countDigits("-1,234.56")).toBe(6);
+    });
+
+    it("returns 0 for a string with no digits", () => {
+      expect(countDigits("-.")).toBe(0);
+    });
+  });
+
+  describe("MAX_NUMBER_INPUT_DIGITS", () => {
+    it("is 15, one below Number.MAX_SAFE_INTEGER's digit count", () => {
+      expect(MAX_NUMBER_INPUT_DIGITS).toBe(15);
+      expect(String(Number.MAX_SAFE_INTEGER).length).toBe(16);
     });
   });
 
