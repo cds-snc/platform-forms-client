@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.23.1](https://github.com/cds-snc/platform-forms-client/compare/v4.23.0...v4.23.1) (2026-10-02)
+
+
+### Bug Fixes
+
+* improve form semantics for assistive technologies ([#7944](https://github.com/cds-snc/platform-forms-client/issues/7944)) ([5bdabe8](https://github.com/cds-snc/platform-forms-client/commit/5bdabe8b397ed538820f8daee7e0257f0026679e))
+* skip-link app wide ([#7934](https://github.com/cds-snc/platform-forms-client/issues/7934)) ([2430a8f](https://github.com/cds-snc/platform-forms-client/commit/2430a8ff84806d01e255d68404718701a543cca6))
+* update hint text to be more readable with magnifiers ([#7937](https://github.com/cds-snc/platform-forms-client/issues/7937)) ([6a299d1](https://github.com/cds-snc/platform-forms-client/commit/6a299d17bb84ffe95009fbb75f10bacd8bb804eb))
+
+
+### Miscellaneous Chores
+
+* feature flagged update checks for allow file upload ([#7982](https://github.com/cds-snc/platform-forms-client/issues/7982)) ([547a705](https://github.com/cds-snc/platform-forms-client/commit/547a70554d9387fbe01957d1edfebffc9f65ebe6))
+* improve form hCaptcha readability ([#7927](https://github.com/cds-snc/platform-forms-client/issues/7927)) ([f87aa72](https://github.com/cds-snc/platform-forms-client/commit/f87aa727e69af56c769fe6959a796586a6be2514))
+* move env variable to disable Prisma telemetry inside Dockerfiles ([#7991](https://github.com/cds-snc/platform-forms-client/issues/7991)) ([e70be3e](https://github.com/cds-snc/platform-forms-client/commit/e70be3ef747a074b6e841364376da6a13de47249))
+
 ## [4.23.0](https://github.com/cds-snc/platform-forms-client/compare/v4.22.7...v4.23.0) (2026-09-29)
 
 
