@@ -38,6 +38,7 @@
     "start": "Speak response",
     "stop": "Stop recording",
     "processing": "Transcribing...",
+    "unavailable": "Voice input is unavailable in this browser. Enter your response manually.",
     "error": "Speech input could not be processed. Try again or enter your response manually."
   },
   "input-validation": {

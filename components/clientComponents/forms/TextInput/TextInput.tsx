@@ -1,7 +1,7 @@
 "use client";
 import React, { type JSX } from "react";
 import { useField } from "formik";
-import { ErrorMessage, SpeechInput } from "@clientComponents/forms";
+import { BrowserSpeechInput, ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
 import { cn } from "@lib/utils";
 import { useCharacterCount } from "@lib/hooks/useCharacterCount";
@@ -64,7 +64,7 @@ export const TextInput = (
       />
       <CharacterCountDisplay />
       {process.env.NEXT_PUBLIC_ENABLE_SPEECH_INPUT === "true" && (
-        <SpeechInput
+        <BrowserSpeechInput
           lang={lang}
           onTranscript={(transcript) =>
             helpers.setValue(`${field.value || ""}${field.value ? " " : ""}${transcript}`)

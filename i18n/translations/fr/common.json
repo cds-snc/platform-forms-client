@@ -38,6 +38,7 @@
     "start": "Dicter la réponse",
     "stop": "Arrêter l'enregistrement",
     "processing": "Transcription en cours...",
+    "unavailable": "La saisie vocale n'est pas disponible dans ce navigateur. Saisissez votre réponse manuellement.",
     "error": "La réponse vocale n'a pas pu être traitée. Réessayez ou saisissez votre réponse manuellement."
   },
   "input-validation": {

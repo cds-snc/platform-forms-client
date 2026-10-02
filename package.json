@@ -73,6 +73,7 @@
     "@headless-tree/core": "^1.7.0",
     "@headless-tree/react": "^1.7.0",
     "@headlessui/react": "^2.2.10",
+    "@huggingface/transformers": "^4.3.0",
     "@next/mdx": "16.3.5",
     "@opentelemetry/exporter-jaeger": "^2.10.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.221.0",

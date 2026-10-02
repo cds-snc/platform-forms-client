@@ -92,6 +92,79 @@ load balancer, or deployment automation. Those become relevant only to the secon
 and only as much as needed to validate the private deployment. Autoscaling, production
 hardening, dashboards, and broad form-field rollout are outside this proof of concept.
 
+#### Browser-based alternative
+
+Whisper is the AI speech-recognition model. `faster-whisper` is the server-side runtime
+used by this proof of concept. The default `Systran/faster-whisper-small` model is
+multilingual and can transcribe English and French; Whisper also has English-only model
+variants such as those with an `.en` suffix. Larger models generally improve accuracy,
+especially with noise, accents, and difficult speech, but require more download size,
+memory, processing time, and battery. Model size is therefore an accuracy trade-off, not
+the only factor determining accuracy.
+
+A browser-based implementation could avoid AWS GPU costs by running a quantized,
+multilingual Whisper model on the user's device. The existing Python service cannot run
+directly in a browser; a browser-compatible runtime such as ONNX Runtime Web or
+`whisper.cpp` compiled to WebAssembly/WebGPU would be required.
+
+For this experiment, use `@huggingface/transformers` with ONNX Runtime Web and the
+`onnx-community/whisper-tiny` model. This is the multilingual ONNX form of OpenAI's
+Whisper Tiny model and is suitable for English and French transcription. Start with
+`q8` quantization for the browser POC, then measure whether `q4` provides a useful
+download-size reduction without unacceptable accuracy loss. The model card identifies
+the original Whisper Tiny model as Apache-2.0; the converted model repository's license
+and redistribution terms must be confirmed before any wider release.
+
+The browser worker defaults to Tiny. To compare another compatible ONNX model, set the public
+client variable before starting Next.js, for example:
+
+```sh
+NEXT_PUBLIC_SPEECH_MODEL=onnx-community/whisper-small
+```
+
+The configured model is displayed on the isolated probe. Model assets are cached by the browser,
+so use a fresh browser profile or clear the site cache when comparing cold-download behavior.
+
+The browser alternative can be explored one step at a time:
+
+1. Select `@huggingface/transformers` and `onnx-community/whisper-tiny`; confirm the
+	model files, quantization options, and license for the intended use.
+2. Build an isolated browser test that records a short sample, converts it to the model's
+	expected 16 kHz mono audio, runs inference in a Web Worker, and displays the result.
+	The first probe is available at `/:locale/speech-poc` and uses WASM with `q8` quantization;
+	it does not call the server speech proxy.
+3. Measure first-load download size, warm-start latency, peak browser memory, CPU/battery
+	impact, and English/French transcription quality on a desktop browser. The probe now reports
+	model asset size, cold versus warm setup time, inference time, audio duration, best-effort
+	main-thread heap usage, browser capabilities, and decoded audio RMS/peak signal levels. CPU/
+	battery impact and real-speech quality still require manual runs with representative English and
+	French recordings.
+4. Integrate the working browser transcription into one public form text field behind the
+	existing feature flag. The first integration uses browser transcription for `TextInput` while
+	`TextArea` remains on the server-backed control for comparison. Audio remains in the browser
+	and does not use the proxy.
+5. Add capability detection and a manual-entry fallback for browsers that lack suitable
+	WebGPU/WASM performance. The public control now checks microphone, recording, Web Audio,
+	Worker, and WebAssembly support before creating the inference worker; the regular text input
+	remains available when voice input is unavailable.
+6. Compare the browser result with the existing server POC before deciding between a
+	browser-only, hybrid, or private server deployment.
+
+For a repeatable phrase-level comparison, record the same short phrases in English and French on
+the same browser and device. Run each phrase once with a cold page load and once with the warm
+model, then record the transcript, model setup time, inference time, audio duration, asset size,
+and observed heap peak from the probe. Repeat the phrases against the server POC and compare
+transcript accuracy, latency, and device resource impact. The browser probe does not currently
+upload or retain recordings, so an exact same-file comparison requires a later recording-export
+or dual-transcription step.
+
+Initial qualitative observation: on three manual English recordings of “Testing testing 123”,
+Tiny produced unrelated or highly repetitive hallucinations in all three runs. Small produced two
+near-exact transcripts and one transcript with an extra introductory phrase. The Small runs took
+approximately 8 seconds each on the test desktop. This is useful directional evidence, not a
+controlled accuracy benchmark; the probe's cold and warm timing measurements should be recorded
+alongside future samples.
+
 ### Edit `@gcforms/core` styles locally
 
 If you are changing styles in `packages/core/src/styles`, use the local `yalc` workflow to test the built package the same way it will be consumed after publish.
