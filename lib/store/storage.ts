@@ -3,6 +3,7 @@ import { logMessage } from "@lib/logger";
 import { TemplateStoreState } from "./types";
 import { StateStorage } from "zustand/middleware";
 import { createJSONStorage } from "zustand/middleware";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
 const storage: StateStorage = {
   getItem: (name: string) => {
@@ -46,6 +47,10 @@ export const storageOptions = {
       return current;
     }
 
-    return { ...current, ...persistedState };
+    return {
+      ...current,
+      ...persistedState,
+      form: persistedState?.form ? migrateTemplate(persistedState.form) : current.form,
+    };
   },
 };
