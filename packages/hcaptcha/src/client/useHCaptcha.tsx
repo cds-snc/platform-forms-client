@@ -45,7 +45,10 @@ export type UseHCaptchaResult = {
 };
 
 const SUSPICIOUS_ERROR_CODES = new Set(["invalid-data", "invalid-input-response"]);
-const HCAPTCHA_EXECUTION_TIMEOUT_MS = 15000;
+
+// Give users time to finish, but don't let a stuck CAPTCHA hang the submission forever.
+// hCaptcha handles token expiry separately; we use the same two-minute window as the outer wait limit.
+const HCAPTCHA_EXECUTION_TIMEOUT_MS = 2 * 60 * 1000;
 
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
@@ -239,7 +242,8 @@ export const useHCaptcha = ({
       resolveExecution = resolve;
     });
     const executionId = ++executionIdRef.current;
-    // On timeout resets hCaptcha to allow showing a recoverable submission error so the user can retry
+    // Fallback if the provider never becomes ready or execution never settles.
+    // Normal challenge expiry is handled by hCaptcha's lifecycle callbacks.
     const timeoutId = setTimeout(() => {
       logger?.warn?.(`hCaptcha: execution timed out after ${HCAPTCHA_EXECUTION_TIMEOUT_MS}ms`);
       complete(failureResult("timeout"), executionId);

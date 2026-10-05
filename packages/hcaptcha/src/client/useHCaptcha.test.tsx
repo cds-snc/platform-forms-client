@@ -6,6 +6,8 @@ import { forwardRef, useImperativeHandle } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useHCaptcha, type HCaptchaExecutionResult, type HCaptchaLogger } from "./useHCaptcha";
 
+const HCAPTCHA_EXECUTION_TIMEOUT_MS = 2 * 60 * 1000;
+
 const mockCaptcha = vi.hoisted(() => ({
   execute: vi.fn<() => void | Promise<{ response: string; key: string }>>(() => undefined),
   isReady: vi.fn(() => true),
@@ -275,13 +277,45 @@ describe("useHCaptcha", () => {
     fireEvent.click(getByRole("button", { name: "Execute" }));
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(15000);
+      await vi.advanceTimersByTimeAsync(HCAPTCHA_EXECUTION_TIMEOUT_MS);
     });
 
     expect(onResult).toHaveBeenCalledWith({
       verified: false,
       reason: "timeout",
     });
+  });
+
+  it("waits until the timeout boundary and logs the timeout", async () => {
+    vi.useFakeTimers();
+    mockCaptcha.isReady.mockReturnValue(false);
+    const logger = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+    };
+    const onResult = vi.fn();
+    const { getByRole } = render(<HookHarness logger={logger} onResult={onResult} />);
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(HCAPTCHA_EXECUTION_TIMEOUT_MS - 1);
+    });
+    expect(onResult).not.toHaveBeenCalled();
+    expect(logger.warn).not.toHaveBeenCalled();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1);
+    });
+
+    expect(onResult).toHaveBeenCalledWith({
+      verified: false,
+      reason: "timeout",
+    });
+    expect(logger.warn).toHaveBeenCalledWith(
+      `hCaptcha: execution timed out after ${HCAPTCHA_EXECUTION_TIMEOUT_MS}ms`
+    );
   });
 
   it("times out when provider execution never settles", async () => {
@@ -293,7 +327,7 @@ describe("useHCaptcha", () => {
     fireEvent.click(getByRole("button", { name: "Execute" }));
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(15000);
+      await vi.advanceTimersByTimeAsync(HCAPTCHA_EXECUTION_TIMEOUT_MS);
     });
 
     expect(onResult).toHaveBeenCalledWith({
@@ -322,7 +356,7 @@ describe("useHCaptcha", () => {
 
     fireEvent.click(getByRole("button", { name: "Execute" }));
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(15000);
+      await vi.advanceTimersByTimeAsync(HCAPTCHA_EXECUTION_TIMEOUT_MS);
     });
     fireEvent.click(getByRole("button", { name: "Execute" }));
 
