@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { act, fireEvent, render, waitFor } from "@testing-library/react";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useHCaptcha, type HCaptchaExecutionResult, type HCaptchaLogger } from "./useHCaptcha";
 
@@ -14,6 +14,8 @@ const mockCaptcha = vi.hoisted(() => ({
   execute: vi.fn<() => void | Promise<{ response: string; key: string }>>(() => undefined),
   isReady: vi.fn(() => true),
   reset: vi.fn(),
+  verifyCallbacks: [] as Array<(token: string) => void>,
+  closeCallbacks: [] as Array<() => void>,
 }));
 
 vi.mock("@hcaptcha/react-hcaptcha", () => ({
@@ -42,6 +44,10 @@ vi.mock("@hcaptcha/react-hcaptcha", () => ({
           execute: mockCaptcha.execute,
           isReady: mockCaptcha.isReady,
         }));
+        useEffect(() => {
+          mockCaptcha.verifyCallbacks.push(onVerify);
+          mockCaptcha.closeCallbacks.push(onClose);
+        }, [onVerify, onClose]);
 
         // Use buttons to simulate provider callbacks without loading the real hCaptcha widget
         return ["invalid-sitekey", "invalid-data", "network-error", "script-error"]
@@ -122,6 +128,8 @@ describe("useHCaptcha", () => {
     mockCaptcha.isReady.mockReset();
     mockCaptcha.isReady.mockReturnValue(true);
     mockCaptcha.reset.mockClear();
+    mockCaptcha.verifyCallbacks.length = 0;
+    mockCaptcha.closeCallbacks.length = 0;
   });
 
   afterEach(() => {
@@ -480,6 +488,103 @@ describe("useHCaptcha", () => {
     resolveSecond({ response: "current-token", key: "current-key" });
     await act(async () => {});
     expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "current-token" });
+  });
+
+  it("ignores a late verification callback from a timed-out widget during retry", async () => {
+    vi.useFakeTimers();
+    const onResult = vi.fn();
+    const onCaptchaVerified = vi.fn();
+    const { getByRole, getByTestId } = render(
+      <HookHarness onResult={onResult} onCaptchaVerified={onCaptchaVerified} />
+    );
+    const oldVerify = mockCaptcha.verifyCallbacks[0];
+    const oldClose = mockCaptcha.closeCallbacks[0];
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(HCAPTCHA_EXECUTION_TIMEOUT_MS);
+    });
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await act(async () => {
+      oldVerify("stale-token");
+      oldClose();
+    });
+    expect(onResult).toHaveBeenCalledExactlyOnceWith({ verified: false, reason: "timeout" });
+    expect(onCaptchaVerified).not.toHaveBeenCalled();
+
+    fireEvent.click(getByTestId("captcha-verify"));
+    await act(async () => {});
+    expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "captcha-token" });
+  });
+
+  it("ignores a late verification callback from a reset widget during retry", async () => {
+    const onResult = vi.fn();
+    const onCaptchaVerified = vi.fn();
+    const { getByRole, getByTestId } = render(
+      <HookHarness onResult={onResult} onCaptchaVerified={onCaptchaVerified} />
+    );
+    const oldVerify = mockCaptcha.verifyCallbacks[0];
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByRole("button", { name: "Reset" }));
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await act(async () => {
+      oldVerify("stale-token");
+    });
+    expect(onResult).toHaveBeenCalledExactlyOnceWith({ verified: false, reason: "cancelled" });
+    expect(onCaptchaVerified).not.toHaveBeenCalled();
+
+    fireEvent.click(getByTestId("captcha-verify"));
+    await waitFor(() =>
+      expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "captcha-token" })
+    );
+  });
+
+  it("ignores a duplicate verification callback after a successful attempt", async () => {
+    const onResult = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onResult={onResult} />);
+    const oldVerify = mockCaptcha.verifyCallbacks[0];
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId("captcha-verify"));
+    await waitFor(() => expect(onResult).toHaveBeenCalledOnce());
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    await act(async () => {
+      oldVerify("stale-token");
+    });
+    expect(onResult).toHaveBeenCalledOnce();
+
+    fireEvent.click(getByTestId("captcha-verify"));
+    await waitFor(() => expect(onResult).toHaveBeenCalledTimes(2));
+    expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "captcha-token" });
+  });
+
+  it.each([
+    ["close", "cancelled"],
+    ["expired", "expired"],
+    ["error-network-error", "captcha-error"],
+  ])("ignores a late verification callback after %s", async (event, reason) => {
+    const onResult = vi.fn();
+    const { getByRole, getByTestId } = render(<HookHarness onResult={onResult} />);
+    const oldVerify = mockCaptcha.verifyCallbacks[0];
+
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+    fireEvent.click(getByTestId(`captcha-${event}`));
+    await waitFor(() => expect(onResult).toHaveBeenCalledWith({ verified: false, reason }));
+    fireEvent.click(getByRole("button", { name: "Execute" }));
+
+    await act(async () => {
+      oldVerify("stale-token");
+    });
+    expect(onResult).toHaveBeenCalledOnce();
+
+    fireEvent.click(getByTestId("captcha-verify"));
+    await waitFor(() =>
+      expect(onResult).toHaveBeenLastCalledWith({ verified: true, token: "captcha-token" })
+    );
   });
 
   it("reports the verified token through the callback", async () => {

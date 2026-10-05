@@ -83,6 +83,12 @@ export const useHCaptcha = ({
   const hasFatalErrorRef = useRef(false);
   const fatalErrorReasonRef = useRef<"configuration-error" | "load-error" | null>(null);
   const [captchaInstanceKey, setCaptchaInstanceKey] = useState(0);
+  const captchaInstanceKeyRef = useRef(0);
+
+  const remountCaptcha = useCallback(() => {
+    captchaInstanceKeyRef.current += 1;
+    setCaptchaInstanceKey(captchaInstanceKeyRef.current);
+  }, []);
 
   // Provider callbacks and the provider's async execute Promise complete the package Promise
   const complete = useCallback((result: HCaptchaExecutionResult, executionId?: number): boolean => {
@@ -108,6 +114,15 @@ export const useHCaptcha = ({
     []
   );
 
+  const completeFailure = useCallback(
+    (reason: HCaptchaFailureReason, executionId?: number): boolean => {
+      if (!complete(failureResult(reason), executionId)) return false;
+      remountCaptcha();
+      return true;
+    },
+    [complete, failureResult, remountCaptcha]
+  );
+
   useEffect(() => {
     return () => {
       complete(failureResult("cancelled"));
@@ -131,12 +146,12 @@ export const useHCaptcha = ({
       const timeoutMs = HCAPTCHA_TIMEOUTS_MS[phase];
       pendingExecution.timeoutId = setTimeout(() => {
         if (pendingExecutionRef.current?.phase !== phase) return;
-        if (complete(failureResult("timeout"), executionId)) {
+        if (completeFailure("timeout", executionId)) {
           logger?.warn(`hCaptcha: ${phase} timed out after ${timeoutMs}ms`);
         }
       }, timeoutMs);
     },
-    [complete, failureResult, logger]
+    [completeFailure, logger]
   );
 
   const reset = useCallback(() => {
@@ -147,24 +162,24 @@ export const useHCaptcha = ({
     hasFatalErrorRef.current = false;
     fatalErrorReasonRef.current = null;
     complete(failureResult("cancelled"));
-    setCaptchaInstanceKey((key) => key + 1);
-  }, [complete, failureResult]);
+    remountCaptcha();
+  }, [complete, failureResult, remountCaptcha]);
 
   const onExpired = useCallback(() => {
     hCaptchaRef.current?.resetCaptcha();
-    complete(failureResult("expired"));
+    completeFailure("expired");
     onCaptchaExpired?.();
-  }, [complete, failureResult, onCaptchaExpired]);
+  }, [completeFailure, onCaptchaExpired]);
 
   const onClose = useCallback(() => {
     hCaptchaRef.current?.resetCaptcha();
-    complete(failureResult("cancelled"));
-  }, [complete, failureResult]);
+    completeFailure("cancelled");
+  }, [completeFailure]);
 
   const resetAfterError = useCallback(() => {
     hCaptchaRef.current?.resetCaptcha();
-    complete(failureResult("captcha-error"));
-  }, [complete, failureResult]);
+    completeFailure("captcha-error");
+  }, [completeFailure]);
 
   const handleProviderError = useCallback(
     (code: string) => {
@@ -196,7 +211,7 @@ export const useHCaptcha = ({
             onExpired();
             break;
           case "execution-error":
-            complete(failureResult("execution-error"));
+            completeFailure("execution-error");
             break;
           default:
             logger?.warn(`hCaptcha: recoverable error "${code}" - user can retry submission`);
@@ -208,6 +223,7 @@ export const useHCaptcha = ({
     },
     [
       complete,
+      completeFailure,
       failureResult,
       logger,
       onClose,
@@ -242,6 +258,7 @@ export const useHCaptcha = ({
           void providerExecution
             .then(({ response }) => {
               if (complete({ verified: true, token: response }, currentExecutionId)) {
+                remountCaptcha();
                 onCaptchaVerified?.();
               }
             })
@@ -255,10 +272,17 @@ export const useHCaptcha = ({
         }
       } catch {
         // The provider can throw before it reports an error through its callbacks
-        complete(failureResult("execution-error"), currentExecutionId);
+        completeFailure("execution-error", currentExecutionId);
       }
     },
-    [complete, failureResult, handleProviderError, onCaptchaVerified, setExecutionTimeout]
+    [
+      complete,
+      completeFailure,
+      handleProviderError,
+      onCaptchaVerified,
+      remountCaptcha,
+      setExecutionTimeout,
+    ]
   );
 
   const onReady = useCallback(() => {
@@ -309,29 +333,47 @@ export const useHCaptcha = ({
   const onVerify = useCallback(
     (verifiedToken: string) => {
       if (complete({ verified: true, token: verifiedToken })) {
+        remountCaptcha();
         logger?.info(`hCaptcha: verified token received at ${new Date().toISOString()}`);
         onCaptchaVerified?.();
       }
     },
-    [complete, logger, onCaptchaVerified]
+    [complete, logger, onCaptchaVerified, remountCaptcha]
   );
+
+  const isCurrentWidget = () => captchaInstanceKeyRef.current === captchaInstanceKey;
 
   const captcha = enabled ? (
     <HCaptcha
       key={captchaInstanceKey}
       ref={hCaptchaRef}
       sitekey={siteKey}
-      onVerify={onVerify}
-      onError={onError}
-      onReady={onReady}
-      onOpen={onOpen}
+      // A replaced widget may still fire callbacks after a retry starts.
+      onVerify={(token) => {
+        if (isCurrentWidget()) onVerify(token);
+      }}
+      onError={(code) => {
+        if (isCurrentWidget()) onError(code);
+      }}
+      onReady={() => {
+        if (isCurrentWidget()) onReady();
+      }}
+      onOpen={() => {
+        if (isCurrentWidget()) onOpen();
+      }}
       // A challenge timeout means the user did not complete the challenge, while token expiration
       // means a previously issued token is no longer valid. Neither can produce a usable token,
       // so both callbacks reset the widget and resolve the active execution as expired. Closing
       // the challenge is handled separately as cancellation below.
-      onChalExpired={onExpired}
-      onExpire={onExpired}
-      onClose={onClose}
+      onChalExpired={() => {
+        if (isCurrentWidget()) onExpired();
+      }}
+      onExpire={() => {
+        if (isCurrentWidget()) onExpired();
+      }}
+      onClose={() => {
+        if (isCurrentWidget()) onClose();
+      }}
       languageOverride={language}
       size="invisible"
       loadAsync={true}
