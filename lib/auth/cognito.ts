@@ -111,6 +111,8 @@ export const initiateSignIn = async ({
 
     logMessage.info("HealthCheck: cognito sign-in failure");
 
+    logMessage.error(e);
+
     throw e;
   }
 };
