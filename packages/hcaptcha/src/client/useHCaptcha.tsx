@@ -2,7 +2,7 @@
 
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import type { ReactNode } from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type HCaptchaLogger = {
   info(message: string): void;
@@ -46,9 +46,13 @@ export type UseHCaptchaResult = {
 
 const SUSPICIOUS_ERROR_CODES = new Set(["invalid-data", "invalid-input-response"]);
 
-// Give users time to finish, but don't let a stuck CAPTCHA hang the submission forever.
-// hCaptcha handles token expiry separately; we use the same two-minute window as the outer wait limit.
-const HCAPTCHA_EXECUTION_TIMEOUT_MS = 2 * 60 * 1000;
+// Give hCaptcha less time to load and respond, and users more time to finish a challenge.
+// These timeouts are separate from token expiry.
+const HCAPTCHA_TIMEOUTS_MS = {
+  readiness: 15000,
+  execution: 30000,
+  challenge: 5 * 60 * 1000,
+};
 
 // Provides CAPTCHA behavior without owning a form, so consumers can integrate execution and reset
 // with their own submission flow, including forms that use uncontrolled inputs
@@ -69,7 +73,8 @@ export const useHCaptcha = ({
     promise: Promise<HCaptchaExecutionResult>;
     resolve: (result: HCaptchaExecutionResult) => void;
     executionId: number;
-    timeoutId: ReturnType<typeof setTimeout>;
+    phase: keyof typeof HCAPTCHA_TIMEOUTS_MS | null;
+    timeoutId: ReturnType<typeof setTimeout> | undefined;
   } | null>(null);
   // Ignore provider results from executions invalidated by reset()
   const executionIdRef = useRef(0);
@@ -101,6 +106,37 @@ export const useHCaptcha = ({
       reason,
     }),
     []
+  );
+
+  useEffect(() => {
+    return () => {
+      complete(failureResult("cancelled"));
+    };
+  }, [complete, failureResult]);
+
+  // Reuse one timer as hCaptcha moves through each step. Repeated events don't restart the clock.
+  const setExecutionTimeout = useCallback(
+    (phase: keyof typeof HCAPTCHA_TIMEOUTS_MS, executionId: number) => {
+      const pendingExecution = pendingExecutionRef.current;
+      if (
+        !pendingExecution ||
+        pendingExecution.executionId !== executionId ||
+        pendingExecution.phase === phase
+      ) {
+        return;
+      }
+
+      clearTimeout(pendingExecution.timeoutId);
+      pendingExecution.phase = phase;
+      const timeoutMs = HCAPTCHA_TIMEOUTS_MS[phase];
+      pendingExecution.timeoutId = setTimeout(() => {
+        if (pendingExecutionRef.current?.phase !== phase) return;
+        if (complete(failureResult("timeout"), executionId)) {
+          logger?.warn(`hCaptcha: ${phase} timed out after ${timeoutMs}ms`);
+        }
+      }, timeoutMs);
+    },
+    [complete, failureResult, logger]
   );
 
   const reset = useCallback(() => {
@@ -189,12 +225,14 @@ export const useHCaptcha = ({
         !pendingExecution ||
         !hCaptchaRef.current ||
         hasFatalErrorRef.current ||
+        pendingExecution.phase !== "readiness" ||
         (executionId !== undefined && pendingExecution.executionId !== executionId)
       ) {
         return;
       }
 
       const currentExecutionId = pendingExecution.executionId;
+      setExecutionTimeout("execution", currentExecutionId);
 
       try {
         const providerExecution = hCaptchaRef.current.execute({ async: true });
@@ -220,12 +258,20 @@ export const useHCaptcha = ({
         complete(failureResult("execution-error"), currentExecutionId);
       }
     },
-    [complete, failureResult, handleProviderError, onCaptchaVerified]
+    [complete, failureResult, handleProviderError, onCaptchaVerified, setExecutionTimeout]
   );
 
   const onReady = useCallback(() => {
     startExecution();
   }, [startExecution]);
+
+  const onOpen = useCallback(() => {
+    const pendingExecution = pendingExecutionRef.current;
+    if (pendingExecution?.phase === "execution") {
+      // Give the user the full challenge time, even if hCaptcha took a while to load or respond
+      setExecutionTimeout("challenge", pendingExecution.executionId);
+    }
+  }, [setExecutionTimeout]);
 
   const onError = useCallback(
     (code: string) => {
@@ -242,18 +288,14 @@ export const useHCaptcha = ({
       resolveExecution = resolve;
     });
     const executionId = ++executionIdRef.current;
-    // Fallback if the provider never becomes ready or execution never settles.
-    // Normal challenge expiry is handled by hCaptcha's lifecycle callbacks.
-    const timeoutId = setTimeout(() => {
-      logger?.warn?.(`hCaptcha: execution timed out after ${HCAPTCHA_EXECUTION_TIMEOUT_MS}ms`);
-      complete(failureResult("timeout"), executionId);
-    }, HCAPTCHA_EXECUTION_TIMEOUT_MS);
     pendingExecutionRef.current = {
       promise,
       resolve: resolveExecution,
       executionId,
-      timeoutId,
+      phase: null,
+      timeoutId: undefined,
     };
+    setExecutionTimeout("readiness", executionId);
 
     if (!hCaptchaRef.current || hasFatalErrorRef.current) {
       complete(failureResult(fatalErrorReasonRef.current ?? "not-ready"));
@@ -262,7 +304,7 @@ export const useHCaptcha = ({
     }
 
     return promise;
-  }, [complete, failureResult, logger, startExecution]);
+  }, [complete, failureResult, setExecutionTimeout, startExecution]);
 
   const onVerify = useCallback(
     (verifiedToken: string) => {
@@ -282,6 +324,7 @@ export const useHCaptcha = ({
       onVerify={onVerify}
       onError={onError}
       onReady={onReady}
+      onOpen={onOpen}
       // A challenge timeout means the user did not complete the challenge, while token expiration
       // means a previously issued token is no longer valid. Neither can produce a usable token,
       // so both callbacks reset the widget and resolve the active execution as expired. Closing
