@@ -31,7 +31,7 @@ export const useFormHCaptcha = ({
   const { hCaptchaEnabledSetting } = useGCFormsContext();
 
   const captchaRequired = shouldCheckCaptcha(isPublished, hCaptchaEnabledSetting);
-  // TEMP
+  // TEMP -
   //const siteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
   const siteKey = HCAPTCHA_PROMPT_SITE_KEY;
   // END TEMP
