@@ -6,9 +6,6 @@ import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 
 import type { CaptchaSubmitControls } from "./submitFormValues";
 
-// TEMP FOR TESTING
-const HCAPTCHA_PROMPT_SITE_KEY = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
-
 type UseFormHCaptchaOptions = {
   isPublished: boolean;
   language: string;
@@ -31,10 +28,7 @@ export const useFormHCaptcha = ({
   const { hCaptchaEnabledSetting } = useGCFormsContext();
 
   const captchaRequired = shouldCheckCaptcha(isPublished, hCaptchaEnabledSetting);
-  // TEMP -
-  //const siteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
-  const siteKey = HCAPTCHA_PROMPT_SITE_KEY;
-  // END TEMP
+  const siteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY?.trim() ?? "";
   // Avoid a hCaptcha browser error by checking for the required siteKey as well
   const captchaEnabled = captchaRequired && Boolean(siteKey);
 
