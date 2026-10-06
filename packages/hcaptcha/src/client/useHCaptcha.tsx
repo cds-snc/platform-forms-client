@@ -75,7 +75,7 @@ export const useHCaptcha = ({
     promise: Promise<HCaptchaExecutionResult>;
     resolve: (result: HCaptchaExecutionResult) => void;
     executionId: number;
-    phase: keyof typeof HCAPTCHA_TIMEOUTS_MS | null;
+    timeoutPhase: keyof typeof HCAPTCHA_TIMEOUTS_MS | null;
     timeoutId: ReturnType<typeof setTimeout> | undefined;
   } | null>(null);
   // Ignore provider results from executions invalidated by reset()
@@ -132,24 +132,24 @@ export const useHCaptcha = ({
   }, [complete, failureResult]);
 
   // Reuse one timer as hCaptcha moves through each step. Repeated events don't restart the clock.
-  const setExecutionTimeout = useCallback(
-    (phase: keyof typeof HCAPTCHA_TIMEOUTS_MS, executionId: number) => {
+  const startPhaseTimeout = useCallback(
+    (timeoutPhase: keyof typeof HCAPTCHA_TIMEOUTS_MS, executionId: number) => {
       const pendingExecution = pendingExecutionRef.current;
       if (
         !pendingExecution ||
         pendingExecution.executionId !== executionId ||
-        pendingExecution.phase === phase
+        pendingExecution.timeoutPhase === timeoutPhase
       ) {
         return;
       }
 
       clearTimeout(pendingExecution.timeoutId);
-      pendingExecution.phase = phase;
-      const timeoutMs = HCAPTCHA_TIMEOUTS_MS[phase];
+      pendingExecution.timeoutPhase = timeoutPhase;
+      const timeoutMs = HCAPTCHA_TIMEOUTS_MS[timeoutPhase];
       pendingExecution.timeoutId = setTimeout(() => {
-        if (pendingExecutionRef.current?.phase !== phase) return;
+        if (pendingExecutionRef.current?.timeoutPhase !== timeoutPhase) return;
         if (completeFailure("timeout", executionId)) {
-          logger?.warn(`hCaptcha: ${phase} timed out after ${timeoutMs}ms`);
+          logger?.warn(`hCaptcha: ${timeoutPhase} timed out after ${timeoutMs}ms`);
         }
       }, timeoutMs);
     },
@@ -243,14 +243,14 @@ export const useHCaptcha = ({
         !pendingExecution ||
         !hCaptchaRef.current ||
         hasFatalErrorRef.current ||
-        pendingExecution.phase !== "readiness" ||
+        pendingExecution.timeoutPhase !== "readiness" ||
         (executionId !== undefined && pendingExecution.executionId !== executionId)
       ) {
         return;
       }
 
       const currentExecutionId = pendingExecution.executionId;
-      setExecutionTimeout("execution", currentExecutionId);
+      startPhaseTimeout("execution", currentExecutionId);
 
       try {
         const providerExecution = hCaptchaRef.current.execute({ async: true });
@@ -283,7 +283,7 @@ export const useHCaptcha = ({
       handleProviderError,
       onCaptchaVerified,
       remountCaptcha,
-      setExecutionTimeout,
+      startPhaseTimeout,
     ]
   );
 
@@ -294,10 +294,10 @@ export const useHCaptcha = ({
   const onOpen = useCallback(() => {
     // Give the user the full challenge time, even if hCaptcha took a while to load or respond
     const pendingExecution = pendingExecutionRef.current;
-    if (pendingExecution?.phase === "execution") {
-      setExecutionTimeout("challenge", pendingExecution.executionId);
+    if (pendingExecution?.timeoutPhase === "execution") {
+      startPhaseTimeout("challenge", pendingExecution.executionId);
     }
-  }, [setExecutionTimeout]);
+  }, [startPhaseTimeout]);
 
   const onError = useCallback(
     (code: string) => {
@@ -318,10 +318,10 @@ export const useHCaptcha = ({
       promise,
       resolve: resolveExecution,
       executionId,
-      phase: null,
+      timeoutPhase: null,
       timeoutId: undefined,
     };
-    setExecutionTimeout("readiness", executionId);
+    startPhaseTimeout("readiness", executionId);
 
     if (!hCaptchaRef.current || hasFatalErrorRef.current) {
       complete(failureResult(fatalErrorReasonRef.current ?? "not-ready"));
@@ -330,7 +330,7 @@ export const useHCaptcha = ({
     }
 
     return promise;
-  }, [complete, failureResult, setExecutionTimeout, startExecution]);
+  }, [complete, failureResult, startPhaseTimeout, startExecution]);
 
   const onVerify = useCallback(
     (verifiedToken: string) => {
