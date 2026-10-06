@@ -46,11 +46,12 @@ export type UseHCaptchaResult = {
 
 const SUSPICIOUS_ERROR_CODES = new Set(["invalid-data", "invalid-input-response"]);
 
-// Give hCaptcha less time to load and respond, and users more time to finish a challenge.
-// These timeouts are separate from token expiry.
 const HCAPTCHA_TIMEOUTS_MS = {
+  // hCaptcha should have loaded by this time since it begins loading on form load but catch any stalled or unusually slow loading scenarios
   readiness: 15000,
+  // Allow time for network retries, but don't hang when no challenge appears
   execution: 30000,
+  // Intentionally generous to allow users enough time to complete the challenge
   challenge: 5 * 60 * 1000,
 };
 
@@ -290,9 +291,9 @@ export const useHCaptcha = ({
   }, [startExecution]);
 
   const onOpen = useCallback(() => {
+    // Give the user the full challenge time, even if hCaptcha took a while to load or respond
     const pendingExecution = pendingExecutionRef.current;
     if (pendingExecution?.phase === "execution") {
-      // Give the user the full challenge time, even if hCaptcha took a while to load or respond
       setExecutionTimeout("challenge", pendingExecution.executionId);
     }
   }, [setExecutionTimeout]);
