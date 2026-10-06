@@ -47,7 +47,8 @@ export type UseHCaptchaResult = {
 const SUSPICIOUS_ERROR_CODES = new Set(["invalid-data", "invalid-input-response"]);
 
 const HCAPTCHA_TIMEOUTS_MS = {
-  // hCaptcha should have loaded by this time since it begins loading on form load but catch any stalled or unusually slow loading scenarios
+  // hCaptcha should have loaded by this time since it begins loading on form load but catch any
+  // stalled or unusually slow loading scenarios
   readiness: 15000,
   // Allow time for network retries, but don't hang when no challenge appears
   execution: 30000,
