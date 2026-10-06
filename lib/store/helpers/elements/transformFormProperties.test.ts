@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { type FormProperties } from "@gcforms/types";
-import { transformFormProperties } from "./transformFormProperties";
+import navigationFocus from "@root/__fixtures__/navigationFocus.json";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
+import { type TemplateStoreState } from "../../types";
+import { transform, transformFormProperties } from "./transformFormProperties";
 
 describe("transformFormProperties", () => {
   it("removes elements not referenced by groups and keeps layout in sync", () => {
@@ -215,5 +218,57 @@ describe("transformFormProperties", () => {
 
     expect(subElement.type).toBe("numberInput");
     expect(subElement.uuid).toBeDefined();
+  });
+
+  it("removes empty exit URLs before template validation", () => {
+    const form = structuredClone(navigationFocus) as FormProperties;
+    form.groups!["exit-page"] = {
+      name: "Exit",
+      titleEn: "Exit",
+      titleFr: "Sortie",
+      elements: [],
+      nextAction: "exit",
+      exitUrlEn: "",
+      exitUrlFr: "http://test-en",
+    };
+
+    expect(validateTemplate(form).errors).toContainEqual({
+      property: "groups.exit-page.exitUrlEn",
+      message: "formInvalidProperty",
+    });
+
+    const transformed = transformFormProperties(form);
+    const errors = validateTemplate(transformed).errors;
+
+    expect(transformed.groups!["exit-page"].exitUrlEn).toBeUndefined();
+    expect(transformed.groups!["exit-page"].exitUrlFr).toBe("http://test-en");
+    expect(errors).not.toContainEqual({
+      property: "groups.exit-page.exitUrlEn",
+      message: "formInvalidProperty",
+    });
+    expect(errors).not.toContainEqual({
+      property: "groups.exit-page.exitUrlFr",
+      message: "formInvalidProperty",
+    });
+  });
+
+  it("removes empty exit URLs when the store transform cleans form structure", () => {
+    const form = structuredClone(navigationFocus) as FormProperties;
+    form.groups!["exit-page"] = {
+      name: "Exit",
+      titleEn: "Exit",
+      titleFr: "Sortie",
+      elements: [],
+      nextAction: "exit",
+      exitUrlEn: "",
+      exitUrlFr: "http://test-en",
+    };
+    const state = { form } as unknown as TemplateStoreState;
+    const set = (update: (state: TemplateStoreState) => void) => update(state);
+
+    transform(set)();
+
+    expect(state.form.groups!["exit-page"].exitUrlEn).toBeUndefined();
+    expect(state.form.groups!["exit-page"].exitUrlFr).toBe("http://test-en");
   });
 });
