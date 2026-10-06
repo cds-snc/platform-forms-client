@@ -13,10 +13,23 @@ const deduplicatePropertyErrors = (errors: errorMessage[]) =>
       !error.property || errors.findIndex(({ property }) => property === error.property) === index
   );
 
-const getValidationPath = (error: ValidationError) => error.path.map(String).join(".");
+const getValidationPath = (error: ValidationError, pathPrefix: (string | number)[] = []) => {
+  const path = [...pathPrefix, ...error.path].map(String);
+  if (
+    error.name === "pattern" &&
+    error.path.at(-1) === "properties" &&
+    typeof error.instance === "string"
+  ) {
+    path.push(error.instance);
+  }
+  return path.join(".");
+};
 
-const getErrorMessageTranslationString = (error: ValidationError) => {
-  const validationPath = getValidationPath(error);
+const getErrorMessageTranslationString = (
+  error: ValidationError,
+  pathPrefix: (string | number)[] = []
+) => {
+  const validationPath = getValidationPath(error, pathPrefix);
   let property = validationPath || error.argument;
   let message = "formInvalidProperty";
 
@@ -40,6 +53,33 @@ const getErrorMessageTranslationString = (error: ValidationError) => {
   };
 };
 
+type OneOfSchema = {
+  oneOf?: {
+    properties?: { type?: { const?: unknown } };
+  }[];
+};
+
+const getOneOfErrors = (error: ValidationError): errorMessage[] => {
+  const elementType = (error.instance as { type?: unknown } | null)?.type;
+  const schema = (error.schema as OneOfSchema).oneOf?.find(
+    ({ properties }) => properties?.type?.const === elementType
+  );
+
+  if (!schema) {
+    return [getErrorMessageTranslationString(error)];
+  }
+
+  const branchResult = new Validator().validate(error.instance, {
+    ...schema,
+    definitions: templatesSchema.definitions,
+  });
+  const branchErrors = branchResult.errors
+    .filter(({ name }) => !["allOf", "anyOf"].includes(name))
+    .map((branchError) => getErrorMessageTranslationString(branchError, error.path));
+
+  return branchErrors.length ? branchErrors : [getErrorMessageTranslationString(error)];
+};
+
 export const validateTemplate = (data: FormProperties) => {
   const errors: errorMessage[] = [];
 
@@ -55,9 +95,14 @@ export const validateTemplate = (data: FormProperties) => {
   const validatorResult: ValidatorResult = validator.validate(data, templatesSchema, {
     preValidateProperty: cleanAngleBrackets,
   });
-  const validationErrors = validatorResult.errors
-    .filter(({ name }) => !["allOf", "anyOf", "oneOf"].includes(name))
-    .map(getErrorMessageTranslationString);
+  const validationErrors = validatorResult.errors.flatMap((error) => {
+    if (error.name === "allOf" || error.name === "anyOf") {
+      return [];
+    }
+    return error.name === "oneOf"
+      ? getOneOfErrors(error)
+      : [getErrorMessageTranslationString(error)];
+  });
   errors.push(...deduplicatePropertyErrors(validationErrors));
 
   return {
