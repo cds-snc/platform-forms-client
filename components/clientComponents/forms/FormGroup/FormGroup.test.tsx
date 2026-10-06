@@ -58,7 +58,11 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Generate a form group", (l
     screen.getAllByText(description).forEach((description) => {
       expect(description).toHaveClass("gc-description");
     });
-    expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
+    const radios = screen.getAllByRole("radio");
+    expect(radios[0]).toHaveAccessibleDescription(description);
+    radios.slice(1).forEach((radio) => {
+      expect(radio).not.toHaveAccessibleDescription(description);
+    });
     // Children are rendered.
     screen.getAllByText(title).forEach((child) => {
       expect(screen.getByRole("group")).toContainElement(child);

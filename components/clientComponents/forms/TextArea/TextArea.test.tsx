@@ -84,7 +84,8 @@ describe("Generate a text area", () => {
         expect(screen.getByText(description)).toBeInTheDocument();
         // Field marked as required and have aria described by
         const renderedTextBox = screen.getByRole("textbox");
-        expect(renderedTextBox).toBeRequired();
+        expect(renderedTextBox).toHaveAttribute("aria-required", "true");
+        expect(renderedTextBox).not.toHaveAttribute("required");
         expect(renderedTextBox).toHaveAccessibleDescription(description);
         expect(screen.queryByTestId("required")).toBeInTheDocument();
         // Placeholder properly renders
@@ -105,7 +106,8 @@ describe("Accessibility tests for the textarea component.", () => {
   it("checks the `aria-describedby` attribute", () => {
     // initial attribute has no value since the description is empty.
     const textBox = localScreen.getByRole("textbox");
-    expect(textBox).toBeRequired();
+    expect(textBox).toHaveAttribute("aria-required", "true");
+    expect(textBox).not.toHaveAttribute("required");
     expect(textBox).not.toHaveAccessibleDescription();
   });
 
@@ -116,7 +118,8 @@ describe("Accessibility tests for the textarea component.", () => {
     await user.type(textInput, "This is 35 characters This is 35 ch");
 
     const textbox = localScreen.getByRole("textbox");
-    expect(textbox).toBeRequired();
+  expect(textbox).toHaveAttribute("aria-required", "true");
+  expect(textbox).not.toHaveAttribute("required");
 
     const expectedEn = "You have 5 characters left.";
     const expectedFr = "Il vous reste 5 caractères.";
@@ -135,7 +138,8 @@ describe("Accessibility tests for the textarea component.", () => {
     await user.type(textInput, "This is 48 characters This is 48 characters This");
 
     const textbox = localScreen.getByRole("textbox");
-    expect(textbox).toBeRequired();
+  expect(textbox).toHaveAttribute("aria-required", "true");
+  expect(textbox).not.toHaveAttribute("required");
 
     const expectedEnError = "You've exceeded the limit by 8 characters.";
     const expectedFrError = "Vous avez dépassé la limite de 8 caractères.";
