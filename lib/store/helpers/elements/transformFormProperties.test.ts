@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { type FormProperties } from "@gcforms/types";
+import navigationFocus from "@root/__fixtures__/navigationFocus.json";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { transformFormProperties } from "./transformFormProperties";
 
 describe("transformFormProperties", () => {
@@ -215,5 +217,37 @@ describe("transformFormProperties", () => {
 
     expect(subElement.type).toBe("numberInput");
     expect(subElement.uuid).toBeDefined();
+  });
+
+  it("removes empty exit URLs before template validation", () => {
+    const form = structuredClone(navigationFocus) as FormProperties;
+    form.groups!["exit-page"] = {
+      name: "Exit",
+      titleEn: "Exit",
+      titleFr: "Sortie",
+      elements: [],
+      nextAction: "exit",
+      exitUrlEn: "",
+      exitUrlFr: "http://test-en",
+    };
+
+    expect(validateTemplate(form).errors).toContainEqual({
+      property: "groups.exit-page.exitUrlEn",
+      message: "formInvalidProperty",
+    });
+
+    const transformed = transformFormProperties(form);
+    const errors = validateTemplate(transformed).errors;
+
+    expect(transformed.groups!["exit-page"].exitUrlEn).toBeUndefined();
+    expect(transformed.groups!["exit-page"].exitUrlFr).toBe("http://test-en");
+    expect(errors).not.toContainEqual({
+      property: "groups.exit-page.exitUrlEn",
+      message: "formInvalidProperty",
+    });
+    expect(errors).not.toContainEqual({
+      property: "groups.exit-page.exitUrlFr",
+      message: "formInvalidProperty",
+    });
   });
 });

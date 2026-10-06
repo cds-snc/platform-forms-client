@@ -92,6 +92,13 @@ const cleanElements = (form: FormProperties) => {
   });
 };
 
+const removeEmptyExitUrls = (form: FormProperties) => {
+  Object.values(form.groups ?? {}).forEach((group) => {
+    if (group.exitUrlEn === "") delete group.exitUrlEn;
+    if (group.exitUrlFr === "") delete group.exitUrlFr;
+  });
+};
+
 export const transformFormProperties = (form?: FormProperties): FormProperties => {
   if (!form) {
     return {} as FormProperties;
@@ -99,6 +106,7 @@ export const transformFormProperties = (form?: FormProperties): FormProperties =
 
   const transformedForm = JSON.parse(JSON.stringify(form)) as FormProperties;
   const cleanedForm = cleanFormStructure(transformedForm);
+  removeEmptyExitUrls(cleanedForm);
   cleanElements(cleanedForm);
 
   return cleanedForm;
