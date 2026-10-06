@@ -129,4 +129,91 @@ describe("transformFormProperties", () => {
     expect(transformed.layout).toEqual([1, 2, 3]);
     expect(transformed.groupsLayout).toEqual(["p2"]);
   });
+
+  it("applies ensureUUID and updateNumberInputType to dynamicRow subElements", () => {
+    const form = {
+      titleEn: "test",
+      titleFr: "test",
+      introduction: { descriptionEn: "", descriptionFr: "" },
+      privacyPolicy: { descriptionEn: "test", descriptionFr: "test" },
+      confirmation: {
+        descriptionEn: "test",
+        descriptionFr: "test",
+        referrerUrlEn: "",
+        referrerUrlFr: "",
+      },
+      layout: [1],
+      elements: [
+        {
+          id: 1,
+          type: "dynamicRow",
+          uuid: "parent-uuid",
+          properties: {
+            titleEn: "row",
+            titleFr: "",
+            questionId: "",
+            validation: { required: false },
+            choices: [],
+            tags: [],
+            subElements: [
+              {
+                id: 101,
+                type: "textField",
+                properties: {
+                  titleEn: "legacy number",
+                  titleFr: "",
+                  questionId: "",
+                  validation: { required: false, type: "number" },
+                  choices: [],
+                  tags: [],
+                  subElements: [],
+                  descriptionEn: "",
+                  descriptionFr: "",
+                  placeholderEn: "",
+                  placeholderFr: "",
+                },
+              },
+            ],
+            descriptionEn: "",
+            descriptionFr: "",
+            placeholderEn: "",
+            placeholderFr: "",
+          },
+        },
+      ],
+      groups: {
+        start: {
+          name: "Start",
+          titleEn: "Start page",
+          titleFr: "Page de depart",
+          autoFlow: true,
+          elements: ["1"],
+          nextAction: "end",
+        },
+        review: {
+          name: "Review",
+          titleEn: "End (Review page and Confirmation)",
+          titleFr: "Fin (Page recapitulative et confirmation)",
+          autoFlow: true,
+          elements: [],
+        },
+        end: {
+          name: "End",
+          titleEn: "Confirmation page",
+          titleFr: "Page de confirmation",
+          autoFlow: true,
+          elements: [],
+          nextAction: "start",
+        },
+      },
+      groupsLayout: [],
+      lastGeneratedElementId: 1,
+    } as unknown as FormProperties;
+
+    const transformed = transformFormProperties(form);
+    const subElement = transformed.elements[0].properties.subElements![0];
+
+    expect(subElement.type).toBe("numberInput");
+    expect(subElement.uuid).toBeDefined();
+  });
 });
