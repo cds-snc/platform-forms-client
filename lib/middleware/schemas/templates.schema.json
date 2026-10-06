@@ -280,7 +280,7 @@
           }
         },
         "autoFlow": {
-          "description": "Whether the group advances automatically after its elements are complete.",
+          "description": "Whether a linear flow was applied automatically or a user added custom branching.",
           "type": "boolean"
         },
         "nextAction": {
@@ -729,9 +729,7 @@
           "enum": ["email", "alphanumeric", "text", "name", "phone", "tel", "date", "custom"]
         },
         "regex": { "type": "string" },
-        "maxLength": { "type": "integer", "minimum": 1 },
-        "descriptionEn": { "type": "string" },
-        "descriptionFr": { "type": "string" }
+        "maxLength": { "type": "integer", "minimum": 1 }
       },
       "required": ["required"],
       "additionalProperties": false
@@ -745,15 +743,6 @@
         "maxValue": { "type": "number" },
         "minDigits": { "type": "integer", "minimum": 1 },
         "maxDigits": { "type": "integer", "minimum": 1 }
-      },
-      "required": ["required"],
-      "additionalProperties": false
-    },
-    "validationFormattedDate": {
-      "type": "object",
-      "properties": {
-        "required": { "type": "boolean" },
-        "type": { "type": "string", "const": "date" }
       },
       "required": ["required"],
       "additionalProperties": false
@@ -848,7 +837,7 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
@@ -874,12 +863,11 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
-                    "choices": { "$ref": "#/definitions/choicesArray" },
-                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" }
+                    "choices": { "$ref": "#/definitions/choicesArray" }
                   },
                   "required": ["validation", "choices"]
                 }
@@ -900,12 +888,11 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationCheckboxLike" },
-                    "choices": { "$ref": "#/definitions/choicesArray" },
-                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" }
+                    "choices": { "$ref": "#/definitions/choicesArray" }
                   },
                   "required": ["validation", "choices"]
                 }
@@ -926,12 +913,11 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder|managedChoices|strictValue)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|managedChoices|strictValue)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
                     "choices": { "$ref": "#/definitions/choicesArray" },
-                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" },
                     "managedChoices": { "$ref": "#/definitions/managedChoicesType" },
                     "strictValue": { "type": "boolean" }
                   },
@@ -964,7 +950,7 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|fileType)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|fileType)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
@@ -998,7 +984,7 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|maxNumberOfRows|dynamicRow|subElements)$"
+                    "pattern": "^(?:titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|maxNumberOfRows|dynamicRow|subElements)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
@@ -1017,8 +1003,8 @@
                         "rowTitleEn",
                         "rowTitleFr",
                         "addButtonTextEn",
-                        "removeButtonTextEn",
                         "addButtonTextFr",
+                        "removeButtonTextEn",
                         "removeButtonTextFr"
                       ],
                       "additionalProperties": false
@@ -1048,17 +1034,8 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|headingLevel|isSectional)$"
-                  },
-                  "properties": {
-                    "validation": { "$ref": "#/definitions/validationSimple" },
-                    "headingLevel": {
-                      "type": "string",
-                      "enum": ["h1", "h2", "h3", "h4", "h5", "h6"]
-                    },
-                    "isSectional": { "type": "boolean" }
-                  },
-                  "required": ["validation"]
+                    "pattern": "^(?:descriptionEn|descriptionFr|conditionalRules)$"
+                  }
                 }
               ]
             }
@@ -1077,7 +1054,7 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationCheckboxLike" }
@@ -1101,7 +1078,7 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|addressComponents)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|addressComponents)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
@@ -1133,10 +1110,10 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|dateFormat|autoComplete)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|dateFormat|autoComplete)$"
                   },
                   "properties": {
-                    "validation": { "$ref": "#/definitions/validationFormattedDate" },
+                    "validation": { "$ref": "#/definitions/validationSimple" },
                     "dateFormat": {
                       "type": "string",
                       "enum": ["YYYY-MM-DD", "DD-MM-YYYY", "MM-DD-YYYY"]
@@ -1162,7 +1139,7 @@
                 {
                   "type": "object",
                   "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|numberOfStars)$"
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|numberOfStars)$"
                   },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
