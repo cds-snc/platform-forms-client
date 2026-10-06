@@ -72,17 +72,21 @@ describe("Version-gated strict element validation", () => {
         ],
       },
     ],
-    ["richText", { validation: { required: false } }],
+    ["richText", { descriptionEn: "Section heading" }],
     ["attestation", { validation: { required: false } }],
     ["addressComplete", { validation: { required: false } }],
     ["formattedDate", { validation: { required: false } }],
     ["starRating", { validation: { required: false } }],
-  ] as const)("accepts %s with its minimal strict validation", (type, properties) => {
+  ] as const)("accepts %s with its minimal strict properties", (type, properties) => {
     const element = { id: 1, type, properties };
 
     expect(validateElement(element, 2)).toBe(true);
-    expect(validateElement({ ...element, properties: {} }, 2)).toBe(false);
-    expect(validateElement({ ...element, properties: { validation: {} } }, 2)).toBe(false);
+    if (type === "richText") {
+      expect(validateElement({ ...element, properties: {} }, 2)).toBe(true);
+    } else {
+      expect(validateElement({ ...element, properties: {} }, 2)).toBe(false);
+      expect(validateElement({ ...element, properties: { validation: {} } }, 2)).toBe(false);
+    }
   });
 
   it.each([
@@ -100,7 +104,7 @@ describe("Version-gated strict element validation", () => {
     ["textField", { choices: [] }],
     ["dropdown", { choices: [{ en: "A", fr: "A" }], managedChoices: "departments" }],
     ["checkbox", { choices: [{ en: "A", fr: "A" }], strictValue: true }],
-    ["richText", { unknownProperty: true }],
+    ["richText", { descriptionEn: "Section heading", unknownProperty: true }],
   ])("rejects unknown or incompatible properties on %s", (type, extraProperties) => {
     expect(
       validateElement(
@@ -292,6 +296,28 @@ describe("Version-gated strict element validation", () => {
         2
       )
     ).toBe(true);
+
+    expect(
+      validateElement(
+        {
+          ...element,
+          properties: {
+            ...element.properties,
+            subElements: [
+              {
+                id: 2,
+                type: "textField",
+                properties: {
+                  validation: { required: false },
+                  conditionalRules: [{ choiceId: "3.0" }],
+                },
+              },
+            ],
+          },
+        },
+        2
+      )
+    ).toBe(false);
   });
 
   it("preserves grouped navigation validation for strict templates", () => {
