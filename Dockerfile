@@ -26,6 +26,9 @@ ENV NEXT_PUBLIC_ZITADEL_PROJECT_ID=$ZITADEL_PROJECT_ID
 ARG API_URL
 ENV NEXT_PUBLIC_API_URL=$API_URL
 
+# Disable Prisma usage data collection (see https://www.prisma.io/docs/orm/v6/tools/prisma-cli#telemetry)
+ENV CHECKPOINT_DISABLE=1
+
 RUN corepack enable && yarn set version stable
 RUN yarn workspaces focus gcforms
 RUN yarn build
@@ -44,9 +47,6 @@ ENV COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
 
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
-
-# Disable Prisma usage data collection (see https://www.prisma.io/docs/orm/v6/tools/prisma-cli#telemetry)
-ENV CHECKPOINT_DISABLE=1
 
 WORKDIR /src
 
