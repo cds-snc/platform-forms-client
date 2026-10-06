@@ -2,8 +2,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createDraftVersionForTemplate } from "@lib/templates/mutations/createDraftForTemplate";
+import { getTemplateVersionById } from "@lib/templates/queries/getTemplateVersionById";
 import { AuthenticatedAction } from "@lib/actions";
-import { type FormRecord } from "@lib/types";
+import { type FormProperties, type FormRecord } from "@lib/types";
 
 export const createDraftVersion = AuthenticatedAction(
   async (
@@ -11,9 +12,13 @@ export const createDraftVersion = AuthenticatedAction(
     {
       id: formID,
       redirectAfter,
+      formConfig,
+      sourceVersionId,
     }: {
       id: string;
       redirectAfter?: string;
+      formConfig?: FormProperties;
+      sourceVersionId?: string;
     }
   ): Promise<{
     formRecord: FormRecord | null;
@@ -23,7 +28,20 @@ export const createDraftVersion = AuthenticatedAction(
     let response: FormRecord | null = null;
 
     try {
-      response = await createDraftVersionForTemplate(formID);
+      let sourceConfig = formConfig;
+      if (sourceVersionId) {
+        const versionRecord = await getTemplateVersionById(formID, sourceVersionId);
+        if (!versionRecord?.jsonConfig) {
+          throw new Error("Version Not Found");
+        }
+
+        sourceConfig =
+          typeof versionRecord.jsonConfig === "string"
+            ? (JSON.parse(versionRecord.jsonConfig) as FormProperties)
+            : (versionRecord.jsonConfig as FormProperties);
+      }
+
+      response = await createDraftVersionForTemplate(formID, sourceConfig);
 
       if (!response) {
         throw new Error(`Unable to create a draft version for ${formID}`);

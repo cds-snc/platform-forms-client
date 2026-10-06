@@ -213,7 +213,7 @@ export const getDownloadableFormVersionConfig = AuthenticatedAction(
         return { formConfig: formRecord.form };
       }
 
-      const versionRecord = await getTemplateVersionById(versionId);
+      const versionRecord = await getTemplateVersionById(formId, versionId);
 
       if (!versionRecord || !versionRecord.jsonConfig) {
         throw new Error("Version Not Found");
