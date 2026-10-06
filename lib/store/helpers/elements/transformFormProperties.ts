@@ -82,6 +82,13 @@ const cleanElements = (form: FormProperties) => {
     cleanElementRules(form.elements, element);
     ensureUUID(element);
     updateNumberInputType(element);
+
+    // subElements can't have conditionalRules, so only
+    // ensureUUID/updateNumberInputType apply to subElements
+    element.properties?.subElements?.forEach((subElement) => {
+      ensureUUID(subElement);
+      updateNumberInputType(subElement);
+    });
   });
 };
 
