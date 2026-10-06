@@ -343,6 +343,7 @@ export const useHCaptcha = ({
     [complete, logger, onCaptchaVerified, remountCaptcha]
   );
 
+  // Old widgets can fire callbacks during a new execution; only accept events from the current mount.
   const isCurrentWidget = () => captchaInstanceKeyRef.current === captchaInstanceKey;
 
   const captcha = enabled ? (
@@ -350,7 +351,6 @@ export const useHCaptcha = ({
       key={captchaInstanceKey}
       ref={hCaptchaRef}
       sitekey={siteKey}
-      // A replaced widget may still fire callbacks after a retry starts.
       onVerify={(token) => {
         if (isCurrentWidget()) onVerify(token);
       }}
