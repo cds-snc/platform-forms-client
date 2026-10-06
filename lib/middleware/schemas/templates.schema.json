@@ -108,7 +108,12 @@
           "$ref": "#/definitions/group"
         }
       },
-      "required": ["start", "review", "end"],
+      "allOf": [
+        {
+          "if": { "minProperties": 1 },
+          "then": { "required": ["start", "review", "end"] }
+        }
+      ],
       "additionalProperties": false
     },
     "groupsLayout": {
@@ -213,7 +218,14 @@
     "properties": { "schemaVersion": { "minimum": 2 } }
   },
   "then": {
+    "required": ["groups", "groupsLayout"],
     "properties": {
+      "layout": {
+        "items": { "type": "integer", "minimum": 1 }
+      },
+      "groupsLayout": {
+        "items": { "not": { "enum": ["start", "review", "end"] } }
+      },
       "elements": {
         "items": { "$ref": "#/definitions/elementStrict" }
       }
@@ -641,21 +653,34 @@
         "descriptionFr": { "type": "string" },
         "conditionalRules": {
           "type": "array",
+          "uniqueItems": true,
           "items": {
             "type": "object",
-            "properties": { "choiceId": { "type": "string" } }
+            "properties": {
+              "choiceId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]*\\.[0-9]+$"
+              }
+            },
+            "required": ["choiceId"],
+            "additionalProperties": false
           }
         }
       }
     },
     "choicesArray": {
       "type": "array",
+      "minItems": 1,
+      "maxItems": 400,
+      "uniqueItems": true,
       "items": {
         "type": "object",
         "properties": {
           "en": { "type": "string" },
           "fr": { "type": "string" }
-        }
+        },
+        "required": ["en", "fr"],
+        "additionalProperties": false
       }
     },
     "sortOrderEnum": {
@@ -663,7 +688,21 @@
       "enum": ["none", "ascending", "descending"]
     },
     "managedChoicesType": {
-      "type": ["array", "string"]
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["departments", "crownCorporations", "provincialTerritorial"]
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["departments", "crownCorporations", "provincialTerritorial"]
+          }
+        }
+      ]
     },
     "validationSimple": {
       "description": "Validation shape for element types with no type-specific validation options.",
@@ -733,7 +772,13 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
-                  "properties": { "validation": { "$ref": "#/definitions/validationTextInput" } },
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|autoComplete)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationTextInput" },
+                    "autoComplete": { "type": "string" }
+                  },
                   "required": ["validation"]
                 }
               ]
@@ -752,6 +797,9 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
+                  },
                   "properties": { "validation": { "$ref": "#/definitions/validationTextInput" } },
                   "required": ["validation"]
                 }
@@ -771,6 +819,9 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|allowNegativeNumbers|stepCount|currencyCode|useThousandsSeparator)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationNumberInput" },
                     "allowNegativeNumbers": { "type": "boolean" },
@@ -796,13 +847,15 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
                     "choices": { "$ref": "#/definitions/choicesArray" },
-                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" },
-                    "managedChoices": { "$ref": "#/definitions/managedChoicesType" }
+                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" }
                   },
-                  "required": ["validation"]
+                  "required": ["validation", "choices"]
                 }
               ]
             }
@@ -820,13 +873,15 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
                     "choices": { "$ref": "#/definitions/choicesArray" },
-                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" },
-                    "managedChoices": { "$ref": "#/definitions/managedChoicesType" }
+                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" }
                   },
-                  "required": ["validation"]
+                  "required": ["validation", "choices"]
                 }
               ]
             }
@@ -844,13 +899,15 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationCheckboxLike" },
                     "choices": { "$ref": "#/definitions/choicesArray" },
-                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" },
-                    "managedChoices": { "$ref": "#/definitions/managedChoicesType" }
+                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" }
                   },
-                  "required": ["validation"]
+                  "required": ["validation", "choices"]
                 }
               ]
             }
@@ -868,6 +925,9 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder|managedChoices|strictValue)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
                     "choices": { "$ref": "#/definitions/choicesArray" },
@@ -875,7 +935,17 @@
                     "managedChoices": { "$ref": "#/definitions/managedChoicesType" },
                     "strictValue": { "type": "boolean" }
                   },
-                  "required": ["validation"]
+                  "required": ["validation"],
+                  "oneOf": [
+                    {
+                      "required": ["choices"],
+                      "not": { "required": ["managedChoices"] }
+                    },
+                    {
+                      "required": ["managedChoices"],
+                      "not": { "required": ["choices"] }
+                    }
+                  ]
                 }
               ]
             }
@@ -893,9 +963,21 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|fileType)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
-                    "fileType": { "type": ["string", "array"] }
+                    "fileType": {
+                      "oneOf": [
+                        { "type": "string", "minLength": 1 },
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": { "type": "string", "minLength": 1 }
+                        }
+                      ]
+                    }
                   },
                   "required": ["validation"]
                 }
@@ -915,9 +997,12 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|maxNumberOfRows|dynamicRow|subElements)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
-                    "maxNumberOfRows": { "type": "integer", "minimum": 1 },
+                    "maxNumberOfRows": { "type": "integer", "minimum": 1, "maximum": 50 },
                     "dynamicRow": {
                       "type": "object",
                       "properties": {
@@ -927,14 +1012,24 @@
                         "removeButtonTextEn": { "type": "string" },
                         "addButtonTextFr": { "type": "string" },
                         "removeButtonTextFr": { "type": "string" }
-                      }
+                      },
+                      "required": [
+                        "rowTitleEn",
+                        "rowTitleFr",
+                        "addButtonTextEn",
+                        "removeButtonTextEn",
+                        "addButtonTextFr",
+                        "removeButtonTextFr"
+                      ],
+                      "additionalProperties": false
                     },
                     "subElements": {
                       "type": "array",
+                      "minItems": 1,
                       "items": { "$ref": "#/definitions/elementStrict" }
                     }
                   },
-                  "required": ["validation"]
+                  "required": ["validation", "dynamicRow", "subElements"]
                 }
               ]
             }
@@ -952,7 +1047,17 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
-                  "properties": { "validation": { "$ref": "#/definitions/validationSimple" } },
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|headingLevel|isSectional)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "headingLevel": {
+                      "type": "string",
+                      "enum": ["h1", "h2", "h3", "h4", "h5", "h6"]
+                    },
+                    "isSectional": { "type": "boolean" }
+                  },
                   "required": ["validation"]
                 }
               ]
@@ -971,6 +1076,9 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationCheckboxLike" }
                   },
@@ -992,6 +1100,9 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|addressComponents)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
                     "addressComponents": {
@@ -999,7 +1110,8 @@
                       "properties": {
                         "canadianOnly": { "type": "boolean" },
                         "splitAddress": { "type": "boolean" }
-                      }
+                      },
+                      "additionalProperties": false
                     }
                   },
                   "required": ["validation"]
@@ -1020,9 +1132,15 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|dateFormat|autoComplete)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationFormattedDate" },
-                    "dateFormat": { "type": "string" },
+                    "dateFormat": {
+                      "type": "string",
+                      "enum": ["YYYY-MM-DD", "DD-MM-YYYY", "MM-DD-YYYY"]
+                    },
                     "autoComplete": { "type": "string" }
                   },
                   "required": ["validation"]
@@ -1043,6 +1161,9 @@
                 { "$ref": "#/definitions/elementCommonProperties" },
                 {
                   "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|numberOfStars)$"
+                  },
                   "properties": {
                     "validation": { "$ref": "#/definitions/validationSimple" },
                     "numberOfStars": { "type": "integer", "minimum": 3, "maximum": 10 }
