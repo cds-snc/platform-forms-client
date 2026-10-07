@@ -555,7 +555,7 @@
     },
     "draftVersion": {
       "message1": "Deleting a draft does not affect the published form.",
-      "message2": "But you cannot restore a deleted draft so consider downloading a copy first.",
+      "message2": "You cannot restore a deleted draft. So consider downloading a copy first.",
       "okay": "Delete draft",
       "title": "Delete version {{version}} draft?"
     },
