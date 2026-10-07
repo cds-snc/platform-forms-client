@@ -73,7 +73,7 @@ describe("Version-gated strict element validation", () => {
       },
     ],
     ["richText", { descriptionEn: "Section heading" }],
-    ["attestation", { validation: { required: false } }],
+    ["attestation", { validation: { all: false } }],
     ["addressComplete", { validation: { required: false } }],
     ["formattedDate", { validation: { required: false } }],
     ["starRating", { validation: { required: false } }],
