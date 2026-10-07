@@ -7,14 +7,26 @@
   "default": {},
   "examples": [
     {
+      "schemaVersion": 2,
       "titleEn": "",
       "titleFr": "",
       "introduction": {},
       "privacyPolicy": {},
       "confirmation": {},
       "layout": [],
+      "groups": {
+        "start": { "name": "start", "titleEn": "Start", "titleFr": "Début", "elements": [] },
+        "review": {
+          "name": "review",
+          "titleEn": "Review",
+          "titleFr": "Révision",
+          "elements": [],
+          "nextAction": "end"
+        },
+        "end": { "name": "end", "titleEn": "End", "titleFr": "Fin", "elements": [] }
+      },
+      "groupsLayout": [],
       "elements": [],
-      "startPage": {},
       "brand": {}
     }
   ],
@@ -129,43 +141,165 @@
       "description": "A list of elements contained within the form.",
       "type": "array",
       "examples": [
-        {
-          "id": 1,
-          "type": "richText",
-          "properties": {
-            "validation": {
-              "required": false
-            },
-            "descriptionEn": "#### Section 1: Nomination Category",
-            "descriptionFr": "#### Section 1: Catégorie de la nomination"
-          }
-        },
-        {
-          "id": 2,
-          "uuid": "12345678-1234-1234-1234-123456789012",
-          "type": "radio",
-          "properties": {
-            "questionId": "my_custom_id",
-            "tags": ["radio", "nomination"],
-            "choices": [
-              {
-                "en": "Team nomination",
-                "fr": "Mise en candidature d’une équipe"
+        [
+          {
+            "id": 1,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Full name",
+              "titleFr": "Nom complet",
+              "validation": { "required": true },
+              "autoComplete": "name"
+            }
+          },
+          {
+            "id": 2,
+            "type": "textArea",
+            "properties": {
+              "titleEn": "Additional details",
+              "titleFr": "Détails supplémentaires",
+              "validation": { "required": false, "maxLength": 1000 }
+            }
+          },
+          {
+            "id": 3,
+            "type": "numberInput",
+            "properties": {
+              "titleEn": "Number of participants",
+              "titleFr": "Nombre de participants",
+              "validation": { "required": true, "minValue": 1, "maxValue": 100 },
+              "stepCount": 0
+            }
+          },
+          {
+            "id": 4,
+            "type": "dropdown",
+            "properties": {
+              "titleEn": "Province or territory",
+              "titleFr": "Province ou territoire",
+              "validation": { "required": true },
+              "choices": [{ "en": "Ontario", "fr": "Ontario" }],
+              "sortOrder": "none"
+            }
+          },
+          {
+            "id": 5,
+            "type": "radio",
+            "properties": {
+              "titleEn": "Nomination type",
+              "titleFr": "Type de mise en candidature",
+              "validation": { "required": true },
+              "choices": [{ "en": "Team", "fr": "Équipe" }]
+            }
+          },
+          {
+            "id": 6,
+            "type": "checkbox",
+            "properties": {
+              "titleEn": "Areas of interest",
+              "titleFr": "Domaines d’intérêt",
+              "validation": { "required": false },
+              "choices": [{ "en": "Research", "fr": "Recherche" }]
+            }
+          },
+          {
+            "id": 7,
+            "type": "combobox",
+            "properties": {
+              "titleEn": "Department",
+              "titleFr": "Ministère",
+              "validation": { "required": true },
+              "managedChoices": "departments"
+            }
+          },
+          {
+            "id": 8,
+            "type": "fileInput",
+            "properties": {
+              "titleEn": "Supporting document",
+              "titleFr": "Document à l’appui",
+              "validation": { "required": false },
+              "fileType": ["application/pdf"]
+            }
+          },
+          {
+            "id": 9,
+            "type": "dynamicRow",
+            "properties": {
+              "titleEn": "References",
+              "titleFr": "Références",
+              "validation": { "required": false },
+              "maxNumberOfRows": 5,
+              "dynamicRow": {
+                "rowTitleEn": "Reference",
+                "rowTitleFr": "Référence",
+                "addButtonTextEn": "Add reference",
+                "addButtonTextFr": "Ajouter une référence",
+                "removeButtonTextEn": "Remove reference",
+                "removeButtonTextFr": "Supprimer la référence"
               },
-              {
-                "en": "Individual Nomination",
-                "fr": "Mise en candidature d’une personne"
-              }
-            ],
-            "titleEn": "Is this a Team or Individual Nomination?",
-            "titleFr": "Is this a Team or Individual Nomination?",
-            "validation": {
-              "required": true
-            },
-            "descriptionEn": "",
-            "descriptionFr": ""
+              "subElements": [
+                {
+                  "id": 15,
+                  "type": "textField",
+                  "properties": {
+                    "titleEn": "Reference name",
+                    "titleFr": "Nom de la référence",
+                    "validation": { "required": true }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": 10,
+            "type": "richText",
+            "properties": {
+              "descriptionEn": "#### Section 1: Nomination Category",
+              "descriptionFr": "#### Section 1 : Catégorie de la nomination"
+            }
+          },
+          {
+            "id": 11,
+            "type": "attestation",
+            "properties": {
+              "titleEn": "I confirm this information is accurate.",
+              "titleFr": "Je confirme que ces renseignements sont exacts.",
+              "validation": { "all": true }
+            }
+          },
+          {
+            "id": 12,
+            "type": "addressComplete",
+            "properties": {
+              "titleEn": "Mailing address",
+              "titleFr": "Adresse postale",
+              "validation": { "required": true },
+              "addressComponents": { "canadianOnly": true, "splitAddress": false }
+            }
+          },
+          {
+            "id": 13,
+            "type": "formattedDate",
+            "properties": {
+              "titleEn": "Date of birth",
+              "titleFr": "Date de naissance",
+              "validation": { "required": true },
+              "dateFormat": "YYYY-MM-DD",
+              "autoComplete": "bday"
+            }
+          },
+          {
+            "id": 14,
+            "type": "starRating",
+            "properties": {
+              "titleEn": "Overall rating",
+              "titleFr": "Évaluation globale",
+              "validation": { "required": true },
+              "numberOfStars": 5
+            }
           }
-        }
+        ]
       ]
     },
     "brand": {
@@ -610,20 +744,12 @@
               },
               "examples": [
                 {
-                  "validation": {
-                    "required": true,
-                    "type": "email",
-                    "descriptionEn": "Enter a valid email address.",
-                    "descriptionFr": "Veuillez entrer une adresse courriel valide."
-                  }
+                  "required": true,
+                  "type": "email"
                 },
                 {
-                  "validation": {
-                    "required": false,
-                    "type": "alphanumeric",
-                    "descriptionEn": "Please enter your home street address.",
-                    "descriptionFr": "Veuillez entrer votre adresse postale."
-                  }
+                  "required": false,
+                  "type": "alphanumeric"
                 }
               ]
             },
