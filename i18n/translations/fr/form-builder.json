@@ -547,11 +547,17 @@
   "formDelete": {
     "error": "Erreur",
     "somethingWentWrong": "Il y a eu un problème",
-    "downloadButtonText": "Télécharger une copie",
+    "downloadButtonText": "Télécharger l’ébauche",
     "draft": {
       "message1": "L'archivage déplacera ce formulaire vers la section « Archivés » de vos formulaires.",
       "message2": "Ce formulaire pourra être désarchivé à partir des formulaires « Archivés » pendant 30 jours avant d'être définitivement supprimé.",
       "message3": " Téléchargez une copie du fichier du formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer le formulaire plus tard."
+    },
+    "draftVersion": {
+      "message1": "Supprimer une ébauche n’a aucune incidence sur le formulaire publié.",
+      "message2": "Lorsqu’une ébauche est supprimée, il n’est pas possible de la récupérer.  Téléchargez une copie de l’ébauche si vous pensez en avoir besoin plus tard.",
+      "okay": "Supprimer l'ébauche",
+      "title": "Supprimer l’ébauche de la version {{version}} ?"
     },
     "okay": "Archiver le formulaire",
     "published": {
