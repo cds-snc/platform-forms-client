@@ -711,13 +711,12 @@
       "required": ["required"],
       "additionalProperties": false
     },
-    "validationCheckboxLike": {
+    "validationAttestation": {
       "type": "object",
       "properties": {
-        "required": { "type": "boolean" },
         "all": { "type": "boolean" }
       },
-      "required": ["required"],
+      "required": ["all"],
       "additionalProperties": false
     },
     "validationTextInput": {
@@ -891,7 +890,7 @@
                     "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices)$"
                   },
                   "properties": {
-                    "validation": { "$ref": "#/definitions/validationCheckboxLike" },
+                    "validation": { "$ref": "#/definitions/validationSimple" },
                     "choices": { "$ref": "#/definitions/choicesArray" }
                   },
                   "required": ["validation", "choices"]
@@ -1057,7 +1056,7 @@
                     "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
                   },
                   "properties": {
-                    "validation": { "$ref": "#/definitions/validationCheckboxLike" }
+                    "validation": { "$ref": "#/definitions/validationAttestation" }
                   },
                   "required": ["validation"]
                 }
