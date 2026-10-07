@@ -547,11 +547,17 @@
   "formDelete": {
     "error": "Error",
     "somethingWentWrong": "Something went wrong",
-    "downloadButtonText": "Download a copy",
+    "downloadButtonText": "Download copy",
     "draft": {
       "message1": "Archiving will move this form to the “Archived” section of your forms.",
       "message2": "This form will be available to restore from the archive folder for 30 days before being deleted permanently.",
       "message3": "Download a copy of the form file for your records. You can upload it again in GC Forms to re-create the form later."
+    },
+    "draftVersion": {
+      "message1": "Deleting a draft does not affect the published form.",
+      "message2": "You cannot restore a deleted draft. So consider downloading a copy first.",
+      "okay": "Delete draft",
+      "title": "Delete version {{version}} draft?"
     },
     "okay": "Archive form",
     "published": {
