@@ -555,7 +555,7 @@
     },
     "draftVersion": {
       "message1": "La suppression d'une ébauche n'affecte pas le formulaire publié.",
-      "message2": "Mais vous ne pouvez pas restaurer une ébauche supprimée, alors envisagez de télécharger une copie d'abord.",
+      "message2": "Lorsqu’une ébauche est supprimée, il n’est pas possible de la récupérer.  Téléchargez une copie de l’ébauche si vous pensez en avoir besoin plus tard.",
       "okay": "Supprimer l'ébauche",
       "title": "Supprimer l'ébauche version {{version}} ?"
     },
