@@ -111,7 +111,7 @@ export const Cards = ({
 
   return (
     <ViewTransition name="forms-tab-switch">
-      <div id={`tabpanel-${tabStatus}`} role="tabpanel" aria-labelledby={`tab-${tabStatus}`}>
+      <div id={`tabpanel-${tabStatus}`}>
         {templates.length > 0 ? (
           <>
             <ol className="grid grid-cols-[repeat(auto-fit,16em)] items-start gap-4 p-0">
