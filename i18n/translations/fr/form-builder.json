@@ -547,7 +547,7 @@
   "formDelete": {
     "error": "Erreur",
     "somethingWentWrong": "Il y a eu un problème",
-    "downloadButtonText": "Télécharger une copie",
+    "downloadButtonText": "Télécharger une copie [FR]",
     "draft": {
       "message1": "L'archivage déplacera ce formulaire vers la section « Archivés » de vos formulaires.",
       "message2": "Ce formulaire pourra être désarchivé à partir des formulaires « Archivés » pendant 30 jours avant d'être définitivement supprimé.",
