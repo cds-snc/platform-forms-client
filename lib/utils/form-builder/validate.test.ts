@@ -51,4 +51,30 @@ describe("validateTemplate", () => {
       { property: "groups.exit-page.exitUrlFr", message: "formInvalidProperty" },
     ]);
   });
+
+  it("reports strict element failures from oneOf schemas", () => {
+    const invalidTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
+    const elementId = Math.max(...invalidTemplate.elements.map(({ id }) => id)) + 1;
+    const elementIndex = invalidTemplate.elements.length;
+    invalidTemplate.schemaVersion = 2;
+    invalidTemplate.elements.push({
+      id: elementId,
+      type: "richText",
+      properties: {
+        questionId: "strict-rich-text",
+        validation: { required: false },
+        choices: [{ en: "", fr: "" }],
+      },
+    } as FormProperties["elements"][number]);
+    invalidTemplate.layout.push(elementId);
+    invalidTemplate.groups!.start.elements.push(String(elementId));
+
+    const result = validateTemplate(invalidTemplate);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContainEqual({
+      property: `elements.${elementIndex}.properties.choices`,
+      message: "formInvalidProperty",
+    });
+  });
 });
