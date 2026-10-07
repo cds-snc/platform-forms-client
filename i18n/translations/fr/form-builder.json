@@ -557,7 +557,7 @@
       "message1": "Supprimer une ébauche n’a aucune incidence sur le formulaire publié.",
       "message2": "Lorsqu’une ébauche est supprimée, il n’est pas possible de la récupérer.  Téléchargez une copie de l’ébauche si vous pensez en avoir besoin plus tard.",
       "okay": "Supprimer l'ébauche",
-      "title": "Supprimer l'ébauche version {{version}} ?"
+      "title": "Supprimer l’ébauche de la version {{version}} ?"
     },
     "okay": "Archiver le formulaire",
     "published": {
