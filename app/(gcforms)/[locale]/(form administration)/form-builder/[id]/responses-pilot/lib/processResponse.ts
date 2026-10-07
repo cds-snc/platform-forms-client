@@ -1,5 +1,5 @@
 import type { FileSystemDirectoryHandle, FileSystemFileHandle } from "native-file-system-adapter";
-import { CompleteAttachment, FormSubmission } from "./types";
+import { FormSubmission } from "./types";
 import { decryptFormSubmission } from "./utils";
 import {
   ATTACHMENTS_FOLDER,
@@ -16,6 +16,11 @@ import { TFunction } from "i18next";
 import { md5 } from "hash-wasm";
 import { withRetry } from "@root/lib/utils/retry";
 import { ResponseDownloadLogger } from "./logger";
+import {
+  collectAttachments,
+  CollectedAttachment,
+} from "@lib/responseAttachments/collectAttachments";
+import { getUniqueAttachmentFilename } from "@lib/responseDownloadFormats/attachmentFilenames";
 
 export const processResponse = async ({
   incrementProcessedSubmissionsCount,
@@ -130,6 +135,8 @@ export type AttachmentDownloadResult = {
   isPotentiallyMalicious: boolean;
 };
 
+type RenamedAttachment = CollectedAttachment & { renameTo: string };
+
 const downloadAndConfirmResponse = async ({
   workingDirectoryHandle,
   apiClient,
@@ -189,7 +196,9 @@ const downloadAndConfirmResponse = async ({
   const fileNameMapping: ResponseFilenameMapping = new Map();
 
   // check if there are files to download
-  if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
+  const responseAttachments = collectAttachments(decryptedResponse.attachments);
+
+  if (responseAttachments.length > 0) {
     const attachmentsDirectoryHandle = await workingDirectoryHandle.getDirectoryHandle(
       ATTACHMENTS_FOLDER,
       {
@@ -207,9 +216,7 @@ const downloadAndConfirmResponse = async ({
 
     const downloadResults: AttachmentDownloadResult[] = [];
 
-    const responseAttachmentsWithRenameTo = deduplicateAttachmentFilenames(
-      decryptedResponse.attachments
-    );
+    const responseAttachmentsWithRenameTo = deduplicateAttachmentFilenames(responseAttachments);
 
     // async download all attachments
     await Promise.all(
@@ -236,26 +243,19 @@ const downloadAndConfirmResponse = async ({
   };
 };
 
-export const deduplicateAttachmentFilenames = (attachments: CompleteAttachment[]) => {
-  const nameCount: Record<string, number> = {};
-  return attachments.map((attachment) => {
-    const lastDot = attachment.name.lastIndexOf(".");
-    const base = lastDot !== -1 ? attachment.name.substring(0, lastDot) : attachment.name;
-    const ext = lastDot !== -1 ? attachment.name.substring(lastDot) : "";
-    const key = attachment.name;
-    const count = nameCount[key] || 0;
-    nameCount[key] = count + 1;
-    let renameTo = attachment.name;
-    if (count > 0) {
-      renameTo = `${base} (${count})${ext}`;
-    }
-    return { ...attachment, renameTo };
-  });
+export const deduplicateAttachmentFilenames = (
+  attachments: CollectedAttachment[]
+): RenamedAttachment[] => {
+  const usedNames = new Set<string>();
+  return attachments.map((attachment, index) => ({
+    ...attachment,
+    renameTo: getUniqueAttachmentFilename(attachment.name, usedNames, index),
+  }));
 };
 
 const downloadAttachment = async (
   responseAttachmentsDirectoryHandle: FileSystemDirectoryHandle,
-  attachment: CompleteAttachment
+  attachment: RenamedAttachment
 ): Promise<AttachmentDownloadResult> => {
   const response = await fetch(attachment.downloadLink);
 
@@ -287,7 +287,7 @@ const downloadAttachment = async (
     id: attachment.id,
     originalName: attachment.name,
     actualName: attachment.renameTo || attachment.name,
-    isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+    isPotentiallyMalicious: attachment.isPotentiallyMalicious ?? false,
   };
 };
 

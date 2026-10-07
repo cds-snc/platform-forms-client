@@ -5,6 +5,8 @@ import { serverTranslation } from "@i18n";
 import { sortByLayout } from "@lib/utils/form-builder";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
+import { allowedOrigin, getOrigin } from "@lib/origin";
+import { getResponseAttachmentsUrl } from "../attachmentDownloadUrl";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -13,6 +15,8 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
   const { t: tFr } = await serverTranslation("common", { lang: "fr" });
 
   const { submissions } = formResponseSubmissions;
+  const hasAttachments = submissions.some((response) => response.attachments?.length);
+  const origin = hasAttachments ? (allowedOrigin ?? (await getOrigin())) : "";
 
   const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
 
@@ -52,7 +56,12 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
     "Date of submission \nDate de soumission"
   );
 
-  header.push("Receipt codes \nCodes de réception");
+  if (hasAttachments) {
+    header.push(
+      "Receipt codes \nCodes de réception",
+      "Response attachments \nPièces jointes de la réponse"
+    );
+  }
 
   const csvStringifier = createCsvStringifier({
     header: header,
@@ -100,13 +109,24 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
       }
       return answerText;
     });
-    return [
-      response.id,
-      new Date(response.createdAt).toISOString(),
-      ...answers,
-      "Receipt codes are in the Official receipt and record of responses\n" +
-        "Les codes de réception sont dans le Reçu et registre officiel des réponses",
-    ];
+    const record = [response.id, new Date(response.createdAt).toISOString(), ...answers];
+
+    if (hasAttachments) {
+      record.push(
+        "Receipt codes are in the Official receipt and record of responses\n" +
+          "Les codes de réception sont dans le Reçu et registre officiel des réponses",
+        response.attachments?.length
+          ? getResponseAttachmentsUrl({
+              origin,
+              locale: "en",
+              formId: formResponseSubmissions.formRecord.id,
+              responseId: response.id,
+            })
+          : "-"
+      );
+    }
+
+    return record;
   });
 
   return csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records);

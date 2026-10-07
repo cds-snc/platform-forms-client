@@ -40,6 +40,9 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { traceFunction } from "@lib/otel";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import type { Response } from "@gcforms/types";
+import { getSubmissionData } from "./submissionData";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -60,7 +63,7 @@ const parseTemplateVersionNumber = (version?: ResponseVersion) => {
 
 export const fetchSubmissions = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       formId,
       status,
@@ -185,11 +188,19 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           );
         }
 
+        const fileUploadEnabled =
+          session.user.featureFlags?.includes(FeatureFlags.fileUpload) ||
+          (await checkOne(FeatureFlags.fileUpload));
+
         // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
         const responses = queryResult
           .sort((a, b) => a.createdAt - b.createdAt)
           .map((item) => {
-            const filteredSubmissionData = JSON.parse(String(item.formSubmission));
+            const { answers: submissionAnswers, attachments } = getSubmissionData(
+              item.formSubmission,
+              item.fileAttachments
+            );
+            const filteredSubmissionData = { ...submissionAnswers };
             // Remove ignored keys from the submission data
             Object.keys(filteredSubmissionData).forEach((key) => {
               if (IGNORED_KEYS.includes(key)) {
@@ -213,6 +224,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
               createdAt: parseInt(item.createdAt.toString()),
               confirmationCode: item.confirmationCode,
               answers: sorted,
+              ...(fileUploadEnabled && attachments.length > 0 && { attachments }),
             };
           }) as FormResponseSubmissions["submissions"];
 
