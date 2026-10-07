@@ -1,13 +1,14 @@
 /**
  * @vitest-environment jsdom
  */
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Field } from "formik";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FormStatus } from "@gcforms/types";
 
 import { Form } from "./Form";
 import { type FormProps } from "./types";
+import { EventKeys } from "@lib/hooks/useCustomEvent";
 
 const mocks = vi.hoisted(() => ({
   executeCaptcha: vi.fn(),
@@ -158,6 +159,7 @@ const renderForm = (props: Partial<FormProps> = {}) => render(<Form {...createFo
 describe("Form", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubEnv("NEXT_PUBLIC_HCAPTCHA_SITE_KEY", "test-site-key");
     mocks.executeCaptcha.mockResolvedValue({ verified: true, token: "captcha-token" });
     mocks.submitForm.mockResolvedValue({ id: "form-id", submissionId: "submission-id" });
     mocks.isFormClosed.mockResolvedValue(false);
@@ -172,6 +174,10 @@ describe("Form", () => {
     mocks.generateFileChecksums.mockResolvedValue({});
     mocks.shouldCheckCaptcha.mockReturnValue(true);
     mocks.gcFormsContext.currentGroup = null;
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("runs hCaptcha after validation and sends the verified token to the server action", async () => {
@@ -281,6 +287,21 @@ describe("Form", () => {
     expect(mocks.submitForm).toHaveBeenCalledWith({}, "en", "form-id", false, undefined, {});
   });
 
+  it("does not mount hCaptcha when the public sitekey is missing", async () => {
+    vi.stubEnv("NEXT_PUBLIC_HCAPTCHA_SITE_KEY", "");
+
+    renderForm();
+
+    expect(screen.queryByTestId("captcha")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => expect(mocks.submitForm).toHaveBeenCalled());
+
+    expect(mocks.executeCaptcha).not.toHaveBeenCalled();
+    expect(mocks.submitForm).toHaveBeenCalledWith({}, "en", "form-id", false, undefined, {});
+  });
+
   it("does not submit when the form is closed", async () => {
     mocks.isFormClosed.mockResolvedValue(true);
 
@@ -347,6 +368,30 @@ describe("Form", () => {
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 
+  it("does not refocus the validation summary on a later render", async () => {
+    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+    mocks.getErrorList.mockReturnValue(<div>Required</div>);
+
+    const formProps = createFormProps();
+    const { rerender } = render(<Form {...formProps} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
+    mocks.setFocusOnErrorMessage.mockClear();
+
+    act(() => {
+      document.dispatchEvent(new Event(EventKeys.continueValidationError));
+    });
+
+    await waitFor(() => expect(mocks.setFocusOnErrorMessage).toHaveBeenCalledOnce());
+    mocks.setFocusOnErrorMessage.mockClear();
+
+    rerender(<Form {...formProps} />);
+
+    expect(mocks.setFocusOnErrorMessage).not.toHaveBeenCalled();
+  });
+
   it("does not submit when hCaptcha blocks the request", async () => {
     mocks.executeCaptcha.mockResolvedValue({
       verified: false,
@@ -360,6 +405,46 @@ describe("Form", () => {
 
     await waitFor(() => expect(mocks.executeCaptcha).toHaveBeenCalledOnce());
 
+    expect(mocks.submitForm).not.toHaveBeenCalled();
+  });
+
+  it("restores focus and enables retry after hCaptcha is cancelled", async () => {
+    let resolveCaptcha: (result: { verified: false; reason: "cancelled" }) => void = () => {};
+    mocks.executeCaptcha.mockImplementation(
+      () => new Promise((resolve) => (resolveCaptcha = resolve))
+    );
+
+    renderForm({ renderSubmit: undefined });
+
+    const submitButton = screen.getByRole("button", { name: /Submit/ });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => expect(submitButton).toBeDisabled());
+
+    resolveCaptcha({ verified: false, reason: "cancelled" });
+
+    await waitFor(() => {
+      expect(submitButton).toBeEnabled();
+      expect(document.activeElement).toBe(submitButton);
+    });
+    expect(mocks.submitForm).not.toHaveBeenCalled();
+  });
+
+  it("focuses the error and enables retry after hCaptcha times out", async () => {
+    mocks.executeCaptcha.mockResolvedValue({
+      verified: false,
+      allowed: false,
+      reason: "timeout",
+    });
+
+    renderForm({ renderSubmit: undefined });
+
+    const submitButton = screen.getByRole("button", { name: /Submit/ });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => expect(submitButton).toBeEnabled());
+    expect(document.activeElement).toBe(screen.getByTestId("alert"));
+    expect(mocks.resetCaptcha).toHaveBeenCalledOnce();
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 

@@ -16,6 +16,8 @@ export const WaitForId = ({ path, locale }: { locale: Language; path: string }) 
       // Redirect to the path
       // Not router push here ...
       // It causes set state issues elsewhere in the app
+
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- force a full page reload after store initialization
       window.location.href = `/${locale}/form-builder/${id}/${path}`;
     }
   }, [id, locale, path]);

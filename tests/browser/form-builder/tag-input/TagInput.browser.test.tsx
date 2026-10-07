@@ -190,7 +190,11 @@ describe("<TagInput />", () => {
 
     const input = page.getByTestId("tag-input");
     await input.element().focus();
-    await userEvent.keyboard("{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{Delete}");
+    await userEvent.keyboard("{ArrowLeft}");
+    await userEvent.keyboard("{ArrowLeft}");
+    await userEvent.keyboard("{ArrowLeft}");
+    await userEvent.keyboard("{ArrowLeft}");
+    await userEvent.keyboard("{Delete}");
 
     const liveRegion = document.querySelector("#tag-input-live-region");
     expect(liveRegion).toBeTruthy();
@@ -354,11 +358,12 @@ describe("<TagInput />", () => {
     errorDivs = document.querySelectorAll("[data-testid='tag-input-error'] div");
     expect(errorDivs.length).toBe(2);
 
-    const errorContainer = page.getByTestId("tag-input-error");
     await expect
-      .element(errorContainer)
-      .toHaveTextContent("Tag must be at least 3 characters long");
-    await expect.element(errorContainer).toHaveTextContent("Tag must not include numbers");
+      .element(page.getByText("Tag must be at least 3 characters long", { exact: true }))
+      .toBeVisible();
+    await expect
+      .element(page.getByText("Tag must not include numbers", { exact: true }))
+      .toBeVisible();
   });
 
   it("shows validation errors on blur when configured", async () => {

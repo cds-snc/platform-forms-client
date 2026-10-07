@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 
@@ -6,21 +5,25 @@ interface SubmitButtonProps {
   disabled: boolean;
   isSubmitting?: boolean;
   submissionError?: boolean;
+  buttonRef?: (element: HTMLButtonElement) => void;
 }
-export const SubmitButton = ({ disabled, isSubmitting, submissionError }: SubmitButtonProps) => {
+export const SubmitButton = ({
+  disabled,
+  isSubmitting,
+  submissionError,
+  buttonRef,
+}: SubmitButtonProps) => {
   const { t } = useTranslation();
-  // Used to show a spinner for the initial validation and hCAPTCHA loading steps
-  const [loading, setLoading] = useState(false);
+  // Formik's submitting state covers validation and hCAPTCHA execution.
+  const loading = Boolean(isSubmitting) && !submissionError;
 
   return (
     <Button
       id="form-submit-button"
       type="submit"
       disabled={disabled || isSubmitting}
-      onClick={() => {
-        setLoading(true);
-      }}
-      loading={loading && !submissionError}
+      buttonRef={buttonRef}
+      loading={loading}
     >
       {t("submitButton")}
     </Button>

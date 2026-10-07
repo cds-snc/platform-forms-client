@@ -14,7 +14,13 @@ describe("ErrorMessage component", () => {
     const errorMessage = screen.queryByTestId("errorMessage");
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveClass("gc-error-message");
-    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(errorMessage).not.toHaveAttribute("role");
     expect(screen.queryByText(text)).toBeInTheDocument();
+  });
+
+  it("supports opt-in live announcements", () => {
+    render(<ErrorMessage role="alert">{text}</ErrorMessage>);
+
+    expect(screen.getByRole("alert")).toHaveTextContent(text);
   });
 });

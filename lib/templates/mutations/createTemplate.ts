@@ -9,7 +9,7 @@ import { checkForBetaComponentsAsync } from "@lib/validation/betaCheck";
 import { NotificationsInterval } from "@gcforms/types";
 import { InvalidFormConfigError } from "../internal/errors";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
-import { templateRecordInclude } from "../internal";
+import { formPropertiesToJson, templateRecordInclude } from "../internal";
 import { checkFlag } from "../internal";
 import { parseTemplate } from "../internal";
 
@@ -79,7 +79,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     .$transaction(async (tx) => {
       const template = await tx.template.create({
         data: {
-          ...getTemplateJsonConfigCreateData(command.formConfig as Prisma.JsonObject),
+          ...getTemplateJsonConfigCreateData(formPropertiesToJson(command.formConfig)),
           ...(command.name && {
             name: command.name,
           }),
@@ -113,7 +113,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
           templateId: template.id,
           versionNumber: 1,
           status: TEMPLATE_VERSION_STATUS.DRAFT,
-          jsonConfig: command.formConfig as Prisma.JsonObject,
+          jsonConfig: formPropertiesToJson(command.formConfig),
           createdByUserId: user.id,
         },
         select: {

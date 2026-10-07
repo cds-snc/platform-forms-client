@@ -21,9 +21,12 @@ export default AuthenticatedLayout(async ({ children, params, session }) => {
             context={"default"}
             showAccountMenu={!!session}
             accountMenuPublishingEnabled={publishFormsEnabled}
+            skipLink={false}
           />
           <div className="shrink-0 grow basis-auto">
-            <main id="content">{children}</main>
+            <main id="content" tabIndex={-1}>
+              {children}
+            </main>
             <ToastContainer containerId="default" />
           </div>
           <Footer displayFormBuilderFooter className="mt-0" />

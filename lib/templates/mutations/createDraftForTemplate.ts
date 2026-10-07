@@ -11,6 +11,8 @@ import { prisma, prismaErrors, Prisma } from "@gcforms/database";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
 import { parseTemplate } from "../internal/index";
 import { formCache } from "@lib/cache/formCache";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
+import { type FormProperties } from "@gcforms/types";
 
 export async function createDraftVersionForTemplate(formID: string): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
@@ -122,12 +124,18 @@ export async function createDraftVersionForTemplate(formID: string): Promise<For
         : ((publishedVersionJson as Prisma.JsonObject) ??
           (template.jsonConfig as Prisma.JsonObject));
 
+      // The published template is never migrated in place; migrate on copy so the
+      // new draft starts at the current template schema version.
+      const migratedDraftJson = migrateTemplate(
+        draftJson as unknown as FormProperties
+      ) as unknown as Prisma.JsonObject;
+
       const draftVersion = await tx.templateVersion.create({
         data: {
           templateId: formID,
           versionNumber: nextVersionNumber,
           status: TEMPLATE_VERSION_STATUS.DRAFT,
-          jsonConfig: draftJson as Prisma.JsonObject,
+          jsonConfig: migratedDraftJson,
           createdByUserId: user.id,
         },
         select: {

@@ -4,12 +4,10 @@ import { FormikProvider, useFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList } from "@lib/validation/validation";
 import { validateOnSubmit } from "@gcforms/core";
-import { useHCaptcha } from "@gcforms/hcaptcha/client";
 
 import { type FormProps, type FormRenderProps } from "./types";
 import { type Responses as FormikResponses } from "@lib/types";
 
-import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 
 import { useSyncVisibleElementIds } from "@lib/hooks/useSyncVisibleElementIds";
@@ -20,13 +18,13 @@ import { SubmitProgress } from "@clientComponents/forms/SubmitProgress/SubmitPro
 import { hasFiles } from "@lib/fileExtractor";
 
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
-import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 import { FormBody } from "./FormBody";
 import { FormStatusAlerts } from "./FormStatusAlerts";
 import { getFormStatusError } from "./getFormStatusError";
 import { submitFormValues } from "./submitFormValues";
 import { useFormErrorFocus } from "./useFormErrorFocus";
 import { useIsHydrated } from "./useIsHydrated";
+import { useFormHCaptcha } from "./useFormHCaptcha";
 
 /**
  * The main content of the form, handling rendering of status alerts, form body, and submission states.
@@ -116,16 +114,16 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
 };
 
 export const Form: React.FC<FormProps> = (props) => {
-  const { setCaptchaFail } = props;
-  // TODO: Follow up by using the selected version's publication status here, so a draft
-  // preview of a published template can be distinguished from the published form.
-  const captchaEnabled = shouldCheckCaptcha(props.formRecord.isPublished);
+  const submitButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const captchaCancelledRef = React.useRef(false);
 
-  const { captcha, execute, reset } = useHCaptcha({
+  const { captcha, captchaControls, captchaEnabled } = useFormHCaptcha({
+    isPublished: props.formRecord.isPublished,
     language: props.language,
-    logger: logMessage,
-    onSuspiciousError: () => setCaptchaFail?.(true),
-    siteKey: process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || "",
+    setCaptchaFail: props.setCaptchaFail,
+    onCaptchaCancelled: () => {
+      captchaCancelledRef.current = true;
+    },
   });
 
   const formik = useFormik<FormikResponses>({
@@ -134,17 +132,28 @@ export const Form: React.FC<FormProps> = (props) => {
     enableReinitialize: true, // needed when switching languages
     initialValues: props.initialValues ?? getFormInitialValues(props.formRecord, props.language),
     validate: (values) => validateOnSubmit(values, props),
-    onSubmit: (values, formikBag) =>
-      submitFormValues(values, formikBag, props, {
-        captchaEnabled,
-        executeCaptcha: execute,
-        resetCaptcha: reset,
-      }),
+    onSubmit: (values, formikBag) => submitFormValues(values, formikBag, props, captchaControls),
   });
+
+  useEffect(() => {
+    // Return focus to the submit button if the captcha challenge was cancelled
+    if (!formik.isSubmitting && captchaCancelledRef.current) {
+      captchaCancelledRef.current = false;
+      submitButtonRef.current?.focus();
+    }
+  }, [formik.isSubmitting]);
 
   return (
     <FormikProvider value={formik}>
-      <FormContent {...props} {...formik} captcha={captcha} captchaEnabled={captchaEnabled} />
+      <FormContent
+        {...props}
+        {...formik}
+        captcha={captcha}
+        captchaEnabled={captchaEnabled}
+        submitButtonRef={(element) => {
+          submitButtonRef.current = element;
+        }}
+      />
     </FormikProvider>
   );
 };

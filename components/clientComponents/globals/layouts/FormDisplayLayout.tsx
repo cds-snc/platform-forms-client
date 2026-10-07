@@ -4,6 +4,7 @@ import { PublicFormRecord } from "@lib/types";
 import { DateModified } from "../DateModified";
 import { cn } from "@lib/utils";
 import { type JSX } from "react";
+import { SkipLink } from "../SkipLink";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 import { type Language } from "@lib/types/form-builder-types";
@@ -31,10 +32,10 @@ const FormDisplayHeader = ({
   const hasCustom = brand?.logoEn && brand?.logoFr;
 
   if (!hasCustom) {
-    return <GcdsHeader pathname={pathname} language={language} />;
+    return <GcdsHeader pathname={pathname} language={language} skipLink={false} />;
   }
 
-  return <BrandHeader brand={brand} pathname={pathname} language={language} />;
+  return <BrandHeader brand={brand} pathname={pathname} language={language} skipLink={false} />;
 };
 
 const FormDisplayLayout = ({
@@ -53,12 +54,13 @@ const FormDisplayLayout = ({
       <meta charSet="utf-8" />
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
       <div className="flex h-full flex-col">
+        <SkipLink />
         <FormDisplayHeader language={language} formRecord={formRecord} pathname={pathname} />
         <div
           className={cn(
             "gc-formview",
             "shrink-0 grow basis-auto py-0",
-            "container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0"
+            "container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]"
           )}
         >
           <main id="content" className="h-full" tabIndex={-1}>

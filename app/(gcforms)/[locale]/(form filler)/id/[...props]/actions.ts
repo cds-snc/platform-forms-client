@@ -25,20 +25,38 @@ import { shouldCheckCaptcha } from "@lib/utils/shouldCheckCaptcha";
 
 import { randomUUID } from "crypto";
 import { getClientIp } from "@lib/ip";
+import { getAppSettingAsBoolean } from "@lib/appSettings";
 
 // The maximum allowed score for hCaptcha verification. Scores above this threshold are considered suspicious.
 const HCAPTCHA_MAX_ALLOWED_SCORE = 0.79;
+const FORM_CLOSED_CHECK_TIMEOUT_MS = 5000;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
+// A pre-check optimization to exit a flow early when the form is already closed
 export async function isFormClosed(formId: string): Promise<boolean> {
-  const closedDetails = await getTemplateClosureState(formId);
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<null>((resolve) => {
+    timeoutId = setTimeout(() => {
+      logMessage.warn(
+        `Form closure check timed out after ${FORM_CLOSED_CHECK_TIMEOUT_MS}ms for formId ${formId}`
+      );
+      resolve(null);
+    }, FORM_CLOSED_CHECK_TIMEOUT_MS);
+  });
 
-  if (closedDetails && closedDetails.isPastClosingDate) {
-    return true;
+  try {
+    // Handling case of a slow cache/DB lookup that could theoretically block the next hCaptcha
+    // step indefinitely. SubmitForm still does the main closed check using the template.
+    const closedDetails = await Promise.race([getTemplateClosureState(formId), timeout]);
+    if (closedDetails && closedDetails.isPastClosingDate) {
+      return true;
+    }
+
+    return false;
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
   }
-
-  return false;
 }
 
 export async function submitForm(
@@ -71,9 +89,15 @@ export async function submitForm(
         };
       }
 
+      const hCaptchaEnabledSetting: boolean =
+        await getAppSettingAsBoolean("hCaptchaEnabledSetting");
+
       // TODO: Follow up by using the selected version's publication status here, so a draft
       // preview of a published template can be distinguished from the published form.
-      const shouldVerifyHCaptcha = shouldCheckCaptcha(template?.isPublished);
+      const shouldVerifyHCaptcha = shouldCheckCaptcha(
+        template?.isPublished,
+        hCaptchaEnabledSetting
+      );
 
       if (shouldVerifyHCaptcha) {
         const captchaSecret = process.env.HCAPTCHA_SITE_VERIFY_KEY;

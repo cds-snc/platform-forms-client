@@ -44,7 +44,7 @@
       "fileInput": "Ajouter un téléverseur de fichier",
       "attestation": "Ajouter une attestation",
       "date": "Ajouter une date",
-      "number": "Ajouter un chiffre",
+      "number": "Ajouter un nombre",
       "name": "Ajouter un nom complet",
       "firstMiddleLastName": "Ajouter des noms individuels",
       "address": "Ajouter une adresse",
@@ -75,8 +75,10 @@
       "whatIsYourAddress": "Adresse",
       "city": "Ville ou communauté",
       "country": "Pays",
-      "description": "<span>Un modèle pour la collecte d’adresses, y compris la ville, la province et le code postal.</span><span>Postes Canada peut trouver et vérifier les adresses au Canada.</span>",
+      "description1": "Un modèle pour la collecte d’adresses. Postes Canada peut trouver et vérifier les adresses postales au Canada à l’aide d’<image />.",
+      "description2": "Les gens peuvent également saisir ou modifier l’adresse eux-mêmes, notamment si AdresseComplète ne fonctionne pas.",
       "label": "Adresse",
+      "logoAltText": "Adresse Complète",
       "postal": "Code postal ou zip",
       "province": "Province, territoire ou état",
       "street": {
@@ -240,10 +242,10 @@
       "title": "Nom complet"
     },
     "number": {
-      "description": "Un champ qui n’accepte qu’une valeur numérique.",
-      "title": "Chiffre",
+      "description": "Un champ qui accepte des valeurs numériques de 15 chiffres ou moins.<br />Les formats acceptés sont les devises, les décimales, les nombres négatifs, les plages de valeurs et les nombres séparés en milliers.<br />Les valeurs inscrites dans ce champ ne peuvent commencer par un zéro.",
+      "title": "Nombre",
       "amount": "Montant",
-      "enterOnlyNumbers": "Saisissez un chiffre.",
+      "enterOnlyNumbers": "Saisissez un nombre.",
       "setNumberFormat": "Définir le format des chiffres",
       "allowNegative": "Permettre les valeurs numériques négatives",
       "decimalPlaces": "Nombre de décimales pouvant être saisies",
@@ -257,6 +259,7 @@
       "limitNumberOfDigits": "Limiter le nombre de chiffres",
       "invalidValueRange": "La valeur minimale doit être inférieure à la valeur maximale.",
       "invalidDigitRange": "Le nombre minimum de chiffres doit être inférieur au nombre maximum de chiffres.",
+      "digitLimitExceedsMax": "Ne peut pas dépasser {{max}} chiffres.",
       "minDigits": "Nombre minimum de chiffres",
       "maxDigits": "Nombre maximum de chiffres",
       "currency": "Devise ($)",
@@ -544,11 +547,17 @@
   "formDelete": {
     "error": "Erreur",
     "somethingWentWrong": "Il y a eu un problème",
-    "downloadButtonText": "Télécharger une copie",
+    "downloadButtonText": "Télécharger l’ébauche",
     "draft": {
       "message1": "L'archivage déplacera ce formulaire vers la section « Archivés » de vos formulaires.",
       "message2": "Ce formulaire pourra être désarchivé à partir des formulaires « Archivés » pendant 30 jours avant d'être définitivement supprimé.",
       "message3": " Téléchargez une copie du fichier du formulaire pour vos registres. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer le formulaire plus tard."
+    },
+    "draftVersion": {
+      "message1": "Supprimer une ébauche n’a aucune incidence sur le formulaire publié.",
+      "message2": "Lorsqu’une ébauche est supprimée, il n’est pas possible de la récupérer.  Téléchargez une copie de l’ébauche si vous pensez en avoir besoin plus tard.",
+      "okay": "Supprimer l'ébauche",
+      "title": "Supprimer l’ébauche de la version {{version}} ?"
     },
     "okay": "Archiver le formulaire",
     "published": {
@@ -799,7 +808,7 @@
   "moveUp": "Déplacer vers le haut ",
   "navLabelEditor": "Navigation de l’onglet modifier",
   "navLabelFormBuilder": "Navigation de Formulaires GC",
-  "numericField": "Chiffre",
+  "numericField": "Nombre",
   "openModal": "Ouvrir fenêtre modale",
   "option": "Option",
   "optionText": "Option",

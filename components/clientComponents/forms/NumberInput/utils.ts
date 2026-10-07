@@ -1,6 +1,11 @@
+import { MAX_NUMBER_INPUT_DIGITS } from "@gcforms/core";
 import { Language } from "@root/lib/types/form-builder-types";
 
 export const langToLocale = (lang?: string) => (lang === "fr" ? "fr-CA" : "en-CA");
+
+export { MAX_NUMBER_INPUT_DIGITS };
+
+export const countDigits = (value: string): number => value.replace(/[^\d]/g, "").length;
 
 export interface NumberFormatConfig {
   currencyCode?: string;

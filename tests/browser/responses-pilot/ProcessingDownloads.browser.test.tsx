@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, vi } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { ProcessingDownloads } from "@responses-pilot/processing/ProcessingDownloads";
 import { render } from "./testUtils";
 import { GCFormsApiClient } from "@responses-pilot/lib/apiClient";

@@ -38,7 +38,7 @@ describe("<FormattedDateOptions />", () => {
     await render(<FormattedDateOptions item={item} setItem={setItemSpy} />);
 
     // Verify the component renders with date format options
-    const label = page.getByText("Date format");
+    const label = page.getByText("Select a format for the date");
     await expect.element(label).toBeVisible();
   });
 });

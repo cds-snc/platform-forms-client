@@ -20,9 +20,15 @@ export const DownloadFileButton = ({
   theme?: "primary" | "secondary";
 }) => {
   const { t, i18n } = useTranslation("form-builder");
-  const { getSchema, form, name } = useTemplateStore((s) => ({
+  const {
+    getSchema,
+    form,
+    id: formId,
+    name,
+  } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
     form: s.form,
+    id: s.id,
     name: s.name,
   }));
 
@@ -48,7 +54,6 @@ export const DownloadFileButton = ({
 
   const downloadFileEvent = () => {
     const formTitle = slugify(name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn);
-    const formId = form.id;
 
     ga("form_download", {
       formTitle,

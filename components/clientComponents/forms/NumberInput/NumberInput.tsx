@@ -4,7 +4,14 @@ import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
-import { langToLocale, getNumberFormatOptions, normalizeLocaleInput } from "./utils";
+import {
+  langToLocale,
+  getNumberFormatOptions,
+  normalizeLocaleInput,
+  countDigits,
+  MAX_NUMBER_INPUT_DIGITS,
+} from "./utils";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface NumberInputProps extends InputFieldProps {
   placeholder?: string;
@@ -83,11 +90,18 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const raw = event.target.value;
-    setInputValue(raw);
 
     // Normalize locale-specific formatting (grouping separators, locale decimal,
     // currency symbols) so that Number() can parse the result reliably.
     const normalized = normalizeLocaleInput(raw, locale);
+
+    // Reject changes (e.g. paste) that would push the value past the digit cap.
+    // Keystrokes are already blocked before they get here — see handleOnKeyDown.
+    if (countDigits(normalized) > MAX_NUMBER_INPUT_DIGITS) {
+      return;
+    }
+
+    setInputValue(raw);
 
     // Allow incomplete intermediate states while typing
     if (normalized === "" || normalized === "-" || normalized === "." || normalized === "-.") {
@@ -125,6 +139,12 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
       return;
     }
 
+    // Block additional digits once the hard cap is reached
+    if (isDigit && countDigits(normalizedInputValue) >= MAX_NUMBER_INPUT_DIGITS) {
+      event.preventDefault();
+      return;
+    }
+
     if (!isDigit && !isAllowedKey && !isModifier) {
       event.preventDefault();
     }
@@ -147,13 +167,15 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
 
-  const ariaDescribedByValue = [meta.error ? `errorMessage${id}` : null, ariaDescribedBy]
-    .filter(Boolean)
-    .join(" ");
+  const errorMessageId = getErrorMessageId(id);
+  const ariaDescribedByValue = getDescribedByIds(
+    meta.error ? errorMessageId : undefined,
+    ariaDescribedBy
+  );
 
   return (
     <>
-      {meta.error && <ErrorMessage id={`errorMessage${id}`}>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       <input
         data-testid="numberInput"
         className={classes}
@@ -165,7 +187,8 @@ export const NumberInput = (props: NumberInputProps): React.ReactElement => {
         onChange={handleOnChange}
         onKeyDown={handleOnKeyDown}
         onBlur={handleOnBlur}
-        required={required}
+        aria-required={required ? "true" : undefined}
+        aria-invalid={meta.error ? "true" : undefined}
         inputMode="numeric"
       />
     </>

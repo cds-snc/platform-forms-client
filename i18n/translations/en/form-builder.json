@@ -75,8 +75,10 @@
       "whatIsYourAddress": "Address",
       "city": "City, town, or community",
       "country": "Country",
-      "description": "<span>A pattern to collect a Canadian address, including fields for address, city, province, and postal code.</span><span>Canada Post can find and verify Canadian addresses.</span>",
+      "description1": "A pattern to enter an address. Canada Post can find and verify Canadian mailing addresses with <image />.",
+      "description2": "People can enter or change the address themselves, including if AddressComplete does not work.",
       "label": "Address",
+      "logoAltText": "Address Complete",
       "postal": "Postal or zip code",
       "province": "Province, territory, or state",
       "street": {
@@ -240,7 +242,7 @@
       "title": "Full name"
     },
     "number": {
-      "description": "A field that only accepts a numeric value.",
+      "description": "A field for numbers of no more than 15 digits.<br>Format options include currency, decimals, negatives, range and thousands separator.<br>Zero cannot be the first in a series of digits.",
       "title": "Number",
       "amount": "Amount",
       "enterOnlyNumbers": "Enter a number.",
@@ -257,6 +259,7 @@
       "limitNumberOfDigits": "Limit number of digits",
       "invalidValueRange": "The minimum value must be less than the maximum value.",
       "invalidDigitRange": "The minimum number of digits must be less than the maximum number of digits.",
+      "digitLimitExceedsMax": "Cannot exceed {{max}} digits.",
       "minDigits": "Minimum number of digits",
       "maxDigits": "Maximum number of digits",
       "currency": "Currency ($)",
@@ -544,11 +547,17 @@
   "formDelete": {
     "error": "Error",
     "somethingWentWrong": "Something went wrong",
-    "downloadButtonText": "Download a copy",
+    "downloadButtonText": "Download copy",
     "draft": {
       "message1": "Archiving will move this form to the “Archived” section of your forms.",
       "message2": "This form will be available to restore from the archive folder for 30 days before being deleted permanently.",
       "message3": "Download a copy of the form file for your records. You can upload it again in GC Forms to re-create the form later."
+    },
+    "draftVersion": {
+      "message1": "Deleting a draft does not affect the published form.",
+      "message2": "You cannot restore a deleted draft. So consider downloading a copy first.",
+      "okay": "Delete draft",
+      "title": "Delete version {{version}} draft?"
     },
     "okay": "Archive form",
     "published": {

@@ -41,6 +41,9 @@ export const LocalizedElementProperties = {
   DESCRIPTION: "description",
   PLACEHOLDER: "placeholder",
   EXIT_URL: "exitUrl",
+  ROW_TITLE: "rowTitle",
+  ADD_BUTTON_TEXT: "addButtonText",
+  REMOVE_BUTTON_TEXT: "removeButtonText",
 } as const;
 export type LocalizedElementProperties =
   (typeof LocalizedElementProperties)[keyof typeof LocalizedElementProperties];
@@ -50,11 +53,7 @@ export interface LocalizedProperty {
 }
 
 export type publishRequiredFields =
-  | "title"
-  | "questions"
-  | "privacyPolicy"
-  | "confirmationMessage"
-  | "translate";
+  "title" | "questions" | "privacyPolicy" | "confirmationMessage" | "translate";
 
 export interface ElementOption {
   id:

@@ -312,7 +312,7 @@ describe("<ElementDialog />", () => {
     await addressElement.click();
 
     // Verify the description content is visible on the right side
-    const descriptionTitle = page.getByTestId("element-description-content");
+    const descriptionTitle = page.getByRole("heading", { name: "Address", level: 3 });
     await expect.element(descriptionTitle).toBeVisible();
     await expect.element(descriptionTitle).toHaveTextContent("Address");
 

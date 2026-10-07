@@ -7,6 +7,7 @@ import { useCombobox } from "downshift";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "@gcforms/announce";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
@@ -53,8 +54,9 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
         (value) => typeof value === "string" && value.toLowerCase() === lowerValue
       )
     );
-    if (bilingualEntry && bilingualEntry[lang]) {
-      setValue(bilingualEntry[lang]);
+    const translatedValue = bilingualEntry?.[lang as keyof PropertyChoices];
+    if (typeof translatedValue === "string" && translatedValue) {
+      setValue(translatedValue);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   // ^ Intentional: run once on mount. Combobox will remount on language change via key prop key={`${id}-${lang}`}.
@@ -138,12 +140,17 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   }
 
   inputProps.value = field.value || "";
-  const describedBy = [ariaDescribedBy, `${id}-hint`].filter(Boolean).join(" ");
+  const errorMessageId = getErrorMessageId(id);
+  const describedBy = getDescribedByIds(
+    meta.error ? errorMessageId : undefined,
+    ariaDescribedBy,
+    `${id}-hint`
+  );
 
   return (
     <>
       <div className={classes} data-testid="combobox" {...(lang && { lang })}>
-        {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+        {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
 
         {/* Keyboard/touch instructions for AT users, always rendered alongside any passed description. */}
         <span id={`${id}-hint`} className="sr-only">
@@ -155,8 +162,8 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           {...inputProps}
           aria-describedby={describedBy}
           id={id}
-          required={required}
-          aria-required={required}
+          aria-required={required ? "true" : undefined}
+          aria-invalid={meta.error ? "true" : undefined}
           {...(name && { name })}
           data-testid="combobox-input"
           aria-autocomplete="list"
@@ -168,7 +175,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           spellCheck={false}
         />
 
-        <AllowDuplicateAnnouncer id={id ?? ""} bump={bump} announcedMessage={announcedMessage} />
+        <AllowDuplicateAnnouncer id={id ?? name} bump={bump} announcedMessage={announcedMessage} />
 
         {/* Ensure UL remains in the DOM so the aria-controls reference is never broken. */}
         {/* Note: downshift sets role="listbox"/"option". */}

@@ -66,7 +66,7 @@ export const useEditLock = ({
     useTemplateContext();
 
   const isOwnerRef = useRef(false);
-  const ownerLastActivityAtRef = useRef(Date.now());
+  const ownerLastActivityAtRef = useRef(0);
   const heartbeatRef = useRef<number | null>(null);
   const pollRef = useRef<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -196,6 +196,7 @@ export const useEditLock = ({
     await postAction("release");
   }, [postAction, setSessionExpiredFallbackState]);
 
+  // eslint-disable-next-line react-hooks/refs -- latest callback container for timer handlers
   ownerIdleTimeoutHandlerRef.current = handleOwnerIdleTimeout;
 
   const updateStore = useCallback(
@@ -294,7 +295,13 @@ export const useEditLock = ({
   );
 
   useEffect(() => {
+    ownerLastActivityAtRef.current = Date.now();
+  }, []);
+
+  useEffect(() => {
     if (!enabled) {
+      // This state mirrors the server-side lock capability when the route is disabled.
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize route state
       setServerLockingEnabled(false);
       setHasSessionExpired(false);
       return;
@@ -543,8 +550,12 @@ export const useEditLock = ({
     standDownForDisabledLocking,
   };
   const cbRef = useRef(callbacks);
+  // These refs intentionally update during render so effect cleanup sees the latest callbacks.
+  // eslint-disable-next-line react-hooks/refs, react-hooks/immutability -- latest callback container for effects
   cbRef.current = callbacks;
+  // eslint-disable-next-line react-hooks/refs -- latest callback container for timer handlers
   startPollingRef.current = startPolling;
+  // eslint-disable-next-line react-hooks/refs -- latest callback container for timer handlers
   startHeartbeatRef.current = startHeartbeat;
 
   useEffect(() => {

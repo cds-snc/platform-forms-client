@@ -36,6 +36,7 @@ export const RichTextEditor = ({
   const { headlessTree } = useTreeRef();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronize editor content
     setValue(content);
   }, [content]);
 

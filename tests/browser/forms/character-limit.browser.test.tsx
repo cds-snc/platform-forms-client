@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { page } from "@vitest/browser/context";
+import { page } from "vitest/browser";
 import { TextInput } from "@clientComponents/forms/TextInput/TextInput";
 import { Formik } from "formik";
 import { render } from "vitest-browser-react";

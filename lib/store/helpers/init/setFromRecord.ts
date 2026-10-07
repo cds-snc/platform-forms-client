@@ -4,6 +4,7 @@ import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
 
 import { defaultForm } from "../../defaults";
 import { type TemplateStore } from "../../types";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
 export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) => {
   const formPurpose = typeof record.formPurpose === "string" ? record.formPurpose : "";
@@ -12,9 +13,12 @@ export const setFromRecord: TemplateStore<"setFromRecord"> = (set) => (record) =
   const publishDesc = typeof record.publishDesc === "string" ? record.publishDesc : "";
   const closingDate = typeof record.closingDate === "string" ? record.closingDate : null;
 
+  // Migrate before merging with defaultForm, so a missing schemaVersion is read as version 0.
+  const migratedForm = migrateTemplate(record.form);
+
   set((state) => {
     state.id = record.id;
-    state.form = initializeGroups({ ...defaultForm, ...record.form });
+    state.form = initializeGroups({ ...defaultForm, ...migratedForm });
 
     if (!state.form.groupsLayout) {
       state.form.groupsLayout = [];

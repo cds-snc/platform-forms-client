@@ -2,7 +2,7 @@ import {
   type AddressCompleteLabels,
   type AddressElements,
 } from "@clientComponents/forms/AddressComplete/types";
-import { type Language } from "@lib/types/form-builder-types";
+import { LocalizedFormProperties, type Language } from "@lib/types/form-builder-types";
 import { type AddressComponents } from "@lib/types";
 import { FormItem } from "../../helpers";
 import { getLocalizedProperty, safeJSONParse } from "@lib/utils";
@@ -41,7 +41,11 @@ export const AddressComplete = ({
 
     return (
       <div className="mb-8">
-        <h4>{String(element?.properties?.[getLocalizedProperty("title", language)])}</h4>
+        <h4>
+          {String(
+            element?.properties?.[getLocalizedProperty(LocalizedFormProperties.TITLE, language)]
+          )}
+        </h4>
         {splitAddress &&
           splitAddress.map((addressAsFormItem, index) => (
             <BaseElement
