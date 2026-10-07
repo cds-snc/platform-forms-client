@@ -125,7 +125,7 @@ const CardBanner = memo(
     const publishedLabel = isClosed
       ? t("card.states.closed")
       : isPublished
-        ? t("card.states.published") + t(publishedVersionText ? `${publishedVersionText}` : "")
+        ? t(publishedVersionText ? `${publishedVersionText}` : "") + t("card.states.published")
         : t("card.states.draft");
 
     return (
@@ -525,6 +525,7 @@ const CardComponent = ({
           id={card.id}
           name={card.name}
           hasDraft={card.hasDraft}
+          currentDraftVersion={card.currentDraftVersion}
           isPublished={card.isPublished}
           ttl={card.ttl ? card.ttl : undefined}
           status={status}
