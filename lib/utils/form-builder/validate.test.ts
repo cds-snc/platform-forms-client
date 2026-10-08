@@ -52,7 +52,6 @@ describe("validateTemplate", () => {
     ]);
   });
 
-<<<<<<< HEAD
   it("reports navigation cycles", () => {
     const cyclicTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
     const firstPageId = cyclicTemplate.groupsLayout?.[0];
@@ -60,7 +59,9 @@ describe("validateTemplate", () => {
 
     expect(validateTemplate(cyclicTemplate).errors).toContainEqual({
       message: "startErrorNavigationCycle",
-=======
+    });
+  });
+
   it("reports strict element failures from oneOf schemas", () => {
     const invalidTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
     const elementId = Math.max(...invalidTemplate.elements.map(({ id }) => id)) + 1;
@@ -84,7 +85,6 @@ describe("validateTemplate", () => {
     expect(result.errors).toContainEqual({
       property: `elements.${elementIndex}.properties.choices`,
       message: "formInvalidProperty",
->>>>>>> main
     });
   });
 });
