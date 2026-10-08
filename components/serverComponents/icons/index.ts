@@ -88,4 +88,3 @@ export { StarIcon } from "./StarIcon";
 export { StarRatingIcon } from "./StarRatingIcon";
 export { PersonIcon } from "./PersonIcon";
 export { ClosedStatusIcon } from "./ClosedStatusIcon";
-export { HistoryIcon } from "./HistoryIcon";

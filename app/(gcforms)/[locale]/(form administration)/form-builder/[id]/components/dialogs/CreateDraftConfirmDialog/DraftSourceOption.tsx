@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React, { type ReactNode } from "react";
 
-export type DraftSource = "current" | "previous" | "upload";
+export type DraftSource = "current" | "upload";
 
 type Props = {
   value: DraftSource;

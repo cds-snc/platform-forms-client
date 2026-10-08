@@ -6,15 +6,10 @@ import { Alert, Button } from "@clientComponents/globals";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
-import { CopyIcon, HistoryIcon, UploadIcon } from "@serverComponents/icons";
+import { CopyIcon, UploadIcon } from "@serverComponents/icons";
 import { FormProperties } from "@lib/types";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { clearTemplateStore } from "@lib/store/utils";
-import {
-  DOWNLOADABLE_TEMPLATE_VERSION_LABEL,
-  DownloadableTemplateVersion,
-} from "@lib/templates/types";
-import { getDownloadableFormVersions } from "../../../settings/actions";
 import { createDraftVersion } from "./actions";
 import { DraftSourceOption, type DraftSource } from "./DraftSourceOption";
 import { useTemplateUpload } from "./useTemplateUpload";
@@ -41,27 +36,14 @@ export const CreateDraftConfirmDialog = () => {
   const [formId, setFormId] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selection, setSelection] = useState<DraftSource>("current");
-  const [versions, setVersions] = useState<DownloadableTemplateVersion[]>([]);
-  const [selectedVersion, setSelectedVersion] = useState("");
 
   const handleOpen = useCallback(
-    async (detail: OpenDetail) => {
+    (detail: OpenDetail) => {
       if (detail && detail.id) {
         setFormId(detail.id);
         setSelection("current");
-        setVersions([]);
-        setSelectedVersion("");
         resetUpload();
         setIsOpen(true);
-
-        const result = await getDownloadableFormVersions(detail.id);
-        if ("versions" in result) {
-          const previousVersions = result.versions.filter(
-            (version) => version.label === DOWNLOADABLE_TEMPLATE_VERSION_LABEL.published
-          );
-          setVersions(previousVersions);
-          setSelectedVersion(previousVersions[0]?.id ?? "");
-        }
       }
     },
     [resetUpload]
@@ -86,10 +68,6 @@ export const CreateDraftConfirmDialog = () => {
     setIsSubmitting(true);
     try {
       const formConfig: FormProperties | undefined = uploadedConfig;
-      let sourceVersionId: string | undefined;
-      if (selection === "previous") {
-        sourceVersionId = selectedVersion;
-      }
 
       if (selection === "upload" && !formConfig) {
         toast.error(t("confirm.createDraft.errors.invalidFile"));
@@ -97,7 +75,7 @@ export const CreateDraftConfirmDialog = () => {
         return;
       }
 
-      const res = await createDraftVersion({ id: formId, formConfig, sourceVersionId });
+      const res = await createDraftVersion({ id: formId, formConfig });
       if (res?.error || !res?.formRecord) {
         toast.error(t("confirm.createDraft.errors.create"));
         setIsSubmitting(false);
@@ -116,45 +94,6 @@ export const CreateDraftConfirmDialog = () => {
   };
 
   const optionChildren = (value: DraftSource) => {
-    if (value === "previous" && selection === "previous") {
-      return (
-        <div className="relative mt-5 ml-10 w-[calc(100%-2.5rem)]">
-          <select
-            className="gc-select w-full appearance-none rounded-md border-2 border-slate-300 bg-white py-2 pr-10 pl-3 text-slate-900"
-            value={selectedVersion}
-            onChange={(event) => setSelectedVersion(event.target.value)}
-            disabled={versions.length === 0}
-          >
-            {versions.map((version) => (
-              <option key={version.id} value={version.id}>
-                {t("formDownload.versionSelector.previousVersion", {
-                  version: version.versionNumber,
-                })}
-              </option>
-            ))}
-          </select>
-          <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M6 9l6 6 6-6"
-                stroke="#0f172a"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-        </div>
-      );
-    }
-
     if (value === "upload" && selection === "upload") {
       return (
         <>
@@ -198,22 +137,6 @@ export const CreateDraftConfirmDialog = () => {
           setSelection("current");
         }}
       />
-      {versions.length > 0 && (
-        <DraftSourceOption
-          value="previous"
-          title={t("confirm.createDraft.options.previous.title")}
-          description={t("confirm.createDraft.options.previous.description")}
-          icon={<HistoryIcon aria-hidden="true" />}
-          isSelected={selection === "previous"}
-          selectedLabel={t("confirm.createDraft.selected")}
-          onSelect={() => {
-            clearUploadErrors();
-            setSelection("previous");
-          }}
-        >
-          {optionChildren("previous")}
-        </DraftSourceOption>
-      )}
       <DraftSourceOption
         value="upload"
         title={t("confirm.createDraft.options.upload.title")}

@@ -413,10 +413,6 @@
         "current": {
           "title": "Utiliser la version publiée actuelle"
         },
-        "previous": {
-          "title": "Sélectionner une version précédente",
-          "description": "Commencez avec une version de l’historique du formulaire."
-        },
         "upload": {
           "title": "Téléverser un fichier",
           "description": "Utilisez un fichier JSON de Formulaires GC."
@@ -425,8 +421,7 @@
       "errors": {
         "title": "Le fichier du formulaire n’est pas valide",
         "create": "Impossible de créer une version brouillon.",
-        "invalidFile": "Sélectionnez un fichier de formulaire valide.",
-        "loadVersion": "Impossible de charger la version sélectionnée."
+        "invalidFile": "Sélectionnez un fichier de formulaire valide."
       },
       "list": {
         "title": "⚠️  Avant de publier les mises à jour, discutez avec vos développeurs et testez votre formulaire. Vous pourriez devoir : ",

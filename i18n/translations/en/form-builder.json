@@ -413,10 +413,6 @@
         "current": {
           "title": "Use current published version"
         },
-        "previous": {
-          "title": "Select a previous version",
-          "description": "Start from a version in the form history."
-        },
         "upload": {
           "title": "Upload a file",
           "description": "Use a GC Forms JSON file."
@@ -425,8 +421,7 @@
       "errors": {
         "title": "The form file is not valid",
         "create": "Could not create a draft version.",
-        "invalidFile": "Select a valid form file.",
-        "loadVersion": "Could not load the selected version."
+        "invalidFile": "Select a valid form file."
       },
       "list": {
         "title": "⚠️ Before publishing updates, discuss with your developers and test your form. You may need to:",
