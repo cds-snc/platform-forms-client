@@ -15,9 +15,10 @@ import { GcPlatformRegisterButton } from "./GcPlatformRegisterButton";
 
 type GcPlatformMigrationPanelProps = {
   locale: string;
+  showPanel: boolean;
 };
 
-export const GcPlatformMigrationPanel = ({ locale }: GcPlatformMigrationPanelProps) => {
+export const GcPlatformMigrationPanel = ({ locale, showPanel }: GcPlatformMigrationPanelProps) => {
   const pathname = usePathname();
   const { getFlag } = useFeatureFlags();
   const [hasMounted, setHasMounted] = useState(false);
@@ -40,7 +41,13 @@ export const GcPlatformMigrationPanel = ({ locale }: GcPlatformMigrationPanelPro
     );
   }, []);
 
-  if (!hasMounted || !isLoginPage || !isZitadelLoginEnabled || hasGcPlatformLoginHint) {
+  if (
+    !hasMounted ||
+    !showPanel ||
+    !isLoginPage ||
+    !isZitadelLoginEnabled ||
+    hasGcPlatformLoginHint
+  ) {
     return null;
   }
 

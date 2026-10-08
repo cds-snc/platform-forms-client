@@ -8,6 +8,7 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 import { GcPlatformMigrationPanel } from "./auth/login/components/client/GcPlatformMigrationPanel";
+import { isProductionEnvironment } from "@lib/origin";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -20,6 +21,9 @@ export default async function Layout(props: {
   const { children } = props;
 
   const { t } = await serverTranslation("common", { lang: locale });
+  // TEMP: Remove the development check to show the migration panel locally.
+  const hideForDev = process.env.NODE_ENV === "development";
+  const showMigrationPanel = !(await isProductionEnvironment()) && !hideForDev;
 
   return (
     <div className="bg-gray-soft flex min-h-full flex-col">
@@ -46,7 +50,7 @@ export default async function Layout(props: {
       </header>
       <div id="page-container" className="gc-authpages">
         <div className="account-wrapper mt-10 flex items-start justify-center gap-8">
-          <GcPlatformMigrationPanel locale={locale} />
+          <GcPlatformMigrationPanel locale={locale} showPanel={showMigrationPanel} />
 
           <div
             className={`tablet:w-[768px] has-[#auth-panel]:tablet:w-[658px] laptop:w-[850px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
