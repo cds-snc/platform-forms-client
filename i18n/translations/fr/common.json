@@ -249,9 +249,7 @@
     "type5": "Prenez une minute pour nous aider",
     "message5": "Testez une fonctionnalité à venir qui améliorera la récupération des réponses : <a href='/fr/forms/browser-check' target='_blank' className='text-white hover:text-white'>Vérifiez votre navigateur</a>",
     "type6": "Améliorer Formulaires GC",
-    "message6": "Aidez nous à améliorer l’expérience de connexion : <a href='https://forms-formulaires.alpha.canada.ca/fr/id/cmuyb8xgz00vb01ud8ducczg5 
-
-' target='_blank' className='text-white hover:text-white'>Participer</a>"
+    "message6": "Aidez nous à améliorer l’expérience de connexion : <a href='https://forms-formulaires.alpha.canada.ca/fr/id/cmuyb8xgz00vb01ud8ducczg5' target='_blank' className='text-white hover:text-white'>Participer</a>"
   },
   },
   "closingNotice": {
