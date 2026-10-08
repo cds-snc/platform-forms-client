@@ -130,7 +130,7 @@ export const Start = () => {
               <WarningIcon className="mt-1" />
             </div>
             <div>
-              <h3 className="mb-2 ml-6">{t("failedToReadFormFile")}</h3>
+              <h3 className="mb-2 ml-6">{t("startErrorTitle")}</h3>
               <ul className="mb-4 list-none pl-6">
                 {errors.map((error, index) => {
                   return (

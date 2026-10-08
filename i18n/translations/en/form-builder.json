@@ -1240,9 +1240,11 @@
   "singleChoice": "Radio buttons",
   "starRating": "Star rating",
   "start": "Start",
+  "startErrorTitle": "Cannot import file",
   "startErrorTemplateSize": "The form file is too large",
   "startErrorDuplicateQuestionId": "Question IDs must be unique",
   "startErrorInvalidCustomRegex": "Invalid or unsafe custom regex pattern",
+  "startErrorNavigationCycle": "The form has at least one branch with an endless loop",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",
@@ -1454,6 +1456,11 @@
     "translateTitle": "Page title",
     "addRule": "Add branch",
     "saveRule": "Save",
+    "invalidNextAction": {
+      "title": "Page {{source}} cannot go to page {{target}}",
+      "message": "That branch would be an endless loop",
+      "okay": "OK"
+    },
     "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
