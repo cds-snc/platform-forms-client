@@ -20,7 +20,7 @@ export const InvalidNextActionDialog = ({
     <Dialog
       dialogRef={dialog}
       handleClose={handleClose}
-      title={t("logic.invalidNextAction.title")}
+      title={t("logic.invalidNextAction.title", { source, target })}
       actions={
         <Button theme="primary" onClick={handleClose}>
           {t("logic.invalidNextAction.okay")}

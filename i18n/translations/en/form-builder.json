@@ -1240,10 +1240,11 @@
   "singleChoice": "Radio buttons",
   "starRating": "Star rating",
   "start": "Start",
+  "startErrorTitle": "Cannot import file",
   "startErrorTemplateSize": "The form file is too large",
   "startErrorDuplicateQuestionId": "Question IDs must be unique",
   "startErrorInvalidCustomRegex": "Invalid or unsafe custom regex pattern",
-  "startErrorNavigationCycle": "The form contains a circular page navigation rule",
+  "startErrorNavigationCycle": "The form has at least one branch with an endless loop",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",
@@ -1456,8 +1457,8 @@
     "addRule": "Add branch",
     "saveRule": "Save",
     "invalidNextAction": {
-      "title": "Cannot save navigation rule",
-      "message": "You cannot set {{source}} to go to {{target}} because it would create a cycle.",
+      "title": "Page {{source}} cannot go to page {{target}}",
+      "message": "That branch would be an endless loop",
       "okay": "OK"
     },
     "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",

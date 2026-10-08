@@ -555,7 +555,7 @@
     },
     "draftVersion": {
       "message1": "Supprimer une ébauche n’a aucune incidence sur le formulaire publié.",
-      "message2": "Lorsqu’une ébauche est supprimée, il n’est pas possible de la récupérer.  Téléchargez une copie de l’ébauche si vous pensez en avoir besoin plus tard.",
+      "message2": "Lorsqu’une ébauche est supprimée, il n’est pas possible de la récupérer. Téléchargez une copie de l’ébauche si vous pensez en avoir besoin plus tard.",
       "okay": "Supprimer l'ébauche",
       "title": "Supprimer l’ébauche de la version {{version}} ?"
     },
@@ -1249,10 +1249,11 @@
   "singleChoice": "Boutons radio",
   "starRating": "Évaluation par étoiles",
   "start": "Commencer",
+  "startErrorTitle": "Impossible d’importer le fichier",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
   "startErrorDuplicateQuestionId": "Les identifiants de questions doivent être uniques",
   "startErrorInvalidCustomRegex": "Modèle regex personnalisé invalide ou non sécurisé",
-  "startErrorNavigationCycle": "Le formulaire contient une règle de navigation circulaire entre les pages",
+  "startErrorNavigationCycle": "Le formulaire contient au moins une branche comportant une boucle infinie.",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",
@@ -1465,8 +1466,8 @@
     "addRule": "Ajouter un embranchement",
     "saveRule": "Enregistrer",
     "invalidNextAction": {
-      "title": "La règle de navigation ne peut pas être enregistrée",
-      "message": "Vous ne pouvez pas faire passer {{source}} à {{target}}, car cela créerait un cycle.",
+      "title": "La page {{source}} ne peut renvoyer à la page {{target}}",
+      "message": "Cette branche causerait une boucle infinie.",
       "okay": "OK"
     },
     "saveNote": "Les embranchements désactivent l'enchaînement linéaire automatique entre les pages du formulaire.",
