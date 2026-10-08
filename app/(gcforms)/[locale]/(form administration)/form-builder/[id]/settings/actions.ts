@@ -19,18 +19,10 @@ import {
 } from "@lib/auditLogs";
 
 import { logMessage } from "@lib/logger";
-import { DownloadableTemplateVersion } from "@lib/templates/types";
-import { getFormattedDownloadableTemplateVersions } from "@lib/templates/queries/getDownloadableTemplateVersions";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { getTemplateVersionById } from "@lib/templates/queries/getTemplateVersionById";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
-
-export type GetDownloadableFormVersionsResult =
-  | {
-      versions: DownloadableTemplateVersion[];
-    }
-  | ServerActionError;
 
 export const createServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
   revalidatePath(
@@ -148,34 +140,6 @@ export const getFormEvents = AuthenticatedAction(
   }
 );
 
-export const getDownloadableFormVersions = AuthenticatedAction(
-  async (_, formId: string): Promise<GetDownloadableFormVersionsResult> => {
-    try {
-      await authorization.canViewForm(formId).catch((e) => {
-        if (e instanceof AccessControlError) {
-          logEvent(
-            e.user.id,
-            { type: "Form", id: formId },
-            "AccessDenied",
-            AuditLogAccessDeniedDetails.AccessDenied_AttemptedToReadFormObject
-          );
-        }
-        throw e;
-      });
-
-      const versions = await getFormattedDownloadableTemplateVersions(formId);
-
-      if (!versions || versions.length === 0) {
-        throw new Error("Form Not Found");
-      }
-
-      return { versions };
-    } catch (error) {
-      return { error: "There was an error. Please try again later." } as ServerActionError;
-    }
-  }
-);
-
 export type GetDownloadableFormVersionConfigResult =
   | {
       formConfig: unknown;
@@ -213,7 +177,7 @@ export const getDownloadableFormVersionConfig = AuthenticatedAction(
         return { formConfig: formRecord.form };
       }
 
-      const versionRecord = await getTemplateVersionById(versionId);
+      const versionRecord = await getTemplateVersionById(formId, versionId);
 
       if (!versionRecord || !versionRecord.jsonConfig) {
         throw new Error("Version Not Found");

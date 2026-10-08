@@ -406,6 +406,23 @@
     "createDraft": {
       "title": "Mettre à jour le formulaire publié",
       "liveForm": "La version actuelle continuera de recueillir des réponses jusqu’à ce que vous publiez la mise à jour du formulaire.",
+      "selected": "Sélectionné",
+      "browse": "Parcourir les fichiers",
+      "fileSelected": "Fichier sélectionné",
+      "options": {
+        "current": {
+          "title": "Utiliser la version publiée actuelle"
+        },
+        "upload": {
+          "title": "Téléverser un fichier",
+          "description": "Utilisez un fichier JSON de Formulaires GC."
+        }
+      },
+      "errors": {
+        "title": "Le fichier du formulaire n’est pas valide",
+        "create": "Impossible de créer une version brouillon.",
+        "invalidFile": "Sélectionnez un fichier de formulaire valide."
+      },
       "list": {
         "title": "⚠️  Avant de publier les mises à jour, discutez avec vos développeurs et testez votre formulaire. Vous pourriez devoir : ",
         "listitem1": "Ajuster les questions du formulaire et vos flux de travail.",
