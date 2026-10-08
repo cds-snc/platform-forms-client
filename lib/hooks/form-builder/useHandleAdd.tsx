@@ -11,6 +11,7 @@ import { MAX_DYNAMIC_ROW_AMOUNT } from "@root/constants";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
   defaultField,
+  filterElementPropertiesByType,
   createElement,
   setDescription,
   setTitle,
@@ -64,7 +65,7 @@ export const useHandleAdd = () => {
       item = setTitle(item, "fr", titleFr);
     }
 
-    return item;
+    return filterElementPropertiesByType(item);
   }, []);
 
   const loadError = t("failedToReadFormFile");
