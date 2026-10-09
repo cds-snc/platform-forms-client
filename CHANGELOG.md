@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.25.0](https://github.com/cds-snc/platform-forms-client/compare/v4.24.0...v4.25.0) (2026-10-09)
+
+
+### Features
+
+* Add version-gated strict element schemas ([#7998](https://github.com/cds-snc/platform-forms-client/issues/7998)) ([c6cae04](https://github.com/cds-snc/platform-forms-client/commit/c6cae04a34913aca1da9f3f86abcdc545013310e))
+* detect cycles in branching ([#7979](https://github.com/cds-snc/platform-forms-client/issues/7979)) ([e02c865](https://github.com/cds-snc/platform-forms-client/commit/e02c865b7775b5601da2982a9200d2b3d0ba865e))
+* Strict element properties on element creation ([#8004](https://github.com/cds-snc/platform-forms-client/issues/8004)) ([d536742](https://github.com/cds-snc/platform-forms-client/commit/d53674271f0a4808423c113a29c226b918721a32))
+
+
+### Bug Fixes
+
+* occasionally failing hCaptcha test ([#8025](https://github.com/cds-snc/platform-forms-client/issues/8025)) ([f0857e2](https://github.com/cds-snc/platform-forms-client/commit/f0857e279c3189788ae2e646470ec1947c361a09))
+* RichText title rendering ([#8013](https://github.com/cds-snc/platform-forms-client/issues/8013)) ([62e77d9](https://github.com/cds-snc/platform-forms-client/commit/62e77d9d70afaa199ddb55c003a6b14c82a60562))
+* update aria semantics - mainly missing or broken label references ([#8006](https://github.com/cds-snc/platform-forms-client/issues/8006)) ([8945b52](https://github.com/cds-snc/platform-forms-client/commit/8945b520ba7226ac61afd6183afad6fb648ece12))
+
+
+### Miscellaneous Chores
+
+* update GC SSO button  ([#8015](https://github.com/cds-snc/platform-forms-client/issues/8015)) ([abe7bb0](https://github.com/cds-snc/platform-forms-client/commit/abe7bb00a437e6b94d18311b81a986f7bc4b183f))
+
 ## [4.24.0](https://github.com/cds-snc/platform-forms-client/compare/v4.23.0...v4.24.0) (2026-10-07)
 
 
