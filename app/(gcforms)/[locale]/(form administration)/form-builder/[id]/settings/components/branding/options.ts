@@ -440,4 +440,13 @@ export const options = [
     logoTitleEn: "Canadian Heritage Rivers System",
     logoTitleFr: "Réseau des rivières du patrimoine canadien",
   },
+  {
+    name: "mpo",
+    urlEn: "https://www.canada.ca/en/privy-council/major-projects-office.html",
+    urlFr: "https://www.canada.ca/fr/conseil-prive/bureau-grands-projets.html",
+    logoEn: "/img/branding/mpo-en.svg",
+    logoFr: "/img/branding/mpo-fr.svg",
+    logoTitleEn: "Major Projects Office",
+    logoTitleFr: "Bureau des grands projets",
+  },
 ];
