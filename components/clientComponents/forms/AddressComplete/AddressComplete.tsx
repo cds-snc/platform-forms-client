@@ -15,6 +15,8 @@ import {
   matchesAddressPattern,
   getCountryCodeFromName,
   getCountryNameFromCode,
+  normalizeAddressField,
+  normalizePostalCode,
 } from "./utils";
 import { Description, Label, ManagedCombobox, ErrorMessage } from "@clientComponents/forms";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
@@ -282,8 +284,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
     for (const internalKey in baseAddressObject) {
       if (key === internalKey) {
-        const maxLength = key === "postalCode" ? MAX_POSTAL_CODE_LENGTH : MAX_ADDRESS_FIELD_LENGTH;
-        const newAddressObject = { ...baseAddressObject, [key]: value.slice(0, maxLength) };
+        const sanitizedValue =
+          key === "postalCode" ? normalizePostalCode(value) : normalizeAddressField(value);
+        const newAddressObject = { ...baseAddressObject, [key]: sanitizedValue };
         setAddressObject(newAddressObject as AddressElements);
       }
     }
