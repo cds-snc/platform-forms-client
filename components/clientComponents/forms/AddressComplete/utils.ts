@@ -235,3 +235,7 @@ export const normalizePostalCode = (value: string): string => {
 export const isPositiveSafeInteger = (value: number): boolean => {
   return Number.isSafeInteger(value) && value > 0;
 };
+
+export const enforceMaxLength = (value: string, maxLength: number): string => {
+  return value.length > maxLength ? value.slice(0, maxLength) : value;
+};
