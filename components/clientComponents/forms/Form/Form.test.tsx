@@ -159,6 +159,7 @@ const renderForm = (props: Partial<FormProps> = {}) => render(<Form {...createFo
 describe("Form", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.setFocusOnErrorMessage.mockReset();
     vi.stubEnv("NEXT_PUBLIC_HCAPTCHA_SITE_KEY", "test-site-key");
     mocks.executeCaptcha.mockResolvedValue({ verified: true, token: "captcha-token" });
     mocks.submitForm.mockResolvedValue({ id: "form-id", submissionId: "submission-id" });
@@ -431,6 +432,10 @@ describe("Form", () => {
   });
 
   it("focuses the error and enables retry after hCaptcha times out", async () => {
+    const validation = await vi.importActual<typeof import("@lib/validation/validation")>(
+      "@lib/validation/validation"
+    );
+    mocks.setFocusOnErrorMessage.mockImplementation(validation.setFocusOnErrorMessage);
     mocks.executeCaptcha.mockResolvedValue({
       verified: false,
       allowed: false,
@@ -442,8 +447,10 @@ describe("Form", () => {
     const submitButton = screen.getByRole("button", { name: /Submit/ });
     fireEvent.click(submitButton);
 
-    await waitFor(() => expect(submitButton).toBeEnabled());
-    expect(document.activeElement).toBe(screen.getByTestId("alert"));
+    await waitFor(() => {
+      expect(submitButton).toBeEnabled();
+      expect(document.activeElement).toBe(screen.getByTestId("alert"));
+    });
     expect(mocks.resetCaptcha).toHaveBeenCalledOnce();
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
