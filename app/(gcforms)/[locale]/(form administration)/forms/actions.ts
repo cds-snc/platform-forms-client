@@ -4,6 +4,7 @@ import { TemplateHasUnprocessedSubmissions } from "@lib/templates/internal/error
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 import { cloneTemplate } from "@lib/templates/mutations/cloneTemplate";
 import { deleteTemplate } from "@lib/templates/mutations/deleteTemplate";
+import { deleteDraftVersionForTemplate } from "@lib/templates/mutations/deleteDraftVersionForTemplate";
 import { restoreTemplate } from "@lib/templates/mutations/restoreTemplate";
 import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
@@ -61,6 +62,17 @@ export const deleteForm = AuthenticatedAction(
       revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
     } catch (e) {
       return { error: (e as Error).message };
+    }
+  }
+);
+
+export const deleteDraftForm = AuthenticatedAction(
+  async (_, id: string): Promise<void | { error?: string }> => {
+    try {
+      await deleteDraftVersionForTemplate(id);
+      revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
+    } catch {
+      return { error: "Failed to Delete Draft" };
     }
   }
 );

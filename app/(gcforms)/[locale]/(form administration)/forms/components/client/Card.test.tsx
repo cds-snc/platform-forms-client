@@ -71,11 +71,11 @@ describe("Card", () => {
 
     render(<Card card={card} status={TAB_STATUS.DRAFT} />);
 
-    expect(screen.getByText("Published- version 2").closest("a")).toHaveAttribute(
+    expect(screen.getByText("Version 2 - Published").closest("a")).toHaveAttribute(
       "href",
       "/en/id/form-123"
     );
     expect(screen.queryByRole("link", { name: "Draft - version 3" })).not.toBeInTheDocument();
-    expect(screen.getByText("Draft - version 3")).toBeInTheDocument();
+    expect(screen.getByText("Version 3 - Draft")).toBeInTheDocument();
   });
 });

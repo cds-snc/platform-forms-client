@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.24.0](https://github.com/cds-snc/platform-forms-client/compare/v4.23.0...v4.24.0) (2026-10-07)
+
+
+### Features
+
+* allow delete versioned draft ([#7935](https://github.com/cds-snc/platform-forms-client/issues/7935)) ([d61a4dd](https://github.com/cds-snc/platform-forms-client/commit/d61a4ddf9060032a6d46092537f009fbd38bf7de))
+
+
+### Bug Fixes
+
+* Ensure element transformations run against subElements ([#7994](https://github.com/cds-snc/platform-forms-client/issues/7994)) ([0d702b4](https://github.com/cds-snc/platform-forms-client/commit/0d702b4effd501ed8e6871d4a1194c859eee2092))
+* improve form semantics for assistive technologies ([#7944](https://github.com/cds-snc/platform-forms-client/issues/7944)) ([5bdabe8](https://github.com/cds-snc/platform-forms-client/commit/5bdabe8b397ed538820f8daee7e0257f0026679e))
+* Remove whitespace trimming from AddressComplete fields onChange ([#8008](https://github.com/cds-snc/platform-forms-client/issues/8008)) ([85013de](https://github.com/cds-snc/platform-forms-client/commit/85013de9c14c16c23d7a8baa4febac5af9386303))
+* skip-link app wide ([#7934](https://github.com/cds-snc/platform-forms-client/issues/7934)) ([2430a8f](https://github.com/cds-snc/platform-forms-client/commit/2430a8ff84806d01e255d68404718701a543cca6))
+* update hint text to be more readable with magnifiers ([#7937](https://github.com/cds-snc/platform-forms-client/issues/7937)) ([6a299d1](https://github.com/cds-snc/platform-forms-client/commit/6a299d17bb84ffe95009fbb75f10bacd8bb804eb))
+
+
+### Miscellaneous Chores
+
+* clean next url ([#8001](https://github.com/cds-snc/platform-forms-client/issues/8001)) ([2ff4b8a](https://github.com/cds-snc/platform-forms-client/commit/2ff4b8afb103f7e208d3b8259d30f721601a41ff))
+* feature flagged update checks for allow file upload ([#7982](https://github.com/cds-snc/platform-forms-client/issues/7982)) ([547a705](https://github.com/cds-snc/platform-forms-client/commit/547a70554d9387fbe01957d1edfebffc9f65ebe6))
+* hCaptcha timeouts update ([#7995](https://github.com/cds-snc/platform-forms-client/issues/7995)) ([6e2f189](https://github.com/cds-snc/platform-forms-client/commit/6e2f189a13622462e4bb1f3570a3b27a0cf22e07))
+* improve form hCaptcha readability ([#7927](https://github.com/cds-snc/platform-forms-client/issues/7927)) ([f87aa72](https://github.com/cds-snc/platform-forms-client/commit/f87aa727e69af56c769fe6959a796586a6be2514))
+* move env variable to disable Prisma telemetry inside Dockerfiles ([#7991](https://github.com/cds-snc/platform-forms-client/issues/7991)) ([e70be3e](https://github.com/cds-snc/platform-forms-client/commit/e70be3ef747a074b6e841364376da6a13de47249))
+
 ## [4.23.0](https://github.com/cds-snc/platform-forms-client/compare/v4.22.7...v4.23.0) (2026-09-29)
 
 

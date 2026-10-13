@@ -259,54 +259,55 @@ export const PrePublishDialog = ({
               <p className="mb-4 text-sm">{t("prePublishFormDialog.thisInformation")}</p>
             )}
 
-            {!hasCurrentlyPublishedVersion ? (
-              <Label className="gcds-label required" required={true}>
-                {t("prePublishFormDialog.whatType")}
-              </Label>
-            ) : (
-              <Label className="gcds-label required" required={true}>
-                {t("prePublishFormDialog.republish.categoryLabel")}
-              </Label>
-            )}
-
             <div className="mb-1">
               {hasCurrentlyPublishedVersion ? (
-                <div className="flex flex-col gap-3">
-                  {reasonForPublishOptions.map((option) => (
-                    <Radio
-                      key={option.value}
-                      onChange={onReasonForPublishChange}
-                      id={`formtype-${option.value}`}
-                      name="template-category"
-                      value={option.value}
-                      label={option.label}
-                    />
-                  ))}
-                </div>
+                <fieldset>
+                  <Label className="gcds-label required" required={true} group={true}>
+                    {t("prePublishFormDialog.republish.categoryLabel")}
+                  </Label>
+                  <div className="flex flex-col gap-3">
+                    {reasonForPublishOptions.map((option) => (
+                      <Radio
+                        key={option.value}
+                        onChange={onReasonForPublishChange}
+                        id={`formtype-${option.value}`}
+                        name="template-category"
+                        value={option.value}
+                        label={option.label}
+                      />
+                    ))}
+                  </div>
+                </fieldset>
               ) : (
-                <select
-                  className={cn(
-                    "center-right-15px form-builder-dropdown text-black-default my-0 inline-block min-w-[400px] border-1 border-black p-2"
-                  )}
-                  value={formType}
-                  onChange={(e) => onFormTypeChange(e)}
-                >
-                  <option value="" disabled hidden>
-                    {t("logic.choiceSelect.selectOption")}
-                  </option>
-                  {formTypeOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
+                <>
+                  <Label className="gcds-label required" required={true} htmlFor="formtype">
+                    {t("prePublishFormDialog.whatType")}
+                  </Label>
+                  <select
+                    id="formtype"
+                    className={cn(
+                      "center-right-15px form-builder-dropdown text-black-default my-0 inline-block min-w-[400px] border-1 border-black p-2"
+                    )}
+                    value={formType}
+                    onChange={(e) => onFormTypeChange(e)}
+                  >
+                    <option value="" disabled hidden>
+                      {t("logic.choiceSelect.selectOption")}
                     </option>
-                  ))}
-                </select>
+                    {formTypeOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </>
               )}
             </div>
 
             {/* Show description (brief description) only for initial publishes; republish only captures category */}
             {!hasCurrentlyPublishedVersion && (
               <>
-                <Label className="gcds-label required" required={true}>
+                <Label className="gcds-label required" required={true} htmlFor="txtDescription">
                   {t("prePublishFormDialog.briefDesc")}
                 </Label>
                 <p>

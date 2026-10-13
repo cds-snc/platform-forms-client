@@ -61,6 +61,9 @@ const cleanFormStructure = (form: FormProperties) => {
     group.elements.forEach((elementId) => {
       elementIdsInGroups.add(elementId);
     });
+
+    if (group.exitUrlEn === "") delete group.exitUrlEn;
+    if (group.exitUrlFr === "") delete group.exitUrlFr;
   });
 
   cleanedForm.elements = cleanedForm.elements.filter((element) => {
@@ -82,6 +85,13 @@ const cleanElements = (form: FormProperties) => {
     cleanElementRules(form.elements, element);
     ensureUUID(element);
     updateNumberInputType(element);
+
+    // subElements can't have conditionalRules, so only
+    // ensureUUID/updateNumberInputType apply to subElements
+    element.properties?.subElements?.forEach((subElement) => {
+      ensureUUID(subElement);
+      updateNumberInputType(subElement);
+    });
   });
 };
 

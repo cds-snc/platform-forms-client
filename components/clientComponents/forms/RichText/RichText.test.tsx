@@ -33,8 +33,7 @@ describe("Generate a rich text element", () => {
     const description =
       lang === "en" ? richTextData.properties.descriptionEn : richTextData.properties.descriptionFr;
 
-    expect(screen.getByText(title!)).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(title!);
+    expect(screen.queryByText(title!)).not.toBeInTheDocument();
     expect(screen.getByText(description!)).toBeInTheDocument();
   });
 

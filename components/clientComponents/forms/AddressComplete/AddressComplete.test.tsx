@@ -158,7 +158,11 @@ vi.mock("@clientComponents/forms", () => {
   ManagedCombobox.displayName = "ManagedCombobox";
 
   return {
-    Label: ({ htmlFor, children, required }: {
+    Label: ({
+      htmlFor,
+      children,
+      required,
+    }: {
       htmlFor: string;
       children: React.ReactNode;
       required?: boolean;
@@ -263,10 +267,7 @@ describe("AddressComplete", () => {
     expect(cityInput).toHaveAttribute("aria-required", "true");
     expect(cityInput).toHaveAttribute("aria-invalid", "true");
     expect(cityInput).toHaveAttribute("aria-describedby", "errorMessage-address-city");
-    expect(screen.getByText("City is required")).toHaveAttribute(
-      "id",
-      "errorMessage-address-city"
-    );
+    expect(screen.getByText("City is required")).toHaveAttribute("id", "errorMessage-address-city");
 
     expect(provinceInput).toHaveAttribute("aria-required", "true");
     expect(provinceInput).not.toHaveAttribute("aria-invalid");
@@ -290,6 +291,33 @@ describe("AddressComplete", () => {
       "aria-describedby",
       "desc-address-streetDesc"
     );
+  });
+
+  it.each([
+    ["streetAddress", "addresscomplete-streetAddress-input", "123 Main Street"],
+    ["city", "addresscomplete-input-city", "New York"],
+    ["province", "addresscomplete-input-province", "New Jersey"],
+    ["postalCode", "addresscomplete-input-postalCode", "SW1A 1AA"],
+  ])("preserves spaces while typing into %s", async (fieldName, testId, value) => {
+    const user = userEvent.setup();
+    formikState.value = JSON.stringify({
+      streetAddress: "",
+      city: "",
+      province: "",
+      postalCode: "",
+      country: "France",
+    });
+
+    renderComponent({ canadianOnly: false });
+
+    const input = screen.getByTestId(testId);
+    const firstSpace = value.indexOf(" ");
+    await user.type(input, value.slice(0, firstSpace + 1));
+    expect(input).toHaveValue(value.slice(0, firstSpace + 1));
+
+    await user.type(input, value.slice(firstSpace + 1));
+    expect(input).toHaveValue(value);
+    expect(JSON.parse(setValueMock.mock.lastCall![0])[fieldName]).toBe(value);
   });
 
   it("uses AddressComplete search when feature flag is enabled", async () => {

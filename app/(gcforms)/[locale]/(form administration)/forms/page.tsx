@@ -236,7 +236,10 @@ export default async function Page(props: {
 
   return (
     <div className="m-4 grid min-h-screen grid-cols-[20em_1fr] gap-8">
-      <h1 className="sr-only">{`${getStatusTitle(status, t)} - ${t("title")}`}</h1>
+      <h1
+        id="forms-page-title"
+        className="sr-only"
+      >{`${getStatusTitle(status, t)} - ${t("title")}`}</h1>
       <div>
         <div className="self-start rounded border border-slate-200 bg-white p-2">
           <AccountDetails

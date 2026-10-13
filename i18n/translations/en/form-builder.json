@@ -547,11 +547,17 @@
   "formDelete": {
     "error": "Error",
     "somethingWentWrong": "Something went wrong",
-    "downloadButtonText": "Download a copy",
+    "downloadButtonText": "Download copy",
     "draft": {
       "message1": "Archiving will move this form to the “Archived” section of your forms.",
       "message2": "This form will be available to restore from the archive folder for 30 days before being deleted permanently.",
       "message3": "Download a copy of the form file for your records. You can upload it again in GC Forms to re-create the form later."
+    },
+    "draftVersion": {
+      "message1": "Deleting a draft does not affect the published form.",
+      "message2": "You cannot restore a deleted draft. So consider downloading a copy first.",
+      "okay": "Delete draft",
+      "title": "Delete version {{version}} draft?"
     },
     "okay": "Archive form",
     "published": {
@@ -1234,9 +1240,11 @@
   "singleChoice": "Radio buttons",
   "starRating": "Star rating",
   "start": "Start",
+  "startErrorTitle": "Cannot import file",
   "startErrorTemplateSize": "The form file is too large",
   "startErrorDuplicateQuestionId": "Question IDs must be unique",
   "startErrorInvalidCustomRegex": "Invalid or unsafe custom regex pattern",
+  "startErrorNavigationCycle": "The form has at least one branch with an endless loop",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",
@@ -1448,6 +1456,11 @@
     "translateTitle": "Page title",
     "addRule": "Add branch",
     "saveRule": "Save",
+    "invalidNextAction": {
+      "title": "Page {{source}} cannot go to page {{target}}",
+      "message": "That branch would be an endless loop",
+      "okay": "OK"
+    },
     "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
