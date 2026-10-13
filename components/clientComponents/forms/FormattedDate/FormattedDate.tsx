@@ -7,7 +7,7 @@ import { useTranslation } from "@i18n/client";
 import { DateFormat, DateObject, DatePart } from "./types";
 import { isValidDateFormat } from "./utils";
 import { ErrorMessage } from "@clientComponents/forms";
-import { cn } from "@lib/utils";
+import { cn, safeJSONParse } from "@lib/utils";
 import { logMessage } from "@lib/logger";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
@@ -34,7 +34,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
 
   const [field, meta, helpers] = useField(props);
   const [dateObject, setDateObject] = useState<DateObject | null>(
-    field.value ? JSON.parse(field.value) : null
+    field.value ? safeJSONParse(field.value) || null : null
   );
   const { t } = useTranslation(["common", "form-builder"], { lng: lang });
 
