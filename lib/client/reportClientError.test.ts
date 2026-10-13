@@ -15,7 +15,11 @@ describe("reportClientError", () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal("fetch", fetchMock);
 
-    const error = Object.assign(new TypeError("Render failed"), { digest: "digest-123" });
+    const stack = "TypeError: Render failed\n    at render (chunk.js:1:2)";
+    const error = Object.assign(new TypeError("Render failed"), {
+      digest: "digest-123",
+      stack,
+    });
     reportClientError(error, "global");
 
     expect(fetchMock).toHaveBeenCalledOnce();
@@ -29,7 +33,7 @@ describe("reportClientError", () => {
       name: "TypeError",
       message: "Render failed",
       digest: "digest-123",
-      stack: error.stack.slice(0, 4096),
+      stack,
       locale: "en",
       formId: "form123",
       step: "confirmation",
