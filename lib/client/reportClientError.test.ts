@@ -29,6 +29,7 @@ describe("reportClientError", () => {
       name: "TypeError",
       message: "Render failed",
       digest: "digest-123",
+      stack: error.stack.slice(0, 4096),
       locale: "en",
       formId: "form123",
       step: "confirmation",
@@ -40,5 +41,17 @@ describe("reportClientError", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     expect(() => reportClientError(new Error("Render failed"), "route")).not.toThrow();
+  });
+
+  it("truncates long stack traces before sending them", () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+    vi.stubGlobal("fetch", fetchMock);
+    const error = new Error("Render failed");
+    Object.defineProperty(error, "stack", { value: "frame\n".repeat(1000) });
+
+    reportClientError(error, "route");
+
+    const [, request] = fetchMock.mock.calls[0];
+    expect(JSON.parse(request.body).stack).toHaveLength(4096);
   });
 });

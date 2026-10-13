@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ error: vi.fn() }));
+const mocks = vi.hoisted(() => ({ info: vi.fn() }));
 
-vi.mock("@lib/logger", () => ({ logMessage: { error: mocks.error } }));
+vi.mock("@lib/logger", () => ({ logMessage: { info: mocks.info } }));
 
 import { POST } from "./route";
 
@@ -10,6 +10,7 @@ const report = {
   boundary: "route",
   name: "TypeError",
   message: "Request failed for user@example.com",
+  stack: "TypeError: Request failed for user@example.com\n    at render (chunk.js:1:2)",
   digest: "digest-123",
   locale: "en",
   formId: "form123",
@@ -35,17 +36,20 @@ const makeRequest = (
 
 describe("client error report route", () => {
   beforeEach(() => {
-    mocks.error.mockClear();
+    mocks.info.mockClear();
   });
 
   it("logs a sanitized, bounded report and returns no content", async () => {
     const response = await POST(makeRequest(JSON.stringify(report)));
 
     expect(response.status).toBe(204);
-    expect(mocks.error).toHaveBeenCalledOnce();
-    const logged = mocks.error.mock.calls[0][0] as string;
+    expect(mocks.info).toHaveBeenCalledOnce();
+    const logged = mocks.info.mock.calls[0][0] as string;
     expect(logged).toContain('"boundary":"route"');
     expect(logged).toContain('"formId":"form123"');
+    expect(logged).toContain(
+      '"stack":"TypeError: Request failed for [Redacted: email]\\n    at render (chunk.js:1:2)"'
+    );
     expect(logged).not.toContain("user@example.com");
   });
 
@@ -55,23 +59,32 @@ describe("client error report route", () => {
     );
 
     expect(response.status).toBe(403);
-    expect(mocks.error).not.toHaveBeenCalled();
+    expect(mocks.info).not.toHaveBeenCalled();
   });
 
   it("rejects malformed reports", async () => {
     const response = await POST(makeRequest(JSON.stringify({ ...report, boundary: "unknown" })));
 
     expect(response.status).toBe(400);
-    expect(mocks.error).not.toHaveBeenCalled();
+    expect(mocks.info).not.toHaveBeenCalled();
   });
 
   it("rejects oversized requests", async () => {
     const response = await POST(
-      makeRequest(JSON.stringify({ ...report, message: "x".repeat(3000) }))
+      makeRequest(JSON.stringify({ ...report, message: "x".repeat(9000) }))
     );
 
     expect(response.status).toBe(413);
-    expect(mocks.error).not.toHaveBeenCalled();
+    expect(mocks.info).not.toHaveBeenCalled();
+  });
+
+  it("rejects a stack trace above the accepted limit", async () => {
+    const response = await POST(
+      makeRequest(JSON.stringify({ ...report, stack: "x".repeat(4097) }))
+    );
+
+    expect(response.status).toBe(400);
+    expect(mocks.info).not.toHaveBeenCalled();
   });
 
   it("limits repeated reports per client", async () => {
@@ -85,6 +98,6 @@ describe("client error report route", () => {
     const limitedResponse = await POST(makeRequest(JSON.stringify(report), { ip }));
 
     expect(limitedResponse.status).toBe(429);
-    expect(mocks.error).toHaveBeenCalledTimes(10);
+    expect(mocks.info).toHaveBeenCalledTimes(10);
   });
 });

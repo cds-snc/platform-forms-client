@@ -1,8 +1,9 @@
 import { sanitizePii } from "@cdssnc/sanitize-pii";
 import { logMessage } from "@lib/logger";
 
-const MAX_BODY_BYTES = 2048;
+const MAX_BODY_BYTES = 8192;
 const MAX_MESSAGE_LENGTH = 1000;
+const MAX_STACK_LENGTH = 4096;
 const MAX_TRACKED_CLIENTS = 2000;
 const MAX_REPORTS_PER_WINDOW = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -15,6 +16,7 @@ type ClientErrorReport = {
   name: string;
   message: string;
   digest?: string;
+  stack?: string;
   locale?: "en" | "fr";
   formId?: string;
   step?: string;
@@ -38,6 +40,7 @@ const parseReport = (value: unknown): ClientErrorReport | null => {
   if (!isBoundedString(value.message, MAX_MESSAGE_LENGTH)) return null;
 
   if (value.digest !== undefined && !isBoundedString(value.digest, 128)) return null;
+  if (value.stack !== undefined && !isBoundedString(value.stack, MAX_STACK_LENGTH)) return null;
   if (value.locale !== undefined && value.locale !== "en" && value.locale !== "fr") return null;
   if (
     value.formId !== undefined &&
@@ -57,6 +60,7 @@ const parseReport = (value: unknown): ClientErrorReport | null => {
     name: value.name,
     message: value.message,
     ...(typeof value.digest === "string" && { digest: value.digest }),
+    ...(typeof value.stack === "string" && { stack: value.stack }),
     ...(value.locale && { locale: value.locale }),
     ...(value.formId && { formId: value.formId }),
     ...(value.step && { step: value.step }),
@@ -136,15 +140,23 @@ export async function POST(request: Request) {
     .replace(EMAIL_PATTERN, "[Redacted: email]")
     .replace(/[\r\n\t]+/g, " ")
     .slice(0, 1000);
+  const stack = report.stack
+    ? sanitizePii(report.stack)
+        .replace(EMAIL_PATTERN, "[Redacted: email]")
+        .replace(/\r\n?/g, "\n")
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+        .slice(0, MAX_STACK_LENGTH)
+    : undefined;
   const userAgent = request.headers.get("user-agent")?.slice(0, 256);
 
-  logMessage.error(
+  logMessage.info(
     JSON.stringify({
       event: "client_error_boundary",
       boundary: report.boundary,
       name: report.name,
       message,
       digest: report.digest,
+      stack,
       locale: report.locale,
       formId: report.formId,
       step: report.step,
