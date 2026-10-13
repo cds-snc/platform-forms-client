@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ info: vi.fn() }));
+const mocks = vi.hoisted(() => ({ info: vi.fn(), getAppSetting: vi.fn() }));
 
 vi.mock("@lib/logger", () => ({ logMessage: { info: mocks.info } }));
+vi.mock("@lib/appSettings", () => ({ getAppSetting: mocks.getAppSetting }));
 
 import { POST } from "./route";
 
@@ -37,6 +38,7 @@ const makeRequest = (
 describe("client error report route", () => {
   beforeEach(() => {
     mocks.info.mockClear();
+    mocks.getAppSetting.mockReset().mockResolvedValue("on");
   });
 
   it("logs a sanitized, bounded report and returns no content", async () => {
@@ -59,6 +61,24 @@ describe("client error report route", () => {
     );
 
     expect(response.status).toBe(403);
+    expect(mocks.info).not.toHaveBeenCalled();
+  });
+
+  it("does not process or log reports when reporting is disabled", async () => {
+    mocks.getAppSetting.mockResolvedValue("off");
+
+    const response = await POST(makeRequest("not-json", { origin: "https://attacker.example" }));
+
+    expect(response.status).toBe(404);
+    expect(mocks.info).not.toHaveBeenCalled();
+  });
+
+  it("fails closed when the setting cannot be read", async () => {
+    mocks.getAppSetting.mockRejectedValue(new Error("Settings unavailable"));
+
+    const response = await POST(makeRequest(JSON.stringify(report)));
+
+    expect(response.status).toBe(503);
     expect(mocks.info).not.toHaveBeenCalled();
   });
 

@@ -43,6 +43,13 @@ describe("reportClientError", () => {
     expect(() => reportClientError(new Error("Render failed"), "route")).not.toThrow();
   });
 
+  it("ignores non-success responses from the reporting endpoint", () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 404 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    expect(() => reportClientError(new Error("Render failed"), "route")).not.toThrow();
+  });
+
   it("truncates long stack traces before sending them", () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal("fetch", fetchMock);

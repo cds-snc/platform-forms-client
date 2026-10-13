@@ -1,4 +1,5 @@
 import { sanitizePii } from "@cdssnc/sanitize-pii";
+import { getAppSetting } from "@lib/appSettings";
 import { logMessage } from "@lib/logger";
 
 const MAX_BODY_BYTES = 8192;
@@ -97,6 +98,14 @@ const getClientKey = (request: Request) => {
 };
 
 export async function POST(request: Request) {
+  try {
+    if ((await getAppSetting("enableClientErrorReporting")) !== "on") {
+      return new Response(null, { status: 404 });
+    }
+  } catch {
+    return new Response(null, { status: 503 });
+  }
+
   if (request.headers.get("origin") !== new URL(request.url).origin) {
     return Response.json({ error: "Forbidden" }, { status: 403 });
   }

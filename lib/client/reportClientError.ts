@@ -42,7 +42,9 @@ export const reportClientError = (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(report),
       keepalive: true,
-    }).catch(() => undefined);
+    })
+      .then(() => undefined)
+      .catch(() => undefined);
   } catch {
     // Reporting must never interfere with rendering the error boundary.
   }
