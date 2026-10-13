@@ -64,14 +64,17 @@ describe("client error report route", () => {
     expect(mocks.info).not.toHaveBeenCalled();
   });
 
-  it("does not process or log reports when reporting is disabled", async () => {
-    mocks.getAppSetting.mockResolvedValue("off");
+  it.each(["off", "OFF"])(
+    "does not process or log reports when reporting is %s",
+    async (disabledSetting) => {
+      mocks.getAppSetting.mockResolvedValue(disabledSetting);
 
-    const response = await POST(makeRequest("not-json", { origin: "https://attacker.example" }));
+      const response = await POST(makeRequest("not-json", { origin: "https://attacker.example" }));
 
-    expect(response.status).toBe(404);
-    expect(mocks.info).not.toHaveBeenCalled();
-  });
+      expect(response.status).toBe(404);
+      expect(mocks.info).not.toHaveBeenCalled();
+    }
+  );
 
   it("fails closed when the setting cannot be read", async () => {
     mocks.getAppSetting.mockRejectedValue(new Error("Settings unavailable"));

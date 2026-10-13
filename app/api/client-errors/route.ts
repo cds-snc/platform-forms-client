@@ -99,7 +99,8 @@ const getClientKey = (request: Request) => {
 
 export async function POST(request: Request) {
   try {
-    if ((await getAppSetting("enableClientErrorReporting")) !== "ON") {
+    const reportingSetting = await getAppSetting("enableClientErrorReporting");
+    if (reportingSetting?.toUpperCase() !== "ON") {
       return new Response(null, { status: 404 });
     }
   } catch {
