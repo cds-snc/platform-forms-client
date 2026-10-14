@@ -93,8 +93,8 @@ export const CreateDraftConfirmDialog = () => {
     }
   };
 
-  const optionChildren = (value: DraftSource) => {
-    if (value === "upload" && selection === "upload") {
+  const renderUploadOptionChildren = () => {
+    if (selection === "upload") {
       return (
         <>
           <button
@@ -146,7 +146,7 @@ export const CreateDraftConfirmDialog = () => {
         selectedLabel={t("confirm.createDraft.selected")}
         onSelect={() => setSelection("upload")}
       >
-        {optionChildren("upload")}
+        {renderUploadOptionChildren()}
       </DraftSourceOption>
     </>
   );
