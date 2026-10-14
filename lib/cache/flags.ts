@@ -4,6 +4,7 @@ import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { AuditLogAccessDeniedDetails, logEvent } from "@lib/auditLogs";
 import { FeatureFlagKeys, FeatureFlags, Flags, PickFlags } from "./types";
+import { cacheLife, cacheTag } from "next/cache";
 
 const getTestFlagValue = (key: string): boolean => {
   if (key === FeatureFlags.zitadelLogin) {
@@ -88,6 +89,10 @@ export const checkOne = async (key: string): Promise<boolean> => {
  * @returns An object of {flag: value ...}
  */
 export const checkAll = async (): Promise<Flags> => {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("application-flags");
+
   const keys = await getKeys();
   return checkMulti(keys);
 };
