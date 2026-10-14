@@ -97,12 +97,6 @@ export default async function Page(props: {
 }) {
   const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
 
-  if (searchParams.throwError === "true") {
-    // @ts-expect-error Intentional invalid access to trigger a test error.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const test = searchParams[0].length;
-  }
-
   const { status = TAB_STATUS.RECENTLY_EDITED } = searchParams;
 
   const { locale } = params;
