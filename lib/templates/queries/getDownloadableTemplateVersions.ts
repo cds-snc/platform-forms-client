@@ -1,5 +1,4 @@
 import { prisma, prismaErrors } from "@gcforms/database";
-import { unstable_noStore as noStore } from "next/cache";
 import { TEMPLATE_VERSION_STATUS } from "../internal/types";
 import {
   type DownloadableTemplateVersionsInput,
@@ -10,8 +9,6 @@ import { formatDownloadableTemplateVersions } from "@lib/utils/formatDownloadabl
 export async function getDownloadableTemplateVersions(
   formID: string
 ): Promise<DownloadableTemplateVersionsInput | null> {
-  noStore();
-
   const template = await prisma.template
     .findUnique({
       where: {
