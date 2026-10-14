@@ -125,3 +125,5 @@ next-env.d.ts
 packages/core/styles/
 
 .test-json
+
+.playwright-mcp

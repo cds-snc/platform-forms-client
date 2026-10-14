@@ -1,7 +1,7 @@
 "use server";
 
 import { enableFlag, disableFlag } from "@lib/cache/flags";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -14,6 +14,7 @@ export const modifyFlag = AuthenticatedAction(async (_, id: string, value: boole
   } else {
     await disableFlag(id);
   }
+  updateTag("application-flags");
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/flags", "page");
 });
 
