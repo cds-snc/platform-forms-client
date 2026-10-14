@@ -93,9 +93,15 @@ const FALLBACK_DATE = Date.now().toString();
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ status: FormTabStatus }>;
+  searchParams: Promise<{ status: FormTabStatus; throwError?: string | string[] }>;
 }) {
   const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
+
+  if (searchParams.throwError === "true") {
+    // @ts-expect-error Intentional invalid access to trigger a test error.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const test = searchParams[0].length;
+  }
 
   const { status = TAB_STATUS.RECENTLY_EDITED } = searchParams;
 
