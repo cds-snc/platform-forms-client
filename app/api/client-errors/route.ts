@@ -1,10 +1,10 @@
 import { sanitizePii } from "@cdssnc/sanitize-pii";
 import { getAppSetting } from "@lib/appSettings";
+import { prisma } from "@gcforms/database";
 import { logMessage } from "@lib/logger";
 
 const MAX_BODY_BYTES = 8192;
 const MAX_MESSAGE_LENGTH = 1000;
-const MAX_STACK_LENGTH = 4096;
 const MAX_TRACKED_CLIENTS = 2000;
 const MAX_REPORTS_PER_WINDOW = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -17,10 +17,12 @@ type ClientErrorReport = {
   name: string;
   message: string;
   digest?: string;
-  stack?: string;
   locale?: "en" | "fr";
-  formId?: string;
+  formId: string;
   step?: string;
+  online?: boolean;
+  connection?: string;
+  msSinceLoad?: number;
 };
 
 type RateLimitEntry = { count: number; expiresAt: number };
@@ -41,12 +43,8 @@ const parseReport = (value: unknown): ClientErrorReport | null => {
   if (!isBoundedString(value.message, MAX_MESSAGE_LENGTH)) return null;
 
   if (value.digest !== undefined && !isBoundedString(value.digest, 128)) return null;
-  if (value.stack !== undefined && !isBoundedString(value.stack, MAX_STACK_LENGTH)) return null;
   if (value.locale !== undefined && value.locale !== "en" && value.locale !== "fr") return null;
-  if (
-    value.formId !== undefined &&
-    (!isBoundedString(value.formId, 64) || !safePathSegment.test(value.formId))
-  ) {
+  if (!isBoundedString(value.formId, 64) || !safePathSegment.test(value.formId)) {
     return null;
   }
   if (
@@ -56,15 +54,26 @@ const parseReport = (value: unknown): ClientErrorReport | null => {
     return null;
   }
 
+  if (value.online !== undefined && typeof value.online !== "boolean") return null;
+  if (value.connection !== undefined && !isBoundedString(value.connection, 16)) return null;
+  if (
+    value.msSinceLoad !== undefined &&
+    (typeof value.msSinceLoad !== "number" || !Number.isFinite(value.msSinceLoad))
+  ) {
+    return null;
+  }
+
   return {
     boundary: value.boundary,
     name: value.name,
     message: value.message,
     ...(typeof value.digest === "string" && { digest: value.digest }),
-    ...(typeof value.stack === "string" && { stack: value.stack }),
     ...(value.locale && { locale: value.locale }),
-    ...(value.formId && { formId: value.formId }),
+    formId: value.formId,
     ...(value.step && { step: value.step }),
+    ...(typeof value.online === "boolean" && { online: value.online }),
+    ...(typeof value.connection === "string" && { connection: value.connection }),
+    ...(typeof value.msSinceLoad === "number" && { msSinceLoad: value.msSinceLoad }),
   } as ClientErrorReport;
 };
 
@@ -146,17 +155,23 @@ export async function POST(request: Request) {
     return Response.json({ error: "Too many reports" }, { status: 429 });
   }
 
+  // Runs after rate limiting so random IDs can't be used to hammer the database.
+  try {
+    const template = await prisma.template.findUnique({
+      where: { id: report.formId },
+      select: { id: true, ttl: true },
+    });
+    if (!template || template.ttl) {
+      return Response.json({ error: "Invalid error report" }, { status: 400 });
+    }
+  } catch {
+    return new Response(null, { status: 503 });
+  }
+
   const message = sanitizePii(report.message)
     .replace(EMAIL_PATTERN, "[Redacted: email]")
     .replace(/[\r\n\t]+/g, " ")
     .slice(0, 1000);
-  const stack = report.stack
-    ? sanitizePii(report.stack)
-        .replace(EMAIL_PATTERN, "[Redacted: email]")
-        .replace(/\r\n?/g, "\n")
-        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
-        .slice(0, MAX_STACK_LENGTH)
-    : undefined;
   const userAgent = request.headers.get("user-agent")?.slice(0, 256);
 
   logMessage.info(
@@ -166,10 +181,12 @@ export async function POST(request: Request) {
       name: report.name,
       message,
       digest: report.digest,
-      stack,
       locale: report.locale,
       formId: report.formId,
       step: report.step,
+      online: report.online,
+      connection: report.connection,
+      msSinceLoad: report.msSinceLoad,
       userAgent,
     })
   );

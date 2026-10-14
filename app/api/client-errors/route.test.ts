@@ -1,9 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ info: vi.fn(), getAppSetting: vi.fn() }));
+const mocks = vi.hoisted(() => ({
+  info: vi.fn(),
+  getAppSetting: vi.fn(),
+  findUnique: vi.fn(),
+}));
 
 vi.mock("@lib/logger", () => ({ logMessage: { info: mocks.info } }));
 vi.mock("@lib/appSettings", () => ({ getAppSetting: mocks.getAppSetting }));
+vi.mock("@gcforms/database", () => ({
+  prisma: { template: { findUnique: mocks.findUnique } },
+}));
 
 import { POST } from "./route";
 
@@ -11,7 +18,9 @@ const report = {
   boundary: "route",
   name: "TypeError",
   message: "Request failed for user@example.com",
-  stack: "TypeError: Request failed for user@example.com\n    at render (chunk.js:1:2)",
+  online: true,
+  connection: "4g",
+  msSinceLoad: 1234,
   digest: "digest-123",
   locale: "en",
   formId: "form123",
@@ -39,6 +48,27 @@ describe("client error report route", () => {
   beforeEach(() => {
     mocks.info.mockClear();
     mocks.getAppSetting.mockReset().mockResolvedValue("on");
+    mocks.findUnique.mockReset().mockResolvedValue({ id: "form123", ttl: null });
+  });
+
+  it("rejects reports for unknown or deleted forms", async () => {
+    mocks.findUnique.mockResolvedValueOnce(null);
+    const unknown = await POST(makeRequest(JSON.stringify(report), { ip: "203.0.113.50" }));
+    expect(unknown.status).toBe(400);
+
+    mocks.findUnique.mockResolvedValueOnce({ id: "form123", ttl: new Date() });
+    const deleted = await POST(makeRequest(JSON.stringify(report), { ip: "203.0.113.51" }));
+    expect(deleted.status).toBe(400);
+    expect(mocks.info).not.toHaveBeenCalled();
+  });
+
+  it("rejects reports without a formId", async () => {
+    const { formId: _formId, ...withoutForm } = report;
+    const response = await POST(makeRequest(JSON.stringify(withoutForm), { ip: "203.0.113.52" }));
+
+    expect(response.status).toBe(400);
+    expect(mocks.findUnique).not.toHaveBeenCalled();
+    expect(mocks.info).not.toHaveBeenCalled();
   });
 
   it("logs a sanitized, bounded report and returns no content", async () => {
@@ -49,9 +79,8 @@ describe("client error report route", () => {
     const logged = mocks.info.mock.calls[0][0] as string;
     expect(logged).toContain('"boundary":"route"');
     expect(logged).toContain('"formId":"form123"');
-    expect(logged).toContain(
-      '"stack":"TypeError: Request failed for [Redacted: email]\\n    at render (chunk.js:1:2)"'
-    );
+    expect(logged).toContain('"connection":"4g"');
+    expect(logged).not.toContain("stack");
     expect(logged).not.toContain("user@example.com");
   });
 
@@ -101,10 +130,8 @@ describe("client error report route", () => {
     expect(mocks.info).not.toHaveBeenCalled();
   });
 
-  it("rejects a stack trace above the accepted limit", async () => {
-    const response = await POST(
-      makeRequest(JSON.stringify({ ...report, stack: "x".repeat(4097) }))
-    );
+  it("rejects invalid context fields", async () => {
+    const response = await POST(makeRequest(JSON.stringify({ ...report, online: "yes" })));
 
     expect(response.status).toBe(400);
     expect(mocks.info).not.toHaveBeenCalled();

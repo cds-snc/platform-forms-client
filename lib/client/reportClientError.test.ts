@@ -15,10 +15,8 @@ describe("reportClientError", () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal("fetch", fetchMock);
 
-    const stack = "TypeError: Render failed\n    at render (chunk.js:1:2)";
     const error = Object.assign(new TypeError("Render failed"), {
       digest: "digest-123",
-      stack,
     });
     reportClientError(error, "global");
 
@@ -33,14 +31,27 @@ describe("reportClientError", () => {
       name: "TypeError",
       message: "Render failed",
       digest: "digest-123",
-      stack,
       locale: "en",
       formId: "form123",
       step: "confirmation",
+      online: true,
+      msSinceLoad: expect.any(Number),
     });
+    expect(JSON.parse(request.body)).not.toHaveProperty("stack");
+  });
+
+  it("does not report errors outside public form routes", () => {
+    window.history.replaceState({}, "", "/en/form-builder/abc123/edit");
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    reportClientError(new Error("Render failed"), "route");
+
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("does not let a failed report request throw into the boundary", () => {
+    window.history.replaceState({}, "", "/en/id/form123");
     const fetchMock = vi.fn().mockRejectedValue(new Error("Offline"));
     vi.stubGlobal("fetch", fetchMock);
 
@@ -52,17 +63,5 @@ describe("reportClientError", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     expect(() => reportClientError(new Error("Render failed"), "route")).not.toThrow();
-  });
-
-  it("truncates long stack traces before sending them", () => {
-    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
-    vi.stubGlobal("fetch", fetchMock);
-    const error = new Error("Render failed");
-    Object.defineProperty(error, "stack", { value: "frame\n".repeat(1000) });
-
-    reportClientError(error, "route");
-
-    const [, request] = fetchMock.mock.calls[0];
-    expect(JSON.parse(request.body).stack).toHaveLength(4096);
   });
 });
