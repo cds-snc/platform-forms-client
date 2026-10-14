@@ -84,6 +84,6 @@ export async function userSession(
 
     // Ensure we've arrived at forms page and it's fully loaded
     await page.locator("#react-hydration-loader").waitFor({ state: "detached", timeout: 30000 });
-    await page.locator("main").waitFor({ state: "visible" });
+    await page.locator("#forms-page-title").waitFor({ state: "visible" });
   }
 }
