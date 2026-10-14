@@ -154,7 +154,30 @@ export const DownloadDialog = ({
     const selectedVersion = selectedVersionForDialog ?? dialogVersions[0] ?? null;
 
     const generateDownloadZip = async (zip: JSZip) => {
-      const blob = await zip.generateAsync({ type: "blob", streamFiles: true });
+      const stream = zip.generateInternalStream({ type: "uint8array", streamFiles: true });
+      let zipSizeBytes = 0;
+      let lastLoggedSizeBytes = 0;
+      const zipData = await stream
+        .on("data", (chunk) => {
+          zipSizeBytes += chunk.byteLength;
+          if (zipSizeBytes - lastLoggedSizeBytes >= 1024 * 1024) {
+            logMessage.debug({
+              message: "Response ZIP generation progress",
+              formId,
+              zipSizeBytes,
+            });
+            lastLoggedSizeBytes = zipSizeBytes;
+          }
+        })
+        .accumulate();
+      logMessage.debug({
+        message: "Response ZIP generation complete",
+        formId,
+        zipSizeBytes,
+      });
+      const zipBuffer = new ArrayBuffer(zipData.byteLength);
+      new Uint8Array(zipBuffer).set(zipData);
+      const blob = new Blob([zipBuffer], { type: "application/zip" });
       const fileName = getVersionedZipFileName(
         `${filePrefix}responses-reponses.zip`,
         selectedVersion
