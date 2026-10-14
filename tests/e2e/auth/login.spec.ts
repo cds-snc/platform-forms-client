@@ -101,13 +101,13 @@ test.describe("Login Page", () => {
     test("page renders", async ({ page }) => {
       await expect(page.locator("[id='verificationCodeForm']")).toBeVisible();
       await expect(page.locator("input[id='verificationCode']")).toBeVisible();
-      await expect(page.locator("button[type='submit']")).toBeVisible();
+      await expect(page.getByTestId("verify-submit")).toBeVisible();
     });
 
     test("Displays an error message when submitting an empty form.", async ({ page }) => {
       await expect(page.locator("[id='verificationCodeForm']")).toBeVisible();
-      await expect(page.locator("button[type='submit']")).toBeVisible();
-      await page.locator("button[type='submit']").click();
+      await expect(page.getByTestId("verify-submit")).toBeVisible();
+      await page.getByTestId("verify-submit").click();
       await expect(page.locator("[data-testid='errorMessage']")).toBeVisible();
     });
 
@@ -117,8 +117,8 @@ test.describe("Login Page", () => {
       await expect(page.locator("[id='verificationCodeForm']")).toBeVisible();
       await expect(page.locator("input[id='verificationCode']")).toBeVisible();
       await page.fill("input[id='verificationCode']", "12");
-      await expect(page.locator("button[type='submit']")).toBeVisible();
-      await page.locator("button[type='submit']").click();
+      await expect(page.getByTestId("verify-submit")).toBeVisible();
+      await page.getByTestId("verify-submit").click();
       await expect(page.locator("[data-testid='errorMessage']")).toBeVisible();
     });
 
@@ -128,8 +128,8 @@ test.describe("Login Page", () => {
       await expect(page.locator("[id='verificationCodeForm']")).toBeVisible();
       await expect(page.locator("input[id='verificationCode']")).toBeVisible();
       await page.fill("input[id='verificationCode']", "12/34");
-      await expect(page.locator("button[type='submit']")).toBeVisible();
-      await page.locator("button[type='submit']").click();
+      await expect(page.getByTestId("verify-submit")).toBeVisible();
+      await page.getByTestId("verify-submit").click();
       await expect(page.locator("[data-testid='errorMessage']")).toBeVisible();
     });
   });
