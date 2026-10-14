@@ -93,7 +93,7 @@ const FALLBACK_DATE = Date.now().toString();
 
 export default async function Page(props: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ status: FormTabStatus; throwError?: string | string[] }>;
+  searchParams: Promise<{ status: FormTabStatus }>;
 }) {
   const [params, searchParams] = await Promise.all([props.params, props.searchParams]);
 
