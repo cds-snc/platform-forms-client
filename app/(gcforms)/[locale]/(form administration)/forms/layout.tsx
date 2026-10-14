@@ -8,6 +8,11 @@ import { Footer } from "@serverComponents/globals/Footer";
 import { AuthenticatedLayout } from "@lib/pages/auth";
 import { authorization } from "@lib/privileges";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export default AuthenticatedLayout(async ({ children, params, session }) => {
   const { locale } = await params;
   const publishFormsEnabled = await authorization.hasPublishFormsPrivilege().catch(() => false);
