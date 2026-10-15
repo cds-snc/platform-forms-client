@@ -12,6 +12,11 @@ import { CompatibilityGuard } from "./guards/CompatibilityGuard";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { getFullTemplateByID } from "@lib/templates/queries/getFullTemplateByID";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export default async function ResponsesLayout(props: {
   children: React.ReactNode;
   params: Promise<{ locale: string; id: string }>;
