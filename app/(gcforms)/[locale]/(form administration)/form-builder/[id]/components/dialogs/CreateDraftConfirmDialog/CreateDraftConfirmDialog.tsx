@@ -110,7 +110,11 @@ export const CreateDraftConfirmDialog = () => {
           {uploadedFileName && (
             <p className="mt-2 ml-10 text-sm text-slate-700">{uploadedFileName}</p>
           )}
+          <label htmlFor="draft-upload-file" className="sr-only">
+            {t("confirm.createDraft.browse")}
+          </label>
           <input
+            id="draft-upload-file"
             ref={uploadInput}
             type="file"
             accept="application/json,.json"
