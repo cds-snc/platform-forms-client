@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.26.0](https://github.com/cds-snc/platform-forms-client/compare/v4.25.0...v4.26.0) (2026-10-15)
+
+
+### Features
+
+* add ability to download attachments via the UI (feature flagged) ([#8034](https://github.com/cds-snc/platform-forms-client/issues/8034)) ([0ac53b8](https://github.com/cds-snc/platform-forms-client/commit/0ac53b8e8e0c281c188ebc25e30a6f40024db113))
+* Add client error logging at error boundaries ([#8033](https://github.com/cds-snc/platform-forms-client/issues/8033)) ([55dc777](https://github.com/cds-snc/platform-forms-client/commit/55dc777700c3955fef24ab5497d13c7c7e1459ea))
+
+
+### Miscellaneous Chores
+
+* Next.js 16.4 ([#8031](https://github.com/cds-snc/platform-forms-client/issues/8031)) ([b33bdd2](https://github.com/cds-snc/platform-forms-client/commit/b33bdd2aca06472a89376b155034ae1988616e5a))
+* Prevent downgrade the version number when running migrations ([#8002](https://github.com/cds-snc/platform-forms-client/issues/8002)) ([573cb84](https://github.com/cds-snc/platform-forms-client/commit/573cb84fdcaef8f16df5c57fce2b4cc77f04299b))
+
 ## [4.25.0](https://github.com/cds-snc/platform-forms-client/compare/v4.24.0...v4.25.0) (2026-10-13)
 
 
