@@ -411,11 +411,11 @@
       "fileSelected": "File selected",
       "options": {
         "current": {
-          "title": "Use current published version"
+          "title": "Use published version"
         },
         "upload": {
-          "title": "Upload a file",
-          "description": "Use a GC Forms JSON file."
+          "title": "Upload file",
+          "description": "Use a GC Forms JSON file"
         },
         "legend": "Choose the source for the draft form"
       },

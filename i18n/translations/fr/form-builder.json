@@ -411,11 +411,11 @@
       "fileSelected": "Fichier sélectionné",
       "options": {
         "current": {
-          "title": "Utiliser la version publiée actuelle"
+          "title": "Utiliser la version publiée"
         },
         "upload": {
           "title": "Téléverser un fichier",
-          "description": "Utilisez un fichier JSON de Formulaires GC."
+          "description": "Utilisez un fichier JSON de Formulaires GC"
         },
         "legend": "Choisissez la source du formulaire brouillon"
       },
