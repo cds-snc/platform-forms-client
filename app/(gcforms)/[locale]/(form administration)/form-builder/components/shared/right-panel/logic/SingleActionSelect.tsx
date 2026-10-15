@@ -10,9 +10,10 @@ import { useTranslation } from "@i18n/client";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
-import { canModifyNextAction } from "@lib/groups/utils/validateGroups";
+import { canModifyNextAction, createsNextActionCycle } from "@lib/groups/utils/validateGroups";
 import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
+import { InvalidNextActionDialog } from "./InvalidNextActionDialog";
 
 const ExitIcon = () => {
   return (
@@ -41,6 +42,7 @@ export const SingleActionSelect = ({
   const { t } = useTranslation(["form-builder", "common"]);
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
+  const [invalidRule, setInvalidRule] = useState<{ source: string; target: string } | null>(null);
   const { saveDraftIfNeeded } = useTemplateContext();
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
@@ -79,7 +81,7 @@ export const SingleActionSelect = ({
       <div>
         <div className="p-4">
           <h4 className="relative mb-4 block text-sm font-bold">
-            <span className="absolute top-[4px] inline-block">
+            <span className="absolute top-1 inline-block">
               <ExitIcon />
             </span>
             <span className="mr-3 ml-6 inline-block">{t("logic.exit.exitPanel.title1")}:</span>
@@ -147,6 +149,15 @@ export const SingleActionSelect = ({
               return;
             }
 
+            if (createsNextActionCycle(formGroups, group as string, nextActionId)) {
+              setNextActionId(nextAction);
+              setInvalidRule({
+                source: formGroups[group as string]?.name || String(group || ""),
+                target: formGroups[nextActionId]?.name || nextActionId,
+              });
+              return;
+            }
+
             setGroupNextAction(group as string, nextActionId);
 
             // Add a delay to allow group state to update calling for redraw
@@ -161,6 +172,9 @@ export const SingleActionSelect = ({
           {t("logic.saveRule")}
         </Button>
       </div>
+      {invalidRule && (
+        <InvalidNextActionDialog {...invalidRule} handleClose={() => setInvalidRule(null)} />
+      )}
     </div>
   );
 };
