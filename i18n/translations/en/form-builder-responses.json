@@ -202,7 +202,12 @@
       "download": "Download",
       "chooseVersion": "Download responses for version",
       "chooseVersionPlaceholder": "Select a version",
-      "chooseVersionRequired": "You can change the selected version if needed"
+      "chooseVersionRequired": "You can change the selected version if needed",
+      "processingResponse": "Processing response {{response}} of {{total}}",
+      "responseProgress": "Response {{response}} of {{total}}",
+      "downloadingAttachment": "Downloading attachment {{current}} of {{total}}",
+      "preparingRecoveryCopy": "Preparing a recovery copy",
+      "creatingZip": "Creating ZIP: {{percent}}%"
     },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirm the removal of new responses",
