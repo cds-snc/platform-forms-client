@@ -416,7 +416,8 @@
         "upload": {
           "title": "Téléverser un fichier",
           "description": "Utilisez un fichier JSON de Formulaires GC."
-        }
+        },
+        "legend": "Choisissez la source du formulaire brouillon"
       },
       "errors": {
         "title": "Le fichier du formulaire n’est pas valide",

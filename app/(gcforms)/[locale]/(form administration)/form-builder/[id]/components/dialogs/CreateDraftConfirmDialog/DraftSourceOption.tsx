@@ -36,7 +36,7 @@ export const DraftSourceOption = ({
         <span className={isSelected ? "text-gcds-blue-vivid" : "text-slate-600"}>{icon}</span>
         <div>
           <div className="font-bold text-slate-900">{title}</div>
-          {description && <p className="text-sm text-gray-600">{description}</p>}
+          {description && <p className="text-sm text-(--gcds-hint-text)">{description}</p>}
         </div>
       </div>
       <input

@@ -416,7 +416,8 @@
         "upload": {
           "title": "Upload a file",
           "description": "Use a GC Forms JSON file."
-        }
+        },
+        "legend": "Choose the source for the draft form"
       },
       "errors": {
         "title": "The form file is not valid",

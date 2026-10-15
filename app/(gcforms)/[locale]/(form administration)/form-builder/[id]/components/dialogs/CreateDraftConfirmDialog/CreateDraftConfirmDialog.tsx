@@ -125,7 +125,8 @@ export const CreateDraftConfirmDialog = () => {
   };
 
   const options = (
-    <>
+    <fieldset className="flex flex-col gap-3">
+      <legend className="sr-only">{t("confirm.createDraft.options.legend")}</legend>
       <DraftSourceOption
         value="current"
         title={t("confirm.createDraft.options.current.title")}
@@ -148,7 +149,7 @@ export const CreateDraftConfirmDialog = () => {
       >
         {renderUploadOptionChildren()}
       </DraftSourceOption>
-    </>
+    </fieldset>
   );
 
   const actions = (
@@ -201,7 +202,7 @@ export const CreateDraftConfirmDialog = () => {
               </Alert.Danger>
             )}
 
-            <div className="flex flex-col gap-3">{options}</div>
+            {options}
           </div>
         </Dialog>
       )}
