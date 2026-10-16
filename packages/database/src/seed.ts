@@ -64,10 +64,38 @@ async function createPrivileges(env: string) {
   await Promise.all(privilegePromises);
 }
 
-async function createSettings(env: string) {
-  return prisma.setting.createMany({
-    data: seedSettings[env],
-    skipDuplicates: true,
+async function syncSettings(env: string) {
+  const settings = seedSettings[env];
+  if (settings.length === 0) {
+    throw new Error("Refusing to synchronize settings from an empty fixture");
+  }
+
+  await Promise.all(
+    settings.map((setting) =>
+      prisma.setting.upsert({
+        where: { internalId: setting.internalId },
+        // Fixture-owned metadata stays in sync across environments. Deliberately omit `value`
+        // here: it is runtime configuration and must not be reset on deploy/seed.
+        update: {
+          nameEn: setting.nameEn,
+          nameFr: setting.nameFr,
+          descriptionEn: setting.descriptionEn,
+          descriptionFr: setting.descriptionFr,
+          type: setting.type,
+          groupEn: setting.groupEn,
+          groupFr: setting.groupFr,
+        },
+        create: setting,
+      })
+    )
+  );
+
+  // The fixture is authoritative. Settings removed from it are retired here; their callers
+  // should be removed from the application in the same change.
+  return prisma.setting.deleteMany({
+    where: {
+      internalId: { notIn: settings.map(({ internalId }) => internalId) },
+    },
   });
 }
 
@@ -146,7 +174,7 @@ async function main() {
     await Promise.all([
       createTemplates(environment),
       createPrivileges(environment),
-      createSettings(environment),
+      syncSettings(environment),
       createSecurityQuestions(),
     ]);
 
