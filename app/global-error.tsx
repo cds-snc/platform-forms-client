@@ -6,6 +6,7 @@ import { Noto_Sans, Lato } from "next/font/google";
 import { logMessage } from "@lib/logger";
 import { useEffect } from "react";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
+import { reportClientError } from "@lib/client/reportClientError";
 
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -27,6 +28,7 @@ const lato = Lato({
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
   useEffect(() => {
     logMessage.error(`Global Error Handler Reached: ${(error as Error).message}`);
+    reportClientError(error, "global");
   }, [error]);
 
   return (

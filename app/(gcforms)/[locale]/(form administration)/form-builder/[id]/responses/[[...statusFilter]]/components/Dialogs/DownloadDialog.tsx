@@ -15,6 +15,9 @@ import { ga, getDate, slugify } from "@lib/client/clientHelpers";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
 import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
+import { addResponseAttachmentsToZip } from "@lib/responseDownloadFormats/attachments";
+import { FeatureFlags } from "@lib/cache/types";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FormBuilderError } from "../../exceptions";
 import { useTemplateVersioning } from "./useTemplateVersioning";
 import { VersionSelector } from "./VersionSelector";
@@ -58,6 +61,8 @@ export const DownloadDialog = ({
   );
 
   const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
+  const { getFlag } = useFeatureFlags();
+  const fileUploadEnabled = getFlag(FeatureFlags.fileUpload);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -148,6 +153,39 @@ export const DownloadDialog = ({
 
     const selectedVersion = selectedVersionForDialog ?? dialogVersions[0] ?? null;
 
+    const generateDownloadZip = async (zip: JSZip) => {
+      const stream = zip.generateInternalStream({ type: "uint8array", streamFiles: true });
+      let zipSizeBytes = 0;
+      let lastLoggedSizeBytes = 0;
+      const zipData = await stream
+        .on("data", (chunk) => {
+          zipSizeBytes += chunk.byteLength;
+          if (zipSizeBytes - lastLoggedSizeBytes >= 1024 * 1024) {
+            logMessage.debug({
+              message: "Response ZIP generation progress",
+              formId,
+              zipSizeBytes,
+            });
+            lastLoggedSizeBytes = zipSizeBytes;
+          }
+        })
+        .accumulate();
+      logMessage.debug({
+        message: "Response ZIP generation complete",
+        formId,
+        zipSizeBytes,
+      });
+      const zipBuffer = new ArrayBuffer(zipData.byteLength);
+      new Uint8Array(zipBuffer).set(zipData);
+      const blob = new Blob([zipBuffer], { type: "application/zip" });
+      const fileName = getVersionedZipFileName(
+        `${filePrefix}responses-reponses.zip`,
+        selectedVersion
+      );
+      downloadFileFromBlob(blob, fileName);
+      handleDownloadComplete(filteredIds);
+    };
+
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
         const response = (await getSubmissionsByFormat({
@@ -170,16 +208,8 @@ export const DownloadDialog = ({
         response.responses.forEach((response: { id: string; html: string }) => {
           zip.file(`${response.id}.html`, response.html);
         });
-
-        zip.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-          const fileName = getVersionedZipFileName(
-            `${filePrefix}responses-reponses.zip`,
-            selectedVersion
-          );
-          downloadFileFromBlob(blob, fileName);
-
-          handleDownloadComplete(filteredIds);
-        });
+        await addResponseAttachmentsToZip(zip, response.attachments);
+        await generateDownloadZip(zip);
       }
 
       if (selectedFormat === DownloadFormat.CSV) {
@@ -197,28 +227,18 @@ export const DownloadDialog = ({
 
         downloadFormatEvent(formId, selectedFormat, filteredIds.length);
         const universalBOMForUTF8 = "\uFEFF";
-
-        if (zipAllFiles) {
-          const file = new JSZip();
-
-          file.file("receipt-recu.html", response.receipt);
-          file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
-          file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = getVersionedZipFileName(
-              `${filePrefix}responses-reponses.zip`,
-              selectedVersion
-            );
-            downloadFileFromBlob(blob, fileName);
-
-            handleDownloadComplete(filteredIds);
-          });
+        if (zipAllFiles || fileUploadEnabled) {
+          const zip = new JSZip();
+          zip.file("receipt-recu.html", response.receipt);
+          zip.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
+          await addResponseAttachmentsToZip(zip, response.attachments);
+          await generateDownloadZip(zip);
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(
             new Blob([universalBOMForUTF8 + response.responses]),
             `${filePrefix}responses-reponses.csv`
           );
-
           handleDownloadComplete(filteredIds);
         }
       }
@@ -237,27 +257,18 @@ export const DownloadDialog = ({
         }
 
         downloadFormatEvent(formId, selectedFormat, filteredIds.length);
-
-        if (zipAllFiles) {
-          const file = new JSZip();
-          file.file("receipt-recu.html", response.receipt);
-          file.file("responses-reponses.json", JSON.stringify(response.responses));
-          file.generateAsync({ type: "blob", streamFiles: true }).then((blob) => {
-            const fileName = getVersionedZipFileName(
-              `${filePrefix}responses-reponses.zip`,
-              selectedVersion
-            );
-            downloadFileFromBlob(blob, fileName);
-
-            handleDownloadComplete(filteredIds);
-          });
+        if (zipAllFiles || fileUploadEnabled) {
+          const zip = new JSZip();
+          zip.file("receipt-recu.html", response.receipt);
+          zip.file("responses-reponses.json", JSON.stringify(response.responses));
+          await addResponseAttachmentsToZip(zip, response.attachments);
+          await generateDownloadZip(zip);
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(
             new Blob([JSON.stringify(response.responses)], { type: "application/json" }),
             `${filePrefix}responses-reponses.json`
           );
-
           handleDownloadComplete(filteredIds);
         }
       }
@@ -359,19 +370,19 @@ export const DownloadDialog = ({
                   </span>
                 </label>
               </div>
+            </div>
 
-              <hr />
-
-              <div>
+            {!fileUploadEnabled && (
+              <div className="mt-6">
                 <div className="gc-input-checkbox">
                   <input
                     type="checkbox"
-                    name="downloadFormat"
+                    name="downloadAllAsZip"
                     id="zipped"
                     checked={zipAllFiles}
                     disabled={selectedFormat === DownloadFormat.HTML_ZIPPED}
                     className="gc-input-checkbox__input"
-                    onChange={() => setZipAllFiles(zipAllFiles === true ? false : true)}
+                    onChange={() => setZipAllFiles(!zipAllFiles)}
                   />
                   <label htmlFor="zipped" className="gc-checkbox-label">
                     <span className="block font-semibold">
@@ -380,7 +391,7 @@ export const DownloadDialog = ({
                   </label>
                 </div>
               </div>
-            </div>
+            )}
 
             <div className="sticky bottom-0 flex border-t-[0.5px] border-slate-500 bg-white p-4">
               <div className="flex gap-4">

@@ -21,7 +21,12 @@ export const GcPlatformRegisterButton = ({ locale, label }: GcPlatformRegisterBu
   };
 
   return (
-    <Button type="button" theme="primary" onClick={() => void handleClick()}>
+    <Button
+      type="button"
+      theme="primary"
+      className="border-black bg-[#d8f999] text-black hover:border-black hover:bg-[#c5e97d] hover:text-black"
+      onClick={() => void handleClick()}
+    >
       {label}
     </Button>
   );

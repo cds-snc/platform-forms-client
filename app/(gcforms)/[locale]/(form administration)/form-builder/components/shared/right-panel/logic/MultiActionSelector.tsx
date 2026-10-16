@@ -24,6 +24,8 @@ import { Language } from "@lib/types/form-builder-types";
 import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { filterNextActionRulesForItem } from "./filterNextActionRulesForItem";
+import { createsNextActionCycle } from "@lib/groups/utils/validateGroups";
+import { InvalidNextActionDialog } from "./InvalidNextActionDialog";
 
 const GroupAndChoiceSelect = ({
   groupId,
@@ -154,7 +156,9 @@ const MultiActionSelectorInner = ({
   const [nextActions, setNextActions] = useState(() =>
     filterNextActionRulesForItem(item.id, initialNextActionRules)
   );
+  const [invalidRule, setInvalidRule] = useState<{ source: string; target: string } | null>(null);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
+  const getGroups = useGroupStore((state) => state.getGroups);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
   const setChangeKey = useTemplateStore((s) => s.setChangeKey);
 
@@ -214,6 +218,47 @@ const MultiActionSelectorInner = ({
 
   const disableAdd = nextActions.some((action) => action.choiceId.includes("catch-all"));
 
+  const handleSaveRules = () => {
+    // Resolve the page that owns this question and keep only its branch rules.
+    const group = findParentGroup(String(item.id));
+    const parent = group?.index ? String(group.index) : undefined;
+    const filteredNextActions = filterNextActionRulesForItem(item.id, nextActions);
+    const groups = getGroups() as GroupsType;
+
+    // Test the proposed rule set before updating the shared form state.
+    const createsCycle =
+      !!parent && !!groups[parent] && createsNextActionCycle(groups, parent, filteredNextActions);
+
+    // Find the first rule whose removal makes the complete rule set cycle-free.
+    const invalidAction = createsCycle
+      ? filteredNextActions.find(
+          (action) =>
+            !createsNextActionCycle(
+              groups,
+              parent,
+              filteredNextActions.filter((candidate) => candidate !== action)
+            )
+        ) || filteredNextActions[0]
+      : undefined;
+
+    if (invalidAction) {
+      // Restore the last saved rules and explain which destination caused the rejection.
+      setNextActions(filterNextActionRulesForItem(item.id, initialNextActionRules));
+      setInvalidRule({
+        source: sectionName || parent || "",
+        target: groups[invalidAction.groupId]?.name || invalidAction.groupId,
+      });
+      return;
+    }
+
+    // Persist the valid rules, redraw the flow, and save the draft.
+    parent && setGroupNextAction(parent, filteredNextActions);
+    setChangeKey(String(new Date().getTime()));
+    flow.current?.redraw();
+    saveDraftIfNeeded();
+    toast.success(t("logic.actionsSaved"));
+  };
+
   return (
     <>
       <div className="sticky top-0 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
@@ -252,21 +297,15 @@ const MultiActionSelectorInner = ({
           <Button
             className={cn("px-4 py-1", nextActions.length === 0 && "disabled")}
             disabled={nextActions.length === 0}
-            onClick={() => {
-              const group = findParentGroup(String(item.id));
-              const parent = group?.index;
-              const filteredNextActions = filterNextActionRulesForItem(item.id, nextActions);
-              parent && setGroupNextAction(parent as string, filteredNextActions);
-              setChangeKey(String(new Date().getTime()));
-              flow.current?.redraw();
-              saveDraftIfNeeded();
-              toast.success(t("logic.actionsSaved"));
-            }}
+            onClick={handleSaveRules}
           >
             {t("logic.saveRule")}
           </Button>
         </div>
       </form>
+      {invalidRule && (
+        <InvalidNextActionDialog {...invalidRule} handleClose={() => setInvalidRule(null)} />
+      )}
     </>
   );
 };

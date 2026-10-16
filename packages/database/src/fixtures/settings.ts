@@ -107,6 +107,17 @@ const hCaptchaEnabledSetting: Setting = {
   value: "false",
 };
 
+const enableClientErrorReporting: Setting = {
+  internalId: "enableClientErrorReporting",
+  nameEn: "Enable Client Error Reporting",
+  nameFr: "Activer le rapport d'erreurs client",
+  descriptionEn:
+    "Enable or disable client error reporting for the app. Set to ON to activate or OFF to deactivate.",
+  descriptionFr:
+    "Activez ou désactivez le rapport d'erreurs client pour l'application. Réglez sur ON pour activer et sur OFF pour désactiver.",
+  value: "OFF",
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -118,6 +129,7 @@ const allSettings = [
   addressCompleteRetrieveRateLimitMax,
   addressCompleteRateLimitWindowSeconds,
   hCaptchaEnabledSetting,
+  enableClientErrorReporting,
 ];
 
 export default {

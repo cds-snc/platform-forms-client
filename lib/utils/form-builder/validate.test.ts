@@ -52,6 +52,16 @@ describe("validateTemplate", () => {
     ]);
   });
 
+  it("reports navigation cycles", () => {
+    const cyclicTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
+    const firstPageId = cyclicTemplate.groupsLayout?.[0];
+    cyclicTemplate.groups![firstPageId!].nextAction = "start";
+
+    expect(validateTemplate(cyclicTemplate).errors).toContainEqual({
+      message: "startErrorNavigationCycle",
+    });
+  });
+
   it("reports strict element failures from oneOf schemas", () => {
     const invalidTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
     const elementId = Math.max(...invalidTemplate.elements.map(({ id }) => id)) + 1;

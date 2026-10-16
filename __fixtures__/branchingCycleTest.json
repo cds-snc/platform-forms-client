@@ -1,0 +1,109 @@
+{
+  "titleEn": "Branching cycle reproduction",
+  "titleFr": "Reproduction d'un cycle de branchement",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "confirmation": {
+    "descriptionEn": "Submitted",
+    "descriptionFr": "Soumis",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [1],
+  "elements": [
+    {
+      "id": 1,
+      "type": "radio",
+      "uuid": "90ec50c0-1dae-48f0-80c1-9a74a10ab24a",
+      "properties": {
+        "tags": [],
+        "choices": [
+          { "en": "Loop", "fr": "Boucle" },
+          { "en": "Finish", "fr": "Terminer" }
+        ],
+        "titleEn": "Choose a route",
+        "titleFr": "Choisissez un parcours",
+        "questionId": "",
+        "validation": { "required": true },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    }
+  ],
+  "groups": {
+    "end": {
+      "name": "End",
+      "titleEn": "Confirmation page",
+      "titleFr": "Page de confirmation",
+      "elements": []
+    },
+    "start": {
+      "name": "Start",
+      "titleEn": "Start page",
+      "titleFr": "Page de départ",
+      "elements": [],
+      "nextAction": "entry"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "Review page",
+      "titleFr": "Page de révision",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "entry": {
+      "name": "Entry",
+      "titleEn": "Entry",
+      "titleFr": "Entrée",
+      "autoFlow": true,
+      "elements": [],
+      "nextAction": "landing"
+    },
+    "cycle-a": {
+      "name": "Cycle page A",
+      "titleEn": "Cycle page A",
+      "titleFr": "Page de boucle A",
+      "autoFlow": true,
+      "elements": [],
+      "nextAction": "cycle-b"
+    },
+    "cycle-b": {
+      "name": "Cycle page B",
+      "titleEn": "Cycle page B",
+      "titleFr": "Page de boucle B",
+      "autoFlow": true,
+      "elements": [],
+      "nextAction": "cycle-c"
+    },
+    "cycle-c": {
+      "name": "Cycle page C",
+      "titleEn": "Cycle page C",
+      "titleFr": "Page de boucle C",
+      "autoFlow": true,
+      "elements": [],
+      "nextAction": "end"
+    },
+    "landing": {
+      "name": "Choose a route",
+      "titleEn": "Choose a route",
+      "titleFr": "Choisissez un parcours",
+      "autoFlow": false,
+      "elements": ["1"],
+      "nextAction": [
+        { "groupId": "cycle-a", "choiceId": "1.0" },
+        { "groupId": "end", "choiceId": "1.1" }
+      ]
+    }
+  },
+  "groupsLayout": ["start", "entry", "cycle-a", "cycle-b", "cycle-c", "landing", "review", "end"],
+  "lastGeneratedElementId": 1
+}

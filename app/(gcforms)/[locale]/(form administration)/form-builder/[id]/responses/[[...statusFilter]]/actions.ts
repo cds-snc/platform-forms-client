@@ -40,6 +40,9 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { traceFunction } from "@lib/otel";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import type { Response } from "@gcforms/types";
+import { FeatureFlags } from "@lib/cache/types";
+import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
+import { getFormSubmissionAttachmentDownloadLink } from "@lib/vault/getFormSubmissionAttachmentDownloadLink";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -185,6 +188,28 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           );
         }
 
+        const fileUploadEnabled = await featureFlagAllowedForUser(
+          session.user.id,
+          FeatureFlags.fileUpload
+        );
+        const attachments = fileUploadEnabled
+          ? (
+              await Promise.all(
+                queryResult.map(async (item) => ({
+                  responseId: item.name,
+                  attachments: await Promise.all(
+                    (item.fileAttachments ?? []).map(async (attachment) => ({
+                      id: attachment.id,
+                      name: attachment.name,
+                      downloadLink: await getFormSubmissionAttachmentDownloadLink(attachment.path),
+                      isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+                    }))
+                  ),
+                }))
+              )
+            ).filter((group) => group.attachments.length > 0)
+          : [];
+
         // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
         const responses = queryResult
           .sort((a, b) => a.createdAt - b.createdAt)
@@ -244,6 +269,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
             return {
               receipt: await htmlAggregatedTransform(formResponse, lang),
               responses: await csvTransform(formResponse),
+              ...(attachments.length > 0 && { attachments }),
             };
           case DownloadFormat.HTML_AGGREGATED:
             return await htmlAggregatedTransform(formResponse, lang);
@@ -252,13 +278,18 @@ export const getSubmissionsByFormat = AuthenticatedAction(
             return await htmlTransform(formResponse);
 
           case DownloadFormat.HTML_ZIPPED: {
-            return await zipTransform(formResponse, lang);
+            const response = await zipTransform(formResponse, lang);
+            return {
+              ...response,
+              ...(attachments.length > 0 && { attachments }),
+            };
           }
 
           case DownloadFormat.JSON:
             return {
               receipt: await htmlAggregatedTransform(formResponse, lang),
               responses: jsonTransform(formResponse),
+              ...(attachments.length > 0 && { attachments }),
             };
 
           default:

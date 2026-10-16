@@ -11,7 +11,6 @@ import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";
 import { auth } from "@lib/auth";
 import ServiceWorker from "@clientComponents/globals/ServiceWorker";
-import { AppUpdater } from "@clientComponents/globals/Update";
 
 export const dynamic = "force-dynamic";
 
@@ -102,8 +101,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
       </head>
 
       <body className={"has-[.bkd-soft]:bg-gray-soft"}>
-        {/* AppUpdater must be the very first element in the body */}
-        <AppUpdater />
         {process.env.NODE_ENV === "production" || process.env.APP_UPDATER === "true" ? (
           <ServiceWorker />
         ) : null}
