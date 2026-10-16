@@ -280,7 +280,7 @@ const placeTrailingNodes = (nodes: LayoutNode[]) => {
   });
 };
 
-const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[]) => {
+export const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[]) => {
   if (!nodes.length) {
     return nodes;
   }
@@ -304,15 +304,47 @@ const layoutPageNodes = (nodes: LayoutNode[], edges: Edge[]) => {
     .nodeSize([maxPageHeight + LAYOUT_SPACING_Y, PAGE_WIDTH + LAYOUT_SPACING_X])
     .separation(() => 1);
 
+  // Walk outward from the entry points so back-edges (loops) never become parents.
+  const mainNodeIds = new Set(mainNodes.map((node) => node.id));
+  const parentById = new Map<string, string>();
+  const targetsWithIncoming = new Set(layoutEdges.map((edge) => edge.target));
+  const seeds = [
+    ...mainNodes.filter((node) => node.id === LOCKED_SECTIONS.START),
+    ...mainNodes.filter(
+      (node) => node.id !== LOCKED_SECTIONS.START && !targetsWithIncoming.has(node.id)
+    ),
+    ...mainNodes,
+  ];
+
+  for (const seed of seeds) {
+    if (parentById.has(seed.id)) {
+      continue;
+    }
+
+    parentById.set(seed.id, rootLayoutNode.id);
+    const queue = [seed.id];
+
+    while (queue.length) {
+      const current = queue.shift() as string;
+
+      for (const edge of layoutEdges) {
+        if (edge.source !== current || !mainNodeIds.has(edge.target)) {
+          continue;
+        }
+
+        if (!parentById.has(edge.target)) {
+          parentById.set(edge.target, current);
+          queue.push(edge.target);
+        }
+      }
+    }
+  }
+
   const hierarchy = stratify<LayoutNode>()
     .id((node) => node.id)
-    .parentId((node) => {
-      if (node.id === rootLayoutNode.id) {
-        return undefined;
-      }
-
-      return layoutEdges.find((edge) => edge.target === node.id)?.source || rootLayoutNode.id;
-    })([rootLayoutNode, ...mainNodes]);
+    .parentId((node) =>
+      node.id === rootLayoutNode.id ? undefined : (parentById.get(node.id) ?? rootLayoutNode.id)
+    )([rootLayoutNode, ...mainNodes]);
 
   const laidOutRoot = layoutTree(hierarchy);
   const positions = new Map<string, { x: number; y: number }>();
