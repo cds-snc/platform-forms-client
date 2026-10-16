@@ -62,6 +62,16 @@ describe("validateTemplate", () => {
     });
   });
 
+  it("reports unsupported template schema versions as validation errors", () => {
+    const template = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
+    template.schemaVersion = 3;
+
+    expect(validateTemplate(template)).toMatchObject({
+      valid: false,
+      errors: [{ property: "schemaVersion", message: "formInvalidProperty" }],
+    });
+  });
+
   it("reports strict element failures from oneOf schemas", () => {
     const invalidTemplate = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
     const elementId = Math.max(...invalidTemplate.elements.map(({ id }) => id)) + 1;
