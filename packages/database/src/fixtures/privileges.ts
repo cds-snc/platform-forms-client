@@ -99,7 +99,7 @@ const ManageApplicationSettings: PrivilegeSeed = {
   permissions: [
     { action: "view", subject: "Flag" },
     { action: "update", subject: "Flag" },
-    { action: ["create", "view", "update", "delete"], subject: "Setting" },
+    { action: ["view", "update"], subject: "Setting" },
   ],
   priority: 5,
 };
