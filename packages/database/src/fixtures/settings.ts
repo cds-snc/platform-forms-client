@@ -146,7 +146,7 @@ const enableClientErrorReporting: SettingFixture = {
   type: "boolean",
   groupEn: null,
   groupFr: null,
-  value: "OFF",
+  value: "false",
 };
 
 const allSettings = [
