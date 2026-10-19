@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.27.0](https://github.com/cds-snc/platform-forms-client/compare/v4.26.0...v4.27.0) (2026-10-15)
+
+
+### Features
+
+* Edit published with upload template ([#7999](https://github.com/cds-snc/platform-forms-client/issues/7999)) ([dae370d](https://github.com/cds-snc/platform-forms-client/commit/dae370d29538d10ff12f9e93b9f953c0a332737f))
+
+
+### Bug Fixes
+
+* local communication between GCForms and IDP ([#8041](https://github.com/cds-snc/platform-forms-client/issues/8041)) ([023831b](https://github.com/cds-snc/platform-forms-client/commit/023831b7f55339d7ed7627db5b1096b4e84849e0))
+
 ## [4.26.0](https://github.com/cds-snc/platform-forms-client/compare/v4.25.0...v4.26.0) (2026-10-15)
 
 
