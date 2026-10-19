@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { Validator } from "jsonschema";
 import { NextRequest } from "next/server";
 import { jsonValidator } from "@lib/middleware";
-import { getTemplateSchema } from "../middleware/schemas/templates";
+import { getTemplateSchema } from "../templates/schemas/templates";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import validFormTemplateWithHTMLInDynamicRow from "../../__fixtures__/validFormTemplateWithHTMLInDynamicRow.json";

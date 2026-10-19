@@ -1,5 +1,5 @@
 import { ValidationError, Validator, ValidatorResult } from "jsonschema";
-import { getTemplateSchema } from "@lib/middleware/schemas/templates";
+import { getTemplateSchema } from "@lib/templates/schemas/templates";
 import { FormProperties } from "@lib/types";
 import { cleanAngleBrackets } from "@lib/client/jsonFormatting";
 import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
