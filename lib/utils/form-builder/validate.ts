@@ -1,4 +1,4 @@
-import { ValidationError, Validator, ValidatorResult } from "jsonschema";
+import { type Schema, ValidationError, Validator, ValidatorResult } from "jsonschema";
 import { getTemplateSchema } from "@lib/templates/schemas/templates";
 import { FormProperties } from "@lib/types";
 import { cleanAngleBrackets } from "@lib/client/jsonFormatting";
@@ -60,10 +60,7 @@ type OneOfSchema = {
   }[];
 };
 
-const getOneOfErrors = (
-  error: ValidationError,
-  templateSchema: ReturnType<typeof getTemplateSchema>
-) => {
+const getOneOfErrors = (error: ValidationError, templateSchema: Schema) => {
   const elementType = (error.instance as { type?: unknown } | null)?.type;
   const oneOfSchema = (error.schema as OneOfSchema).oneOf?.find(
     ({ properties }) => properties?.type?.const === elementType
@@ -104,7 +101,8 @@ export const validateTemplate = (data: FormProperties) => {
     errors.push({ message: "startErrorNavigationCycle" });
   }
 
-  let schema: ReturnType<typeof getTemplateSchema>;
+  let schema: Schema;
+
   try {
     schema = getTemplateSchema(data.schemaVersion);
   } catch (e) {
