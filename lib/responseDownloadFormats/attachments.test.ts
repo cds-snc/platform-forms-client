@@ -42,7 +42,25 @@ describe("response attachment ZIP paths", () => {
     expect(Object.keys(loadedZip.files).filter((filename) => !filename.endsWith("/"))).toEqual([
       "file_attachments-fichiers_joints/response-1/document.pdf",
       "file_attachments-fichiers_joints/response-1/document (1).pdf",
+      "file_attachments-fichiers_joints/response-1/mapping.json",
     ]);
+    const mapping = JSON.parse(
+      await loadedZip.files["file_attachments-fichiers_joints/response-1/mapping.json"].async(
+        "string"
+      )
+    );
+    expect(mapping).toEqual({
+      first: {
+        originalName: "document.pdf",
+        actualName: "document.pdf",
+        isPotentiallyMalicious: false,
+      },
+      second: {
+        originalName: "document.pdf",
+        actualName: "document (1).pdf",
+        isPotentiallyMalicious: false,
+      },
+    });
   });
 
   it("retries expired links and keeps successful files when another download fails", async () => {

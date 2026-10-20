@@ -74,11 +74,6 @@ export const generateDownloadZip = async ({
     const blob = await zip.generateAsync({ type: "blob", streamFiles: true }, ({ percent }) =>
       setDownloadProgress({ phase: "zip", percent })
     );
-    logMessage.debug({
-      message: "Response ZIP generation complete",
-      formId,
-      zipSizeBytes: blob.size,
-    });
     downloadFileFromBlob(blob, fileName);
   } catch (err) {
     if (!recoveryCopy) throw err;

@@ -3,6 +3,7 @@ import type { ResponseAttachmentGroup } from "./types";
 
 export const RESPONSE_ATTACHMENTS_FOLDER = "file_attachments-fichiers_joints";
 export const SUSPICIOUS_ATTACHMENTS_FOLDER = "suspicious_files-fichiers_suspects";
+const MAPPING_FILENAME = "mapping.json";
 
 const safePathSegment = (value: string, fallback: string) => {
   const segment = value
@@ -11,6 +12,9 @@ const safePathSegment = (value: string, fallback: string) => {
     .trim();
   return segment || fallback;
 };
+
+const getResponseAttachmentFolderPath = (responseId: string) =>
+  `${RESPONSE_ATTACHMENTS_FOLDER}/${safePathSegment(responseId, "response")}`;
 
 export const getUniqueAttachmentFilename = (
   filename: string,
@@ -43,13 +47,13 @@ export const getAttachmentZipPath = (
   usedNames: Set<string>,
   index: number
 ) => {
-  const safeResponseId = safePathSegment(responseId, "response");
   const uniqueFilename = getUniqueAttachmentFilename(filename, usedNames, index);
-  const folders = isPotentiallyMalicious
-    ? [RESPONSE_ATTACHMENTS_FOLDER, safeResponseId, SUSPICIOUS_ATTACHMENTS_FOLDER]
-    : [RESPONSE_ATTACHMENTS_FOLDER, safeResponseId];
+  const responseFolderPath = getResponseAttachmentFolderPath(responseId);
+  const attachmentFolderPath = isPotentiallyMalicious
+    ? `${responseFolderPath}/${SUSPICIOUS_ATTACHMENTS_FOLDER}`
+    : responseFolderPath;
 
-  return [...folders, uniqueFilename].join("/");
+  return `${attachmentFolderPath}/${uniqueFilename}`;
 };
 
 export type AttachmentDownloadProgress = {
@@ -79,6 +83,10 @@ export const addResponseAttachmentsToZip = async (
     group.attachments.map((attachment, index) => ({ group, attachment, index }))
   );
   const usedNamesByResponse = new Map<string, Set<string>>();
+  const mappingsByResponse = new Map<
+    string,
+    Map<string, { originalName: string; actualName: string; isPotentiallyMalicious: boolean }>
+  >();
   const failures: FailedAttachmentDownload[] = [];
   let completed = 0;
 
@@ -110,6 +118,13 @@ export const addResponseAttachmentsToZip = async (
         });
       } else {
         zip.file(path, await response.blob());
+        const mapping = mappingsByResponse.get(group.responseId) ?? new Map();
+        mapping.set(attachment.id, {
+          originalName: attachment.name,
+          actualName: path.split("/").pop() ?? attachment.name,
+          isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+        });
+        mappingsByResponse.set(group.responseId, mapping);
       }
     } catch {
       failures.push({
@@ -128,6 +143,13 @@ export const addResponseAttachmentsToZip = async (
     await previous;
     await processAttachment(attachment);
   }, Promise.resolve());
+
+  mappingsByResponse.forEach((mapping, responseId) => {
+    zip.file(
+      `${getResponseAttachmentFolderPath(responseId)}/${MAPPING_FILENAME}`,
+      JSON.stringify(Object.fromEntries(mapping), null, 2)
+    );
+  });
 
   if (failures.length > 0 && options.writeFailureManifest !== false) {
     zip.file("attachment-download-errors.json", JSON.stringify(failures, null, 2));
