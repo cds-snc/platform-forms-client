@@ -72,10 +72,10 @@ export const downloadResponses = async ({
     const fileName = getVersionedZipFileName(`${filePrefix}responses-reponses.zip`, version);
     await generateDownloadZip({ zip, recoveryCopy, fileName, formId, setDownloadProgress });
 
-    const successfulIds = filteredIds.filter(
+    const fullyDownloadedResponseIds = filteredIds.filter(
       (responseId) => !downloadFailures.some((failure) => failure.responseId === responseId)
     );
-    if (successfulIds.length === 0) {
+    if (fullyDownloadedResponseIds.length === 0) {
       setIsDownloading(false);
       onClose();
       return;
@@ -85,7 +85,7 @@ export const downloadResponses = async ({
     try {
       const trackingResponse = await getSubmissionsByFormat({
         formID: formId,
-        ids: successfulIds,
+        ids: fullyDownloadedResponseIds,
         format,
         lang: language,
         version,
@@ -106,7 +106,7 @@ export const downloadResponses = async ({
     }
 
     if (trackingSucceeded) {
-      onDownloadComplete(successfulIds);
+      onDownloadComplete(fullyDownloadedResponseIds);
       return;
     }
 
