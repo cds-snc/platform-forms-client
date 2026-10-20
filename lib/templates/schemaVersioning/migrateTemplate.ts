@@ -23,6 +23,10 @@ export const migrateTemplate = (
   let migrated = template;
   let version = getTemplateSchemaVersion(migrated);
 
+  if (version > targetVersion) {
+    return migrated;
+  }
+
   while (version < targetVersion) {
     // migrations is keyed by the version it upgrades TO, e.g. migrations[1] takes version 0 to 1.
     const migrate = migrations[version + 1];

@@ -295,12 +295,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
         </div>
       );
     case FormElementTypes.richText:
-      return (
-        <>
-          {labelText && <h3>{labelText}</h3>}
-          <RichText>{description}</RichText>
-        </>
-      );
+      return <RichText>{description}</RichText>;
     case FormElementTypes.fileInput:
       return (
         <div className="focus-group">

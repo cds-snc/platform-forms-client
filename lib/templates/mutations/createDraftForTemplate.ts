@@ -13,8 +13,12 @@ import { parseTemplate } from "../internal/index";
 import { formCache } from "@lib/cache/formCache";
 import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 import { type FormProperties } from "@gcforms/types";
+import { validateFormConfig } from "./shared/validateFormConfig";
 
-export async function createDraftVersionForTemplate(formID: string): Promise<FormRecord | null> {
+export async function createDraftVersionForTemplate(
+  formID: string,
+  formConfig?: FormProperties
+): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
       e.user.id,
@@ -24,6 +28,10 @@ export async function createDraftVersionForTemplate(formID: string): Promise<For
     );
     throw e;
   });
+
+  if (formConfig) {
+    await validateFormConfig(formConfig, user);
+  }
 
   const updatedTemplate = await prisma
     .$transaction(async (tx) => {
@@ -119,10 +127,12 @@ export async function createDraftVersionForTemplate(formID: string): Promise<For
 
       const nextVersionNumber = (existingLatest ?? 0) + (createdPublishedVersionId ? 2 : 1);
 
-      const draftJson = template.currentPublishedVersion
-        ? (template.currentPublishedVersion.jsonConfig as Prisma.JsonObject)
-        : ((publishedVersionJson as Prisma.JsonObject) ??
-          (template.jsonConfig as Prisma.JsonObject));
+      const draftJson = formConfig
+        ? (formConfig as unknown as Prisma.JsonObject)
+        : template.currentPublishedVersion
+          ? (template.currentPublishedVersion.jsonConfig as Prisma.JsonObject)
+          : ((publishedVersionJson as Prisma.JsonObject) ??
+            (template.jsonConfig as Prisma.JsonObject));
 
       // The published template is never migrated in place; migrate on copy so the
       // new draft starts at the current template schema version.

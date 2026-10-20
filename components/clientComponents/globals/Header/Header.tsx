@@ -51,8 +51,8 @@ export const Header = ({
   useEffect(() => {
     async function fetchBannerData() {
       setBannerData(isEnabled);
-      setBannerMessage(t("campaignBanner.message5"));
-      setBannerType(t("campaignBanner.type5"));
+      setBannerMessage(t("campaignBanner.message6"));
+      setBannerType(t("campaignBanner.type6"));
     }
     fetchBannerData();
   }, [t, isEnabled]);

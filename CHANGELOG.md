@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.27.0](https://github.com/cds-snc/platform-forms-client/compare/v4.26.0...v4.27.0) (2026-10-15)
+
+
+### Features
+
+* Edit published with upload template ([#7999](https://github.com/cds-snc/platform-forms-client/issues/7999)) ([dae370d](https://github.com/cds-snc/platform-forms-client/commit/dae370d29538d10ff12f9e93b9f953c0a332737f))
+
+
+### Bug Fixes
+
+* local communication between GCForms and IDP ([#8041](https://github.com/cds-snc/platform-forms-client/issues/8041)) ([023831b](https://github.com/cds-snc/platform-forms-client/commit/023831b7f55339d7ed7627db5b1096b4e84849e0))
+
+## [4.26.0](https://github.com/cds-snc/platform-forms-client/compare/v4.25.0...v4.26.0) (2026-10-15)
+
+
+### Features
+
+* add ability to download attachments via the UI (feature flagged) ([#8034](https://github.com/cds-snc/platform-forms-client/issues/8034)) ([0ac53b8](https://github.com/cds-snc/platform-forms-client/commit/0ac53b8e8e0c281c188ebc25e30a6f40024db113))
+* Add client error logging at error boundaries ([#8033](https://github.com/cds-snc/platform-forms-client/issues/8033)) ([55dc777](https://github.com/cds-snc/platform-forms-client/commit/55dc777700c3955fef24ab5497d13c7c7e1459ea))
+
+
+### Miscellaneous Chores
+
+* Next.js 16.4 ([#8031](https://github.com/cds-snc/platform-forms-client/issues/8031)) ([b33bdd2](https://github.com/cds-snc/platform-forms-client/commit/b33bdd2aca06472a89376b155034ae1988616e5a))
+* Prevent downgrade the version number when running migrations ([#8002](https://github.com/cds-snc/platform-forms-client/issues/8002)) ([573cb84](https://github.com/cds-snc/platform-forms-client/commit/573cb84fdcaef8f16df5c57fce2b4cc77f04299b))
+
+## [4.25.0](https://github.com/cds-snc/platform-forms-client/compare/v4.24.0...v4.25.0) (2026-10-13)
+
+
+### Features
+
+* Add version-gated strict element schemas ([#7998](https://github.com/cds-snc/platform-forms-client/issues/7998)) ([c6cae04](https://github.com/cds-snc/platform-forms-client/commit/c6cae04a34913aca1da9f3f86abcdc545013310e))
+* detect cycles in branching ([#7979](https://github.com/cds-snc/platform-forms-client/issues/7979)) ([e02c865](https://github.com/cds-snc/platform-forms-client/commit/e02c865b7775b5601da2982a9200d2b3d0ba865e))
+* Strict element properties on element creation ([#8004](https://github.com/cds-snc/platform-forms-client/issues/8004)) ([d536742](https://github.com/cds-snc/platform-forms-client/commit/d53674271f0a4808423c113a29c226b918721a32))
+
+
+### Bug Fixes
+
+* keep page delete confirmation visible after scrolling ([#8028](https://github.com/cds-snc/platform-forms-client/issues/8028)) ([45c698f](https://github.com/cds-snc/platform-forms-client/commit/45c698f5ac192b4528507a7d9aeb3ef6cdcfa803))
+* occasionally failing hCaptcha test ([#8025](https://github.com/cds-snc/platform-forms-client/issues/8025)) ([f0857e2](https://github.com/cds-snc/platform-forms-client/commit/f0857e279c3189788ae2e646470ec1947c361a09))
+* Prevent unhandled exceptions in complex components with safeJSONparse ([#8027](https://github.com/cds-snc/platform-forms-client/issues/8027)) ([af684ea](https://github.com/cds-snc/platform-forms-client/commit/af684eaf5c071b4e9dd9786c1d546bd059efc712))
+* RichText title rendering ([#8013](https://github.com/cds-snc/platform-forms-client/issues/8013)) ([62e77d9](https://github.com/cds-snc/platform-forms-client/commit/62e77d9d70afaa199ddb55c003a6b14c82a60562))
+* update aria semantics - mainly missing or broken label references ([#8006](https://github.com/cds-snc/platform-forms-client/issues/8006)) ([8945b52](https://github.com/cds-snc/platform-forms-client/commit/8945b520ba7226ac61afd6183afad6fb648ece12))
+
+
+### Miscellaneous Chores
+
+* add mpo branding ([#8024](https://github.com/cds-snc/platform-forms-client/issues/8024)) ([fec31cd](https://github.com/cds-snc/platform-forms-client/commit/fec31cd2c4a53f0af10d85ce72febc963b05a2e4))
+* AppUpdate is already included as part of the context ([#8029](https://github.com/cds-snc/platform-forms-client/issues/8029)) ([8a32754](https://github.com/cds-snc/platform-forms-client/commit/8a32754d627b1505fdc143d936a9c62143d0fc98))
+* update GC SSO button  ([#8015](https://github.com/cds-snc/platform-forms-client/issues/8015)) ([abe7bb0](https://github.com/cds-snc/platform-forms-client/commit/abe7bb00a437e6b94d18311b81a986f7bc4b183f))
+
 ## [4.24.0](https://github.com/cds-snc/platform-forms-client/compare/v4.23.0...v4.24.0) (2026-10-07)
 
 

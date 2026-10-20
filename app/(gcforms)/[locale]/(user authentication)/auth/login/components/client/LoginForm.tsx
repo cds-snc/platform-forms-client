@@ -8,8 +8,12 @@ import Link from "next/link";
 
 import { ErrorStatus } from "@lib/constants";
 import { SubmitButtonAction } from "@clientComponents/globals/Buttons/SubmitButton";
+import { FeatureFlags } from "@lib/cache/types";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const LoginForm = () => {
+  const { getFlag } = useFeatureFlags();
+  const isZitadelLoginEnabled = getFlag(FeatureFlags.zitadelLogin);
   const {
     t,
     i18n: { language },
@@ -80,11 +84,13 @@ export const LoginForm = () => {
             </ol>
           </Alert>
         )}
-      <h1 className="mb-12 mt-6 border-b-0">{t("title")}</h1>
-      <p className="-mt-6 mb-10">
-        {t("signUpText")}&nbsp;
-        <Link href={`/${language}/auth/register`}>{t("signUpLink")}</Link>
-      </p>
+      <h1 className="mt-6 mb-12 border-b-0">{t("title")}</h1>
+      {!isZitadelLoginEnabled && (
+        <p className="-mt-6 mb-10">
+          {t("signUpText")}&nbsp;
+          <Link href={`/${language}/auth/register`}>{t("signUpLink")}</Link>
+        </p>
+      )}
       <form id="login" action={formAction} noValidate>
         <div className="gcds-input-wrapper">
           <Label id={"label-username"} htmlFor={"username"} className="required" required>

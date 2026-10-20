@@ -21,7 +21,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import debounce from "lodash/debounce";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
-import { cn } from "@lib/utils";
+import { cn, safeJSONParse } from "@lib/utils";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 import { Language } from "@lib/types/form-builder-types";
 import { countries } from "@lib/managedData/countries";
@@ -89,20 +89,20 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
   const allowAddressComplete = !isNoAuthPreviewMode;
 
+  const defaultAddressObject = {
+    streetAddress: "",
+    city: "",
+    province: "",
+    postalCode: "",
+    // Make sure the initial default is CAN to avoid null cases when:
+    // - the address is "Canada only"
+    // - the address is not "Canada only" and the country drop down was not interacted with
+    country: "Canada",
+  };
+
   //Form fillers address elements
   const [addressObject, setAddressObject] = useState<AddressElements>(
-    field.value
-      ? JSON.parse(field.value)
-      : {
-          streetAddress: "",
-          city: "",
-          province: "",
-          postalCode: "",
-          // Make sure the initial default is CAN to avoid null cases when:
-          // - the address is "Canada only"
-          // - the address is not "Canada only" and the country drop down was not interacted with
-          country: "Canada",
-        }
+    field.value ? safeJSONParse(field.value) || defaultAddressObject : defaultAddressObject
   );
 
   // Update the field value when the address object changes

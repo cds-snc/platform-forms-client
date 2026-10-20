@@ -33,6 +33,13 @@ describe("migrateTemplate", () => {
     expect(migrated).toEqual(template);
   });
 
+  it("does not downgrade a template newer than the target version", () => {
+    const template = { ...baseTemplate, schemaVersion: 2 };
+    const migrated = migrateTemplate(template, { targetVersion: 1 });
+
+    expect(migrated).toEqual(template);
+  });
+
   it("applies registered migrations in sequence up to the target version", () => {
     const template = { ...baseTemplate, schemaVersion: 1 };
     const migrated = migrateTemplate(template, {

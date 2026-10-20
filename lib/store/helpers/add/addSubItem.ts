@@ -3,6 +3,7 @@ import { FormElementTypes } from "@lib/types";
 import { defaultField } from "../../defaults";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
 import { incrementSubElementId } from "@lib/utils/form-builder";
+import { filterElementPropertiesByType } from "@lib/utils/form-builder/itemHelper";
 
 export const addSubItem: TemplateStore<"addSubItem"> =
   (set) =>
@@ -25,12 +26,18 @@ export const addSubItem: TemplateStore<"addSubItem"> =
           state.form.elements[parentIndex].id
         );
 
-        state.form.elements[parentIndex].properties.subElements?.splice(subIndex + 1, 0, {
+        const item = {
           ...subDefaultField,
           ...data,
           id,
           type,
-        });
+        };
+
+        state.form.elements[parentIndex].properties.subElements?.splice(
+          subIndex + 1,
+          0,
+          filterElementPropertiesByType(item, true)
+        );
 
         resolve(id);
       });
