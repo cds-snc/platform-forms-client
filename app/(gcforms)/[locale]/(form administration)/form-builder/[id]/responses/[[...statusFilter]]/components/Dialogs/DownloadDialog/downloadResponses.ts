@@ -11,6 +11,7 @@ import {
   addResponseAttachmentsToZip,
   type AttachmentDownloadProgress,
 } from "@lib/responseDownloadFormats/attachments";
+import { processSequentially } from "@lib/responseDownloadFormats/processSequentially";
 import {
   DownloadFormat,
   type CSVResponse,
@@ -51,6 +52,12 @@ const trackDownloadFormat = (formId: string, format: DownloadFormat, numberOfRec
     downloadType: format,
     numberOfRecords,
   });
+};
+
+const assertNoServerActionError: <Response extends object>(
+  response: Response | ServerActionError
+) => asserts response is Response = (response) => {
+  if ("error" in response) throw new FormBuilderError(response.error, response.code);
 };
 
 export const downloadResponses = async ({
@@ -121,12 +128,12 @@ export const downloadResponses = async ({
     version,
   });
 
-  const addAttachmentsToZip = (
+  const addAttachmentsToZipAndRecordFailures = async (
     zip: JSZip,
     attachments: HtmlZippedResponse["attachments"],
     response: number
-  ) =>
-    addResponseAttachmentsToZip(zip, attachments, {
+  ) => {
+    const failures = await addResponseAttachmentsToZip(zip, attachments, {
       onProgress: ({ completed, total }: AttachmentDownloadProgress) => {
         if (total > 0) {
           setDownloadProgress({
@@ -141,13 +148,14 @@ export const downloadResponses = async ({
       refreshDownloadLink: refreshAttachmentDownloadLink,
       writeFailureManifest: false,
     });
+    downloadFailures.push(...failures);
+  };
 
   // Process responses one at a time so short-lived attachment links are still valid when used.
   const processResponseQueue = async (
     processResponse: (responseId: string, index: number) => Promise<void>
   ) =>
-    filteredIds.reduce(async (previous, responseId, index) => {
-      await previous;
+    processSequentially(filteredIds, async (responseId, index) => {
       setDownloadProgress({ phase: "responses", response: index + 1, total: filteredIds.length });
       try {
         await processResponse(responseId, index);
@@ -158,7 +166,7 @@ export const downloadResponses = async ({
           reason: err instanceof Error ? err.message : "Response download failed",
         });
       }
-    }, Promise.resolve());
+    });
 
   const finishZip = async (zip: JSZip, recoveryFiles: RecoveryFile[]) => {
     if (downloadFailures.length > 0) {
@@ -184,9 +192,7 @@ export const downloadResponses = async ({
       version,
     })) as CSVResponse | JSONResponse | ServerActionError;
 
-    if ("error" in response) {
-      throw new FormBuilderError(response.error, response.code);
-    }
+    assertNoServerActionError(response);
 
     trackDownloadFormat(formId, individualFormat, filteredIds.length);
     createIndividualResponseFiles(individualFormat, response, filePrefix).forEach(
@@ -214,9 +220,7 @@ export const downloadResponses = async ({
       trackDownload: false,
     })) as SimpleResponse | ServerActionError;
 
-    if ("error" in response) {
-      throw new FormBuilderError(response.error, response.code);
-    }
+    assertNoServerActionError(response);
 
     trackDownloadFormat(formId, archiveFormat, filteredIds.length);
     const zip = new JSZip();
@@ -234,14 +238,10 @@ export const downloadResponses = async ({
         trackDownload: false,
       })) as SimpleResponse | ServerActionError;
 
-      if ("error" in queuedResponse) {
-        throw new FormBuilderError(queuedResponse.error, queuedResponse.code);
-      }
+      assertNoServerActionError(queuedResponse);
 
       content = adapter.append(content, queuedResponse);
-      downloadFailures.push(
-        ...(await addAttachmentsToZip(zip, queuedResponse.attachments, index + 1))
-      );
+      await addAttachmentsToZipAndRecordFailures(zip, queuedResponse.attachments, index + 1);
     });
 
     const serializedContent = adapter.serialize(content);
@@ -264,9 +264,7 @@ export const downloadResponses = async ({
       trackDownload: false,
     })) as HtmlZippedResponse | ServerActionError;
 
-    if ("error" in response) {
-      throw new FormBuilderError(response.error, response.code);
-    }
+    assertNoServerActionError(response);
 
     trackDownloadFormat(formId, DownloadFormat.HTML_ZIPPED, filteredIds.length);
     const zip = new JSZip();
@@ -283,17 +281,13 @@ export const downloadResponses = async ({
         trackDownload: false,
       })) as HtmlZippedResponse | ServerActionError;
 
-      if ("error" in queuedResponse) {
-        throw new FormBuilderError(queuedResponse.error, queuedResponse.code);
-      }
+      assertNoServerActionError(queuedResponse);
 
       queuedResponse.responses.forEach(({ id, html }) => {
         zip.file(`${id}.html`, html);
         recoveryFiles.push({ path: `${id}.html`, data: html });
       });
-      downloadFailures.push(
-        ...(await addAttachmentsToZip(zip, queuedResponse.attachments, index + 1))
-      );
+      await addAttachmentsToZipAndRecordFailures(zip, queuedResponse.attachments, index + 1);
     });
 
     await finishZip(zip, recoveryFiles);

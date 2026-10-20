@@ -108,6 +108,7 @@ describe("<DownloadDialog />", () => {
 
     expect(mockDownloadResponses).toHaveBeenCalledOnce();
     expect(await page.getByRole("status").all()).toHaveLength(0);
+    await expect.element(page.getByTestId("download-progress-indicator")).toBeVisible();
   });
 
   it("shows progress status when file uploads are enabled", async () => {

@@ -1,4 +1,5 @@
 import type JSZip from "jszip";
+import { processSequentially } from "./processSequentially";
 import type { ResponseAttachmentGroup } from "./types";
 
 export const RESPONSE_ATTACHMENTS_FOLDER = "file_attachments-fichiers_joints";
@@ -139,10 +140,7 @@ export const addResponseAttachmentsToZip = async (
   };
 
   // Process one file at a time to limit in-flight memory and preserve earlier ZIP entries on failure.
-  await attachments.reduce(async (previous, attachment) => {
-    await previous;
-    await processAttachment(attachment);
-  }, Promise.resolve());
+  await processSequentially(attachments, processAttachment);
 
   mappingsByResponse.forEach((mapping, responseId) => {
     zip.file(

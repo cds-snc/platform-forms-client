@@ -138,6 +138,44 @@ export const DownloadDialog = ({
     }
   };
 
+  const getDownloadProgressMessage = () => {
+    if (!downloadProgress) return t("loading");
+
+    switch (downloadProgress.phase) {
+      case "responses":
+        return t("downloadResponsesModals.downloadDialog.processingResponse", {
+          response: downloadProgress.response,
+          total: downloadProgress.total,
+        });
+      case "attachments":
+        return (
+          <>
+            <span>
+              {t("downloadResponsesModals.downloadDialog.responseProgress", {
+                response: downloadProgress.response,
+                total: downloadProgress.responseTotal,
+              })}
+            </span>
+            <span aria-hidden="true" className="px-2">
+              •
+            </span>
+            <span>
+              {t("downloadResponsesModals.downloadDialog.downloadingAttachment", {
+                current: Math.min(downloadProgress.completed + 1, downloadProgress.total),
+                total: downloadProgress.total,
+              })}
+            </span>
+          </>
+        );
+      case "recovery":
+        return t("downloadResponsesModals.downloadDialog.preparingRecoveryCopy");
+      case "zip":
+        return t("downloadResponsesModals.downloadDialog.creatingZip", {
+          percent: Math.floor(downloadProgress.percent),
+        });
+    }
+  };
+
   return (
     <>
       {isDialogVisible && (
@@ -252,46 +290,17 @@ export const DownloadDialog = ({
             )}
 
             <div className="sticky bottom-0 flex flex-col gap-3 border-t-[0.5px] border-slate-500 bg-white p-4">
-              {isDownloading && fileUploadEnabled && (
-                <div role="status" aria-live="polite" className="flex items-center gap-2">
+              {isDownloading && (
+                <div
+                  role={fileUploadEnabled ? "status" : undefined}
+                  aria-live={fileUploadEnabled ? "polite" : undefined}
+                  className="flex items-center gap-2"
+                  data-testid="download-progress-indicator"
+                >
                   <SpinnerIcon className="size-6 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
-                  <span className="text-sm">
-                    {downloadProgress?.phase === "responses" ? (
-                      t("downloadResponsesModals.downloadDialog.processingResponse", {
-                        response: downloadProgress.response,
-                        total: downloadProgress.total,
-                      })
-                    ) : downloadProgress?.phase === "attachments" ? (
-                      <>
-                        <span>
-                          {t("downloadResponsesModals.downloadDialog.responseProgress", {
-                            response: downloadProgress.response,
-                            total: downloadProgress.responseTotal,
-                          })}
-                        </span>
-                        <span aria-hidden="true" className="px-2">
-                          •
-                        </span>
-                        <span>
-                          {t("downloadResponsesModals.downloadDialog.downloadingAttachment", {
-                            current: Math.min(
-                              downloadProgress.completed + 1,
-                              downloadProgress.total
-                            ),
-                            total: downloadProgress.total,
-                          })}
-                        </span>
-                      </>
-                    ) : downloadProgress?.phase === "recovery" ? (
-                      t("downloadResponsesModals.downloadDialog.preparingRecoveryCopy")
-                    ) : downloadProgress?.phase === "zip" ? (
-                      t("downloadResponsesModals.downloadDialog.creatingZip", {
-                        percent: Math.floor(downloadProgress.percent),
-                      })
-                    ) : (
-                      t("loading")
-                    )}
-                  </span>
+                  {fileUploadEnabled && (
+                    <span className="text-sm">{getDownloadProgressMessage()}</span>
+                  )}
                 </div>
               )}
               <div className="flex gap-4">
