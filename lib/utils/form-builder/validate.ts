@@ -5,6 +5,7 @@ import { cleanAngleBrackets } from "@lib/client/jsonFormatting";
 import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
 import { validateCustomRegex } from "@lib/regex/validateCustomRegex";
 import { createsNextActionCycle } from "@lib/groups/utils/validateGroups";
+import { logMessage } from "@lib/logger";
 
 export type errorMessage = { property?: string; message: string };
 
@@ -106,7 +107,8 @@ export const validateTemplate = (data: FormProperties) => {
   try {
     schema = getTemplateSchema(data.schemaVersion);
   } catch (e) {
-    errors.push({ property: "schemaVersion", message: `formInvalidProperty: ${e}` });
+    logMessage.error(e);
+    errors.push({ property: "schemaVersion", message: "formInvalidProperty" });
     return {
       valid: false,
       errors: deduplicatePropertyErrors(errors),
