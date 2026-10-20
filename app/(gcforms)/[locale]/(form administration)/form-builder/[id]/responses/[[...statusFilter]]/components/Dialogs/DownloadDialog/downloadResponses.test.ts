@@ -50,12 +50,12 @@ const createOptions = (
 describe("downloadResponses", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.getSubmissionsByFormat.mockImplementation(({ trackDownload }) =>
+    mocks.getSubmissionsByFormat.mockImplementation(({ ids, trackDownload }) =>
       trackDownload
         ? Promise.resolve({})
         : Promise.resolve({
-            receipt: "receipt",
-            responses: [{ id: "response-1", html: "response" }],
+            receipt: ids.join(","),
+            responses: [{ id: ids[0], html: "response" }],
             attachments: [{ filename: "attachment.png" }],
           })
     );
@@ -80,6 +80,10 @@ describe("downloadResponses", () => {
     );
     expect(trackingCall?.[0].ids).toEqual(["response-2"]);
     expect(onDownloadComplete).toHaveBeenCalledWith(["response-2"], true);
+    const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
+    expect(zip.files["response-1.html"]).toBeUndefined();
+    expect(zip.files["response-2.html"]).toBeDefined();
+    await expect(zip.files["_receipt-recu.html"].async("string")).resolves.toBe("response-2");
   });
 
   it("does not track responses when a recovery copy is downloaded", async () => {
@@ -103,6 +107,7 @@ describe("downloadResponses", () => {
         { id: "response-1", html: "response" },
         { id: "response-2", html: "response" },
       ],
+      attachments: [],
     });
 
     await downloadResponses(createOptions(["response-1", "response-2"], onDownloadComplete));
@@ -131,5 +136,32 @@ describe("downloadResponses", () => {
       ["response-1"],
       ["response-2"],
     ]);
+  });
+
+  it("stops fetching responses when an entry exceeds the ZIP size limit", async () => {
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+    mocks.getSubmissionsByFormat.mockImplementation(({ ids, trackDownload }) => {
+      if (trackDownload) return Promise.resolve({});
+      if (ids.length > 1) {
+        return Promise.resolve({ receipt: "receipt", responses: [], attachments: [] });
+      }
+      return Promise.resolve({
+        receipt: "receipt",
+        responses: [{ id: ids[0], html: "x".repeat(14 * 1024 * 1024) }],
+        attachments: [],
+      });
+    });
+
+    await downloadResponses(createOptions(["response-1", "response-2"], onDownloadComplete));
+
+    const responseFetches = mocks.getSubmissionsByFormat.mock.calls.filter(
+      ([options]) => options.ids.length === 1 && !options.trackDownload
+    );
+    expect(responseFetches.map(([options]) => options.ids)).toEqual([["response-1"]]);
+    expect(mocks.createRecoveryCopy).not.toHaveBeenCalled();
+    expect(
+      mocks.generateDownloadZip.mock.calls[0][0].zip.files["_receipt-recu.html"]
+    ).toBeUndefined();
+    expect(onDownloadComplete).toHaveBeenCalledWith([], true);
   });
 });
