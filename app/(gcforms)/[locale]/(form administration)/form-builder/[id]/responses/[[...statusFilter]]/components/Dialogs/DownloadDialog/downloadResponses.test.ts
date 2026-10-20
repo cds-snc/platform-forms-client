@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => ({
   getSubmissionsByFormat: vi.fn(),
   getTemplateHasFileInput: vi.fn(),
 }));
+const OriginalTextEncoder = globalThis.TextEncoder;
 
 vi.mock("@lib/client/clientHelpers", () => ({ ga: mocks.ga }));
 vi.mock("@lib/responseDownloadFormats/attachments", () => ({
@@ -140,6 +141,17 @@ describe("downloadResponses", () => {
 
   it("stops fetching responses when an entry exceeds the ZIP size limit", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+    vi.stubGlobal(
+      "TextEncoder",
+      class extends OriginalTextEncoder {
+        encode(input?: string) {
+          if (input === "oversized response") {
+            return { byteLength: 499 * 1024 * 1024 } as unknown as Uint8Array;
+          }
+          return super.encode(input);
+        }
+      }
+    );
     mocks.getSubmissionsByFormat.mockImplementation(({ ids, trackDownload }) => {
       if (trackDownload) return Promise.resolve({});
       if (ids.length > 1) {
@@ -147,12 +159,16 @@ describe("downloadResponses", () => {
       }
       return Promise.resolve({
         receipt: "receipt",
-        responses: [{ id: ids[0], html: "x".repeat(14 * 1024 * 1024) }],
+        responses: [{ id: ids[0], html: "oversized response" }],
         attachments: [],
       });
     });
 
-    await downloadResponses(createOptions(["response-1", "response-2"], onDownloadComplete));
+    try {
+      await downloadResponses(createOptions(["response-1", "response-2"], onDownloadComplete));
+    } finally {
+      vi.unstubAllGlobals();
+    }
 
     const responseFetches = mocks.getSubmissionsByFormat.mock.calls.filter(
       ([options]) => options.ids.length === 1 && !options.trackDownload
