@@ -48,7 +48,7 @@ import type {
 
 // const ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
 // For testing purposes, set a lower ZIP size limit to trigger the limit more easily during development.
-const ZIP_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
+export const ZIP_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
 const ZIP_MANIFEST_RESERVE_BYTES = 2 * 1024 * 1024;
 const ZIP_ENTRY_OVERHEAD_BYTES = 4096;
 type ZipEntryData = string | Blob | Uint8Array | ArrayBuffer;

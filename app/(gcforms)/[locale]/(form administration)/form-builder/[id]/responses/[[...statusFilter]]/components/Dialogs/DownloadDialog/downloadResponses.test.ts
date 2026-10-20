@@ -29,7 +29,7 @@ vi.mock("./downloadZip", async (importOriginal) => {
   };
 });
 
-import { downloadResponses } from "./downloadResponses";
+import { downloadResponses, ZIP_SIZE_LIMIT_BYTES } from "./downloadResponses";
 
 const createOptions = (
   filteredIds: string[],
@@ -178,14 +178,14 @@ describe("downloadResponses", () => {
     ]);
   });
 
-  const stubResponseSizes = (sizesInMb: Record<string, number>) =>
+  const stubResponseSizes = (sizesInBytes: Record<string, number>) =>
     vi.stubGlobal(
       "TextEncoder",
       class extends OriginalTextEncoder {
         encode(input?: string): Uint8Array<ArrayBuffer> {
-          if (input !== undefined && input in sizesInMb) {
+          if (input !== undefined && input in sizesInBytes) {
             return {
-              byteLength: sizesInMb[input] * 1024 * 1024,
+              byteLength: sizesInBytes[input],
             } as unknown as Uint8Array<ArrayBuffer>;
           }
           return super.encode(input);
@@ -208,7 +208,7 @@ describe("downloadResponses", () => {
 
   it("always downloads the first response even when it exceeds the ZIP size limit", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
-    stubResponseSizes({ "oversized response": 600 });
+    stubResponseSizes({ "oversized response": ZIP_SIZE_LIMIT_BYTES * 1.2 });
     mockResponseHtml(() => "oversized response");
 
     try {
@@ -236,7 +236,7 @@ describe("downloadResponses", () => {
 
   it("downloads a single response that exceeds the ZIP size limit without failures", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
-    stubResponseSizes({ "oversized response": 600 });
+    stubResponseSizes({ "oversized response": ZIP_SIZE_LIMIT_BYTES * 1.2 });
     mockResponseHtml(() => "oversized response");
 
     try {
@@ -253,7 +253,10 @@ describe("downloadResponses", () => {
 
   it("excludes later responses that would exceed the ZIP size limit", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
-    stubResponseSizes({ "large response 1": 300, "large response 2": 300 });
+    stubResponseSizes({
+      "large response 1": ZIP_SIZE_LIMIT_BYTES / 2,
+      "large response 2": ZIP_SIZE_LIMIT_BYTES / 2,
+    });
     mockResponseHtml((responseId) =>
       responseId === "response-1" ? "large response 1" : "large response 2"
     );
