@@ -87,6 +87,45 @@ describe("downloadResponses", () => {
     await expect(zip.files["_receipt-recu.html"].async("string")).resolves.toBe("response-2");
   });
 
+  it("exports collected responses when receipt regeneration fails without tracking them", async () => {
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+    mocks.addResponseAttachmentsToZip
+      .mockResolvedValueOnce([
+        { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
+      ])
+      .mockResolvedValueOnce([]);
+    mocks.getSubmissionsByFormat.mockImplementation(
+      ({ ids, trackDownload, includeResponses, includeAttachments }) => {
+        if (trackDownload) return Promise.resolve({});
+        if (
+          ids.length === 1 &&
+          ids[0] === "response-2" &&
+          includeResponses === false &&
+          includeAttachments === false
+        ) {
+          return Promise.reject(new Error("Receipt request failed"));
+        }
+        return Promise.resolve({
+          receipt: ids.join(","),
+          responses: [{ id: ids[0], html: "response" }],
+          attachments: [{ filename: "attachment.png" }],
+        });
+      }
+    );
+
+    await downloadResponses(createOptions(["response-1", "response-2"], onDownloadComplete));
+
+    const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
+    expect(zip.files["response-2.html"]).toBeDefined();
+    expect(zip.files["_receipt-recu.html"]).toBeUndefined();
+    expect(zip.files["RECOVERY-COPY-NOTE.txt"]).toBeDefined();
+    expect(zip.files["response-download-errors.json"]).toBeDefined();
+    expect(mocks.getSubmissionsByFormat.mock.calls.some(([options]) => options.trackDownload)).toBe(
+      false
+    );
+    expect(onDownloadComplete).toHaveBeenCalledWith([], true);
+  });
+
   it("does not track responses when a recovery copy is downloaded", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
     mocks.generateDownloadZip.mockResolvedValue(true);

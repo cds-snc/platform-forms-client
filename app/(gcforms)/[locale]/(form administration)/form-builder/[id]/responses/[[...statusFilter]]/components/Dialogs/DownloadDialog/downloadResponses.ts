@@ -273,23 +273,40 @@ export const downloadResponses = async ({
       removeZipFileReservation(receiptPath);
     } else {
       let receipt = initialReceipt;
+      let receiptRegenerationFailed = false;
       if (downloadFailures.length > 0) {
-        const receiptResponse = (await getSubmissionsByFormat({
-          formID: formId,
-          ids: successfulResponseIds,
-          format,
-          lang: language,
-          version,
-          includeResponses: false,
-          includeAttachments: false,
-          includeCsvHeader: false,
-          trackDownload: false,
-        })) as SimpleResponse | HtmlZippedResponse | ServerActionError;
-        throwOnServerActionError(receiptResponse);
-        receipt = receiptResponse.receipt;
+        try {
+          const receiptResponse = (await getSubmissionsByFormat({
+            formID: formId,
+            ids: successfulResponseIds,
+            format,
+            lang: language,
+            version,
+            includeResponses: false,
+            includeAttachments: false,
+            includeCsvHeader: false,
+            trackDownload: false,
+          })) as SimpleResponse | HtmlZippedResponse | ServerActionError;
+          throwOnServerActionError(receiptResponse);
+          receipt = receiptResponse.receipt;
+        } catch (err) {
+          receiptRegenerationFailed = true;
+          logMessage.error(err as Error);
+          downloadFailures.push(
+            ...successfulResponseIds.map((responseId) => ({
+              responseId,
+              reason: "Response receipt could not be regenerated",
+            }))
+          );
+          removeZipFileReservation(receiptPath);
+          const recoveryNote =
+            "The response receipt could not be regenerated. These response files are included, but their submissions were not marked as downloaded.";
+          zip.file("RECOVERY-COPY-NOTE.txt", recoveryNote);
+          recoveryFiles.push({ path: "RECOVERY-COPY-NOTE.txt", data: recoveryNote });
+        }
       }
 
-      if (addZipFile(zip, receiptPath, receipt)) {
+      if (!receiptRegenerationFailed && addZipFile(zip, receiptPath, receipt)) {
         recoveryFiles.unshift({ path: receiptPath, data: receipt });
       }
     }
