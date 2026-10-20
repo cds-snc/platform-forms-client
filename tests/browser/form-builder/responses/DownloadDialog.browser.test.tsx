@@ -80,7 +80,7 @@ describe("<DownloadDialog />", () => {
     expect(checkboxes).toHaveLength(0);
   });
 
-  it("hides progress status when file uploads are disabled", async () => {
+  it("shows a generic loading status when file uploads are disabled", async () => {
     mockDownloadResponses.mockImplementationOnce(
       async (options: {
         setDownloadProgress: (progress: {
@@ -107,7 +107,10 @@ describe("<DownloadDialog />", () => {
     );
 
     expect(mockDownloadResponses).toHaveBeenCalledOnce();
-    expect(await page.getByRole("status").all()).toHaveLength(0);
+    await expect.element(page.getByRole("status")).toHaveTextContent("loading");
+    await expect
+      .element(page.getByRole("status"))
+      .not.toHaveTextContent("downloadResponsesModals.downloadDialog.processingResponse");
     await expect.element(page.getByTestId("download-progress-indicator")).toBeVisible();
   });
 

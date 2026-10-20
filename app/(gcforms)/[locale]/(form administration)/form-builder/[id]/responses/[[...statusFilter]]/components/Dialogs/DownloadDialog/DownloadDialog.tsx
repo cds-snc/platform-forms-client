@@ -292,12 +292,13 @@ export const DownloadDialog = ({
             <div className="sticky bottom-0 flex flex-col gap-3 border-t-[0.5px] border-slate-500 bg-white p-4">
               {isDownloading && (
                 <div
-                  role={fileUploadEnabled ? "status" : undefined}
-                  aria-live={fileUploadEnabled ? "polite" : undefined}
+                  role="status"
+                  aria-live="polite"
                   className="flex items-center gap-2"
                   data-testid="download-progress-indicator"
                 >
                   <SpinnerIcon className="size-6 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
+                  <span className="sr-only">{t("loading")}</span>
                   {fileUploadEnabled && (
                     <span className="text-sm">{getDownloadProgressMessage()}</span>
                   )}
