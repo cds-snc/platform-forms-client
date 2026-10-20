@@ -24,7 +24,7 @@ import { FormServerErrorCodes, type ServerActionError } from "@lib/types/form-bu
 /*--------------------------------------------*
  * Local Relative
  *--------------------------------------------*/
-import { getSubmissionsByFormat } from "../../../actions";
+import { getSubmissionsByFormat, getTemplateHasFileInput } from "../../../actions";
 import { FormBuilderError } from "../../../exceptions";
 import {
   createIndividualResponseFiles,
@@ -73,6 +73,10 @@ export const downloadResponses = async ({
   onDownloadComplete,
   onClose,
 }: DownloadResponsesOptions) => {
+  // Responses are only fetched one at a time when attachments are involved. If the check fails
+  // (undefined), fall back to the sequential path since it handles every case.
+  const templateHasFileInput = (await getTemplateHasFileInput({ formID: formId, version })) ?? true;
+
   const downloadFailures: DownloadFailure[] = [];
 
   const finishZipDownload = async (zip: JSZip, recoveryCopy?: Blob) => {
@@ -218,10 +222,52 @@ export const downloadResponses = async ({
     onDownloadComplete(filteredIds);
   };
 
+  // Without file inputs there are no short-lived attachment links, so fetch everything at once.
+  const fetchAllResponsesAtOnce = async <Response extends object>(
+    responseFormat: DownloadFormat
+  ): Promise<Response> => {
+    setDownloadProgress({ phase: "responses", response: 0, total: filteredIds.length });
+    const response = (await getSubmissionsByFormat({
+      formID: formId,
+      ids: filteredIds,
+      format: responseFormat,
+      lang: language,
+      version,
+      includeAttachments: false,
+      trackDownload: true,
+    })) as Response | ServerActionError;
+
+    throwOnServerActionError(response);
+
+    setDownloadProgress({
+      phase: "responses",
+      response: filteredIds.length,
+      total: filteredIds.length,
+    });
+    trackDownloadFormat(formId, responseFormat, filteredIds.length);
+    return response;
+  };
+
+  const finishSingleRequestZip = async (zip: JSZip) => {
+    const fileName = getVersionedZipFileName(`${filePrefix}responses-reponses.zip`, version);
+    await generateDownloadZip({ zip, fileName, formId, setDownloadProgress });
+    onDownloadComplete(filteredIds);
+  };
+
   const downloadSimpleFormatArchive = async <T>(
     archiveFormat: typeof DownloadFormat.CSV | typeof DownloadFormat.JSON,
     adapter: ArchiveAdapter<T>
   ) => {
+    if (!templateHasFileInput) {
+      const allResponses = await fetchAllResponsesAtOnce<SimpleResponse>(archiveFormat);
+      const zip = new JSZip();
+      createIndividualResponseFiles(archiveFormat, allResponses, "").forEach(({ name, content }) =>
+        zip.file(name, content)
+      );
+      await finishSingleRequestZip(zip);
+      return;
+    }
+
     const response = (await getSubmissionsByFormat({
       formID: formId,
       ids: filteredIds,
@@ -266,6 +312,17 @@ export const downloadResponses = async ({
   };
 
   const downloadHtmlArchive = async () => {
+    if (!templateHasFileInput) {
+      const allResponses = await fetchAllResponsesAtOnce<HtmlZippedResponse>(
+        DownloadFormat.HTML_ZIPPED
+      );
+      const zip = new JSZip();
+      zip.file("_receipt-recu.html", allResponses.receipt);
+      allResponses.responses.forEach(({ id, html }) => zip.file(`${id}.html`, html));
+      await finishSingleRequestZip(zip);
+      return;
+    }
+
     const response = (await getSubmissionsByFormat({
       formID: formId,
       ids: filteredIds,

@@ -43,6 +43,7 @@ import type { Response } from "@gcforms/types";
 import { FeatureFlags } from "@lib/cache/types";
 import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { getFormSubmissionAttachmentDownloadLink } from "@lib/vault/getFormSubmissionAttachmentDownloadLink";
+import { FormElement, FormElementTypes } from "@gcforms/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -114,6 +115,62 @@ export const fetchSubmissions = AuthenticatedAction(
       } catch (e) {
         logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
         return { error: true, submissions: [] };
+      }
+    });
+  }
+);
+
+const hasFileInputElement = (formElements: FormElement[]): boolean => {
+  const checkForFileInput = (elements?: FormElement[]): boolean => {
+    if (!elements) return false;
+
+    return elements.some(
+      (element) =>
+        element.type === FormElementTypes.fileInput ||
+        (element.properties?.subElements && checkForFileInput(element.properties.subElements))
+    );
+  };
+
+  return checkForFileInput(formElements);
+};
+
+export const getTemplateHasFileInput = AuthenticatedAction(
+  async (
+    session,
+    {
+      formID,
+      version,
+    }: {
+      formID: string;
+      version?: ResponseVersion;
+    }
+  ) => {
+    return traceFunction("getTemplateHasFileInput", async () => {
+      try {
+        const templateVersionNumber = parseTemplateVersionNumber(version) ?? undefined;
+
+        if (version && templateVersionNumber === undefined) {
+          throw new FormBuilderError(`Invalid template version: ${version}`);
+        }
+
+        let fullFormTemplate = await getFullTemplateByID(formID, undefined, templateVersionNumber);
+
+        // Mirror getSubmissionsByFormat: version 1 may predate versioned templates.
+        if (fullFormTemplate === null && templateVersionNumber === 1) {
+          fullFormTemplate = await getFullTemplateByID(formID);
+        }
+
+        if (fullFormTemplate === null) {
+          logMessage.warn(`getTemplateHasFileInput form not found: ${formID}`);
+          throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
+        }
+
+        return hasFileInputElement(fullFormTemplate.form.elements);
+      } catch (e) {
+        logMessage.error(
+          `Error fetching template version for form ${formID}: ${(e as Error).message}`
+        );
+        return;
       }
     });
   }
