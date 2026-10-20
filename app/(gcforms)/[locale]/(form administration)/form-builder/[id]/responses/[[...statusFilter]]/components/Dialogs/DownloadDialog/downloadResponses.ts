@@ -46,6 +46,20 @@ import type {
   SimpleResponse,
 } from "./DownloadDialog.types";
 
+const ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
+const ZIP_MANIFEST_RESERVE_BYTES = 2 * 1024 * 1024;
+const ZIP_ENTRY_OVERHEAD_BYTES = 4096;
+
+const estimateZipEntrySize = (path: string, data: string | Blob | Uint8Array | ArrayBuffer) => {
+  const dataSize =
+    typeof data === "string"
+      ? new TextEncoder().encode(data).byteLength
+      : data instanceof Blob
+        ? data.size
+        : data.byteLength;
+  return dataSize + new TextEncoder().encode(path).byteLength * 8 + ZIP_ENTRY_OVERHEAD_BYTES;
+};
+
 const trackDownloadFormat = (formId: string, format: DownloadFormat, numberOfRecords: number) => {
   ga("download_format", {
     formID: formId,
@@ -78,6 +92,23 @@ export const downloadResponses = async ({
   const templateHasFileInput = (await getTemplateHasFileInput({ formID: formId, version })) ?? true;
 
   const downloadFailures: DownloadFailure[] = [];
+  const zipEntrySizes = new Map<string, number>();
+  let zipSizeBytes = 0;
+  let zipSizeLimitReached = false;
+
+  const addZipFile = (zip: JSZip, path: string, data: string | Blob | Uint8Array | ArrayBuffer) => {
+    const entrySize = estimateZipEntrySize(path, data);
+    const nextSize = zipSizeBytes - (zipEntrySizes.get(path) ?? 0) + entrySize;
+    if (nextSize > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES) {
+      zipSizeLimitReached = true;
+      return false;
+    }
+
+    zip.file(path, data);
+    zipEntrySizes.set(path, entrySize);
+    zipSizeBytes = nextSize;
+    return true;
+  };
 
   const finishZipDownload = async (zip: JSZip, recoveryCopy?: Blob) => {
     const fileName = getVersionedZipFileName(`${filePrefix}responses-reponses.zip`, version);
@@ -164,6 +195,7 @@ export const downloadResponses = async ({
       },
       refreshDownloadLink: refreshAttachmentDownloadLink,
       writeFailureManifest: false,
+      addFileToZip: (path, data) => addZipFile(zip, path, data),
     });
     downloadFailures.push(...failures);
   };
@@ -174,6 +206,11 @@ export const downloadResponses = async ({
   ) =>
     processSequentially(filteredIds, async (responseId, index) => {
       setDownloadProgress({ phase: "responses", response: index + 1, total: filteredIds.length });
+      if (zipSizeLimitReached) {
+        downloadFailures.push({ responseId, reason: "Archive size limit reached" });
+        return;
+      }
+
       try {
         await processResponse(responseId, index);
       } catch (err) {
@@ -283,8 +320,9 @@ export const downloadResponses = async ({
 
     trackDownloadFormat(formId, archiveFormat, filteredIds.length);
     const zip = new JSZip();
-    zip.file("receipt-recu.html", response.receipt);
+    addZipFile(zip, "receipt-recu.html", response.receipt);
     let content = adapter.initialize(response);
+    addZipFile(zip, adapter.responseFileName, adapter.serialize(content));
 
     await processResponseQueue(async (responseId, index) => {
       const queuedResponse = (await getSubmissionsByFormat({
@@ -299,12 +337,16 @@ export const downloadResponses = async ({
 
       throwOnServerActionError(queuedResponse);
 
-      content = adapter.append(content, queuedResponse);
+      const nextContent = adapter.append(content, queuedResponse);
+      if (!addZipFile(zip, adapter.responseFileName, adapter.serialize(nextContent))) {
+        downloadFailures.push({ responseId, reason: "Archive size limit reached" });
+        return;
+      }
+      content = nextContent;
       await addAttachmentsToZipAndRecordFailures(zip, queuedResponse.attachments, index + 1);
     });
 
     const serializedContent = adapter.serialize(content);
-    zip.file(adapter.responseFileName, serializedContent);
     await finishZip(zip, [
       { path: "receipt-recu.html", data: response.receipt },
       { path: adapter.responseFileName, data: serializedContent },
@@ -338,7 +380,7 @@ export const downloadResponses = async ({
 
     trackDownloadFormat(formId, DownloadFormat.HTML_ZIPPED, filteredIds.length);
     const zip = new JSZip();
-    zip.file("_receipt-recu.html", response.receipt);
+    addZipFile(zip, "_receipt-recu.html", response.receipt);
     const recoveryFiles = [{ path: "_receipt-recu.html", data: response.receipt }];
 
     await processResponseQueue(async (responseId, index) => {
@@ -354,9 +396,17 @@ export const downloadResponses = async ({
       throwOnServerActionError(queuedResponse);
 
       queuedResponse.responses.forEach(({ id, html }) => {
-        zip.file(`${id}.html`, html);
-        recoveryFiles.push({ path: `${id}.html`, data: html });
+        if (addZipFile(zip, `${id}.html`, html)) {
+          recoveryFiles.push({ path: `${id}.html`, data: html });
+        } else {
+          downloadFailures.push({
+            responseId,
+            filename: `${id}.html`,
+            reason: "Archive size limit reached",
+          });
+        }
       });
+      if (zipSizeLimitReached) return;
       await addAttachmentsToZipAndRecordFailures(zip, queuedResponse.attachments, index + 1);
     });
 
