@@ -129,13 +129,9 @@ export const downloadResponses = async ({
     return {
       add: (path: string, data: ZipEntryData) => {
         const entrySize = estimateZipEntrySize(path, data);
-        const previousSize = entrySizes.get(path) ?? 0;
-        const nextSize =
-          zipSizeBytes -
-          (zipEntrySizes.get(path) ?? 0) +
-          stagedSizeBytes -
-          previousSize +
-          entrySize;
+        const previousSize = entrySizes.get(path) ?? zipEntrySizes.get(path) ?? 0;
+        const nextStagedSizeBytes = stagedSizeBytes - previousSize + entrySize;
+        const nextSize = zipSizeBytes + nextStagedSizeBytes;
         if (nextSize > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES) {
           zipSizeLimitReached = true;
           return false;
@@ -143,7 +139,7 @@ export const downloadResponses = async ({
 
         files.set(path, data);
         entrySizes.set(path, entrySize);
-        stagedSizeBytes = stagedSizeBytes - previousSize + entrySize;
+        stagedSizeBytes = nextStagedSizeBytes;
         return true;
       },
       commit: (zip: JSZip) => files.forEach((data, path) => addZipFile(zip, path, data)),
