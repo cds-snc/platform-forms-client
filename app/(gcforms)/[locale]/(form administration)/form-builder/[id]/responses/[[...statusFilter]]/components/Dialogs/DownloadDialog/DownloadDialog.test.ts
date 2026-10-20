@@ -29,7 +29,11 @@ describe("createIndividualResponseFiles", () => {
       )
     ).toEqual([
       { name: "form-receipt-recu.html", content: "receipt" },
-      { name: "form-responses-reponses.csv", content: "\uFEFFresponses", contentType: undefined },
+      {
+        name: "form-responses-reponses.csv",
+        content: "\uFEFFresponses",
+        contentType: "text/csv;charset=utf-8",
+      },
     ]);
   });
 

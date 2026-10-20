@@ -30,6 +30,11 @@ export type SimpleDownloadFormat = Extract<DownloadFormat, "csv" | "json">;
 
 export type SimpleResponse = CSVResponse | JSONResponse;
 
+export type SimpleResponseByFormat = {
+  [DownloadFormat.CSV]: CSVResponse;
+  [DownloadFormat.JSON]: JSONResponse;
+};
+
 export type ArchiveAdapter<T> = {
   responseFileName: string;
   initialize: (response: SimpleResponse) => T;
@@ -43,14 +48,13 @@ export type DownloadFile = {
   contentType?: string;
 };
 
-export type ResponseFileConfig = Record<
-  SimpleDownloadFormat,
-  {
+export type ResponseFileConfig = {
+  [Format in SimpleDownloadFormat]: {
     name: string;
-    content: (response: SimpleResponse) => string;
+    content: (response: SimpleResponseByFormat[Format]) => string;
     contentType?: string;
-  }
->;
+  };
+};
 
 export type DownloadResponsesOptions = {
   formId: string;

@@ -15,6 +15,7 @@ import type {
   DownloadFile,
   ResponseFileConfig,
   SimpleDownloadFormat,
+  SimpleResponseByFormat,
 } from "./DownloadDialog.types";
 
 // Update this list when the API adds another format supported by the dialog.
@@ -27,21 +28,19 @@ export const availableDownloadFormats: DownloadFormat[] = [
 const responseFileConfig = {
   [DownloadFormat.CSV]: {
     name: "responses-reponses.csv",
-    content: (response: CSVResponse | JSONResponse) =>
-      `\uFEFF${(response as CSVResponse).responses}`,
-    contentType: undefined,
+    content: (response: CSVResponse) => `\uFEFF${response.responses}`,
+    contentType: "text/csv;charset=utf-8",
   },
   [DownloadFormat.JSON]: {
     name: "responses-reponses.json",
-    content: (response: CSVResponse | JSONResponse) =>
-      JSON.stringify((response as JSONResponse).responses),
+    content: (response: JSONResponse) => JSON.stringify(response.responses),
     contentType: "application/json",
   },
 } satisfies ResponseFileConfig;
 
-export const createIndividualResponseFiles = (
-  format: SimpleDownloadFormat,
-  response: CSVResponse | JSONResponse,
+export const createIndividualResponseFiles = <Format extends SimpleDownloadFormat>(
+  format: Format,
+  response: SimpleResponseByFormat[Format],
   filePrefix: string
 ): DownloadFile[] => {
   const responseFile = responseFileConfig[format];
