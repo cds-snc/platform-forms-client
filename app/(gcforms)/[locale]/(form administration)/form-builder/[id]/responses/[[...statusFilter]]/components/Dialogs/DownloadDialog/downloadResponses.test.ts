@@ -144,9 +144,9 @@ describe("downloadResponses", () => {
     vi.stubGlobal(
       "TextEncoder",
       class extends OriginalTextEncoder {
-        encode(input?: string) {
+        encode(input?: string): Uint8Array<ArrayBuffer> {
           if (input === "oversized response") {
-            return { byteLength: 499 * 1024 * 1024 } as unknown as Uint8Array;
+            return { byteLength: 499 * 1024 * 1024 } as unknown as Uint8Array<ArrayBuffer>;
           }
           return super.encode(input);
         }
