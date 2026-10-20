@@ -96,11 +96,21 @@ export const downloadResponses = async ({
   const zipEntrySizes = new Map<string, number>();
   let zipSizeBytes = 0;
   let zipSizeLimitReached = false;
+  let hasCommittedResponse = false;
 
-  const reserveZipFile = (path: string, data: ZipEntryData) => {
+  // The limit is only enforced once a response is in the ZIP, so a single response larger than
+  // the limit is still downloaded rather than blocking the user entirely.
+  const exceedsZipSizeLimit = (sizeBytes: number) =>
+    hasCommittedResponse && sizeBytes > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES;
+
+  const reserveZipFile = (
+    path: string,
+    data: ZipEntryData,
+    { enforceLimit = true }: { enforceLimit?: boolean } = {}
+  ) => {
     const entrySize = estimateZipEntrySize(path, data);
     const nextSize = zipSizeBytes - (zipEntrySizes.get(path) ?? 0) + entrySize;
-    if (nextSize > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES) {
+    if (enforceLimit && exceedsZipSizeLimit(nextSize)) {
       zipSizeLimitReached = true;
       return false;
     }
@@ -110,8 +120,13 @@ export const downloadResponses = async ({
     return true;
   };
 
-  const addZipFile = (zip: JSZip, path: string, data: ZipEntryData) => {
-    if (!reserveZipFile(path, data)) return false;
+  const addZipFile = (
+    zip: JSZip,
+    path: string,
+    data: ZipEntryData,
+    options?: { enforceLimit?: boolean }
+  ) => {
+    if (!reserveZipFile(path, data, options)) return false;
     zip.file(path, data);
     return true;
   };
@@ -132,7 +147,7 @@ export const downloadResponses = async ({
         const previousSize = entrySizes.get(path) ?? zipEntrySizes.get(path) ?? 0;
         const nextStagedSizeBytes = stagedSizeBytes - previousSize + entrySize;
         const nextSize = zipSizeBytes + nextStagedSizeBytes;
-        if (nextSize > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES) {
+        if (exceedsZipSizeLimit(nextSize)) {
           zipSizeLimitReached = true;
           return false;
         }
@@ -142,7 +157,14 @@ export const downloadResponses = async ({
         stagedSizeBytes = nextStagedSizeBytes;
         return true;
       },
-      commit: (zip: JSZip) => files.forEach((data, path) => addZipFile(zip, path, data)),
+      // Sizes were already checked while staging, so commit without re-checking the limit.
+      commit: (zip: JSZip) => {
+        files.forEach((data, path) => addZipFile(zip, path, data, { enforceLimit: false }));
+        hasCommittedResponse = true;
+        if (zipSizeBytes > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES) {
+          zipSizeLimitReached = true;
+        }
+      },
     };
   };
 
@@ -306,7 +328,11 @@ export const downloadResponses = async ({
         }
       }
 
-      if (!receiptRegenerationFailed && addZipFile(zip, receiptPath, receipt)) {
+      // The receipt was reserved before any responses were added, so it is always included.
+      if (
+        !receiptRegenerationFailed &&
+        addZipFile(zip, receiptPath, receipt, { enforceLimit: false })
+      ) {
         recoveryFiles.unshift({ path: receiptPath, data: receipt });
       }
     }

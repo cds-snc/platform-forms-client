@@ -178,30 +178,38 @@ describe("downloadResponses", () => {
     ]);
   });
 
-  it("stops fetching responses when an entry exceeds the ZIP size limit", async () => {
-    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+  const stubResponseSizes = (sizesInMb: Record<string, number>) =>
     vi.stubGlobal(
       "TextEncoder",
       class extends OriginalTextEncoder {
         encode(input?: string): Uint8Array<ArrayBuffer> {
-          if (input === "oversized response") {
-            return { byteLength: 499 * 1024 * 1024 } as unknown as Uint8Array<ArrayBuffer>;
+          if (input !== undefined && input in sizesInMb) {
+            return {
+              byteLength: sizesInMb[input] * 1024 * 1024,
+            } as unknown as Uint8Array<ArrayBuffer>;
           }
           return super.encode(input);
         }
       }
     );
+
+  const mockResponseHtml = (getHtml: (responseId: string) => string) =>
     mocks.getSubmissionsByFormat.mockImplementation(({ ids, trackDownload }) => {
       if (trackDownload) return Promise.resolve({});
-      if (ids.length > 1) {
-        return Promise.resolve({ receipt: "receipt", responses: [], attachments: [] });
+      if (ids.length > 1 || ids.length === 0) {
+        return Promise.resolve({ receipt: ids.join(","), responses: [], attachments: [] });
       }
       return Promise.resolve({
-        receipt: "receipt",
-        responses: [{ id: ids[0], html: "oversized response" }],
+        receipt: ids.join(","),
+        responses: [{ id: ids[0], html: getHtml(ids[0]) }],
         attachments: [],
       });
     });
+
+  it("always downloads the first response even when it exceeds the ZIP size limit", async () => {
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+    stubResponseSizes({ "oversized response": 600 });
+    mockResponseHtml(() => "oversized response");
 
     try {
       await downloadResponses(createOptions(["response-1", "response-2"], onDownloadComplete));
@@ -210,13 +218,65 @@ describe("downloadResponses", () => {
     }
 
     const responseFetches = mocks.getSubmissionsByFormat.mock.calls.filter(
-      ([options]) => options.ids.length === 1 && !options.trackDownload
+      ([options]) =>
+        options.ids.length === 1 && !options.trackDownload && options.includeResponses !== false
     );
     expect(responseFetches.map(([options]) => options.ids)).toEqual([["response-1"]]);
     expect(mocks.createRecoveryCopy).not.toHaveBeenCalled();
-    expect(
-      mocks.generateDownloadZip.mock.calls[0][0].zip.files["_receipt-recu.html"]
-    ).toBeUndefined();
-    expect(onDownloadComplete).toHaveBeenCalledWith([], true);
+    const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
+    expect(zip.files["response-1.html"]).toBeDefined();
+    expect(zip.files["response-2.html"]).toBeUndefined();
+    await expect(zip.files["_receipt-recu.html"].async("string")).resolves.toBe("response-1");
+    const trackingCall = mocks.getSubmissionsByFormat.mock.calls.find(
+      ([options]) => options.trackDownload
+    );
+    expect(trackingCall?.[0].ids).toEqual(["response-1"]);
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], true);
+  });
+
+  it("downloads a single response that exceeds the ZIP size limit without failures", async () => {
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+    stubResponseSizes({ "oversized response": 600 });
+    mockResponseHtml(() => "oversized response");
+
+    try {
+      await downloadResponses(createOptions(["response-1"], onDownloadComplete));
+    } finally {
+      vi.unstubAllGlobals();
+    }
+
+    const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
+    expect(zip.files["response-1.html"]).toBeDefined();
+    expect(zip.files["response-download-errors.json"]).toBeUndefined();
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], false);
+  });
+
+  it("excludes later responses that would exceed the ZIP size limit", async () => {
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+    stubResponseSizes({ "large response 1": 300, "large response 2": 300 });
+    mockResponseHtml((responseId) =>
+      responseId === "response-1" ? "large response 1" : "large response 2"
+    );
+
+    try {
+      await downloadResponses(
+        createOptions(["response-1", "response-2", "response-3"], onDownloadComplete)
+      );
+    } finally {
+      vi.unstubAllGlobals();
+    }
+
+    const responseFetches = mocks.getSubmissionsByFormat.mock.calls.filter(
+      ([options]) =>
+        options.ids.length === 1 && !options.trackDownload && options.includeResponses !== false
+    );
+    expect(responseFetches.map(([options]) => options.ids)).toEqual([
+      ["response-1"],
+      ["response-2"],
+    ]);
+    const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
+    expect(zip.files["response-1.html"]).toBeDefined();
+    expect(zip.files["response-2.html"]).toBeUndefined();
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], true);
   });
 });
