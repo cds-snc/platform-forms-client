@@ -7,13 +7,19 @@ import { setupFonts } from "../../helpers/setupFonts";
 
 import "@root/styles/app.css";
 
-const { mockFileUploadEnabled } = vi.hoisted(() => ({
+const { mockFileUploadEnabled, mockDownloadResponses } = vi.hoisted(() => ({
   mockFileUploadEnabled: vi.fn(() => false),
+  mockDownloadResponses: vi.fn(),
 }));
 
 vi.mock("@lib/hooks/useFeatureFlags", () => ({
   useFeatureFlags: () => ({ getFlag: mockFileUploadEnabled }),
 }));
+
+vi.mock(
+  "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses/[[...statusFilter]]/components/Dialogs/DownloadDialog/downloadResponses",
+  () => ({ downloadResponses: mockDownloadResponses })
+);
 
 vi.mock(
   "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses/[[...statusFilter]]/actions",
@@ -50,6 +56,7 @@ describe("<DownloadDialog />", () => {
 
   beforeEach(() => {
     mockFileUploadEnabled.mockReturnValue(false);
+    mockDownloadResponses.mockReset();
   });
 
   it("does not render the version selector when versions are not provided", async () => {
@@ -71,6 +78,67 @@ describe("<DownloadDialog />", () => {
 
     const checkboxes = await page.getByRole("checkbox").all();
     expect(checkboxes).toHaveLength(0);
+  });
+
+  it("hides progress status when file uploads are disabled", async () => {
+    mockDownloadResponses.mockImplementationOnce(
+      async (options: {
+        setDownloadProgress: (progress: {
+          phase: "responses";
+          response: number;
+          total: number;
+        }) => void;
+      }) => {
+        options.setDownloadProgress({ phase: "responses", response: 1, total: 2 });
+      }
+    );
+    await render(
+      <DownloadDialog
+        {...defaultProps}
+        checkedMeta={[
+          { name: "response-1", version: "v1" },
+          { name: "response-2", version: "v1" },
+        ]}
+      />
+    );
+
+    await userEvent.click(
+      page.getByRole("button", { name: "downloadResponsesModals.downloadDialog.download" })
+    );
+
+    expect(mockDownloadResponses).toHaveBeenCalledOnce();
+    expect(await page.getByRole("status").all()).toHaveLength(0);
+  });
+
+  it("shows progress status when file uploads are enabled", async () => {
+    mockFileUploadEnabled.mockReturnValue(true);
+    mockDownloadResponses.mockImplementationOnce(
+      async (options: {
+        setDownloadProgress: (progress: {
+          phase: "responses";
+          response: number;
+          total: number;
+        }) => void;
+      }) => {
+        options.setDownloadProgress({ phase: "responses", response: 1, total: 2 });
+      }
+    );
+    await render(
+      <DownloadDialog
+        {...defaultProps}
+        checkedMeta={[
+          { name: "response-1", version: "v1" },
+          { name: "response-2", version: "v1" },
+        ]}
+      />
+    );
+
+    await userEvent.click(
+      page.getByRole("button", { name: "downloadResponsesModals.downloadDialog.download" })
+    );
+
+    expect(mockDownloadResponses).toHaveBeenCalledOnce();
+    await expect.element(page.getByRole("status")).toBeVisible();
   });
 
   it("does not render the version selector when all matched versions are the same", async () => {
