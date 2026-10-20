@@ -46,7 +46,7 @@ import type {
   SimpleResponse,
 } from "./DownloadDialog.types";
 
-const ZIP_SIZE_LIMIT_BYTES = 15 * 1024 * 1024;
+const ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
 const ZIP_MANIFEST_RESERVE_BYTES = 2 * 1024 * 1024;
 const ZIP_ENTRY_OVERHEAD_BYTES = 4096;
 type ZipEntryData = string | Blob | Uint8Array | ArrayBuffer;
