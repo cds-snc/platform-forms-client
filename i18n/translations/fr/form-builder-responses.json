@@ -97,6 +97,10 @@
     "download": "Télécharger",
     "delete": "Supprimer",
     "movedToDownloaded": "Déplacée vers Téléchargements",
+    "partialDownload": {
+      "title": "Certains fichiers n'ont pas été inclus dans le téléchargement",
+      "body": "Consultez le manifeste d'erreurs ou la note de la copie de récupération dans le fichier ZIP. Les soumissions entièrement téléchargées ont été déplacées vers Téléchargements; celles qui ne l'ont pas été restent disponibles pour le téléchargement."
+    },
     "header": {
       "tableTitle": "Tableau de réponses",
       "select": "Sélectionner",

@@ -77,9 +77,9 @@ export const DownloadDialog = ({
     dialogRef.current?.close();
   };
 
-  const handleDownloadComplete = (filteredIds: string[]) => {
+  const handleDownloadComplete = (filteredIds: string[], hasDownloadFailures = false) => {
     setIsDownloading(false);
-    onSuccessfulDownload(filteredIds);
+    onSuccessfulDownload(filteredIds, hasDownloadFailures);
     handleClose();
   };
 

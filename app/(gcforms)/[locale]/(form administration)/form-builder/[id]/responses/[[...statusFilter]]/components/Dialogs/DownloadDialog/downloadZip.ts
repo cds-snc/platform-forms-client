@@ -68,17 +68,19 @@ export const generateDownloadZip = async ({
   fileName,
   formId,
   setDownloadProgress,
-}: GenerateDownloadZipOptions) => {
+}: GenerateDownloadZipOptions): Promise<boolean> => {
   try {
     setDownloadProgress({ phase: "zip", percent: 0 });
     const blob = await zip.generateAsync({ type: "blob", streamFiles: true }, ({ percent }) =>
       setDownloadProgress({ phase: "zip", percent })
     );
     downloadFileFromBlob(blob, fileName);
+    return false;
   } catch (err) {
     if (!recoveryCopy) throw err;
     logMessage.error(err as Error);
     logMessage.warn(`Downloading response ZIP recovery copy for form ${formId}`);
     downloadFileFromBlob(recoveryCopy, fileName);
+    return true;
   }
 };

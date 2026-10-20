@@ -77,12 +77,25 @@ export const downloadResponses = async ({
 
   const finishZipDownload = async (zip: JSZip, recoveryCopy?: Blob) => {
     const fileName = getVersionedZipFileName(`${filePrefix}responses-reponses.zip`, version);
-    await generateDownloadZip({ zip, recoveryCopy, fileName, formId, setDownloadProgress });
+    const usedRecoveryCopy = await generateDownloadZip({
+      zip,
+      recoveryCopy,
+      fileName,
+      formId,
+      setDownloadProgress,
+    });
+    const hasDownloadFailures = downloadFailures.length > 0 || usedRecoveryCopy;
 
-    const fullyDownloadedResponseIds = filteredIds.filter(
-      (responseId) => !downloadFailures.some((failure) => failure.responseId === responseId)
-    );
+    const fullyDownloadedResponseIds = usedRecoveryCopy
+      ? []
+      : filteredIds.filter(
+          (responseId) => !downloadFailures.some((failure) => failure.responseId === responseId)
+        );
     if (fullyDownloadedResponseIds.length === 0) {
+      if (hasDownloadFailures) {
+        onDownloadComplete([], true);
+        return;
+      }
       setIsDownloading(false);
       onClose();
       return;
@@ -113,7 +126,7 @@ export const downloadResponses = async ({
     }
 
     if (trackingSucceeded) {
-      onDownloadComplete(fullyDownloadedResponseIds);
+      onDownloadComplete(fullyDownloadedResponseIds, hasDownloadFailures);
       return;
     }
 

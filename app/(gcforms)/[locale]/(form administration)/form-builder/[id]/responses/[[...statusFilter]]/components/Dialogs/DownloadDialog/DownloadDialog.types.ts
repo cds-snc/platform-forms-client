@@ -66,7 +66,7 @@ export type DownloadResponsesOptions = {
   shouldCreateZip: boolean;
   setDownloadProgress: (progress: DownloadProgress) => void;
   setIsDownloading: (isDownloading: boolean) => void;
-  onDownloadComplete: (filteredIds: string[]) => void;
+  onDownloadComplete: (filteredIds: string[], hasDownloadFailures?: boolean) => void;
   onClose: () => void;
 };
 
@@ -92,7 +92,7 @@ export type DownloadDialogProps = {
   setDownloadError: Dispatch<SetStateAction<boolean | string>>;
   formId: string;
   formName: string;
-  onSuccessfulDownload: (filteredIds: string[]) => void;
+  onSuccessfulDownload: (filteredIds: string[], hasDownloadFailures?: boolean) => void;
   responseDownloadLimit: number;
   checkedMeta?: { id?: string; name?: string; version?: string | number | null }[];
 };

@@ -97,6 +97,10 @@
     "download": "Download",
     "delete": "Delete",
     "movedToDownloaded": "Moved to Downloaded",
+    "partialDownload": {
+      "title": "Some files were not included in the download",
+      "body": "Check the ZIP's error manifest or recovery note. Fully downloaded submissions were moved to Downloaded; submissions that were not fully downloaded remain available to download."
+    },
     "header": {
       "tableTitle": "Responses table",
       "select": "Select",

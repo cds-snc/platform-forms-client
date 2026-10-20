@@ -56,6 +56,7 @@ export const DownloadTable = ({
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
+  const [showPartialDownloadWarning, setShowPartialDownloadWarning] = useState(false);
   const [removedRows, setRemovedRows] = useState<string[]>([]);
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
@@ -114,6 +115,12 @@ export const DownloadTable = ({
 
   return (
     <>
+      {showPartialDownloadWarning && (
+        <Alert.Warning className="mb-4">
+          <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
+          <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
+        </Alert.Warning>
+      )}
       {showDownloadSuccess && (
         <Alert.Success className="mb-4">
           <Alert.Title>{t(`${showDownloadSuccess}.title`)}</Alert.Title>
@@ -356,15 +363,20 @@ export const DownloadTable = ({
         setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
         formName={formName}
-        onSuccessfulDownload={(filteredIds) => {
-          setRemovedRows([...removedRows, ...filteredIds]);
-          tableItemsDispatch({
-            type: TableActions.UNCHECK,
-            payload: { ids: filteredIds },
-          });
+        onSuccessfulDownload={(filteredIds, hasDownloadFailures = false) => {
+          setShowPartialDownloadWarning(hasDownloadFailures);
+          if (filteredIds.length > 0) {
+            setRemovedRows([...removedRows, ...filteredIds]);
+            tableItemsDispatch({
+              type: TableActions.UNCHECK,
+              payload: { ids: filteredIds },
+            });
+          }
           // router.replace(router.asPath, undefined, { scroll: false });
           if (statusFilter === StatusFilter.NEW) {
-            setShowDownloadSuccess("downloadSuccess");
+            setShowDownloadSuccess(
+              filteredIds.length > 0 && !hasDownloadFailures ? "downloadSuccess" : false
+            );
           }
         }}
         setDownloadError={setDownloadError}
