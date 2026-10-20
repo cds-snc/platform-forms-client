@@ -449,4 +449,13 @@ export const options = [
     logoTitleEn: "Major Projects Office",
     logoTitleFr: "Bureau des grands projets",
   },
+  {
+    name: "chrc",
+    urlEn: "https://www.chrc-ccdp.gc.ca/",
+    urlFr: "https://www.ccdp-chrc.gc.ca/",
+    logoEn: "/img/branding/chrc-en.svg",
+    logoFr: "/img/branding/chrc-fr.svg",
+    logoTitleEn: "Canadian Human Rights Commission",
+    logoTitleFr: "Commission canadienne des droits de la personne",
+  },
 ];
