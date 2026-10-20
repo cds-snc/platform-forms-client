@@ -54,7 +54,7 @@ const trackDownloadFormat = (formId: string, format: DownloadFormat, numberOfRec
   });
 };
 
-const assertNoServerActionError: <Response extends object>(
+const throwOnServerActionError: <Response extends object>(
   response: Response | ServerActionError
 ) => asserts response is Response = (response) => {
   if ("error" in response) throw new FormBuilderError(response.error, response.code);
@@ -192,7 +192,7 @@ export const downloadResponses = async ({
       version,
     })) as CSVResponse | JSONResponse | ServerActionError;
 
-    assertNoServerActionError(response);
+    throwOnServerActionError(response);
 
     trackDownloadFormat(formId, individualFormat, filteredIds.length);
     createIndividualResponseFiles(individualFormat, response, filePrefix).forEach(
@@ -220,7 +220,7 @@ export const downloadResponses = async ({
       trackDownload: false,
     })) as SimpleResponse | ServerActionError;
 
-    assertNoServerActionError(response);
+    throwOnServerActionError(response);
 
     trackDownloadFormat(formId, archiveFormat, filteredIds.length);
     const zip = new JSZip();
@@ -238,7 +238,7 @@ export const downloadResponses = async ({
         trackDownload: false,
       })) as SimpleResponse | ServerActionError;
 
-      assertNoServerActionError(queuedResponse);
+      throwOnServerActionError(queuedResponse);
 
       content = adapter.append(content, queuedResponse);
       await addAttachmentsToZipAndRecordFailures(zip, queuedResponse.attachments, index + 1);
@@ -264,7 +264,7 @@ export const downloadResponses = async ({
       trackDownload: false,
     })) as HtmlZippedResponse | ServerActionError;
 
-    assertNoServerActionError(response);
+    throwOnServerActionError(response);
 
     trackDownloadFormat(formId, DownloadFormat.HTML_ZIPPED, filteredIds.length);
     const zip = new JSZip();
@@ -281,7 +281,7 @@ export const downloadResponses = async ({
         trackDownload: false,
       })) as HtmlZippedResponse | ServerActionError;
 
-      assertNoServerActionError(queuedResponse);
+      throwOnServerActionError(queuedResponse);
 
       queuedResponse.responses.forEach(({ id, html }) => {
         zip.file(`${id}.html`, html);
