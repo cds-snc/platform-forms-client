@@ -15,8 +15,10 @@ import type {
   DownloadFile,
   ResponseFileConfig,
   SimpleDownloadFormat,
-  SimpleResponseByFormat,
 } from "./DownloadDialog.types";
+
+const isCSVResponse = (response: CSVResponse | JSONResponse): response is CSVResponse =>
+  typeof response.responses === "string";
 
 // Update this list when the API adds another format supported by the dialog.
 export const availableDownloadFormats: DownloadFormat[] = [
@@ -38,21 +40,36 @@ const responseFileConfig = {
   },
 } satisfies ResponseFileConfig;
 
-export const createIndividualResponseFiles = <Format extends SimpleDownloadFormat>(
-  format: Format,
-  response: SimpleResponseByFormat[Format],
+export const createIndividualResponseFiles = (
+  format: SimpleDownloadFormat,
+  response: CSVResponse | JSONResponse,
   filePrefix: string
 ): DownloadFile[] => {
-  const responseFile = responseFileConfig[format];
+  let responseFile: DownloadFile;
 
-  return [
-    { name: `${filePrefix}receipt-recu.html`, content: response.receipt },
-    {
-      name: `${filePrefix}${responseFile.name}`,
-      content: responseFile.content(response),
-      contentType: responseFile.contentType,
-    },
-  ];
+  if (format === DownloadFormat.CSV) {
+    if (!isCSVResponse(response)) {
+      throw new TypeError("Expected CSV response data");
+    }
+    const config = responseFileConfig[DownloadFormat.CSV];
+    responseFile = {
+      name: `${filePrefix}${config.name}`,
+      content: config.content(response),
+      contentType: config.contentType,
+    };
+  } else {
+    if (isCSVResponse(response)) {
+      throw new TypeError("Expected JSON response data");
+    }
+    const config = responseFileConfig[DownloadFormat.JSON];
+    responseFile = {
+      name: `${filePrefix}${config.name}`,
+      content: config.content(response),
+      contentType: config.contentType,
+    };
+  }
+
+  return [{ name: `${filePrefix}receipt-recu.html`, content: response.receipt }, responseFile];
 };
 
 export const csvArchiveAdapter: ArchiveAdapter<string> = {
