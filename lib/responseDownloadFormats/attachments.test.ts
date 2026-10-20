@@ -165,6 +165,47 @@ describe("response attachment ZIP paths", () => {
     expect(maxConcurrentDownloads).toBe(1);
   });
 
+  it("stops fetching attachments after an entry exceeds the ZIP budget", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      blob: async () => new TextEncoder().encode("attachment contents"),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const zip = new JSZip();
+
+    const failures = await addResponseAttachmentsToZip(
+      zip,
+      [
+        {
+          responseId: "response-1",
+          attachments: ["first", "second", "third"].map((name) => ({
+            id: name,
+            name: `${name}.txt`,
+            downloadLink: `https://example.test/${name}`,
+            isPotentiallyMalicious: false,
+          })),
+        },
+      ],
+      {
+        addFileToZip: (path, data) => {
+          if (path.endsWith("second.txt")) return false;
+          zip.file(path, data);
+          return true;
+        },
+      }
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(failures).toEqual([
+      { responseId: "response-1", filename: "second.txt", reason: "Archive size limit reached" },
+      { responseId: "response-1", filename: "third.txt", reason: "Archive size limit reached" },
+    ]);
+    expect(Object.keys(zip.files)).toContain(
+      "file_attachments-fichiers_joints/response-1/first.txt"
+    );
+  });
+
   it("places potentially malicious files in a nested suspicious folder", () => {
     const path = getAttachmentZipPath("response-1", "upload.exe", true, new Set(), 0);
 

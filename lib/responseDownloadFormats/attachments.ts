@@ -69,10 +69,13 @@ export type FailedAttachmentDownload = {
   reason: string;
 };
 
+type ZipEntryData = string | Blob | Uint8Array | ArrayBuffer;
+
 type AddResponseAttachmentsOptions = {
   onProgress?: (progress: AttachmentDownloadProgress) => void;
   refreshDownloadLink?: (responseId: string, attachmentId: string) => Promise<string | undefined>;
   writeFailureManifest?: boolean;
+  addFileToZip?: (path: string, data: ZipEntryData) => boolean;
 };
 
 export const addResponseAttachmentsToZip = async (
@@ -89,11 +92,23 @@ export const addResponseAttachmentsToZip = async (
     Map<string, { originalName: string; actualName: string; isPotentiallyMalicious: boolean }>
   >();
   const failures: FailedAttachmentDownload[] = [];
+  let sizeLimitReached = false;
   let completed = 0;
 
   options.onProgress?.({ completed, total: attachments.length });
 
   const processAttachment = async ({ group, attachment, index }: (typeof attachments)[number]) => {
+    if (sizeLimitReached) {
+      failures.push({
+        responseId: group.responseId,
+        filename: attachment.name,
+        reason: "Archive size limit reached",
+      });
+      completed += 1;
+      options.onProgress?.({ completed, total: attachments.length, filename: attachment.name });
+      return;
+    }
+
     const usedNames = usedNamesByResponse.get(group.responseId) ?? new Set<string>();
     usedNamesByResponse.set(group.responseId, usedNames);
     const path = getAttachmentZipPath(
@@ -118,14 +133,26 @@ export const addResponseAttachmentsToZip = async (
           reason: `HTTP ${response.status}`,
         });
       } else {
-        zip.file(path, await response.blob());
-        const mapping = mappingsByResponse.get(group.responseId) ?? new Map();
-        mapping.set(attachment.id, {
-          originalName: attachment.name,
-          actualName: path.split("/").pop() ?? attachment.name,
-          isPotentiallyMalicious: attachment.isPotentiallyMalicious,
-        });
-        mappingsByResponse.set(group.responseId, mapping);
+        const blob = await response.blob();
+        const added = options.addFileToZip
+          ? options.addFileToZip(path, blob)
+          : (zip.file(path, blob), true);
+        if (!added) {
+          sizeLimitReached = true;
+          failures.push({
+            responseId: group.responseId,
+            filename: attachment.name,
+            reason: "Archive size limit reached",
+          });
+        } else {
+          const mapping = mappingsByResponse.get(group.responseId) ?? new Map();
+          mapping.set(attachment.id, {
+            originalName: attachment.name,
+            actualName: path.split("/").pop() ?? attachment.name,
+            isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+          });
+          mappingsByResponse.set(group.responseId, mapping);
+        }
       }
     } catch {
       failures.push({
@@ -143,10 +170,18 @@ export const addResponseAttachmentsToZip = async (
   await processSequentially(attachments, processAttachment);
 
   mappingsByResponse.forEach((mapping, responseId) => {
-    zip.file(
-      `${getResponseAttachmentFolderPath(responseId)}/${MAPPING_FILENAME}`,
-      JSON.stringify(Object.fromEntries(mapping), null, 2)
-    );
+    const path = `${getResponseAttachmentFolderPath(responseId)}/${MAPPING_FILENAME}`;
+    const contents = JSON.stringify(Object.fromEntries(mapping), null, 2);
+    const added = options.addFileToZip
+      ? options.addFileToZip(path, contents)
+      : (zip.file(path, contents), true);
+    if (!added) {
+      failures.push({
+        responseId,
+        filename: MAPPING_FILENAME,
+        reason: "Archive size limit reached",
+      });
+    }
   });
 
   if (failures.length > 0 && options.writeFailureManifest !== false) {
