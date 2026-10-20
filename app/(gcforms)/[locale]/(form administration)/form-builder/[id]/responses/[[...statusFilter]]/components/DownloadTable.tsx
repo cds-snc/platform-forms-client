@@ -15,7 +15,7 @@ import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { ActionsPanel } from "./ActionsPanel";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
-import { DownloadDialog } from "./Dialogs/DownloadDialog";
+import { DownloadDialog } from "./Dialogs/DownloadDialog/DownloadDialog";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";

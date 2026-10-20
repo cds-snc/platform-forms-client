@@ -2,7 +2,7 @@ import React from "react";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
-import { DownloadDialog } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses/[[...statusFilter]]/components/Dialogs/DownloadDialog";
+import { DownloadDialog } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses/[[...statusFilter]]/components/Dialogs/DownloadDialog/DownloadDialog";
 import { setupFonts } from "../../helpers/setupFonts";
 
 import "@root/styles/app.css";
