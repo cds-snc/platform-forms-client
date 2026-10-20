@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
+import type { DownloadResponsesOptions } from "./DownloadDialog.types";
 
 const mocks = vi.hoisted(() => ({
   addResponseAttachmentsToZip: vi.fn(),
@@ -25,7 +26,10 @@ vi.mock("./downloadZip", async (importOriginal) => {
 
 import { downloadResponses } from "./downloadResponses";
 
-const createOptions = (filteredIds: string[], onDownloadComplete: ReturnType<typeof vi.fn>) => ({
+const createOptions = (
+  filteredIds: string[],
+  onDownloadComplete: DownloadResponsesOptions["onDownloadComplete"]
+) => ({
   formId: "form-id",
   format: DownloadFormat.HTML_ZIPPED,
   language: "en" as const,
@@ -57,7 +61,7 @@ describe("downloadResponses", () => {
   });
 
   it("tracks only responses whose attachments were included", async () => {
-    const onDownloadComplete = vi.fn();
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
     mocks.addResponseAttachmentsToZip
       .mockResolvedValueOnce([
         { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
@@ -74,7 +78,7 @@ describe("downloadResponses", () => {
   });
 
   it("does not track responses when a recovery copy is downloaded", async () => {
-    const onDownloadComplete = vi.fn();
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
     mocks.generateDownloadZip.mockResolvedValue(true);
 
     await downloadResponses(createOptions(["response-1"], onDownloadComplete));
