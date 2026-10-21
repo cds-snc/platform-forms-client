@@ -1,15 +1,13 @@
 import { Setting } from "../generated/client";
 
-type SettingFixture = Setting;
-
 type SettingCollection = {
-  development: SettingFixture[];
-  production: SettingFixture[];
-  test: SettingFixture[];
-  [key: string]: SettingFixture[];
+  development: Setting[];
+  production: Setting[];
+  test: Setting[];
+  [key: string]: Setting[];
 };
 
-const brandingRequestFormSetting: SettingFixture = {
+const brandingRequestFormSetting: Setting = {
   internalId: "brandingRequestForm",
   nameEn: "Branding Request Form Setting",
   nameFr: "Formulaire de demande d'image de marque",
@@ -21,7 +19,7 @@ const brandingRequestFormSetting: SettingFixture = {
   value: null,
 };
 
-const nagwarePhaseEncouraged: SettingFixture = {
+const nagwarePhaseEncouraged: Setting = {
   internalId: "nagwarePhaseEncouraged",
   nameEn: "Nagware Encouraged Phase",
   nameFr: "Phase d'encouragement de Nagware",
@@ -34,7 +32,7 @@ const nagwarePhaseEncouraged: SettingFixture = {
   groupFr: "Nagware",
   value: "15",
 };
-const nagwarePhasePrompted: SettingFixture = {
+const nagwarePhasePrompted: Setting = {
   internalId: "nagwarePhasePrompted",
   nameEn: "Nagware Prompted Phase",
   nameFr: "Phase d'invite Nagware",
@@ -47,7 +45,7 @@ const nagwarePhasePrompted: SettingFixture = {
   groupFr: "Nagware",
   value: "21",
 };
-const nagwarePhaseWarned: SettingFixture = {
+const nagwarePhaseWarned: Setting = {
   internalId: "nagwarePhaseWarned",
   nameEn: "Nagware Warned Phase",
   nameFr: "Phase d'avertissement de Nagware",
@@ -61,7 +59,7 @@ const nagwarePhaseWarned: SettingFixture = {
   value: "35",
 };
 
-const nagwarePhaseEscalated: SettingFixture = {
+const nagwarePhaseEscalated: Setting = {
   internalId: "nagwarePhaseEscalated",
   nameEn: "Nagware Escalated Phase",
   nameFr: "Phase d'escalade de Nagware",
@@ -74,7 +72,7 @@ const nagwarePhaseEscalated: SettingFixture = {
   value: "46",
 };
 
-const responseDownloadLimit: SettingFixture = {
+const responseDownloadLimit: Setting = {
   internalId: "responseDownloadLimit",
   nameEn: "Limit the number of responses that can be downloaded at once",
   nameFr: "Limitez le nombre de réponses pouvant être téléchargées à la fois",
@@ -86,7 +84,7 @@ const responseDownloadLimit: SettingFixture = {
   value: "20",
 };
 
-const editLockRedirectIdleMs: SettingFixture = {
+const editLockRedirectIdleMs: Setting = {
   internalId: "editLockRedirectIdleMs",
   nameEn: "Edit lock idle redirect timeout (ms)",
   nameFr: "Délai de redirection d'inactivité du verrou d'édition (ms)",
@@ -99,7 +97,7 @@ const editLockRedirectIdleMs: SettingFixture = {
   value: "1800000",
 };
 
-const addressCompleteRetrieveRateLimitMax: SettingFixture = {
+const addressCompleteRetrieveRateLimitMax: Setting = {
   internalId: "addressCompleteRetrieveRateLimitMax",
   nameEn: "Address Complete Retrieve Rate Limit Max (count)",
   nameFr: "Limite maximale de récupération de l'adresse complète (nombre)",
@@ -112,7 +110,7 @@ const addressCompleteRetrieveRateLimitMax: SettingFixture = {
   value: "12",
 };
 
-const addressCompleteRateLimitWindowSeconds: SettingFixture = {
+const addressCompleteRateLimitWindowSeconds: Setting = {
   internalId: "addressCompleteRateLimitWindowSeconds",
   nameEn: "Address Complete Rate Limit Window",
   nameFr: "Fenêtre de limite de débit pour Address Complete",
@@ -125,7 +123,7 @@ const addressCompleteRateLimitWindowSeconds: SettingFixture = {
   value: "60",
 };
 
-const hCaptchaEnabledSetting: SettingFixture = {
+const hCaptchaEnabledSetting: Setting = {
   internalId: "hCaptchaEnabledSetting",
   nameEn: "hCaptcha Enabled Setting",
   nameFr: "Paramètre d'activation de hCaptcha",
@@ -137,7 +135,7 @@ const hCaptchaEnabledSetting: SettingFixture = {
   value: "false",
 };
 
-const enableClientErrorReporting: SettingFixture = {
+const enableClientErrorReporting: Setting = {
   internalId: "enableClientErrorReporting",
   nameEn: "Enable Client Error Reporting",
   nameFr: "Activer le rapport d'erreurs client",
