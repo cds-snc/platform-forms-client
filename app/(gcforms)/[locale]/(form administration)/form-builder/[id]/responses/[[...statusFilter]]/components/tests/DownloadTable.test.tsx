@@ -109,11 +109,23 @@ describe("Download Table", () => {
     );
     if (warnings.sizeLimitReached) {
       expect(rendered.getByText(/in smaller groups or one at a time/)).toBeInTheDocument();
+      if (!warnings.processingFailed) {
+        expect(
+          rendered.getByText("Download size limit reached").closest('[data-testid="alert"]')
+        ).toHaveFocus();
+      }
     }
     if (warnings.processingFailed) {
       expect(
         rendered.getByText(/Try downloading the remaining responses again/)
       ).toBeInTheDocument();
+      if (!warnings.sizeLimitReached) {
+        expect(
+          rendered
+            .getByText("Some responses could not be processed")
+            .closest('[data-testid="alert"]')
+        ).toHaveFocus();
+      }
     }
 
     await act(async () => {
