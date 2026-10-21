@@ -320,6 +320,35 @@ describe("mapAnswers", () => {
     expect(String(fileAnswer.answer)).toContain("⚠️"); // Warning emoji for malicious files
   });
 
+  it("uses the renamed filename for file upload answers", () => {
+    const template = {
+      elements: [
+        {
+          id: 1,
+          type: "fileInput",
+          properties: { titleEn: "Upload a file", titleFr: "Télécharger un fichier" },
+        },
+      ],
+    } as unknown as FormProperties;
+
+    const mapped = mapAnswers({
+      formTemplate: template,
+      rawAnswers: { "1": { id: "attachment-1", name: "document.pdf" } as Response },
+      attachments: new Map([
+        [
+          "attachment-1",
+          {
+            originalName: "document.pdf",
+            actualName: "document (1).pdf",
+            isPotentiallyMalicious: false,
+          },
+        ],
+      ]),
+    });
+
+    expect(mapped[0].answer).toBe("document (1).pdf");
+  });
+
   it("handles multiple file uploads with mixed malicious status", () => {
     const template = {
       id: "multi-files",
