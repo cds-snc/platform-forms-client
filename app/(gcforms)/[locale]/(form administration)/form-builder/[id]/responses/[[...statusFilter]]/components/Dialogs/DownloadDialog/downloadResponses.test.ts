@@ -4,7 +4,6 @@ import type { DownloadResponsesOptions } from "./DownloadDialog.types";
 
 const mocks = vi.hoisted(() => ({
   addResponseAttachmentsToZip: vi.fn(),
-  createRecoveryCopy: vi.fn(),
   ga: vi.fn(),
   generateDownloadZip: vi.fn(),
   getSubmissionsByFormat: vi.fn(),
@@ -24,7 +23,6 @@ vi.mock("./downloadZip", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./downloadZip")>();
   return {
     ...actual,
-    createRecoveryCopy: mocks.createRecoveryCopy,
     generateDownloadZip: mocks.generateDownloadZip,
   };
 });
@@ -62,8 +60,7 @@ describe("downloadResponses", () => {
     );
     mocks.getTemplateHasFileInput.mockResolvedValue(true);
     mocks.addResponseAttachmentsToZip.mockResolvedValue([]);
-    mocks.createRecoveryCopy.mockResolvedValue(new Blob());
-    mocks.generateDownloadZip.mockResolvedValue(false);
+    mocks.generateDownloadZip.mockResolvedValue(undefined);
   });
 
   it("tracks only responses whose attachments were included", async () => {
@@ -80,11 +77,41 @@ describe("downloadResponses", () => {
       ([options]) => options.trackDownload
     );
     expect(trackingCall?.[0].ids).toEqual(["response-2"]);
-    expect(onDownloadComplete).toHaveBeenCalledWith(["response-2"], true);
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-2"], {
+      sizeLimitReached: false,
+      processingFailed: true,
+    });
     const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
     expect(zip.files["response-1.html"]).toBeUndefined();
     expect(zip.files["response-2.html"]).toBeDefined();
     await expect(zip.files["_receipt-recu.html"].async("string")).resolves.toBe("response-2");
+  });
+
+  it("includes attachments only alongside their complete responses", async () => {
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+    mocks.addResponseAttachmentsToZip
+      .mockImplementationOnce(async (_zip, _attachments, options) => {
+        options.addFileToZip("response-1/attachment.txt", "partial attachment");
+        return [{ responseId: "response-1", filename: "missing.txt", reason: "HTTP 404" }];
+      })
+      .mockImplementationOnce(async (_zip, _attachments, options) => {
+        options.addFileToZip("response-2/attachment.txt", "complete attachment");
+        return [];
+      });
+
+    await downloadResponses(createOptions(["response-1", "response-2"], onDownloadComplete));
+
+    const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
+    expect(zip.files["response-1.html"]).toBeUndefined();
+    expect(zip.files["response-1/attachment.txt"]).toBeUndefined();
+    expect(zip.files["response-2.html"]).toBeDefined();
+    await expect(zip.files["response-2/attachment.txt"].async("string")).resolves.toBe(
+      "complete attachment"
+    );
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-2"], {
+      sizeLimitReached: false,
+      processingFailed: true,
+    });
   });
 
   it("exports collected responses when receipt regeneration fails without tracking them", async () => {
@@ -119,23 +146,29 @@ describe("downloadResponses", () => {
     expect(zip.files["response-2.html"]).toBeDefined();
     expect(zip.files["_receipt-recu.html"]).toBeUndefined();
     expect(zip.files["RECOVERY-COPY-NOTE.txt"]).toBeDefined();
-    expect(zip.files["response-download-errors.json"]).toBeDefined();
+    expect(zip.files["errors-erreurs.json"]).toBeDefined();
     expect(mocks.getSubmissionsByFormat.mock.calls.some(([options]) => options.trackDownload)).toBe(
       false
     );
-    expect(onDownloadComplete).toHaveBeenCalledWith([], true);
+    expect(onDownloadComplete).toHaveBeenCalledWith([], {
+      sizeLimitReached: false,
+      processingFailed: true,
+    });
   });
 
-  it("does not track responses when a recovery copy is downloaded", async () => {
+  it("propagates ZIP generation failures without marking responses as downloaded", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
-    mocks.generateDownloadZip.mockResolvedValue(true);
+    const error = new Error("ZIP generation failed");
+    mocks.generateDownloadZip.mockRejectedValueOnce(error);
 
-    await downloadResponses(createOptions(["response-1"], onDownloadComplete));
+    await expect(downloadResponses(createOptions(["response-1"], onDownloadComplete))).rejects.toBe(
+      error
+    );
 
     expect(mocks.getSubmissionsByFormat.mock.calls.some(([options]) => options.trackDownload)).toBe(
       false
     );
-    expect(onDownloadComplete).toHaveBeenCalledWith([], true);
+    expect(onDownloadComplete).not.toHaveBeenCalled();
   });
 
   it("fetches all responses in a single request when the form has no file inputs", async () => {
@@ -222,7 +255,6 @@ describe("downloadResponses", () => {
         options.ids.length === 1 && !options.trackDownload && options.includeResponses !== false
     );
     expect(responseFetches.map(([options]) => options.ids)).toEqual([["response-1"]]);
-    expect(mocks.createRecoveryCopy).not.toHaveBeenCalled();
     const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
     expect(zip.files["response-1.html"]).toBeDefined();
     expect(zip.files["response-2.html"]).toBeUndefined();
@@ -231,7 +263,10 @@ describe("downloadResponses", () => {
       ([options]) => options.trackDownload
     );
     expect(trackingCall?.[0].ids).toEqual(["response-1"]);
-    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], true);
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], {
+      sizeLimitReached: true,
+      processingFailed: false,
+    });
   });
 
   it("downloads a single response that exceeds the ZIP size limit without failures", async () => {
@@ -247,8 +282,11 @@ describe("downloadResponses", () => {
 
     const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
     expect(zip.files["response-1.html"]).toBeDefined();
-    expect(zip.files["response-download-errors.json"]).toBeUndefined();
-    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], false);
+    expect(zip.files["errors-erreurs.json"]).toBeUndefined();
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], {
+      sizeLimitReached: false,
+      processingFailed: false,
+    });
   });
 
   it("excludes later responses that would exceed the ZIP size limit", async () => {
@@ -280,6 +318,33 @@ describe("downloadResponses", () => {
     const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
     expect(zip.files["response-1.html"]).toBeDefined();
     expect(zip.files["response-2.html"]).toBeUndefined();
-    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], true);
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], {
+      sizeLimitReached: true,
+      processingFailed: false,
+    });
+  });
+
+  it("reports both size-limit and processing issues when both occur", async () => {
+    const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
+    stubResponseSizes({ "oversized response": ZIP_SIZE_LIMIT_BYTES * 1.2 });
+    mockResponseHtml(() => "oversized response");
+    mocks.addResponseAttachmentsToZip
+      .mockResolvedValueOnce([
+        { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
+      ])
+      .mockResolvedValueOnce([]);
+
+    try {
+      await downloadResponses(
+        createOptions(["response-1", "response-2", "response-3"], onDownloadComplete)
+      );
+    } finally {
+      vi.unstubAllGlobals();
+    }
+
+    expect(onDownloadComplete).toHaveBeenCalledWith(["response-2"], {
+      sizeLimitReached: true,
+      processingFailed: true,
+    });
   });
 });

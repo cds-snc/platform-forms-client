@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import JSZip from "jszip";
 import { getVersionedZipFileName } from "./DownloadDialog";
 import {
   createIndividualResponseFiles,
@@ -6,6 +7,23 @@ import {
   jsonArchiveAdapter,
 } from "./downloadResponseFiles";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
+import { generateDownloadZip } from "./downloadZip";
+
+describe("generateDownloadZip", () => {
+  it("propagates generation failures without attempting a fallback archive", async () => {
+    const zip = new JSZip();
+    const error = new Error("ZIP generation failed");
+    const generate = vi.spyOn(zip, "generateAsync").mockRejectedValueOnce(error);
+    const setDownloadProgress = vi.fn();
+
+    await expect(
+      generateDownloadZip({ zip, fileName: "responses-reponses.zip", setDownloadProgress })
+    ).rejects.toBe(error);
+
+    expect(generate).toHaveBeenCalledTimes(1);
+    expect(setDownloadProgress).toHaveBeenCalledWith({ phase: "zip", percent: 0 });
+  });
+});
 
 describe("getVersionedZipFileName", () => {
   it("adds the version suffix before the zip extension", () => {

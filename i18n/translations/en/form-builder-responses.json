@@ -98,8 +98,12 @@
     "delete": "Delete",
     "movedToDownloaded": "Moved to Downloaded",
     "partialDownload": {
-      "title": "Some files were not included in the download",
-      "body": "Check the ZIP's error manifest or recovery note. Fully downloaded submissions were moved to Downloaded; submissions that were not fully downloaded remain available to download."
+      "title": "Some responses could not be processed",
+      "body": "There was a problem processing some responses or their attachments. Try downloading the remaining responses again."
+    },
+    "sizeLimitReached": {
+      "title": "Download size limit reached",
+      "body": "Some responses were not downloaded because this download reached its size limit. Download the remaining responses in smaller groups or one at a time."
     },
     "header": {
       "tableTitle": "Responses table",
@@ -210,7 +214,6 @@
       "processingResponse": "Processing response {{response}} of {{total}}",
       "responseProgress": "Response {{response}} of {{total}}",
       "downloadingAttachment": "Downloading attachment {{current}} of {{total}}",
-      "preparingRecoveryCopy": "Preparing a recovery copy",
       "creatingZip": "Creating ZIP: {{percent}}%"
     },
     "confirmDeleteNewDialog": {

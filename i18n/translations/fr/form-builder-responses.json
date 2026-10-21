@@ -98,8 +98,12 @@
     "delete": "Supprimer",
     "movedToDownloaded": "Déplacée vers Téléchargements",
     "partialDownload": {
-      "title": "Certains fichiers n'ont pas été inclus dans le téléchargement",
-      "body": "Consultez le manifeste d'erreurs ou la note de la copie de récupération dans le fichier ZIP. Les soumissions entièrement téléchargées ont été déplacées vers Téléchargements; celles qui ne l'ont pas été restent disponibles pour le téléchargement."
+      "title": "Certaines réponses n'ont pas pu être traitées",
+      "body": "Un problème est survenu lors du traitement de certaines réponses ou de leurs pièces jointes. Réessayez de télécharger les réponses restantes."
+    },
+    "sizeLimitReached": {
+      "title": "Limite de taille du téléchargement atteinte",
+      "body": "Certaines réponses n'ont pas été téléchargées, car ce téléchargement a atteint sa limite de taille. Téléchargez les réponses restantes en plus petits groupes ou une à la fois."
     },
     "header": {
       "tableTitle": "Tableau de réponses",
@@ -210,7 +214,6 @@
       "processingResponse": "Traitement de la réponse {{response}} sur {{total}}",
       "responseProgress": "Réponse {{response}} sur {{total}}",
       "downloadingAttachment": "Téléchargement de la pièce jointe {{current}} sur {{total}}",
-      "preparingRecoveryCopy": "Préparation d’une copie de récupération",
       "creatingZip": "Création du fichier ZIP : {{percent}} %"
     },
     "confirmDeleteNewDialog": {

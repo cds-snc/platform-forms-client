@@ -31,18 +31,12 @@ import {
   csvArchiveAdapter,
   jsonArchiveAdapter,
 } from "./downloadResponseFiles";
-import {
-  createRecoveryCopy,
-  downloadFileFromBlob,
-  generateDownloadZip,
-  getVersionedZipFileName,
-} from "./downloadZip";
+import { downloadFileFromBlob, generateDownloadZip, getVersionedZipFileName } from "./downloadZip";
 import { createAttachmentDownloadLinkRefresher } from "./refreshAttachmentDownloadLink";
 import type {
   ArchiveAdapter,
   DownloadFailure,
   DownloadResponsesOptions,
-  RecoveryFile,
   SimpleResponse,
 } from "./DownloadDialog.types";
 
@@ -167,25 +161,29 @@ export const downloadResponses = async ({
     };
   };
 
-  const finishZipDownload = async (zip: JSZip, recoveryCopy?: Blob) => {
+  const finishZipDownload = async (zip: JSZip) => {
     const fileName = getVersionedZipFileName(`${filePrefix}responses-reponses.zip`, version);
-    const usedRecoveryCopy = await generateDownloadZip({
+    await generateDownloadZip({
       zip,
-      recoveryCopy,
       fileName,
-      formId,
       setDownloadProgress,
     });
-    const hasDownloadFailures = downloadFailures.length > 0 || usedRecoveryCopy;
+    const hasDownloadFailures = downloadFailures.length > 0;
+    const warnings = {
+      sizeLimitReached: downloadFailures.some(
+        (failure) => failure.reason === "Archive size limit reached"
+      ),
+      processingFailed: downloadFailures.some(
+        (failure) => failure.reason !== "Archive size limit reached"
+      ),
+    };
 
-    const fullyDownloadedResponseIds = usedRecoveryCopy
-      ? []
-      : filteredIds.filter(
-          (responseId) => !downloadFailures.some((failure) => failure.responseId === responseId)
-        );
+    const fullyDownloadedResponseIds = filteredIds.filter(
+      (responseId) => !downloadFailures.some((failure) => failure.responseId === responseId)
+    );
     if (fullyDownloadedResponseIds.length === 0) {
       if (hasDownloadFailures) {
-        onDownloadComplete([], true);
+        onDownloadComplete([], warnings);
         return;
       }
       setIsDownloading(false);
@@ -218,7 +216,7 @@ export const downloadResponses = async ({
     }
 
     if (trackingSucceeded) {
-      onDownloadComplete(fullyDownloadedResponseIds, hasDownloadFailures);
+      onDownloadComplete(fullyDownloadedResponseIds, warnings);
       return;
     }
 
@@ -280,12 +278,7 @@ export const downloadResponses = async ({
       }
     });
 
-  const finishZip = async (
-    zip: JSZip,
-    recoveryFiles: RecoveryFile[],
-    receiptPath: string,
-    initialReceipt: string
-  ) => {
+  const finishZip = async (zip: JSZip, receiptPath: string, initialReceipt: string) => {
     const successfulResponseIds = filteredIds.filter(
       (responseId) => !downloadFailures.some((failure) => failure.responseId === responseId)
     );
@@ -323,26 +316,19 @@ export const downloadResponses = async ({
           const recoveryNote =
             "The response receipt could not be regenerated. These response files are included, but their submissions were not marked as downloaded.";
           zip.file("RECOVERY-COPY-NOTE.txt", recoveryNote);
-          recoveryFiles.push({ path: "RECOVERY-COPY-NOTE.txt", data: recoveryNote });
         }
       }
 
       // The receipt was reserved before any responses were added, so it is always included.
-      if (
-        !receiptRegenerationFailed &&
-        addZipFile(zip, receiptPath, receipt, { enforceLimit: false })
-      ) {
-        recoveryFiles.unshift({ path: receiptPath, data: receipt });
+      if (!receiptRegenerationFailed) {
+        addZipFile(zip, receiptPath, receipt, { enforceLimit: false });
       }
     }
 
     if (downloadFailures.length > 0) {
-      zip.file("response-download-errors.json", JSON.stringify(downloadFailures, null, 2));
+      zip.file("errors-erreurs.json", JSON.stringify(downloadFailures, null, 2));
     }
-    const recoveryCopy = zipSizeLimitReached
-      ? undefined
-      : await createRecoveryCopy(recoveryFiles, downloadFailures, formId, setDownloadProgress);
-    await finishZipDownload(zip, recoveryCopy);
+    await finishZipDownload(zip);
   };
 
   const downloadIndividualFiles = async (
@@ -397,7 +383,7 @@ export const downloadResponses = async ({
 
   const finishSingleRequestZip = async (zip: JSZip) => {
     const fileName = getVersionedZipFileName(`${filePrefix}responses-reponses.zip`, version);
-    await generateDownloadZip({ zip, fileName, formId, setDownloadProgress });
+    await generateDownloadZip({ zip, fileName, setDownloadProgress });
     onDownloadComplete(filteredIds);
   };
 
@@ -467,12 +453,7 @@ export const downloadResponses = async ({
       content = nextContent;
     });
 
-    await finishZip(
-      zip,
-      [{ path: adapter.responseFileName, data: adapter.serialize(content) }],
-      "receipt-recu.html",
-      response.receipt
-    );
+    await finishZip(zip, "receipt-recu.html", response.receipt);
   };
 
   const downloadHtmlArchive = async () => {
@@ -503,7 +484,6 @@ export const downloadResponses = async ({
     trackDownloadFormat(formId, DownloadFormat.HTML_ZIPPED, filteredIds.length);
     const zip = new JSZip();
     reserveZipFile("_receipt-recu.html", response.receipt);
-    const recoveryFiles: RecoveryFile[] = [];
 
     await processResponseQueue(async (responseId, index) => {
       const queuedResponse = (await getSubmissionsByFormat({
@@ -541,12 +521,9 @@ export const downloadResponses = async ({
         return;
       }
       stagedFiles.commit(zip);
-      queuedResponse.responses.forEach(({ id, html }) =>
-        recoveryFiles.push({ path: `${id}.html`, data: html })
-      );
     });
 
-    await finishZip(zip, recoveryFiles, "_receipt-recu.html", response.receipt);
+    await finishZip(zip, "_receipt-recu.html", response.receipt);
   };
 
   const downloadHandlers: Partial<Record<DownloadFormat, () => Promise<void>>> = {
