@@ -8,6 +8,11 @@ import JSZip from "jszip";
  *--------------------------------------------*/
 import { ga } from "@lib/client/clientHelpers";
 import {
+  RESPONSES_UI_ZIP_ENTRY_OVERHEAD_BYTES,
+  RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES,
+  RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES,
+} from "@root/constants";
+import {
   addResponseAttachmentsToZip,
   type AttachmentDownloadProgress,
 } from "@lib/responseDownloadFormats/attachments";
@@ -40,9 +45,6 @@ import type {
   SimpleResponse,
 } from "./DownloadDialog.types";
 
-export const ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
-const ZIP_MANIFEST_RESERVE_BYTES = 2 * 1024 * 1024;
-const ZIP_ENTRY_OVERHEAD_BYTES = 4096;
 type ZipEntryData = string | Blob | Uint8Array | ArrayBuffer;
 
 const estimateZipEntrySize = (path: string, data: ZipEntryData) => {
@@ -52,7 +54,9 @@ const estimateZipEntrySize = (path: string, data: ZipEntryData) => {
       : data instanceof Blob
         ? data.size
         : data.byteLength;
-  return dataSize + new TextEncoder().encode(path).byteLength * 8 + ZIP_ENTRY_OVERHEAD_BYTES;
+  return (
+    dataSize + new TextEncoder().encode(path).byteLength * 8 + RESPONSES_UI_ZIP_ENTRY_OVERHEAD_BYTES
+  );
 };
 
 const trackDownloadFormat = (formId: string, format: DownloadFormat, numberOfRecords: number) => {
@@ -94,7 +98,8 @@ export const downloadResponses = async ({
 
   // The limit is only enforced once at least a single response is in the ZIP this is to avoid blocking the download of responses completely.
   const exceedsZipSizeLimit = (sizeBytes: number) =>
-    hasCommittedResponse && sizeBytes > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES;
+    hasCommittedResponse &&
+    sizeBytes > RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES - RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES;
 
   const reserveZipFile = (
     path: string,
@@ -154,7 +159,10 @@ export const downloadResponses = async ({
       commit: (zip: JSZip) => {
         files.forEach((data, path) => addZipFile(zip, path, data, { enforceLimit: false }));
         hasCommittedResponse = true;
-        if (zipSizeBytes > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES) {
+        if (
+          zipSizeBytes >
+          RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES - RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES
+        ) {
           zipSizeLimitReached = true;
         }
       },

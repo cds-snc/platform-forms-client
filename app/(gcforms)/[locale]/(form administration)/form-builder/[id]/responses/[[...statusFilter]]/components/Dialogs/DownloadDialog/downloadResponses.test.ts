@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
+import { RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES } from "@root/constants";
 import type { DownloadResponsesOptions } from "./DownloadDialog.types";
 
 const mocks = vi.hoisted(() => ({
@@ -27,7 +28,7 @@ vi.mock("./downloadZip", async (importOriginal) => {
   };
 });
 
-import { downloadResponses, ZIP_SIZE_LIMIT_BYTES } from "./downloadResponses";
+import { downloadResponses } from "./downloadResponses";
 
 const createOptions = (
   filteredIds: string[],
@@ -241,7 +242,7 @@ describe("downloadResponses", () => {
 
   it("always downloads the first response even when it exceeds the ZIP size limit", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
-    stubResponseSizes({ "oversized response": ZIP_SIZE_LIMIT_BYTES * 1.2 });
+    stubResponseSizes({ "oversized response": RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES * 1.2 });
     mockResponseHtml(() => "oversized response");
 
     try {
@@ -271,7 +272,7 @@ describe("downloadResponses", () => {
 
   it("downloads a single response that exceeds the ZIP size limit without failures", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
-    stubResponseSizes({ "oversized response": ZIP_SIZE_LIMIT_BYTES * 1.2 });
+    stubResponseSizes({ "oversized response": RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES * 1.2 });
     mockResponseHtml(() => "oversized response");
 
     try {
@@ -292,8 +293,8 @@ describe("downloadResponses", () => {
   it("excludes later responses that would exceed the ZIP size limit", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
     stubResponseSizes({
-      "large response 1": ZIP_SIZE_LIMIT_BYTES / 2,
-      "large response 2": ZIP_SIZE_LIMIT_BYTES / 2,
+      "large response 1": RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES / 2,
+      "large response 2": RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES / 2,
     });
     mockResponseHtml((responseId) =>
       responseId === "response-1" ? "large response 1" : "large response 2"
@@ -326,7 +327,7 @@ describe("downloadResponses", () => {
 
   it("reports both size-limit and processing issues when both occur", async () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
-    stubResponseSizes({ "oversized response": ZIP_SIZE_LIMIT_BYTES * 1.2 });
+    stubResponseSizes({ "oversized response": RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES * 1.2 });
     mockResponseHtml(() => "oversized response");
     mocks.addResponseAttachmentsToZip
       .mockResolvedValueOnce([
