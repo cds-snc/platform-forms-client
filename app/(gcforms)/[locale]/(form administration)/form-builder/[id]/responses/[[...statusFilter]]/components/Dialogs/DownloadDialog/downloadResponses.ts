@@ -19,6 +19,7 @@ import {
 import { processSequentially } from "@lib/responseDownloadFormats/processSequentially";
 import {
   DownloadFormat,
+  ResponseDownloadErrorCode,
   type CSVResponse,
   type HtmlZippedResponse,
   type JSONResponse,
@@ -179,10 +180,10 @@ export const downloadResponses = async ({
     const hasDownloadFailures = downloadFailures.length > 0;
     const warnings = {
       sizeLimitReached: downloadFailures.some(
-        (failure) => failure.reason === "Archive size limit reached"
+        (failure) => failure.code === ResponseDownloadErrorCode.SIZE_LIMIT
       ),
       processingFailed: downloadFailures.some(
-        (failure) => failure.reason !== "Archive size limit reached"
+        (failure) => failure.code === ResponseDownloadErrorCode.PROCESSING
       ),
     };
 
@@ -271,7 +272,11 @@ export const downloadResponses = async ({
     processSequentially(filteredIds, async (responseId, index) => {
       setDownloadProgress({ phase: "responses", response: index + 1, total: filteredIds.length });
       if (zipSizeLimitReached) {
-        downloadFailures.push({ responseId, reason: "Archive size limit reached" });
+        downloadFailures.push({
+          code: ResponseDownloadErrorCode.SIZE_LIMIT,
+          responseId,
+          reason: "Archive size limit reached",
+        });
         return;
       }
 
@@ -280,6 +285,7 @@ export const downloadResponses = async ({
       } catch (err) {
         logMessage.error(err as Error);
         downloadFailures.push({
+          code: ResponseDownloadErrorCode.PROCESSING,
           responseId,
           reason: err instanceof Error ? err.message : "Response download failed",
         });
@@ -316,6 +322,7 @@ export const downloadResponses = async ({
           logMessage.error(err as Error);
           downloadFailures.push(
             ...successfulResponseIds.map((responseId) => ({
+              code: ResponseDownloadErrorCode.PROCESSING,
               responseId,
               reason: "Response receipt could not be regenerated",
             }))
@@ -444,7 +451,11 @@ export const downloadResponses = async ({
       const stagedFiles = createStagedZipFiles();
       const nextContent = adapter.append(content, queuedResponse);
       if (!stagedFiles.add(adapter.responseFileName, adapter.serialize(nextContent))) {
-        downloadFailures.push({ responseId, reason: "Archive size limit reached" });
+        downloadFailures.push({
+          code: ResponseDownloadErrorCode.SIZE_LIMIT,
+          responseId,
+          reason: "Archive size limit reached",
+        });
         return;
       }
       const attachmentFailures = await addAttachmentsToZipAndRecordFailures(
@@ -511,6 +522,7 @@ export const downloadResponses = async ({
         if (!stagedFiles.add(`${id}.html`, html)) {
           responseFileFailed = true;
           downloadFailures.push({
+            code: ResponseDownloadErrorCode.SIZE_LIMIT,
             responseId,
             filename: `${id}.html`,
             reason: "Archive size limit reached",

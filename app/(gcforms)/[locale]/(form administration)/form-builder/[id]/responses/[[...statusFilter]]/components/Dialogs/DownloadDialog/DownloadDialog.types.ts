@@ -7,7 +7,12 @@ import type JSZip from "jszip";
 /*--------------------------------------------*
  * Internal Aliases
  *--------------------------------------------*/
-import type { CSVResponse, DownloadFormat, JSONResponse } from "@lib/responseDownloadFormats/types";
+import type {
+  CSVResponse,
+  DownloadFormat,
+  JSONResponse,
+  ResponseDownloadErrorCode,
+} from "@lib/responseDownloadFormats/types";
 import type { Language } from "@lib/types/form-builder-types";
 
 export type DownloadProgress =
@@ -21,7 +26,12 @@ export type DownloadProgress =
     }
   | { phase: "zip"; percent: number };
 
-export type DownloadFailure = { responseId: string; filename?: string; reason: string };
+export type DownloadFailure = {
+  code: ResponseDownloadErrorCode;
+  responseId: string;
+  filename?: string;
+  reason: string;
+};
 
 export type DownloadWarnings = { sizeLimitReached: boolean; processingFailed: boolean };
 

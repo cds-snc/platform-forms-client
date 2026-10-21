@@ -68,7 +68,12 @@ describe("downloadResponses", () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
     mocks.addResponseAttachmentsToZip
       .mockResolvedValueOnce([
-        { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
+        {
+          code: "PROCESSING",
+          responseId: "response-1",
+          filename: "attachment.png",
+          reason: "Download failed",
+        },
       ])
       .mockResolvedValueOnce([]);
 
@@ -93,7 +98,14 @@ describe("downloadResponses", () => {
     mocks.addResponseAttachmentsToZip
       .mockImplementationOnce(async (_zip, _attachments, options) => {
         options.addFileToZip("response-1/attachment.txt", "partial attachment");
-        return [{ responseId: "response-1", filename: "missing.txt", reason: "HTTP 404" }];
+        return [
+          {
+            code: "PROCESSING",
+            responseId: "response-1",
+            filename: "missing.txt",
+            reason: "HTTP 404",
+          },
+        ];
       })
       .mockImplementationOnce(async (_zip, _attachments, options) => {
         options.addFileToZip("response-2/attachment.txt", "complete attachment");
@@ -119,7 +131,12 @@ describe("downloadResponses", () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
     mocks.addResponseAttachmentsToZip
       .mockResolvedValueOnce([
-        { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
+        {
+          code: "PROCESSING",
+          responseId: "response-1",
+          filename: "attachment.png",
+          reason: "Download failed",
+        },
       ])
       .mockResolvedValueOnce([]);
     mocks.getSubmissionsByFormat.mockImplementation(
@@ -331,7 +348,12 @@ describe("downloadResponses", () => {
     mockResponseHtml(() => "oversized response");
     mocks.addResponseAttachmentsToZip
       .mockResolvedValueOnce([
-        { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
+        {
+          code: "PROCESSING",
+          responseId: "response-1",
+          filename: "attachment.png",
+          reason: "Download failed",
+        },
       ])
       .mockResolvedValueOnce([]);
 
