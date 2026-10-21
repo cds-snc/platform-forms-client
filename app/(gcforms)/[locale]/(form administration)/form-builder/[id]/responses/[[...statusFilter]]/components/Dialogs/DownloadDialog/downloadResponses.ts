@@ -185,6 +185,9 @@ export const downloadResponses = async ({
         (failure) => failure.reason !== "Archive size limit reached"
       ),
     };
+    if (warnings.sizeLimitReached) {
+      logMessage.warn(`Responses ZIP size limit reached for form ${formId}`);
+    }
 
     const fullyDownloadedResponseIds = filteredIds.filter(
       (responseId) => !downloadFailures.some((failure) => failure.responseId === responseId)
