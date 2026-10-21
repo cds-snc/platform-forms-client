@@ -9,10 +9,15 @@ const mocks = vi.hoisted(() => ({
   generateDownloadZip: vi.fn(),
   getSubmissionsByFormat: vi.fn(),
   getTemplateHasFileInput: vi.fn(),
+  logMessageError: vi.fn(),
+  logMessageWarn: vi.fn(),
 }));
 const OriginalTextEncoder = globalThis.TextEncoder;
 
 vi.mock("@lib/client/clientHelpers", () => ({ ga: mocks.ga }));
+vi.mock("@lib/logger", () => ({
+  logMessage: { error: mocks.logMessageError, warn: mocks.logMessageWarn },
+}));
 vi.mock("@lib/responseDownloadFormats/attachments", () => ({
   addResponseAttachmentsToZip: mocks.addResponseAttachmentsToZip,
 }));
@@ -68,7 +73,12 @@ describe("downloadResponses", () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
     mocks.addResponseAttachmentsToZip
       .mockResolvedValueOnce([
-        { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
+        {
+          code: "PROCESSING",
+          responseId: "response-1",
+          filename: "attachment.png",
+          reason: "Download failed",
+        },
       ])
       .mockResolvedValueOnce([]);
 
@@ -93,7 +103,14 @@ describe("downloadResponses", () => {
     mocks.addResponseAttachmentsToZip
       .mockImplementationOnce(async (_zip, _attachments, options) => {
         options.addFileToZip("response-1/attachment.txt", "partial attachment");
-        return [{ responseId: "response-1", filename: "missing.txt", reason: "HTTP 404" }];
+        return [
+          {
+            code: "PROCESSING",
+            responseId: "response-1",
+            filename: "missing.txt",
+            reason: "HTTP 404",
+          },
+        ];
       })
       .mockImplementationOnce(async (_zip, _attachments, options) => {
         options.addFileToZip("response-2/attachment.txt", "complete attachment");
@@ -119,7 +136,12 @@ describe("downloadResponses", () => {
     const onDownloadComplete = vi.fn<DownloadResponsesOptions["onDownloadComplete"]>();
     mocks.addResponseAttachmentsToZip
       .mockResolvedValueOnce([
-        { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
+        {
+          code: "PROCESSING",
+          responseId: "response-1",
+          filename: "attachment.png",
+          reason: "Download failed",
+        },
       ])
       .mockResolvedValueOnce([]);
     mocks.getSubmissionsByFormat.mockImplementation(
@@ -268,6 +290,9 @@ describe("downloadResponses", () => {
       sizeLimitReached: true,
       processingFailed: false,
     });
+    expect(mocks.logMessageWarn).toHaveBeenCalledWith(
+      "Responses ZIP size limit reached for form form-id"
+    );
   });
 
   it("downloads a single response that exceeds the ZIP size limit without failures", async () => {
@@ -331,7 +356,12 @@ describe("downloadResponses", () => {
     mockResponseHtml(() => "oversized response");
     mocks.addResponseAttachmentsToZip
       .mockResolvedValueOnce([
-        { responseId: "response-1", filename: "attachment.png", reason: "Download failed" },
+        {
+          code: "PROCESSING",
+          responseId: "response-1",
+          filename: "attachment.png",
+          reason: "Download failed",
+        },
       ])
       .mockResolvedValueOnce([]);
 

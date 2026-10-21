@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import React from "react";
-import { act, cleanup, render } from "@testing-library/react";
+import { act, cleanup, fireEvent, render } from "@testing-library/react";
 import { DownloadTable } from "../DownloadTable";
 import { VaultSubmissionOverview, VaultStatus } from "@lib/types";
 import axios from "axios";
@@ -109,11 +109,23 @@ describe("Download Table", () => {
     );
     if (warnings.sizeLimitReached) {
       expect(rendered.getByText(/in smaller groups or one at a time/)).toBeInTheDocument();
+      if (!warnings.processingFailed) {
+        expect(
+          rendered.getByText("Download size limit reached").closest('[data-testid="alert"]')
+        ).toHaveFocus();
+      }
     }
     if (warnings.processingFailed) {
       expect(
         rendered.getByText(/Try downloading the remaining responses again/)
       ).toBeInTheDocument();
+      if (!warnings.sizeLimitReached) {
+        expect(
+          rendered
+            .getByText("Some responses could not be processed")
+            .closest('[data-testid="alert"]')
+        ).toHaveFocus();
+      }
     }
 
     await act(async () => {
@@ -121,6 +133,33 @@ describe("Download Table", () => {
     });
     expect(rendered.queryByText("Download size limit reached")).not.toBeInTheDocument();
     expect(rendered.queryByText("Some responses could not be processed")).not.toBeInTheDocument();
+  });
+
+  it("clears the greyed-out state when a row is selected again", async () => {
+    const rendered = render(
+      <DownloadTable
+        statusFilter={StatusFilter.NEW}
+        vaultSubmissions={vaultSubmissions}
+        formId="clg17xha50008efkgfgxa8l4f"
+        formName=""
+        nagwareResult={null}
+        responseDownloadLimit={100}
+        overdueAfter={0}
+        startFromExclusiveResponse={null}
+      />
+    );
+    const responseId = vaultSubmissions[0].name;
+
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([responseId]);
+    });
+
+    const checkbox = rendered.getByRole("checkbox", { name: responseId });
+    expect(checkbox.closest("tr")).toHaveClass("opacity-50");
+
+    fireEvent.click(checkbox);
+
+    expect(checkbox.closest("tr")).not.toHaveClass("opacity-50");
   });
 });
 

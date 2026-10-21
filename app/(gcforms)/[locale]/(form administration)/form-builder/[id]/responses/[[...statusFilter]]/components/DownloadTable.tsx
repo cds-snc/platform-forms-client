@@ -84,6 +84,9 @@ export const DownloadTable = ({
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
+    if (checked) {
+      setRemovedRows((rows) => rows.filter((row) => row !== name));
+    }
     const dispatchAction = { type: TableActions.UPDATE, payload: { item: { name, checked } } };
     tableItemsDispatch(dispatchAction);
 
@@ -117,13 +120,13 @@ export const DownloadTable = ({
   return (
     <>
       {downloadWarnings?.sizeLimitReached && (
-        <Alert.Warning className="mb-4">
+        <Alert.Warning className="mb-4" focussable={true}>
           <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
           <Alert.Body>{t("downloadResponsesTable.sizeLimitReached.body")}</Alert.Body>
         </Alert.Warning>
       )}
       {downloadWarnings?.processingFailed && (
-        <Alert.Warning className="mb-4">
+        <Alert.Warning className="mb-4" focussable={true}>
           <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
           <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
         </Alert.Warning>
