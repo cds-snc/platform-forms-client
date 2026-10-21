@@ -43,6 +43,7 @@ import type { Response } from "@gcforms/types";
 import { FeatureFlags } from "@lib/cache/types";
 import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { getFormSubmissionAttachmentDownloadLink } from "@lib/vault/getFormSubmissionAttachmentDownloadLink";
+import { FormElement, FormElementTypes } from "@gcforms/types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -119,6 +120,62 @@ export const fetchSubmissions = AuthenticatedAction(
   }
 );
 
+const hasFileInputElement = (formElements: FormElement[]): boolean => {
+  const checkForFileInput = (elements?: FormElement[]): boolean => {
+    if (!elements) return false;
+
+    return elements.some(
+      (element) =>
+        element.type === FormElementTypes.fileInput ||
+        (element.properties?.subElements && checkForFileInput(element.properties.subElements))
+    );
+  };
+
+  return checkForFileInput(formElements);
+};
+
+export const getTemplateHasFileInput = AuthenticatedAction(
+  async (
+    session,
+    {
+      formID,
+      version,
+    }: {
+      formID: string;
+      version?: ResponseVersion;
+    }
+  ) => {
+    return traceFunction("getTemplateHasFileInput", async () => {
+      try {
+        const templateVersionNumber = parseTemplateVersionNumber(version) ?? undefined;
+
+        if (version && templateVersionNumber === undefined) {
+          throw new FormBuilderError(`Invalid template version: ${version}`);
+        }
+
+        let fullFormTemplate = await getFullTemplateByID(formID, undefined, templateVersionNumber);
+
+        // Mirror getSubmissionsByFormat: version 1 may predate versioned templates.
+        if (fullFormTemplate === null && templateVersionNumber === 1) {
+          fullFormTemplate = await getFullTemplateByID(formID);
+        }
+
+        if (fullFormTemplate === null) {
+          logMessage.warn(`getTemplateHasFileInput form not found: ${formID}`);
+          throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
+        }
+
+        return hasFileInputElement(fullFormTemplate.form.elements);
+      } catch (e) {
+        logMessage.error(
+          `Error fetching template version for form ${formID}: ${(e as Error).message}`
+        );
+        return;
+      }
+    });
+  }
+);
+
 export const getSubmissionsByFormat = AuthenticatedAction(
   async (
     session,
@@ -128,12 +185,21 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       format = DownloadFormat.HTML,
       lang,
       version,
+      // Queue callers fetch response content and short-lived attachment links separately.
+      includeAttachments = true,
+      includeResponses = true,
+      includeCsvHeader = true,
+      trackDownload = true,
     }: {
       formID: string;
       ids: string[];
       format: DownloadFormat;
       lang: Language;
       version?: ResponseVersion;
+      includeAttachments?: boolean;
+      includeResponses?: boolean;
+      includeCsvHeader?: boolean;
+      trackDownload?: boolean;
     }
   ): Promise<
     | HtmlResponse
@@ -192,23 +258,27 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           session.user.id,
           FeatureFlags.fileUpload
         );
-        const attachments = fileUploadEnabled
-          ? (
-              await Promise.all(
-                queryResult.map(async (item) => ({
-                  responseId: item.name,
-                  attachments: await Promise.all(
-                    (item.fileAttachments ?? []).map(async (attachment) => ({
-                      id: attachment.id,
-                      name: attachment.name,
-                      downloadLink: await getFormSubmissionAttachmentDownloadLink(attachment.path),
-                      isPotentiallyMalicious: attachment.isPotentiallyMalicious,
-                    }))
-                  ),
-                }))
-              )
-            ).filter((group) => group.attachments.length > 0)
-          : [];
+        // Mint links only for the current queue item, not for every selected response up front.
+        const attachments =
+          fileUploadEnabled && includeAttachments
+            ? (
+                await Promise.all(
+                  queryResult.map(async (item) => ({
+                    responseId: item.name,
+                    attachments: await Promise.all(
+                      (item.fileAttachments ?? []).map(async (attachment) => ({
+                        id: attachment.id,
+                        name: attachment.name,
+                        downloadLink: await getFormSubmissionAttachmentDownloadLink(
+                          attachment.path
+                        ),
+                        isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+                      }))
+                    ),
+                  }))
+                )
+              ).filter((group) => group.attachments.length > 0)
+            : [];
 
         // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
         const responses = queryResult
@@ -253,22 +323,27 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           submissions: responses,
         } as FormResponseSubmissions;
 
-        const responseIdStatusArray = queryResult.map((item) => {
-          return {
-            id: item.name,
-            status: item.status,
-            createdAt: item.createdAt,
-          };
-        });
+        if (trackDownload) {
+          const responseIdStatusArray = queryResult.map((item) => {
+            return {
+              id: item.name,
+              status: item.status,
+              createdAt: item.createdAt,
+            };
+          });
 
-        await updateLastDownloadedBy(responseIdStatusArray, formID);
-        await logDownload(responseIdStatusArray, format, session.user.id);
+          await updateLastDownloadedBy(responseIdStatusArray, formID);
+          await logDownload(responseIdStatusArray, format, session.user.id);
+        }
 
         switch (format) {
           case DownloadFormat.CSV:
             return {
               receipt: await htmlAggregatedTransform(formResponse, lang),
-              responses: await csvTransform(formResponse),
+              responses: await csvTransform(formResponse, {
+                includeHeader: includeCsvHeader,
+                includeRecords: includeResponses,
+              }),
               ...(attachments.length > 0 && { attachments }),
             };
           case DownloadFormat.HTML_AGGREGATED:
@@ -278,7 +353,12 @@ export const getSubmissionsByFormat = AuthenticatedAction(
             return await htmlTransform(formResponse);
 
           case DownloadFormat.HTML_ZIPPED: {
-            const response = await zipTransform(formResponse, lang);
+            const response = includeResponses
+              ? await zipTransform(formResponse, lang)
+              : {
+                  receipt: await htmlAggregatedTransform(formResponse, lang),
+                  responses: [],
+                };
             return {
               ...response,
               ...(attachments.length > 0 && { attachments }),
@@ -288,7 +368,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           case DownloadFormat.JSON:
             return {
               receipt: await htmlAggregatedTransform(formResponse, lang),
-              responses: jsonTransform(formResponse),
+              responses: includeResponses ? jsonTransform(formResponse) : [],
               ...(attachments.length > 0 && { attachments }),
             };
 

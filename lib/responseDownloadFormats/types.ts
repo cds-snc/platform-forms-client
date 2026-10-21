@@ -32,6 +32,13 @@ export interface FormResponseSubmissions {
   submissions: Submission[];
 }
 
+export const ResponseDownloadErrorCode = {
+  SIZE_LIMIT: "SIZE_LIMIT",
+  PROCESSING: "PROCESSING",
+} as const;
+export type ResponseDownloadErrorCode =
+  (typeof ResponseDownloadErrorCode)[keyof typeof ResponseDownloadErrorCode];
+
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue>;
 
 export interface Translations {

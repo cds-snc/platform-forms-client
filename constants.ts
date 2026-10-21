@@ -5,6 +5,10 @@ export const BODY_SIZE_LIMIT = mbToBytes(5);
 export const MAX_FILE_SIZE = 10485760; // 10 MB matches file upload lambda see: generateSignedUrl
 export const MAX_RESPONSE_SIZE = kbToBytes(380);
 
+export const RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
+export const RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES = 2 * 1024 * 1024;
+export const RESPONSES_UI_ZIP_ENTRY_OVERHEAD_BYTES = 4096;
+
 export const MAX_DYNAMIC_ROW_AMOUNT = 50;
 export const MAX_CHOICE_AMOUNT = 400;
 

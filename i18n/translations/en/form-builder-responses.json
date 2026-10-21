@@ -97,6 +97,14 @@
     "download": "Download",
     "delete": "Delete",
     "movedToDownloaded": "Moved to Downloaded",
+    "partialDownload": {
+      "title": "Some responses could not be processed",
+      "body": "There was a problem processing some responses or their attachments. Try downloading the remaining responses again."
+    },
+    "sizeLimitReached": {
+      "title": "Download size limit reached",
+      "body": "Some responses were not downloaded because this download reached its size limit. Download the remaining responses in smaller groups or one at a time."
+    },
     "header": {
       "tableTitle": "Responses table",
       "select": "Select",
@@ -202,7 +210,11 @@
       "download": "Download",
       "chooseVersion": "Download responses for version",
       "chooseVersionPlaceholder": "Select a version",
-      "chooseVersionRequired": "You can change the selected version if needed"
+      "chooseVersionRequired": "You can change the selected version if needed",
+      "processingResponse": "Processing response {{response}} of {{total}}",
+      "responseProgress": "Response {{response}} of {{total}}",
+      "downloadingAttachment": "Downloading attachment {{current}} of {{total}}",
+      "creatingZip": "Creating ZIP: {{percent}}%"
     },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirm the removal of new responses",
