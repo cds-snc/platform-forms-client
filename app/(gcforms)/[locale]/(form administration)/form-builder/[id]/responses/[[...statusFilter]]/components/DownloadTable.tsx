@@ -16,6 +16,7 @@ import { DownloadButton } from "./DownloadButton";
 import { ActionsPanel } from "./ActionsPanel";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog/DownloadDialog";
+import type { DownloadWarnings } from "./Dialogs/DownloadDialog/DownloadDialog.types";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
@@ -56,7 +57,7 @@ export const DownloadTable = ({
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
-  const [showPartialDownloadWarning, setShowPartialDownloadWarning] = useState(false);
+  const [downloadWarnings, setDownloadWarnings] = useState<DownloadWarnings | undefined>();
   const [removedRows, setRemovedRows] = useState<string[]>([]);
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
@@ -115,7 +116,13 @@ export const DownloadTable = ({
 
   return (
     <>
-      {showPartialDownloadWarning && (
+      {downloadWarnings?.sizeLimitReached && (
+        <Alert.Warning className="mb-4">
+          <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
+          <Alert.Body>{t("downloadResponsesTable.sizeLimitReached.body")}</Alert.Body>
+        </Alert.Warning>
+      )}
+      {downloadWarnings?.processingFailed && (
         <Alert.Warning className="mb-4">
           <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
           <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
@@ -363,8 +370,8 @@ export const DownloadTable = ({
         setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
         formName={formName}
-        onSuccessfulDownload={(filteredIds, hasDownloadFailures = false) => {
-          setShowPartialDownloadWarning(hasDownloadFailures);
+        onSuccessfulDownload={(filteredIds, warnings) => {
+          setDownloadWarnings(warnings);
           if (filteredIds.length > 0) {
             setRemovedRows([...removedRows, ...filteredIds]);
             tableItemsDispatch({
@@ -375,7 +382,9 @@ export const DownloadTable = ({
           // router.replace(router.asPath, undefined, { scroll: false });
           if (statusFilter === StatusFilter.NEW) {
             setShowDownloadSuccess(
-              filteredIds.length > 0 && !hasDownloadFailures ? "downloadSuccess" : false
+              filteredIds.length > 0 && !warnings?.sizeLimitReached && !warnings?.processingFailed
+                ? "downloadSuccess"
+                : false
             );
           }
         }}

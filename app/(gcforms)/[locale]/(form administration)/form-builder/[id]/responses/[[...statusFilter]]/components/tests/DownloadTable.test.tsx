@@ -2,11 +2,17 @@
  * @vitest-environment jsdom
  */
 import React from "react";
-import { act, render } from "@testing-library/react";
+import { act, cleanup, render } from "@testing-library/react";
 import { DownloadTable } from "../DownloadTable";
 import { VaultSubmissionOverview, VaultStatus } from "@lib/types";
 import axios from "axios";
 import { StatusFilter } from "../../types";
+import { DownloadDialog } from "../Dialogs/DownloadDialog/DownloadDialog";
+import type { DownloadWarnings } from "../Dialogs/DownloadDialog/DownloadDialog.types";
+
+vi.mock("../Dialogs/DownloadDialog/DownloadDialog", () => ({
+  DownloadDialog: vi.fn(() => null),
+}));
 
 vi.mock("next/navigation", () => ({
   useSearchParams: () => ({
@@ -34,6 +40,8 @@ vi.mock("../../actions", () => ({
 }));
 
 describe("Download Table", () => {
+  afterEach(cleanup);
+
   it("Download Table should render", async () => {
     const promise = Promise.resolve();
     const axiosSpy = vi.spyOn(axios, "get");
@@ -68,6 +76,51 @@ describe("Download Table", () => {
     await act(async () => {
       await promise;
     });
+  });
+
+  it.each<DownloadWarnings>([
+    { sizeLimitReached: true, processingFailed: false },
+    { sizeLimitReached: false, processingFailed: true },
+    { sizeLimitReached: true, processingFailed: true },
+    { sizeLimitReached: false, processingFailed: false },
+  ])("shows the appropriate warnings for %j", async (warnings) => {
+    const rendered = render(
+      <DownloadTable
+        statusFilter={StatusFilter.NEW}
+        vaultSubmissions={vaultSubmissions}
+        formId="clg17xha50008efkgfgxa8l4f"
+        formName=""
+        nagwareResult={null}
+        responseDownloadLimit={100}
+        overdueAfter={0}
+        startFromExclusiveResponse={null}
+      />
+    );
+
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([], warnings);
+    });
+
+    expect(rendered.queryByText("Download size limit reached") !== null).toBe(
+      warnings.sizeLimitReached
+    );
+    expect(rendered.queryByText("Some responses could not be processed") !== null).toBe(
+      warnings.processingFailed
+    );
+    if (warnings.sizeLimitReached) {
+      expect(rendered.getByText(/in smaller groups or one at a time/)).toBeInTheDocument();
+    }
+    if (warnings.processingFailed) {
+      expect(
+        rendered.getByText(/Try downloading the remaining responses again/)
+      ).toBeInTheDocument();
+    }
+
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([]);
+    });
+    expect(rendered.queryByText("Download size limit reached")).not.toBeInTheDocument();
+    expect(rendered.queryByText("Some responses could not be processed")).not.toBeInTheDocument();
   });
 });
 
