@@ -84,6 +84,9 @@ export const DownloadTable = ({
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
+    if (checked) {
+      setRemovedRows((rows) => rows.filter((row) => row !== name));
+    }
     const dispatchAction = { type: TableActions.UPDATE, payload: { item: { name, checked } } };
     tableItemsDispatch(dispatchAction);
 
