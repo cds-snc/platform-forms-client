@@ -15,7 +15,8 @@ import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { ActionsPanel } from "./ActionsPanel";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
-import { DownloadDialog } from "./Dialogs/DownloadDialog";
+import { DownloadDialog } from "./Dialogs/DownloadDialog/DownloadDialog";
+import type { DownloadWarnings } from "./Dialogs/DownloadDialog/DownloadDialog.types";
 import { formatDateTime } from "@lib/utils/form-builder";
 import { DownloadSingleButton } from "./DownloadSingleButton";
 import { Pagination } from "./Pagination";
@@ -56,6 +57,7 @@ export const DownloadTable = ({
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
+  const [downloadWarnings, setDownloadWarnings] = useState<DownloadWarnings | undefined>();
   const [removedRows, setRemovedRows] = useState<string[]>([]);
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
@@ -82,6 +84,9 @@ export const DownloadTable = ({
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
+    if (checked) {
+      setRemovedRows((rows) => rows.filter((row) => row !== name));
+    }
     const dispatchAction = { type: TableActions.UPDATE, payload: { item: { name, checked } } };
     tableItemsDispatch(dispatchAction);
 
@@ -114,6 +119,18 @@ export const DownloadTable = ({
 
   return (
     <>
+      {downloadWarnings?.sizeLimitReached && (
+        <Alert.Warning className="mb-4">
+          <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
+          <Alert.Body>{t("downloadResponsesTable.sizeLimitReached.body")}</Alert.Body>
+        </Alert.Warning>
+      )}
+      {downloadWarnings?.processingFailed && (
+        <Alert.Warning className="mb-4">
+          <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
+          <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
+        </Alert.Warning>
+      )}
       {showDownloadSuccess && (
         <Alert.Success className="mb-4">
           <Alert.Title>{t(`${showDownloadSuccess}.title`)}</Alert.Title>
@@ -356,15 +373,22 @@ export const DownloadTable = ({
         setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
         formName={formName}
-        onSuccessfulDownload={(filteredIds) => {
-          setRemovedRows([...removedRows, ...filteredIds]);
-          tableItemsDispatch({
-            type: TableActions.UNCHECK,
-            payload: { ids: filteredIds },
-          });
+        onSuccessfulDownload={(filteredIds, warnings) => {
+          setDownloadWarnings(warnings);
+          if (filteredIds.length > 0) {
+            setRemovedRows([...removedRows, ...filteredIds]);
+            tableItemsDispatch({
+              type: TableActions.UNCHECK,
+              payload: { ids: filteredIds },
+            });
+          }
           // router.replace(router.asPath, undefined, { scroll: false });
           if (statusFilter === StatusFilter.NEW) {
-            setShowDownloadSuccess("downloadSuccess");
+            setShowDownloadSuccess(
+              filteredIds.length > 0 && !warnings?.sizeLimitReached && !warnings?.processingFailed
+                ? "downloadSuccess"
+                : false
+            );
           }
         }}
         setDownloadError={setDownloadError}

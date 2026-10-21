@@ -414,8 +414,8 @@
           "title": "Utiliser la version publiée"
         },
         "upload": {
-          "title": "Téléverser un fichier",
-          "description": "Utilisez un fichier JSON de Formulaires GC"
+          "title": "Télécharger un fichier",
+          "description": "Choisissez un fichier JSON créé à l’aide de Formulaires GC."
         },
         "legend": "Choisissez la source du formulaire brouillon"
       },
