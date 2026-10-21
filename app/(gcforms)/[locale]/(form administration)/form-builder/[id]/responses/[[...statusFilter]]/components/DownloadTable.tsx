@@ -120,13 +120,13 @@ export const DownloadTable = ({
   return (
     <>
       {downloadWarnings?.sizeLimitReached && (
-        <Alert.Warning className="mb-4">
+        <Alert.Warning className="mb-4" focussable={true}>
           <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
           <Alert.Body>{t("downloadResponsesTable.sizeLimitReached.body")}</Alert.Body>
         </Alert.Warning>
       )}
       {downloadWarnings?.processingFailed && (
-        <Alert.Warning className="mb-4">
+        <Alert.Warning className="mb-4" focussable={true}>
           <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
           <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
         </Alert.Warning>
