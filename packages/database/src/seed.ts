@@ -64,6 +64,16 @@ async function createPrivileges(env: string) {
   await Promise.all(privilegePromises);
 }
 
+/**
+ * Fixtures in settings.ts are canonical, so we sync all properties except
+ * value which is runtime-specific and should not be overwritten.
+ *
+ * If a setting is removed from the fixture, it will be deleted from the database as well.
+ * If a setting is added to the fixture, it will be created in the database including the default value.
+ *
+ * @param env The environment for which to synchronize settings
+ * @returns A promise that resolves when the settings have been synchronized
+ */
 async function syncSettings(env: string) {
   const settings = seedSettings[env];
   if (settings.length === 0) {
