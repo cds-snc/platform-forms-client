@@ -123,18 +123,6 @@ const addressCompleteRateLimitWindowSeconds: Setting = {
   value: "60",
 };
 
-const hCaptchaEnabledSetting: Setting = {
-  internalId: "hCaptchaEnabledSetting",
-  nameEn: "hCaptcha Enabled Setting",
-  nameFr: "Paramètre d'activation de hCaptcha",
-  descriptionEn: "Enable or disable hCaptcha for the app.",
-  descriptionFr: "Activez ou désactivez hCaptcha pour l'application.",
-  type: "boolean",
-  groupEn: null,
-  groupFr: null,
-  value: "false",
-};
-
 const enableClientErrorReporting: Setting = {
   internalId: "enableClientErrorReporting",
   nameEn: "Enable Client Error Reporting",
@@ -157,7 +145,6 @@ const allSettings = [
   editLockRedirectIdleMs,
   addressCompleteRetrieveRateLimitMax,
   addressCompleteRateLimitWindowSeconds,
-  hCaptchaEnabledSetting,
   enableClientErrorReporting,
 ];
 
