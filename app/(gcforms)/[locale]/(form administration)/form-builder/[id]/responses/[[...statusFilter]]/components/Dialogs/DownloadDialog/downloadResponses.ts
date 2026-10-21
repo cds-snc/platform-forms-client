@@ -46,9 +46,7 @@ import type {
   SimpleResponse,
 } from "./DownloadDialog.types";
 
-// const ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
-// For testing purposes, set a lower ZIP size limit to trigger the limit more easily during development.
-export const ZIP_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
+export const ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
 const ZIP_MANIFEST_RESERVE_BYTES = 2 * 1024 * 1024;
 const ZIP_ENTRY_OVERHEAD_BYTES = 4096;
 type ZipEntryData = string | Blob | Uint8Array | ArrayBuffer;
@@ -100,8 +98,7 @@ export const downloadResponses = async ({
   let zipSizeLimitReached = false;
   let hasCommittedResponse = false;
 
-  // The limit is only enforced once a response is in the ZIP, so a single response larger than
-  // the limit is still downloaded rather than blocking the user entirely.
+  // The limit is only enforced once at least a single response is in the ZIP this is to avoid blocking the download of responses completely.
   const exceedsZipSizeLimit = (sizeBytes: number) =>
     hasCommittedResponse && sizeBytes > ZIP_SIZE_LIMIT_BYTES - ZIP_MANIFEST_RESERVE_BYTES;
 
