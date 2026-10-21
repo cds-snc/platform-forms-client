@@ -43,7 +43,7 @@ export const SettingValueEditor = ({
     setSaving(true);
     setError(false);
     try {
-      await saveSettingValue(internalId, draft);
+      await saveSettingValue(internalId, type === "boolean" ? String(booleanValue) : draft);
       closeDialog();
       router.refresh();
     } catch {
