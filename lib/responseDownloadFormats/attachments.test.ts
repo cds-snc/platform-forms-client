@@ -111,7 +111,12 @@ describe("response attachment ZIP paths", () => {
     expect(fetchMock).toHaveBeenNthCalledWith(2, "https://example.test/refreshed");
     expect(refreshDownloadLink).toHaveBeenCalledWith("response-1", "first");
     expect(failures).toEqual([
-      { responseId: "response-1", filename: "second.txt", reason: "HTTP 500" },
+      {
+        code: "PROCESSING",
+        responseId: "response-1",
+        filename: "second.txt",
+        reason: "HTTP 500",
+      },
     ]);
     expect(Object.keys(loadedZip.files)).toContain(
       "file_attachments-fichiers_joints/response-1/first.txt"
@@ -198,8 +203,18 @@ describe("response attachment ZIP paths", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(failures).toEqual([
-      { responseId: "response-1", filename: "second.txt", reason: "Archive size limit reached" },
-      { responseId: "response-1", filename: "third.txt", reason: "Archive size limit reached" },
+      {
+        code: "SIZE_LIMIT",
+        responseId: "response-1",
+        filename: "second.txt",
+        reason: "Archive size limit reached",
+      },
+      {
+        code: "SIZE_LIMIT",
+        responseId: "response-1",
+        filename: "third.txt",
+        reason: "Archive size limit reached",
+      },
     ]);
     expect(Object.keys(zip.files)).toContain(
       "file_attachments-fichiers_joints/response-1/first.txt"
