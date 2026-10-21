@@ -9,10 +9,15 @@ const mocks = vi.hoisted(() => ({
   generateDownloadZip: vi.fn(),
   getSubmissionsByFormat: vi.fn(),
   getTemplateHasFileInput: vi.fn(),
+  logMessageError: vi.fn(),
+  logMessageWarn: vi.fn(),
 }));
 const OriginalTextEncoder = globalThis.TextEncoder;
 
 vi.mock("@lib/client/clientHelpers", () => ({ ga: mocks.ga }));
+vi.mock("@lib/logger", () => ({
+  logMessage: { error: mocks.logMessageError, warn: mocks.logMessageWarn },
+}));
 vi.mock("@lib/responseDownloadFormats/attachments", () => ({
   addResponseAttachmentsToZip: mocks.addResponseAttachmentsToZip,
 }));
@@ -285,6 +290,9 @@ describe("downloadResponses", () => {
       sizeLimitReached: true,
       processingFailed: false,
     });
+    expect(mocks.logMessageWarn).toHaveBeenCalledWith(
+      "Responses ZIP size limit reached for form form-id"
+    );
   });
 
   it("downloads a single response that exceeds the ZIP size limit without failures", async () => {
