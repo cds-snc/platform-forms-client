@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createDraftVersionForTemplate } from "@lib/templates/mutations/createDraftForTemplate";
 import { AuthenticatedAction } from "@lib/actions";
-import { type FormRecord } from "@lib/types";
+import { type FormProperties, type FormRecord } from "@lib/types";
 
 export const createDraftVersion = AuthenticatedAction(
   async (
@@ -11,9 +11,11 @@ export const createDraftVersion = AuthenticatedAction(
     {
       id: formID,
       redirectAfter,
+      formConfig,
     }: {
       id: string;
       redirectAfter?: string;
+      formConfig?: FormProperties;
     }
   ): Promise<{
     formRecord: FormRecord | null;
@@ -23,7 +25,7 @@ export const createDraftVersion = AuthenticatedAction(
     let response: FormRecord | null = null;
 
     try {
-      response = await createDraftVersionForTemplate(formID);
+      response = await createDraftVersionForTemplate(formID, formConfig);
 
       if (!response) {
         throw new Error(`Unable to create a draft version for ${formID}`);

@@ -1,33 +1,39 @@
 "use client";
+
+/*--------------------------------------------*
+ * Framework and Third-Party
+ *--------------------------------------------*/
 import React, { useEffect } from "react";
+
+/*--------------------------------------------*
+ * Internal Aliases
+ *--------------------------------------------*/
+import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
-import { Button } from "@clientComponents/globals";
-import { logMessage } from "@lib/logger";
-import {
-  CSVResponse,
-  DownloadFormat,
-  HtmlZippedResponse,
-  JSONResponse,
-} from "@lib/responseDownloadFormats/types";
-import JSZip from "jszip";
-import { ga, getDate, slugify } from "@lib/client/clientHelpers";
-import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
-import { getSubmissionsByFormat } from "../../actions";
-import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
-import { addResponseAttachmentsToZip } from "@lib/responseDownloadFormats/attachments";
 import { FeatureFlags } from "@lib/cache/types";
+import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FormBuilderError } from "../../exceptions";
+import { logMessage } from "@lib/logger";
+import { DownloadFormat } from "@lib/responseDownloadFormats/types";
+import {
+  FormServerErrorCodes,
+  type Language,
+  type ServerActionError,
+} from "@lib/types/form-builder-types";
+import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
+
+/*--------------------------------------------*
+ * Local Relative
+ *--------------------------------------------*/
+import type { DownloadDialogProps, DownloadWarnings } from "./DownloadDialog.types";
+import { availableDownloadFormats } from "./downloadResponseFiles";
+import type { DownloadProgress } from "./DownloadDialog.types";
+import { downloadResponses } from "./downloadResponses";
 import { useTemplateVersioning } from "./useTemplateVersioning";
 import { VersionSelector } from "./VersionSelector";
 
-export const getVersionedZipFileName = (baseFileName: string, version: string | null) => {
-  if (!version) return baseFileName;
-
-  const normalizedVersion = version.trim().replace(/^v/i, "");
-  return baseFileName.replace(/\.zip$/, `-v${normalizedVersion}.zip`);
-};
+export { getVersionedZipFileName } from "./downloadZip";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -39,23 +45,14 @@ export const DownloadDialog = ({
   onSuccessfulDownload,
   responseDownloadLimit,
   checkedMeta = [],
-}: {
-  checkedItems: Map<string, boolean>;
-  isDialogVisible: boolean;
-  setIsDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
-  formId: string;
-  formName: string;
-  onSuccessfulDownload: (filteredIds: string[]) => void;
-  responseDownloadLimit: number;
-  checkedMeta?: { id?: string; name?: string; version?: string | number | null }[];
-}) => {
+}: DownloadDialogProps) => {
   const dialogRef = useDialogRef();
   const { t, i18n } = useTranslation("form-builder-responses");
   const defaultSelectedFormat = DownloadFormat.HTML_ZIPPED;
   const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>(defaultSelectedFormat);
   const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
+  const [downloadProgress, setDownloadProgress] = React.useState<DownloadProgress | null>(null);
   const [selectedVersionForDialog, setSelectedVersionForDialog] = React.useState<string | null>(
     null
   );
@@ -75,50 +72,21 @@ export const DownloadDialog = ({
     setSelectedFormat(defaultSelectedFormat);
     setZipAllFiles(true);
     setSelectedVersionForDialog(null);
+    setDownloadProgress(null);
     setIsDialogVisible(false);
     dialogRef.current?.close();
   };
 
-  const handleDownloadComplete = (filteredIds: string[]) => {
+  const handleDownloadComplete = (filteredIds: string[], warnings?: DownloadWarnings) => {
     setIsDownloading(false);
-    onSuccessfulDownload(filteredIds);
+    onSuccessfulDownload(filteredIds, warnings);
     handleClose();
   };
-
-  const downloadFileFromBlob = (data: Blob, fileName: string) => {
-    const href = window.URL.createObjectURL(data);
-    const anchorElement = document.createElement("a");
-    anchorElement.href = href;
-    anchorElement.download = fileName;
-    document.body.appendChild(anchorElement);
-    anchorElement.click();
-    document.body.removeChild(anchorElement);
-    window.URL.revokeObjectURL(href);
-  };
-
-  const downloadFormatEvent = (
-    formID: string,
-    downloadType: DownloadFormat,
-    numberOfRecords: number
-  ) => {
-    ga("download_format", {
-      formID,
-      downloadType,
-      numberOfRecords,
-    });
-  };
-
-  // Note: The API can provide additional formats, see DownloadFormat const and update this array if needed
-  const availableFormats: DownloadFormat[] = [
-    DownloadFormat.CSV,
-    DownloadFormat.JSON,
-    DownloadFormat.HTML_ZIPPED,
-  ];
 
   const handleDownload = async () => {
     setIsDownloading(true);
     setDownloadError(false);
-    if (!selectedFormat || !availableFormats.includes(selectedFormat)) {
+    if (!selectedFormat || !availableDownloadFormats.includes(selectedFormat)) {
       setDownloadError(FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT);
       return;
     }
@@ -134,8 +102,6 @@ export const DownloadDialog = ({
 
     const filePrefix = slugify(`${formName}-${getDate()}`) + "-";
 
-    let filteredIds = Array.from(checkedItems.keys());
-
     // Exclude items without a version; only download responses that have a matched version
     const filteredIdsWithVersion = getFilteredIds(selectedVersionForDialog);
 
@@ -148,135 +114,63 @@ export const DownloadDialog = ({
       return;
     }
 
-    // If a version is selected in-dialog, narrow ids to that version; otherwise use all filtered ids
-    filteredIds = filteredIdsWithVersion;
-
     const selectedVersion = selectedVersionForDialog ?? dialogVersions[0] ?? null;
-
-    const generateDownloadZip = async (zip: JSZip) => {
-      const stream = zip.generateInternalStream({ type: "uint8array", streamFiles: true });
-      let zipSizeBytes = 0;
-      let lastLoggedSizeBytes = 0;
-      const zipData = await stream
-        .on("data", (chunk) => {
-          zipSizeBytes += chunk.byteLength;
-          if (zipSizeBytes - lastLoggedSizeBytes >= 1024 * 1024) {
-            logMessage.debug({
-              message: "Response ZIP generation progress",
-              formId,
-              zipSizeBytes,
-            });
-            lastLoggedSizeBytes = zipSizeBytes;
-          }
-        })
-        .accumulate();
-      logMessage.debug({
-        message: "Response ZIP generation complete",
-        formId,
-        zipSizeBytes,
-      });
-      const zipBuffer = new ArrayBuffer(zipData.byteLength);
-      new Uint8Array(zipBuffer).set(zipData);
-      const blob = new Blob([zipBuffer], { type: "application/zip" });
-      const fileName = getVersionedZipFileName(
-        `${filePrefix}responses-reponses.zip`,
-        selectedVersion
-      );
-      downloadFileFromBlob(blob, fileName);
-      handleDownloadComplete(filteredIds);
-    };
-
     try {
-      if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
-        const response = (await getSubmissionsByFormat({
-          formID: formId,
-          ids: filteredIds,
-          format: DownloadFormat.HTML_ZIPPED,
-          lang: i18n.language as Language,
-          version: selectedVersion,
-        })) as HtmlZippedResponse | ServerActionError;
-
-        if ("error" in response) {
-          throw new FormBuilderError(response.error, response.code);
-        }
-
-        downloadFormatEvent(formId, selectedFormat, filteredIds.length);
-
-        const zip = new JSZip();
-        zip.file("_receipt-recu.html", response.receipt);
-
-        response.responses.forEach((response: { id: string; html: string }) => {
-          zip.file(`${response.id}.html`, response.html);
-        });
-        await addResponseAttachmentsToZip(zip, response.attachments);
-        await generateDownloadZip(zip);
-      }
-
-      if (selectedFormat === DownloadFormat.CSV) {
-        const response = (await getSubmissionsByFormat({
-          formID: formId,
-          ids: filteredIds,
-          format: DownloadFormat.CSV,
-          lang: i18n.language as Language,
-          version: selectedVersion,
-        })) as CSVResponse | ServerActionError;
-
-        if ("error" in response) {
-          throw new FormBuilderError(response.error, response.code);
-        }
-
-        downloadFormatEvent(formId, selectedFormat, filteredIds.length);
-        const universalBOMForUTF8 = "\uFEFF";
-        if (zipAllFiles || fileUploadEnabled) {
-          const zip = new JSZip();
-          zip.file("receipt-recu.html", response.receipt);
-          zip.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
-          await addResponseAttachmentsToZip(zip, response.attachments);
-          await generateDownloadZip(zip);
-        } else {
-          downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
-          downloadFileFromBlob(
-            new Blob([universalBOMForUTF8 + response.responses]),
-            `${filePrefix}responses-reponses.csv`
-          );
-          handleDownloadComplete(filteredIds);
-        }
-      }
-
-      if (selectedFormat === DownloadFormat.JSON) {
-        const response = (await getSubmissionsByFormat({
-          formID: formId,
-          ids: filteredIds,
-          format: DownloadFormat.JSON,
-          lang: i18n.language as Language,
-          version: selectedVersion,
-        })) as JSONResponse | ServerActionError;
-
-        if ("error" in response) {
-          throw new FormBuilderError(response.error, response.code);
-        }
-
-        downloadFormatEvent(formId, selectedFormat, filteredIds.length);
-        if (zipAllFiles || fileUploadEnabled) {
-          const zip = new JSZip();
-          zip.file("receipt-recu.html", response.receipt);
-          zip.file("responses-reponses.json", JSON.stringify(response.responses));
-          await addResponseAttachmentsToZip(zip, response.attachments);
-          await generateDownloadZip(zip);
-        } else {
-          downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
-          downloadFileFromBlob(
-            new Blob([JSON.stringify(response.responses)], { type: "application/json" }),
-            `${filePrefix}responses-reponses.json`
-          );
-          handleDownloadComplete(filteredIds);
-        }
-      }
+      await downloadResponses({
+        formId,
+        format: selectedFormat,
+        language: i18n.language as Language,
+        version: selectedVersion,
+        filteredIds: filteredIdsWithVersion,
+        filePrefix,
+        shouldCreateZip: zipAllFiles || fileUploadEnabled,
+        setDownloadProgress,
+        setIsDownloading,
+        onDownloadComplete: handleDownloadComplete,
+        onClose: handleClose,
+      });
     } catch (err) {
       logMessage.error(err as Error);
       setDownloadError((err as ServerActionError).code || true);
       setIsDownloading(false);
+      setDownloadProgress(null);
       handleClose();
+    }
+  };
+
+  const getDownloadProgressMessage = () => {
+    if (!downloadProgress) return t("loading");
+
+    switch (downloadProgress.phase) {
+      case "responses":
+        return t("downloadResponsesModals.downloadDialog.processingResponse", {
+          response: downloadProgress.response,
+          total: downloadProgress.total,
+        });
+      case "attachments":
+        return (
+          <>
+            <span>
+              {t("downloadResponsesModals.downloadDialog.responseProgress", {
+                response: downloadProgress.response,
+                total: downloadProgress.responseTotal,
+              })}
+            </span>
+            <span aria-hidden="true" className="px-2">
+              •
+            </span>
+            <span>
+              {t("downloadResponsesModals.downloadDialog.downloadingAttachment", {
+                current: Math.min(downloadProgress.completed + 1, downloadProgress.total),
+                total: downloadProgress.total,
+              })}
+            </span>
+          </>
+        );
+      case "zip":
+        return t("downloadResponsesModals.downloadDialog.creatingZip", {
+          percent: Math.floor(downloadProgress.percent),
+        });
     }
   };
 
@@ -393,7 +287,21 @@ export const DownloadDialog = ({
               </div>
             )}
 
-            <div className="sticky bottom-0 flex border-t-[0.5px] border-slate-500 bg-white p-4">
+            <div className="sticky bottom-0 flex flex-col gap-3 border-t-[0.5px] border-slate-500 bg-white p-4">
+              {isDownloading && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="flex items-center gap-2"
+                  data-testid="download-progress-indicator"
+                >
+                  <SpinnerIcon className="size-6 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
+                  <span className="sr-only">{t("loading")}</span>
+                  {fileUploadEnabled && (
+                    <span className="text-sm">{getDownloadProgressMessage()}</span>
+                  )}
+                </div>
+              )}
               <div className="flex gap-4">
                 <Button theme="secondary" onClick={handleClose} disabled={isDownloading}>
                   {t("downloadResponsesModals.downloadDialog.cancel")}
@@ -409,12 +317,6 @@ export const DownloadDialog = ({
                 >
                   {t("downloadResponsesModals.downloadDialog.download")}
                 </Button>
-                {isDownloading && (
-                  <div role="status" className="mt-2">
-                    <SpinnerIcon className="size-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
-                    <span className="sr-only">{t("loading")}</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>
