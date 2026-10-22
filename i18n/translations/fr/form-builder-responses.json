@@ -97,6 +97,10 @@
     "download": "Télécharger",
     "delete": "Supprimer",
     "movedToDownloaded": "Déplacée vers Téléchargements",
+    "overdueRestriction": {
+      "title": "Le téléchargement des nouvelles réponses est restreint",
+      "body": "Téléchargez les réponses en retard et approuvez leur suppression pour rétablir l’accès aux nouvelles réponses. Vous pouvez toujours télécharger les réponses en retard et télécharger de nouveau les réponses de l’onglet Téléchargements."
+    },
     "partialDownload": {
       "title": "Certaines réponses n'ont pas pu être traitées",
       "body": "Un problème est survenu lors du traitement de certaines réponses ou de leurs pièces jointes. Réessayez de télécharger les réponses restantes."

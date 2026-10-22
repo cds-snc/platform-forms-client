@@ -126,6 +126,20 @@ Once the change is made, you will need to 'Log Out' and log back in. Alternative
 
 ## Testing
 
+### Overdue response download enforcement
+
+`ENFORCE_OVERDUE_RESPONSE_LIMITATION` in `constants.ts` enables this restriction by default.
+Set it to `false` to disable enforcement in both the responses UI and its download server action.
+Changing the constant requires redeploying the application.
+
+When a form has new or downloaded responses older than the `nagwarePhaseWarned` setting
+(35 days by default), only new responses already marked overdue can be downloaded.
+Download eligibility uses `nagwarePhaseEncouraged` (15 days by default), matching the
+table's rounded-day overdue labels; it is separate from the day-36 restriction trigger.
+Re-downloading previously retrieved responses and signing off on their removal remain available.
+The check covers the whole form, including responses outside the current page. Once all overdue
+responses are signed off, refreshing the responses list restores access to newer responses.
+
 See package.json scripts for vitest and playwright
 
 ### Local Playwright setup

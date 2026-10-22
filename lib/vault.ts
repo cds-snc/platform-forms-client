@@ -27,6 +27,55 @@ import { TemplateAlreadyPublishedError } from "@lib/templates/internal/errors";
 import { getAppSetting } from "./appSettings";
 import { delay, getExponentialBackoffTimeInMS } from "./utils/retryability";
 import type { VaultFileAttachment } from "@lib/types";
+import { ENFORCE_OVERDUE_RESPONSE_LIMITATION } from "@root/constants";
+
+/**
+ * Returns the latest creation timestamp eligible for download while overdue responses remain.
+ * Query both unprocessed statuses across the entire form, independent of UI pagination.
+ */
+export async function getResponseDownloadCutoff(formID: string): Promise<number | null> {
+  if (!ENFORCE_OVERDUE_RESPONSE_LIMITATION) return null;
+
+  await authorization.canViewForm(formID);
+  const warnedDaysSetting = await getAppSetting("nagwarePhaseWarned");
+  const warnedDays = Number(warnedDaysSetting);
+  if (!warnedDaysSetting || !Number.isInteger(warnedDays) || warnedDays < 0) {
+    throw new Error("Invalid nagwarePhaseWarned setting");
+  }
+  const overdueDaysSetting = await getAppSetting("nagwarePhaseEncouraged");
+  const overdueDays = Number(overdueDaysSetting);
+  if (!overdueDaysSetting || !Number.isInteger(overdueDays) || overdueDays < 0) {
+    throw new Error("Invalid nagwarePhaseEncouraged setting");
+  }
+
+  // Match nagware's whole-day threshold: 35 days is allowed; day 36 is restricted.
+  const now = Date.now();
+  const cutoff = now - (warnedDays + 1) * 86_400_000;
+  const results = await Promise.all(
+    [VaultStatus.NEW, VaultStatus.DOWNLOADED].map((status) =>
+      dynamoDBDocumentClient.send(
+        new QueryCommand({
+          TableName: "Vault",
+          IndexName: "StatusCreatedAt_v2",
+          Limit: 1,
+          KeyConditionExpression:
+            "FormID = :formID AND #statusCreatedAtKey BETWEEN :start AND :end",
+          ExpressionAttributeNames: { "#statusCreatedAtKey": "Status#CreatedAt" },
+          ExpressionAttributeValues: {
+            ":formID": formID,
+            ":start": `${status}#`,
+            ":end": `${status}#${cutoff}`,
+          },
+          ProjectionExpression: "FormID",
+        })
+      )
+    )
+  );
+
+  // The table labels a response overdue when Math.round(ageInDays) exceeds overdueDays.
+  const downloadCutoff = now - (overdueDays + 0.5) * 86_400_000;
+  return results.some((result) => result.Items?.length) ? downloadCutoff : null;
+}
 
 /**
  * Checks if any submissions exist for a given form and type

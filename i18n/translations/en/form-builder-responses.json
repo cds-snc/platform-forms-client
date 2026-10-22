@@ -97,6 +97,10 @@
     "download": "Download",
     "delete": "Delete",
     "movedToDownloaded": "Moved to Downloaded",
+    "overdueRestriction": {
+      "title": "Downloading new responses is restricted",
+      "body": "Download overdue responses and sign off on their removal to restore access to new responses. You can still download overdue responses and download responses again from the Downloaded tab."
+    },
     "partialDownload": {
       "title": "Some responses could not be processed",
       "body": "There was a problem processing some responses or their attachments. Try downloading the remaining responses again."

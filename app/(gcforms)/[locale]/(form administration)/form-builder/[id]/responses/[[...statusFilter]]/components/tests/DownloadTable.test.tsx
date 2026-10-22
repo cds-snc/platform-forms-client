@@ -62,7 +62,7 @@ describe("Download Table", () => {
         vaultSubmissions={vaultSubmissions}
         formId="clg17xha50008efkgfgxa8l4f"
         formName={""}
-        nagwareResult={null}
+        downloadCutoff={null}
         responseDownloadLimit={0}
         overdueAfter={0}
         startFromExclusiveResponse={null}
@@ -90,7 +90,7 @@ describe("Download Table", () => {
         vaultSubmissions={vaultSubmissions}
         formId="clg17xha50008efkgfgxa8l4f"
         formName=""
-        nagwareResult={null}
+        downloadCutoff={null}
         responseDownloadLimit={100}
         overdueAfter={0}
         startFromExclusiveResponse={null}
@@ -142,7 +142,7 @@ describe("Download Table", () => {
         vaultSubmissions={vaultSubmissions}
         formId="clg17xha50008efkgfgxa8l4f"
         formName=""
-        nagwareResult={null}
+        downloadCutoff={null}
         responseDownloadLimit={100}
         overdueAfter={0}
         startFromExclusiveResponse={null}
@@ -160,6 +160,100 @@ describe("Download Table", () => {
     fireEvent.click(checkbox);
 
     expect(checkbox.closest("tr")).not.toHaveClass("opacity-50");
+  });
+});
+
+describe("Overdue download restrictions", () => {
+  afterEach(cleanup);
+
+  const cutoff = Date.UTC(2026, 8, 16);
+  const submissions: VaultSubmissionOverview[] = [
+    { formID: "form-id", name: "overdue", status: VaultStatus.NEW, createdAt: cutoff },
+    { formID: "form-id", name: "recent", status: VaultStatus.NEW, createdAt: cutoff + 1 },
+    {
+      formID: "form-id",
+      name: "downloaded",
+      status: VaultStatus.DOWNLOADED,
+      createdAt: cutoff + 1,
+    },
+    { formID: "form-id", name: "confirmed", status: VaultStatus.CONFIRMED, createdAt: cutoff + 1 },
+  ];
+
+  const renderTable = (downloadCutoff: number | null, items = submissions) =>
+    render(
+      <DownloadTable
+        statusFilter={StatusFilter.NEW}
+        vaultSubmissions={items}
+        formId="form-id"
+        formName=""
+        downloadCutoff={downloadCutoff}
+        responseDownloadLimit={100}
+        overdueAfter={15}
+        startFromExclusiveResponse={null}
+      />
+    );
+
+  it("blocks recent new responses but keeps overdue downloads and re-downloads available", () => {
+    const rendered = renderTable(cutoff);
+
+    for (const submission of submissions) {
+      const checkbox = rendered.getByRole("checkbox", { name: submission.name });
+      const button = rendered.getByRole("button", { name: `Download ${submission.name}` });
+      if (submission.name === "recent") {
+        expect(checkbox).toBeDisabled();
+        expect(button).toBeDisabled();
+        fireEvent.click(button);
+      } else {
+        expect(checkbox).not.toBeDisabled();
+        expect(button).not.toBeDisabled();
+      }
+    }
+    expect(rendered.getByText("Downloading new responses is restricted")).toBeInTheDocument();
+  });
+
+  it("select all excludes blocked responses from bulk downloads", () => {
+    const rendered = renderTable(cutoff);
+    fireEvent.click(rendered.getByRole("checkbox", { name: "Select all" }));
+
+    expect(rendered.getByRole("checkbox", { name: "recent" })).not.toBeChecked();
+    expect(rendered.getByRole("checkbox", { name: "overdue" })).toBeChecked();
+    const dialogProps = vi.mocked(DownloadDialog).mock.lastCall![0];
+    expect([...dialogProps.checkedItems.keys()]).toEqual(["overdue", "downloaded", "confirmed"]);
+    expect(dialogProps.checkedMeta?.map((item) => item.name)).not.toContain("recent");
+  });
+
+  it("allows every overdue age, including 35 days, while blocking recent responses", () => {
+    const now = Date.now();
+    const items = [1, 15, 16, 35, 36, 46].map((days) => ({
+      formID: "form-id",
+      name: `${days}-days`,
+      status: VaultStatus.NEW,
+      createdAt: now - days * 86_400_000,
+    }));
+    const rendered = renderTable(now - 15.5 * 86_400_000, items);
+    for (const days of [1, 15]) {
+      expect(rendered.getByRole("checkbox", { name: `${days}-days` })).toBeDisabled();
+    }
+    for (const days of [16, 35, 36, 46]) {
+      expect(rendered.getByRole("checkbox", { name: `${days}-days` })).not.toBeDisabled();
+      expect(rendered.getByRole("button", { name: `Download ${days}-days` })).not.toBeDisabled();
+    }
+  });
+
+  it("blocks new responses even when overdue responses are on another page or tab", () => {
+    const rendered = renderTable(cutoff, [submissions[1]]);
+    expect(rendered.getByRole("checkbox", { name: "recent" })).toBeDisabled();
+    expect(rendered.getByRole("checkbox", { name: "Select all" })).toHaveAttribute(
+      "aria-disabled",
+      "true"
+    );
+  });
+
+  it("allows all downloads once overdue responses are signed off or enforcement is disabled", () => {
+    const rendered = renderTable(null);
+    expect(rendered.queryByText("Downloading new responses is restricted")).not.toBeInTheDocument();
+    expect(rendered.getByRole("checkbox", { name: "recent" })).not.toBeDisabled();
+    expect(rendered.getByRole("button", { name: "Download recent" })).not.toBeDisabled();
   });
 });
 

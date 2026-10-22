@@ -9,6 +9,9 @@ export const RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
 export const RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES = 2 * 1024 * 1024;
 export const RESPONSES_UI_ZIP_ENTRY_OVERHEAD_BYTES = 4096;
 
+// Restrict new downloads until responses older than nagwarePhaseWarned are signed off.
+export const ENFORCE_OVERDUE_RESPONSE_LIMITATION = true;
+
 export const MAX_DYNAMIC_ROW_AMOUNT = 50;
 export const MAX_CHOICE_AMOUNT = 400;
 

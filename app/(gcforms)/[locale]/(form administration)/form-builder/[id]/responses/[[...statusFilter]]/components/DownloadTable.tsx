@@ -1,15 +1,9 @@
 import React, { useEffect, useReducer, useState, useMemo } from "react";
-import {
-  NagwareResult,
-  StartFromExclusiveResponse,
-  VaultStatus,
-  VaultSubmissionOverview,
-} from "@lib/types";
+import { StartFromExclusiveResponse, VaultStatus, VaultSubmissionOverview } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
-import { getDaysPassed } from "@lib/client/clientHelpers";
 import { Alert } from "@clientComponents/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
@@ -30,7 +24,7 @@ interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionOverview[];
   formName: string;
   formId: string;
-  nagwareResult: NagwareResult | null;
+  downloadCutoff?: number | null;
   responseDownloadLimit: number;
   startFromExclusiveResponse: StartFromExclusiveResponse | null;
   overdueAfter: number;
@@ -41,7 +35,7 @@ export const DownloadTable = ({
   vaultSubmissions,
   formName,
   formId,
-  nagwareResult,
+  downloadCutoff = null,
   responseDownloadLimit,
   startFromExclusiveResponse,
   overdueAfter,
@@ -59,7 +53,6 @@ export const DownloadTable = ({
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [downloadWarnings, setDownloadWarnings] = useState<DownloadWarnings | undefined>();
   const [removedRows, setRemovedRows] = useState<string[]>([]);
-  const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { hasApiKeyId } = useFormBuilderConfig();
 
@@ -99,16 +92,20 @@ export const DownloadTable = ({
   };
 
   const blockDownload = (submission: VaultSubmissionOverview) => {
-    const daysPast = getDaysPassed(submission.createdAt);
-
-    if (
+    return (
       submission.status === VaultStatus.NEW &&
-      accountEscalated &&
-      daysPast < Number(overdueAfter)
-    ) {
-      return true;
-    }
-    return false;
+      downloadCutoff !== null &&
+      submission.createdAt > downloadCutoff
+    );
+  };
+
+  const selectableTableItems = {
+    ...tableItems,
+    checkedItems: new Map(
+      [...tableItems.checkedItems].filter(([id]) =>
+        tableItems.allItems.some((item) => item.name === id && !blockDownload(item))
+      )
+    ),
   };
 
   useEffect(() => {
@@ -119,6 +116,12 @@ export const DownloadTable = ({
 
   return (
     <>
+      {downloadCutoff !== null && (
+        <Alert.Danger className="mb-4">
+          <Alert.Title>{t("downloadResponsesTable.overdueRestriction.title")}</Alert.Title>
+          <Alert.Body>{t("downloadResponsesTable.overdueRestriction.body")}</Alert.Body>
+        </Alert.Danger>
+      )}
       {downloadWarnings?.sizeLimitReached && (
         <Alert.Warning className="mb-4" focussable={true}>
           <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
@@ -169,7 +172,8 @@ export const DownloadTable = ({
             <tr className="border-b-1 border-slate-300">
               <th scope="col" className="py-4 text-center">
                 <CheckAll
-                  tableItems={tableItems}
+                  tableItems={selectableTableItems}
+                  isItemDisabled={blockDownload}
                   tableItemsDispatch={tableItemsDispatch}
                   noSelectedItemsError={noSelectedItemsError}
                   setNoSelectedItemsError={setNoSelectedItemsError}
@@ -266,7 +270,7 @@ export const DownloadTable = ({
                         className="gc-input-checkbox__input"
                         name="responses"
                         type="checkbox"
-                        checked={tableItems.statusItems.get(submission.name)}
+                        checked={!isBlocked && tableItems.statusItems.get(submission.name)}
                         onChange={handleChecked}
                         {...(isBlocked && { disabled: true })}
                       />
@@ -302,6 +306,7 @@ export const DownloadTable = ({
                   </td>
                   <td className="text-center whitespace-nowrap">
                     <DownloadSingleButton
+                      disabled={isBlocked}
                       id={`button-${submission.name}`}
                       formId={submission.formID}
                       responseId={submission.name}
@@ -353,7 +358,7 @@ export const DownloadTable = ({
         </div>
       </section>
 
-      {tableItems.checkedItems.size > 0 && (
+      {selectableTableItems.checkedItems.size > 0 && (
         <ActionsPanel>
           <DownloadButton
             setShowDownloadDialog={setShowDownloadDialog}
@@ -368,7 +373,7 @@ export const DownloadTable = ({
       />
 
       <DownloadDialog
-        checkedItems={tableItems.checkedItems}
+        checkedItems={selectableTableItems.checkedItems}
         isDialogVisible={showDownloadDialog}
         setIsDialogVisible={setShowDownloadDialog}
         formId={formId}
@@ -393,7 +398,9 @@ export const DownloadTable = ({
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
-        checkedMeta={tableItems.allItems.filter((item) => tableItems.checkedItems.get(item.name))}
+        checkedMeta={tableItems.allItems.filter((item) =>
+          selectableTableItems.checkedItems.get(item.name)
+        )}
       />
     </>
   );

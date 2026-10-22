@@ -24,6 +24,7 @@ import {
   updateLastDownloadedBy,
   submissionTypeExists,
   retrieveSubmissionRemovalDate,
+  getResponseDownloadCutoff,
 } from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
@@ -109,10 +110,19 @@ export const fetchSubmissions = AuthenticatedAction(
           }
         }
 
-        const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
-          await listAllSubmissions(formId, selectedStatus, undefined, startFromExclusiveResponse);
+        const [
+          { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse },
+          downloadCutoff,
+        ] = await Promise.all([
+          listAllSubmissions(formId, selectedStatus, undefined, startFromExclusiveResponse),
+          getResponseDownloadCutoff(formId),
+        ]);
 
-        return { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse };
+        return {
+          submissions,
+          startFromExclusiveResponse: nextStartFromExclusiveResponse,
+          downloadCutoff,
+        };
       } catch (e) {
         logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
         return { error: true, submissions: [] };
@@ -253,6 +263,21 @@ export const getSubmissionsByFormat = AuthenticatedAction(
             "Error retrieving submissions",
             FormServerErrorCodes.DOWNLOAD_RETRIEVE_SUBMISSIONS
           );
+        }
+
+        if (queryResult.some((item) => item.status === VaultStatus.NEW)) {
+          const downloadCutoff = await getResponseDownloadCutoff(formID);
+          if (
+            downloadCutoff !== null &&
+            queryResult.some(
+              (item) => item.status === VaultStatus.NEW && item.createdAt > downloadCutoff
+            )
+          ) {
+            throw new FormBuilderError(
+              "Download and sign off overdue responses before downloading new responses.",
+              FormServerErrorCodes.DOWNLOAD_OVERDUE_RESTRICTION
+            );
+          }
         }
 
         const fileUploadEnabled = await featureFlagAllowedForUser(

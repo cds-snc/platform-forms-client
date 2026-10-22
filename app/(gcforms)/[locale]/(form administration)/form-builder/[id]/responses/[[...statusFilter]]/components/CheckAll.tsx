@@ -11,6 +11,7 @@ export const CheckAll = ({
   tableItemsDispatch,
   noSelectedItemsError,
   setNoSelectedItemsError,
+  isItemDisabled,
 }: {
   tableItems: {
     checkedItems: Map<string, boolean>;
@@ -21,6 +22,7 @@ export const CheckAll = ({
   tableItemsDispatch: React.Dispatch<ReducerTableItemsActions>;
   noSelectedItemsError: boolean;
   setNoSelectedItemsError: (noSelectedItemsError: boolean) => void;
+  isItemDisabled?: (submission: VaultSubmissionOverview) => boolean;
 }) => {
   const { t } = useTranslation("form-builder-responses");
 
@@ -34,7 +36,8 @@ export const CheckAll = ({
   const { checkedItems, allItems } = tableItems;
 
   const checkedItemsCount = checkedItems.size;
-  const allItemsCount = allItems.length;
+  const selectableItems = allItems.filter((submission) => !isItemDisabled?.(submission));
+  const allItemsCount = selectableItems.length;
 
   // Are all items checked, some items checked, or no items checked?
   const checkAllStatus =
@@ -48,8 +51,9 @@ export const CheckAll = ({
    * Check all items if none are checked, otherwise uncheck all items.
    */
   const handleCheckAll = () => {
+    if (allItemsCount === 0) return;
     if (checkAllStatus === allCheckedState.NONE) {
-      allItems.forEach((submission) => {
+      selectableItems.forEach((submission) => {
         tableItemsDispatch({
           type: TableActions.UPDATE,
           payload: { item: { name: submission.name, checked: true } },
@@ -78,6 +82,7 @@ export const CheckAll = ({
       <span
         className="m-auto inline-block cursor-pointer"
         role="checkbox"
+        aria-disabled={allItemsCount === 0}
         aria-checked={
           checkAllStatus === allCheckedState.ALL
             ? "true"
@@ -85,10 +90,11 @@ export const CheckAll = ({
               ? "mixed"
               : "false"
         }
-        tabIndex={0}
+        tabIndex={allItemsCount === 0 ? -1 : 0}
         onClick={handleCheckAll}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
             handleCheckAll();
           }
         }}

@@ -9,7 +9,7 @@ import { getSubmissionRemovalDate } from "../actions";
 
 const ExclamationText = ({
   text,
-  className = "flex items-center",
+  className = "inline-flex items-center",
   isShowIcon = true,
 }: {
   text: string;
@@ -17,10 +17,10 @@ const ExclamationText = ({
   isShowIcon?: boolean;
 }) => {
   return (
-    <div className={className}>
+    <span className={className}>
       {isShowIcon && <ExclamationIcon className="mr-1" />}
       <span className="font-bold text-[#bc3332]">{text}</span>
-    </div>
+    </span>
   );
 };
 

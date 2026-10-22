@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Nagware } from "@formBuilder/components/Nagware";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
 import { useTranslation } from "@i18n/client";
 import { ucfirst } from "@lib/client/clientHelpers";
@@ -9,7 +8,7 @@ import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { TitleAndDescription } from "./TitleAndDescription";
-import { NagLevel, StartFromExclusiveResponse, VaultSubmissionOverview } from "@lib/types";
+import { StartFromExclusiveResponse, VaultSubmissionOverview } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
 import { StatusFilter } from "../types";
@@ -54,7 +53,14 @@ export const Responses = ({
     submissions: VaultSubmissionOverview[];
     startFromExclusiveResponse: StartFromExclusiveResponse | null;
     error: boolean;
-  }>({ loading: true, submissions: [], startFromExclusiveResponse: null, error: false });
+    downloadCutoff: number | null;
+  }>({
+    loading: true,
+    submissions: [],
+    startFromExclusiveResponse: null,
+    error: false,
+    downloadCutoff: null,
+  });
 
   useEffect(() => {
     fetchSubmissions({
@@ -62,23 +68,27 @@ export const Responses = ({
       status: statusFilter,
       lastKey,
     })
-      .then(({ submissions, startFromExclusiveResponse, error }) => {
+      .then(({ submissions, startFromExclusiveResponse, error, downloadCutoff }) => {
         setState({
           loading: false,
           submissions,
           startFromExclusiveResponse: startFromExclusiveResponse ?? null,
           error: Boolean(error),
+          downloadCutoff: downloadCutoff ?? null,
         });
       })
       .catch(() =>
-        setState({ loading: false, submissions: [], startFromExclusiveResponse: null, error: true })
+        setState({
+          loading: false,
+          submissions: [],
+          startFromExclusiveResponse: null,
+          error: true,
+          downloadCutoff: null,
+        })
       );
   }, [formId, lastKey, statusFilter, forceRefresh]);
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
-
-  // The nagware will be refactored during the database optimiztion work.
-  const nagwareResult = { level: NagLevel.None, numberOfSubmissions: 0 };
 
   if (state.loading) {
     return null;
@@ -99,7 +109,7 @@ export const Responses = ({
                 vaultSubmissions={state.submissions}
                 formName={formName}
                 formId={formId}
-                nagwareResult={nagwareResult}
+                downloadCutoff={state.downloadCutoff}
                 responseDownloadLimit={responseDownloadLimit}
                 startFromExclusiveResponse={state.startFromExclusiveResponse}
                 overdueAfter={overdueAfter}
@@ -124,7 +134,6 @@ export const Responses = ({
         />
       )}
 
-      <Nagware nagwareResult={nagwareResult} />
       <div aria-live="polite">
         <ClosedBanner id={formId} />
         {state.submissions.length > 0 ? (
@@ -134,7 +143,7 @@ export const Responses = ({
               vaultSubmissions={state.submissions}
               formName={formName}
               formId={formId}
-              nagwareResult={nagwareResult}
+              downloadCutoff={state.downloadCutoff}
               responseDownloadLimit={responseDownloadLimit}
               startFromExclusiveResponse={state.startFromExclusiveResponse}
               overdueAfter={overdueAfter}
