@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.28.0](https://github.com/cds-snc/platform-forms-client/compare/v4.27.0...v4.28.0) (2026-10-22)
+
+
+### Features
+
+* Improved system settings management ([#8048](https://github.com/cds-snc/platform-forms-client/issues/8048)) ([c102f7f](https://github.com/cds-snc/platform-forms-client/commit/c102f7f5e5b6772053452dc80b8f94fcfa0110b8))
+* Separate versioned schemas for better legibility ([#8044](https://github.com/cds-snc/platform-forms-client/issues/8044)) ([7322ba0](https://github.com/cds-snc/platform-forms-client/commit/7322ba0a740ee0f1862711a587cde8f84459a4b4))
+
+
+### Bug Fixes
+
+* add focus indicator to upload answer button ([#8054](https://github.com/cds-snc/platform-forms-client/issues/8054)) ([7f5102b](https://github.com/cds-snc/platform-forms-client/commit/7f5102bd35d3720ab8ec72471217bdfb83bec472))
+* Remove strict enforcement and exitUrl transform that removed empty exitUrls ([#8078](https://github.com/cds-snc/platform-forms-client/issues/8078)) ([a284de5](https://github.com/cds-snc/platform-forms-client/commit/a284de53d90b0a940db2b109853deb850fe30eb9))
+* Retain last successful template migration on failure ([#8060](https://github.com/cds-snc/platform-forms-client/issues/8060)) ([777a630](https://github.com/cds-snc/platform-forms-client/commit/777a6301bf2fcad92d08e39f7d03cdf0175dbba9))
+
+
+### Miscellaneous Chores
+
+* Add branding for Canadian Human Rights Commission ([#8058](https://github.com/cds-snc/platform-forms-client/issues/8058)) ([abe8706](https://github.com/cds-snc/platform-forms-client/commit/abe8706d54f6885342ddb223b23b2c64b4ff881c))
+* add prop for alert ([#8073](https://github.com/cds-snc/platform-forms-client/issues/8073)) ([0559b95](https://github.com/cds-snc/platform-forms-client/commit/0559b9529dd0dd34b330146f1050895f10572d7b))
+* attachments via UI add log + fix bug ([#8071](https://github.com/cds-snc/platform-forms-client/issues/8071)) ([e4b24a4](https://github.com/cds-snc/platform-forms-client/commit/e4b24a4e62c340b7485c0f5a380a5783bbc29ce4))
+* bump Next.js to 16.4.2 ([#8077](https://github.com/cds-snc/platform-forms-client/issues/8077)) ([ff2acde](https://github.com/cds-snc/platform-forms-client/commit/ff2acdef8f06e2ac0a7d76b8ad8db70a039d4513))
+* ensure unique filenames for attachment ui ([#8074](https://github.com/cds-snc/platform-forms-client/issues/8074)) ([720f547](https://github.com/cds-snc/platform-forms-client/commit/720f547bcad183944df256b27ab50a26f975e27e))
+* ensure users can always download at least one response with attachments ([#8067](https://github.com/cds-snc/platform-forms-client/issues/8067)) ([0f0bd2b](https://github.com/cds-snc/platform-forms-client/commit/0f0bd2b0941d59052f29d06a5e4aac84303f7188))
+* prep app for cache components ([#8036](https://github.com/cds-snc/platform-forms-client/issues/8036)) ([bbb031d](https://github.com/cds-snc/platform-forms-client/commit/bbb031d51ffad97032a592e60bb919965cab1fff))
+* synced file(s) with cds-snc/site-reliability-engineering ([#7903](https://github.com/cds-snc/platform-forms-client/issues/7903)) ([a5ee342](https://github.com/cds-snc/platform-forms-client/commit/a5ee342cb6497918fb99a7bd9a4b93b20e34fb26))
+* Update FR content for versioning ([#8065](https://github.com/cds-snc/platform-forms-client/issues/8065)) ([9eba2c1](https://github.com/cds-snc/platform-forms-client/commit/9eba2c19e959523a8242e47166191f80f714d058))
+
+
+### Code Refactoring
+
+* update download zip process (attachments - feature flagged) ([#8040](https://github.com/cds-snc/platform-forms-client/issues/8040)) ([88a51f6](https://github.com/cds-snc/platform-forms-client/commit/88a51f637b933c19cbd63fd8a8729caaa4ca3eec))
+
 ## [4.27.0](https://github.com/cds-snc/platform-forms-client/compare/v4.26.0...v4.27.0) (2026-10-15)
 
 
