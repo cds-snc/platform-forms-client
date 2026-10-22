@@ -1,12 +1,32 @@
 import JSZip from "jszip";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { addResponseAttachmentsToZip, getAttachmentZipPath } from "./attachments";
+import {
+  addResponseAttachmentsToZip,
+  getAttachmentZipPath,
+  getResponseAttachmentFilenameMapping,
+} from "./attachments";
 
 afterEach(() => {
   vi.unstubAllGlobals();
 });
 
 describe("response attachment ZIP paths", () => {
+  it("maps duplicate attachment names to the same unique filenames used in the ZIP", () => {
+    const mapping = getResponseAttachmentFilenameMapping([
+      { id: "first", name: "document.pdf", isPotentiallyMalicious: false },
+      { id: "second", name: "document.pdf", isPotentiallyMalicious: false },
+      { id: "third", name: "document.pdf", isPotentiallyMalicious: false },
+    ]);
+
+    expect(mapping.get("first")).toEqual({
+      originalName: "document.pdf",
+      actualName: "document.pdf",
+      isPotentiallyMalicious: false,
+    });
+    expect(mapping.get("second")?.actualName).toBe("document (1).pdf");
+    expect(mapping.get("third")?.actualName).toBe("document (2).pdf");
+  });
+
   it("puts attachments in a response-specific folder and deduplicates names", async () => {
     vi.stubGlobal(
       "fetch",
@@ -226,6 +246,42 @@ describe("response attachment ZIP paths", () => {
 
     expect(path).toBe(
       "file_attachments-fichiers_joints/response-1/suspicious_files-fichiers_suspects/upload.exe"
+    );
+  });
+
+  it("writes renamed malicious attachments into the suspicious folder", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        blob: async () => new TextEncoder().encode("attachment contents"),
+      })
+    );
+    const zip = new JSZip();
+
+    await addResponseAttachmentsToZip(zip, [
+      {
+        responseId: "response-1",
+        attachments: [
+          {
+            id: "safe",
+            name: "upload.exe",
+            downloadLink: "https://example.test/safe",
+            isPotentiallyMalicious: false,
+          },
+          {
+            id: "suspicious",
+            name: "upload.exe",
+            downloadLink: "https://example.test/suspicious",
+            isPotentiallyMalicious: true,
+          },
+        ],
+      },
+    ]);
+
+    expect(Object.keys(zip.files)).toContain(
+      "file_attachments-fichiers_joints/response-1/suspicious_files-fichiers_suspects/upload (1).exe"
     );
   });
 

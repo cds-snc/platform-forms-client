@@ -44,6 +44,7 @@ import { FeatureFlags } from "@lib/cache/types";
 import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { getFormSubmissionAttachmentDownloadLink } from "@lib/vault/getFormSubmissionAttachmentDownloadLink";
 import { FormElement, FormElementTypes } from "@gcforms/types";
+import { getResponseAttachmentFilenameMapping } from "@lib/responseDownloadFormats/attachments";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -294,6 +295,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
             const submission = mapAnswers({
               formTemplate: fullFormTemplate.form,
               rawAnswers: filteredSubmissionData as Record<string, Response>,
+              attachments: getResponseAttachmentFilenameMapping(item.fileAttachments ?? []),
             });
 
             let sorted: Answer[];
