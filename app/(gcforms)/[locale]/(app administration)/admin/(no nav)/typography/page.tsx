@@ -1,3 +1,8 @@
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 const Heading = ({ title }: { title: string }) => {
   return (
     <h2 className="my-4 border-y-1 border-slate-700 bg-slate-50 py-4 text-center text-2xl font-bold">
@@ -14,7 +19,7 @@ export default async function Page() {
       <div className="gc-formview">
         <p className="mb-4">Default (base) text size (20px) Noto Sans</p>
 
-        <p className="mb-4 font-lato">
+        <p className="font-lato mb-4">
           <strong>Heading font</strong>: Lato
         </p>
         <h1>H1 Heading</h1>
@@ -27,7 +32,7 @@ export default async function Page() {
 
       <Heading title="Form builder + Admin" />
       <p className="mb-4">Default (base) text size (18px) Noto Sans</p>
-      <p className="mb-4 font-noto-sans">
+      <p className="font-noto-sans mb-4">
         <strong>Heading font</strong>: Noto Sans
       </p>
 
