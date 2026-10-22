@@ -46,7 +46,7 @@ export const migrateTemplate = (
       version = nextVersion;
     } catch (error) {
       const reason = error instanceof Error ? error.message : String(error);
-      logMessage.error(
+      logMessage.warn(
         `[templates][migrateTemplate] Migration from schema version ${version} to ${
           version + 1
         } failed; keeping version ${version}: ${reason}`
