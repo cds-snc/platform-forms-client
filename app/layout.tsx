@@ -11,9 +11,11 @@ import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";
 import { auth } from "@lib/auth";
 import ServiceWorker from "@clientComponents/globals/ServiceWorker";
-import { AppUpdater } from "@clientComponents/globals/Update";
 
-export const dynamic = "force-dynamic";
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -102,8 +104,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
       </head>
 
       <body className={"has-[.bkd-soft]:bg-gray-soft"}>
-        {/* AppUpdater must be the very first element in the body */}
-        <AppUpdater />
         {process.env.NODE_ENV === "production" || process.env.APP_UPDATER === "true" ? (
           <ServiceWorker />
         ) : null}

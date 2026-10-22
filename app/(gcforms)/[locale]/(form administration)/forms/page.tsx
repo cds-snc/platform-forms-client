@@ -20,6 +20,11 @@ import type { FormsTemplate, FormsTemplateWithLockInfo, FormTabStatus } from "./
 import { TAB_STATUS } from "./components/types";
 import { CreateDraftConfirmDialog } from "../form-builder/[id]/components/dialogs/CreateDraftConfirmDialog/CreateDraftConfirmDialog";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => string): string => {
   const statusTitleMap: Record<string, string> = {
     [TAB_STATUS.DRAFT]: t("nav.drafts"),
@@ -236,7 +241,10 @@ export default async function Page(props: {
 
   return (
     <div className="m-4 grid min-h-screen grid-cols-[20em_1fr] gap-8">
-      <h1 className="sr-only">{`${getStatusTitle(status, t)} - ${t("title")}`}</h1>
+      <h1
+        id="forms-page-title"
+        className="sr-only"
+      >{`${getStatusTitle(status, t)} - ${t("title")}`}</h1>
       <div>
         <div className="self-start rounded border border-slate-200 bg-white p-2">
           <AccountDetails

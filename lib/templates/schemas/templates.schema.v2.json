@@ -1,0 +1,1282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "id": "https://forms-formulaires.alpha.canada.ca/schema/v2",
+  "type": "object",
+  "title": "GC Forms Schema - Alpha v2",
+  "description": "A schema to define a Forms configuration.",
+  "default": {},
+  "examples": [
+    {
+      "schemaVersion": 2,
+      "titleEn": "",
+      "titleFr": "",
+      "introduction": {},
+      "privacyPolicy": {},
+      "confirmation": {},
+      "layout": [],
+      "groups": {
+        "start": { "name": "start", "titleEn": "Start", "titleFr": "Début", "elements": [] },
+        "review": {
+          "name": "review",
+          "titleEn": "Review",
+          "titleFr": "Révision",
+          "elements": [],
+          "nextAction": "end"
+        },
+        "end": { "name": "end", "titleEn": "End", "titleFr": "Fin", "elements": [] }
+      },
+      "groupsLayout": [],
+      "elements": [],
+      "brand": {}
+    }
+  ],
+  "properties": {
+    "schemaVersion": {
+      "description": "The template schema version this form was authored/migrated against. Absent means version 1.",
+      "id": "#/properties/schemaVersion",
+      "type": "integer",
+      "const": 2
+    },
+    "titleEn": {
+      "description": "The displayed title of the form to the user in English",
+      "id": "#/properties/titleEn",
+      "type": "string"
+    },
+    "titleFr": {
+      "description": "The displayed title of the form to the user in French",
+      "id": "#/properties/titleFr",
+      "type": "string"
+    },
+    "introduction": {
+      "description": "Form introduction",
+      "id": "#/properties/introduction",
+      "type": "object",
+      "properties": {
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
+        }
+      }
+    },
+    "privacyPolicy": {
+      "description": "Form privacy policy",
+      "id": "#/properties/privacyPolicy",
+      "type": "object",
+      "properties": {
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
+        }
+      }
+    },
+    "confirmation": {
+      "description": "Content that will be displayed after a form is submitted.",
+      "id": "#/properties/confirmation",
+      "type": "object",
+      "properties": {
+        "descriptionEn": {
+          "type": "string"
+        },
+        "descriptionFr": {
+          "type": "string"
+        },
+        "referrerUrlEn": {
+          "type": "string"
+        },
+        "referrerUrlFr": {
+          "type": "string"
+        }
+      }
+    },
+    "layout": {
+      "description": "A list of element IDs that determines the order or elements in the form.",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "uniqueItems": true,
+      "examples": [[2, 3, 4, 6, 9, 5]]
+    },
+    "groups": {
+      "description": "Groups keyed by group ID. Grouped templates must include the reserved start, review, and end groups.",
+      "type": "object",
+      "properties": {
+        "start": {
+          "$ref": "#/definitions/group"
+        },
+        "review": {
+          "$ref": "#/definitions/reviewGroup"
+        },
+        "end": {
+          "$ref": "#/definitions/endGroup"
+        }
+      },
+      "patternProperties": {
+        ".+": {
+          "$ref": "#/definitions/group"
+        }
+      },
+      "allOf": [
+        {
+          "if": { "minProperties": 1 },
+          "then": { "required": ["start", "review", "end"] }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "groupsLayout": {
+      "description": "A list of group IDs that determines the order of the groups in the form.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "not": { "enum": ["start", "review", "end"] }
+      },
+      "uniqueItems": true,
+      "examples": [["one", "two"]]
+    },
+    "elements": {
+      "description": "A list of elements contained within the form.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/elementStrict"
+      },
+      "examples": [
+        [
+          {
+            "id": 1,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Full name",
+              "titleFr": "Nom complet",
+              "validation": { "required": true },
+              "autoComplete": "name"
+            }
+          },
+          {
+            "id": 2,
+            "type": "textArea",
+            "properties": {
+              "titleEn": "Additional details",
+              "titleFr": "Détails supplémentaires",
+              "validation": { "required": false, "maxLength": 1000 }
+            }
+          },
+          {
+            "id": 3,
+            "type": "numberInput",
+            "properties": {
+              "titleEn": "Number of participants",
+              "titleFr": "Nombre de participants",
+              "validation": { "required": true, "minValue": 1, "maxValue": 100 },
+              "stepCount": 0
+            }
+          },
+          {
+            "id": 4,
+            "type": "dropdown",
+            "properties": {
+              "titleEn": "Province or territory",
+              "titleFr": "Province ou territoire",
+              "validation": { "required": true },
+              "choices": [{ "en": "Ontario", "fr": "Ontario" }],
+              "sortOrder": "none"
+            }
+          },
+          {
+            "id": 5,
+            "type": "radio",
+            "properties": {
+              "titleEn": "Nomination type",
+              "titleFr": "Type de mise en candidature",
+              "validation": { "required": true },
+              "choices": [{ "en": "Team", "fr": "Équipe" }]
+            }
+          },
+          {
+            "id": 6,
+            "type": "checkbox",
+            "properties": {
+              "titleEn": "Areas of interest",
+              "titleFr": "Domaines d’intérêt",
+              "validation": { "required": false },
+              "choices": [{ "en": "Research", "fr": "Recherche" }]
+            }
+          },
+          {
+            "id": 7,
+            "type": "combobox",
+            "properties": {
+              "titleEn": "Department",
+              "titleFr": "Ministère",
+              "validation": { "required": true },
+              "managedChoices": "departments"
+            }
+          },
+          {
+            "id": 8,
+            "type": "fileInput",
+            "properties": {
+              "titleEn": "Supporting document",
+              "titleFr": "Document à l’appui",
+              "validation": { "required": false },
+              "fileType": ["application/pdf"]
+            }
+          },
+          {
+            "id": 9,
+            "type": "dynamicRow",
+            "properties": {
+              "titleEn": "References",
+              "titleFr": "Références",
+              "validation": { "required": false },
+              "maxNumberOfRows": 5,
+              "dynamicRow": {
+                "rowTitleEn": "Reference",
+                "rowTitleFr": "Référence",
+                "addButtonTextEn": "Add reference",
+                "addButtonTextFr": "Ajouter une référence",
+                "removeButtonTextEn": "Remove reference",
+                "removeButtonTextFr": "Supprimer la référence"
+              },
+              "subElements": [
+                {
+                  "id": 15,
+                  "type": "textField",
+                  "properties": {
+                    "titleEn": "Reference name",
+                    "titleFr": "Nom de la référence",
+                    "validation": { "required": true }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": 10,
+            "type": "richText",
+            "properties": {
+              "descriptionEn": "#### Section 1: Nomination Category",
+              "descriptionFr": "#### Section 1 : Catégorie de la nomination"
+            }
+          },
+          {
+            "id": 11,
+            "type": "attestation",
+            "properties": {
+              "titleEn": "I confirm this information is accurate.",
+              "titleFr": "Je confirme que ces renseignements sont exacts.",
+              "validation": { "all": true }
+            }
+          },
+          {
+            "id": 12,
+            "type": "addressComplete",
+            "properties": {
+              "titleEn": "Mailing address",
+              "titleFr": "Adresse postale",
+              "validation": { "required": true },
+              "addressComponents": { "canadianOnly": true, "splitAddress": false }
+            }
+          },
+          {
+            "id": 13,
+            "type": "formattedDate",
+            "properties": {
+              "titleEn": "Date of birth",
+              "titleFr": "Date de naissance",
+              "validation": { "required": true },
+              "dateFormat": "YYYY-MM-DD",
+              "autoComplete": "bday"
+            }
+          },
+          {
+            "id": 14,
+            "type": "starRating",
+            "properties": {
+              "titleEn": "Overall rating",
+              "titleFr": "Évaluation globale",
+              "validation": { "required": true },
+              "numberOfStars": 5
+            }
+          }
+        ]
+      ]
+    },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The brand name.",
+          "type": "string"
+        },
+        "urlEn": {
+          "description": "URL for English version of the site.",
+          "type": "string"
+        },
+        "urlFr": {
+          "description": "URL for a French version of the site.",
+          "type": "string"
+        },
+        "logoEn": {
+          "description": "English logo path.",
+          "type": "string"
+        },
+        "logoFr": {
+          "description": "French logo path.",
+          "type": "string"
+        },
+        "logoTitleEn": {
+          "description": "logo title.",
+          "type": "string"
+        },
+        "logoTitleFr": {
+          "description": "logo title.",
+          "type": "string"
+        },
+        "disableGCBranding": {
+          "description": "If set to true, GC branding will not be rendered in the footer.",
+          "type": "boolean"
+        }
+      }
+    },
+    "lastGeneratedElementId": {
+      "description": "The last generated element id",
+      "type": "number"
+    }
+  },
+  "required": [
+    "titleEn",
+    "titleFr",
+    "privacyPolicy",
+    "confirmation",
+    "layout",
+    "schemaVersion",
+    "groups",
+    "groupsLayout",
+    "elements"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "required": ["groups"]
+      },
+      "then": {
+        "required": ["groupsLayout"]
+      }
+    },
+    {
+      "if": {
+        "required": ["groupsLayout"]
+      },
+      "then": {
+        "required": ["groups"]
+      }
+    }
+  ],
+  "definitions": {
+    "group": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The name of the group.",
+          "type": "string"
+        },
+        "titleEn": {
+          "description": "The title of the group in English.",
+          "type": "string"
+        },
+        "titleFr": {
+          "description": "The title of the group in French.",
+          "type": "string"
+        },
+        "elements": {
+          "description": "A list of top-level element IDs contained within the form group.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "autoFlow": {
+          "description": "Whether a linear flow was applied automatically or a user added custom branching.",
+          "type": "boolean"
+        },
+        "nextAction": {
+          "description": "The next group, a reserved destination, or conditional navigation rules.",
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "description": "Conditional navigation rules evaluated against one source choice element.",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/nextActionRule"
+              }
+            }
+          ]
+        },
+        "exitUrlEn": {
+          "description": "English URL used when nextAction is exit.",
+          "type": "string"
+        },
+        "exitUrlFr": {
+          "description": "French URL used when nextAction is exit.",
+          "type": "string"
+        }
+      },
+      "required": ["name", "titleEn", "titleFr", "elements"],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "nextAction": {
+                  "const": "exit"
+                }
+              },
+              "required": ["nextAction"]
+            },
+            {
+              "properties": {
+                "nextAction": {
+                  "not": {
+                    "const": "exit"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "reviewGroup": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/group"
+        },
+        {
+          "properties": {
+            "nextAction": {
+              "const": "end"
+            }
+          },
+          "required": ["nextAction"]
+        }
+      ]
+    },
+    "endGroup": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/group"
+        },
+        {
+          "not": {
+            "required": ["nextAction"]
+          }
+        }
+      ]
+    },
+    "nextActionRule": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "description": "The destination group ID or permitted reserved destination.",
+          "type": "string",
+          "minLength": 1
+        },
+        "choiceId": {
+          "description": "A source element ID and zero-based choice index, or a navigation catch-all.",
+          "type": "string",
+          "pattern": "^[1-9][0-9]*\\.(?:[0-9]+|catch-all)$"
+        }
+      },
+      "required": ["groupId", "choiceId"],
+      "additionalProperties": false
+    },
+    "element": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The unique id for the object",
+          "type": "integer",
+          "minimum": 1
+        },
+        "uuid": {
+          "description": "A unique id for the object (future use)",
+          "type": "string",
+          "format": "uuid"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "textField",
+            "textArea",
+            "dropdown",
+            "radio",
+            "checkbox",
+            "fileInput",
+            "dynamicRow",
+            "richText",
+            "attestation",
+            "combobox",
+            "addressComplete",
+            "formattedDate",
+            "numberInput",
+            "starRating"
+          ]
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "questionId": {
+              "description": "A user-defined unique id for the question",
+              "type": "string"
+            },
+            "tags": {
+              "description": "A list of tags that can be used to group elements together.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "titleEn": {
+              "description": "Input label in English",
+              "type": "string"
+            },
+            "titleFr": {
+              "description": "Input label in French",
+              "type": "string"
+            },
+            "placeholderEn": {
+              "description": "Text that will appear in the text input field as a placeholder in English",
+              "type": "string"
+            },
+            "placeholderFr": {
+              "description": "Text that will appear in the text input field as a placeholder in French",
+              "type": "string"
+            },
+            "descriptionEn": {
+              "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in English",
+              "type": "string"
+            },
+            "descriptionFr": {
+              "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
+              "type": "string"
+            },
+            "dynamicRow": {
+              "type": "object",
+              "properties": {
+                "rowTitleEn": {
+                  "type": "string",
+                  "description": "The title of the row in English"
+                },
+                "rowTitleFr": {
+                  "type": "string",
+                  "description": "The title of the row in French"
+                },
+                "addButtonTextEn": {
+                  "type": "string",
+                  "description": "Text for the add button in English"
+                },
+                "removeButtonTextEn": {
+                  "type": "string",
+                  "description": "Text for the remove button in English"
+                },
+                "addButtonTextFr": {
+                  "type": "string",
+                  "description": "Text for the add button in French"
+                },
+                "removeButtonTextFr": {
+                  "type": "string",
+                  "description": "Text for the remove button in French"
+                }
+              }
+            },
+            "choices": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "en": {
+                    "description": "English choice",
+                    "type": "string"
+                  },
+                  "fr": {
+                    "description": "French choice",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "sortOrder": {
+              "type": "string",
+              "description": "Controls how choices are displayed",
+              "enum": ["none", "ascending", "descending"],
+              "default": "none"
+            },
+            "managedChoices": {
+              "type": ["array", "string"],
+              "description": "The name of the data file(s) containing the choices for this element."
+            },
+            "conditionalRules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "choiceId": {
+                    "description": "The id of the element that will trigger the conditional rule",
+                    "type": "string",
+                    "minimum": 1
+                  }
+                }
+              }
+            },
+            "maxNumberOfRows": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "strictValue": {
+              "description": "If set to true, the element will only accept values that are in the choices list.",
+              "type": "boolean"
+            },
+            "allowNegativeNumbers": {
+              "description": "If set to true, the number input will allow negative numbers.",
+              "type": "boolean"
+            },
+            "stepCount": {
+              "description": "The number of decimals allowed for a number input.",
+              "type": "integer",
+              "minimum": 0
+            },
+            "currencyCode": {
+              "description": "The ISO 4217 currency code used to format the number input as currency (e.g. CAD, USD).",
+              "type": "string"
+            },
+            "useThousandsSeparator": {
+              "description": "If set to true, the number input will format numbers with a thousands separator.",
+              "type": "boolean"
+            },
+            "numberOfStars": {
+              "description": "The number of stars to display in a star rating element.",
+              "type": "integer",
+              "minimum": 3,
+              "maximum": 10
+            },
+            "validation": {
+              "type": "object",
+              "properties": {
+                "required": {
+                  "type": "boolean"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "email",
+                    "alphanumeric",
+                    "text",
+                    "name",
+                    "number",
+                    "phone",
+                    "date",
+                    "custom"
+                  ]
+                },
+                "regex": {
+                  "type": "string"
+                },
+                "maxLength": {
+                  "description": "The maximum number of characters that can be entered in a textinput or textarea.",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "minValue": {
+                  "description": "The minimum allowed numeric value for a number input.",
+                  "type": "number"
+                },
+                "maxValue": {
+                  "description": "The maximum allowed numeric value for a number input.",
+                  "type": "number"
+                },
+                "minDigits": {
+                  "description": "The minimum number of digits required for a number input.",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "maxDigits": {
+                  "description": "The maximum number of digits allowed for a number input.",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "descriptionEn": {
+                  "type": "string"
+                },
+                "descriptionFr": {
+                  "type": "string"
+                },
+                "all": {
+                  "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
+                  "type": "boolean"
+                }
+              },
+              "examples": [
+                {
+                  "required": true,
+                  "type": "email"
+                },
+                {
+                  "required": false,
+                  "type": "alphanumeric"
+                }
+              ]
+            },
+            "subElements": {
+              "description": "A list of subElements contained within a dynamicRow",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/element"
+              }
+            }
+          }
+        }
+      },
+      "required": ["id", "type", "properties"]
+    },
+    "elementCommonProperties": {
+      "description": "Properties every element type may carry, regardless of its type-specific shape.",
+      "type": "object",
+      "properties": {
+        "questionId": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "titleEn": { "type": "string" },
+        "titleFr": { "type": "string" },
+        "placeholderEn": { "type": "string" },
+        "placeholderFr": { "type": "string" },
+        "descriptionEn": { "type": "string" },
+        "descriptionFr": { "type": "string" },
+        "conditionalRules": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "properties": {
+              "choiceId": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]*\\.[0-9]+$"
+              }
+            },
+            "required": ["choiceId"],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "choicesArray": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 400,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "en": { "type": "string" },
+          "fr": { "type": "string" }
+        },
+        "required": ["en", "fr"],
+        "additionalProperties": false
+      }
+    },
+    "sortOrderEnum": {
+      "type": "string",
+      "enum": ["none", "ascending", "descending"]
+    },
+    "managedChoicesType": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["departments", "crownCorporations", "provincialTerritorial"]
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["departments", "crownCorporations", "provincialTerritorial"]
+          }
+        }
+      ]
+    },
+    "validationSimple": {
+      "description": "Validation shape for element types with no type-specific validation options.",
+      "type": "object",
+      "properties": { "required": { "type": "boolean" } },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "validationAttestation": {
+      "type": "object",
+      "properties": {
+        "all": { "type": "boolean" }
+      },
+      "required": ["all"],
+      "additionalProperties": false
+    },
+    "validationTextInput": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "type": {
+          "type": "string",
+          "enum": ["email", "alphanumeric", "text", "name", "phone", "tel", "date", "custom"]
+        },
+        "regex": { "type": "string" },
+        "maxLength": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "validationNumberInput": {
+      "description": "numberInput must not carry a validation.type - the element type itself conveys that.",
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "minValue": { "type": "number" },
+        "maxValue": { "type": "number" },
+        "minDigits": { "type": "integer", "minimum": 1 },
+        "maxDigits": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "elementStrict": {
+      "description": "Discriminated, per-type element schema used by template schema version 2.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "textField" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|autoComplete)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationTextInput" },
+                    "autoComplete": { "type": "string" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "textArea" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
+                  },
+                  "properties": { "validation": { "$ref": "#/definitions/validationTextInput" } },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "numberInput" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation|allowNegativeNumbers|stepCount|currencyCode|useThousandsSeparator)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationNumberInput" },
+                    "allowNegativeNumbers": { "type": "boolean" },
+                    "stepCount": { "type": "integer", "minimum": 0 },
+                    "currencyCode": { "type": "string" },
+                    "useThousandsSeparator": { "type": "boolean" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "dropdown" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|sortOrder)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "choices": { "$ref": "#/definitions/choicesArray" },
+                    "sortOrder": { "$ref": "#/definitions/sortOrderEnum" }
+                  },
+                  "required": ["validation", "choices"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "radio" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "choices": { "$ref": "#/definitions/choicesArray" }
+                  },
+                  "required": ["validation", "choices"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "checkbox" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "choices": { "$ref": "#/definitions/choicesArray" }
+                  },
+                  "required": ["validation", "choices"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "combobox" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices|managedChoices|strictValue)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "choices": { "$ref": "#/definitions/choicesArray" },
+                    "managedChoices": { "$ref": "#/definitions/managedChoicesType" },
+                    "strictValue": { "type": "boolean" }
+                  },
+                  "required": ["validation"],
+                  "oneOf": [
+                    {
+                      "required": ["choices"],
+                      "not": { "required": ["managedChoices"] }
+                    },
+                    {
+                      "required": ["managedChoices"],
+                      "not": { "required": ["choices"] }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "fileInput" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|fileType)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "fileType": {
+                      "oneOf": [
+                        { "type": "string", "minLength": 1 },
+                        {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": { "type": "string", "minLength": 1 }
+                        }
+                      ]
+                    }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "dynamicRow" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|maxNumberOfRows|dynamicRow|subElements)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "maxNumberOfRows": { "type": "integer", "minimum": 1, "maximum": 50 },
+                    "dynamicRow": {
+                      "type": "object",
+                      "properties": {
+                        "rowTitleEn": { "type": "string" },
+                        "rowTitleFr": { "type": "string" },
+                        "addButtonTextEn": { "type": "string" },
+                        "removeButtonTextEn": { "type": "string" },
+                        "addButtonTextFr": { "type": "string" },
+                        "removeButtonTextFr": { "type": "string" }
+                      },
+                      "required": [
+                        "rowTitleEn",
+                        "rowTitleFr",
+                        "addButtonTextEn",
+                        "addButtonTextFr",
+                        "removeButtonTextEn",
+                        "removeButtonTextFr"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "subElements": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": { "$ref": "#/definitions/elementStrictSubElement" }
+                    }
+                  },
+                  "required": ["validation", "dynamicRow", "subElements"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "richText" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:descriptionEn|descriptionFr|conditionalRules)$"
+                  }
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "attestation" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationAttestation" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "addressComplete" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|addressComponents)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "addressComponents": {
+                      "type": "object",
+                      "properties": {
+                        "canadianOnly": { "type": "boolean" },
+                        "splitAddress": { "type": "boolean" }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "formattedDate" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|dateFormat|autoComplete)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "dateFormat": {
+                      "type": "string",
+                      "enum": ["YYYY-MM-DD", "DD-MM-YYYY", "MM-DD-YYYY"]
+                    },
+                    "autoComplete": { "type": "string" }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "starRating" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|numberOfStars)$"
+                  },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "numberOfStars": { "type": "integer", "minimum": 3, "maximum": 10 }
+                  },
+                  "required": ["validation"]
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        }
+      ]
+    },
+    "elementStrictSubElement": {
+      "allOf": [
+        { "$ref": "#/definitions/elementStrict" },
+        {
+          "properties": {
+            "properties": {
+              "not": {
+                "required": ["conditionalRules"]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

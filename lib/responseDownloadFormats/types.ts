@@ -15,10 +15,29 @@ export interface Submission {
   answers: Answer[];
 }
 
+export interface ResponseAttachment {
+  id: string;
+  name: string;
+  downloadLink: string;
+  isPotentiallyMalicious: boolean;
+}
+
+export interface ResponseAttachmentGroup {
+  responseId: string;
+  attachments: ResponseAttachment[];
+}
+
 export interface FormResponseSubmissions {
   formRecord: FormRecord;
   submissions: Submission[];
 }
+
+export const ResponseDownloadErrorCode = {
+  SIZE_LIMIT: "SIZE_LIMIT",
+  PROCESSING: "PROCESSING",
+} as const;
+export type ResponseDownloadErrorCode =
+  (typeof ResponseDownloadErrorCode)[keyof typeof ResponseDownloadErrorCode];
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue>;
 
@@ -47,6 +66,7 @@ export type HtmlAggregatedResponse = string;
 
 export type HtmlZippedResponse = {
   receipt: string;
+  attachments?: ResponseAttachmentGroup[];
   responses: {
     id: string;
     created_at: number;
@@ -54,5 +74,13 @@ export type HtmlZippedResponse = {
   }[];
 };
 
-export type CSVResponse = { receipt: string; responses: string };
-export type JSONResponse = { receipt: string; responses: object };
+export type CSVResponse = {
+  receipt: string;
+  responses: string;
+  attachments?: ResponseAttachmentGroup[];
+};
+export type JSONResponse = {
+  receipt: string;
+  responses: object;
+  attachments?: ResponseAttachmentGroup[];
+};

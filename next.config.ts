@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
   reactCompiler: {
     compilationMode: "annotation",
   },
-  cacheComponents: false,
+  cacheComponents: true,
+  partialPrefetching: false,
   sassOptions: {
     includePaths: ["./styles"],
   },
@@ -61,6 +62,7 @@ const nextConfig: NextConfig = {
   },
   serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino", "@opentelemetry/sdk-node", "recheck"],
   experimental: {
+    agentUpgrade: "latest",
     serverActions: {
       // Note: this matches values in constants.ts
       bodySizeLimit: "10mb",

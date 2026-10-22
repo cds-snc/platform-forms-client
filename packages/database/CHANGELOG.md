@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-10-21
+
+- Adds Group[En|Fr] and type properties/columns to Settings
+- Fixture settings.ts is now canonical for Settings and related properties
+- Updates seeder to Update and Delete settings in addition to Create based on the fixture
+
+## [1.1.13] - 2026-10-14
+
+- Add client error reporting setting
+
 ## [1.1.12] - 2026-09-17
 
 - Update AWS SDK packages to latest versions

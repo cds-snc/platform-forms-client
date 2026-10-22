@@ -8,6 +8,11 @@ import { SetClosingDate } from "./components/close/SetClosingDate";
 import { Notifications } from "./components/notifications/Notifications";
 import { getNotificationsUsersForForm } from "@lib/formEmailOrchestration";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {

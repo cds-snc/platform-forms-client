@@ -1,4 +1,5 @@
 import { type FormProperties } from "@gcforms/types";
+import { logMessage } from "@lib/logger";
 import { CURRENT_TEMPLATE_VERSION, migrations as defaultMigrations } from "./migrations";
 import { type TemplateMigration } from "./migrations/types";
 
@@ -23,6 +24,10 @@ export const migrateTemplate = (
   let migrated = template;
   let version = getTemplateSchemaVersion(migrated);
 
+  if (version > targetVersion) {
+    return migrated;
+  }
+
   while (version < targetVersion) {
     // migrations is keyed by the version it upgrades TO, e.g. migrations[1] takes version 0 to 1.
     const migrate = migrations[version + 1];
@@ -30,13 +35,24 @@ export const migrateTemplate = (
       throw new Error(`No migration registered to upgrade template from version ${version}`);
     }
 
-    migrated = migrate(migrated);
-
-    const nextVersion = getTemplateSchemaVersion(migrated);
-    if (nextVersion <= version) {
-      throw new Error(`Migration from version ${version} did not advance the template version`);
+    const previousVersionTemplate = structuredClone(migrated);
+    try {
+      const nextTemplate = migrate(structuredClone(migrated));
+      const nextVersion = getTemplateSchemaVersion(nextTemplate);
+      if (nextVersion <= version) {
+        throw new Error(`Migration from version ${version} did not advance the template version`);
+      }
+      migrated = nextTemplate;
+      version = nextVersion;
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      logMessage.warn(
+        `[templates][migrateTemplate] Migration from schema version ${version} to ${
+          version + 1
+        } failed; keeping version ${version}: ${reason}`
+      );
+      return previousVersionTemplate;
     }
-    version = nextVersion;
   }
 
   return { ...migrated, schemaVersion: targetVersion };
