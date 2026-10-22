@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   reactCompiler: {
     compilationMode: "annotation",
   },
-  cacheComponents: false,
+  cacheComponents: true,
   sassOptions: {
     includePaths: ["./styles"],
   },
