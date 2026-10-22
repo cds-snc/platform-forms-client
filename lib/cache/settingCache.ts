@@ -14,7 +14,7 @@ export const settingCheck = async (internalId: string): Promise<string | null> =
     try {
       const redis = await getRedisInstance();
       const value = await redis.get(checkParameter);
-      if (value) {
+      if (value !== null) {
         logMessage.debug(`Using Cached Setting for ${checkParameter}`);
         return value;
       }

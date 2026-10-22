@@ -1,0 +1,19 @@
+name: Settings Fixture Check
+on:
+  pull_request:
+    branches: [develop, main, feature/*]
+
+jobs:
+  settings-fixture-check:
+    name: Check removed settings references
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+      - name: Fetch pull request base
+        run: git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+      - name: Node.JS Setup
+        uses: actions/setup-node@670825a89dc0abd596e7a3abd0f5e3f6e5faf37c # v4.6.0
+        with:
+          node-version-file: .nvmrc
+      - name: Check removed settings have no remaining code references
+        run: node scripts/check-removed-settings.mjs "${{ github.event.pull_request.base.sha }}"

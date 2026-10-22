@@ -1,6 +1,10 @@
 import type JSZip from "jszip";
 import { processSequentially } from "./processSequentially";
-import { ResponseDownloadErrorCode, type ResponseAttachmentGroup } from "./types";
+import {
+  ResponseDownloadErrorCode,
+  type ResponseAttachment,
+  type ResponseAttachmentGroup,
+} from "./types";
 
 export const RESPONSE_ATTACHMENTS_FOLDER = "file_attachments-fichiers_joints";
 export const SUSPICIOUS_ATTACHMENTS_FOLDER = "suspicious_files-fichiers_suspects";
@@ -39,6 +43,23 @@ export const getUniqueAttachmentFilename = (
 
   usedNames.add(candidate);
   return candidate;
+};
+
+export const getResponseAttachmentFilenameMapping = (
+  attachments: Array<Pick<ResponseAttachment, "id" | "name" | "isPotentiallyMalicious">>
+) => {
+  const usedNames = new Set<string>();
+
+  return new Map(
+    attachments.map((attachment, index) => [
+      attachment.id,
+      {
+        originalName: attachment.name,
+        actualName: getUniqueAttachmentFilename(attachment.name, usedNames, index),
+        isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+      },
+    ])
+  );
 };
 
 export const getAttachmentZipPath = (
