@@ -431,7 +431,7 @@
                   "const": "exit"
                 }
               },
-              "required": ["nextAction", "exitUrlEn", "exitUrlFr"]
+              "required": ["nextAction"]
             },
             {
               "properties": {
