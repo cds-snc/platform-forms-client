@@ -1,5 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
 import { type FormProperties } from "@gcforms/types";
+import { logMessage } from "@lib/logger";
 import { getTemplateSchemaVersion, migrateTemplate } from "./migrateTemplate";
 import { CURRENT_TEMPLATE_VERSION } from "./migrations";
 
@@ -9,6 +10,10 @@ const baseTemplate = {
   layout: [],
   elements: [],
 } as unknown as FormProperties;
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe("getTemplateSchemaVersion", () => {
   it("treats a missing version as version 0", () => {
@@ -60,12 +65,71 @@ describe("migrateTemplate", () => {
     );
   });
 
-  it("throws if a migration does not advance the version", () => {
-    expect(() =>
-      migrateTemplate(baseTemplate, {
-        targetVersion: 2,
-        migrations: { 1: (template) => ({ ...template }) },
-      })
-    ).toThrow(/did not advance/);
+  it("logs and keeps the previous version if a migration does not advance", () => {
+    const logError = vi.spyOn(logMessage, "error").mockImplementation(() => {});
+    const migrated = migrateTemplate(baseTemplate, {
+      targetVersion: 2,
+      migrations: { 1: (template) => ({ ...template }) },
+    });
+
+    expect(migrated).toEqual(baseTemplate);
+    expect(logError).toHaveBeenCalledWith(
+      expect.stringContaining("Migration from schema version 0 to 1 failed; keeping version 0")
+    );
+  });
+
+  it("keeps the last successful version when a migration mutates then throws", () => {
+    const logError = vi.spyOn(logMessage, "error").mockImplementation(() => {});
+    const template = { ...baseTemplate, schemaVersion: 1 };
+    const migrated = migrateTemplate(template, {
+      targetVersion: 2,
+      migrations: {
+        2: (input) => {
+          input.titleEn = "partial change";
+          throw new Error("migration failed");
+        },
+      },
+    });
+
+    expect(migrated).toEqual(template);
+    expect(migrated.schemaVersion).toBe(1);
+    expect(logError).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "Migration from schema version 1 to 2 failed; keeping version 1: migration failed"
+      )
+    );
+  });
+
+  it("retains successful earlier steps and stops after the first failed step", () => {
+    const logError = vi.spyOn(logMessage, "error").mockImplementation(() => {});
+    const laterMigration = vi.fn();
+    const migrated = migrateTemplate(baseTemplate, {
+      targetVersion: 3,
+      migrations: {
+        1: (template) => ({ ...template, schemaVersion: 1, titleEn: "successful change" }),
+        2: (template) => {
+          template.elements.push({
+            id: 1,
+            type: "textField",
+            properties: { titleEn: "partial change", titleFr: "" },
+          });
+          throw new Error("migration failed");
+        },
+        3: laterMigration,
+      },
+    });
+
+    expect(migrated).toEqual({
+      ...baseTemplate,
+      schemaVersion: 1,
+      titleEn: "successful change",
+    });
+    expect(baseTemplate.elements).toEqual([]);
+    expect(laterMigration).not.toHaveBeenCalled();
+    expect(logError).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "Migration from schema version 1 to 2 failed; keeping version 1: migration failed"
+      )
+    );
   });
 });
