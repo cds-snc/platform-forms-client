@@ -413,15 +413,11 @@
         },
         "exitUrlEn": {
           "description": "English URL used when nextAction is exit.",
-          "type": "string",
-          "minLength": 1,
-          "format": "uri"
+          "type": "string"
         },
         "exitUrlFr": {
           "description": "French URL used when nextAction is exit.",
-          "type": "string",
-          "minLength": 1,
-          "format": "uri"
+          "type": "string"
         }
       },
       "required": ["name", "titleEn", "titleFr", "elements"],
