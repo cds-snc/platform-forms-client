@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     compilationMode: "annotation",
   },
   cacheComponents: true,
+  partialPrefetching: false,
   sassOptions: {
     includePaths: ["./styles"],
   },
