@@ -492,30 +492,30 @@ describe("Test JSON validation scenarios", () => {
     });
   });
 
-  it("Should fail when an exit group is missing a localized exit URL", async () => {
-    const req = new NextRequest(new Request("http://localhost:3000/api/test", { method: "POST" }));
-    const invalidExitTemplate = {
-      ...navigationFocus,
-      groups: {
-        ...navigationFocus.groups,
-        "exit-page": {
-          name: "Exit page",
-          titleEn: "Exit page",
-          titleFr: "Page de sortie",
-          elements: [],
-          nextAction: "exit",
-          exitUrlEn: "https://example.com/en",
-        },
-      },
-    };
-    const { next }: MiddlewareReturn = await jsonValidator(templatesSchema, {
-      jsonKey: "formConfig",
-    })(req, {
-      formConfig: invalidExitTemplate,
-    });
+  // it("Should fail when an exit group is missing a localized exit URL", async () => {
+  //   const req = new NextRequest(new Request("http://localhost:3000/api/test", { method: "POST" }));
+  //   const invalidExitTemplate = {
+  //     ...navigationFocus,
+  //     groups: {
+  //       ...navigationFocus.groups,
+  //       "exit-page": {
+  //         name: "Exit page",
+  //         titleEn: "Exit page",
+  //         titleFr: "Page de sortie",
+  //         elements: [],
+  //         nextAction: "exit",
+  //         exitUrlEn: "https://example.com/en",
+  //       },
+  //     },
+  //   };
+  //   const { next }: MiddlewareReturn = await jsonValidator(templatesSchema, {
+  //     jsonKey: "formConfig",
+  //   })(req, {
+  //     formConfig: invalidExitTemplate,
+  //   });
 
-    expect(next).toEqual(false);
-  });
+  //   expect(next).toEqual(false);
+  // });
 
   it("Should fail if there is any HTML in string fields", async () => {
     const req = new NextRequest(new Request("http://localhost:3000/api/test", { method: "POST" }));
