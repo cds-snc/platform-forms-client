@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.28.1](https://github.com/cds-snc/platform-forms-client/compare/v4.28.0...v4.28.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* Wrap suspense boundary around LocalDialog ([#8079](https://github.com/cds-snc/platform-forms-client/issues/8079)) ([2334cf9](https://github.com/cds-snc/platform-forms-client/commit/2334cf9394ee29bb625d75b7f23395b5a3bafa81))
+
+
+### Miscellaneous Chores
+
+* add playwright test for exit pages ([#8080](https://github.com/cds-snc/platform-forms-client/issues/8080)) ([209488b](https://github.com/cds-snc/platform-forms-client/commit/209488b4cc0eecc6c18427266ef8e91a649394d0))
+
 ## [4.28.0](https://github.com/cds-snc/platform-forms-client/compare/v4.27.0...v4.28.0) (2026-10-22)
 
 
