@@ -66,7 +66,7 @@ describe("migrateTemplate", () => {
   });
 
   it("logs and keeps the previous version if a migration does not advance", () => {
-    const logError = vi.spyOn(logMessage, "error").mockImplementation(() => {});
+    const logError = vi.spyOn(logMessage, "warn").mockImplementation(() => {});
     const migrated = migrateTemplate(baseTemplate, {
       targetVersion: 2,
       migrations: { 1: (template) => ({ ...template }) },
@@ -79,7 +79,7 @@ describe("migrateTemplate", () => {
   });
 
   it("keeps the last successful version when a migration mutates then throws", () => {
-    const logError = vi.spyOn(logMessage, "error").mockImplementation(() => {});
+    const logError = vi.spyOn(logMessage, "warn").mockImplementation(() => {});
     const template = { ...baseTemplate, schemaVersion: 1 };
     const migrated = migrateTemplate(template, {
       targetVersion: 2,
@@ -101,7 +101,7 @@ describe("migrateTemplate", () => {
   });
 
   it("retains successful earlier steps and stops after the first failed step", () => {
-    const logError = vi.spyOn(logMessage, "error").mockImplementation(() => {});
+    const logError = vi.spyOn(logMessage, "warn").mockImplementation(() => {});
     const laterMigration = vi.fn();
     const migrated = migrateTemplate(baseTemplate, {
       targetVersion: 3,
