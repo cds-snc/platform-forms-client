@@ -39,6 +39,8 @@ vi.mock("../../actions", () => ({
   getSubmissionsByFormat: vi.fn(),
 }));
 
+const RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB = 500;
+
 describe("Download Table", () => {
   afterEach(cleanup);
 
@@ -64,6 +66,7 @@ describe("Download Table", () => {
         formName={""}
         nagwareResult={null}
         responseDownloadLimit={0}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
         overdueAfter={0}
         startFromExclusiveResponse={null}
       />
@@ -92,6 +95,7 @@ describe("Download Table", () => {
         formName=""
         nagwareResult={null}
         responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
         overdueAfter={0}
         startFromExclusiveResponse={null}
       />
@@ -144,6 +148,7 @@ describe("Download Table", () => {
         formName=""
         nagwareResult={null}
         responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
         overdueAfter={0}
         startFromExclusiveResponse={null}
       />

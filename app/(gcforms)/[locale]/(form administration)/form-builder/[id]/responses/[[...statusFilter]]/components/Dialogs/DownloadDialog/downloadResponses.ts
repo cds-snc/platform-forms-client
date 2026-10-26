@@ -10,7 +10,6 @@ import { ga } from "@lib/client/clientHelpers";
 import {
   RESPONSES_UI_ZIP_ENTRY_OVERHEAD_BYTES,
   RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES,
-  RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES,
 } from "@root/constants";
 import {
   addResponseAttachmentsToZip,
@@ -82,6 +81,7 @@ export const downloadResponses = async ({
   filteredIds,
   filePrefix,
   shouldCreateZip,
+  responsesDownloadZipMaxSizeMB,
   setDownloadProgress,
   setIsDownloading,
   onDownloadComplete,
@@ -93,6 +93,7 @@ export const downloadResponses = async ({
 
   const downloadFailures: DownloadFailure[] = [];
   const zipEntrySizes = new Map<string, number>();
+  const responsesDownloadZipMaxSizeBytes = responsesDownloadZipMaxSizeMB * 1024 * 1024;
   let zipSizeBytes = 0;
   let zipSizeLimitReached = false;
   let hasCommittedResponse = false;
@@ -100,7 +101,7 @@ export const downloadResponses = async ({
   // The limit is only enforced once at least a single response is in the ZIP this is to avoid blocking the download of responses completely.
   const exceedsZipSizeLimit = (sizeBytes: number) =>
     hasCommittedResponse &&
-    sizeBytes > RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES - RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES;
+    sizeBytes > responsesDownloadZipMaxSizeBytes - RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES;
 
   const reserveZipFile = (
     path: string,
@@ -162,7 +163,7 @@ export const downloadResponses = async ({
         hasCommittedResponse = true;
         if (
           zipSizeBytes >
-          RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES - RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES
+          responsesDownloadZipMaxSizeBytes - RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES
         ) {
           zipSizeLimitReached = true;
         }

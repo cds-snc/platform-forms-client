@@ -73,6 +73,7 @@ export type DownloadResponsesOptions = {
   filteredIds: string[];
   filePrefix: string;
   shouldCreateZip: boolean;
+  responsesDownloadZipMaxSizeMB: number;
   setDownloadProgress: (progress: DownloadProgress) => void;
   setIsDownloading: (isDownloading: boolean) => void;
   onDownloadComplete: (filteredIds: string[], warnings?: DownloadWarnings) => void;
@@ -101,5 +102,6 @@ export type DownloadDialogProps = {
   formName: string;
   onSuccessfulDownload: (filteredIds: string[], warnings?: DownloadWarnings) => void;
   responseDownloadLimit: number;
+  responsesDownloadZipMaxSizeMB: number;
   checkedMeta?: { id?: string; name?: string; version?: string | number | null }[];
 };

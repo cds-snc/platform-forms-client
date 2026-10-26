@@ -136,6 +136,7 @@ export default async function Page(props: {
     <ResponsesContainer
       hasOverdue={hasOverdue}
       responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
+      responsesDownloadZipMaxSizeMB={Number(await getAppSetting("responsesDownloadZipMaxSizeMB"))}
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
       statusFilter={statusFilter as StatusFilter}
       isApiRetrieval={isApiRetrieval}
