@@ -56,10 +56,10 @@ export const ManagedCombobox = React.forwardRef(
     const { getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
       useCombobox({
         inputValue,
-        onInputValueChange: ({ inputValue }) => {
-          setInputValue(inputValue || "");
-          if (props.onChange) {
-            props.onChange({
+        onInputValueChange: ({ inputValue, type }) => {
+          if (type === useCombobox.stateChangeTypes.InputChange) {
+            setInputValue(inputValue || "");
+            props.onChange?.({
               target: { value: inputValue },
             } as React.ChangeEvent<HTMLInputElement>);
           }

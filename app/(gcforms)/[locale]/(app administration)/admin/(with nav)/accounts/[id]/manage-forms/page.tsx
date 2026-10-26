@@ -149,11 +149,11 @@ export default AuthenticatedPage<{ id: string }>(
         </div>
 
         {manageFormId ? (
-          <>
+          <Suspense>
             <ManageOwnersDialogClient>
               <ManageOwners id={manageFormId} />
             </ManageOwnersDialogClient>
-          </>
+          </Suspense>
         ) : null}
       </>
     );
