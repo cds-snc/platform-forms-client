@@ -7,7 +7,12 @@ import type JSZip from "jszip";
 /*--------------------------------------------*
  * Internal Aliases
  *--------------------------------------------*/
-import type { CSVResponse, DownloadFormat, JSONResponse } from "@lib/responseDownloadFormats/types";
+import type {
+  CSVResponse,
+  DownloadFormat,
+  JSONResponse,
+  ResponseDownloadErrorCode,
+} from "@lib/responseDownloadFormats/types";
 import type { Language } from "@lib/types/form-builder-types";
 
 export type DownloadProgress =
@@ -19,12 +24,16 @@ export type DownloadProgress =
       completed: number;
       total: number;
     }
-  | { phase: "recovery" }
   | { phase: "zip"; percent: number };
 
-export type DownloadFailure = { responseId: string; filename?: string; reason: string };
+export type DownloadFailure = {
+  code: ResponseDownloadErrorCode;
+  responseId: string;
+  filename?: string;
+  reason: string;
+};
 
-export type RecoveryFile = { path: string; data: string };
+export type DownloadWarnings = { sizeLimitReached: boolean; processingFailed: boolean };
 
 export type SimpleDownloadFormat = Extract<DownloadFormat, "csv" | "json">;
 
@@ -66,7 +75,7 @@ export type DownloadResponsesOptions = {
   shouldCreateZip: boolean;
   setDownloadProgress: (progress: DownloadProgress) => void;
   setIsDownloading: (isDownloading: boolean) => void;
-  onDownloadComplete: (filteredIds: string[], hasDownloadFailures?: boolean) => void;
+  onDownloadComplete: (filteredIds: string[], warnings?: DownloadWarnings) => void;
   onClose: () => void;
 };
 
@@ -79,9 +88,7 @@ export type AttachmentDownloadLinkRefresherOptions = {
 
 export type GenerateDownloadZipOptions = {
   zip: JSZip;
-  recoveryCopy?: Blob;
   fileName: string;
-  formId: string;
   setDownloadProgress: (progress: DownloadProgress) => void;
 };
 
@@ -92,7 +99,7 @@ export type DownloadDialogProps = {
   setDownloadError: Dispatch<SetStateAction<boolean | string>>;
   formId: string;
   formName: string;
-  onSuccessfulDownload: (filteredIds: string[], hasDownloadFailures?: boolean) => void;
+  onSuccessfulDownload: (filteredIds: string[], warnings?: DownloadWarnings) => void;
   responseDownloadLimit: number;
   checkedMeta?: { id?: string; name?: string; version?: string | number | null }[];
 };

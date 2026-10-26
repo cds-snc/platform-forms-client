@@ -21,6 +21,12 @@ describe("decrementNextAction tests", () => {
     // Should decrement
     expect(decrementNextAction({ groupId: "a", choiceId: "1.3" }, "1.2")).toEqual({ groupId: "a", choiceId: "1.2" });
     expect(decrementNextAction({ groupId: "a", choiceId: "1.7" }, "1.2")).toEqual({ groupId: "a", choiceId: "1.6" });
+
+    // Catch-all next actions are not decremented with numeric choices.
+    expect(decrementNextAction({ groupId: "a", choiceId: "1.catch-all" }, "1.2")).toEqual({
+      groupId: "a",
+      choiceId: "1.catch-all",
+    });
   });
 });
 

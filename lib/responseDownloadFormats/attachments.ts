@@ -1,6 +1,10 @@
 import type JSZip from "jszip";
 import { processSequentially } from "./processSequentially";
-import type { ResponseAttachmentGroup } from "./types";
+import {
+  ResponseDownloadErrorCode,
+  type ResponseAttachment,
+  type ResponseAttachmentGroup,
+} from "./types";
 
 export const RESPONSE_ATTACHMENTS_FOLDER = "file_attachments-fichiers_joints";
 export const SUSPICIOUS_ATTACHMENTS_FOLDER = "suspicious_files-fichiers_suspects";
@@ -41,6 +45,23 @@ export const getUniqueAttachmentFilename = (
   return candidate;
 };
 
+export const getResponseAttachmentFilenameMapping = (
+  attachments: Array<Pick<ResponseAttachment, "id" | "name" | "isPotentiallyMalicious">>
+) => {
+  const usedNames = new Set<string>();
+
+  return new Map(
+    attachments.map((attachment, index) => [
+      attachment.id,
+      {
+        originalName: attachment.name,
+        actualName: getUniqueAttachmentFilename(attachment.name, usedNames, index),
+        isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+      },
+    ])
+  );
+};
+
 export const getAttachmentZipPath = (
   responseId: string,
   filename: string,
@@ -64,6 +85,7 @@ export type AttachmentDownloadProgress = {
 };
 
 export type FailedAttachmentDownload = {
+  code: ResponseDownloadErrorCode;
   responseId: string;
   filename: string;
   reason: string;
@@ -100,6 +122,7 @@ export const addResponseAttachmentsToZip = async (
   const processAttachment = async ({ group, attachment, index }: (typeof attachments)[number]) => {
     if (sizeLimitReached) {
       failures.push({
+        code: ResponseDownloadErrorCode.SIZE_LIMIT,
         responseId: group.responseId,
         filename: attachment.name,
         reason: "Archive size limit reached",
@@ -128,6 +151,7 @@ export const addResponseAttachmentsToZip = async (
 
       if (!response.ok) {
         failures.push({
+          code: ResponseDownloadErrorCode.PROCESSING,
           responseId: group.responseId,
           filename: attachment.name,
           reason: `HTTP ${response.status}`,
@@ -140,6 +164,7 @@ export const addResponseAttachmentsToZip = async (
         if (!added) {
           sizeLimitReached = true;
           failures.push({
+            code: ResponseDownloadErrorCode.SIZE_LIMIT,
             responseId: group.responseId,
             filename: attachment.name,
             reason: "Archive size limit reached",
@@ -156,6 +181,7 @@ export const addResponseAttachmentsToZip = async (
       }
     } catch {
       failures.push({
+        code: ResponseDownloadErrorCode.PROCESSING,
         responseId: group.responseId,
         filename: attachment.name,
         reason: "Download failed",
@@ -177,6 +203,7 @@ export const addResponseAttachmentsToZip = async (
       : (zip.file(path, contents), true);
     if (!added) {
       failures.push({
+        code: ResponseDownloadErrorCode.SIZE_LIMIT,
         responseId,
         filename: MAPPING_FILENAME,
         reason: "Archive size limit reached",

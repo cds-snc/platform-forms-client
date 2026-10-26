@@ -26,7 +26,7 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 /*--------------------------------------------*
  * Local Relative
  *--------------------------------------------*/
-import type { DownloadDialogProps } from "./DownloadDialog.types";
+import type { DownloadDialogProps, DownloadWarnings } from "./DownloadDialog.types";
 import { availableDownloadFormats } from "./downloadResponseFiles";
 import type { DownloadProgress } from "./DownloadDialog.types";
 import { downloadResponses } from "./downloadResponses";
@@ -77,9 +77,9 @@ export const DownloadDialog = ({
     dialogRef.current?.close();
   };
 
-  const handleDownloadComplete = (filteredIds: string[], hasDownloadFailures = false) => {
+  const handleDownloadComplete = (filteredIds: string[], warnings?: DownloadWarnings) => {
     setIsDownloading(false);
-    onSuccessfulDownload(filteredIds, hasDownloadFailures);
+    onSuccessfulDownload(filteredIds, warnings);
     handleClose();
   };
 
@@ -167,8 +167,6 @@ export const DownloadDialog = ({
             </span>
           </>
         );
-      case "recovery":
-        return t("downloadResponsesModals.downloadDialog.preparingRecoveryCopy");
       case "zip":
         return t("downloadResponsesModals.downloadDialog.creatingZip", {
           percent: Math.floor(downloadProgress.percent),
