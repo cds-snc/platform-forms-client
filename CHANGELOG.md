@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.28.1](https://github.com/cds-snc/platform-forms-client/compare/v4.28.0...v4.28.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* handle catch all when decrementing rules ([#8086](https://github.com/cds-snc/platform-forms-client/issues/8086)) ([e8031cc](https://github.com/cds-snc/platform-forms-client/commit/e8031ccebfbf4e1f0408c6bc8e6a0f19fcb61426))
+* preserve AddressComplete address when returning from review ([#8066](https://github.com/cds-snc/platform-forms-client/issues/8066)) ([f27e057](https://github.com/cds-snc/platform-forms-client/commit/f27e05798301d21598966817d14455ba9f7d7ef7))
+* Wrap suspense boundary around LocalDialog ([#8079](https://github.com/cds-snc/platform-forms-client/issues/8079)) ([2334cf9](https://github.com/cds-snc/platform-forms-client/commit/2334cf9394ee29bb625d75b7f23395b5a3bafa81))
+
+
+### Miscellaneous Chores
+
+* add playwright test for exit pages ([#8080](https://github.com/cds-snc/platform-forms-client/issues/8080)) ([209488b](https://github.com/cds-snc/platform-forms-client/commit/209488b4cc0eecc6c18427266ef8e91a649394d0))
+* **deps:** update dependency axios to v1.20.0 [security] ([#8085](https://github.com/cds-snc/platform-forms-client/issues/8085)) ([b90fb99](https://github.com/cds-snc/platform-forms-client/commit/b90fb99a52ed0481505ac91597f4e913e1acb50f))
+
 ## [4.28.0](https://github.com/cds-snc/platform-forms-client/compare/v4.27.0...v4.28.0) (2026-10-22)
 
 
