@@ -32,6 +32,7 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
+  responsesDownloadZipMaxSizeBytes: number;
   startFromExclusiveResponse: StartFromExclusiveResponse | null;
   overdueAfter: number;
   statusFilter: StatusFilter;
@@ -43,6 +44,7 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
+  responsesDownloadZipMaxSizeBytes,
   startFromExclusiveResponse,
   overdueAfter,
   statusFilter,
@@ -393,6 +395,7 @@ export const DownloadTable = ({
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
+        responsesDownloadZipMaxSizeBytes={responsesDownloadZipMaxSizeBytes}
         checkedMeta={tableItems.allItems.filter((item) => tableItems.checkedItems.get(item.name))}
       />
     </>

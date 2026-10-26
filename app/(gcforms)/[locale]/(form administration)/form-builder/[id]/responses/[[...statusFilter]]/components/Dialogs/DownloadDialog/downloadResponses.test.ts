@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
-import { RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES } from "@root/constants";
 import type { DownloadResponsesOptions } from "./DownloadDialog.types";
+
+const RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES = 500 * 1024 * 1024;
 
 const mocks = vi.hoisted(() => ({
   addResponseAttachmentsToZip: vi.fn(),
@@ -46,6 +47,7 @@ const createOptions = (
   filteredIds,
   filePrefix: "form-",
   shouldCreateZip: true,
+  responsesDownloadZipMaxSizeBytes: RESPONSES_UI_ZIP_SIZE_LIMIT_BYTES,
   setDownloadProgress: vi.fn(),
   setIsDownloading: vi.fn(),
   onDownloadComplete,

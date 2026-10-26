@@ -84,6 +84,18 @@ const responseDownloadLimit: Setting = {
   value: "20",
 };
 
+const responsesDownloadZipMaxSizeBytes: Setting = {
+  internalId: "responsesDownloadZipMaxSizeBytes",
+  nameEn: "Maximum responses download ZIP size (bytes)",
+  nameFr: "Taille maximale du ZIP de téléchargement des réponses (octets)",
+  descriptionEn: "Maximum total size of a responses ZIP, including file attachments.",
+  descriptionFr: "Taille totale maximale d'un ZIP de réponses, y compris les fichiers joints.",
+  type: "number",
+  groupEn: null,
+  groupFr: null,
+  value: "524288000",
+};
+
 const editLockRedirectIdleMs: Setting = {
   internalId: "editLockRedirectIdleMs",
   nameEn: "Edit lock idle redirect timeout (ms)",
@@ -154,6 +166,7 @@ const allSettings = [
   nagwarePhaseWarned,
   nagwarePhaseEscalated,
   responseDownloadLimit,
+  responsesDownloadZipMaxSizeBytes,
   editLockRedirectIdleMs,
   addressCompleteRetrieveRateLimitMax,
   addressCompleteRateLimitWindowSeconds,
