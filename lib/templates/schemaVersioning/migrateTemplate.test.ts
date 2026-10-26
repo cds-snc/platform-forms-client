@@ -101,7 +101,7 @@ describe("migrateTemplate", () => {
   });
 
   it("falls back to schema version 1 when strict element migration fails", () => {
-    const logError = vi.spyOn(logMessage, "error").mockImplementation(() => {});
+    const logWarning = vi.spyOn(logMessage, "warn").mockImplementation(() => {});
     const template: FormProperties = {
       ...baseTemplate,
       elements: [
@@ -116,7 +116,7 @@ describe("migrateTemplate", () => {
 
     expect(migrated.schemaVersion).toBe(1);
     expect(migrated.elements).toEqual(template.elements);
-    expect(logError).toHaveBeenCalledWith(
+    expect(logWarning).toHaveBeenCalledWith(
       expect.stringContaining(
         'Cannot migrate template elements to schema version 2: elements[0].properties: requires property "validation"'
       )
