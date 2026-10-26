@@ -20,7 +20,7 @@ import { v4 as uuid } from "uuid";
 export interface ResponsesProps {
   hasOverdue: boolean;
   responseDownloadLimit: number;
-  responsesDownloadZipMaxSizeBytes: number;
+  responsesDownloadZipMaxSizeMB: number;
   overdueAfter: number;
   statusFilter: StatusFilter;
   isApiRetrieval?: boolean;
@@ -29,7 +29,7 @@ export interface ResponsesProps {
 export const Responses = ({
   hasOverdue,
   responseDownloadLimit,
-  responsesDownloadZipMaxSizeBytes,
+  responsesDownloadZipMaxSizeMB,
   overdueAfter,
   statusFilter,
   isApiRetrieval = false,
@@ -103,7 +103,7 @@ export const Responses = ({
                 formId={formId}
                 nagwareResult={nagwareResult}
                 responseDownloadLimit={responseDownloadLimit}
-                responsesDownloadZipMaxSizeBytes={responsesDownloadZipMaxSizeBytes}
+                responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
                 startFromExclusiveResponse={state.startFromExclusiveResponse}
                 overdueAfter={overdueAfter}
               />
@@ -139,7 +139,7 @@ export const Responses = ({
               formId={formId}
               nagwareResult={nagwareResult}
               responseDownloadLimit={responseDownloadLimit}
-              responsesDownloadZipMaxSizeBytes={responsesDownloadZipMaxSizeBytes}
+              responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
               startFromExclusiveResponse={state.startFromExclusiveResponse}
               overdueAfter={overdueAfter}
             />

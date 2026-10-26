@@ -81,7 +81,7 @@ export const downloadResponses = async ({
   filteredIds,
   filePrefix,
   shouldCreateZip,
-  responsesDownloadZipMaxSizeBytes,
+  responsesDownloadZipMaxSizeMB,
   setDownloadProgress,
   setIsDownloading,
   onDownloadComplete,
@@ -93,6 +93,7 @@ export const downloadResponses = async ({
 
   const downloadFailures: DownloadFailure[] = [];
   const zipEntrySizes = new Map<string, number>();
+  const responsesDownloadZipMaxSizeBytes = responsesDownloadZipMaxSizeMB * 1024 * 1024;
   let zipSizeBytes = 0;
   let zipSizeLimitReached = false;
   let hasCommittedResponse = false;

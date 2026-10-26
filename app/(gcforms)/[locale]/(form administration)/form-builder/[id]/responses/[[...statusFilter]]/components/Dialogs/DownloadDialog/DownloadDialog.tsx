@@ -44,7 +44,7 @@ export const DownloadDialog = ({
   formName,
   onSuccessfulDownload,
   responseDownloadLimit,
-  responsesDownloadZipMaxSizeBytes,
+  responsesDownloadZipMaxSizeMB,
   checkedMeta = [],
 }: DownloadDialogProps) => {
   const dialogRef = useDialogRef();
@@ -125,7 +125,7 @@ export const DownloadDialog = ({
         filteredIds: filteredIdsWithVersion,
         filePrefix,
         shouldCreateZip: zipAllFiles || fileUploadEnabled,
-        responsesDownloadZipMaxSizeBytes,
+        responsesDownloadZipMaxSizeMB,
         setDownloadProgress,
         setIsDownloading,
         onDownloadComplete: handleDownloadComplete,

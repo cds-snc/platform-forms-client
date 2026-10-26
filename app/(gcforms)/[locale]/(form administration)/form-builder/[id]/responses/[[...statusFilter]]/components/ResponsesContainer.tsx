@@ -13,14 +13,14 @@ import { ResponseBetaLink } from "./ResponseBetaLink";
 export const ResponsesContainer = ({
   hasOverdue,
   responseDownloadLimit,
-  responsesDownloadZipMaxSizeBytes,
+  responsesDownloadZipMaxSizeMB,
   overdueAfter,
   statusFilter,
   isApiRetrieval,
 }: {
   hasOverdue: boolean;
   responseDownloadLimit: number;
-  responsesDownloadZipMaxSizeBytes: number;
+  responsesDownloadZipMaxSizeMB: number;
   overdueAfter: number;
   statusFilter: StatusFilter;
   isApiRetrieval: boolean;
@@ -53,7 +53,7 @@ export const ResponsesContainer = ({
             hasOverdue={hasOverdue}
             statusFilter={statusFilter}
             responseDownloadLimit={responseDownloadLimit}
-            responsesDownloadZipMaxSizeBytes={responsesDownloadZipMaxSizeBytes}
+            responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
             overdueAfter={overdueAfter}
             isApiRetrieval={true}
           />
@@ -89,7 +89,7 @@ export const ResponsesContainer = ({
           hasOverdue={hasOverdue}
           statusFilter={statusFilter}
           responseDownloadLimit={responseDownloadLimit}
-          responsesDownloadZipMaxSizeBytes={responsesDownloadZipMaxSizeBytes}
+          responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
           overdueAfter={overdueAfter}
         />
         <ResponsesFooter formId={id} />
