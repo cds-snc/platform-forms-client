@@ -47,6 +47,7 @@ const defaultProps = {
   formName: "Test form",
   onSuccessfulDownload: vi.fn(),
   responseDownloadLimit: 50,
+  responsesDownloadZipMaxSizeMB: 500,
 };
 
 describe("<DownloadDialog />", () => {
