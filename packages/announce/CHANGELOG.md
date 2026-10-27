@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add message coordinator, scheduler and update how package is exported
 - replace old hook api with more streamlined `useAnnounce()` hook
+- Limit suppression of published duplicates to one second per priority, while
+  retaining pending duplicate suppression and the `allowDuplicates` override.
 
 ## [1.0.5] - 2026-06-11
 

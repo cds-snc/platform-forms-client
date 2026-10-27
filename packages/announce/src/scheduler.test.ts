@@ -130,7 +130,7 @@ describe("announcement scheduler", () => {
     expect(publish).toHaveBeenLastCalledWith("Routine", "polite");
   });
 
-  it("suppresses consecutive duplicates within each priority, including pending messages", () => {
+  it("suppresses rapid and pending duplicates within each priority, then permits later repeats", () => {
     const publish = vi.fn();
     const scheduler = createScheduler(publish);
     scheduler.enqueue("Same", "polite");
@@ -149,7 +149,101 @@ describe("announcement scheduler", () => {
       ["Same", "polite"],
     ]);
     scheduler.enqueue("Same", "polite");
-    expect(publish).toHaveBeenCalledTimes(4);
+    expect(publish).toHaveBeenCalledTimes(5);
+    expect(publish).toHaveBeenLastCalledWith("Same", "polite");
+  });
+
+  it.each(["polite", "assertive"] as const)(
+    "suppresses a published %s duplicate at 999 ms but accepts it at 1000 ms and after idle",
+    (priority) => {
+      const publish = vi.fn();
+      const scheduler = createScheduler(publish);
+      scheduler.enqueue("Changes saved.", priority);
+      vi.advanceTimersByTime(999);
+      scheduler.enqueue("Changes saved.", priority);
+      expect(publish).toHaveBeenCalledTimes(1);
+      vi.advanceTimersByTime(1);
+      scheduler.enqueue("Changes saved.", priority);
+      expect(publish.mock.calls).toEqual([
+        ["Changes saved.", priority],
+        ["Changes saved.", priority],
+      ]);
+      vi.advanceTimersByTime(60000);
+      scheduler.enqueue("Changes saved.", priority);
+      expect(publish).toHaveBeenCalledTimes(3);
+    }
+  );
+
+  it("keeps duplicate windows independent when assertive work interrupts a polite cooldown", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    scheduler.enqueue("Same", "polite");
+    vi.advanceTimersByTime(400);
+    scheduler.enqueue("Same", "assertive");
+    vi.advanceTimersByTime(599);
+    scheduler.enqueue("Same", "polite");
+    expect(publish).toHaveBeenCalledTimes(2);
+    vi.advanceTimersByTime(1);
+    scheduler.enqueue("Same", "polite");
+    vi.advanceTimersByTime(399);
+    scheduler.enqueue("Same", "assertive");
+    expect(publish).toHaveBeenCalledTimes(2);
+    vi.advanceTimersByTime(1);
+    scheduler.enqueue("Same", "assertive");
+    expect(publish.mock.calls).toEqual([
+      ["Same", "polite"],
+      ["Same", "assertive"],
+      ["Same", "polite"],
+      ["Same", "assertive"],
+    ]);
+  });
+
+  it("suppresses pending duplicates during a long pause and starts the window at publication", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    scheduler.pause();
+    scheduler.enqueue("Same", "polite");
+    vi.advanceTimersByTime(60000);
+    scheduler.enqueue("Same", "polite");
+    scheduler.resume();
+    vi.advanceTimersByTime(999);
+    scheduler.enqueue("Same", "polite");
+    expect(publish).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(1);
+    scheduler.enqueue("Same", "polite");
+    expect(publish).toHaveBeenCalledTimes(2);
+    vi.runAllTimers();
+    expect(publish).toHaveBeenCalledTimes(2);
+  });
+
+  it("removes abort listeners from duplicates exposed by cancellation after the window expires", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    const intervening = new AbortController();
+    const repeated = new AbortController();
+    const cleanup = vi.spyOn(repeated.signal, "removeEventListener");
+    scheduler.enqueue("Same", "polite");
+    scheduler.enqueue("Intervening", "polite", { signal: intervening.signal });
+    scheduler.enqueue("Same", "polite", { signal: repeated.signal });
+    intervening.abort();
+    vi.advanceTimersByTime(1000);
+    expect(publish.mock.calls).toEqual([
+      ["Same", "polite"],
+      ["Same", "polite"],
+    ]);
+    expect(cleanup).toHaveBeenCalledExactlyOnceWith("abort", expect.any(Function));
+  });
+
+  it("does not expire duplicate history when the wall clock changes", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    scheduler.enqueue("Same", "polite");
+    vi.setSystemTime(Date.now() + 60000);
+    scheduler.enqueue("Same", "polite");
+    expect(publish).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(1000);
+    scheduler.enqueue("Same", "polite");
+    expect(publish).toHaveBeenCalledTimes(2);
   });
 
   it("drops the oldest pending polite message on overflow and warns without logging content", () => {
@@ -185,8 +279,8 @@ describe("announcement scheduler", () => {
       expect(publish).toHaveBeenCalledTimes(2);
       vi.advanceTimersByTime(1000);
       expect(publish).toHaveBeenCalledTimes(3);
-      vi.runAllTimers();
       scheduler.enqueue("Same", priority);
+      vi.runAllTimers();
       expect(publish.mock.calls).toEqual(Array.from({ length: 3 }, () => ["Same", priority]));
       expect(vi.getTimerCount()).toBe(0);
     }
@@ -270,7 +364,7 @@ describe("announcement scheduler", () => {
     expect(publish.mock.calls[12]).toEqual(["Routine 1", "polite"]);
   });
 
-  it("skips duplicates exposed by overflow without introducing an extra cooldown", () => {
+  it("publishes duplicates exposed by overflow after their suppression window expires", () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
     const publish = vi.fn();
     const scheduler = createScheduler(publish);
@@ -282,6 +376,7 @@ describe("announcement scheduler", () => {
     vi.runAllTimers();
 
     expect(publish.mock.calls.filter(([, priority]) => priority === "polite")).toEqual([
+      ["Same", "polite"],
       ["Same", "polite"],
     ]);
     expect(vi.getTimerCount()).toBe(0);

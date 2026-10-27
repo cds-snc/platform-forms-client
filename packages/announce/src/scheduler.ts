@@ -27,7 +27,7 @@ const reportPublicationFailure = () => {
 export const createScheduler = (publisher: Publisher, onError = reportPublicationFailure) => {
   const politeQueue: PendingMessage[] = [];
   const assertiveQueue: PendingMessage[] = [];
-  const lastPublished: Partial<Record<Priority, string>> = {};
+  const lastPublished: Partial<Record<Priority, { message: string; publishedAt: number }>> = {};
   let timer: ReturnType<typeof setTimeout> | undefined;
   let lastPriority: Priority | undefined;
   let stopped = false;
@@ -36,6 +36,13 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
   const _getQueue = (priority: Priority): PendingMessage[] =>
     priority === "assertive" ? assertiveQueue : politeQueue;
 
+  const _getRecentMessage = (priority: Priority): string | undefined => {
+    const previous = lastPublished[priority];
+    if (previous && performance.now() - previous.publishedAt < PUBLICATION_INTERVAL_MS) {
+      return previous.message;
+    }
+  };
+
   const _takeNextMessage = (): { message: string; priority: Priority } | undefined => {
     while (assertiveQueue.length || politeQueue.length) {
       const priority = assertiveQueue.length ? "assertive" : "polite";
@@ -43,9 +50,8 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
       const { message, allowDuplicates, cleanup } = queue.shift()!;
       cleanup();
 
-      // Overflow can drop the message separating two identical announcements
-      // Skip any message that now matches the last publication for this priority
-      if (!allowDuplicates && lastPublished[priority] === message) {
+      // Dropping or cancelling a queued message can leave a repeat of something we just announced
+      if (!allowDuplicates && _getRecentMessage(priority) === message) {
         continue;
       }
 
@@ -59,7 +65,7 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
 
     const { message, priority } = nextMessage;
     publisher(message, priority);
-    lastPublished[priority] = message;
+    lastPublished[priority] = { message, publishedAt: performance.now() };
     lastPriority = priority;
     timer = setTimeout(() => {
       timer = undefined;
@@ -82,8 +88,9 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
     if (stopped || !message || signal?.aborted) return;
 
     const queue = _getQueue(priority);
-    // Compare with the last pending message, or the last publication if this queue is empty.
-    const previousMessage = queue.at(-1)?.message ?? lastPublished[priority];
+    // Skip repeats of the last queued message, or one we announced less than a second ago
+    const lastQueuedMessage = queue.at(-1)?.message;
+    const previousMessage = lastQueuedMessage ?? _getRecentMessage(priority);
 
     if (!options.allowDuplicates && previousMessage === message) return;
 

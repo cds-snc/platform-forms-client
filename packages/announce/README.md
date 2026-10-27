@@ -51,8 +51,12 @@ announce("5 results available.", Priority.LOW, { allowDuplicates: true });
 In Next.js, call `announce()` from client components. The announcer includes its
 own inline visually hidden styles; no stylesheet is needed.
 
-Set `allowDuplicates: true` on a request to publish it even when its text matches
-the previous message. It still uses the shared queue, timing, and overflow rules.
+By default, consecutive identical requests in each priority are suppressed while
+pending or for one second after publication. After that window, the same text can
+be requested again. The window starts when the message is published, not queued.
+
+Set `allowDuplicates: true` on a request to bypass both duplicate checks. It still
+uses the shared queue, timing, and overflow rules.
 Hosts keep two empty live regions per priority mounted, alternating repeated text
 between them to produce a fresh update. This does not guarantee repeated speech
 across all screen readers.

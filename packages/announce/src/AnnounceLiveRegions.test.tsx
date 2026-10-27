@@ -72,7 +72,7 @@ describe("Announce", () => {
   });
 
   it.each([Priority.LOW, Priority.HIGH])(
-    "alternates repeated %s messages only when the incoming request allows duplicates",
+    "alternates explicitly allowed %s duplicates and suppresses rapid default requests",
     (priority) => {
       renderReadyHost(
         <StrictMode>
@@ -100,6 +100,25 @@ describe("Announce", () => {
       expect(alternate).toBeEmptyDOMElement();
       act(() => vi.advanceTimersByTime(1000));
       expect(vi.getTimerCount()).toBe(0);
+    }
+  );
+
+  it.each([Priority.LOW, Priority.HIGH])(
+    "creates a fresh live-region update for a default %s repeat after one second",
+    (priority) => {
+      renderReadyHost();
+      const primary = screen.getByTestId(`gc-announce-${priority}`);
+      const alternate = screen.getByTestId(`gc-announce-${priority}-alternate`);
+      act(() => announce("Changes saved.", priority));
+      act(() => vi.advanceTimersByTime(999));
+      act(() => announce("Changes saved.", priority));
+      expect(primary).toHaveTextContent("Changes saved.");
+      expect(alternate).toBeEmptyDOMElement();
+      act(() => vi.advanceTimersByTime(1));
+      expect(alternate).toBeEmptyDOMElement();
+      act(() => announce("Changes saved.", priority));
+      expect(primary).toBeEmptyDOMElement();
+      expect(alternate).toHaveTextContent("Changes saved.");
     }
   );
 
