@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
-import { createScheduler } from "./scheduler";
+import { registerHost } from "./coordinator";
 
 const visuallyHiddenStyle: CSSProperties = {
   clip: "rect(0, 0, 0, 0)",
@@ -21,11 +21,6 @@ export const Priority = {
 } as const;
 export type Priority = (typeof Priority)[keyof typeof Priority];
 
-interface Message {
-  message: string;
-  priority?: Priority;
-}
-
 /**
  * Example:
  * In a top level component near the layout add:
@@ -38,11 +33,19 @@ interface Message {
  * ...
  * announce("Your message here");
  */
-export const Announce = () => {
+export const Announce = ({
+  scope = "root",
+  active = true,
+}: {
+  scope?: "root" | "modal";
+  active?: boolean;
+}) => {
   const messageLowRef = useRef<HTMLDivElement>(null);
   const messageHighRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!active) return;
+
     const updateLiveRegion = (message: string, priority: Priority) => {
       const region = priority === Priority.HIGH ? messageHighRef.current : messageLowRef.current;
       if (region && region.textContent !== message) {
@@ -50,44 +53,29 @@ export const Announce = () => {
       }
     };
 
-    const scheduler = createScheduler(updateLiveRegion);
-
-    const handleAnnouncePolite = (event: Event) => {
-      const customEvent = event as CustomEvent<Message>;
-      scheduler.enqueue(customEvent.detail.message, Priority.LOW);
+    const clearLiveRegions = () => {
+      if (messageLowRef.current) messageLowRef.current.textContent = "";
+      if (messageHighRef.current) messageHighRef.current.textContent = "";
     };
-    window.addEventListener("gc-announce-polite", handleAnnouncePolite);
 
-    const handleAnnounceAssertive = (event: Event) => {
-      const customEvent = event as CustomEvent<Message>;
-      scheduler.enqueue(customEvent.detail.message, Priority.HIGH);
-    };
-    window.addEventListener("gc-announce-assertive", handleAnnounceAssertive);
-
-    return () => {
-      window.removeEventListener("gc-announce-polite", handleAnnouncePolite);
-      window.removeEventListener("gc-announce-assertive", handleAnnounceAssertive);
-      scheduler.stop();
-    };
-  }, []);
+    return registerHost({ scope, publish: updateLiveRegion, clear: clearLiveRegions });
+  }, [scope, active]);
 
   // Prime the live regions and add redundant aria-live attribute for best AT support
   return (
-    <>
+    <div style={visuallyHiddenStyle} data-announce-host={scope}>
       <div
         role="status"
         aria-live="polite"
-        style={visuallyHiddenStyle}
         data-testid="gc-announce-polite"
         ref={messageLowRef}
       ></div>
       <div
         role="alert"
         aria-live="assertive"
-        style={visuallyHiddenStyle}
         data-testid="gc-announce-assertive"
         ref={messageHighRef}
       ></div>
-    </>
+    </div>
   );
 };

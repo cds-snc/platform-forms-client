@@ -7,8 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2026-10-27
 
-- Add message scheduler and package exports
-- Use inline visually hidden styles for `<Announce />` instead of a stylesheet import.
+- Add message coordinator, scheduler and package exports
 
 ## [1.0.5] - 2026-06-11
 

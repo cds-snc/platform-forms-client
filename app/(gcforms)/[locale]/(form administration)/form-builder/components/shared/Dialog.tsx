@@ -1,6 +1,7 @@
 "use client";
 import React, { use, useCallback, useEffect, useId, useRef, useState } from "react";
 import { browser } from "react-dom";
+import { Announce } from "@gcforms/announce";
 import { CDSHTMLDialogElement } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
@@ -12,6 +13,7 @@ export const useDialogRef = () => {
   return ref;
 };
 
+// TODO: move into its own directory now that there is also a test file
 export const Dialog = ({
   dialogRef,
   children,
@@ -19,6 +21,7 @@ export const Dialog = ({
   actions,
   className,
   handleClose,
+  withAnnounce,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement | null>;
   children: React.ReactElement;
@@ -26,6 +29,7 @@ export const Dialog = ({
   actions?: React.ReactElement;
   className?: string;
   handleClose?: () => void;
+  withAnnounce?: boolean;
 }) => {
   use(browser("This component requires browser APIs."));
   const { t } = useTranslation("form-builder");
@@ -48,17 +52,18 @@ export const Dialog = ({
 
   // Close modal if "ESC" key is pressed
   useEffect(() => {
+    const dialog = dialogRef.current;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.preventDefault();
         e.stopPropagation();
-        handleClose && handleClose();
         close();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [close, handleClose]);
+    dialog?.addEventListener("keydown", handleKeyDown);
+    return () => dialog?.removeEventListener("keydown", handleKeyDown);
+  }, [close, dialogRef]);
 
   const modalId = `modal-title-${useId()}`;
 
@@ -68,6 +73,11 @@ export const Dialog = ({
       {...(title ? { "aria-labelledby": modalId } : {})}
       ref={dialogRef}
       data-testid="dialog"
+      onClose={(event) => {
+        if (event.target === event.currentTarget && !event.currentTarget.open) {
+          changeOpen(false);
+        }
+      }}
     >
       <div
         className={cn(
@@ -105,6 +115,7 @@ export const Dialog = ({
           </span>
         </Button>
       </div>
+      {withAnnounce && <Announce scope="modal" active={isOpen} />}
     </dialog>
   );
 };

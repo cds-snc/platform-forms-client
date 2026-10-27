@@ -189,4 +189,107 @@ describe("announcement scheduler", () => {
     expect(publish).not.toHaveBeenCalled();
     expect(vi.getTimerCount()).toBe(0);
   });
+
+  it("retains queued messages while paused, including assertive messages", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    scheduler.pause();
+    scheduler.enqueue("Routine", "polite");
+    scheduler.enqueue("Urgent", "assertive");
+    vi.advanceTimersByTime(2000);
+    expect(publish).not.toHaveBeenCalled();
+    scheduler.resume();
+    expect(publish.mock.calls).toEqual([["Urgent", "assertive"]]);
+    vi.advanceTimersByTime(1000);
+    expect(publish).toHaveBeenLastCalledWith("Routine", "polite");
+  });
+
+  it("preserves the remaining cooldown when resumed", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    scheduler.enqueue("First", "polite");
+    scheduler.enqueue("Second", "polite");
+    vi.advanceTimersByTime(200);
+    scheduler.pause();
+    vi.advanceTimersByTime(300);
+    scheduler.resume();
+    scheduler.resume();
+    vi.advanceTimersByTime(499);
+    expect(publish).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(1);
+    expect(publish).toHaveBeenLastCalledWith("Second", "polite");
+  });
+
+  it("does not drain the queue when a cooldown expires while paused", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    scheduler.enqueue("First", "polite");
+    scheduler.enqueue("Second", "polite");
+    scheduler.pause();
+    vi.advanceTimersByTime(2000);
+    expect(publish).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
+    scheduler.resume();
+    expect(publish).toHaveBeenLastCalledWith("Second", "polite");
+  });
+
+  it("cannot resume a stopped scheduler", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    scheduler.pause();
+    scheduler.enqueue("Pending", "polite");
+    scheduler.stop();
+    scheduler.resume();
+    vi.runAllTimers();
+    expect(publish).not.toHaveBeenCalled();
+  });
+
+  it("stops and reports an immediate publisher failure without throwing", () => {
+    const publish = vi.fn(() => {
+      throw new Error("Private announcement text");
+    });
+    const onError = vi.fn();
+    const scheduler = createScheduler(publish, onError);
+
+    expect(() => scheduler.enqueue("First", "polite")).not.toThrow();
+    scheduler.enqueue("Later", "assertive");
+    scheduler.resume();
+    vi.runAllTimers();
+
+    expect(publish).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledExactlyOnceWith();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("discards pending work when a timed publication fails", () => {
+    const publish = vi
+      .fn()
+      .mockImplementationOnce(() => {})
+      .mockImplementation(() => {
+        throw new Error("Private announcement text");
+      });
+    const onError = vi.fn();
+    const scheduler = createScheduler(publish, onError);
+    scheduler.enqueue("First", "polite");
+    scheduler.enqueue("Fails", "polite");
+    scheduler.enqueue("Discarded", "polite");
+
+    expect(() => vi.advanceTimersByTime(1000)).not.toThrow();
+    vi.runAllTimers();
+    expect(publish).toHaveBeenCalledTimes(2);
+    expect(onError).toHaveBeenCalledExactlyOnceWith();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("logs a diagnostic without announcement text when no error handler is supplied", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const scheduler = createScheduler(() => {
+      throw new Error("Private announcement text");
+    });
+    scheduler.enqueue("Private announcement text", "polite");
+
+    expect(error).toHaveBeenCalledExactlyOnceWith(
+      "[gcforms/announce] Delivery stopped after a publication error."
+    );
+  });
 });

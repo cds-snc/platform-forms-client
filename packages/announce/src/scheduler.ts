@@ -5,19 +5,26 @@ const MAX_PENDING_MESSAGES = 20;
 
 type Publisher = (message: string, priority: Priority) => void;
 
+const reportPublicationFailure = () => {
+  // eslint-disable-next-line no-console
+  console.error("[gcforms/announce] Delivery stopped after a publication error.");
+};
+
 /**
  * Queues announcements and spaces them out, letting urgent messages jump ahead.
  * @param publisher Callback that updates the live region with a message and its priority.
- * @returns `enqueue` to submit messages and `stop` to cancel pending work and timers
- * and permanently stop this scheduler. Call `stop` when the announcer unmounts.
+ * @param onError Reports a publication failure after the scheduler has stopped.
+ * @returns `enqueue` to submit messages, `pause`/`resume` to control delivery without
+ * losing pending work, and `stop` to permanently cancel pending work and timers.
  */
-export const createScheduler = (publisher: Publisher) => {
+export const createScheduler = (publisher: Publisher, onError = reportPublicationFailure) => {
   const politeQueue: string[] = [];
   const assertiveQueue: string[] = [];
   const lastPublished: Partial<Record<Priority, string>> = {};
   let timer: ReturnType<typeof setTimeout> | undefined;
   let lastPriority: Priority | undefined;
   let stopped = false;
+  let paused = false;
 
   const _getQueue = (priority: Priority): string[] =>
     priority === "assertive" ? assertiveQueue : politeQueue;
@@ -53,8 +60,13 @@ export const createScheduler = (publisher: Publisher) => {
   };
 
   const _schedule = () => {
-    if (stopped || timer !== undefined) return;
-    _publish();
+    if (stopped || paused || timer !== undefined) return;
+    try {
+      _publish();
+    } catch {
+      stop();
+      onError();
+    }
   };
 
   const enqueue = (message: string, priority: Priority) => {
@@ -87,6 +99,15 @@ export const createScheduler = (publisher: Publisher) => {
     _schedule();
   };
 
+  const pause = () => {
+    paused = true;
+  };
+
+  const resume = () => {
+    paused = false;
+    _schedule();
+  };
+
   const stop = () => {
     stopped = true;
     clearTimeout(timer);
@@ -95,5 +116,5 @@ export const createScheduler = (publisher: Publisher) => {
     assertiveQueue.length = 0;
   };
 
-  return { enqueue, stop };
+  return { enqueue, pause, resume, stop };
 };
