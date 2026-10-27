@@ -1,8 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { createScheduler } from "./scheduler";
-import "./Announce.css";
+
+const visuallyHiddenStyle: CSSProperties = {
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  borderWidth: 0,
+  width: 1,
+  height: 1,
+  margin: -1,
+  padding: 0,
+  position: "absolute",
+  overflow: "hidden",
+};
 
 export const Priority = {
   LOW: "polite",
@@ -32,12 +43,14 @@ export const Announce = () => {
   const messageHighRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const scheduler = createScheduler((message, priority) => {
+    const updateLiveRegion = (message: string, priority: Priority) => {
       const region = priority === Priority.HIGH ? messageHighRef.current : messageLowRef.current;
       if (region && region.textContent !== message) {
         region.textContent = message;
       }
-    });
+    };
+
+    const scheduler = createScheduler(updateLiveRegion);
 
     const handleAnnouncePolite = (event: Event) => {
       const customEvent = event as CustomEvent<Message>;
@@ -54,7 +67,7 @@ export const Announce = () => {
     return () => {
       window.removeEventListener("gc-announce-polite", handleAnnouncePolite);
       window.removeEventListener("gc-announce-assertive", handleAnnounceAssertive);
-      scheduler.dispose();
+      scheduler.stop();
     };
   }, []);
 
@@ -64,14 +77,14 @@ export const Announce = () => {
       <div
         role="status"
         aria-live="polite"
-        className="gc-announce-sr-only"
+        style={visuallyHiddenStyle}
         data-testid="gc-announce-polite"
         ref={messageLowRef}
       ></div>
       <div
         role="alert"
         aria-live="assertive"
-        className="gc-announce-sr-only"
+        style={visuallyHiddenStyle}
         data-testid="gc-announce-assertive"
         ref={messageHighRef}
       ></div>

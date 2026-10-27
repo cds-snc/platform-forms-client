@@ -25,6 +25,29 @@ describe("Announce", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  it("visually hides both live regions without hiding them from assistive technology", () => {
+    render(<Announce />);
+
+    for (const role of ["status", "alert"]) {
+      const region = screen.getByRole(role);
+      expect(region).toHaveStyle({
+        clip: "rect(0px, 0px, 0px, 0px)",
+        whiteSpace: "nowrap",
+        borderWidth: "0px",
+        width: "1px",
+        height: "1px",
+        margin: "-1px",
+        padding: "0px",
+        position: "absolute",
+        overflow: "hidden",
+      });
+      expect(region).not.toHaveAttribute("aria-hidden");
+      expect(region).not.toHaveAttribute("hidden");
+      expect(region).not.toHaveStyle({ display: "none" });
+      expect(region).not.toHaveStyle({ visibility: "hidden" });
+    }
+  });
+
   it("keeps the public API and live-region hosts while pacing publications", () => {
     render(<Announce />);
     const polite = screen.getByTestId("gc-announce-polite");

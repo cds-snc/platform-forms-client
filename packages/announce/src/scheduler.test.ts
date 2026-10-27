@@ -168,14 +168,14 @@ describe("announcement scheduler", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
-  it("clears timers and pending messages on disposal", () => {
+  it("stops the scheduler, clearing timers and pending messages and preventing further announcements", () => {
     const publish = vi.fn();
     const scheduler = createScheduler(publish);
     scheduler.enqueue("First", "polite");
     scheduler.enqueue("Pending", "polite");
-    scheduler.dispose();
-    scheduler.dispose();
-    scheduler.enqueue("After disposal", "assertive");
+    scheduler.stop();
+    scheduler.stop();
+    scheduler.enqueue("After stopping", "assertive");
     vi.runAllTimers();
 
     expect(publish.mock.calls).toEqual([["First", "polite"]]);
