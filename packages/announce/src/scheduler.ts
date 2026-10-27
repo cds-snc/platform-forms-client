@@ -9,6 +9,7 @@ type Publisher = (message: string, priority: Priority) => void;
 interface PendingMessage {
   message: string;
   allowDuplicates: boolean;
+  callers: Map<AbortSignal | undefined, () => void>;
   cleanup: () => void;
 }
 
@@ -35,6 +36,26 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
 
   const _getQueue = (priority: Priority): PendingMessage[] =>
     priority === "assertive" ? assertiveQueue : politeQueue;
+
+  const _addCaller = (
+    pending: PendingMessage,
+    queue: PendingMessage[],
+    signal: AbortSignal | undefined
+  ) => {
+    if (pending.callers.has(signal)) return;
+
+    const cancel = () => {
+      signal?.removeEventListener("abort", cancel);
+      pending.callers.delete(signal);
+      if (pending.callers.size === 0) {
+        const index = queue.indexOf(pending);
+        if (index !== -1) queue.splice(index, 1);
+      }
+    };
+
+    pending.callers.set(signal, cancel);
+    signal?.addEventListener("abort", cancel, { once: true });
+  };
 
   const _getRecentMessage = (priority: Priority): string | undefined => {
     const previous = lastPublished[priority];
@@ -74,7 +95,14 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
   };
 
   const _schedule = () => {
-    if (stopped || paused || timer !== undefined) return;
+    if (stopped || paused) return;
+
+    if (timer !== undefined) {
+      if (lastPriority !== "polite" || assertiveQueue.length === 0) return;
+      clearTimeout(timer);
+      timer = undefined;
+    }
+
     try {
       _publish();
     } catch {
@@ -88,25 +116,29 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
     if (stopped || !message || signal?.aborted) return;
 
     const queue = _getQueue(priority);
-    // Skip repeats of the last queued message, or one we announced less than a second ago
-    const lastQueuedMessage = queue.at(-1)?.message;
-    const previousMessage = lastQueuedMessage ?? _getRecentMessage(priority);
-
-    if (!options.allowDuplicates && previousMessage === message) return;
+    const lastQueued = queue.at(-1);
+    if (!options.allowDuplicates) {
+      if (lastQueued?.message === message) {
+        // Share the message, but let each caller cancel just their own request.
+        _addCaller(lastQueued, queue, signal);
+        return;
+      }
+      if (!lastQueued && _getRecentMessage(priority) === message) return;
+    }
 
     const pending: PendingMessage = {
       message,
       allowDuplicates: options.allowDuplicates === true,
-      cleanup: () => signal?.removeEventListener("abort", cancel),
+      callers: new Map(),
+      cleanup: () => {
+        for (const [signal, cancel] of pending.callers) {
+          signal?.removeEventListener("abort", cancel);
+        }
+        pending.callers.clear();
+      },
     };
 
-    const cancel = () => {
-      const index = queue.indexOf(pending);
-      if (index !== -1) queue.splice(index, 1);
-      pending.cleanup();
-    };
-
-    signal?.addEventListener("abort", cancel, { once: true });
+    _addCaller(pending, queue, signal);
     queue.push(pending);
 
     if (politeQueue.length + assertiveQueue.length > MAX_PENDING_MESSAGES) {
@@ -118,11 +150,6 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
       console.warn(
         `[gcforms/announce] Pending message limit reached; discarded the oldest ${droppedPriority} message.`
       );
-    }
-
-    if (priority === "assertive" && lastPriority === "polite" && timer !== undefined) {
-      clearTimeout(timer);
-      timer = undefined;
     }
 
     _schedule();

@@ -52,6 +52,25 @@ describe("announcement host coordinator", () => {
     expect(root.publish).toHaveBeenCalledTimes(1);
   });
 
+  it("preserves polite pacing when urgent work is cancelled during modal activation", () => {
+    const root = register("root");
+    const urgent = new AbortController();
+    vi.advanceTimersByTime(100);
+    announce("First");
+    announce("Pending");
+    vi.advanceTimersByTime(200);
+    const modal = register("modal");
+    announce("Urgent", "assertive", { signal: urgent.signal });
+    urgent.abort();
+    vi.advanceTimersByTime(100);
+    expect(modal.publish).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(699);
+    expect(modal.publish).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(1);
+    expect(modal.publish).toHaveBeenCalledExactlyOnceWith("Pending", "polite");
+    expect(root.publish).toHaveBeenCalledExactlyOnceWith("First", "polite");
+  });
+
   it("does not send assertive updates to the root during modal activation", () => {
     const root = register("root");
     vi.advanceTimersByTime(100);

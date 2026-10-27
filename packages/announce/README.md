@@ -1,7 +1,5 @@
 # Announce
 
-TODO: more thought about whether to include logging or not
-
 Screen-reader announcements for React apps, with persistent live regions and a
 priority queue that spaces out updates.
 
@@ -76,6 +74,11 @@ For transient feedback, abort the previous request when the input changes or the
 component closes or unmounts. This removes pending feedback without affecting other
 callers. It cannot stop speech for a message that has already been published.
 
+Identical pending requests share one announcement by default. Aborting one caller's
+signal only removes that caller's request; the announcement remains pending while
+another caller still needs it. A request without a signal keeps it pending even if
+the other callers cancel.
+
 ## Announce updates from React components
 
 Use `useAnnounce()` to debounce feedback as React state changes. It calls
@@ -128,3 +131,15 @@ returns delivery to the previous modal or the root.
 
 Pending messages follow the active host; previously published messages aren't
 replayed.
+
+Host changes preserve the remaining publication cooldown. Pending assertive work
+can interrupt a polite cooldown once the new host is ready. Cancelling that work
+before delivery leaves the original polite cooldown intact.
+
+## Future work
+
+- More thought about whether to include logging or not
+- Review imperative `announce()` calls in file inputs, dynamic rows, and right-panel
+  updates. Use an `AbortSignal` to cancel pending feedback when the UI it describes
+  closes or unmounts, while allowing application-wide notifications to survive
+  navigation. Avoid clearing the whole queue on navigation or modal handoff.

@@ -37,6 +37,99 @@ describe("announcement scheduler", () => {
     ]);
   });
 
+  it.each(["polite", "assertive"] as const)(
+    "keeps a shared %s announcement until its last caller cancels",
+    (priority) => {
+      const publish = vi.fn();
+      const scheduler = createScheduler(publish);
+      const first = new AbortController();
+      const second = new AbortController();
+      scheduler.pause();
+      scheduler.enqueue("Saved", priority, { signal: first.signal });
+      scheduler.enqueue("Saved", priority, { signal: second.signal });
+      first.abort();
+      scheduler.resume();
+      vi.runAllTimers();
+      expect(publish).toHaveBeenCalledExactlyOnceWith("Saved", priority);
+    }
+  );
+
+  it.each([false, true])(
+    "keeps a shared announcement requested without a signal (first: %s)",
+    (withoutSignalFirst) => {
+      const publish = vi.fn();
+      const scheduler = createScheduler(publish);
+      const controller = new AbortController();
+      scheduler.pause();
+      const cancellable = { signal: controller.signal };
+      scheduler.enqueue("Saved", "polite", withoutSignalFirst ? {} : cancellable);
+      scheduler.enqueue("Saved", "polite", withoutSignalFirst ? cancellable : {});
+      controller.abort();
+      scheduler.resume();
+      vi.runAllTimers();
+      expect(publish).toHaveBeenCalledExactlyOnceWith("Saved", "polite");
+    }
+  );
+
+  it("removes a shared announcement only when all its callers cancel", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    const first = new AbortController();
+    const second = new AbortController();
+    scheduler.pause();
+    scheduler.enqueue("Saved", "polite", { signal: first.signal });
+    scheduler.enqueue("Saved", "polite", { signal: second.signal });
+    second.abort();
+    first.abort();
+    scheduler.resume();
+    vi.runAllTimers();
+    expect(publish).not.toHaveBeenCalled();
+  });
+
+  it("deduplicates requests sharing a signal and removes its listener on cancellation", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    const controller = new AbortController();
+    const addListener = vi.spyOn(controller.signal, "addEventListener");
+    const removeListener = vi.spyOn(controller.signal, "removeEventListener");
+    scheduler.pause();
+    scheduler.enqueue("Saved", "polite", { signal: controller.signal });
+    scheduler.enqueue("Saved", "polite", { signal: controller.signal });
+    expect(addListener).toHaveBeenCalledTimes(1);
+    controller.abort();
+    expect(removeListener).toHaveBeenCalledTimes(1);
+    scheduler.resume();
+    expect(publish).not.toHaveBeenCalled();
+  });
+
+  it.each(["publication", "overflow", "stop"] as const)(
+    "detaches every shared caller's listener on %s",
+    (reason) => {
+      vi.spyOn(console, "warn").mockImplementation(() => {});
+      const publish = vi.fn();
+      const scheduler = createScheduler(publish);
+      const first = new AbortController();
+      const second = new AbortController();
+      const firstCleanup = vi.spyOn(first.signal, "removeEventListener");
+      const secondCleanup = vi.spyOn(second.signal, "removeEventListener");
+      scheduler.pause();
+      scheduler.enqueue("Saved", "polite", { signal: first.signal });
+      scheduler.enqueue("Saved", "polite", { signal: second.signal });
+      if (reason === "publication") {
+        scheduler.resume();
+        vi.runAllTimers();
+        expect(publish).toHaveBeenCalledExactlyOnceWith("Saved", "polite");
+      } else if (reason === "overflow") {
+        for (let i = 0; i < 20; i++) scheduler.enqueue(`Pending ${i}`, "polite");
+      } else {
+        scheduler.stop();
+      }
+      expect(firstCleanup).toHaveBeenCalledExactlyOnceWith("abort", expect.any(Function));
+      expect(secondCleanup).toHaveBeenCalledExactlyOnceWith("abort", expect.any(Function));
+      scheduler.stop();
+    }
+  );
+
   it("removes cancelled requests immediately so they do not consume queue capacity", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const publish = vi.fn();
@@ -433,6 +526,79 @@ describe("announcement scheduler", () => {
     vi.advanceTimersByTime(1);
     expect(publish).toHaveBeenLastCalledWith("Second", "polite");
   });
+
+  it("preserves the polite deadline when an urgent request is cancelled while paused", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    const urgent = new AbortController();
+    scheduler.enqueue("First", "polite");
+    scheduler.enqueue("Second", "polite");
+    vi.advanceTimersByTime(200);
+    scheduler.pause();
+    scheduler.enqueue("Urgent", "assertive", { signal: urgent.signal });
+    urgent.abort();
+    vi.advanceTimersByTime(100);
+    scheduler.resume();
+    expect(publish.mock.calls).toEqual([["First", "polite"]]);
+    vi.advanceTimersByTime(699);
+    expect(publish).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(1);
+    expect(publish.mock.calls).toEqual([
+      ["First", "polite"],
+      ["Second", "polite"],
+    ]);
+  });
+
+  it("does not restart an expired cooldown after cancelling urgent work while paused", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    const urgent = new AbortController();
+    scheduler.enqueue("First", "polite");
+    scheduler.enqueue("Second", "polite");
+    vi.advanceTimersByTime(200);
+    scheduler.pause();
+    scheduler.enqueue("Urgent", "assertive", { signal: urgent.signal });
+    urgent.abort();
+    vi.advanceTimersByTime(1000);
+    expect(publish).toHaveBeenCalledTimes(1);
+    scheduler.resume();
+    expect(publish.mock.calls).toEqual([
+      ["First", "polite"],
+      ["Second", "polite"],
+    ]);
+  });
+
+  it.each([false, true])(
+    "interrupts a polite cooldown on resume while urgent work remains (one caller cancelled: %s)",
+    (cancelFirstCaller) => {
+      const publish = vi.fn();
+      const scheduler = createScheduler(publish);
+      const first = new AbortController();
+      const second = new AbortController();
+      scheduler.enqueue("First", "polite");
+      scheduler.enqueue("Second", "polite");
+      vi.advanceTimersByTime(200);
+      scheduler.pause();
+      scheduler.enqueue("Urgent", "assertive", { signal: first.signal });
+      scheduler.enqueue("Urgent", "assertive", { signal: second.signal });
+      scheduler.enqueue("Next urgent", "assertive");
+      if (cancelFirstCaller) first.abort();
+      vi.advanceTimersByTime(100);
+      expect(publish).toHaveBeenCalledTimes(1);
+      scheduler.resume();
+      expect(publish.mock.calls).toEqual([
+        ["First", "polite"],
+        ["Urgent", "assertive"],
+      ]);
+      vi.advanceTimersByTime(999);
+      expect(publish).toHaveBeenCalledTimes(2);
+      vi.advanceTimersByTime(1);
+      expect(publish).toHaveBeenLastCalledWith("Next urgent", "assertive");
+      vi.advanceTimersByTime(1000);
+      expect(publish).toHaveBeenLastCalledWith("Second", "polite");
+      expect(publish).toHaveBeenCalledTimes(4);
+    }
+  );
 
   it("does not drain the queue when a cooldown expires while paused", () => {
     const publish = vi.fn();

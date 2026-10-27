@@ -140,6 +140,16 @@ describe("useAnnounce", () => {
     expect(text(Priority.HIGH)).toBe("Feedback");
   });
 
+  it("keeps another hook's identical pending feedback when the first hook unmounts", () => {
+    render(<Announce />);
+    const first = renderHook(() => useAnnounce("Ready"));
+    renderHook(() => useAnnounce("Ready"));
+    advance(0);
+    first.unmount();
+    advance(100);
+    expect(text()).toBe("Ready");
+  });
+
   it.each(["inactive", "empty", "unmount"])(
     "cancels its queued request on %s without affecting other callers",
     (reason) => {
