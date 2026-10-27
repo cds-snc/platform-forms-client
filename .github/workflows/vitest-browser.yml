@@ -8,6 +8,10 @@ jobs:
   vitest-browser-run:
     name: Vitest Browser Mode
     runs-on: ubuntu-latest
+    container:
+      # Keep the image version aligned with Playwright in yarn.lock.
+      image: mcr.microsoft.com/playwright:v1.64.1-noble@sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea
+      options: --ipc=host
     steps:
       - name: Checkout
         uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
@@ -17,8 +21,8 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Yarn update to V4
-        run: corepack enable && yarn set version stable
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -36,18 +40,6 @@ jobs:
 
       - name: "Install dependencies"
         run: yarn workspaces focus gcforms
-
-      - name: Cache Playwright binaries
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v4.5.0
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
 
       - name: Run Vitest Browser Tests
         run: yarn test:vitest:browser

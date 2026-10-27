@@ -128,6 +128,21 @@ Once the change is made, you will need to 'Log Out' and log back in. Alternative
 
 See package.json scripts for vitest and playwright
 
+### Browser tests in CI
+
+The E2E and Vitest browser workflows run in the official Playwright container, which
+includes browsers and their system dependencies. They do not need a browser install
+step or a separate browser cache. Node still follows `.nvmrc`, and Corepack uses the
+repository's pinned Yarn version.
+
+When upgrading Playwright, update the container image version and digest in both
+`.github/workflows/playwright.yml` and `.github/workflows/vitest-browser.yml` to match
+the resolved `playwright` version in `yarn.lock`.
+
+The E2E job connects to PostgreSQL and Redis using the service hostnames `postgres`
+and `redis`; `localhost` refers to the test job's own container. The application still
+runs at `http://localhost:3000` inside that container.
+
 ### Local Playwright setup
 
 For local development, the local Playwright scripts install Chromium automatically before running.
