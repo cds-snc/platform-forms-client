@@ -101,6 +101,42 @@ describe("migrateToStrictElementSchemas", () => {
     ).toBe(true);
   });
 
+  it.each(["number", "email", "custom", "unknown"])(
+    "removes ignored text-area validation type %s, including nested dynamic-row elements",
+    (type) => {
+      const textArea = {
+        id: 1,
+        type: "textArea",
+        properties: {
+          titleEn: "Comments",
+          titleFr: "Commentaires",
+          validation: { required: true, type, maxLength: 100 },
+        },
+      };
+      const migrated = migrate([
+        textArea,
+        {
+          id: 2,
+          type: "dynamicRow",
+          properties: { subElements: [{ ...textArea, id: 3 }] },
+        },
+      ]);
+
+      expect(migrated.schemaVersion).toBe(2);
+      expect(migrated.elements[0].type).toBe("textArea");
+      expect(migrated.elements[0].properties.validation).toEqual({
+        required: true,
+        maxLength: 100,
+      });
+      expect(migrated.elements[1].properties.subElements?.[0].type).toBe("textArea");
+      expect(migrated.elements[1].properties.subElements?.[0].properties.validation).toEqual({
+        required: true,
+        maxLength: 100,
+      });
+      expect(textArea.properties.validation.type).toBe(type);
+    }
+  );
+
   it("defaults missing validation to optional, including nested dynamic-row elements", () => {
     const migrated = migrate([
       {
