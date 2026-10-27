@@ -101,6 +101,101 @@ describe("migrateToStrictElementSchemas", () => {
     ).toBe(true);
   });
 
+  it("defaults missing validation to optional, including nested dynamic-row elements", () => {
+    const migrated = migrate([
+      {
+        id: 1,
+        type: "textArea",
+        properties: { titleEn: "Comments", titleFr: "Commentaires" },
+      },
+      {
+        id: 2,
+        type: "dynamicRow",
+        properties: {
+          subElements: [
+            {
+              id: 3,
+              type: "textField",
+              properties: { titleEn: "Name", titleFr: "Nom" },
+            },
+          ],
+        },
+      },
+    ]);
+
+    expect(migrated.schemaVersion).toBe(2);
+    expect(migrated.elements[0].properties.validation).toEqual({ required: false });
+    expect(migrated.elements[1].properties.validation).toEqual({ required: false });
+    expect(migrated.elements[1].properties.subElements?.[0].properties.validation).toEqual({
+      required: false,
+    });
+    expect(
+      new Validator().validate(migrated.elements, {
+        type: "array",
+        items: { $ref: "#/definitions/elementStrict" },
+        definitions: getTemplateSchema(2).definitions,
+      }).valid
+    ).toBe(true);
+  });
+
+  it("defaults a missing required flag while preserving other validation options", () => {
+    const migrated = migrate([
+      {
+        id: 1,
+        type: "textField",
+        properties: {
+          titleEn: "Email",
+          titleFr: "Courriel",
+          validation: { type: "email", maxLength: 100 },
+        },
+      },
+    ]);
+
+    expect(migrated.elements[0].properties.validation).toEqual({
+      required: false,
+      type: "email",
+      maxLength: 100,
+    });
+  });
+
+  it("preserves all-required behavior on legacy checkbox groups", () => {
+    const migrated = migrate([
+      {
+        id: 1,
+        type: "checkbox",
+        properties: {
+          titleEn: "Confirm each statement",
+          titleFr: "Confirmer chaque énoncé",
+          validation: { required: true, all: true },
+          choices: [{ en: "I agree", fr: "Je suis d'accord" }],
+        },
+      },
+    ]);
+
+    expect(migrated.schemaVersion).toBe(2);
+    expect(migrated.elements[0].properties.validation).toEqual({ required: true, all: true });
+    expect(
+      new Validator().validate(migrated.elements, {
+        type: "array",
+        items: { $ref: "#/definitions/elementStrict" },
+        definitions: getTemplateSchema(2).definitions,
+      }).valid
+    ).toBe(true);
+  });
+
+  it("defaults missing attestation validation to requiring all checkboxes", () => {
+    const migrated = migrate([
+      {
+        id: 1,
+        type: "attestation",
+        properties: { titleEn: "Confirm", titleFr: "Confirmer" },
+      },
+    ]);
+
+    expect(migrated.schemaVersion).toBe(2);
+    expect(migrated.elements[0].properties.validation).toEqual({ all: true });
+  });
+
   it("rejects element types that are not supported by schema version 2", () => {
     expect(() =>
       migrate([

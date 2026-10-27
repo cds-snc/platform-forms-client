@@ -822,6 +822,16 @@
       "required": ["required"],
       "additionalProperties": false
     },
+    "validationCheckbox": {
+      "description": "Checkbox validation supports requiring every checkbox in the group.",
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "all": { "type": "boolean" }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
     "validationAttestation": {
       "type": "object",
       "properties": {
@@ -1001,7 +1011,7 @@
                     "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation|choices)$"
                   },
                   "properties": {
-                    "validation": { "$ref": "#/definitions/validationSimple" },
+                    "validation": { "$ref": "#/definitions/validationCheckbox" },
                     "choices": { "$ref": "#/definitions/choicesArray" }
                   },
                   "required": ["validation", "choices"]

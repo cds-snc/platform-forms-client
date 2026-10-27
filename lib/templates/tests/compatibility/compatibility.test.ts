@@ -29,7 +29,7 @@ describe("template compatibility fixtures", () => {
         .sort();
       const failures: MigrationFailure[] = [];
       let migratedCount = 0;
-      const migrationLog = vi.spyOn(logMessage, "error").mockImplementation(() => {});
+      const migrationLog = vi.spyOn(logMessage, "warn").mockImplementation(() => {});
 
       try {
         for (const fileName of fileNames) {
@@ -49,7 +49,7 @@ describe("template compatibility fixtures", () => {
 
             const migrationError = migrationLog.mock.calls
               .slice(logCountBeforeMigration)
-              .map(([message]) => (message instanceof Error ? message.message : String(message)))
+              .map(([message]) => String(message))
               .at(-1);
 
             failures.push({
