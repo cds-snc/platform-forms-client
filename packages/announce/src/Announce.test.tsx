@@ -16,8 +16,9 @@ function renderReadyHost(element: ReactElement = <Announce />) {
 
 describe("Announce", () => {
   beforeEach(() => vi.useFakeTimers());
-  afterEach(() => {
+  afterEach(async () => {
     cleanup();
+    await Promise.resolve();
     vi.clearAllTimers();
     vi.useRealTimers();
   });
@@ -104,7 +105,7 @@ describe("Announce", () => {
     expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Pending");
   });
 
-  it("cleans up on unmount and starts fresh on remount", () => {
+  it("cleans up on unmount and starts fresh on remount", async () => {
     const host = renderReadyHost();
     const oldRegion = screen.getByTestId("gc-announce-polite");
     act(() => {
@@ -112,6 +113,7 @@ describe("Announce", () => {
       announce("Stale");
     });
     host.unmount();
+    await Promise.resolve();
     expect(vi.getTimerCount()).toBe(0);
     announce("While unmounted");
     renderReadyHost();
@@ -122,7 +124,7 @@ describe("Announce", () => {
     expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Fresh");
   });
 
-  it("survives Strict Mode effect cleanup without duplicate listeners or stale timers", () => {
+  it("survives Strict Mode effect cleanup without duplicate publications or stale timers", async () => {
     renderReadyHost(
       <StrictMode>
         <Announce />
@@ -137,11 +139,11 @@ describe("Announce", () => {
     act(() => vi.advanceTimersByTime(1000));
     expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Second");
     cleanup();
+    await Promise.resolve();
     expect(vi.getTimerCount()).toBe(0);
   });
 
-  it("ignores requests before mounting, empty messages, and consecutive duplicates", () => {
-    announce("Before mounting");
+  it("ignores empty messages and consecutive duplicates", () => {
     renderReadyHost();
     expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
     act(() => {

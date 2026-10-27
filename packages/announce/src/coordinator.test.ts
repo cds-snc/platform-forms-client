@@ -15,11 +15,12 @@ describe("announcement host coordinator", () => {
   };
 
   beforeEach(() => vi.useFakeTimers());
-  afterEach(() => {
+  afterEach(async () => {
     cleanups
       .splice(0)
       .reverse()
       .forEach((cleanup) => cleanup());
+    await Promise.resolve();
     expect(vi.getTimerCount()).toBe(0);
     vi.useRealTimers();
     vi.restoreAllMocks();
@@ -118,11 +119,12 @@ describe("announcement host coordinator", () => {
     expect(modal.publish).not.toHaveBeenCalled();
   });
 
-  it("removes listeners and queued work after the last host leaves and starts fresh later", () => {
+  it("discards queued work after the last host leaves and starts fresh later", async () => {
     const root = register("root");
     announce("Discarded");
     root.unregister();
     root.unregister();
+    await Promise.resolve();
     expect(vi.getTimerCount()).toBe(0);
     announce("Without host");
 
@@ -174,7 +176,7 @@ describe("announcement host coordinator", () => {
     expect(error).toHaveBeenCalledTimes(1);
   });
 
-  it("contains an immediate publication failure from a window event", () => {
+  it("contains an immediate publication failure from a request", () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
     const uncaught = vi.fn();
     window.addEventListener("error", uncaught);
@@ -219,7 +221,6 @@ describe("announcement host coordinator", () => {
 
   it("finishes cleanup even when clearing the last host throws", () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
-    const removeListener = vi.spyOn(window, "removeEventListener");
     const root = register("root");
     announce("Pending");
     root.clear.mockImplementation(() => {
@@ -229,8 +230,6 @@ describe("announcement host coordinator", () => {
     expect(() => root.unregister()).not.toThrow();
     expect(() => root.unregister()).not.toThrow();
     expect(vi.getTimerCount()).toBe(0);
-    expect(removeListener).toHaveBeenCalledWith("gc-announce-polite", expect.any(Function));
-    expect(removeListener).toHaveBeenCalledWith("gc-announce-assertive", expect.any(Function));
     expect(error).toHaveBeenCalledExactlyOnceWith(
       "[gcforms/announce] Delivery stopped after a host cleanup error."
     );
@@ -241,41 +240,18 @@ describe("announcement host coordinator", () => {
     expect(fresh.publish).toHaveBeenCalledExactlyOnceWith("Fresh", "polite");
   });
 
-  it("contains request-processing errors and detaches the event listeners", () => {
+  it("contains request-processing errors without exposing announcement content", () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
     const root = register("root");
-    const event = new CustomEvent("gc-announce-polite", {
-      detail: {
-        get message() {
-          throw new Error("Private announcement text");
-        },
-      },
+    vi.spyOn(console, "warn").mockImplementation(() => {
+      throw new Error("Private announcement text");
     });
-    window.dispatchEvent(event);
+    for (let i = 0; i < 21; i++) announce(`Pending ${i}`);
     announce("Later");
     vi.runAllTimers();
     expect(root.publish).not.toHaveBeenCalled();
     expect(error).toHaveBeenCalledExactlyOnceWith(
       "[gcforms/announce] Delivery stopped after a request processing error."
-    );
-  });
-
-  it("rolls back partially attached listeners if initialization fails", () => {
-    const error = vi.spyOn(console, "error").mockImplementation(() => {});
-    const addListener = window.addEventListener.bind(window);
-    const removeListener = vi.spyOn(window, "removeEventListener");
-    vi.spyOn(window, "addEventListener").mockImplementation((type, listener, options) => {
-      if (type === "gc-announce-assertive") throw new Error("Listener setup failed");
-      addListener(type, listener, options);
-    });
-
-    const root = register("root");
-    announce("Discarded");
-    vi.runAllTimers();
-    expect(root.publish).not.toHaveBeenCalled();
-    expect(removeListener).toHaveBeenCalledWith("gc-announce-polite", expect.any(Function));
-    expect(error).toHaveBeenCalledExactlyOnceWith(
-      "[gcforms/announce] Delivery stopped after a listener setup error."
     );
   });
 });

@@ -58,8 +58,10 @@ own inline visually hidden styles; no stylesheet is needed.
   suppressed.
 - Holds up to 20 pending messages. Overflow drops the oldest polite message
   first, otherwise the oldest assertive message, and logs a warning.
-- Calls before any active host registers or on the server are ignored.
-  Removing the last active host discards pending messages and cancels timers.
+- Client calls before the first host registers are queued until a host is ready;
+  server calls are ignored. Removing the last active host pauses delivery immediately
+  and discards pending work after the current effect flush, allowing Strict Mode
+  to re-register hosts. Calls made without a host after initial registration are ignored.
 - An unexpected internal error logs a diagnostic without announcement text and
   stops delivery, rather than letting the error escape into the app. Pending
   messages are discarded. Delivery restarts only after all active hosts have

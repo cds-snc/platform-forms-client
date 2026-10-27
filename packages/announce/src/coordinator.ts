@@ -14,6 +14,7 @@ function createCoordinator() {
   let activeHost: Host | undefined;
   let activationTimer: ReturnType<typeof setTimeout> | undefined;
   let failed = false;
+  let hasRegisteredHost = false;
 
   const scheduler = createScheduler(
     (message, priority) => {
@@ -30,8 +31,6 @@ function createCoordinator() {
     clearTimeout(activationTimer);
     activationTimer = undefined;
     scheduler.stop();
-    window.removeEventListener("gc-announce-polite", handlePolite);
-    window.removeEventListener("gc-announce-assertive", handleAssertive);
   };
 
   const handleFailure = (operation: string) => {
@@ -68,30 +67,17 @@ function createCoordinator() {
     }
   };
 
-  const handlePolite = (event: Event) => {
+  const enqueue = (message: string, priority: Priority) => {
+    if (hasRegisteredHost && hosts.length === 0) return;
     try {
-      scheduler.enqueue((event as CustomEvent<{ message: string }>).detail.message, "polite");
+      scheduler.enqueue(message, priority);
     } catch {
       handleFailure("request processing");
     }
   };
-
-  const handleAssertive = (event: Event) => {
-    try {
-      scheduler.enqueue((event as CustomEvent<{ message: string }>).detail.message, "assertive");
-    } catch {
-      handleFailure("request processing");
-    }
-  };
-
-  try {
-    window.addEventListener("gc-announce-polite", handlePolite);
-    window.addEventListener("gc-announce-assertive", handleAssertive);
-  } catch {
-    handleFailure("listener setup");
-  }
 
   const register = (host: Host) => {
+    hasRegisteredHost = true;
     hosts.push(host);
     selectHost();
     let registered = true;
@@ -110,21 +96,42 @@ function createCoordinator() {
       selectHost();
 
       if (hosts.length === 0) {
-        stopDelivery();
-        coordinator = undefined;
+        if (failed) {
+          stopDelivery();
+          coordinator = undefined;
+          return;
+        }
+        // React Strict Mode can re-register hosts in the same effect flush.
+        // Publication is already paused; discard pending work only after that flush.
+        queueMicrotask(() => {
+          if (hosts.length === 0 && coordinator === instance) {
+            stopDelivery();
+            coordinator = undefined;
+          }
+        });
       }
     };
   };
 
-  return { register };
+  const instance = { register, enqueue };
+  return instance;
 }
 
-// Created only by mounted client hosts. The last host's cleanup releases all shared state.
 let coordinator: ReturnType<typeof createCoordinator> | undefined;
+let hasRegisteredHost = false;
 
 export function registerHost(host: Host) {
+  hasRegisteredHost = true;
   if (coordinator === null || coordinator === undefined) {
     coordinator = createCoordinator();
   }
   return coordinator.register(host);
+}
+
+export function enqueueAnnouncement(message: string, priority: Priority) {
+  if (!coordinator) {
+    if (hasRegisteredHost) return;
+    coordinator = createCoordinator();
+  }
+  coordinator.enqueue(message, priority);
 }

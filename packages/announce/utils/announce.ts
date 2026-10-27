@@ -1,4 +1,5 @@
 import { Priority } from "../src/Announce";
+import { enqueueAnnouncement } from "../src/coordinator";
 
 export const announce = (message: string, priority: Priority = Priority.LOW) => {
   if (typeof window === "undefined") {
@@ -9,9 +10,5 @@ export const announce = (message: string, priority: Priority = Priority.LOW) => 
     return;
   }
 
-  const eventName = `gc-announce-${priority == Priority.LOW ? "polite" : "assertive"}`;
-  const event = new CustomEvent(eventName, {
-    detail: { message, priority },
-  });
-  window.dispatchEvent(event);
+  enqueueAnnouncement(message, priority);
 };

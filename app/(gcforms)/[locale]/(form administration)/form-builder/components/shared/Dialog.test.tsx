@@ -49,8 +49,9 @@ describe("Dialog announcement host", () => {
       },
     });
   });
-  afterEach(() => {
+  afterEach(async () => {
     cleanup();
+    await Promise.resolve();
     vi.clearAllTimers();
     vi.useRealTimers();
     for (const [name, descriptor] of [
@@ -69,7 +70,7 @@ describe("Dialog announcement host", () => {
         <section data-testid="root">
           <Announce />
         </section>
-        <Dialog dialogRef={ref}>
+        <Dialog dialogRef={ref} withAnnounce>
           <p>Modal content</p>
         </Dialog>
       </>
@@ -95,10 +96,10 @@ describe("Dialog announcement host", () => {
     render(
       <>
         <Announce />
-        <Dialog dialogRef={outer} handleClose={onOuterClose}>
+        <Dialog dialogRef={outer} handleClose={onOuterClose} withAnnounce>
           <div>
             <p>Outer</p>
-            <Dialog dialogRef={inner} handleClose={onInnerClose}>
+            <Dialog dialogRef={inner} handleClose={onInnerClose} withAnnounce>
               <p>Inner</p>
             </Dialog>
           </div>
@@ -135,4 +136,19 @@ describe("Dialog announcement host", () => {
     expect(ref.current?.open).toBe(false);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
+
+  it.each([undefined, false])(
+    "renders no announcement host when withAnnounce is %s",
+    (withAnnounce) => {
+      const ref = createRef<CDSHTMLDialogElement>();
+      render(
+        <Dialog dialogRef={ref} withAnnounce={withAnnounce}>
+          <p>Modal content</p>
+        </Dialog>
+      );
+      expect(screen.getByTestId("dialog").querySelector("[data-announce-host]")).toBeNull();
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    }
+  );
 });
