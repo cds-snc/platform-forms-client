@@ -111,7 +111,11 @@ export const DownloadTable = ({
       {downloadWarnings?.sizeLimitReached && (
         <Alert.Warning className="mb-4" focussable={true}>
           <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
-          <Alert.Body>{t("downloadResponsesTable.sizeLimitReached.body")}</Alert.Body>
+          <Alert.Body>
+            {t("downloadResponsesTable.sizeLimitReached.body", {
+              maxSizeMB: responsesDownloadZipMaxSizeMB,
+            })}
+          </Alert.Body>
         </Alert.Warning>
       )}
       {downloadWarnings?.processingFailed && (

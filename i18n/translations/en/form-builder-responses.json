@@ -98,12 +98,12 @@
     "delete": "Delete",
     "movedToDownloaded": "Moved to Downloaded",
     "partialDownload": {
-      "title": "Some responses could not be processed",
-      "body": "There was a problem processing some responses or their attachments. Try downloading the remaining responses again."
+      "title": "Could not download all responses or attachments",
+      "body": "Try downloading remaining responses again."
     },
     "sizeLimitReached": {
-      "title": "Download size limit reached",
-      "body": "Some responses were not downloaded because this download reached its size limit. Download the remaining responses in smaller groups or one at a time."
+      "title": "Download smaller batches",
+      "body": "This download exceeds our maximum {{maxSizeMB}} MB."
     },
     "header": {
       "tableTitle": "Responses table",
@@ -195,6 +195,7 @@
   "downloadResponsesModals": {
     "downloadDialog": {
       "title": "Download responses",
+      "sizeLimit": "Maximum {{maxSizeMB}} MB at one time. Select smaller batches if the download fails.",
       "chooseDownloadFormat": "Choose the format of response files",
       "downloadFormatContext1": "You’ll get an ",
       "downloadFormatContext2": "Official receipt",

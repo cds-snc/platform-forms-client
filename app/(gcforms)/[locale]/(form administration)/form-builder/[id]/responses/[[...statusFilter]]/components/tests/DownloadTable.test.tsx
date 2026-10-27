@@ -121,7 +121,7 @@ describe("Download Table", () => {
         formName=""
         nagwareResult={null}
         responseDownloadLimit={100}
-        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
+        responsesDownloadZipMaxSizeMB={125}
         overdueAfter={0}
         startFromExclusiveResponse={null}
       />
@@ -131,28 +131,26 @@ describe("Download Table", () => {
       vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([], warnings);
     });
 
-    expect(rendered.queryByText("Download size limit reached") !== null).toBe(
+    expect(rendered.queryByText("Download smaller batches") !== null).toBe(
       warnings.sizeLimitReached
     );
-    expect(rendered.queryByText("Some responses could not be processed") !== null).toBe(
+    expect(rendered.queryByText("Could not download all responses or attachments") !== null).toBe(
       warnings.processingFailed
     );
     if (warnings.sizeLimitReached) {
-      expect(rendered.getByText(/in smaller groups or one at a time/)).toBeInTheDocument();
+      expect(rendered.getByText("This download exceeds our maximum 125 MB.")).toBeInTheDocument();
       if (!warnings.processingFailed) {
         expect(
-          rendered.getByText("Download size limit reached").closest('[data-testid="alert"]')
+          rendered.getByText("Download smaller batches").closest('[data-testid="alert"]')
         ).toHaveFocus();
       }
     }
     if (warnings.processingFailed) {
-      expect(
-        rendered.getByText(/Try downloading the remaining responses again/)
-      ).toBeInTheDocument();
+      expect(rendered.getByText("Try downloading remaining responses again.")).toBeInTheDocument();
       if (!warnings.sizeLimitReached) {
         expect(
           rendered
-            .getByText("Some responses could not be processed")
+            .getByText("Could not download all responses or attachments")
             .closest('[data-testid="alert"]')
         ).toHaveFocus();
       }
@@ -161,8 +159,10 @@ describe("Download Table", () => {
     await act(async () => {
       vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([]);
     });
-    expect(rendered.queryByText("Download size limit reached")).not.toBeInTheDocument();
-    expect(rendered.queryByText("Some responses could not be processed")).not.toBeInTheDocument();
+    expect(rendered.queryByText("Download smaller batches")).not.toBeInTheDocument();
+    expect(
+      rendered.queryByText("Could not download all responses or attachments")
+    ).not.toBeInTheDocument();
   });
 
   it("clears the greyed-out state when a row is selected again", async () => {

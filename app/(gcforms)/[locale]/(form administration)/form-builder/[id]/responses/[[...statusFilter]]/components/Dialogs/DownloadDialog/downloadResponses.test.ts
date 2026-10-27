@@ -285,6 +285,9 @@ describe("downloadResponses", () => {
     expect(zip.files["response-1.html"]).toBeDefined();
     expect(zip.files["response-2.html"]).toBeUndefined();
     await expect(zip.files["_receipt-recu.html"].async("string")).resolves.toBe("response-1");
+    expect(JSON.parse(await zip.files["errors-erreurs.json"].async("string"))).toEqual([
+      { code: "Download limit", responseId: "response-2", reason: "At download limit" },
+    ]);
     const trackingCall = mocks.getSubmissionsByFormat.mock.calls.find(
       ([options]) => options.trackDownload
     );
@@ -344,6 +347,15 @@ describe("downloadResponses", () => {
     const zip = mocks.generateDownloadZip.mock.calls[0][0].zip;
     expect(zip.files["response-1.html"]).toBeDefined();
     expect(zip.files["response-2.html"]).toBeUndefined();
+    expect(JSON.parse(await zip.files["errors-erreurs.json"].async("string"))).toEqual([
+      {
+        code: "Download limit",
+        responseId: "response-2",
+        filename: "response-2.html",
+        reason: "At download limit",
+      },
+      { code: "Download limit", responseId: "response-3", reason: "At download limit" },
+    ]);
     expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], {
       sizeLimitReached: true,
       processingFailed: false,

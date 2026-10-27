@@ -276,7 +276,7 @@ export const downloadResponses = async ({
         downloadFailures.push({
           code: ResponseDownloadErrorCode.SIZE_LIMIT,
           responseId,
-          reason: "Archive size limit reached",
+          reason: "At download limit",
         });
         return;
       }
@@ -455,7 +455,7 @@ export const downloadResponses = async ({
         downloadFailures.push({
           code: ResponseDownloadErrorCode.SIZE_LIMIT,
           responseId,
-          reason: "Archive size limit reached",
+          reason: "At download limit",
         });
         return;
       }
@@ -526,7 +526,7 @@ export const downloadResponses = async ({
             code: ResponseDownloadErrorCode.SIZE_LIMIT,
             responseId,
             filename: `${id}.html`,
-            reason: "Archive size limit reached",
+            reason: "At download limit",
           });
         }
       });
