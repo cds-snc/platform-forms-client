@@ -1,6 +1,7 @@
 import { FormElement } from "@lib/types";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import { loadBlockTemplate } from "@formBuilder/actions";
+import { filterElementPropertiesByType } from "./itemHelper";
 
 export const blockLoader = async (
   type: TemplateTypes,
@@ -18,6 +19,6 @@ export const blockLoader = async (
   }
 
   result.data.forEach((data: FormElement, index: number) => {
-    onData(data, startIndex + index);
+    onData(filterElementPropertiesByType(data), startIndex + index);
   });
 };
