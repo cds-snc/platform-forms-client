@@ -81,6 +81,32 @@ describe("Download Table", () => {
     });
   });
 
+  it.each(["1", "3"])("shows the version column for responses all from version %s", (version) => {
+    const singleVersionSubmissions = vaultSubmissions.map((submission) => ({
+      ...submission,
+      version,
+    }));
+
+    const rendered = render(
+      <DownloadTable
+        statusFilter={StatusFilter.NEW}
+        vaultSubmissions={singleVersionSubmissions}
+        formId="clg17xha50008efkgfgxa8l4f"
+        formName=""
+        nagwareResult={null}
+        responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
+        overdueAfter={0}
+        startFromExclusiveResponse={null}
+      />
+    );
+
+    expect(rendered.getByRole("columnheader", { name: /Version/ })).toBeInTheDocument();
+    expect(rendered.container.querySelectorAll(`td[data-version="${version}"]`)).toHaveLength(
+      singleVersionSubmissions.length
+    );
+  });
+
   it.each<DownloadWarnings>([
     { sizeLimitReached: true, processingFailed: false },
     { sizeLimitReached: false, processingFailed: true },
