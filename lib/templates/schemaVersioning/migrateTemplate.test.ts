@@ -107,8 +107,12 @@ describe("migrateTemplate", () => {
       elements: [
         {
           id: 31,
-          type: "textField",
-          properties: { titleEn: "Other ", titleFr: "Autre " },
+          type: "dropdown",
+          properties: {
+            titleEn: "Other ",
+            titleFr: "Autre ",
+            validation: { required: false },
+          },
         },
       ],
     };
@@ -118,7 +122,7 @@ describe("migrateTemplate", () => {
     expect(migrated.elements).toEqual(template.elements);
     expect(logWarning).toHaveBeenCalledWith(
       expect.stringContaining(
-        'Cannot migrate template elements to schema version 2: elements[0].properties: requires property "validation"'
+        'Cannot migrate template elements to schema version 2: elements[0].properties: requires property "choices"'
       )
     );
   });

@@ -104,6 +104,17 @@ const migrateElement = (value: unknown, path: string, isSubElement = false): For
   }
 
   const branch = getStrictBranch(type, path);
+  if (branch.properties?.properties?.allOf?.[1]?.properties?.validation) {
+    // Older templates sometimes omitted validation or its required flag. Make these controls
+    // optional by default; attestations use the separate `all` flag and require every checkbox.
+    const validation = isJsonObject(properties.validation) ? { ...properties.validation } : {};
+    const requiredFlag = type === "attestation" ? "all" : "required";
+    if (validation[requiredFlag] === undefined) {
+      validation[requiredFlag] = type === "attestation";
+    }
+    properties.validation = validation;
+  }
+
   const propertyPattern = branch.properties?.properties?.allOf?.[1]?.propertyNames?.pattern;
   if (!propertyPattern) {
     throw new Error(`Missing strict property rules for element type "${type}" at ${path}`);
