@@ -42,20 +42,32 @@ export const Announce = ({
 }) => {
   const messageLowRef = useRef<HTMLDivElement>(null);
   const messageHighRef = useRef<HTMLDivElement>(null);
+  const alternateLowRef = useRef<HTMLDivElement>(null);
+  const alternateHighRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!active) return;
 
     const updateLiveRegion = (message: string, priority: Priority) => {
       const region = priority === Priority.HIGH ? messageHighRef.current : messageLowRef.current;
-      if (region && region.textContent !== message) {
-        region.textContent = message;
+      const alternate =
+        priority === Priority.HIGH ? alternateHighRef.current : alternateLowRef.current;
+      if (region && alternate) {
+        // Move repeated text to an already-mounted empty region to create a fresh update.
+        if (region.textContent === message) {
+          region.textContent = "";
+          alternate.textContent = message;
+        } else {
+          alternate.textContent = "";
+          region.textContent = message;
+        }
       }
     };
 
     const clearLiveRegions = () => {
-      if (messageLowRef.current) messageLowRef.current.textContent = "";
-      if (messageHighRef.current) messageHighRef.current.textContent = "";
+      for (const ref of [messageLowRef, messageHighRef, alternateLowRef, alternateHighRef]) {
+        if (ref.current) ref.current.textContent = "";
+      }
     };
 
     return registerHost({ scope, publish: updateLiveRegion, clear: clearLiveRegions });
@@ -67,14 +79,30 @@ export const Announce = ({
       <div
         role="status"
         aria-live="polite"
+        aria-atomic="true"
         data-testid="gc-announce-polite"
         ref={messageLowRef}
       ></div>
       <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        data-testid="gc-announce-polite-alternate"
+        ref={alternateLowRef}
+      ></div>
+      <div
         role="alert"
         aria-live="assertive"
+        aria-atomic="true"
         data-testid="gc-announce-assertive"
         ref={messageHighRef}
+      ></div>
+      <div
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-testid="gc-announce-assertive-alternate"
+        ref={alternateHighRef}
       ></div>
     </div>
   );

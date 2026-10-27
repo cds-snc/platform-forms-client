@@ -6,7 +6,7 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
-import { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "@gcforms/announce";
+import { useAnnounce } from "@gcforms/announce";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 interface ComboboxProps extends InputFieldProps {
@@ -118,10 +118,13 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       : t("combobox-no-results")
     : "";
 
-  const { bump, announcedMessage } = useAllowDuplicateAnnouncer({
-    message: targetMessage,
-    delayCondition: isOpen && items.length > 0,
-    isActive: isOpen,
+  // Preserve the existing onscreen-keyboard delays: 400 ms for results, 1400 ms for none
+  useAnnounce(targetMessage, {
+    active: isOpen,
+    delay: items.length > 0 ? 400 : 1400,
+    skipOnActivation: true,
+    allowDuplicates: true,
+    resetKey: filterText,
   });
 
   /**
@@ -174,8 +177,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           autoCapitalize="none"
           spellCheck={false}
         />
-
-        <AllowDuplicateAnnouncer id={id ?? name} bump={bump} announcedMessage={announcedMessage} />
 
         {/* Ensure UL remains in the DOM so the aria-controls reference is never broken. */}
         {/* Note: downshift sets role="listbox"/"option". */}

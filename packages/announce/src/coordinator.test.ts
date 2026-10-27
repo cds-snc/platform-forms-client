@@ -3,7 +3,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerHost } from "./coordinator";
-import { announce } from "../utils/announce";
+import { announce } from "./announce";
 
 describe("announcement host coordinator", () => {
   const cleanups: Array<() => void> = [];

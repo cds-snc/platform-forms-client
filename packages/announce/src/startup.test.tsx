@@ -37,13 +37,13 @@ describe("announcement startup", () => {
         </>
       );
       render(strict ? <StrictMode>{content}</StrictMode> : content);
-      expect(screen.getByRole("status")).toBeEmptyDOMElement();
+      expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
       act(() => vi.advanceTimersByTime(99));
-      expect(screen.getByRole("status")).toBeEmptyDOMElement();
+      expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
       act(() => vi.advanceTimersByTime(1));
-      expect(screen.getByRole("status")).toHaveTextContent("Before mounting");
+      expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Before mounting");
       act(() => vi.advanceTimersByTime(1000));
-      expect(screen.getByRole("status")).toHaveTextContent("From mount effect");
+      expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("From mount effect");
       act(() => vi.advanceTimersByTime(1000));
       expect(vi.getTimerCount()).toBe(0);
     }
@@ -58,12 +58,27 @@ describe("announcement startup", () => {
     expect(vi.getTimerCount()).toBe(0);
     render(<Announce />);
     act(() => vi.advanceTimersByTime(100));
-    expect(screen.getByRole("alert")).toHaveTextContent("Urgent");
-    expect(screen.getByRole("status")).toBeEmptyDOMElement();
+    expect(screen.getByTestId("gc-announce-assertive")).toHaveTextContent("Urgent");
+    expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
     act(() => vi.advanceTimersByTime(1000));
-    expect(screen.getByRole("status")).toHaveTextContent("Message 2");
+    expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Message 2");
     act(() => vi.runAllTimers());
-    expect(screen.getByRole("status")).toHaveTextContent("Message 20");
+    expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Message 20");
+  });
+
+  it("cancels a startup request before its first host is ready", async () => {
+    const { Announce, announce, Priority } = await import("./index");
+    const controller = new AbortController();
+    announce("Stale startup feedback", Priority.LOW, {
+      allowDuplicates: true,
+      signal: controller.signal,
+    });
+    controller.abort();
+    render(<Announce />);
+    act(() => vi.advanceTimersByTime(100));
+    expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
+    expect(screen.getByTestId("gc-announce-polite-alternate")).toBeEmptyDOMElement();
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it("does not queue server calls or install window event listeners", async () => {
@@ -78,7 +93,7 @@ describe("announcement startup", () => {
     announce("");
     render(<Announce />);
     act(() => vi.advanceTimersByTime(100));
-    expect(screen.getByRole("status")).toBeEmptyDOMElement();
+    expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
     expect(addListener.mock.calls.some(([name]) => name.startsWith("gc-announce-"))).toBe(false);
   });
 });

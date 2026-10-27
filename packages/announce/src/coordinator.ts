@@ -1,5 +1,6 @@
-import type { Priority } from "./Announce";
+import type { Priority } from "./AnnounceLiveRegions";
 import { createScheduler } from "./scheduler";
+import type { AnnounceOptions } from "./announce";
 
 const HOST_ACTIVATION_DELAY_MS = 100;
 
@@ -67,10 +68,10 @@ function createCoordinator() {
     }
   };
 
-  const enqueue = (message: string, priority: Priority) => {
+  const enqueue = (message: string, priority: Priority, options: AnnounceOptions) => {
     if (hasRegisteredHost && hosts.length === 0) return;
     try {
-      scheduler.enqueue(message, priority);
+      scheduler.enqueue(message, priority, options);
     } catch {
       handleFailure("request processing");
     }
@@ -128,10 +129,14 @@ export function registerHost(host: Host) {
   return coordinator.register(host);
 }
 
-export function enqueueAnnouncement(message: string, priority: Priority) {
+export function enqueueAnnouncement(
+  message: string,
+  priority: Priority,
+  options: AnnounceOptions = {}
+) {
   if (!coordinator) {
     if (hasRegisteredHost) return;
     coordinator = createCoordinator();
   }
-  coordinator.enqueue(message, priority);
+  coordinator.enqueue(message, priority, options);
 }

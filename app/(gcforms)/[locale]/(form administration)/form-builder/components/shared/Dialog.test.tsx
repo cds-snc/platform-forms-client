@@ -77,15 +77,19 @@ describe("Dialog announcement host", () => {
     );
     act(() => vi.advanceTimersByTime(100));
     act(() => announce("Inside modal"));
-    expect(within(screen.getByTestId("dialog")).getByRole("status")).toHaveTextContent(
-      "Inside modal"
-    );
-    expect(within(screen.getByTestId("root")).getByRole("status")).toBeEmptyDOMElement();
+    expect(
+      within(screen.getByTestId("dialog")).getByTestId("gc-announce-polite")
+    ).toHaveTextContent("Inside modal");
+    expect(
+      within(screen.getByTestId("root")).getByTestId("gc-announce-polite")
+    ).toBeEmptyDOMElement();
 
     act(() => ref.current?.close());
     act(() => announce("After close"));
     act(() => vi.advanceTimersByTime(1000));
-    expect(within(screen.getByTestId("root")).getByRole("status")).toHaveTextContent("After close");
+    expect(within(screen.getByTestId("root")).getByTestId("gc-announce-polite")).toHaveTextContent(
+      "After close"
+    );
   });
 
   it("only closes the dialog receiving Escape and calls its handler once", () => {
@@ -121,7 +125,7 @@ describe("Dialog announcement host", () => {
 
     act(() => announce("Back to outer"));
     act(() => vi.advanceTimersByTime(100));
-    expect(within(outer.current!).getByRole("status")).toHaveTextContent("Back to outer");
+    expect(within(outer.current!).getAllByRole("status")[0]).toHaveTextContent("Back to outer");
   });
 
   it("preserves the close button callback without calling it again for the native close event", () => {

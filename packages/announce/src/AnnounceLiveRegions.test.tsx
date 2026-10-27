@@ -5,8 +5,8 @@ import { act, cleanup, render, screen } from "@testing-library/react";
 import { StrictMode, type ReactElement } from "react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { Announce, Priority } from "./Announce";
-import { announce } from "../utils/announce";
+import { Announce, Priority } from "./AnnounceLiveRegions";
+import { announce } from "./announce";
 
 function renderReadyHost(element: ReactElement = <Announce />) {
   const host = render(element);
@@ -32,11 +32,11 @@ describe("Announce", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
-  it("visually hides both live regions without hiding them from assistive technology", () => {
+  it("visually hides all live regions without hiding them from assistive technology", () => {
     renderReadyHost();
 
-    const polite = screen.getByRole("status");
-    const assertive = screen.getByRole("alert");
+    const [polite, alternatePolite] = screen.getAllByRole("status");
+    const [assertive, alternateAssertive] = screen.getAllByRole("alert");
     const host = polite.parentElement!;
     expect(assertive.parentElement).toBe(host);
     expect(host).toHaveAttribute("data-announce-host", "root");
@@ -52,7 +52,7 @@ describe("Announce", () => {
       overflow: "hidden",
     });
 
-    for (const element of [host, polite, assertive]) {
+    for (const element of [host, polite, alternatePolite, assertive, alternateAssertive]) {
       expect(element).not.toHaveAttribute("aria-hidden");
       expect(element).not.toHaveAttribute("hidden");
       expect(element).not.toHaveStyle({ display: "none" });
@@ -61,6 +61,79 @@ describe("Announce", () => {
 
     expect(polite).toHaveAttribute("aria-live", "polite");
     expect(assertive).toHaveAttribute("aria-live", "assertive");
+    expect(alternatePolite.parentElement).toBe(host);
+    expect(alternateAssertive.parentElement).toBe(host);
+    expect(alternatePolite).toHaveAttribute("aria-live", "polite");
+    expect(alternateAssertive).toHaveAttribute("aria-live", "assertive");
+    for (const region of [polite, alternatePolite, assertive, alternateAssertive]) {
+      expect(region).toHaveAttribute("aria-atomic", "true");
+      expect(region).toBeEmptyDOMElement();
+    }
+  });
+
+  it.each([Priority.LOW, Priority.HIGH])(
+    "alternates repeated %s messages only when the incoming request allows duplicates",
+    (priority) => {
+      renderReadyHost(
+        <StrictMode>
+          <Announce />
+        </StrictMode>
+      );
+      const primary = screen.getByTestId(`gc-announce-${priority}`);
+      const alternate = screen.getByTestId(`gc-announce-${priority}-alternate`);
+      act(() => {
+        announce("Same", priority);
+        announce("Same", priority, { allowDuplicates: true });
+        announce("Same", priority, { allowDuplicates: true });
+        announce("Same", priority, { allowDuplicates: false });
+        announce("Same", priority);
+      });
+      expect(primary).toHaveTextContent("Same");
+      expect(alternate).toBeEmptyDOMElement();
+      act(() => vi.advanceTimersByTime(999));
+      expect(primary).toHaveTextContent("Same");
+      act(() => vi.advanceTimersByTime(1));
+      expect(primary).toBeEmptyDOMElement();
+      expect(alternate).toHaveTextContent("Same");
+      act(() => vi.advanceTimersByTime(1000));
+      expect(primary).toHaveTextContent("Same");
+      expect(alternate).toBeEmptyDOMElement();
+      act(() => vi.advanceTimersByTime(1000));
+      expect(vi.getTimerCount()).toBe(0);
+    }
+  );
+
+  it("clears alternate regions on handoff and retains a pending allowed duplicate", () => {
+    const view = (active: boolean) => (
+      <>
+        <section data-testid="root-host">
+          <Announce />
+        </section>
+        <section data-testid="modal-host">
+          <Announce scope="modal" active={active} />
+        </section>
+      </>
+    );
+    const host = renderReadyHost(view(false));
+    const root = screen.getByTestId("root-host");
+    const modal = screen.getByTestId("modal-host");
+    act(() => {
+      announce("Same");
+      announce("Same", Priority.LOW, { allowDuplicates: true });
+      vi.advanceTimersByTime(1000);
+    });
+    expect(root.querySelector('[data-testid="gc-announce-polite-alternate"]')).toHaveTextContent(
+      "Same"
+    );
+    act(() => announce("Same", Priority.LOW, { allowDuplicates: true }));
+    host.rerender(view(true));
+    expect(root.textContent).toBe("");
+    act(() => vi.advanceTimersByTime(1000));
+    expect(modal.querySelector('[data-testid="gc-announce-polite"]')).toHaveTextContent("Same");
+    host.rerender(view(false));
+    expect(modal.textContent).toBe("");
+    act(() => vi.advanceTimersByTime(1000));
+    expect(root.textContent).toBe("");
   });
 
   it("keeps the public API and live-region hosts while pacing publications", () => {
