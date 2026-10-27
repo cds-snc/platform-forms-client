@@ -14,6 +14,7 @@ import { useTranslation } from "@i18n/client";
 import { FeatureFlags } from "@lib/cache/types";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { logMessage } from "@lib/logger";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
 import {
@@ -60,6 +61,7 @@ export const DownloadDialog = ({
 
   const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
   const { getFlag } = useFeatureFlags();
+  const { logClientError } = useLogClient();
   const fileUploadEnabled = getFlag(FeatureFlags.fileUpload);
 
   useEffect(() => {
@@ -80,6 +82,14 @@ export const DownloadDialog = ({
 
   const handleDownloadComplete = (filteredIds: string[], warnings?: DownloadWarnings) => {
     setIsDownloading(false);
+    if (warnings?.sizeLimitReached) {
+      logClientError({
+        code: FormServerErrorCodes.DOWNLOAD_ZIP_SIZE_LIMIT_REACHED,
+        formId,
+        detail: `ZIP size limit: ${responsesDownloadZipMaxSizeMB} MB`,
+        level: "warn",
+      });
+    }
     onSuccessfulDownload(filteredIds, warnings);
     handleClose();
   };
