@@ -224,20 +224,23 @@ describe("response attachment ZIP paths", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(failures).toEqual([
       {
-        code: "SIZE_LIMIT",
+        code: "Download limit",
         responseId: "response-1",
         filename: "second.txt",
-        reason: "Archive size limit reached",
+        reason: "At download limit",
       },
       {
-        code: "SIZE_LIMIT",
+        code: "Download limit",
         responseId: "response-1",
         filename: "third.txt",
-        reason: "Archive size limit reached",
+        reason: "At download limit",
       },
     ]);
     expect(Object.keys(zip.files)).toContain(
       "file_attachments-fichiers_joints/response-1/first.txt"
+    );
+    expect(JSON.parse(await zip.files["attachment-download-errors.json"].async("string"))).toEqual(
+      failures
     );
   });
 

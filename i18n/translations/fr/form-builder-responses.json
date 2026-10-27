@@ -98,12 +98,12 @@
     "delete": "Supprimer",
     "movedToDownloaded": "Déplacée vers Téléchargements",
     "partialDownload": {
-      "title": "Certaines réponses n'ont pas pu être traitées",
-      "body": "Un problème est survenu lors du traitement de certaines réponses ou de leurs pièces jointes. Réessayez de télécharger les réponses restantes."
+      "title": "Impossible de télécharger toutes les réponses ou pièces jointes",
+      "body": "Réessayez de télécharger les réponses restantes."
     },
     "sizeLimitReached": {
-      "title": "Limite de taille du téléchargement atteinte",
-      "body": "Certaines réponses n'ont pas été téléchargées, car ce téléchargement a atteint sa limite de taille. Téléchargez les réponses restantes en plus petits groupes ou une à la fois."
+      "title": "Téléchargez en plus petits lots",
+      "body": "Ce téléchargement dépasse notre limite de {{maxSizeMB}} Mo."
     },
     "header": {
       "tableTitle": "Tableau de réponses",
@@ -195,6 +195,7 @@
   "downloadResponsesModals": {
     "downloadDialog": {
       "title": "Télécharger les réponses",
+      "sizeLimit": "Maximum {{maxSizeMB}} Mo à la fois. Sélectionnez de plus petits lots si le téléchargement échoue.",
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
       "downloadFormatContext1": "Vous recevrez un ",
       "downloadFormatContext2": "Reçu officiel",

@@ -195,6 +195,11 @@ export const DownloadDialog = ({
           handleClose={handleClose}
         >
           <div className="p-4">
+            <p className="mb-4">
+              {t("downloadResponsesModals.downloadDialog.sizeLimit", {
+                maxSizeMB: responsesDownloadZipMaxSizeMB,
+              })}
+            </p>
             <h3 className="mb-4 block font-semibold">
               {t("downloadResponsesModals.downloadDialog.chooseDownloadFormat")}
             </h3>
