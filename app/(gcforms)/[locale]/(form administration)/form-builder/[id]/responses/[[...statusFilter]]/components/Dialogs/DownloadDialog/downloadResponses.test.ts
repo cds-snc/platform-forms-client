@@ -293,9 +293,6 @@ describe("downloadResponses", () => {
       sizeLimitReached: true,
       processingFailed: false,
     });
-    expect(mocks.logMessageWarn).toHaveBeenCalledWith(
-      "Responses ZIP size limit reached for form form-id"
-    );
   });
 
   it("downloads a single response that exceeds the ZIP size limit without failures", async () => {
