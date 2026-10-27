@@ -131,6 +131,11 @@ const migrateElement = (value: unknown, path: string, isSubElement = false): For
 
   properties = filterValidationProperties(properties, branch);
 
+  if (type === "textArea" && isJsonObject(properties.validation)) {
+    // Text areas only use required/maxLength validation; validation.type is ignored at runtime.
+    delete properties.validation.type;
+  }
+
   if (
     type === "combobox" &&
     properties.managedChoices !== undefined &&
