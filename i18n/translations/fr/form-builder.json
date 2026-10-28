@@ -861,6 +861,10 @@
   "publishYourForm": "Publier votre formulaire",
   "migrationProblems": {
     "title": "Problèmes",
+    "count_one": "{{count}} problème de compatibilité détecté",
+    "count_other": "{{count}} problèmes de compatibilité détectés",
+    "notice": "Votre formulaire pourrait ne pas fonctionner avec les futures versions de Formulaires GC. Vous pouvez quand même le publier.",
+    "review": "Examiner les problèmes",
     "warning": "Votre formulaire comporte des problèmes qui pourraient le rendre incompatible avec les futures versions de Formulaires GC. Nous vous recommandons de les corriger si possible. Cela ne vous empêche pas de publier.",
     "intro": "Ces problèmes ont empêché la mise à jour de votre brouillon vers le schéma le plus récent. Corrigez-les dans l'éditeur pour maintenir la compatibilité de votre formulaire. Vous pouvez quand même publier votre formulaire.",
     "resolved": "Aucun problème de compatibilité n'a été trouvé dans ce brouillon.",
