@@ -7,8 +7,10 @@ import {
   NavPublishIcon,
   NavSettingsIcon,
   NavResponsesIcon,
+  WarningIcon,
 } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateMigrationProblems } from "@lib/store/hooks/useTemplateMigrationProblems";
 import { LeftNav } from "@clientComponents/globals/Buttons/LeftNav";
 import { useSelectedLayoutSegment } from "next/navigation";
 
@@ -30,6 +32,7 @@ const linkHelper = ({
 };
 
 export const LeftNavigation = ({ id }: { id: string }) => {
+  const problems = useTemplateMigrationProblems();
   const {
     t,
     i18n: { language },
@@ -58,6 +61,17 @@ export const LeftNavigation = ({ id }: { id: string }) => {
               title={t("edit")}
             >
               <NavEditIcon />
+            </LeftNav>
+          </li>
+        )}
+        {problems.length > 0 && (!isPublished || currentDraftVersionId) && (
+          <li>
+            <LeftNav
+              testid="problems"
+              {...linkHelper({ route: "problems", id: formId, segment, language })}
+              title={t("migrationProblems.title")}
+            >
+              <WarningIcon />
             </LeftNav>
           </li>
         )}
