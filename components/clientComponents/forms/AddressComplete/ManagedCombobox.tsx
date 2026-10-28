@@ -57,7 +57,10 @@ export const ManagedCombobox = React.forwardRef(
       useCombobox({
         inputValue,
         onInputValueChange: ({ inputValue, type }) => {
-          if (type === useCombobox.stateChangeTypes.InputChange) {
+          if (
+            type === useCombobox.stateChangeTypes.InputChange ||
+            type === useCombobox.stateChangeTypes.ItemClick
+          ) {
             setInputValue(inputValue || "");
             props.onChange?.({
               target: { value: inputValue },
