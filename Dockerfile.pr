@@ -1,6 +1,6 @@
 # Use the ARG to pull the image and assign a static alias (e.g., "lambda-adapter-source")
 ARG ECR_ACCOUNT_ID
-FROM ${ECR_ACCOUNT_ID}.dkr.ecr.ca-central-1.amazonaws.com/ecr-public/awsguru/aws-lambda-adapter:1.1.0 AS lambda-adapter-source
+FROM ${ECR_ACCOUNT_ID}.dkr.ecr.ca-central-1.amazonaws.com/ecr-public/cds-snc/aws-lambda-adapter AS lambda-adapter-source
 
 # Form viewier that runs as a Lambda function.  It is used to create 
 # Lambda function review environments for each PR.
