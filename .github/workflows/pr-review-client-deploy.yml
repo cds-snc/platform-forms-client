@@ -78,7 +78,7 @@ jobs:
             --build-arg ZITADEL_PROJECT_ID=$ZITADEL_PROJECT_ID \
             --build-arg API_URL=$API_URL \
             --build-arg NEXT_DEPLOYMENT_ID=$GITHUB_SHA \
-            --build-arg ECR_ACCOUNT_ID=${{ vars.STAGING_AWS_ACCOUNT_ID }} .
+            --build-arg ECR_ACCOUNT_ID=$AWS_ACCOUNT_ID .
 
       - name: Push Docker image to ECR
         run: |
