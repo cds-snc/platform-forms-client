@@ -47,11 +47,12 @@ jobs:
       CI: true
 
     steps:
-      - name: Set default Git branch
-        run: git config --global init.defaultBranch main
-
       - name: Checkout
         uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+        env:
+          GIT_CONFIG_COUNT: 1
+          GIT_CONFIG_KEY_0: init.defaultBranch
+          GIT_CONFIG_VALUE_0: main
         with:
           fetch-depth: 1
       - name: Node.JS Setup
