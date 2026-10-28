@@ -859,6 +859,32 @@
   "publishingRemovesTestResponses": "La publication supprime les réponses test.",
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
+  "migrationProblems": {
+    "title": "Problèmes",
+    "warning": "Votre formulaire comporte des problèmes qui pourraient le rendre incompatible avec les futures versions de Formulaires GC. Nous vous recommandons de les corriger si possible. Cela ne vous empêche pas de publier.",
+    "intro": "Ces problèmes ont empêché la mise à jour de votre brouillon vers le schéma le plus récent. Corrigez-les dans l'éditeur pour maintenir la compatibilité de votre formulaire. Vous pouvez quand même publier votre formulaire.",
+    "resolved": "Aucun problème de compatibilité n'a été trouvé dans ce brouillon.",
+    "untitled": "Question sans titre",
+    "form": "Formulaire",
+    "edit": "Modifier le formulaire",
+    "field": "Cette question",
+    "duplicateChoices": "Choix en double : {{choices}}. Supprimez ou modifiez les choix répétés.",
+    "duplicateRules": "Des règles conditionnelles sont identiques. Supprimez ou modifiez les règles répétées.",
+    "emptyList": "{{field}} doit contenir au moins une entrée.",
+    "tooMany": "{{field}} contient trop d'entrées. Supprimez-en quelques-unes.",
+    "invalidFormat": "{{field}} n'a pas le bon format. Vérifiez ou modifiez la valeur.",
+    "required": "Une valeur obligatoire manque dans {{field}}.",
+    "invalid": "{{field}} contient une valeur non valide : {{detail}}.",
+    "cannotUpgrade": "Cette question ne peut pas être mise à jour vers la dernière version. Vérifiez ses paramètres ou communiquez avec le soutien.",
+    "fields": {
+      "choices": "Choix",
+      "conditionalRules": "Règles conditionnelles",
+      "titleEn": "Titre de la question en anglais",
+      "titleFr": "Titre de la question en français",
+      "validation": "Paramètres de validation",
+      "subElements": "Questions dans l'ensemble répétitif"
+    }
+  },
   "publishYourFormInstructions": {
     "settings": "Paramètres",
     "classification": "Classification des données ",
