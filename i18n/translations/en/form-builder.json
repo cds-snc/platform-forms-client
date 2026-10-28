@@ -861,6 +861,10 @@
   "publishYourForm": "Publish your form",
   "migrationProblems": {
     "title": "Problems",
+    "count_one": "{{count}} compatibility problem found",
+    "count_other": "{{count}} compatibility problems found",
+    "notice": "Your form may not work with future versions of Forms. You can still publish it.",
+    "review": "Review problems",
     "warning": "Your form has issues that may make it incompatible with future versions of Forms. We recommend fixing them if you can. This does not prevent publishing.",
     "intro": "These issues prevented your draft from being updated to the latest form schema. Fix them in the editor to keep your form compatible. You can still publish your form.",
     "resolved": "No compatibility problems were found in this draft.",
