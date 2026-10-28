@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState, useMemo } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import {
   NagwareResult,
   StartFromExclusiveResponse,
@@ -32,6 +32,7 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
+  responsesDownloadZipMaxSizeMB: number;
   startFromExclusiveResponse: StartFromExclusiveResponse | null;
   overdueAfter: number;
   statusFilter: StatusFilter;
@@ -43,6 +44,7 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
+  responsesDownloadZipMaxSizeMB,
   startFromExclusiveResponse,
   overdueAfter,
   statusFilter,
@@ -59,6 +61,9 @@ export const DownloadTable = ({
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [downloadWarnings, setDownloadWarnings] = useState<DownloadWarnings | undefined>();
   const [removedRows, setRemovedRows] = useState<string[]>([]);
+  const downloadWarningsRef = useRef<HTMLDivElement>(null);
+  const hasDownloadWarnings =
+    downloadWarnings?.sizeLimitReached || downloadWarnings?.processingFailed;
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { hasApiKeyId } = useFormBuilderConfig();
@@ -67,19 +72,6 @@ export const DownloadTable = ({
     reducerTableItems,
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
-
-  // Check to see if we should show the version column. If there are mixed versions and at least one submission is not version 1, show the version column. Otherwise hide it.
-  const showVersionsColumn = useMemo(() => {
-    const hasMixedVersions = vaultSubmissions.some(
-      (submission) => submission.version !== vaultSubmissions[0].version
-    );
-
-    const hasNonVersion1Submissions = vaultSubmissions.some(
-      (submission) => Number(submission.version) !== 1 && submission.version !== undefined
-    );
-
-    return hasNonVersion1Submissions && hasMixedVersions;
-  }, [vaultSubmissions]);
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -117,19 +109,33 @@ export const DownloadTable = ({
     tableItemsDispatch(dispatchAction);
   }, [vaultSubmissions]);
 
+  useEffect(() => {
+    if (hasDownloadWarnings) {
+      downloadWarningsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [hasDownloadWarnings]);
+
   return (
     <>
-      {downloadWarnings?.sizeLimitReached && (
-        <Alert.Warning className="mb-4" focussable={true}>
-          <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
-          <Alert.Body>{t("downloadResponsesTable.sizeLimitReached.body")}</Alert.Body>
-        </Alert.Warning>
-      )}
-      {downloadWarnings?.processingFailed && (
-        <Alert.Warning className="mb-4" focussable={true}>
-          <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
-          <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
-        </Alert.Warning>
+      {hasDownloadWarnings && (
+        <div ref={downloadWarningsRef}>
+          {downloadWarnings?.sizeLimitReached && (
+            <Alert.Warning className="mb-4" focussable={true}>
+              <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
+              <Alert.Body>
+                {t("downloadResponsesTable.sizeLimitReached.body", {
+                  maxSizeMB: responsesDownloadZipMaxSizeMB,
+                })}
+              </Alert.Body>
+            </Alert.Warning>
+          )}
+          {downloadWarnings?.processingFailed && (
+            <Alert.Warning className="mb-4" focussable={true}>
+              <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
+              <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
+            </Alert.Warning>
+          )}
+        </div>
       )}
       {showDownloadSuccess && (
         <Alert.Success className="mb-4">
@@ -197,21 +203,19 @@ export const DownloadTable = ({
                   <p>{t(`tooltips.downloadTable.date.body`)}</p>
                 </Tooltip.Info>
               </th>
-              {showVersionsColumn && (
-                <th scope="col" className="p-4 text-left">
-                  <span className="flex items-center">
-                    {t("downloadResponsesTable.header.version")}
-                    <Tooltip.Info
-                      side="top"
-                      triggerClassName="align-middle ml-1"
-                      tooltipClassName="font-normal"
-                    >
-                      <strong>{t(`tooltips.downloadTable.version.title`)}</strong>
-                      <p>{t(`tooltips.downloadTable.version.body`)}</p>
-                    </Tooltip.Info>
-                  </span>
-                </th>
-              )}
+              <th scope="col" className="p-4 text-left">
+                <span className="flex items-center">
+                  {t("downloadResponsesTable.header.version")}
+                  <Tooltip.Info
+                    side="top"
+                    triggerClassName="align-middle ml-1"
+                    tooltipClassName="font-normal"
+                  >
+                    <strong>{t(`tooltips.downloadTable.version.title`)}</strong>
+                    <p>{t(`tooltips.downloadTable.version.body`)}</p>
+                  </Tooltip.Info>
+                </span>
+              </th>
 
               <th scope="col" className="w-full p-4 text-left">
                 {t("downloadResponsesTable.header.nextStep")}
@@ -284,14 +288,12 @@ export const DownloadTable = ({
                     {submission.name}
                   </th>
                   <td className="px-4 whitespace-nowrap">{createdDateTime}</td>
-                  {showVersionsColumn && (
-                    <td
-                      className="px-4 whitespace-nowrap"
-                      data-version={submission.version ?? "unknown"}
-                    >
-                      {submission.version ?? t("downloadResponsesTable.unknownVersion")}
-                    </td>
-                  )}
+                  <td
+                    className="px-4 whitespace-nowrap"
+                    data-version={submission.version ?? "unknown"}
+                  >
+                    {submission.version ?? t("downloadResponsesTable.unknownVersion")}
+                  </td>
                   <td className="px-4 whitespace-nowrap">
                     <NextStep
                       statusFilter={statusFilter as StatusFilter}
@@ -357,7 +359,10 @@ export const DownloadTable = ({
         <ActionsPanel>
           <DownloadButton
             setShowDownloadDialog={setShowDownloadDialog}
-            onClick={() => setDownloadError(false)}
+            onClick={() => {
+              setDownloadError(false);
+              setDownloadWarnings(undefined);
+            }}
           />
         </ActionsPanel>
       )}
@@ -393,6 +398,7 @@ export const DownloadTable = ({
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
+        responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
         checkedMeta={tableItems.allItems.filter((item) => tableItems.checkedItems.get(item.name))}
       />
     </>

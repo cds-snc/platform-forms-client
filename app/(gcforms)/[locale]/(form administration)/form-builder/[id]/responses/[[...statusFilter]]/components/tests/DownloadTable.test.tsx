@@ -39,6 +39,8 @@ vi.mock("../../actions", () => ({
   getSubmissionsByFormat: vi.fn(),
 }));
 
+const RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB = 500;
+
 describe("Download Table", () => {
   afterEach(cleanup);
 
@@ -64,6 +66,7 @@ describe("Download Table", () => {
         formName={""}
         nagwareResult={null}
         responseDownloadLimit={0}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
         overdueAfter={0}
         startFromExclusiveResponse={null}
       />
@@ -78,12 +81,41 @@ describe("Download Table", () => {
     });
   });
 
+  it.each(["1", "3"])("shows the version column for responses all from version %s", (version) => {
+    const singleVersionSubmissions = vaultSubmissions.map((submission) => ({
+      ...submission,
+      version,
+    }));
+
+    const rendered = render(
+      <DownloadTable
+        statusFilter={StatusFilter.NEW}
+        vaultSubmissions={singleVersionSubmissions}
+        formId="clg17xha50008efkgfgxa8l4f"
+        formName=""
+        nagwareResult={null}
+        responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
+        overdueAfter={0}
+        startFromExclusiveResponse={null}
+      />
+    );
+
+    expect(rendered.getByRole("columnheader", { name: /Version/ })).toBeInTheDocument();
+    expect(rendered.container.querySelectorAll(`td[data-version="${version}"]`)).toHaveLength(
+      singleVersionSubmissions.length
+    );
+  });
+
   it.each<DownloadWarnings>([
     { sizeLimitReached: true, processingFailed: false },
     { sizeLimitReached: false, processingFailed: true },
     { sizeLimitReached: true, processingFailed: true },
     { sizeLimitReached: false, processingFailed: false },
   ])("shows the appropriate warnings for %j", async (warnings) => {
+    const scrollIntoView = vi.fn();
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
     const rendered = render(
       <DownloadTable
         statusFilter={StatusFilter.NEW}
@@ -92,6 +124,7 @@ describe("Download Table", () => {
         formName=""
         nagwareResult={null}
         responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={125}
         overdueAfter={0}
         startFromExclusiveResponse={null}
       />
@@ -101,38 +134,47 @@ describe("Download Table", () => {
       vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([], warnings);
     });
 
-    expect(rendered.queryByText("Download size limit reached") !== null).toBe(
+    expect(rendered.queryByText("Download smaller batches") !== null).toBe(
       warnings.sizeLimitReached
     );
-    expect(rendered.queryByText("Some responses could not be processed") !== null).toBe(
+    expect(rendered.queryByText("Could not download all responses or attachments") !== null).toBe(
       warnings.processingFailed
     );
+    expect(scrollIntoView).toHaveBeenCalledTimes(
+      warnings.sizeLimitReached || warnings.processingFailed ? 1 : 0
+    );
     if (warnings.sizeLimitReached) {
-      expect(rendered.getByText(/in smaller groups or one at a time/)).toBeInTheDocument();
+      expect(rendered.getByText("This download exceeds our maximum 125 MB.")).toBeInTheDocument();
       if (!warnings.processingFailed) {
         expect(
-          rendered.getByText("Download size limit reached").closest('[data-testid="alert"]')
+          rendered.getByText("Download smaller batches").closest('[data-testid="alert"]')
         ).toHaveFocus();
       }
     }
     if (warnings.processingFailed) {
-      expect(
-        rendered.getByText(/Try downloading the remaining responses again/)
-      ).toBeInTheDocument();
+      expect(rendered.getByText("Try downloading remaining responses again.")).toBeInTheDocument();
       if (!warnings.sizeLimitReached) {
         expect(
           rendered
-            .getByText("Some responses could not be processed")
+            .getByText("Could not download all responses or attachments")
             .closest('[data-testid="alert"]')
         ).toHaveFocus();
       }
     }
 
-    await act(async () => {
-      vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([]);
-    });
-    expect(rendered.queryByText("Download size limit reached")).not.toBeInTheDocument();
-    expect(rendered.queryByText("Some responses could not be processed")).not.toBeInTheDocument();
+    if (warnings.sizeLimitReached || warnings.processingFailed) {
+      fireEvent.click(rendered.getAllByRole("checkbox")[0]);
+      fireEvent.click(rendered.container.querySelector("#downloadTableButtonId")!);
+    } else {
+      await act(async () => {
+        vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([]);
+      });
+    }
+    expect(rendered.queryByText("Download smaller batches")).not.toBeInTheDocument();
+    expect(
+      rendered.queryByText("Could not download all responses or attachments")
+    ).not.toBeInTheDocument();
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
   });
 
   it("clears the greyed-out state when a row is selected again", async () => {
@@ -144,6 +186,7 @@ describe("Download Table", () => {
         formName=""
         nagwareResult={null}
         responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
         overdueAfter={0}
         startFromExclusiveResponse={null}
       />

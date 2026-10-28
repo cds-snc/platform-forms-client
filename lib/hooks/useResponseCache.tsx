@@ -469,10 +469,6 @@ export const useResponsesCache = () => {
   });
 
   useEffect(() => {
-    if (updateTriggered || (rawData && rawData.restoredForm)) {
-      toast.success(t("saveAndResume.formRestored"), "public-facing-form");
-    }
-
     if (previousFormVersionNumber !== currentFormVersionNumber && rawData && rawData.restoredForm) {
       toast.notice(
         <VersionChangedToast
@@ -481,6 +477,14 @@ export const useResponsesCache = () => {
         />,
         "public-facing-form-wide"
       );
+
+      return;
+    }
+
+    if (updateTriggered || (rawData && rawData.restoredForm)) {
+      toast.success(t("saveAndResume.formRestored"), "public-facing-form");
+
+      return;
     }
 
     if (!rawData) {
