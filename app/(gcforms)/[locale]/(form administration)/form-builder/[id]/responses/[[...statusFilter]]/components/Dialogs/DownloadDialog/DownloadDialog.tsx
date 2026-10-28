@@ -55,6 +55,9 @@ export const DownloadDialog = ({
   const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
   const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
   const [downloadProgress, setDownloadProgress] = React.useState<DownloadProgress | null>(null);
+  const [downloadResult, setDownloadResult] = React.useState<{
+    warnings?: DownloadWarnings;
+  } | null>(null);
   const [selectedVersionForDialog, setSelectedVersionForDialog] = React.useState<string | null>(
     null
   );
@@ -76,6 +79,7 @@ export const DownloadDialog = ({
     setZipAllFiles(true);
     setSelectedVersionForDialog(null);
     setDownloadProgress(null);
+    setDownloadResult(null);
     setIsDialogVisible(false);
     dialogRef.current?.close();
   };
@@ -91,10 +95,12 @@ export const DownloadDialog = ({
       });
     }
     onSuccessfulDownload(filteredIds, warnings);
-    handleClose();
+    setDownloadProgress(null);
+    setDownloadResult({ warnings });
   };
 
   const handleDownload = async () => {
+    if (isDownloading || downloadResult) return;
     setIsDownloading(true);
     setDownloadError(false);
     if (!selectedFormat || !availableDownloadFormats.includes(selectedFormat)) {
@@ -195,123 +201,148 @@ export const DownloadDialog = ({
           handleClose={handleClose}
         >
           <div className="p-4">
-            <p className="mb-4">
-              {t("downloadResponsesModals.downloadDialog.sizeLimit", {
-                maxSizeMB: responsesDownloadZipMaxSizeMB,
-              })}
-            </p>
-            <h3 className="mb-4 block font-semibold">
-              {t("downloadResponsesModals.downloadDialog.chooseDownloadFormat")}
-            </h3>
-            <p className="">
-              {t("downloadResponsesModals.downloadDialog.downloadFormatContext1")}
-              <i>{t("downloadResponsesModals.downloadDialog.downloadFormatContext2")}</i>
-              {t("downloadResponsesModals.downloadDialog.downloadFormatContext3")}
-            </p>
+            <fieldset disabled={isDownloading || downloadResult !== null}>
+              <p className="mb-4">
+                {t("downloadResponsesModals.downloadDialog.sizeLimit", {
+                  maxSizeMB: responsesDownloadZipMaxSizeMB,
+                })}
+              </p>
+              <h3 className="mb-4 block font-semibold">
+                {t("downloadResponsesModals.downloadDialog.chooseDownloadFormat")}
+              </h3>
+              <p className="">
+                {t("downloadResponsesModals.downloadDialog.downloadFormatContext1")}
+                <i>{t("downloadResponsesModals.downloadDialog.downloadFormatContext2")}</i>
+                {t("downloadResponsesModals.downloadDialog.downloadFormatContext3")}
+              </p>
 
-            <div className="mt-4 flex flex-col gap-6">
-              <VersionSelector
-                dialogVersions={dialogVersions}
-                selectedVersion={selectedVersionForDialog}
-                setSelectedVersion={setSelectedVersionForDialog}
-                t={t}
-              />
-              <div className="gc-input-radio">
-                <input
-                  type="radio"
-                  name="downloadFormat"
-                  id="zip"
-                  value={DownloadFormat.HTML_ZIPPED}
-                  checked={selectedFormat === DownloadFormat.HTML_ZIPPED}
-                  className="gc-radio__input"
-                  onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
+              <div className="mt-4 flex flex-col gap-6">
+                <VersionSelector
+                  dialogVersions={dialogVersions}
+                  selectedVersion={selectedVersionForDialog}
+                  setSelectedVersion={setSelectedVersionForDialog}
+                  t={t}
                 />
-                <label htmlFor="zip" className="gc-radio-label">
-                  <span className="radio-label-text">
-                    <span className="block font-semibold">
-                      {t("downloadResponsesModals.downloadDialog.html")}
-                    </span>
-                    <span className="font-normal">
-                      {t("downloadResponsesModals.downloadDialog.htmlDescription")}
-                    </span>
-                  </span>
-                </label>
-              </div>
-
-              <div className="gc-input-radio">
-                <input
-                  type="radio"
-                  name="downloadFormat"
-                  id="combined"
-                  value={DownloadFormat.CSV}
-                  checked={selectedFormat === DownloadFormat.CSV}
-                  className="gc-radio__input"
-                  onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
-                />
-                <label htmlFor="combined" className="gc-radio-label">
-                  <span className="radio-label-text">
-                    <span className="block font-semibold">
-                      {t("downloadResponsesModals.downloadDialog.csv")}
-                    </span>
-                    <span className="font-normal">
-                      {t("downloadResponsesModals.downloadDialog.csvDescription")}
-                    </span>
-                  </span>
-                </label>
-              </div>
-
-              <div className="gc-input-radio">
-                <input
-                  type="radio"
-                  name="downloadFormat"
-                  id="json"
-                  value={DownloadFormat.JSON}
-                  checked={selectedFormat === DownloadFormat.JSON}
-                  className="gc-radio__input"
-                  onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
-                />
-                <label htmlFor="json" className="gc-radio-label">
-                  <span className="radio-label-text">
-                    <span className="block font-semibold">
-                      {t("downloadResponsesModals.downloadDialog.json")}
-                    </span>
-                    <span className="font-normal">
-                      {t("downloadResponsesModals.downloadDialog.jsonDescription")}
-                    </span>
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            {!fileUploadEnabled && (
-              <div className="mt-6">
-                <div className="gc-input-checkbox">
+                <div className="gc-input-radio">
                   <input
-                    type="checkbox"
-                    name="downloadAllAsZip"
-                    id="zipped"
-                    checked={zipAllFiles}
-                    disabled={selectedFormat === DownloadFormat.HTML_ZIPPED}
-                    className="gc-input-checkbox__input"
-                    onChange={() => setZipAllFiles(!zipAllFiles)}
+                    type="radio"
+                    name="downloadFormat"
+                    id="zip"
+                    value={DownloadFormat.HTML_ZIPPED}
+                    checked={selectedFormat === DownloadFormat.HTML_ZIPPED}
+                    className="gc-radio__input"
+                    onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                   />
-                  <label htmlFor="zipped" className="gc-checkbox-label">
-                    <span className="block font-semibold">
-                      {t("downloadResponsesModals.downloadDialog.downloadAllAsZip")}
+                  <label htmlFor="zip" className="gc-radio-label">
+                    <span className="radio-label-text">
+                      <span className="block font-semibold">
+                        {t("downloadResponsesModals.downloadDialog.html")}
+                      </span>
+                      <span className="font-normal">
+                        {t("downloadResponsesModals.downloadDialog.htmlDescription")}
+                      </span>
+                    </span>
+                  </label>
+                </div>
+
+                <div className="gc-input-radio">
+                  <input
+                    type="radio"
+                    name="downloadFormat"
+                    id="combined"
+                    value={DownloadFormat.CSV}
+                    checked={selectedFormat === DownloadFormat.CSV}
+                    className="gc-radio__input"
+                    onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
+                  />
+                  <label htmlFor="combined" className="gc-radio-label">
+                    <span className="radio-label-text">
+                      <span className="block font-semibold">
+                        {t("downloadResponsesModals.downloadDialog.csv")}
+                      </span>
+                      <span className="font-normal">
+                        {t("downloadResponsesModals.downloadDialog.csvDescription")}
+                      </span>
+                    </span>
+                  </label>
+                </div>
+
+                <div className="gc-input-radio">
+                  <input
+                    type="radio"
+                    name="downloadFormat"
+                    id="json"
+                    value={DownloadFormat.JSON}
+                    checked={selectedFormat === DownloadFormat.JSON}
+                    className="gc-radio__input"
+                    onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
+                  />
+                  <label htmlFor="json" className="gc-radio-label">
+                    <span className="radio-label-text">
+                      <span className="block font-semibold">
+                        {t("downloadResponsesModals.downloadDialog.json")}
+                      </span>
+                      <span className="font-normal">
+                        {t("downloadResponsesModals.downloadDialog.jsonDescription")}
+                      </span>
                     </span>
                   </label>
                 </div>
               </div>
-            )}
 
+              {!fileUploadEnabled && (
+                <div className="mt-6">
+                  <div className="gc-input-checkbox">
+                    <input
+                      type="checkbox"
+                      name="downloadAllAsZip"
+                      id="zipped"
+                      checked={zipAllFiles}
+                      disabled={selectedFormat === DownloadFormat.HTML_ZIPPED}
+                      className="gc-input-checkbox__input"
+                      onChange={() => setZipAllFiles(!zipAllFiles)}
+                    />
+                    <label htmlFor="zipped" className="gc-checkbox-label">
+                      <span className="block font-semibold">
+                        {t("downloadResponsesModals.downloadDialog.downloadAllAsZip")}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              )}
+            </fieldset>
             <div className="sticky bottom-0 flex flex-col gap-3 border-t-[0.5px] border-slate-500 bg-white p-4">
+              {/* Avoid flooding a screen reader with messages by only announcing summary info e.g. "Processing response 1 of 3" */}
+              <div
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className={downloadResult ? "text-sm" : "sr-only"}
+                data-testid="download-progress-indicator-hidden"
+              >
+                {downloadResult ? (
+                  downloadResult.warnings?.sizeLimitReached ||
+                  downloadResult.warnings?.processingFailed ? (
+                    <>
+                      <p>{t("downloadResponsesTable.partialDownload.title")}</p>
+                      {downloadResult.warnings.sizeLimitReached && (
+                        <p>
+                          {t("downloadResponsesTable.sizeLimitReached.body", {
+                            maxSizeMB: responsesDownloadZipMaxSizeMB,
+                          })}
+                        </p>
+                      )}
+                      <p>{t("downloadResponsesTable.partialDownload.body")}</p>
+                    </>
+                  ) : (
+                    t("downloadResponsesModals.downloadDialog.complete")
+                  )
+                ) : (
+                  downloadProgress?.phase === "responses" && getDownloadProgressMessage()
+                )}
+              </div>
               {isDownloading && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="flex items-center gap-2"
-                  data-testid="download-progress-indicator"
-                >
+                <div className="flex items-center gap-2" data-testid="download-progress-indicator">
                   <SpinnerIcon className="size-6 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
                   <span className="sr-only">{t("loading")}</span>
                   {fileUploadEnabled && (
@@ -320,19 +351,25 @@ export const DownloadDialog = ({
                 </div>
               )}
               <div className="flex gap-4">
-                <Button theme="secondary" onClick={handleClose} disabled={isDownloading}>
-                  {t("downloadResponsesModals.downloadDialog.cancel")}
-                </Button>
+                {!downloadResult && (
+                  <Button theme="secondary" onClick={handleClose} disabled={isDownloading}>
+                    {t("downloadResponsesModals.downloadDialog.cancel")}
+                  </Button>
+                )}
                 <Button
                   theme="primary"
-                  onClick={handleDownload}
+                  onClick={downloadResult ? handleClose : handleDownload}
+                  aria-disabled={isDownloading}
                   disabled={
-                    !selectedFormat ||
-                    isDownloading ||
-                    (dialogVersions.length > 1 && !selectedVersionForDialog)
+                    !downloadResult &&
+                    (!selectedFormat || (dialogVersions.length > 1 && !selectedVersionForDialog))
                   }
                 >
-                  {t("downloadResponsesModals.downloadDialog.download")}
+                  {t(
+                    downloadResult
+                      ? "downloadResponsesModals.downloadDialog.close"
+                      : "downloadResponsesModals.downloadDialog.download"
+                  )}
                 </Button>
               </div>
             </div>

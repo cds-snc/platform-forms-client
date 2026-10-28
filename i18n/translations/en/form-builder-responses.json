@@ -209,6 +209,8 @@
       "downloadAllAsZip": "Download all as ZIP (compressed) file",
       "cancel": "Cancel",
       "download": "Download",
+      "complete": "Download complete.",
+      "close": "Close",
       "chooseVersion": "Download responses for version",
       "chooseVersionPlaceholder": "Select a version",
       "chooseVersionRequired": "You can change the selected version if needed",
