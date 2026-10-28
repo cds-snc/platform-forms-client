@@ -83,7 +83,7 @@ jobs:
 
           docker pull "$IMAGE"
 
-          CONTAINER=$(docker create "$IMAGE")
+          CONTAINER=$(docker create "$IMAGE" true)
           docker cp "$CONTAINER:/lambda-adapter" .cache/lambda-adapter
           docker rm "$CONTAINER"
 
