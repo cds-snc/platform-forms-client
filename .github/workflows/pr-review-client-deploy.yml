@@ -67,6 +67,26 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@5a88a04c91d5c6f97aae0d9be790e64d9b1d47b7 # v1.7.1
 
+      - name: Cache Lambda adapter binary
+        id: adapter-cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/lambda-adapter
+          key: lambda-adapter-0.9.0-19cd0b92bc4a376b2b63e3b02d8b9ad3b4031ea3549fd5e54faa848c49948e09
+
+      - name: Extract Lambda adapter on cache miss
+        if: steps.adapter-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p .cache
+
+          IMAGE="public.ecr.aws/cds-snc/aws-lambda-adapter:0.9.0@sha256:19cd0b92bc4a376b2b63e3b02d8b9ad3b4031ea3549fd5e54faa848c49948e09"
+
+          docker pull "$IMAGE"
+
+          CONTAINER=$(docker create "$IMAGE")
+          docker cp "$CONTAINER:/lambda-adapter" .cache/lambda-adapter
+          docker rm "$CONTAINER"
+
       - name: Build Docker image
         run: |
           docker build --platform=linux/amd64 --provenance false -t ${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ env.PR_NUMBER }} \

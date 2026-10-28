@@ -77,9 +77,7 @@ RUN corepack enable && yarn set version stable
 RUN apk update && apk add --no-cache aws-cli
 
 # Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
-# The public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 image reference in the docs has
-# been pushed to the public CDS ECR to avoid rate limiting when pulling the image.
-COPY --from=public.ecr.aws/cds-snc/aws-lambda-adapter:0.9.0@sha256:19cd0b92bc4a376b2b63e3b02d8b9ad3b4031ea3549fd5e54faa848c49948e09 /lambda-adapter /opt/extensions/lambda-adapter
+COPY --chmod=755 .cache/lambda-adapter /opt/extensions/lambda-adapter
 RUN ln -s /tmp ./.next/cache
 
 EXPOSE 3000
