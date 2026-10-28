@@ -1,3 +1,7 @@
+# Use the ARG to pull the image and assign a static alias (e.g., "lambda-adapter-source")
+ARG ECR_ACCOUNT_ID
+FROM ${ECR_ACCOUNT_ID}.dkr.ecr.ca-central-1.amazonaws.com/ecr-public/awsguru/aws-lambda-adapter:1.1.0 AS lambda-adapter-source
+
 # Form viewier that runs as a Lambda function.  It is used to create 
 # Lambda function review environments for each PR.
 FROM node:24-alpine AS build
@@ -51,7 +55,6 @@ ENV INDEX_SITE=$INDEX_SITE
 ARG TAG_VERSION
 ENV TAG_VERSION=$TAG_VERSION
 
-ARG ECR_ACCOUNT_ID
 
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
@@ -80,7 +83,7 @@ RUN apk update && apk add --no-cache aws-cli
 
 # Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
 # The public.ecr.aws/awsguru/aws-lambda-adapter has been cached in order to avoid rate limiting
-COPY --from=${ECR_ACCOUNT_ID}.dkr.ecr.ca-central-1.amazonaws.com/ecr-public/awsguru/aws-lambda-adapter:1.1.0 /lambda-adapter /opt/extensions/lambda-adapter
+COPY --from=lambda-adapter-source /lambda-adapter /opt/extensions/lambda-adapter
 RUN ln -s /tmp ./.next/cache
 
 EXPOSE 3000
