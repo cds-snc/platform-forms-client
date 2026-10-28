@@ -57,10 +57,7 @@ export const ManagedCombobox = React.forwardRef(
       useCombobox({
         inputValue,
         onInputValueChange: ({ inputValue, type }) => {
-          if (
-            type === useCombobox.stateChangeTypes.InputChange ||
-            type === useCombobox.stateChangeTypes.ItemClick
-          ) {
+          if (type === useCombobox.stateChangeTypes.InputChange) {
             setInputValue(inputValue || "");
             props.onChange?.({
               target: { value: inputValue },
@@ -77,10 +74,10 @@ export const ManagedCombobox = React.forwardRef(
         },
         items,
         onSelectedItemChange: ({ selectedItem }) => {
-          setValue(selectedItem || "");
-          if (props.onSetValue) {
-            props.onSetValue(selectedItem || "");
-          }
+          const value = selectedItem ?? "";
+          setInputValue(value);
+          setValue(value);
+          props.onSetValue?.(value);
           setIsOpen(false);
         },
         onIsOpenChange: ({ isOpen }) => {
