@@ -61,7 +61,9 @@ export const DownloadTable = ({
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [downloadWarnings, setDownloadWarnings] = useState<DownloadWarnings | undefined>();
   const [removedRows, setRemovedRows] = useState<string[]>([]);
-  const sizeLimitAlertRef = useRef<HTMLDivElement>(null);
+  const downloadWarningsRef = useRef<HTMLDivElement>(null);
+  const hasDownloadWarnings =
+    downloadWarnings?.sizeLimitReached || downloadWarnings?.processingFailed;
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { hasApiKeyId } = useFormBuilderConfig();
@@ -108,30 +110,32 @@ export const DownloadTable = ({
   }, [vaultSubmissions]);
 
   useEffect(() => {
-    if (downloadWarnings?.sizeLimitReached) {
-      sizeLimitAlertRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    if (hasDownloadWarnings) {
+      downloadWarningsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-  }, [downloadWarnings?.sizeLimitReached]);
+  }, [hasDownloadWarnings]);
 
   return (
     <>
-      {downloadWarnings?.sizeLimitReached && (
-        <div ref={sizeLimitAlertRef}>
-          <Alert.Warning className="mb-4" focussable={true}>
-            <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
-            <Alert.Body>
-              {t("downloadResponsesTable.sizeLimitReached.body", {
-                maxSizeMB: responsesDownloadZipMaxSizeMB,
-              })}
-            </Alert.Body>
-          </Alert.Warning>
+      {hasDownloadWarnings && (
+        <div ref={downloadWarningsRef}>
+          {downloadWarnings?.sizeLimitReached && (
+            <Alert.Warning className="mb-4" focussable={true}>
+              <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
+              <Alert.Body>
+                {t("downloadResponsesTable.sizeLimitReached.body", {
+                  maxSizeMB: responsesDownloadZipMaxSizeMB,
+                })}
+              </Alert.Body>
+            </Alert.Warning>
+          )}
+          {downloadWarnings?.processingFailed && (
+            <Alert.Warning className="mb-4" focussable={true}>
+              <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
+              <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
+            </Alert.Warning>
+          )}
         </div>
-      )}
-      {downloadWarnings?.processingFailed && (
-        <Alert.Warning className="mb-4" focussable={true}>
-          <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
-          <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
-        </Alert.Warning>
       )}
       {showDownloadSuccess && (
         <Alert.Success className="mb-4">

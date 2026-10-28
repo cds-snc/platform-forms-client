@@ -140,9 +140,11 @@ describe("Download Table", () => {
     expect(rendered.queryByText("Could not download all responses or attachments") !== null).toBe(
       warnings.processingFailed
     );
+    expect(scrollIntoView).toHaveBeenCalledTimes(
+      warnings.sizeLimitReached || warnings.processingFailed ? 1 : 0
+    );
     if (warnings.sizeLimitReached) {
       expect(rendered.getByText("This download exceeds our maximum 125 MB.")).toBeInTheDocument();
-      expect(scrollIntoView).toHaveBeenCalled();
       if (!warnings.processingFailed) {
         expect(
           rendered.getByText("Download smaller batches").closest('[data-testid="alert"]')
