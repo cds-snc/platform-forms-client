@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import {
   NagwareResult,
   StartFromExclusiveResponse,
@@ -61,6 +61,7 @@ export const DownloadTable = ({
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [downloadWarnings, setDownloadWarnings] = useState<DownloadWarnings | undefined>();
   const [removedRows, setRemovedRows] = useState<string[]>([]);
+  const sizeLimitAlertRef = useRef<HTMLDivElement>(null);
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
 
   const { hasApiKeyId } = useFormBuilderConfig();
@@ -106,17 +107,25 @@ export const DownloadTable = ({
     tableItemsDispatch(dispatchAction);
   }, [vaultSubmissions]);
 
+  useEffect(() => {
+    if (downloadWarnings?.sizeLimitReached) {
+      sizeLimitAlertRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [downloadWarnings?.sizeLimitReached]);
+
   return (
     <>
       {downloadWarnings?.sizeLimitReached && (
-        <Alert.Warning className="mb-4" focussable={true}>
-          <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
-          <Alert.Body>
-            {t("downloadResponsesTable.sizeLimitReached.body", {
-              maxSizeMB: responsesDownloadZipMaxSizeMB,
-            })}
-          </Alert.Body>
-        </Alert.Warning>
+        <div ref={sizeLimitAlertRef}>
+          <Alert.Warning className="mb-4" focussable={true}>
+            <Alert.Title>{t("downloadResponsesTable.sizeLimitReached.title")}</Alert.Title>
+            <Alert.Body>
+              {t("downloadResponsesTable.sizeLimitReached.body", {
+                maxSizeMB: responsesDownloadZipMaxSizeMB,
+              })}
+            </Alert.Body>
+          </Alert.Warning>
+        </div>
       )}
       {downloadWarnings?.processingFailed && (
         <Alert.Warning className="mb-4" focussable={true}>
@@ -346,7 +355,10 @@ export const DownloadTable = ({
         <ActionsPanel>
           <DownloadButton
             setShowDownloadDialog={setShowDownloadDialog}
-            onClick={() => setDownloadError(false)}
+            onClick={() => {
+              setDownloadError(false);
+              setDownloadWarnings(undefined);
+            }}
           />
         </ActionsPanel>
       )}
