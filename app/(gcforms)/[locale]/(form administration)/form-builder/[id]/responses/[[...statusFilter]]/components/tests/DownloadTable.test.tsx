@@ -113,6 +113,9 @@ describe("Download Table", () => {
     { sizeLimitReached: true, processingFailed: true },
     { sizeLimitReached: false, processingFailed: false },
   ])("shows the appropriate warnings for %j", async (warnings) => {
+    const scrollIntoView = vi.fn();
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
     const rendered = render(
       <DownloadTable
         statusFilter={StatusFilter.NEW}
@@ -137,6 +140,9 @@ describe("Download Table", () => {
     expect(rendered.queryByText("Could not download all responses or attachments") !== null).toBe(
       warnings.processingFailed
     );
+    expect(scrollIntoView).toHaveBeenCalledTimes(
+      warnings.sizeLimitReached || warnings.processingFailed ? 1 : 0
+    );
     if (warnings.sizeLimitReached) {
       expect(rendered.getByText("This download exceeds our maximum 125 MB.")).toBeInTheDocument();
       if (!warnings.processingFailed) {
@@ -156,13 +162,19 @@ describe("Download Table", () => {
       }
     }
 
-    await act(async () => {
-      vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([]);
-    });
+    if (warnings.sizeLimitReached || warnings.processingFailed) {
+      fireEvent.click(rendered.getAllByRole("checkbox")[0]);
+      fireEvent.click(rendered.container.querySelector("#downloadTableButtonId")!);
+    } else {
+      await act(async () => {
+        vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([]);
+      });
+    }
     expect(rendered.queryByText("Download smaller batches")).not.toBeInTheDocument();
     expect(
       rendered.queryByText("Could not download all responses or attachments")
     ).not.toBeInTheDocument();
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
   });
 
   it("clears the greyed-out state when a row is selected again", async () => {
