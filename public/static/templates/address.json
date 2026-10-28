@@ -2,34 +2,13 @@
   {
     "type": "richText",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
-      "titleEn": "",
-      "titleFr": "",
-      "validation": {
-        "required": false
-      },
       "descriptionEn": "## What is your address?",
-      "descriptionFr": "## Quelle est votre adresse?",
-      "placeholderEn": "",
-      "placeholderFr": ""
+      "descriptionFr": "## Quelle est votre adresse?"
     }
   },
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "Street address",
       "titleFr": "Adresse municipale",
       "validation": {
@@ -45,13 +24,6 @@
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "City, town, or community",
       "titleFr": "Ville ou communauté",
       "validation": {
@@ -67,13 +39,6 @@
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "Province or territory",
       "titleFr": "Province ou territoire",
       "validation": {
@@ -89,13 +54,6 @@
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "Postal code",
       "titleFr": "Code postal",
       "validation": {
