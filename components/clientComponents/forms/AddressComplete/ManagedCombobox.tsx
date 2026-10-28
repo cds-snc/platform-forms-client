@@ -74,10 +74,10 @@ export const ManagedCombobox = React.forwardRef(
         },
         items,
         onSelectedItemChange: ({ selectedItem }) => {
-          setValue(selectedItem || "");
-          if (props.onSetValue) {
-            props.onSetValue(selectedItem || "");
-          }
+          const value = selectedItem ?? "";
+          setInputValue(value);
+          setValue(value);
+          props.onSetValue?.(value);
           setIsOpen(false);
         },
         onIsOpenChange: ({ isOpen }) => {
