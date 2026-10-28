@@ -7,9 +7,10 @@ import { setupFonts } from "../../helpers/setupFonts";
 
 import "@root/styles/app.css";
 
-const { mockFileUploadEnabled, mockDownloadResponses } = vi.hoisted(() => ({
+const { mockFileUploadEnabled, mockDownloadResponses, mockLanguage } = vi.hoisted(() => ({
   mockFileUploadEnabled: vi.fn(() => false),
   mockDownloadResponses: vi.fn(),
+  mockLanguage: vi.fn(() => "en"),
 }));
 
 vi.mock("@lib/hooks/useFeatureFlags", () => ({
@@ -28,12 +29,23 @@ vi.mock(
   })
 );
 
-vi.mock("@i18n/client", () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: { language: "en" },
-  }),
-}));
+vi.mock("@i18n/client", async () => {
+  const { createInstance } = await import("i18next");
+  const { default: en } = await import("@root/i18n/translations/en/form-builder-responses.json");
+  const { default: fr } = await import("@root/i18n/translations/fr/form-builder-responses.json");
+  const i18n = createInstance();
+  await i18n.init({
+    lng: "en",
+    resources: { en: { translation: en }, fr: { translation: fr } },
+  });
+
+  return {
+    useTranslation: () => ({
+      t: i18n.getFixedT(mockLanguage()),
+      i18n: { language: mockLanguage() },
+    }),
+  };
+});
 
 const defaultProps = {
   checkedItems: new Map<string, boolean>([
@@ -47,6 +59,7 @@ const defaultProps = {
   formName: "Test form",
   onSuccessfulDownload: vi.fn(),
   responseDownloadLimit: 50,
+  responsesDownloadZipMaxSizeMB: 500,
 };
 
 describe("<DownloadDialog />", () => {
@@ -57,6 +70,21 @@ describe("<DownloadDialog />", () => {
   beforeEach(() => {
     mockFileUploadEnabled.mockReturnValue(false);
     mockDownloadResponses.mockReset();
+    mockLanguage.mockReturnValue("en");
+  });
+
+  it.each([
+    ["en", "Maximum 125 MB at one time. Select smaller batches if the download fails."],
+    [
+      "fr",
+      "Maximum 125 Mo à la fois. Sélectionnez de plus petits lots si le téléchargement échoue.",
+    ],
+  ])("shows the configured download size limit in %s", async (language, message) => {
+    mockLanguage.mockReturnValue(language);
+    mockFileUploadEnabled.mockReturnValue(true);
+    await render(<DownloadDialog {...defaultProps} responsesDownloadZipMaxSizeMB={125} />);
+
+    await expect.element(page.getByText(message)).toBeVisible();
   });
 
   it("does not render the version selector when versions are not provided", async () => {
@@ -102,15 +130,11 @@ describe("<DownloadDialog />", () => {
       />
     );
 
-    await userEvent.click(
-      page.getByRole("button", { name: "downloadResponsesModals.downloadDialog.download" })
-    );
+    await userEvent.click(page.getByRole("button", { name: "Download", exact: true }));
 
     expect(mockDownloadResponses).toHaveBeenCalledOnce();
-    await expect.element(page.getByRole("status")).toHaveTextContent("loading");
-    await expect
-      .element(page.getByRole("status"))
-      .not.toHaveTextContent("downloadResponsesModals.downloadDialog.processingResponse");
+    await expect.element(page.getByRole("status")).toHaveTextContent("Loading...");
+    await expect.element(page.getByRole("status")).not.toHaveTextContent("Processing response");
     await expect.element(page.getByTestId("download-progress-indicator")).toBeVisible();
   });
 
@@ -137,9 +161,7 @@ describe("<DownloadDialog />", () => {
       />
     );
 
-    await userEvent.click(
-      page.getByRole("button", { name: "downloadResponsesModals.downloadDialog.download" })
-    );
+    await userEvent.click(page.getByRole("button", { name: "Download", exact: true }));
 
     expect(mockDownloadResponses).toHaveBeenCalledOnce();
     await expect.element(page.getByRole("status")).toBeVisible();
@@ -190,7 +212,8 @@ describe("<DownloadDialog />", () => {
     await expect.element(versionSelector).toBeVisible();
 
     const downloadButton = page.getByRole("button", {
-      name: "downloadResponsesModals.downloadDialog.download",
+      name: "Download",
+      exact: true,
     });
     await expect.element(downloadButton).toBeDisabled();
 

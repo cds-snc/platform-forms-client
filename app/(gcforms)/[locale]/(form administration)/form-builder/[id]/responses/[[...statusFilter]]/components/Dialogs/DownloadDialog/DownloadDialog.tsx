@@ -14,6 +14,7 @@ import { useTranslation } from "@i18n/client";
 import { FeatureFlags } from "@lib/cache/types";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { logMessage } from "@lib/logger";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
 import {
@@ -44,6 +45,7 @@ export const DownloadDialog = ({
   formName,
   onSuccessfulDownload,
   responseDownloadLimit,
+  responsesDownloadZipMaxSizeMB,
   checkedMeta = [],
 }: DownloadDialogProps) => {
   const dialogRef = useDialogRef();
@@ -59,6 +61,7 @@ export const DownloadDialog = ({
 
   const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
   const { getFlag } = useFeatureFlags();
+  const { logClientError } = useLogClient();
   const fileUploadEnabled = getFlag(FeatureFlags.fileUpload);
 
   useEffect(() => {
@@ -79,6 +82,14 @@ export const DownloadDialog = ({
 
   const handleDownloadComplete = (filteredIds: string[], warnings?: DownloadWarnings) => {
     setIsDownloading(false);
+    if (warnings?.sizeLimitReached) {
+      logClientError({
+        code: FormServerErrorCodes.DOWNLOAD_ZIP_SIZE_LIMIT_REACHED,
+        formId,
+        detail: `ZIP size limit: ${responsesDownloadZipMaxSizeMB} MB`,
+        level: "warn",
+      });
+    }
     onSuccessfulDownload(filteredIds, warnings);
     handleClose();
   };
@@ -124,6 +135,7 @@ export const DownloadDialog = ({
         filteredIds: filteredIdsWithVersion,
         filePrefix,
         shouldCreateZip: zipAllFiles || fileUploadEnabled,
+        responsesDownloadZipMaxSizeMB,
         setDownloadProgress,
         setIsDownloading,
         onDownloadComplete: handleDownloadComplete,
@@ -183,6 +195,11 @@ export const DownloadDialog = ({
           handleClose={handleClose}
         >
           <div className="p-4">
+            <p className="mb-4">
+              {t("downloadResponsesModals.downloadDialog.sizeLimit", {
+                maxSizeMB: responsesDownloadZipMaxSizeMB,
+              })}
+            </p>
             <h3 className="mb-4 block font-semibold">
               {t("downloadResponsesModals.downloadDialog.chooseDownloadFormat")}
             </h3>

@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.28.2](https://github.com/cds-snc/platform-forms-client/compare/v4.28.1...v4.28.2) (2026-10-28)
+
+
+### Bug Fixes
+
+* add return + swap order for toast message ([#8101](https://github.com/cds-snc/platform-forms-client/issues/8101)) ([299f3de](https://github.com/cds-snc/platform-forms-client/commit/299f3de8f6d91933822d0bad3912ebceb7732c22))
+* Consistently apply last-matching-rule wins logic ([#8094](https://github.com/cds-snc/platform-forms-client/issues/8094)) ([507bd5a](https://github.com/cds-snc/platform-forms-client/commit/507bd5afd9703dd50547850f8e5ec320594094a0))
+* Ensure blockLoader templates are valid elements ([#8105](https://github.com/cds-snc/platform-forms-client/issues/8105)) ([e156203](https://github.com/cds-snc/platform-forms-client/commit/e1562033a9b867f1048340a0f00f7241026aa5b6))
+
+
+### Miscellaneous Chores
+
+* add invite link ([#8009](https://github.com/cds-snc/platform-forms-client/issues/8009)) ([58a745d](https://github.com/cds-snc/platform-forms-client/commit/58a745d44f174f3967214d2e6a1848d325fe64ba))
+* always show versions column ([#8099](https://github.com/cds-snc/platform-forms-client/issues/8099)) ([8c91dfb](https://github.com/cds-snc/platform-forms-client/commit/8c91dfbeaf6b4aeb555d7ff8a8002376593001f3))
+* bump next to 16.4.3 ([#8100](https://github.com/cds-snc/platform-forms-client/issues/8100)) ([cd3c006](https://github.com/cds-snc/platform-forms-client/commit/cd3c006599d95e68b746c8c4242bc4e9173d2744))
+* fix build error ([#8102](https://github.com/cds-snc/platform-forms-client/issues/8102)) ([b15f67b](https://github.com/cds-snc/platform-forms-client/commit/b15f67b171f9c612dcf085e39ab4cfa6b5ef6380))
+* fix margin for sign off button ([#8098](https://github.com/cds-snc/platform-forms-client/issues/8098)) ([6107774](https://github.com/cds-snc/platform-forms-client/commit/6107774832fbae277d5211941e74332731ef587c))
+* fix size limit alert ([#8106](https://github.com/cds-snc/platform-forms-client/issues/8106)) ([9ab6a70](https://github.com/cds-snc/platform-forms-client/commit/9ab6a70faa2cad6ac85d4000881860450eeef557))
+* move responses download file limit to an app setting ([#8092](https://github.com/cds-snc/platform-forms-client/issues/8092)) ([702fb36](https://github.com/cds-snc/platform-forms-client/commit/702fb3614c3804d826304ab9ee4f85c214786bf9))
+* update content for attachments UI  with placeholder for MB ([#8103](https://github.com/cds-snc/platform-forms-client/issues/8103)) ([8c47b44](https://github.com/cds-snc/platform-forms-client/commit/8c47b445c89c4c8fd9d8a0e3023138e4e77dd27d))
+* update logging for attachments limit ([#8096](https://github.com/cds-snc/platform-forms-client/issues/8096)) ([b89f1ab](https://github.com/cds-snc/platform-forms-client/commit/b89f1ab571516d25bf13b4aefc6cbb951f315062))
+* update setup for playwright / vitest ([#8097](https://github.com/cds-snc/platform-forms-client/issues/8097)) ([13806e5](https://github.com/cds-snc/platform-forms-client/commit/13806e5b317ebfa17a0928ea3a46a920c6d766e9))
+
+## [4.28.1](https://github.com/cds-snc/platform-forms-client/compare/v4.28.0...v4.28.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* handle catch all when decrementing rules ([#8086](https://github.com/cds-snc/platform-forms-client/issues/8086)) ([e8031cc](https://github.com/cds-snc/platform-forms-client/commit/e8031ccebfbf4e1f0408c6bc8e6a0f19fcb61426))
+* preserve AddressComplete address when returning from review ([#8066](https://github.com/cds-snc/platform-forms-client/issues/8066)) ([f27e057](https://github.com/cds-snc/platform-forms-client/commit/f27e05798301d21598966817d14455ba9f7d7ef7))
+* Wrap suspense boundary around LocalDialog ([#8079](https://github.com/cds-snc/platform-forms-client/issues/8079)) ([2334cf9](https://github.com/cds-snc/platform-forms-client/commit/2334cf9394ee29bb625d75b7f23395b5a3bafa81))
+
+
+### Miscellaneous Chores
+
+* add playwright test for exit pages ([#8080](https://github.com/cds-snc/platform-forms-client/issues/8080)) ([209488b](https://github.com/cds-snc/platform-forms-client/commit/209488b4cc0eecc6c18427266ef8e91a649394d0))
+* **deps:** update dependency axios to v1.20.0 [security] ([#8085](https://github.com/cds-snc/platform-forms-client/issues/8085)) ([b90fb99](https://github.com/cds-snc/platform-forms-client/commit/b90fb99a52ed0481505ac91597f4e913e1acb50f))
+
 ## [4.28.0](https://github.com/cds-snc/platform-forms-client/compare/v4.27.0...v4.28.0) (2026-10-22)
 
 

@@ -488,6 +488,12 @@ export const decrementNextAction = (nextAction: NextActionRule, choiceId: string
   // Get nextAction choiceId parts
   const nextChoiceParts = nextAction.choiceId.split(".");
   const nextChoiceParentId = Number(nextChoiceParts[0]);
+
+  if (nextChoiceParts[1] === "catch-all") {
+    // If the next action is a catch-all, leave it unchanged
+    return updatedNextActions;
+  }
+
   const nextChoiceIndex = Number(nextChoiceParts[1]);
 
   // Parents don't match so we don't need to adjust the choiceId

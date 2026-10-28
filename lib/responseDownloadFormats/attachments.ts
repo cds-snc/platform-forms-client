@@ -125,7 +125,7 @@ export const addResponseAttachmentsToZip = async (
         code: ResponseDownloadErrorCode.SIZE_LIMIT,
         responseId: group.responseId,
         filename: attachment.name,
-        reason: "Archive size limit reached",
+        reason: "At download limit",
       });
       completed += 1;
       options.onProgress?.({ completed, total: attachments.length, filename: attachment.name });
@@ -167,7 +167,7 @@ export const addResponseAttachmentsToZip = async (
             code: ResponseDownloadErrorCode.SIZE_LIMIT,
             responseId: group.responseId,
             filename: attachment.name,
-            reason: "Archive size limit reached",
+            reason: "At download limit",
           });
         } else {
           const mapping = mappingsByResponse.get(group.responseId) ?? new Map();
@@ -206,7 +206,7 @@ export const addResponseAttachmentsToZip = async (
         code: ResponseDownloadErrorCode.SIZE_LIMIT,
         responseId,
         filename: MAPPING_FILENAME,
-        reason: "Archive size limit reached",
+        reason: "At download limit",
       });
     }
   });

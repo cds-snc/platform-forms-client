@@ -33,7 +33,7 @@ export interface FormResponseSubmissions {
 }
 
 export const ResponseDownloadErrorCode = {
-  SIZE_LIMIT: "SIZE_LIMIT",
+  SIZE_LIMIT: "Download limit",
   PROCESSING: "PROCESSING",
 } as const;
 export type ResponseDownloadErrorCode =

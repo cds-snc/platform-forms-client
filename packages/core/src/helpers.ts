@@ -146,7 +146,7 @@ export const matchRule = (
 };
 
 /**
- * Returns values array but with matched ids for checkboxes and radios.
+ * Returns values with matched choice IDs, preserving all selections in checkbox arrays.
  *
  * @param formElements
  * @param values
@@ -167,17 +167,15 @@ export const getValuesWithMatchedIds = (formElements: FormElement[], values: For
 
     if (isChoiceInputType(el.type) && choices && Array.isArray(choices)) {
       if (Array.isArray(value)) {
-        // For checkboxes, map the values to their choiceIds
-        for (const selected of value) {
+        newValues[key] = value.map((selected) => {
           const choiceIndex = choices.findIndex((choice) => {
             return (
               (choice.en !== "" && choice.en === selected) ||
               (choice.fr !== "" && choice.fr === selected)
             );
           });
-          newValues[key] = `${el.id}.${choiceIndex}`;
-          return;
-        }
+          return choiceIndex > -1 ? `${el.id}.${choiceIndex}` : selected;
+        });
       } else {
         const choiceIndex = choices.findIndex(
           (choice) =>
