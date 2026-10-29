@@ -2,6 +2,7 @@
 
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting, getAppSettingAsBoolean } from "@lib/appSettings";
+import { TEMP_ENABLE_NAGWARE_IN_REVIEW } from "@root/constants";
 import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { ucfirst } from "@lib/client/clientHelpers";
 import {
@@ -114,7 +115,8 @@ export const fetchSubmissions = AuthenticatedAction(
 
         // The New tab must also restrict downloads when previously downloaded responses are overdue for sign-off.
         const oldestDownloaded =
-          selectedStatus === VaultStatus.NEW && (await getAppSettingAsBoolean("nagwareEnabled"))
+          selectedStatus === VaultStatus.NEW &&
+          (TEMP_ENABLE_NAGWARE_IN_REVIEW || (await getAppSettingAsBoolean("nagwareEnabled")))
             ? await listAllSubmissions(formId, VaultStatus.DOWNLOADED, 1)
             : null;
 

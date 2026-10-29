@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { getAppSetting, getAppSettingAsBoolean } from "@lib/appSettings";
+import { TEMP_ENABLE_NAGWARE_IN_REVIEW } from "@root/constants";
 import { authCheckAndThrow } from "@lib/actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { checkKeyExists } from "@lib/serviceAccount";
@@ -140,7 +141,9 @@ export default async function Page(props: {
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
       nagwarePromptAfter={Number(await getAppSetting("nagwarePhasePrompted"))}
       nagwareWarnAfter={Number(await getAppSetting("nagwarePhaseWarned"))}
-      nagwareEnabled={await getAppSettingAsBoolean("nagwareEnabled")}
+      nagwareEnabled={
+        TEMP_ENABLE_NAGWARE_IN_REVIEW || (await getAppSettingAsBoolean("nagwareEnabled"))
+      }
       statusFilter={statusFilter as StatusFilter}
       isApiRetrieval={isApiRetrieval}
     />
