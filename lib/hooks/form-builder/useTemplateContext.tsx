@@ -13,6 +13,7 @@ import { useAppUpdate } from "../useAppUpdate";
 import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
 import { resetReviewEndNextAction } from "@lib/groups/utils/resetReviewEndNextAction";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 
@@ -107,9 +108,12 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     });
 
     try {
+      // Attempt to migrate to latest schema version before saving
+      const migratedFormConfig = migrateTemplate(formConfig);
+
       const operationResult = await createOrUpdateTemplate({
         id: getId(),
-        formConfig,
+        formConfig: migratedFormConfig,
         name: getName(true),
         deliveryOption: getDeliveryOption(),
         securityAttribute,
