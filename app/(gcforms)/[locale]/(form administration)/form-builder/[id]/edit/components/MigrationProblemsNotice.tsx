@@ -5,10 +5,12 @@ import { useTranslation } from "@i18n/client";
 import { WarningIcon } from "@serverComponents/icons";
 import { useTemplateMigrationProblems } from "@lib/store/hooks/useTemplateMigrationProblems";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useMigrationProblemFeedback } from "@lib/store/hooks/useMigrationProblemFeedback";
 
 export const MigrationProblemsNotice = ({ id, locale }: { id: string; locale: string }) => {
   const { t } = useTranslation("form-builder");
   const problems = useTemplateMigrationProblems();
+  useMigrationProblemFeedback(problems);
   const storeId = useTemplateStore((state) => state.id);
 
   if (problems.length === 0) return null;
