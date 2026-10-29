@@ -75,13 +75,14 @@ export const DownloadDialog = ({
     setSelectedFormat(defaultSelectedFormat);
     setZipAllFiles(true);
     setSelectedVersionForDialog(null);
-    setDownloadProgress(null);
+    // setDownloadProgress(null);
     setIsDialogVisible(false);
     dialogRef.current?.close();
   };
 
   const handleDownloadComplete = (filteredIds: string[], warnings?: DownloadWarnings) => {
     setIsDownloading(false);
+    setDownloadProgress({ phase: "complete", warnings });
     if (warnings?.sizeLimitReached) {
       logClientError({
         code: FormServerErrorCodes.DOWNLOAD_ZIP_SIZE_LIMIT_REACHED,
@@ -95,6 +96,7 @@ export const DownloadDialog = ({
   };
 
   const handleDownload = async () => {
+    setDownloadProgress(null);
     setIsDownloading(true);
     setDownloadError(false);
     if (!selectedFormat || !availableDownloadFormats.includes(selectedFormat)) {
@@ -183,6 +185,11 @@ export const DownloadDialog = ({
         return t("downloadResponsesModals.downloadDialog.creatingZip", {
           percent: Math.floor(downloadProgress.percent),
         });
+      case "complete":
+        return downloadProgress.warnings?.sizeLimitReached ||
+          downloadProgress.warnings?.processingFailed
+          ? t("downloadResponsesTable.partialDownload.title")
+          : t("downloadResponsesModals.downloadDialog.complete");
     }
   };
 
@@ -305,13 +312,20 @@ export const DownloadDialog = ({
             )}
 
             <div className="sticky bottom-0 flex flex-col gap-3 border-t-[0.5px] border-slate-500 bg-white p-4">
+              {/* Avoid flooding a screen reader with messages by only announcing summary info e.g. "Processing response 1 of 3" */}
+              <div
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="sr-only"
+                data-testid="download-progress-indicator-hidden"
+              >
+                {(downloadProgress?.phase === "complete" ||
+                  (isDownloading && downloadProgress?.phase === "responses")) &&
+                  getDownloadProgressMessage()}
+              </div>
               {isDownloading && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="flex items-center gap-2"
-                  data-testid="download-progress-indicator"
-                >
+                <div className="flex items-center gap-2" data-testid="download-progress-indicator">
                   <SpinnerIcon className="size-6 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
                   <span className="sr-only">{t("loading")}</span>
                   {fileUploadEnabled && (

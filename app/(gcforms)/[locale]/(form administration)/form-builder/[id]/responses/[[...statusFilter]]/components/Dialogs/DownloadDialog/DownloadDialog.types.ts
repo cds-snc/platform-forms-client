@@ -24,7 +24,8 @@ export type DownloadProgress =
       completed: number;
       total: number;
     }
-  | { phase: "zip"; percent: number };
+  | { phase: "zip"; percent: number }
+  | { phase: "complete"; warnings?: DownloadWarnings };
 
 export type DownloadFailure = {
   code: ResponseDownloadErrorCode;

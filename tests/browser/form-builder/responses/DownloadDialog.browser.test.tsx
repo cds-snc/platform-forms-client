@@ -4,6 +4,10 @@ import { page, userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
 import { DownloadDialog } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses/[[...statusFilter]]/components/Dialogs/DownloadDialog/DownloadDialog";
 import { setupFonts } from "../../helpers/setupFonts";
+import type {
+  DownloadProgress,
+  DownloadResponsesOptions,
+} from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/responses/[[...statusFilter]]/components/Dialogs/DownloadDialog/DownloadDialog.types";
 
 import "@root/styles/app.css";
 
@@ -108,7 +112,7 @@ describe("<DownloadDialog />", () => {
     expect(checkboxes).toHaveLength(0);
   });
 
-  it("shows a generic loading status when file uploads are disabled", async () => {
+  it("announces response progress when file uploads are disabled", async () => {
     mockDownloadResponses.mockImplementationOnce(
       async (options: {
         setDownloadProgress: (progress: {
@@ -133,21 +137,16 @@ describe("<DownloadDialog />", () => {
     await userEvent.click(page.getByRole("button", { name: "Download", exact: true }));
 
     expect(mockDownloadResponses).toHaveBeenCalledOnce();
-    await expect.element(page.getByRole("status")).toHaveTextContent("Loading...");
-    await expect.element(page.getByRole("status")).not.toHaveTextContent("Processing response");
+    await expect.element(page.getByRole("status")).toHaveTextContent("Processing response 1 of 2");
     await expect.element(page.getByTestId("download-progress-indicator")).toBeVisible();
   });
 
-  it("shows progress status when file uploads are enabled", async () => {
+  it("keeps detailed progress outside the mounted live region", async () => {
     mockFileUploadEnabled.mockReturnValue(true);
+    let updateProgress: ((progress: DownloadProgress) => void) | undefined;
     mockDownloadResponses.mockImplementationOnce(
-      async (options: {
-        setDownloadProgress: (progress: {
-          phase: "responses";
-          response: number;
-          total: number;
-        }) => void;
-      }) => {
+      async (options: { setDownloadProgress: (progress: DownloadProgress) => void }) => {
+        updateProgress = options.setDownloadProgress;
         options.setDownloadProgress({ phase: "responses", response: 1, total: 2 });
       }
     );
@@ -161,10 +160,115 @@ describe("<DownloadDialog />", () => {
       />
     );
 
-    await userEvent.click(page.getByRole("button", { name: "Download", exact: true }));
+    const status = page.getByRole("status");
+    const statusElement = status.element();
+    await expect.element(status).toHaveTextContent("");
+    await expect.element(status).toHaveAttribute("aria-atomic", "true");
 
+    await userEvent.click(page.getByRole("button", { name: "Download", exact: true }));
     expect(mockDownloadResponses).toHaveBeenCalledOnce();
-    await expect.element(page.getByRole("status")).toBeVisible();
+    expect(status.element()).toBe(statusElement);
+    expect(await page.getByRole("status").all()).toHaveLength(1);
+    await expect.element(status).toHaveTextContent("Processing response 1 of 2");
+    await expect
+      .element(page.getByTestId("download-progress-indicator"))
+      .not.toHaveAttribute("aria-live");
+
+    expect(updateProgress).toBeDefined();
+    updateProgress!({
+      phase: "attachments",
+      response: 1,
+      responseTotal: 2,
+      completed: 0,
+      total: 3,
+    });
+    await expect.element(status).toHaveTextContent("");
+    await expect
+      .element(page.getByText("Downloading attachment 1 of 3", { exact: true }))
+      .toBeVisible();
+
+    updateProgress!({ phase: "zip", percent: 42 });
+    await expect.element(status).toHaveTextContent("");
+    await expect
+      .element(page.getByTestId("download-progress-indicator"))
+      .toHaveTextContent("Loading...Creating ZIP: 42%");
+  });
+
+  it.each([
+    { language: "en", warnings: undefined, message: "Download complete." },
+    { language: "fr", warnings: undefined, message: "Téléchargement terminé." },
+    {
+      language: "en",
+      warnings: { sizeLimitReached: true, processingFailed: false },
+      message: "Could not download all responses or attachments",
+    },
+    {
+      language: "en",
+      warnings: { sizeLimitReached: false, processingFailed: true },
+      message: "Could not download all responses or attachments",
+    },
+  ])(
+    "sets completion text without changing auto-close: $message",
+    async ({ language, warnings, message }) => {
+      mockLanguage.mockReturnValue(language);
+      mockDownloadResponses.mockImplementationOnce(async (options: DownloadResponsesOptions) => {
+        options.onDownloadComplete(["response-1"], warnings);
+      });
+      const setIsDialogVisible = vi.fn();
+      const onSuccessfulDownload = vi.fn();
+      await render(
+        <DownloadDialog
+          {...defaultProps}
+          setIsDialogVisible={setIsDialogVisible}
+          onSuccessfulDownload={onSuccessfulDownload}
+          checkedMeta={[
+            { name: "response-1", version: "v1" },
+            { name: "response-2", version: "v1" },
+          ]}
+        />
+      );
+      await userEvent.click(
+        page.getByRole("button", {
+          name: language === "fr" ? "Télécharger" : "Download",
+          exact: true,
+        })
+      );
+      await expect
+        .element(page.getByTestId("download-progress-indicator-hidden"))
+        .toHaveTextContent(message);
+      expect(onSuccessfulDownload).toHaveBeenCalledWith(["response-1"], warnings);
+      expect(setIsDialogVisible).toHaveBeenCalledWith(false);
+      await expect.element(page.getByTestId("dialog")).not.toHaveAttribute("open");
+    }
+  );
+
+  it("clears completed progress when the dialog is reopened", async () => {
+    mockDownloadResponses.mockImplementationOnce(async (options: DownloadResponsesOptions) => {
+      options.onDownloadComplete(["response-1"]);
+    });
+    const Harness = () => {
+      const [visible, setVisible] = React.useState(true);
+      return (
+        <>
+          <button onClick={() => setVisible(true)}>Open download dialog</button>
+          <DownloadDialog
+            {...defaultProps}
+            isDialogVisible={visible}
+            setIsDialogVisible={setVisible}
+            checkedMeta={[
+              { name: "response-1", version: "v1" },
+              { name: "response-2", version: "v1" },
+            ]}
+          />
+        </>
+      );
+    };
+    await render(<Harness />);
+    await userEvent.click(page.getByRole("button", { name: "Download", exact: true }));
+    await expect.element(page.getByTestId("dialog")).not.toBeInTheDocument();
+    await userEvent.click(page.getByRole("button", { name: "Open download dialog" }));
+    await expect.element(page.getByRole("status")).toHaveTextContent("");
+    await expect.element(page.getByRole("button", { name: "Download", exact: true })).toBeEnabled();
   });
 
   it("does not render the version selector when all matched versions are the same", async () => {

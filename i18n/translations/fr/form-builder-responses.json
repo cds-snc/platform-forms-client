@@ -209,6 +209,7 @@
       "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
       "cancel": "Annuler",
       "download": "Télécharger",
+      "complete": "Téléchargement terminé.",
       "chooseVersion": "Télécharger les réponses pour la version",
       "chooseVersionPlaceholder": "Sélectionner une version",
       "chooseVersionRequired": "Vous pouvez modifier la version sélectionnée si nécessaire",
