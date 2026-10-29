@@ -16,6 +16,7 @@ export const DownloadSingleButton = ({
   setDownloadError,
   onDownloadSuccess,
   ariaLabelledBy,
+  disabled = false,
 }: {
   id: string;
   formId: string;
@@ -24,6 +25,7 @@ export const DownloadSingleButton = ({
   setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
   onDownloadSuccess: () => void;
   ariaLabelledBy: string;
+  disabled?: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder-responses");
 
@@ -65,6 +67,7 @@ export const DownloadSingleButton = ({
   return (
     <button
       id={id}
+      disabled={disabled}
       onClick={handleDownload}
       className="active:border-blue-focus rounded border-2 border-white"
       aria-labelledby={`${id} ${ariaLabelledBy}`}

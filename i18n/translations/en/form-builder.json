@@ -1330,32 +1330,32 @@
   "formName": "Form name",
   "responsesNavLabel": "Responses",
   "nagware": {
-    "restrictedDownloadAfter35Days": "Downloading will be restricted if overdue responses are older than 35 days.",
+    "restrictedDownloadAfter35Days": "Downloading will be restricted if overdue responses are older than {{days}} days.",
     "unsavedSubmissionsOver21DaysOld": {
       "title": "Retrieve responses",
       "body1": "There are",
       "body2": {
-        "moreThan20Responses": "new responses older than 21 days. Download and sign off on the removal of 20 overdue new responses at a time.",
-        "lessThan20Responses": "new responses older than 21 days. Download and sign off on the removal of all overdue new responses."
+        "moreThan20Responses": "new responses older than {{days}} days. Download and sign off on the removal of 20 overdue new responses at a time.",
+        "lessThan20Responses": "new responses older than {{days}} days. Download and sign off on the removal of all overdue new responses."
       }
     },
     "unconfirmedSubmissionsOver21DaysOld": {
       "title": "Sign off on the removal of responses from GC Forms",
       "body1": "There are",
-      "body2": "downloaded responses older than 21 days. Confirm receipt of all overdue responses by signing off on their removal from GC Forms."
+      "body2": "downloaded responses older than {{days}} days. Confirm receipt of all overdue responses by signing off on their removal from GC Forms."
     },
     "unsavedSubmissionsOver35DaysOld": {
       "title": "Downloading is restricted to overdue responses until they are retrieved",
       "body1": "There are",
       "body2": {
-        "moreThan20Responses": "new responses over 35 days old. Download and sign off on 20 overdue responses at a time before continuing.",
-        "lessThan20Responses": "new responses over 35 days old. Download and sign off on all overdue responses before continuing."
+        "moreThan20Responses": "new responses over {{days}} days old. Download and sign off on 20 overdue responses at a time before continuing.",
+        "lessThan20Responses": "new responses over {{days}} days old. Download and sign off on all overdue responses before continuing."
       }
     },
     "unconfirmedSubmissionsOver35DaysOld": {
       "title": "Downloading is restricted until responses are signed off for removal",
       "body1": "There are",
-      "body2": "downloaded responses 35 days overdue. Sign off on the removal of all overdue downloaded responses before saving new ones."
+      "body2": "downloaded responses {{days}} days overdue. Sign off on the removal of all overdue downloaded responses before saving new ones."
     }
   },
   "loading": "Loading...",
