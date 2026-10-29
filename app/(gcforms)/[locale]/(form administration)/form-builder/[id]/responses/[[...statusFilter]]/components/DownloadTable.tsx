@@ -223,7 +223,8 @@ export const DownloadTable = ({
             </Alert.Success>
           )}
           {downloadError && !showDownloadDialog && (
-            <Alert.Danger focussable={true}>
+            // Focus announces the error; avoid a competing live announcement by using role=note.
+            <Alert.Danger role="note" focussable={true}>
               <Alert.Title>
                 {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
               </Alert.Title>
@@ -417,7 +418,8 @@ export const DownloadTable = ({
         <div className="mt-8 flex">
           <div id="notificationsBottom" className="ml-4">
             {downloadError && (
-              <Alert.Danger icon={false}>
+              // Keep the visual duplicate accessible without another live announcement
+              <Alert.Danger role="note" icon={false}>
                 <Alert.Title headingTag="h3">
                   {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
                 </Alert.Title>
