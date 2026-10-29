@@ -2,6 +2,7 @@
 import React, { FocusEventHandler } from "react";
 
 import { cn } from "@lib/utils";
+import { StoreInputFeedback, useInputFeedback } from "./InputFeedback";
 
 interface Props {
   id: string;
@@ -39,12 +40,14 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
     wrapperClassName,
     className,
   } = props;
+  const feedback = useInputFeedback(describedBy);
 
   return (
     <div
       className={cn(
-        "input-sizer stacked border-2 border-solid border-slate-500 rounded-sm",
-        wrapperClassName
+        "input-sizer stacked rounded-sm border-2 border-solid border-slate-500",
+        wrapperClassName,
+        feedback.wrapperClassName
       )}
       data-value={value}
     >
@@ -53,12 +56,13 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
         maxLength={2000}
         id={id}
         className={cn(
-          "focus:bg-gray-default focus:outline-0 overflow-y-visible rounded-sm",
-          className
+          "focus:bg-gray-default overflow-y-visible rounded-sm focus:outline-0",
+          className,
+          feedback.state && "pr-10"
         )}
         name={name}
-        aria-describedby={describedBy}
-        aria-invalid={isInvalid ? true : false}
+        aria-describedby={feedback.describedBy}
+        aria-invalid={isInvalid || feedback.isInvalid}
         value={value}
         placeholder={placeholder}
         onChange={onChange}
@@ -75,4 +79,12 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
 
 ExpandingInput.displayName = "ExpandingInput";
 
-export { ExpandingInput };
+const FeedbackExpandingInput = React.forwardRef<Ref, Props>((props, ref) => (
+  <StoreInputFeedback inputId={props.id}>
+    <ExpandingInput {...props} ref={ref} />
+  </StoreInputFeedback>
+));
+
+FeedbackExpandingInput.displayName = "ExpandingInput";
+
+export { FeedbackExpandingInput as ExpandingInput };

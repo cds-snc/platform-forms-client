@@ -14,6 +14,7 @@ import { getTranslatedProperties } from "@formBuilder/actions";
 
 import { useFileUploadEnabled } from "@lib/hooks/form-builder/useFileUploadEnabled";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
+import { inputFeedbackPanelClassName } from "@formBuilder/components/shared/InputFeedback";
 
 export const ElementPanel = ({
   item,
@@ -79,7 +80,8 @@ export const ElementPanel = ({
         hasRules && "border-1 border-dashed border-slate-500",
         hasSubPanel &&
           "border border-slate-500 focus-within:outline focus-within:outline-2 focus-within:outline-offset-[-1px] focus-within:outline-indigo-700 hover:outline hover:outline-2 hover:outline-offset-[-1px] hover:outline-indigo-700",
-        isFileUpload && !fileUploadEnabled && "bg-red-50 focus-within:bg-red-50 hover:bg-red-50"
+        isFileUpload && !fileUploadEnabled && "bg-red-50 focus-within:bg-red-50 hover:bg-red-50",
+        !(isFileUpload && !fileUploadEnabled) && inputFeedbackPanelClassName
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;
