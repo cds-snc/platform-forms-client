@@ -27,6 +27,7 @@ const TextAreaControl = ({
   lang?: string;
   testId?: string;
   isInvalid?: boolean;
+  checkEmpty?: string;
 }) => {
   const feedback = useInputFeedback(describedBy);
   return (
@@ -53,7 +54,7 @@ const TextAreaControl = ({
 };
 
 export const TextArea = (props: React.ComponentProps<typeof TextAreaControl>) => (
-  <StoreInputFeedback inputId={props.id}>
+  <StoreInputFeedback inputId={props.id} checkEmpty={props.checkEmpty}>
     <TextAreaControl {...props} />
   </StoreInputFeedback>
 );

@@ -20,6 +20,7 @@ interface Props {
   isInvalid?: boolean;
   lang?: string;
   onBlur?: FocusEventHandler;
+  checkEmpty?: string;
 }
 
 type Ref = HTMLTextAreaElement;
@@ -80,7 +81,7 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
 ExpandingInput.displayName = "ExpandingInput";
 
 const FeedbackExpandingInput = React.forwardRef<Ref, Props>((props, ref) => (
-  <StoreInputFeedback inputId={props.id}>
+  <StoreInputFeedback inputId={props.id} checkEmpty={props.checkEmpty}>
     <ExpandingInput {...props} ref={ref} />
   </StoreInputFeedback>
 ));
