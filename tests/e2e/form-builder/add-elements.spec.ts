@@ -57,7 +57,10 @@ test.describe.serial("Test FormBuilder Add Elements", () => {
     await page.getByTestId("element-description-add-element").click();
 
     await expect(page.locator("#item-1")).toHaveAttribute("placeholder", "Question");
+    await expect(page.locator("#item-1")).toBeFocused();
     await page.getByRole("button", { name: "Add option" }).click();
+    await expect(page.locator("#item-1")).toHaveAttribute("aria-invalid", "true");
+    await expect(page.locator("#item-1")).toHaveAccessibleDescription("Enter a question title.");
     await expect(page.locator("#option--1--1")).toHaveAttribute("type", "text");
     await expect(page.locator("#option--1--1")).toHaveAttribute("placeholder", "Option 1");
     await expect(page.locator(".example-text")).toContainText("Radio buttons");
