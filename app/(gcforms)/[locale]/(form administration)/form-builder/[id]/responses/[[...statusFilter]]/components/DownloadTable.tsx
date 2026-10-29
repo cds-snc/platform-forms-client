@@ -176,7 +176,7 @@ export const DownloadTable = ({
             nagwareWarnAfter={nagwareWarnAfter}
           />
         ))}
-      {hasDownloadWarnings && (
+      {hasDownloadWarnings && !showDownloadDialog && (
         <div ref={downloadWarningsRef}>
           {downloadWarnings?.sizeLimitReached && (
             <Alert.Warning className="mb-4" focussable={true}>

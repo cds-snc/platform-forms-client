@@ -17,10 +17,6 @@ vi.mock("../Dialogs/DownloadDialog/DownloadDialog", () => ({
   DownloadDialog: vi.fn(() => null),
 }));
 
-vi.mock("../NextStep", () => ({
-  NextStep: () => null,
-}));
-
 vi.mock("next/navigation", () => ({
   useSearchParams: () => ({
     get: (key: string) => {
@@ -49,7 +45,21 @@ vi.mock("../../actions", () => ({
 const RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB = 500;
 
 describe("Download Table", () => {
-  afterEach(cleanup);
+  beforeEach(() => {
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        observe = vi.fn();
+        unobserve = vi.fn();
+        disconnect = vi.fn();
+      }
+    );
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+  });
 
   it.each([
     { age: 14, overdue: false },
@@ -435,10 +445,11 @@ describe("Download Table", () => {
           vaultSubmissions={vaultSubmissions}
           formId="clg17xha50008efkgfgxa8l4f"
           formName=""
-          nagwareResult={null}
           responseDownloadLimit={100}
           responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
           overdueAfter={0}
+          nagwarePromptAfter={21}
+          nagwareWarnAfter={35}
           startFromExclusiveResponse={null}
         />
       );
@@ -461,8 +472,8 @@ describe("Download Table", () => {
         vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(false);
       });
       expect(notifications).toHaveTextContent(message);
-      expect(rendered.getByRole("note")).toHaveFocus();
-      expect(rendered.getByRole("note")).toHaveAttribute("tabindex", "-1");
+      expect(rendered.getByRole("status")).toHaveFocus();
+      expect(rendered.getByRole("status")).toHaveAttribute("tabindex", "-1");
       if (statusFilter === StatusFilter.NEW) {
         expect(notifications).toHaveTextContent(
           "Next: sign off on the removal of responses from GC Forms."
@@ -497,10 +508,11 @@ describe("Download Table", () => {
         vaultSubmissions={vaultSubmissions}
         formId="clg17xha50008efkgfgxa8l4f"
         formName=""
-        nagwareResult={null}
         responseDownloadLimit={100}
         responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
         overdueAfter={0}
+        nagwarePromptAfter={21}
+        nagwareWarnAfter={35}
         startFromExclusiveResponse={null}
       />
     );
@@ -518,24 +530,25 @@ describe("Download Table", () => {
         vaultSubmissions={vaultSubmissions}
         formId="clg17xha50008efkgfgxa8l4f"
         formName=""
-        nagwareResult={null}
         responseDownloadLimit={100}
         responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
         overdueAfter={0}
+        nagwarePromptAfter={21}
+        nagwareWarnAfter={35}
         startFromExclusiveResponse={null}
       />
     );
     await act(async () => {
       vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([vaultSubmissions[0].name]);
     });
-    expect(rendered.getByRole("note")).toHaveTextContent("Download complete.");
+    expect(rendered.getByRole("status")).toHaveTextContent("Download complete.");
     await act(async () => {
       vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(true);
     });
     await act(async () => {
       vi.mocked(DownloadDialog).mock.lastCall![0].setDownloadError(true);
     });
-    expect(rendered.queryByRole("note")).not.toBeInTheDocument();
+    expect(rendered.queryByRole("status")).not.toBeInTheDocument();
     expect(
       rendered.container.querySelector('#notificationsTop [role="alert"]')
     ).not.toBeInTheDocument();
