@@ -102,6 +102,7 @@ describe("<InputFeedback />", () => {
 
   it("preserves the expanding input blur handler when checking empty values", async () => {
     const onBlur = vi.fn();
+    const onClick = vi.fn();
     await renderWithStore(
       <>
         <ExpandingInput
@@ -112,13 +113,21 @@ describe("<InputFeedback />", () => {
           onBlur={onBlur}
           checkEmpty="Enter a question title."
         />
-        <button type="button">Blur question</button>
+        <button type="button" onClick={onClick}>
+          Blur question
+        </button>
       </>
     );
     const control = page.getByRole("textbox", { name: "Question", exact: true });
+    const button = page.getByRole("button", { name: "Blur question", exact: true });
+    const before = button.element().getBoundingClientRect();
+    await expect.element(control).not.toHaveAttribute("aria-describedby");
+    await expect.element(page.getByText("Enter a question title.")).not.toBeVisible();
     await userEvent.click(control);
-    await userEvent.click(page.getByRole("button", { name: "Blur question", exact: true }));
+    await userEvent.click(button);
     expect(onBlur).toHaveBeenCalledOnce();
+    expect(onClick).toHaveBeenCalledOnce();
+    expect(button.element().getBoundingClientRect().top).toBe(before.top);
     await expect.element(control).toHaveAccessibleDescription("Enter a question title.");
   });
 

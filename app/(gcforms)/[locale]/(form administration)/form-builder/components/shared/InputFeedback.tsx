@@ -31,6 +31,7 @@ const ConnectedInputFeedback = ({
     <InputFeedback
       state={feedback?.state}
       message={feedback?.message}
+      reservedMessage={checkEmpty}
       onBlur={(event) => {
         const input = event.target;
         if (
@@ -92,12 +93,14 @@ export const InputFeedback = ({
   children,
   className,
   onBlur,
+  reservedMessage,
 }: {
   state?: FeedbackState;
   message?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
+  reservedMessage?: string;
 }) => {
   const inheritedFeedback = useContext(InputFeedbackContext);
   const messageId = useId();
@@ -126,15 +129,17 @@ export const InputFeedback = ({
             </span>
           )}
         </div>
-        {hasMessage && (
+        {(hasMessage || reservedMessage) && (
           <p
-            id={messageId}
+            id={hasMessage ? messageId : undefined}
+            aria-hidden={hasMessage ? undefined : true}
             className={cn(
               "mt-1 text-sm wrap-anywhere",
+              !hasMessage && "invisible",
               state === "error" ? "text-red-default" : "text-(--gcds-color-yellow-700)"
             )}
           >
-            {message}
+            {hasMessage ? message : reservedMessage}
           </p>
         )}
       </div>
