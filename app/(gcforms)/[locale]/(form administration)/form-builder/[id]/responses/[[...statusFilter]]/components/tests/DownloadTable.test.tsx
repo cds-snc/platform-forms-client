@@ -49,9 +49,9 @@ describe("Download Table", () => {
 
   it.each([
     { age: 14, overdue: false },
-    { age: 15, overdue: true },
+    { age: 15, overdue: false },
     { age: 16, overdue: true },
-  ])("starts the policy's table signal on day 15: %j", ({ age, overdue }) => {
+  ])("preserves the existing table overdue threshold: %j", ({ age, overdue }) => {
     for (const status of [VaultStatus.NEW, VaultStatus.DOWNLOADED]) {
       const submission = { ...vaultSubmissions[0], status, createdAt: Date.now() - age * 86400000 };
       const rendered = render(

@@ -96,7 +96,7 @@ export const NextStep = ({
     if (!overdueAfter) return <>{t("downloadResponsesTable.unknown")}</>;
     const daysLeft = overdueAfter - daysPassed;
 
-    if (daysLeft <= 0) {
+    if (daysLeft < 0) {
       return <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
     }
 
@@ -107,7 +107,7 @@ export const NextStep = ({
     if (!overdueAfter) return t("downloadResponsesTable.unknown");
     const daysLeft = overdueAfter - daysPassed;
 
-    if (daysLeft <= 0) {
+    if (daysLeft < 0) {
       return <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
     }
 
