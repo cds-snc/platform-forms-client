@@ -30,7 +30,7 @@ export const Title = ({
   return (
     <HeadingTag
       data-testid="alert-heading"
-      className={cn("!mb-0 pb-0 !mt-0", headingClasses[HeadingTag], statusClass, className)}
+      className={cn("!mt-0 !mb-0 pb-0", headingClasses[HeadingTag], statusClass, className)}
     >
       {children}
     </HeadingTag>
@@ -129,7 +129,7 @@ type AlertProps = {
   dismissible?: boolean;
   onDismiss?: React.ReactEventHandler;
   focussable?: boolean;
-  role?: "alert" | "note"; // use note for non-critical alerts (e.g. info)
+  role?: "alert" | "status" | "note"; // use note for non-critical tangental alerts (e.g. info) and "status" for related but non urgent messages (e.g. success message)
 };
 
 const AlertContainer = ({
@@ -192,7 +192,7 @@ const AlertContainer = ({
     <div
       ref={refFocus}
       {...(focussable && { tabIndex: -1 })}
-      className={cn("relative flex rounded-sm laptop:rounded-md p-4", className)}
+      className={cn("laptop:rounded-md relative flex rounded-sm p-4", className)}
       data-testid="alert"
       role={role}
       {...props}
@@ -315,6 +315,7 @@ export const Success = ({
   dismissible,
   onDismiss,
   focussable,
+  role = "status",
   ...props
 }: AlertProps) => {
   return (
@@ -327,6 +328,7 @@ export const Success = ({
       dismissible={dismissible}
       onDismiss={onDismiss}
       focussable={focussable}
+      role={role}
       {...props}
     >
       {children}

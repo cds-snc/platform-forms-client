@@ -66,7 +66,9 @@ export const DownloadTable = ({
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
-  const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
+  const [showDownloadSuccess, setShowDownloadSuccess] = useState<
+    false | "downloadSuccess" | "downloadComplete"
+  >(false);
   const [downloadWarnings, setDownloadWarnings] = useState<DownloadWarnings | undefined>();
   const [removedRows, setRemovedRows] = useState<string[]>([]);
   const downloadWarningsRef = useRef<HTMLDivElement>(null);
@@ -121,6 +123,12 @@ export const DownloadTable = ({
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
 
+  const handleDownloadStart = () => {
+    setShowDownloadSuccess(false);
+    setDownloadError(false);
+    setDownloadWarnings(undefined);
+  };
+
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
@@ -153,10 +161,10 @@ export const DownloadTable = ({
   }, [vaultSubmissions]);
 
   useEffect(() => {
-    if (hasDownloadWarnings) {
+    if (hasDownloadWarnings && !showDownloadDialog) {
       downloadWarningsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-  }, [hasDownloadWarnings]);
+  }, [hasDownloadWarnings, showDownloadDialog]);
 
   return (
     <>
@@ -174,7 +182,7 @@ export const DownloadTable = ({
             nagwareWarnAfter={nagwareWarnAfter}
           />
         ))}
-      {hasDownloadWarnings && (
+      {hasDownloadWarnings && !showDownloadDialog && (
         <div ref={downloadWarningsRef}>
           {downloadWarnings?.sizeLimitReached && (
             <Alert.Warning className="mb-4" focussable={true}>
@@ -187,18 +195,12 @@ export const DownloadTable = ({
             </Alert.Warning>
           )}
           {downloadWarnings?.processingFailed && (
-            <Alert.Warning className="mb-4" focussable={true}>
+            <Alert.Warning className="mb-4" focussable={!downloadWarnings?.sizeLimitReached}>
               <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
               <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
             </Alert.Warning>
           )}
         </div>
-      )}
-      {showDownloadSuccess && (
-        <Alert.Success className="mb-4">
-          <Alert.Title>{t(`${showDownloadSuccess}.title`)}</Alert.Title>
-          <Alert.Body>{t(`${showDownloadSuccess}.body`)}</Alert.Body>
-        </Alert.Success>
       )}
       <section>
         {!hasApiKeyId && (
@@ -208,8 +210,21 @@ export const DownloadTable = ({
         )}
 
         <div id="notificationsTop">
-          {downloadError && (
-            <Alert.Danger>
+          {showDownloadSuccess && !showDownloadDialog && !downloadError && !hasDownloadWarnings && (
+            <Alert.Success className="mb-4" focussable={true}>
+              <Alert.Title>
+                {showDownloadSuccess === "downloadSuccess"
+                  ? t("downloadSuccess.title")
+                  : t("downloadResponsesModals.downloadDialog.complete")}
+              </Alert.Title>
+              {showDownloadSuccess === "downloadSuccess" && (
+                <Alert.Body>{t("downloadSuccess.body")}</Alert.Body>
+              )}
+            </Alert.Success>
+          )}
+          {downloadError && !showDownloadDialog && (
+            // Focus announces the error; avoid a competing live announcement by using role=note.
+            <Alert.Danger role="note" focussable={true}>
               <Alert.Title>
                 {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
               </Alert.Title>
@@ -367,17 +382,19 @@ export const DownloadTable = ({
                       formId={submission.formID}
                       responseId={submission.name}
                       version={submission.version}
+                      onDownloadStart={handleDownloadStart}
                       onDownloadSuccess={() => {
                         setDownloadError(false);
+                        setDownloadWarnings(undefined);
                         setRemovedRows([...removedRows, submission.name]);
                         tableItemsDispatch({
                           type: TableActions.UNCHECK,
                           payload: { ids: [submission.name] },
                         });
                         // router.replace(router.asPath, undefined, { scroll: false });
-                        if (statusFilter === StatusFilter.NEW) {
-                          setShowDownloadSuccess("downloadSuccess");
-                        }
+                        setShowDownloadSuccess(
+                          statusFilter === StatusFilter.NEW ? "downloadSuccess" : "downloadComplete"
+                        );
                       }}
                       setDownloadError={setDownloadError}
                       ariaLabelledBy={submission.name}
@@ -401,7 +418,8 @@ export const DownloadTable = ({
         <div className="mt-8 flex">
           <div id="notificationsBottom" className="ml-4">
             {downloadError && (
-              <Alert.Danger icon={false}>
+              // Keep the visual duplicate accessible without another live announcement
+              <Alert.Danger role="note" icon={false}>
                 <Alert.Title headingTag="h3">
                   {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
                 </Alert.Title>
@@ -418,10 +436,7 @@ export const DownloadTable = ({
         <ActionsPanel>
           <DownloadButton
             setShowDownloadDialog={setShowDownloadDialog}
-            onClick={() => {
-              setDownloadError(false);
-              setDownloadWarnings(undefined);
-            }}
+            onClick={handleDownloadStart}
           />
         </ActionsPanel>
       )}
@@ -447,13 +462,13 @@ export const DownloadTable = ({
             });
           }
           // router.replace(router.asPath, undefined, { scroll: false });
-          if (statusFilter === StatusFilter.NEW) {
-            setShowDownloadSuccess(
-              filteredIds.length > 0 && !warnings?.sizeLimitReached && !warnings?.processingFailed
+          setShowDownloadSuccess(
+            filteredIds.length > 0 && !warnings?.sizeLimitReached && !warnings?.processingFailed
+              ? statusFilter === StatusFilter.NEW
                 ? "downloadSuccess"
-                : false
-            );
-          }
+                : "downloadComplete"
+              : false
+          );
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}

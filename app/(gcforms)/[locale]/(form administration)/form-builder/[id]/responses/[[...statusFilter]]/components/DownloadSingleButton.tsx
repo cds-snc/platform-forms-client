@@ -14,6 +14,7 @@ export const DownloadSingleButton = ({
   responseId,
   version,
   setDownloadError,
+  onDownloadStart,
   onDownloadSuccess,
   ariaLabelledBy,
   disabled = false,
@@ -23,6 +24,7 @@ export const DownloadSingleButton = ({
   responseId: string;
   version?: string | number | null;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
+  onDownloadStart?: () => void;
   onDownloadSuccess: () => void;
   ariaLabelledBy: string;
   disabled?: boolean;
@@ -30,6 +32,7 @@ export const DownloadSingleButton = ({
   const { t, i18n } = useTranslation("form-builder-responses");
 
   const handleDownload = async () => {
+    onDownloadStart?.();
     try {
       const response = (await getSubmissionsByFormat({
         formID: formId,
