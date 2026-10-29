@@ -82,7 +82,6 @@ export const DownloadDialog = ({
 
   const handleDownloadComplete = (filteredIds: string[], warnings?: DownloadWarnings) => {
     setIsDownloading(false);
-    setDownloadProgress({ phase: "complete", warnings });
     if (warnings?.sizeLimitReached) {
       logClientError({
         code: FormServerErrorCodes.DOWNLOAD_ZIP_SIZE_LIMIT_REACHED,
@@ -315,8 +314,8 @@ export const DownloadDialog = ({
                 className="sr-only"
                 data-testid="download-progress-indicator-hidden"
               >
-                {(downloadProgress?.phase === "complete" ||
-                  (isDownloading && downloadProgress?.phase === "responses")) &&
+                {isDownloading &&
+                  downloadProgress?.phase === "responses" &&
                   getDownloadProgressMessage()}
               </div>
               {isDownloading && (
