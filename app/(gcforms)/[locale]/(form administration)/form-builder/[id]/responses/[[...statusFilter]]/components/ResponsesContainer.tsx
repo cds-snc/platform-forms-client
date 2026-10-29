@@ -15,6 +15,9 @@ export const ResponsesContainer = ({
   responseDownloadLimit,
   responsesDownloadZipMaxSizeMB,
   overdueAfter,
+  nagwarePromptAfter,
+  nagwareWarnAfter,
+  nagwareEnabled,
   statusFilter,
   isApiRetrieval,
 }: {
@@ -22,6 +25,9 @@ export const ResponsesContainer = ({
   responseDownloadLimit: number;
   responsesDownloadZipMaxSizeMB: number;
   overdueAfter: number;
+  nagwarePromptAfter: number;
+  nagwareWarnAfter: number;
+  nagwareEnabled: boolean;
   statusFilter: StatusFilter;
   isApiRetrieval: boolean;
 }) => {
@@ -55,6 +61,9 @@ export const ResponsesContainer = ({
             responseDownloadLimit={responseDownloadLimit}
             responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
             overdueAfter={overdueAfter}
+            nagwarePromptAfter={nagwarePromptAfter}
+            nagwareWarnAfter={nagwareWarnAfter}
+            nagwareEnabled={nagwareEnabled}
             isApiRetrieval={true}
           />
           {/* Dialog is now provided globally in layout */}
@@ -91,6 +100,9 @@ export const ResponsesContainer = ({
           responseDownloadLimit={responseDownloadLimit}
           responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
           overdueAfter={overdueAfter}
+          nagwarePromptAfter={nagwarePromptAfter}
+          nagwareWarnAfter={nagwareWarnAfter}
+          nagwareEnabled={nagwareEnabled}
         />
         <ResponsesFooter formId={id} />
       </div>

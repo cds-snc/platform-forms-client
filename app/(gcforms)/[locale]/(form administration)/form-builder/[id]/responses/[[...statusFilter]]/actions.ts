@@ -1,7 +1,7 @@
 "use server";
 
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
-import { getAppSetting } from "@lib/appSettings";
+import { getAppSetting, getAppSettingAsBoolean } from "@lib/appSettings";
 import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { ucfirst } from "@lib/client/clientHelpers";
 import {
@@ -112,7 +112,17 @@ export const fetchSubmissions = AuthenticatedAction(
         const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
           await listAllSubmissions(formId, selectedStatus, undefined, startFromExclusiveResponse);
 
-        return { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse };
+        // The New tab must also restrict downloads when previously downloaded responses are overdue for sign-off.
+        const oldestDownloaded =
+          selectedStatus === VaultStatus.NEW && (await getAppSettingAsBoolean("nagwareEnabled"))
+            ? await listAllSubmissions(formId, VaultStatus.DOWNLOADED, 1)
+            : null;
+
+        return {
+          submissions,
+          startFromExclusiveResponse: nextStartFromExclusiveResponse,
+          oldestDownloadedCreatedAt: oldestDownloaded?.submissions[0]?.createdAt ?? null,
+        };
       } catch (e) {
         logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
         return { error: true, submissions: [] };
