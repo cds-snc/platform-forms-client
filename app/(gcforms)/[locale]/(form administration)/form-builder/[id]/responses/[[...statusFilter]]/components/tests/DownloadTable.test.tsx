@@ -120,7 +120,7 @@ describe("Download Table", () => {
           const notification =
             outcome === "success"
               ? rendered.getByRole("status")
-              : rendered.container.querySelector('#notificationsTop [role="alert"]');
+              : rendered.container.querySelector('#notificationsTop [role="note"]');
           expect(notification).toBeInTheDocument();
           expect(notification).toHaveFocus();
           expect(notification).not.toBe(previousNotification);
@@ -626,15 +626,18 @@ describe("Download Table", () => {
     });
     expect(rendered.queryByRole("status")).not.toBeInTheDocument();
     expect(
-      rendered.container.querySelector('#notificationsTop [role="alert"]')
+      rendered.container.querySelector('#notificationsTop [role="note"]')
     ).not.toBeInTheDocument();
     await act(async () => {
       vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(false);
     });
-    const error = rendered.container.querySelector('#notificationsTop [role="alert"]');
+    const error = rendered.container.querySelector('#notificationsTop [role="note"]');
     expect(error).toBeInTheDocument();
     expect(error).toHaveFocus();
     expect(error).toHaveAttribute("tabindex", "-1");
+    const duplicateError = rendered.container.querySelector('#notificationsBottom [role="note"]');
+    expect(duplicateError).toBeInTheDocument();
+    expect(duplicateError).not.toHaveFocus();
   });
 
   it.each<DownloadWarnings>([
