@@ -214,6 +214,7 @@
       "chooseVersionPlaceholder": "Sélectionner une version",
       "chooseVersionRequired": "Vous pouvez modifier la version sélectionnée si nécessaire",
       "processingResponse": "Traitement de la réponse {{response}} sur {{total}}",
+      "processingResponses": "Traitement des réponses",
       "responseProgress": "Réponse {{response}} sur {{total}}",
       "downloadingAttachment": "Téléchargement de la pièce jointe {{current}} sur {{total}}",
       "creatingZip": "Création du fichier ZIP : {{percent}} %"

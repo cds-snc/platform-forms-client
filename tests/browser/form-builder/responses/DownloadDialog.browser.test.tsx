@@ -141,6 +141,44 @@ describe("<DownloadDialog />", () => {
     await expect.element(page.getByTestId("download-progress-indicator")).toBeVisible();
   });
 
+  it.each([
+    ["en", "Download", "Processing responses", "Processing response 1 of 2"],
+    ["fr", "Télécharger", "Traitement des réponses", "Traitement de la réponse 1 sur 2"],
+  ])(
+    "uses generic initial progress instead of response zero in %s",
+    async (language, download, initialMessage, numberedMessage) => {
+      mockLanguage.mockReturnValue(language);
+      mockFileUploadEnabled.mockReturnValue(true);
+      let updateProgress: DownloadResponsesOptions["setDownloadProgress"] | undefined;
+      mockDownloadResponses.mockImplementationOnce(async (options: DownloadResponsesOptions) => {
+        updateProgress = options.setDownloadProgress;
+        options.setDownloadProgress({ phase: "responses", response: 0, total: 2 });
+      });
+      await render(
+        <DownloadDialog
+          {...defaultProps}
+          checkedMeta={[
+            { name: "response-1", version: "v1" },
+            { name: "response-2", version: "v1" },
+          ]}
+        />
+      );
+      const status = page.getByRole("status");
+      const statusElement = status.element();
+      await userEvent.click(page.getByRole("button", { name: download, exact: true }));
+      await expect.element(status).toHaveTextContent(initialMessage);
+      const indicator = page.getByTestId("download-progress-indicator");
+      await expect.element(indicator).toBeVisible();
+      expect(indicator.element().textContent).toContain(initialMessage);
+
+      expect(updateProgress).toBeDefined();
+      updateProgress!({ phase: "responses", response: 1, total: 2 });
+      await expect.element(status).toHaveTextContent(numberedMessage);
+      expect(status.element()).toBe(statusElement);
+      expect(indicator.element().textContent).toContain(numberedMessage);
+    }
+  );
+
   it("keeps detailed progress outside the mounted live region", async () => {
     mockFileUploadEnabled.mockReturnValue(true);
     let updateProgress: ((progress: DownloadProgress) => void) | undefined;

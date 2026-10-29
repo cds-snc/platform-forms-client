@@ -156,6 +156,9 @@ export const DownloadDialog = ({
 
     switch (downloadProgress.phase) {
       case "responses":
+        if (downloadProgress.response === 0) {
+          return t("downloadResponsesModals.downloadDialog.processingResponses");
+        }
         return t("downloadResponsesModals.downloadDialog.processingResponse", {
           response: downloadProgress.response,
           total: downloadProgress.total,
