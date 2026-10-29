@@ -517,6 +517,9 @@ describe("Download Table", () => {
     });
 
     const checkbox = rendered.getByRole("checkbox", { name: responseId });
+    expect(
+      rendered.getByTestId("numberOfSubmissions").closest('[data-testid="alert"]')
+    ).toHaveClass("mb-4");
     expect(checkbox.closest("tr")).toHaveClass("opacity-50");
 
     fireEvent.click(checkbox);

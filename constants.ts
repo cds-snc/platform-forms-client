@@ -8,8 +8,6 @@ export const MAX_RESPONSE_SIZE = kbToBytes(380);
 export const RESPONSES_UI_ZIP_MANIFEST_RESERVE_BYTES = 2 * 1024 * 1024;
 export const RESPONSES_UI_ZIP_ENTRY_OVERHEAD_BYTES = 4096;
 
-export const TEMP_ENABLE_NAGWARE_IN_REVIEW = process.env.REVIEW_ENV === "1";
-
 export const MAX_DYNAMIC_ROW_AMOUNT = 50;
 export const MAX_CHOICE_AMOUNT = 400;
 

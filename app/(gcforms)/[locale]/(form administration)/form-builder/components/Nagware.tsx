@@ -94,7 +94,7 @@ export const Nagware = ({
 
   if (notificationContent.type === "warning") {
     return (
-      <Alert.Warning>
+      <Alert.Warning className="mb-4">
         <Alert.Title>{notificationContent.title}</Alert.Title>
         <p>{notificationContent.body}</p>
       </Alert.Warning>
@@ -102,7 +102,7 @@ export const Nagware = ({
   }
 
   return (
-    <Alert.Danger>
+    <Alert.Danger className="mb-4">
       <Alert.Title>{notificationContent.title}</Alert.Title>
       <p>{notificationContent.body}</p>
     </Alert.Danger>
