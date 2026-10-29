@@ -17,10 +17,10 @@ const ExclamationText = ({
   isShowIcon?: boolean;
 }) => {
   return (
-    <div className={className}>
+    <span className={className}>
       {isShowIcon && <ExclamationIcon className="mr-1" />}
       <span className="font-bold text-[#bc3332]">{text}</span>
-    </div>
+    </span>
   );
 };
 
@@ -96,7 +96,7 @@ export const NextStep = ({
     if (!overdueAfter) return <>{t("downloadResponsesTable.unknown")}</>;
     const daysLeft = overdueAfter - daysPassed;
 
-    if (daysLeft < 0) {
+    if (daysLeft <= 0) {
       return <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
     }
 
@@ -107,7 +107,7 @@ export const NextStep = ({
     if (!overdueAfter) return t("downloadResponsesTable.unknown");
     const daysLeft = overdueAfter - daysPassed;
 
-    if (daysLeft < 0) {
+    if (daysLeft <= 0) {
       return <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
     }
 

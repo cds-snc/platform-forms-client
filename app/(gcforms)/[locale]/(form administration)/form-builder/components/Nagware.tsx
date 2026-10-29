@@ -4,7 +4,15 @@ import { useTranslation } from "@i18n/client";
 import { Alert } from "@clientComponents/globals";
 import { NagLevel, NagwareResult } from "@lib/types";
 
-export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => {
+export const Nagware = ({
+  nagwareResult,
+  nagwarePromptAfter = 21,
+  nagwareWarnAfter = 35,
+}: {
+  nagwareResult: NagwareResult;
+  nagwarePromptAfter?: number;
+  nagwareWarnAfter?: number;
+}) => {
   const { t } = useTranslation("form-builder");
 
   const notificationContent: {
@@ -19,23 +27,17 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
           title: t("nagware.unsavedSubmissionsOver21DaysOld.title"),
           body: (
             <>
-              {nagwareResult.numberOfSubmissions > 20 ? (
-                <>
-                  {t("nagware.unsavedSubmissionsOver21DaysOld.body1")}{" "}
-                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
-                  {t("nagware.unsavedSubmissionsOver21DaysOld.body2.moreThan20Responses")}
-                </>
-              ) : (
-                <>
-                  {t("nagware.unsavedSubmissionsOver21DaysOld.body1")}{" "}
-                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
-                  {t("nagware.unsavedSubmissionsOver21DaysOld.body2.lessThan20Responses")}
-                </>
+              {t("nagware.unsavedSubmissionsOver21DaysOld.body1")}{" "}
+              <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
+              {t(
+                nagwareResult.numberOfSubmissions > 20
+                  ? "nagware.unsavedSubmissionsOver21DaysOld.body2.moreThan20Responses"
+                  : "nagware.unsavedSubmissionsOver21DaysOld.body2.lessThan20Responses",
+                { days: nagwarePromptAfter }
               )}
-
               <br />
               <br />
-              <b>{t("nagware.restrictedDownloadAfter35Days")}</b>
+              <b>{t("nagware.restrictedDownloadAfter35Days", { days: nagwareWarnAfter })}</b>
             </>
           ),
         };
@@ -47,10 +49,10 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
             <>
               {t("nagware.unconfirmedSubmissionsOver21DaysOld.body1")}{" "}
               <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
-              {t("nagware.unconfirmedSubmissionsOver21DaysOld.body2")}
+              {t("nagware.unconfirmedSubmissionsOver21DaysOld.body2", { days: nagwarePromptAfter })}
               <br />
               <br />
-              <b>{t("nagware.restrictedDownloadAfter35Days")}</b>
+              <b>{t("nagware.restrictedDownloadAfter35Days", { days: nagwareWarnAfter })}</b>
             </>
           ),
         };
@@ -60,18 +62,13 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
           title: t("nagware.unsavedSubmissionsOver35DaysOld.title"),
           body: (
             <>
-              {nagwareResult.numberOfSubmissions > 20 ? (
-                <>
-                  {t("nagware.unsavedSubmissionsOver35DaysOld.body1")}{" "}
-                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
-                  {t("nagware.unsavedSubmissionsOver35DaysOld.body2.moreThan20Responses")}
-                </>
-              ) : (
-                <>
-                  {t("nagware.unsavedSubmissionsOver35DaysOld.body1")}{" "}
-                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
-                  {t("nagware.unsavedSubmissionsOver35DaysOld.body2.lessThan20Responses")}
-                </>
+              {t("nagware.unsavedSubmissionsOver35DaysOld.body1")}{" "}
+              <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
+              {t(
+                nagwareResult.numberOfSubmissions > 20
+                  ? "nagware.unsavedSubmissionsOver35DaysOld.body2.moreThan20Responses"
+                  : "nagware.unsavedSubmissionsOver35DaysOld.body2.lessThan20Responses",
+                { days: nagwareWarnAfter }
               )}
             </>
           ),
@@ -84,14 +81,14 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
             <>
               {t("nagware.unconfirmedSubmissionsOver35DaysOld.body1")}{" "}
               <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
-              {t("nagware.unconfirmedSubmissionsOver35DaysOld.body2")}
+              {t("nagware.unconfirmedSubmissionsOver35DaysOld.body2", { days: nagwareWarnAfter })}
             </>
           ),
         };
       case NagLevel.None:
         return null;
     }
-  }, [nagwareResult, t]);
+  }, [nagwareResult, nagwarePromptAfter, nagwareWarnAfter, t]);
 
   if (!notificationContent) return <></>;
 

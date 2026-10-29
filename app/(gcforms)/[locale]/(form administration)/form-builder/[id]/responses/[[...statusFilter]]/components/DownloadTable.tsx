@@ -1,10 +1,11 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import {
-  NagwareResult,
+  NagLevel,
   StartFromExclusiveResponse,
   VaultStatus,
   VaultSubmissionOverview,
 } from "@lib/types";
+import { Nagware } from "@formBuilder/components/Nagware";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import Link from "next/link";
@@ -28,31 +29,38 @@ import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionOverview[];
+  oldestDownloadedCreatedAt?: number | null;
   formName: string;
   formId: string;
-  nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   responsesDownloadZipMaxSizeMB: number;
   startFromExclusiveResponse: StartFromExclusiveResponse | null;
   overdueAfter: number;
+  nagwarePromptAfter: number;
+  nagwareWarnAfter: number;
+  nagwareEnabled?: boolean;
   statusFilter: StatusFilter;
 }
 
 export const DownloadTable = ({
   vaultSubmissions,
+  oldestDownloadedCreatedAt = null,
   formName,
   formId,
-  nagwareResult,
   responseDownloadLimit,
   responsesDownloadZipMaxSizeMB,
   startFromExclusiveResponse,
   overdueAfter,
+  nagwarePromptAfter,
+  nagwareWarnAfter,
+  nagwareEnabled = false,
   statusFilter,
 }: DownloadTableProps) => {
   const {
     t,
     i18n: { language },
   } = useTranslation("form-builder-responses");
+  const { t: tFormBuilder } = useTranslation("form-builder");
 
   const [downloadError, setDownloadError] = useState<boolean | string>(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
@@ -64,7 +72,47 @@ export const DownloadTable = ({
   const downloadWarningsRef = useRef<HTMLDivElement>(null);
   const hasDownloadWarnings =
     downloadWarnings?.sizeLimitReached || downloadWarnings?.processingFailed;
-  const accountEscalated = nagwareResult && nagwareResult.level > 2;
+  const nagwareResult = [
+    {
+      status: VaultStatus.NEW,
+      days: nagwareWarnAfter,
+      level: NagLevel.UnsavedSubmissionsOver35DaysOld,
+    },
+    {
+      status: VaultStatus.DOWNLOADED,
+      days: nagwareWarnAfter,
+      level: NagLevel.UnconfirmedSubmissionsOver35DaysOld,
+    },
+    {
+      status: VaultStatus.NEW,
+      days: nagwarePromptAfter,
+      level: NagLevel.UnsavedSubmissionsOver21DaysOld,
+    },
+    {
+      status: VaultStatus.DOWNLOADED,
+      days: nagwarePromptAfter,
+      level: NagLevel.UnconfirmedSubmissionsOver21DaysOld,
+    },
+  ]
+    .map(({ status, days, level }) => ({
+      level,
+      numberOfSubmissions: vaultSubmissions.filter((submission) => {
+        const age = getDaysPassed(submission.createdAt);
+        return submission.status === status && age > days;
+      }).length,
+    }))
+    .find((result) => result.numberOfSubmissions > 0) ?? {
+    level: NagLevel.None,
+    numberOfSubmissions: 0,
+  };
+  const hasOverdueDownloaded =
+    statusFilter === StatusFilter.NEW &&
+    oldestDownloadedCreatedAt !== null &&
+    getDaysPassed(oldestDownloadedCreatedAt) > nagwareWarnAfter;
+  const hasLoadedRestriction =
+    nagwareResult.level === NagLevel.UnsavedSubmissionsOver35DaysOld ||
+    nagwareResult.level === NagLevel.UnconfirmedSubmissionsOver35DaysOld;
+  const downloadsRestricted = nagwareEnabled && (hasLoadedRestriction || hasOverdueDownloaded);
 
   const { hasApiKeyId } = useFormBuilderConfig();
 
@@ -93,14 +141,9 @@ export const DownloadTable = ({
   const blockDownload = (submission: VaultSubmissionOverview) => {
     const daysPast = getDaysPassed(submission.createdAt);
 
-    if (
-      submission.status === VaultStatus.NEW &&
-      accountEscalated &&
-      daysPast < Number(overdueAfter)
-    ) {
-      return true;
-    }
-    return false;
+    return (
+      submission.status === VaultStatus.NEW && downloadsRestricted && daysPast <= nagwareWarnAfter
+    );
   };
 
   useEffect(() => {
@@ -117,6 +160,20 @@ export const DownloadTable = ({
 
   return (
     <>
+      {nagwareEnabled &&
+        (hasOverdueDownloaded && !hasLoadedRestriction ? (
+          <Alert.Danger className="mb-4">
+            <Alert.Title>
+              {tFormBuilder("nagware.unconfirmedSubmissionsOver35DaysOld.title")}
+            </Alert.Title>
+          </Alert.Danger>
+        ) : (
+          <Nagware
+            nagwareResult={nagwareResult}
+            nagwarePromptAfter={nagwarePromptAfter}
+            nagwareWarnAfter={nagwareWarnAfter}
+          />
+        ))}
       {hasDownloadWarnings && (
         <div ref={downloadWarningsRef}>
           {downloadWarnings?.sizeLimitReached && (
@@ -176,6 +233,7 @@ export const DownloadTable = ({
               <th scope="col" className="py-4 text-center">
                 <CheckAll
                   tableItems={tableItems}
+                  isBlocked={blockDownload}
                   tableItemsDispatch={tableItemsDispatch}
                   noSelectedItemsError={noSelectedItemsError}
                   setNoSelectedItemsError={setNoSelectedItemsError}
@@ -305,6 +363,7 @@ export const DownloadTable = ({
                   <td className="text-center whitespace-nowrap">
                     <DownloadSingleButton
                       id={`button-${submission.name}`}
+                      disabled={isBlocked}
                       formId={submission.formID}
                       responseId={submission.name}
                       version={submission.version}
