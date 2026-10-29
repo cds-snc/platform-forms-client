@@ -16,14 +16,37 @@ const InputFeedbackContext = createContext<{
 
 const ConnectedInputFeedback = ({
   inputId,
+  checkEmpty,
   children,
 }: {
   inputId: string;
+  checkEmpty?: string;
   children: React.ReactNode;
 }) => {
-  const feedback = useTemplateStore((state) => state.inputFeedback[inputId]);
+  const { feedback, setInputFeedback } = useTemplateStore((state) => ({
+    feedback: state.inputFeedback[inputId],
+    setInputFeedback: state.setInputFeedback,
+  }));
   return (
-    <InputFeedback state={feedback?.state} message={feedback?.message}>
+    <InputFeedback
+      state={feedback?.state}
+      message={feedback?.message}
+      onBlur={(event) => {
+        const input = event.target;
+        if (
+          !checkEmpty ||
+          input.id !== inputId ||
+          !(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement)
+        ) {
+          return;
+        }
+        if (!input.value.trim()) {
+          setInputFeedback(inputId, { state: "error", message: checkEmpty });
+        } else if (feedback?.state === "error" && feedback.message === checkEmpty) {
+          setInputFeedback(inputId, null);
+        }
+      }}
+    >
       {children}
     </InputFeedback>
   );
@@ -31,14 +54,19 @@ const ConnectedInputFeedback = ({
 
 export const StoreInputFeedback = ({
   inputId,
+  checkEmpty,
   children,
 }: {
   inputId: string;
+  /** Localized error message for empty or whitespace-only values on blur. */
+  checkEmpty?: string;
   children: React.ReactNode;
 }) => {
   const store = useContext(TemplateStoreContext);
   return store ? (
-    <ConnectedInputFeedback inputId={inputId}>{children}</ConnectedInputFeedback>
+    <ConnectedInputFeedback inputId={inputId} checkEmpty={checkEmpty}>
+      {children}
+    </ConnectedInputFeedback>
   ) : (
     children
   );
@@ -63,11 +91,13 @@ export const InputFeedback = ({
   message,
   children,
   className,
+  onBlur,
 }: {
   state?: FeedbackState;
   message?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  onBlur?: React.FocusEventHandler<HTMLDivElement>;
 }) => {
   const inheritedFeedback = useContext(InputFeedbackContext);
   const messageId = useId();
@@ -77,7 +107,7 @@ export const InputFeedback = ({
     <InputFeedbackContext.Provider
       value={state ? { state, messageId: hasMessage ? messageId : undefined } : inheritedFeedback}
     >
-      <div data-feedback-state={state} className={cn("min-w-0 flex-1", className)}>
+      <div data-feedback-state={state} className={cn("min-w-0 flex-1", className)} onBlur={onBlur}>
         <div className="relative">
           {children}
           {state && (

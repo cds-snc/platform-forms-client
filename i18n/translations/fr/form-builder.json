@@ -955,6 +955,7 @@
     }
   },
   "question": "Question",
+  "questionRequired": "Saisissez un titre de question.",
   "questions": "Questions",
   "questionSet": {
     "addAnother": {

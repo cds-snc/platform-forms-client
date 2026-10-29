@@ -23,6 +23,105 @@ const controls = { Input, TextArea, ExpandingInput };
 describe("<InputFeedback />", () => {
   beforeAll(setupFonts);
 
+  it.each(Object.keys(controls) as (keyof typeof controls)[])(
+    "checks empty %s values on blur through the template store",
+    async (kind) => {
+      const Control = controls[kind];
+      const Example = () => {
+        const [value, setValue] = useState("");
+        const { feedback, setInputFeedback } = useTemplateStore((state) => ({
+          feedback: state.inputFeedback["required-field"],
+          setInputFeedback: state.setInputFeedback,
+        }));
+        return (
+          <>
+            <label htmlFor="required-field">Required field</label>
+            <p id="required-hint">Use a descriptive title.</p>
+            <Control
+              id="required-field"
+              value={value}
+              onChange={(event) => setValue(event.target.value)}
+              describedBy="required-hint"
+              checkEmpty="Enter a title."
+            />
+            <label htmlFor="optional-field">Optional field</label>
+            <Control id="optional-field" value="" onChange={vi.fn()} />
+            <output data-testid="stored-feedback">{JSON.stringify(feedback ?? null)}</output>
+            <button type="button">Blur field</button>
+            <button
+              type="button"
+              onClick={() =>
+                setInputFeedback("required-field", {
+                  state: "conflict",
+                  message: "Review this title.",
+                })
+              }
+            >
+              Show other feedback
+            </button>
+          </>
+        );
+      };
+      await renderWithStore(<Example />);
+      const control = page.getByRole("textbox", { name: "Required field", exact: true });
+      const blur = page.getByRole("button", { name: "Blur field", exact: true });
+      await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
+      await userEvent.click(control);
+      await userEvent.click(blur);
+      await expect.element(control).toHaveAttribute("aria-invalid", "true");
+      await expect
+        .element(control)
+        .toHaveAccessibleDescription("Use a descriptive title. Enter a title.");
+      await expect
+        .element(page.getByTestId("stored-feedback"))
+        .toHaveTextContent('{"state":"error","message":"Enter a title."}');
+
+      await userEvent.fill(control, "   ");
+      await userEvent.click(blur);
+      await expect.element(control).toHaveAttribute("aria-invalid", "true");
+      await userEvent.fill(control, "Delivery address");
+      await expect.element(control).toHaveAttribute("aria-invalid", "true");
+      await userEvent.click(blur);
+      await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
+      await expect.element(control).toHaveAccessibleDescription("Use a descriptive title.");
+      await expect.element(page.getByTestId("stored-feedback")).toHaveTextContent("null");
+
+      await userEvent.click(page.getByRole("button", { name: "Show other feedback", exact: true }));
+      await userEvent.click(control);
+      await userEvent.click(blur);
+      await expect
+        .element(control)
+        .toHaveAccessibleDescription("Use a descriptive title. Review this title.");
+
+      const optional = page.getByRole("textbox", { name: "Optional field", exact: true });
+      await userEvent.click(optional);
+      await userEvent.click(blur);
+      await expect.element(optional).not.toHaveAttribute("aria-invalid", "true");
+    }
+  );
+
+  it("preserves the expanding input blur handler when checking empty values", async () => {
+    const onBlur = vi.fn();
+    await renderWithStore(
+      <>
+        <ExpandingInput
+          id="question-blur"
+          ariaLabel="Question"
+          value=""
+          onChange={vi.fn()}
+          onBlur={onBlur}
+          checkEmpty="Enter a question title."
+        />
+        <button type="button">Blur question</button>
+      </>
+    );
+    const control = page.getByRole("textbox", { name: "Question", exact: true });
+    await userEvent.click(control);
+    await userEvent.click(page.getByRole("button", { name: "Blur question", exact: true }));
+    expect(onBlur).toHaveBeenCalledOnce();
+    await expect.element(control).toHaveAccessibleDescription("Enter a question title.");
+  });
+
   it("maps migration problems to the affected choices and clears them after correction", async () => {
     const Example = () => {
       const { form, importTemplate, updateField } = useTemplateStore((state) => ({

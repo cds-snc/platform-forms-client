@@ -23,6 +23,7 @@ interface Props {
   onBlur?: FocusEventHandler;
   onFocus?: FocusEventHandler;
   disabled?: boolean;
+  checkEmpty?: string;
 }
 
 type Ref = HTMLInputElement;
@@ -86,7 +87,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
 Input.displayName = "Input";
 
 const FeedbackInput = React.forwardRef<Ref, Props>((props, ref) => (
-  <StoreInputFeedback inputId={props.id}>
+  <StoreInputFeedback inputId={props.id} checkEmpty={props.checkEmpty}>
     <Input {...props} ref={ref} />
   </StoreInputFeedback>
 ));
