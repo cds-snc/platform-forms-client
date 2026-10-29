@@ -12,6 +12,7 @@ import axios from "axios";
 import { StatusFilter } from "../../types";
 import { DownloadDialog } from "../Dialogs/DownloadDialog/DownloadDialog";
 import type { DownloadWarnings } from "../Dialogs/DownloadDialog/DownloadDialog.types";
+import { getSubmissionsByFormat } from "../../actions";
 
 vi.mock("../Dialogs/DownloadDialog/DownloadDialog", () => ({
   DownloadDialog: vi.fn(() => null),
@@ -60,6 +61,81 @@ describe("Download Table", () => {
     cleanup();
     vi.unstubAllGlobals();
   });
+
+  it.each(["success", "failure"])(
+    "clears the previous notification and focuses each repeated single-download %s",
+    async (outcome) => {
+      vi.useFakeTimers();
+      vi.stubGlobal(
+        "URL",
+        class extends URL {
+          static createObjectURL = vi.fn(() => "blob:download");
+          static revokeObjectURL = vi.fn();
+        }
+      );
+      const anchorClick = vi
+        .spyOn(HTMLAnchorElement.prototype, "click")
+        .mockImplementation(() => {});
+      let finishDownload: (() => void) | undefined;
+      const download = vi.mocked(getSubmissionsByFormat).mockImplementation(
+        () =>
+          new Promise<Awaited<ReturnType<typeof getSubmissionsByFormat>>>((resolve, reject) => {
+            finishDownload = () => {
+              if (outcome === "success") {
+                resolve([{ id: "response", created_at: 0, html: "<p>Response</p>" }]);
+              } else {
+                reject(new Error("Download failed"));
+              }
+            };
+          })
+      );
+
+      try {
+        const rendered = render(
+          <DownloadTable
+            statusFilter={StatusFilter.DOWNLOADED}
+            vaultSubmissions={vaultSubmissions.slice(0, 2)}
+            formId={vaultSubmissions[0].formID}
+            formName=""
+            responseDownloadLimit={100}
+            responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
+            overdueAfter={0}
+            nagwarePromptAfter={21}
+            nagwareWarnAfter={35}
+            startFromExclusiveResponse={null}
+          />
+        );
+        let previousNotification: Element | null = null;
+        const downloadResponse = async (responseId: string) => {
+          const button = rendered.getByRole("button", { name: new RegExp(responseId) });
+          button.focus();
+          fireEvent.click(button);
+          expect(rendered.container.querySelector("#notificationsTop")).toBeEmptyDOMElement();
+          expect(button).toHaveFocus();
+          expect(finishDownload).toBeDefined();
+          await act(async () => {
+            finishDownload!();
+            await vi.advanceTimersByTimeAsync(200);
+          });
+          const notification =
+            outcome === "success"
+              ? rendered.getByRole("status")
+              : rendered.container.querySelector('#notificationsTop [role="alert"]');
+          expect(notification).toBeInTheDocument();
+          expect(notification).toHaveFocus();
+          expect(notification).not.toBe(previousNotification);
+          previousNotification = notification;
+        };
+        await downloadResponse(vaultSubmissions[0].name);
+        await downloadResponse(vaultSubmissions[1].name);
+        expect(download).toHaveBeenCalledTimes(2);
+      } finally {
+        anchorClick.mockRestore();
+        download.mockReset();
+        vi.useRealTimers();
+      }
+    }
+  );
 
   it.each([
     { age: 14, overdue: false },

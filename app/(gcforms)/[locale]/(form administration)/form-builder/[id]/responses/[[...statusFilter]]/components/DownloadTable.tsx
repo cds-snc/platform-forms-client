@@ -123,6 +123,12 @@ export const DownloadTable = ({
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
 
+  const handleDownloadStart = () => {
+    setShowDownloadSuccess(false);
+    setDownloadError(false);
+    setDownloadWarnings(undefined);
+  };
+
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
@@ -375,6 +381,7 @@ export const DownloadTable = ({
                       formId={submission.formID}
                       responseId={submission.name}
                       version={submission.version}
+                      onDownloadStart={handleDownloadStart}
                       onDownloadSuccess={() => {
                         setDownloadError(false);
                         setDownloadWarnings(undefined);
@@ -427,11 +434,7 @@ export const DownloadTable = ({
         <ActionsPanel>
           <DownloadButton
             setShowDownloadDialog={setShowDownloadDialog}
-            onClick={() => {
-              setDownloadError(false);
-              setDownloadWarnings(undefined);
-              setShowDownloadSuccess(false);
-            }}
+            onClick={handleDownloadStart}
           />
         </ActionsPanel>
       )}
