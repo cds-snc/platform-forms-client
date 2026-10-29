@@ -1,5 +1,7 @@
 "use client";
 import React, { FocusEventHandler } from "react";
+import { cn } from "@lib/utils";
+import { StoreInputFeedback, useInputFeedback } from "./InputFeedback";
 
 interface Props {
   id: string;
@@ -46,6 +48,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     onFocus,
     disabled,
   } = props;
+  const feedback = useInputFeedback(describedBy);
   const themes = {
     default:
       "py-2 px-3 my-2 rounded border-1.5 border-slate-500 border-solid focus:outline-2 focus:outline-blue-focus focus:outline focus:border-blue-focus",
@@ -59,12 +62,12 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     <input
       id={id}
       name={name}
-      aria-describedby={describedBy}
-      aria-invalid={isInvalid ? true : false}
+      aria-describedby={feedback.describedBy}
+      aria-invalid={isInvalid || feedback.isInvalid}
       type={type}
       min={min}
       {...(max !== undefined && { max })}
-      className={`${className} ${themes[theme]}`}
+      className={cn(className, themes[theme], feedback.controlClassName)}
       value={value}
       placeholder={placeholder}
       {...(ariaLabel && { "aria-label": ariaLabel })}
@@ -82,4 +85,12 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
 
 Input.displayName = "Input";
 
-export { Input };
+const FeedbackInput = React.forwardRef<Ref, Props>((props, ref) => (
+  <StoreInputFeedback inputId={props.id}>
+    <Input {...props} ref={ref} />
+  </StoreInputFeedback>
+));
+
+FeedbackInput.displayName = "Input";
+
+export { FeedbackInput as Input };
