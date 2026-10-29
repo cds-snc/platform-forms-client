@@ -75,7 +75,7 @@ export const DownloadDialog = ({
     setSelectedFormat(defaultSelectedFormat);
     setZipAllFiles(true);
     setSelectedVersionForDialog(null);
-    // setDownloadProgress(null);
+    setDownloadProgress(null);
     setIsDialogVisible(false);
     dialogRef.current?.close();
   };
@@ -185,11 +185,6 @@ export const DownloadDialog = ({
         return t("downloadResponsesModals.downloadDialog.creatingZip", {
           percent: Math.floor(downloadProgress.percent),
         });
-      case "complete":
-        return downloadProgress.warnings?.sizeLimitReached ||
-          downloadProgress.warnings?.processingFailed
-          ? t("downloadResponsesTable.partialDownload.title")
-          : t("downloadResponsesModals.downloadDialog.complete");
     }
   };
 

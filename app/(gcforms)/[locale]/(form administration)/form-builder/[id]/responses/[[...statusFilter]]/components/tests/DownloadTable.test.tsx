@@ -14,6 +14,10 @@ vi.mock("../Dialogs/DownloadDialog/DownloadDialog", () => ({
   DownloadDialog: vi.fn(() => null),
 }));
 
+vi.mock("../NextStep", () => ({
+  NextStep: () => null,
+}));
+
 vi.mock("next/navigation", () => ({
   useSearchParams: () => ({
     get: (key: string) => {
@@ -107,6 +111,128 @@ describe("Download Table", () => {
     );
   });
 
+  it.each(Object.values(StatusFilter))(
+    "shows success in the error notification area after the dialog closes on %s",
+    async (statusFilter) => {
+      const rendered = render(
+        <DownloadTable
+          statusFilter={statusFilter}
+          vaultSubmissions={vaultSubmissions}
+          formId="clg17xha50008efkgfgxa8l4f"
+          formName=""
+          nagwareResult={null}
+          responseDownloadLimit={100}
+          responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
+          overdueAfter={0}
+          startFromExclusiveResponse={null}
+        />
+      );
+      const responseId = vaultSubmissions[0].name;
+      const message =
+        statusFilter === StatusFilter.NEW
+          ? "Responses moved to the “Downloaded” tab"
+          : "Download complete.";
+      const notifications = rendered.container.querySelector("#notificationsTop");
+      expect(notifications).toBeEmptyDOMElement();
+
+      fireEvent.click(rendered.getByRole("checkbox", { name: responseId }));
+      fireEvent.click(rendered.container.querySelector("#downloadTableButtonId")!);
+      await act(async () => {
+        vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([responseId]);
+      });
+      expect(rendered.queryByText(message)).not.toBeInTheDocument();
+
+      await act(async () => {
+        vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(false);
+      });
+      expect(notifications).toHaveTextContent(message);
+      expect(rendered.getByRole("note")).toHaveFocus();
+      expect(rendered.getByRole("note")).toHaveAttribute("tabindex", "-1");
+      if (statusFilter === StatusFilter.NEW) {
+        expect(notifications).toHaveTextContent(
+          "Next: sign off on the removal of responses from GC Forms."
+        );
+      }
+
+      fireEvent.click(rendered.getByRole("checkbox", { name: responseId }));
+      fireEvent.click(rendered.container.querySelector("#downloadTableButtonId")!);
+      await act(async () => {
+        vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(false);
+      });
+      expect(notifications).toBeEmptyDOMElement();
+    }
+  );
+
+  it.each([
+    { ids: [], warnings: undefined },
+    {
+      ids: [vaultSubmissions[0].name],
+      warnings: { sizeLimitReached: true, processingFailed: false },
+    },
+    {
+      ids: [vaultSubmissions[0].name],
+      warnings: { sizeLimitReached: false, processingFailed: true },
+    },
+  ])("does not show success for an empty or partial download: %j", async ({ ids, warnings }) => {
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = vi.fn();
+    const rendered = render(
+      <DownloadTable
+        statusFilter={StatusFilter.DOWNLOADED}
+        vaultSubmissions={vaultSubmissions}
+        formId="clg17xha50008efkgfgxa8l4f"
+        formName=""
+        nagwareResult={null}
+        responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
+        overdueAfter={0}
+        startFromExclusiveResponse={null}
+      />
+    );
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload(ids, warnings);
+    });
+    expect(rendered.container.querySelector("#notificationsTop")).toBeEmptyDOMElement();
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
+  it("focuses an error only after the dialog closes and hides previous success", async () => {
+    const rendered = render(
+      <DownloadTable
+        statusFilter={StatusFilter.DOWNLOADED}
+        vaultSubmissions={vaultSubmissions}
+        formId="clg17xha50008efkgfgxa8l4f"
+        formName=""
+        nagwareResult={null}
+        responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={RESPONSES_DOWNLOAD_ZIP_MAX_SIZE_MB}
+        overdueAfter={0}
+        startFromExclusiveResponse={null}
+      />
+    );
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([vaultSubmissions[0].name]);
+    });
+    expect(rendered.getByRole("note")).toHaveTextContent("Download complete.");
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(true);
+    });
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].setDownloadError(true);
+    });
+    expect(rendered.queryByRole("note")).not.toBeInTheDocument();
+    expect(
+      rendered.container.querySelector('#notificationsTop [role="alert"]')
+    ).not.toBeInTheDocument();
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(false);
+    });
+    const error = rendered.container.querySelector('#notificationsTop [role="alert"]');
+    expect(error).toBeInTheDocument();
+    expect(error).toHaveFocus();
+    expect(error).toHaveAttribute("tabindex", "-1");
+  });
+
   it.each<DownloadWarnings>([
     { sizeLimitReached: true, processingFailed: false },
     { sizeLimitReached: false, processingFailed: true },
@@ -131,7 +257,18 @@ describe("Download Table", () => {
     );
 
     await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(true);
+    });
+    await act(async () => {
       vi.mocked(DownloadDialog).mock.lastCall![0].onSuccessfulDownload([], warnings);
+    });
+    expect(rendered.queryByText("Download smaller batches")).not.toBeInTheDocument();
+    expect(
+      rendered.queryByText("Could not download all responses or attachments")
+    ).not.toBeInTheDocument();
+    expect(scrollIntoView).not.toHaveBeenCalled();
+    await act(async () => {
+      vi.mocked(DownloadDialog).mock.lastCall![0].setIsDialogVisible(false);
     });
 
     expect(rendered.queryByText("Download smaller batches") !== null).toBe(
@@ -145,11 +282,9 @@ describe("Download Table", () => {
     );
     if (warnings.sizeLimitReached) {
       expect(rendered.getByText("This download exceeds our maximum 125 MB.")).toBeInTheDocument();
-      if (!warnings.processingFailed) {
-        expect(
-          rendered.getByText("Download smaller batches").closest('[data-testid="alert"]')
-        ).toHaveFocus();
-      }
+      expect(
+        rendered.getByText("Download smaller batches").closest('[data-testid="alert"]')
+      ).toHaveFocus();
     }
     if (warnings.processingFailed) {
       expect(rendered.getByText("Try downloading remaining responses again.")).toBeInTheDocument();

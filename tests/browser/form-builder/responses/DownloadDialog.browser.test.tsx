@@ -195,21 +195,19 @@ describe("<DownloadDialog />", () => {
   });
 
   it.each([
-    { language: "en", warnings: undefined, message: "Download complete." },
-    { language: "fr", warnings: undefined, message: "Téléchargement terminé." },
+    { language: "en", warnings: undefined },
+    { language: "fr", warnings: undefined },
     {
       language: "en",
       warnings: { sizeLimitReached: true, processingFailed: false },
-      message: "Could not download all responses or attachments",
     },
     {
       language: "en",
       warnings: { sizeLimitReached: false, processingFailed: true },
-      message: "Could not download all responses or attachments",
     },
   ])(
-    "sets completion text without changing auto-close: $message",
-    async ({ language, warnings, message }) => {
+    "reports the result and closes without announcing completion in the dialog: %j",
+    async ({ language, warnings }) => {
       mockLanguage.mockReturnValue(language);
       mockDownloadResponses.mockImplementationOnce(async (options: DownloadResponsesOptions) => {
         options.onDownloadComplete(["response-1"], warnings);
@@ -235,9 +233,9 @@ describe("<DownloadDialog />", () => {
       );
       await expect
         .element(page.getByTestId("download-progress-indicator-hidden"))
-        .toHaveTextContent(message);
-      expect(onSuccessfulDownload).toHaveBeenCalledWith(["response-1"], warnings);
-      expect(setIsDialogVisible).toHaveBeenCalledWith(false);
+        .toHaveTextContent("");
+      expect(onSuccessfulDownload).toHaveBeenCalledExactlyOnceWith(["response-1"], warnings);
+      expect(setIsDialogVisible).toHaveBeenCalledExactlyOnceWith(false);
       await expect.element(page.getByTestId("dialog")).not.toHaveAttribute("open");
     }
   );
