@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.28.3](https://github.com/cds-snc/platform-forms-client/compare/v4.28.2...v4.28.3) (2026-10-29)
+
+
+### Bug Fixes
+
+* a11y download dialog status messages ([#8128](https://github.com/cds-snc/platform-forms-client/issues/8128)) ([264448b](https://github.com/cds-snc/platform-forms-client/commit/264448b8a126c5409b9287aab4c446e1bc174301))
+* Published Forms Open their Preview in New Tab ([#8124](https://github.com/cds-snc/platform-forms-client/issues/8124)) ([0c182f0](https://github.com/cds-snc/platform-forms-client/commit/0c182f0216ed2faef6e185788027b57ee88f2289))
+* re-adds download blocking and nagware results ([#8125](https://github.com/cds-snc/platform-forms-client/issues/8125)) ([6151d5a](https://github.com/cds-snc/platform-forms-client/commit/6151d5a63cb3e373f96d490e4c8af6b34f7743e8))
+* update trivy to use cache passthrough ([#8114](https://github.com/cds-snc/platform-forms-client/issues/8114)) ([dbdc01d](https://github.com/cds-snc/platform-forms-client/commit/dbdc01d87e07d9de298dcb1b4b3877080d9bc049))
+
+
+### Miscellaneous Chores
+
+* use new 'platform-forms-client-post-merge-actions' for Github actions running once a commit has been pushed to the main branch ([#8118](https://github.com/cds-snc/platform-forms-client/issues/8118)) ([c1f390a](https://github.com/cds-snc/platform-forms-client/commit/c1f390a72ed68f5f1df3a5399d21c394e065d656))
+
 ## [4.28.2](https://github.com/cds-snc/platform-forms-client/compare/v4.28.1...v4.28.2) (2026-10-28)
 
 
