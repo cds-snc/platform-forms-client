@@ -7,6 +7,9 @@ import {
   inputFeedbackPanelClassName,
 } from "@formBuilder/components/shared/InputFeedback";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateMigrationProblems } from "@lib/store/hooks/useTemplateMigrationProblems";
+import { useMigrationProblemFeedback } from "@lib/store/hooks/useMigrationProblemFeedback";
+import { FormElementTypes } from "@lib/types";
 import { render as renderWithStore } from "./testUtils";
 import { Input } from "@formBuilder/components/shared/Input";
 import { TextArea } from "@formBuilder/components/shared/TextArea";
@@ -19,6 +22,81 @@ const controls = { Input, TextArea, ExpandingInput };
 
 describe("<InputFeedback />", () => {
   beforeAll(setupFonts);
+
+  it("maps migration problems to the affected choices and clears them after correction", async () => {
+    const Example = () => {
+      const { form, importTemplate, updateField } = useTemplateStore((state) => ({
+        form: state.form,
+        importTemplate: state.importTemplate,
+        updateField: state.updateField,
+      }));
+      const problems = useTemplateMigrationProblems();
+      useMigrationProblemFeedback(problems);
+      const elementIndex = form.elements.findIndex((element) => element.id === 901);
+      const element = form.elements[elementIndex];
+      return (
+        <>
+          <button
+            onClick={async () => {
+              const template = structuredClone(form);
+              template.schemaVersion = 1;
+              template.layout = [901];
+              template.elements = [
+                {
+                  id: 901,
+                  type: FormElementTypes.radio,
+                  properties: {
+                    titleEn: "My radio inputs",
+                    titleFr: "Mes choix",
+                    validation: { required: false },
+                    choices: [
+                      { en: "a", fr: "a" },
+                      { en: "a", fr: "a" },
+                      { en: "c", fr: "c" },
+                    ],
+                  },
+                },
+              ];
+              await importTemplate(template);
+            }}
+          >
+            Load migration issue
+          </button>
+          {element?.properties.choices?.map((choice, index) => (
+            <div key={index}>
+              <label htmlFor={`option--901--${index + 1}`}>Choice {index + 1}</label>
+              <Input
+                id={`option--901--${index + 1}`}
+                value={choice.en}
+                onChange={(event) =>
+                  updateField(
+                    `form.elements[${elementIndex}].properties.choices[${index}].en`,
+                    event.target.value
+                  )
+                }
+              />
+            </div>
+          ))}
+        </>
+      );
+    };
+    await renderWithStore(<Example />);
+    await userEvent.click(page.getByRole("button", { name: "Load migration issue", exact: true }));
+    const first = page.getByRole("textbox", { name: "Choice 1", exact: true });
+    const second = page.getByRole("textbox", { name: "Choice 2", exact: true });
+    const third = page.getByRole("textbox", { name: "Choice 3", exact: true });
+    await expect.element(first).toHaveAttribute("aria-invalid", "true");
+    await expect.element(second).toHaveAttribute("aria-invalid", "true");
+    await expect.element(third).not.toHaveAttribute("aria-invalid", "true");
+    await expect
+      .element(
+        page.getByText("Duplicate choices: a. Remove or change the repeated choices.").first()
+      )
+      .toBeVisible();
+    await userEvent.fill(second, "b");
+    await expect.element(first).not.toHaveAttribute("aria-invalid", "true");
+    await expect.element(second).not.toHaveAttribute("aria-invalid", "true");
+  });
 
   it.each([undefined, "conflict", "error"] as const)(
     "highlights panels for child errors, not conflicts: %s",

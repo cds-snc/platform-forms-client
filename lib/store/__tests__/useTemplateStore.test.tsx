@@ -10,6 +10,8 @@ import { FormRecord, FormElementTypes } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { CURRENT_TEMPLATE_VERSION } from "@lib/templates/schemaVersioning/migrations";
+import { getTemplateMigrationProblems } from "@lib/templates/schemaVersioning/getTemplateMigrationProblems";
+import { mapMigrationProblemsToInputFeedback } from "../helpers/mapMigrationProblemsToInputFeedback";
 
 const createStore = async () => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
@@ -32,6 +34,37 @@ const createStore = async () => {
 const promise = Promise.resolve();
 
 describe("TemplateStore", () => {
+  it("maps the existing duplicate-choice migration issue to only the matching inputs", async () => {
+    const result = await createStore();
+    await act(async () => {
+      await result.current.add(0, FormElementTypes.radio);
+    });
+    const form = structuredClone(result.current.form);
+    form.schemaVersion = 1;
+    const element = form.elements[0];
+    element.properties.choices = [
+      { en: "a", fr: "a" },
+      { en: "a", fr: "a" },
+      { en: "b", fr: "b" },
+    ];
+    const original = structuredClone(form);
+    const problems = getTemplateMigrationProblems(form);
+    const t = (key: string) => key;
+    const feedback = mapMigrationProblemsToInputFeedback(form, problems, "en", t);
+    expect(feedback).toEqual({
+      [`option--${element.id}--1`]: {
+        state: "conflict",
+        message: "migrationProblems.duplicateChoices",
+      },
+      [`option--${element.id}--2`]: {
+        state: "conflict",
+        message: "migrationProblems.duplicateChoices",
+      },
+    });
+    expect(mapMigrationProblemsToInputFeedback(form, [], "en", t)).toEqual({});
+    expect(form).toEqual(original);
+  });
+
   it.each(["initial", "import", "record"])(
     "does not generate feedback automatically on %s template load",
     async (source) => {
