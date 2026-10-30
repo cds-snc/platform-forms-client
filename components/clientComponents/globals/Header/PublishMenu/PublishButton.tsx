@@ -6,6 +6,7 @@ import { useTranslation } from "@root/i18n/client";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateMigrationProblems } from "@lib/store/hooks/useTemplateMigrationProblems";
 import { updateTemplate } from "@formBuilder/actions";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -37,6 +38,7 @@ const ChevronDownIcon = () => (
 );
 
 export const PublishButton = ({ locale }: { locale: string }) => {
+  const problems = useTemplateMigrationProblems();
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
   const pathname = usePathname();
@@ -133,6 +135,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     privacy: `/${locale}/form-builder/${formId}/edit#privacy-text`,
     confirmation: `/${locale}/form-builder/${formId}/edit#confirmation-text`,
     settings: `/${locale}/form-builder/${formId}/settings`,
+    problems: `/${locale}/form-builder/${formId}/problems`,
   };
 
   const publishedLinks = {
@@ -340,6 +343,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
             privacyPolicy={privacyPolicy}
             confirmationMessage={confirmationMessage}
             settings={settings}
+            hasMigrationProblems={problems.length > 0}
             links={links}
             onChecklistLinkClick={handleChecklistLinkClick}
             userCanPublish={!!userCanPublish}

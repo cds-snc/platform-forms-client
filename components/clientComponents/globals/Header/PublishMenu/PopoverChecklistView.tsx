@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@clientComponents/globals";
 import { ChecklistItem } from "./ChecklistItem";
+import { WarningIcon } from "@serverComponents/icons";
 
 type Translate = (key: string) => string;
 
@@ -11,6 +12,7 @@ type ChecklistLinks = {
   privacy: string;
   confirmation: string;
   settings: string;
+  problems: string;
 };
 
 export const PopoverChecklistView = ({
@@ -21,6 +23,7 @@ export const PopoverChecklistView = ({
   privacyPolicy,
   confirmationMessage,
   settings,
+  hasMigrationProblems,
   links,
   onChecklistLinkClick,
   userCanPublish,
@@ -37,6 +40,7 @@ export const PopoverChecklistView = ({
   privacyPolicy: boolean;
   confirmationMessage: boolean;
   settings: boolean;
+  hasMigrationProblems: boolean;
   links: ChecklistLinks;
   onChecklistLinkClick: (href: string) => void;
   userCanPublish: boolean;
@@ -85,6 +89,20 @@ export const PopoverChecklistView = ({
           label={t("publishYourFormInstructions.settings")}
           onClick={onChecklistLinkClick}
         />
+        {hasMigrationProblems && (
+          <li className="flex items-start gap-3">
+            <WarningIcon className="size-7 shrink-0 fill-amber-700" />
+            <div>
+              <Link
+                href={links.problems}
+                className="text-xl text-slate-900 no-underline hover:underline"
+              >
+                {t("migrationProblems.title")}
+              </Link>
+              <p className="mb-0 text-sm">{t("migrationProblems.warning")}</p>
+            </div>
+          </li>
+        )}
       </ul>
 
       {!userCanPublish && (

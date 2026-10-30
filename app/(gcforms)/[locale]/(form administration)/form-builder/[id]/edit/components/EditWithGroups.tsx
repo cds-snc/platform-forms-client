@@ -24,6 +24,7 @@ import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
+import { MigrationProblemsNotice } from "./MigrationProblemsNotice";
 
 export const EditWithGroups = ({
   id,
@@ -148,6 +149,7 @@ export const EditWithGroups = ({
           <SaveButton />
         </div>
       </div>
+      <MigrationProblemsNotice id={id} locale={locale} />
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
       <div className="flex max-w-[800px] justify-between">
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
