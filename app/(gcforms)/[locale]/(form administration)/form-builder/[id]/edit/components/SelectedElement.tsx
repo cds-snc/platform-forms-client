@@ -5,18 +5,13 @@ import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
-import {
-  ElementOption,
-  FormElementWithIndex,
-  LocalizedElementProperties,
-} from "@lib/types/form-builder-types";
+import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder/useElementOptions";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 import { StarRatingSelector } from "./elements/StarRatingSelector";
 import { DateElement } from "./elements/DateElement";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
-import { Notice as NoticeComponent } from "@clientComponents/forms/Notice/Notice";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { NoticeEditorPreview } from "./elements/NoticeEditorPreview";
 
 const filterSelected = (
   item: FormElementWithIndex,
@@ -91,16 +86,14 @@ export const SelectedElement = ({
   item,
   elIndex = -1,
   formId,
+  noticeTitleEditor,
 }: {
   item: FormElementWithIndex;
   elIndex: number;
   formId: string;
+  noticeTitleEditor?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
   let element = null;
 
   const selected = useGetSelectedOption(item);
@@ -114,16 +107,12 @@ export const SelectedElement = ({
       break;
     case FormElementTypes.notice:
       element = (
-        <NoticeComponent
-          title={
-            item.properties[
-              localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
-            ] || t("notice")
-          }
+        <NoticeEditorPreview
           type={item.properties.noticeType ?? NoticeType.INFO}
+          titleEditor={noticeTitleEditor}
         >
           <RichText id={item.id} elIndex={item.index} />
-        </NoticeComponent>
+        </NoticeEditorPreview>
       );
       break;
     case "textArea":

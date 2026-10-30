@@ -60,9 +60,11 @@ export const PanelBody = ({
     <>
       {isRichText || isNotice || isDynamicRow ? (
         <div className="my-4">
-          <div className={cn(isDynamicRow && "mt-8 mb-2 px-4")}>
-            <Question item={item} onQuestionChange={onQuestionChange} isInvalid={isInvalid} />
-          </div>
+          {!isNotice && (
+            <div className={cn(isDynamicRow && "mt-8 mb-2 px-4")}>
+              <Question item={item} onQuestionChange={onQuestionChange} isInvalid={isInvalid} />
+            </div>
+          )}
 
           <div className={cn(isDynamicRow && "mb-2")}>
             <SelectedElement
@@ -70,6 +72,11 @@ export const PanelBody = ({
               item={item}
               elIndex={elIndex}
               formId={formId}
+              noticeTitleEditor={
+                isNotice ? (
+                  <Question item={item} onQuestionChange={onQuestionChange} isInvalid={isInvalid} />
+                ) : undefined
+              }
             />
           </div>
         </div>
