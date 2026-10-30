@@ -6,10 +6,12 @@ import React, { useContext, useEffect } from "react";
 import { useTemplateStore, TemplateStoreProvider, TemplateStoreContext } from "../useTemplateStore";
 import { render, renderHook, act, waitFor } from "@testing-library/react";
 import { NotificationsIntervalDefault } from "@gcforms/types";
-import { FormRecord } from "@lib/types";
+import { FormRecord, FormElementTypes } from "@lib/types";
 import { MAX_CHOICE_AMOUNT } from "@root/constants";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { CURRENT_TEMPLATE_VERSION } from "@lib/templates/schemaVersioning/migrations";
+import { getTemplateMigrationProblems } from "@lib/templates/schemaVersioning/getTemplateMigrationProblems";
+import { mapMigrationProblemsToInputFeedback } from "../helpers/mapMigrationProblemsToInputFeedback";
 
 const createStore = async () => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
@@ -32,6 +34,113 @@ const createStore = async () => {
 const promise = Promise.resolve();
 
 describe("TemplateStore", () => {
+  it("maps the existing duplicate-choice migration issue to only the matching inputs", async () => {
+    const result = await createStore();
+    await act(async () => {
+      await result.current.add(0, FormElementTypes.radio);
+    });
+    const form = structuredClone(result.current.form);
+    form.schemaVersion = 1;
+    const element = form.elements[0];
+    element.properties.choices = [
+      { en: "a", fr: "a" },
+      { en: "a", fr: "a" },
+      { en: "b", fr: "b" },
+    ];
+    const original = structuredClone(form);
+    const problems = getTemplateMigrationProblems(form);
+    const t = (key: string) => key;
+    const feedback = mapMigrationProblemsToInputFeedback(form, problems, "en", t);
+    expect(feedback).toEqual({
+      [`option--${element.id}--1`]: {
+        state: "conflict",
+        message: "migrationProblems.duplicateChoices",
+      },
+      [`option--${element.id}--2`]: {
+        state: "conflict",
+        message: "migrationProblems.duplicateChoices",
+      },
+    });
+    expect(mapMigrationProblemsToInputFeedback(form, [], "en", t)).toEqual({});
+    expect(form).toEqual(original);
+  });
+
+  it.each(["initial", "import", "record"])(
+    "does not generate feedback automatically on %s template load",
+    async (source) => {
+      const result = await createStore();
+      await act(async () => {
+        await result.current.add(0, FormElementTypes.radio);
+      });
+      const form = structuredClone(result.current.form);
+      const element = form.elements[0];
+      element.properties.choices = [
+        { en: "Standard delivery", fr: "Livraison standard" },
+        { en: "Standard delivery", fr: "Livraison express" },
+      ];
+      let loaded = result;
+      if (source === "initial") {
+        loaded = renderHook(() => useTemplateStore((state) => state), {
+          wrapper: ({ children }: React.PropsWithChildren) => (
+            <TemplateStoreProvider form={form}>{children}</TemplateStoreProvider>
+          ),
+        }).result;
+      } else if (source === "import") {
+        await act(async () => {
+          await result.current.importTemplate(form);
+        });
+      } else {
+        act(() =>
+          result.current.setFromRecord({
+            id: "loaded-form",
+            name: "Loaded form",
+            isPublished: false,
+            securityAttribute: "Protected A",
+            form,
+          })
+        );
+      }
+      await waitFor(() => {
+        expect(loaded.current.inputFeedback).toEqual({});
+      });
+      expect(JSON.parse(sessionStorage.getItem("form-storage")!).state).not.toHaveProperty(
+        "inputFeedback"
+      );
+    }
+  );
+
+  it("keeps input feedback separate from form data and session storage", async () => {
+    const result = await createStore();
+    const originalForm = result.current!.form;
+
+    act(() => {
+      result.current!.setInputFeedback("option-1-2", {
+        state: "conflict",
+        message: "Duplicate choice label.",
+      });
+      result.current!.setInputFeedback("item-1", {
+        state: "error",
+        message: "Enter a question title.",
+      });
+    });
+
+    expect(result.current!.inputFeedback["option-1-2"]).toEqual({
+      state: "conflict",
+      message: "Duplicate choice label.",
+    });
+    expect(result.current!.form).toBe(originalForm);
+    const persisted = JSON.parse(sessionStorage.getItem("form-storage")!);
+    expect(persisted.state).not.toHaveProperty("inputFeedback");
+    expect(JSON.stringify(persisted)).not.toContain("Duplicate choice label.");
+
+    act(() => result.current!.setInputFeedback("option-1-2", null));
+    expect(result.current!.inputFeedback).not.toHaveProperty("option-1-2");
+    expect(result.current!.inputFeedback).toHaveProperty("item-1");
+
+    act(() => result.current!.clearInputFeedback());
+    expect(result.current!.inputFeedback).toEqual({});
+  });
+
   it("creates a form that conforms to the current template schema version", async () => {
     const result = await createStore();
 

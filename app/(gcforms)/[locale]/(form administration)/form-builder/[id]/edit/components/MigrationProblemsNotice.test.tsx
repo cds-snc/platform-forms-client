@@ -3,14 +3,20 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { MigrationProblemsNotice } from "./MigrationProblemsNotice";
 
-const mock = vi.hoisted(() => ({ count: 0, id: "draft-123" }));
+const mock = vi.hoisted(() => ({ count: 0, id: "draft-123", setInputFeedback: vi.fn() }));
 
 vi.mock("@lib/store/hooks/useTemplateMigrationProblems", () => ({
   useTemplateMigrationProblems: () => Array.from({ length: mock.count }, () => ({})),
 }));
 
 vi.mock("@lib/store/useTemplateStore", () => ({
-  useTemplateStore: (select: (state: { id: string }) => unknown) => select({ id: mock.id }),
+  useTemplateStore: (select: (state: Record<string, unknown>) => unknown) =>
+    select({
+      id: mock.id,
+      form: { elements: [] },
+      translationLanguagePriority: "en",
+      setInputFeedback: mock.setInputFeedback,
+    }),
 }));
 
 vi.mock("@i18n/client", () => ({

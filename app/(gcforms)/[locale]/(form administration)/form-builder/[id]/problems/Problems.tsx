@@ -4,17 +4,12 @@ import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useTemplateMigrationProblems } from "@lib/store/hooks/useTemplateMigrationProblems";
-import { describeMigrationProblem, type ProblemElement } from "./describeMigrationProblem";
-
-const getElement = (elements: ProblemElement[], path: string): ProblemElement | undefined => {
-  const index = path.match(/^elements(?:\[(\d+)\]|\.(\d+))/);
-  if (!index) return undefined;
-  let element: ProblemElement | undefined = elements[Number(index[1] ?? index[2])];
-  for (const match of path.matchAll(/\.properties\.subElements(?:\[(\d+)\]|\.(\d+))/g)) {
-    element = element?.properties?.subElements?.[Number(match[1] ?? match[2])];
-  }
-  return element;
-};
+import {
+  getLocalizedLabel,
+  getProblemElement,
+  type ProblemElement,
+} from "@lib/templates/schemaVersioning/migrationProblemHelpers";
+import { describeMigrationProblem } from "./describeMigrationProblem";
 
 export const Problems = () => {
   const { t, i18n } = useTranslation("form-builder");
@@ -32,12 +27,12 @@ export const Problems = () => {
           <p>{t("migrationProblems.intro")}</p>
           <ol className="list-decimal space-y-5 pl-6">
             {problems.map((problem) => {
-              const element = getElement(elements, problem.path);
+              const element = getProblemElement(elements, problem.path);
               const title =
-                (i18n.language === "fr"
-                  ? element?.properties?.titleFr || element?.properties?.titleEn
-                  : element?.properties?.titleEn || element?.properties?.titleFr) ||
-                t("migrationProblems.untitled");
+                getLocalizedLabel(
+                  { en: element?.properties?.titleEn, fr: element?.properties?.titleFr },
+                  i18n.language
+                ) || t("migrationProblems.untitled");
               return (
                 <li key={`${problem.path}-${problem.name}-${problem.message}`}>
                   <strong>{element ? title : t("migrationProblems.form")}</strong>
