@@ -52,6 +52,7 @@
       "contact": "Ajouter des coordonnées",
       "dynamicRow": "Ajouter un ensemble récurrent",
       "richText": "Ajouter du texte de page",
+      "notice": "Ajouter un avis",
       "departments": "Ajouter un ministère",
       "combobox": "Ajouter une liste avec recherche",
       "formattedDate": "Ajouter une date",
@@ -107,6 +108,10 @@
     "attestation": {
       "description": "Une série de conditions qui doivent toutes être confirmées. Par exemple, pour s'assurer qu'une responsabilité légale est comprise.",
       "title": "Attestation"
+    },
+    "notice": {
+      "description": "Ajoutez un bloc d’information avec un titre et du texte. Choisissez un avis d’information, d’avertissement, de danger ou de succès.",
+      "title": "Avis"
     },
     "categories": {
       "all": "Tout",
@@ -771,6 +776,15 @@
   },
   "more": "Plus",
   "moreDialog": {
+    "notice": {
+      "type": "Type d’avis",
+      "typeOptions": {
+        "info": "Information",
+        "warning": "Avertissement",
+        "danger": "Danger",
+        "success": "Succès"
+      }
+    },
     "date": {
       "dateOptions": "Options de date",
       "typeOfDate": "Quel type de date recueillez-vous?",
@@ -833,6 +847,7 @@
   "pagePreview": "Prévisualiser",
   "pageSettings": "Paramètres",
   "pageText": "Texte de page",
+  "notice": "Avis",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
@@ -925,6 +940,8 @@
     }
   },
   "question": "Question",
+  "noticeTitle": "Titre de l’avis",
+  "noticeBody": "Texte de l’avis",
   "questions": "Questions",
   "questionSet": {
     "addAnother": {

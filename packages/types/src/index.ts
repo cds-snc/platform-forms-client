@@ -31,6 +31,7 @@ import {
   FileInput,
   NextActionRule,
   ValidationInputType,
+  NoticeType,
 } from "./form-types";
 
 export type {
@@ -61,6 +62,7 @@ export type { FormProperties };
 export type { AddressComponents };
 export type { ClosedDetails };
 export { FormElementTypes };
+export { NoticeType };
 export { FormStatus };
 export { NotificationsInterval };
 export { NotificationsIntervalDefault };

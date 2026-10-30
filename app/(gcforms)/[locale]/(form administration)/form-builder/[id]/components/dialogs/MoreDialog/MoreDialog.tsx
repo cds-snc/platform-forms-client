@@ -25,6 +25,7 @@ import { NumberFieldOptions } from "./NumberFieldOptions";
 
 import { CopyItem } from "./CopyItem";
 import { CustomRegexOptions } from "./CustomRegexOptions";
+import { NoticeTypeOptions } from "./NoticeTypeOptions";
 
 // Will re-enable after some futher discussion about crown corp managed data
 // import { ManagedDataOptions } from "./ManagedDataOptions";
@@ -128,8 +129,9 @@ export const MoreDialog = () => {
             >
               <section>
                 <Question item={item} setItem={setItem} />
-                <Description item={item} setItem={setItem} />
+                {item.type !== "notice" && <Description item={item} setItem={setItem} />}
               </section>
+              <NoticeTypeOptions item={item} setItem={setItem} />
               <RequiredOptions item={item} setItem={setItem} />
               <AddressCompleteOptions item={item} setItem={setItem} />
               <FormattedDateOptions item={item} setItem={setItem} />
@@ -151,7 +153,7 @@ export const MoreDialog = () => {
                 setItem={setItem}
               />
 
-              {item.type !== "dynamicRow" && (
+              {item.type !== "dynamicRow" && item.type !== "richText" && item.type !== "notice" && (
                 <InfoDetails
                   summary={t("moreDialog.apiOptionsSection.title")}
                   className="text-2xl font-semibold"

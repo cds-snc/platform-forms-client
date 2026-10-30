@@ -26,7 +26,7 @@ export const getReviewSectionFromDynamicRows = (formItem: FormItem, language: La
       ) as keyof typeof getLocalizedProperty
     ];
   const subElements = element.properties?.subElements?.filter(
-    (sub) => sub.type !== FormElementTypes.richText
+    (sub) => sub.type !== FormElementTypes.richText && sub.type !== FormElementTypes.notice
   );
 
   // Get the children elements of the Dynamic Row

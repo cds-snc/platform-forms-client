@@ -11,12 +11,12 @@ export const QuestionTagOptions = ({
 }) => {
   const { t, i18n } = useTranslation("form-builder");
 
-  if (item.type === FormElementTypes.richText) {
+  if (item.type === FormElementTypes.richText || item.type === FormElementTypes.notice) {
     return null;
   }
 
   return (
-    <section className="mb-4 mt-8">
+    <section className="mt-8 mb-4">
       <TagInput
         locale={i18n.language}
         label={t("moreDialog.tags.title")}

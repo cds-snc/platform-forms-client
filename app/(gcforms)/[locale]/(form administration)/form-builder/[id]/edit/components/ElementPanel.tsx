@@ -64,6 +64,7 @@ export const ElementPanel = ({
   }, [duplicateElement, groupId, item.id, setFocusInput]);
 
   const isFileUpload = item.type === "fileInput";
+  const isContentBlock = item.type === "richText" || item.type === "notice";
   const fileUploadEnabled = useFileUploadEnabled();
 
   return (
@@ -85,7 +86,7 @@ export const ElementPanel = ({
         const el = e.target as HTMLElement;
         if (el.tagName === "DIV") {
           // Rich text editor
-          if (item.type === "richText") {
+          if (isContentBlock) {
             if (el.querySelector("[id^='editor-']")) {
               (el?.querySelector("[id^='editor-']") as HTMLElement).focus();
             } else if (el?.parentElement?.querySelector("[id^='editor-']")) {
@@ -132,7 +133,7 @@ export const ElementPanel = ({
           }
 
           // If the previous element is a rich text editor, then focus on the editor
-          if (previousElement.type === "richText") {
+          if (previousElement.type === "richText" || previousElement.type === "notice") {
             (
               document
                 .getElementById(`element-${previousElement.id}`)
@@ -146,7 +147,7 @@ export const ElementPanel = ({
         }}
         handleMoveUp={() => {
           moveUp(item.index, groupId);
-          if (item.type === "richText") {
+          if (isContentBlock) {
             (
               document
                 .getElementById(`element-${item.id}`)
@@ -159,7 +160,7 @@ export const ElementPanel = ({
         }}
         handleMoveDown={() => {
           moveDown(item.index, groupId);
-          if (item.type === "richText") {
+          if (isContentBlock) {
             (
               document
                 .getElementById(`element-${item.id}`)

@@ -1,5 +1,5 @@
 import { useTranslation } from "@i18n/client";
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 
 export const RequiredOptions = ({
   item,
@@ -9,6 +9,8 @@ export const RequiredOptions = ({
   setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  if (item.type === FormElementTypes.notice) return null;
+
   const checked = item.properties.validation?.required;
   const allRequired = item.properties.validation?.all;
 

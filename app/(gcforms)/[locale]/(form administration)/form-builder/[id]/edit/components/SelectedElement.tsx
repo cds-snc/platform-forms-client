@@ -1,16 +1,22 @@
 "use client";
 import React from "react";
-import { FormElementTypes, ValidationInputType } from "@lib/types";
+import { FormElementTypes, NoticeType, ValidationInputType } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
-import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
+import {
+  ElementOption,
+  FormElementWithIndex,
+  LocalizedElementProperties,
+} from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder/useElementOptions";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 import { StarRatingSelector } from "./elements/StarRatingSelector";
 import { DateElement } from "./elements/DateElement";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
+import { Notice as NoticeComponent } from "@clientComponents/forms/Notice/Notice";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 const filterSelected = (
   item: FormElementWithIndex,
@@ -91,6 +97,10 @@ export const SelectedElement = ({
   formId: string;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
   let element = null;
 
   const selected = useGetSelectedOption(item);
@@ -101,6 +111,20 @@ export const SelectedElement = ({
       break;
     case "richText":
       element = <RichText id={item.id} elIndex={item.index} />;
+      break;
+    case FormElementTypes.notice:
+      element = (
+        <NoticeComponent
+          title={
+            item.properties[
+              localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
+            ] || t("notice")
+          }
+          type={item.properties.noticeType ?? NoticeType.INFO}
+        >
+          <RichText id={item.id} elIndex={item.index} />
+        </NoticeComponent>
+      );
       break;
     case "textArea":
       element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;

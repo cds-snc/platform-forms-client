@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { mergeFormValuesWithInitialValues } from "./formBuilder";
+import { getFormInitialValues, mergeFormValuesWithInitialValues } from "./formBuilder";
 import { FormElementTypes, type PublicFormRecord } from "./types";
 
 const makeFormRecord = (): PublicFormRecord =>
@@ -41,6 +41,23 @@ const makeFormRecord = (): PublicFormRecord =>
   }) as PublicFormRecord;
 
 describe("mergeFormValuesWithInitialValues", () => {
+  it("does not create answer values for notice elements", () => {
+    const formRecord = makeFormRecord();
+    formRecord.form.elements.push({
+      id: 5,
+      type: FormElementTypes.notice,
+      properties: {
+        titleEn: "Notice",
+        titleFr: "Avis",
+        descriptionEn: "Body",
+        descriptionFr: "Texte",
+        noticeType: "info",
+      },
+    });
+
+    expect(getFormInitialValues(formRecord, "en")[5]).toBeUndefined();
+  });
+
   it("retains restored answers and adds defaults for newly added fields", () => {
     const formRecord = makeFormRecord();
 

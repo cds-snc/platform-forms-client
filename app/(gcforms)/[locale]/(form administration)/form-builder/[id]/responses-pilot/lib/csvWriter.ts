@@ -177,13 +177,13 @@ export const orderElements = ({ formTemplate }: { formTemplate: FormProperties }
     ? (formTemplate.elements as FormElement[])
     : [];
 
-  const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+  const nonInputElements: FormElementTypes[] = [FormElementTypes.richText, FormElementTypes.notice];
 
   // sort elements according to layout and filter out richText
   const sortedElements = sortByLayout({
     layout: Array.isArray(formTemplate.layout) ? (formTemplate.layout as number[]) : [],
     elements,
-  }).filter((el: FormElement) => !richTextElements.includes(el.type));
+  }).filter((el: FormElement) => !nonInputElements.includes(el.type));
 
   return sortedElements;
 };

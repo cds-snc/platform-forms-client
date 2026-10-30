@@ -526,6 +526,7 @@
             "fileInput",
             "dynamicRow",
             "richText",
+            "notice",
             "attestation",
             "combobox",
             "addressComplete",
@@ -571,6 +572,12 @@
             "descriptionFr": {
               "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
               "type": "string"
+            },
+            "noticeType": {
+              "description": "The visual type of a notice element.",
+              "type": "string",
+              "enum": ["info", "warning", "danger", "success"],
+              "default": "info"
             },
             "dynamicRow": {
               "type": "object",
@@ -1146,6 +1153,27 @@
                   "propertyNames": {
                     "pattern": "^(?:descriptionEn|descriptionFr|conditionalRules)$"
                   }
+                }
+              ]
+            }
+          },
+          "required": ["id", "type", "properties"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "uuid": { "type": "string", "format": "uuid" },
+            "type": { "const": "notice" },
+            "properties": {
+              "allOf": [
+                { "$ref": "#/definitions/elementCommonProperties" },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "pattern": "^(?:titleEn|titleFr|descriptionEn|descriptionFr|noticeType|conditionalRules)$"
+                  },
+                  "required": ["noticeType"]
                 }
               ]
             }

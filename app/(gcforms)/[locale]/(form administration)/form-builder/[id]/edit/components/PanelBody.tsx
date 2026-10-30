@@ -30,6 +30,7 @@ export const PanelBody = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type === "richText";
+  const isNotice = item.type === "notice";
   const isDynamicRow = item.type === "dynamicRow";
 
   const isAddressComplete = item.type === "addressComplete";
@@ -57,7 +58,7 @@ export const PanelBody = ({
 
   return (
     <>
-      {isRichText || isDynamicRow ? (
+      {isRichText || isNotice || isDynamicRow ? (
         <div className="my-4">
           <div className={cn(isDynamicRow && "mt-8 mb-2 px-4")}>
             <Question item={item} onQuestionChange={onQuestionChange} isInvalid={isInvalid} />

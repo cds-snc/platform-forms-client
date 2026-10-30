@@ -195,6 +195,7 @@ export const generateResponseForQuestion = (
       break;
     // Ignore as they do not accept responses
     case "richText":
+    case "notice":
       break;
 
     default:

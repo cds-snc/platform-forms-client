@@ -1,4 +1,4 @@
-import { FormElement, FormElementTypes, ValidationInputType } from "@lib/types";
+import { FormElement, FormElementTypes, NoticeType, ValidationInputType } from "@lib/types";
 import { Language, LocalizedElementProperties } from "../../types/form-builder-types";
 import { isValidatedTextType, isAutoCompleteField } from "@lib/utils/form-builder";
 import { addressCompleteDefaultElementProperties } from "@clientComponents/forms/AddressComplete/defaults";
@@ -96,6 +96,14 @@ const allowedPropertiesByType: Record<StrictElementType, readonly string[]> = {
     "subElements",
   ],
   [FormElementTypes.richText]: ["descriptionEn", "descriptionFr", "conditionalRules"],
+  [FormElementTypes.notice]: [
+    "titleEn",
+    "titleFr",
+    "descriptionEn",
+    "descriptionFr",
+    "noticeType",
+    "conditionalRules",
+  ],
   [FormElementTypes.attestation]: [...commonProperties],
   [FormElementTypes.addressComplete]: [...commonProperties, "addressComponents"],
   [FormElementTypes.formattedDate]: [...commonProperties, "dateFormat", "autoComplete"],
@@ -244,6 +252,10 @@ export const createElement = (element: FormElement, type: string) => {
       ...newElement.properties,
       ...starRatingDefaultElementProperties,
     };
+  }
+
+  if (type === FormElementTypes.notice) {
+    newElement.properties.noticeType = NoticeType.INFO;
   }
 
   newElement.type = type as FormElementTypes;

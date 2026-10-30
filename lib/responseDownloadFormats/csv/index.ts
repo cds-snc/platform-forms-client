@@ -17,12 +17,12 @@ export const transform = async (
 
   const { submissions } = formResponseSubmissions;
 
-  const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+  const nonInputElements: FormElementTypes[] = [FormElementTypes.richText, FormElementTypes.notice];
 
   const sortedElements = sortByLayout({
     layout: formResponseSubmissions.formRecord.form.layout,
     elements: formResponseSubmissions.formRecord.form.elements,
-  }).filter((element) => !richTextElements.includes(element.type));
+  }).filter((element) => !nonInputElements.includes(element.type));
 
   const header = sortedElements.map((element) => {
     let columnTitle = `${element.properties.titleEn}\n${element.properties.titleFr}`;

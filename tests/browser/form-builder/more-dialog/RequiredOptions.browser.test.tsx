@@ -42,13 +42,24 @@ describe("<RequiredOptions />", () => {
     await expect.element(checkbox).toBeVisible();
   });
 
+  it("does not render a required option for a notice", async () => {
+    const noticeItem = {
+      ...item,
+      type: FormElementTypes.notice,
+    };
+
+    await render(<RequiredOptions item={noticeItem} setItem={vi.fn()} />);
+
+    expect(document.querySelector('[data-testid="required"]')).toBeNull();
+  });
+
   it("sets Required to true and false", async () => {
     const setItemSpy = vi.fn();
 
     await render(<RequiredOptions item={item} setItem={setItemSpy} />);
 
     const checkbox = page.getByTestId("required");
-    
+
     // Click to set required to true
     await checkbox.click();
     expect(setItemSpy).toHaveBeenCalledWith({

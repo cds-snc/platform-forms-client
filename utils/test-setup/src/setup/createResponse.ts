@@ -155,6 +155,7 @@ function generateResponse(
           break;
         case "textArea":
         case "richText":
+        case "notice":
           acc.responses[questionId] =
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ac metus sed odio rutrum eleifend. Donec eu viverra nisl. Duis sit amet accumsan lacus. Nunc eleifend justo nunc. Vestibulum vitae lectus nisl. Aenean ullamcorper dictum arcu, quis sagittis arcu bibendum non. Sed ligula libero, ornare quis augue et, elementum cursus nunc. Fusce at mollis eros. Sed sollicitudin enim ut ligula tristique, vel ultricies nulla interdum. Aenean neque lectus, mattis nec pharetra et, porttitor quis tellus. Aenean a facilisis nunc. Pellentesque et nisl nec eros vehicula bibendum at nec risus. Nam mollis, nunc sed convallis pellentesque, massa est tincidunt ex, vel efficitur dolor elit tempus sapien. Vivamus consequat nisi ipsum, non mollis massa tempus quis. Sed justo turpis, blandit quis arcu in, varius porta dolor.";
           break;

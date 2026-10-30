@@ -16,6 +16,7 @@ import {
   GavelIcon,
   DepartmentsIcon,
   StarIcon,
+  InfoIcon,
 } from "@serverComponents/icons";
 import dynamic from "next/dynamic";
 
@@ -49,6 +50,13 @@ const RichText = dynamic(
   () =>
     import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/RichText").then(
       (mod) => ({ default: mod.RichText })
+    ),
+  { ssr: false, loading: () => <DescriptionLoading /> }
+);
+const NoticeDescription = dynamic(
+  () =>
+    import("@formBuilder/[id]/edit/components/elements/element-dialog/descriptions/Notice").then(
+      (mod) => ({ default: mod.Notice })
     ),
   { ssr: false, loading: () => <DescriptionLoading /> }
 );
@@ -216,6 +224,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("richText"),
       icon: ParagraphIcon,
       description: RichText,
+      className: "",
+      group: groups.other,
+    },
+    {
+      id: "notice",
+      value: t("notice"),
+      icon: InfoIcon,
+      description: NoticeDescription,
       className: "",
       group: groups.other,
     },

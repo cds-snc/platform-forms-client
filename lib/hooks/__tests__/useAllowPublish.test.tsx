@@ -217,6 +217,28 @@ describe("useAllowPublish", () => {
       expect(notProvided).toThrow(MissingTranslation);
     });
 
+    it("requires translated title and body for notice elements", () => {
+      const notice = {
+        id: 1,
+        type: FormElementTypes.notice,
+        properties: {
+          titleEn: "Notice",
+          titleFr: "Avis",
+          descriptionEn: "Details",
+          descriptionFr: "Détails",
+          noticeType: "info" as const,
+        },
+      };
+
+      expect(() => isFormElementTranslated(notice)).not.toThrow();
+      expect(() =>
+        isFormElementTranslated({
+          ...notice,
+          properties: { ...notice.properties, descriptionFr: "" },
+        })
+      ).toThrow(MissingTranslation);
+    });
+
     it("isFormElementTranslated other types", () => {
       const translated = () => {
         isFormElementTranslated({

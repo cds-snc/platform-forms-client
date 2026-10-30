@@ -42,12 +42,12 @@ export const QuestionIdOptions = ({
     setIsValid(isValid);
   }, [isValid, setIsValid]);
 
-  if (item.type === FormElementTypes.richText) {
+  if (item.type === FormElementTypes.richText || item.type === FormElementTypes.notice) {
     return null;
   }
 
   return (
-    <section className="mb-4 mt-6">
+    <section className="mt-6 mb-4">
       <Label htmlFor={`questionId-${item.id}`}>{t("moreDialog.questionId.title")}</Label>
       <p>{t("moreDialog.questionId.description")}</p>
       <Input

@@ -91,7 +91,9 @@ const handleAnswerArray = ({
   }
 
   const subElements = question.properties?.subElements ?? [];
-  const subQuestions = subElements.filter((sub) => sub.type !== FormElementTypes.richText);
+  const subQuestions = subElements.filter(
+    (sub) => sub.type !== FormElementTypes.richText && sub.type !== FormElementTypes.notice
+  );
 
   // Map each row of answers
   const rows = (rawAnswers as unknown[]).map((row) => {

@@ -47,8 +47,12 @@ export const isFormElementTranslated = (element: FormElement) => {
   } else {
     isTitleTranslated(element.properties);
 
-    // Description is optional
-    if (element.properties.descriptionEn || element.properties.descriptionFr) {
+    // Descriptions are optional except for Notice, which always has body text.
+    if (
+      element.type === FormElementTypes.notice ||
+      element.properties.descriptionEn ||
+      element.properties.descriptionFr
+    ) {
       isDescriptionTranslated(element.properties);
     }
 

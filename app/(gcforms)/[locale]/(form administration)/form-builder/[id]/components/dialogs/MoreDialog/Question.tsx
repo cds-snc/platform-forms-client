@@ -19,7 +19,12 @@ export const Question = ({
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
-  const label = item.type === "dynamicRow" ? t("setName") : t("question");
+  const label =
+    item.type === "notice"
+      ? t("noticeTitle")
+      : item.type === "dynamicRow"
+        ? t("setName")
+        : t("question");
 
   return (
     <div className="mb-2">

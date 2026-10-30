@@ -50,6 +50,15 @@ describe("Versioned template schema validation", () => {
     expect(getTemplateSchema()).toBe(getTemplateSchema(1));
   });
 
+  it.each([undefined, 1, 2])("accepts Notice elements at schema version %s", (schemaVersion) => {
+    expect(
+      validateElement(
+        { id: 1, type: "notice", properties: { noticeType: "info" } },
+        schemaVersion
+      )
+    ).toBe(true);
+  });
+
   it.each([0, 3, 1.5])("rejects unsupported template schema version %s", (version) => {
     expect(() => getTemplateSchema(version)).toThrow(
       `Unsupported template schema version: ${version}`
@@ -85,6 +94,7 @@ describe("Versioned template schema validation", () => {
       },
     ],
     ["richText", { descriptionEn: "Section heading" }],
+    ["notice", { noticeType: "info", titleEn: "Notice title" }],
     ["attestation", { validation: { all: false } }],
     ["addressComplete", { validation: { required: false } }],
     ["formattedDate", { validation: { required: false } }],
@@ -95,6 +105,8 @@ describe("Versioned template schema validation", () => {
     expect(validateElement(element, 2)).toBe(true);
     if (type === "richText") {
       expect(validateElement({ ...element, properties: {} }, 2)).toBe(true);
+    } else if (type === "notice") {
+      expect(validateElement({ ...element, properties: {} }, 2)).toBe(false);
     } else {
       expect(validateElement({ ...element, properties: {} }, 2)).toBe(false);
       expect(validateElement({ ...element, properties: { validation: {} } }, 2)).toBe(false);
@@ -117,6 +129,7 @@ describe("Versioned template schema validation", () => {
     ["dropdown", { choices: [{ en: "A", fr: "A" }], managedChoices: "departments" }],
     ["checkbox", { choices: [{ en: "A", fr: "A" }], strictValue: true }],
     ["richText", { descriptionEn: "Section heading", unknownProperty: true }],
+    ["notice", { noticeType: "info", unknownProperty: true }],
   ])("rejects unknown or incompatible properties on %s", (type, extraProperties) => {
     expect(
       validateElement(

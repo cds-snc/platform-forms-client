@@ -228,6 +228,7 @@ export const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.richText:
+    case FormElementTypes.notice:
       break;
     default:
       throw `Validation for component ${componentType} is not handled`;

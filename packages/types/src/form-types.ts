@@ -58,8 +58,17 @@ export const FormElementTypes = {
   numberInput: "numberInput",
   customJson: "customJson",
   starRating: "starRating",
+  notice: "notice",
 } as const;
 export type FormElementTypes = (typeof FormElementTypes)[keyof typeof FormElementTypes];
+
+export const NoticeType = {
+  INFO: "info",
+  WARNING: "warning",
+  DANGER: "danger",
+  SUCCESS: "success",
+} as const;
+export type NoticeType = (typeof NoticeType)[keyof typeof NoticeType];
 
 // format: [FormElementTypes.addressComplete]: { flag: "addressComplete" },
 export const BetaFormElementTypes = {
@@ -133,6 +142,7 @@ export interface ElementProperties {
   currencyCode?: string;
   useThousandsSeparator?: boolean;
   numberOfStars?: number;
+  noticeType?: NoticeType;
   conditionalRules?: ConditionalRule[];
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;

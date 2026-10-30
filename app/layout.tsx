@@ -1,4 +1,5 @@
 import { dir } from "i18next";
+import "@gcds-core/components-react/gcds.css";
 import "../styles/app.css";
 import { Viewport } from "next";
 import Script from "next/script";

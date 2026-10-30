@@ -62,7 +62,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     const initialValue: Record<string, string> = {};
     rowElements.forEach((element, index) => {
       // Initialize each field with an empty string to prevent controlled/uncontrolled warnings
-      if (element.type !== FormElementTypes.richText) {
+      if (element.type !== FormElementTypes.richText && element.type !== FormElementTypes.notice) {
         initialValue[index.toString()] = "";
       }
     });

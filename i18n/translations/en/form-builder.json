@@ -52,6 +52,7 @@
       "contact": "Add contact",
       "dynamicRow": "Add repeating set",
       "richText": "Add page text",
+      "notice": "Add notice",
       "departments": "Add department",
       "combobox": "Add searchable list",
       "formattedDate": "Add date",
@@ -107,6 +108,10 @@
     "attestation": {
       "description": "A series of conditions that must all be confirmed. For example, to ensure a legal responsibility is understood.",
       "title": "Attestation"
+    },
+    "notice": {
+      "description": "Add an information block with a title and text. Choose whether it is information, a warning, a danger, or a success notice.",
+      "title": "Notice"
     },
     "categories": {
       "all": "All",
@@ -771,6 +776,15 @@
   },
   "more": "More",
   "moreDialog": {
+    "notice": {
+      "type": "Notice type",
+      "typeOptions": {
+        "info": "Information",
+        "warning": "Warning",
+        "danger": "Danger",
+        "success": "Success"
+      }
+    },
     "date": {
       "dateOptions": "Date options",
       "typeOfDate": "What type of date is being collected?",
@@ -833,6 +847,7 @@
   "pagePreview": "Preview",
   "pageSettings": "Settings",
   "pageText": "Page text",
+  "notice": "Notice",
   "paragraph": "Long answer",
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
@@ -925,6 +940,8 @@
     }
   },
   "question": "Question",
+  "noticeTitle": "Notice title",
+  "noticeBody": "Notice text",
   "questions": "Questions",
   "questionSet": {
     "addAnother": {

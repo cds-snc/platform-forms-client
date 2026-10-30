@@ -14,6 +14,7 @@ export { TextPage } from "./TextPage/TextPage";
 export { ClosedPage } from "./ClosedPage/ClosedPage";
 export { FileInput } from "./FileInput/FileInput";
 export { RichText } from "./RichText/RichText";
+export { Notice } from "./Notice/Notice";
 export { DynamicGroup } from "./DynamicRow/DynamicRow";
 export { Description } from "./Description/Description";
 export { MultipleChoiceGroup } from "./MultipleChoiceGroup/MultipleChoiceGroup";

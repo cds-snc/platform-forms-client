@@ -1,4 +1,4 @@
-import { FileInputResponse, FormElementTypes } from "@lib/types";
+import { FileInputResponse, FormElementTypes, NoticeType } from "@lib/types";
 import { BaseElement } from "./FormElements/BaseElement";
 import { BaseElementArray } from "./FormElements/BaseElementArray";
 import { FormItem } from "./helpers";
@@ -10,6 +10,7 @@ import { DynamicRow } from "./FormElements/DyanmicRow/DynamicRow";
 import { RichText } from "./FormElements/RichText";
 import { NumberInput } from "./FormElements/NumberInput";
 import { StarRating } from "./FormElements/StarRating";
+import { Notice } from "@clientComponents/forms/Notice/Notice";
 
 export const FormItemFactory = ({
   formItem,
@@ -48,6 +49,16 @@ export const FormItemFactory = ({
 
     case FormElementTypes.richText:
       return <RichText formItem={formItem} language={language} showNothing={true} />;
+
+    case FormElementTypes.notice:
+      return (
+        <Notice
+          title={formItem.label}
+          type={formItem.element?.properties.noticeType ?? NoticeType.INFO}
+        >
+          <RichText formItem={formItem} language={language} />
+        </Notice>
+      );
 
     // Multi-value base Form elements
     case FormElementTypes.checkbox:

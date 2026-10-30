@@ -141,6 +141,7 @@ const Element = ({
     FormElementTypes.addressComplete,
     FormElementTypes.fileInput,
     FormElementTypes.starRating,
+    FormElementTypes.notice,
   ];
 
   if (element.type === FormElementTypes.dynamicRow) {
@@ -160,8 +161,11 @@ const Element = ({
     <>
       {questionNumber && (
         <SectionTitle>
-          {element.type === FormElementTypes.richText && <>{t("pageText")}</>}
-          {element.type !== FormElementTypes.richText && <>{"Question " + questionNumber}</>}
+          {element.type === FormElementTypes.richText && t("pageText")}
+          {element.type === FormElementTypes.notice && t("notice")}
+          {element.type !== FormElementTypes.richText &&
+            element.type !== FormElementTypes.notice &&
+            "Question " + questionNumber}
         </SectionTitle>
       )}
 
@@ -182,7 +186,9 @@ const Element = ({
       {elementsWithText.includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
-          {(element.properties.descriptionEn || element.properties.descriptionFr) && (
+          {(element.type === FormElementTypes.notice ||
+            element.properties.descriptionEn ||
+            element.properties.descriptionFr) && (
             <Description primaryLanguage={primaryLanguage} element={element} />
           )}
         </>

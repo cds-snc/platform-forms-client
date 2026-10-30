@@ -15,7 +15,11 @@ export const DownloadCSVWithGroups = () => {
 
   const parseElement = (element: FormElement, data: string[][]) => {
     const description =
-      element.type === "richText" ? formatText("Page text/Texte de page") : formatText("");
+      element.type === "richText"
+        ? formatText("Page text/Texte de page")
+        : element.type === "notice"
+          ? formatText("Notice/Avis")
+          : formatText("");
 
     if (element.type === "dynamicRow") {
       data.push([

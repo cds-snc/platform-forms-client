@@ -22,12 +22,13 @@ export const Description = ({
   const { t } = useTranslation("form-builder");
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
   const field = LocalizedElementProperties.DESCRIPTION;
+  const descriptionLabel = element.type === "notice" ? t("noticeBody") : t("inputDescription");
 
   return (
     <>
       <fieldset>
         <FieldsetLegend>
-          {t(`addElementDialog.${element.type}.title`)}: {t("inputDescription")}
+          {t(`addElementDialog.${element.type}.title`)}: {descriptionLabel}
         </FieldsetLegend>
         <div className="mb-10 flex gap-px divide-x-2 border-y border-r border-gray-300">
           <label
@@ -44,7 +45,7 @@ export const Description = ({
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`element-${element.id}-description-${primaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${primaryLanguage}-language`}
               value={element.properties[localizeField(field, primaryLanguage)]}
@@ -67,7 +68,7 @@ export const Description = ({
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
-              className="size-full p-4 focus:outline-blue-focus"
+              className="focus:outline-blue-focus size-full p-4"
               id={`element-${element.id}-description-${secondaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${secondaryLanguage}-language`}
               value={element.properties[localizeField(field, secondaryLanguage)]}

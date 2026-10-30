@@ -42,7 +42,10 @@ const dynamicRowFiller = (values: Responses[], element: FormElement): Responses[
     }
 
     subElements.forEach((subElement, index) => {
-      if (subElement.type === FormElementTypes.richText) {
+      if (
+        subElement.type === FormElementTypes.richText ||
+        subElement.type === FormElementTypes.notice
+      ) {
         return;
       }
 

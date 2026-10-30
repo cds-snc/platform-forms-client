@@ -94,6 +94,22 @@ describe("Update elements", () => {
     });
   });
 
+  it("sets properties for notice", () => {
+    const item = createElement(getItem(), FormElementTypes.notice);
+
+    expect(item).toEqual({
+      ...getItem(),
+      type: FormElementTypes.notice,
+      properties: {
+        titleEn: "",
+        titleFr: "",
+        descriptionEn: "",
+        descriptionFr: "",
+        noticeType: "info",
+      },
+    });
+  });
+
   it("sets properties for radio", () => {
     const item = createElement(getItem(), "radio");
     expect(item.properties).toEqual({
@@ -222,6 +238,9 @@ describe("Clean element properties", () => {
       "validation", "maxNumberOfRows", "dynamicRow", "subElements",
     ],
     [FormElementTypes.richText]: ["descriptionEn", "descriptionFr", "conditionalRules"],
+    [FormElementTypes.notice]: [
+      "titleEn", "titleFr", "descriptionEn", "descriptionFr", "noticeType", "conditionalRules",
+    ],
     [FormElementTypes.attestation]: [
       "questionId", "tags", "titleEn", "titleFr", "descriptionEn", "descriptionFr",
       "conditionalRules", "validation",
@@ -250,7 +269,7 @@ describe("Clean element properties", () => {
           "sortOrder", "managedChoices", "strictValue", "fileType", "maxNumberOfRows",
           "dynamicRow", "subElements", "autoComplete", "allowNegativeNumbers", "stepCount",
           "currencyCode", "useThousandsSeparator", "addressComponents", "dateFormat",
-          "numberOfStars", "unsupportedProperty",
+          "numberOfStars", "noticeType", "unsupportedProperty",
         ].map((property) => [property, true])
       );
       const element = { id: 1, type, properties } as unknown as FormElement;

@@ -18,10 +18,12 @@ import {
   Combobox,
   FormattedDate,
   StarRating,
+  Notice,
 } from "@clientComponents/forms";
 import {
   FormElement,
   FormElementTypes,
+  NoticeType,
   HTMLTextInputTypeAttribute,
   PropertyChoices,
   PublicFormRecord,
@@ -296,6 +298,12 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
       );
     case FormElementTypes.richText:
       return <RichText>{description}</RichText>;
+    case FormElementTypes.notice:
+      return (
+        <Notice title={labelText ?? ""} type={element.properties.noticeType ?? NoticeType.INFO}>
+          {description && <RichText lang={lang}>{description}</RichText>}
+        </Notice>
+      );
     case FormElementTypes.fileInput:
       return (
         <div className="focus-group">
@@ -466,8 +474,11 @@ const _getElementInitialValue = (element: FormElement, language: Language): Resp
       const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
-          const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
-          if (!richTextElements.includes(currentValue.type)) {
+          const nonInputElements: FormElementTypes[] = [
+            FormElementTypes.richText,
+            FormElementTypes.notice,
+          ];
+          if (!nonInputElements.includes(currentValue.type)) {
             accumulator[subElementID] = _getElementInitialValue(currentValue, language);
           }
           return accumulator;
@@ -495,10 +506,10 @@ export const getFormInitialValues = (
 
   const initialValues: Responses = {};
 
-  const richTextElements: FormElementTypes[] = [FormElementTypes.richText];
+  const nonInputElements: FormElementTypes[] = [FormElementTypes.richText, FormElementTypes.notice];
 
   formRecord.form.elements
-    .filter((element) => !richTextElements.includes(element.type))
+    .filter((element) => !nonInputElements.includes(element.type))
     .forEach((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);
     });

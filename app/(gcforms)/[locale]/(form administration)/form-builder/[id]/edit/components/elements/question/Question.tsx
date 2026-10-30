@@ -29,7 +29,8 @@ export const Question = ({
   const properties = item.properties;
   const title =
     properties[localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)];
-  const placeholder = item.type === "dynamicRow" ? "setName" : "question";
+  const placeholder =
+    item.type === "notice" ? "noticeTitle" : item.type === "dynamicRow" ? "setName" : "question";
 
   return isRichText ? null : (
     <>
