@@ -1,7 +1,7 @@
 "use client";
 import React, { FocusEventHandler } from "react";
 import { cn } from "@lib/utils";
-import { StoreInputFeedback, useInputFeedback } from "./InputFeedback";
+import { type CheckDuplicate, StoreInputFeedback, useInputFeedback } from "./InputFeedback";
 
 interface Props {
   id: string;
@@ -24,6 +24,7 @@ interface Props {
   onFocus?: FocusEventHandler;
   disabled?: boolean;
   checkEmpty?: string;
+  checkDuplicate?: CheckDuplicate;
 }
 
 type Ref = HTMLInputElement;
@@ -87,7 +88,12 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
 Input.displayName = "Input";
 
 const FeedbackInput = React.forwardRef<Ref, Props>((props, ref) => (
-  <StoreInputFeedback inputId={props.id} checkEmpty={props.checkEmpty}>
+  <StoreInputFeedback
+    inputId={props.id}
+    checkEmpty={props.checkEmpty}
+    checkDuplicate={props.checkDuplicate}
+    value={props.value}
+  >
     <Input {...props} ref={ref} />
   </StoreInputFeedback>
 ));

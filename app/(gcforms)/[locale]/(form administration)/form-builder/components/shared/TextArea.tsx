@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { cn } from "@lib/utils";
-import { StoreInputFeedback, useInputFeedback } from "./InputFeedback";
+import { type CheckDuplicate, StoreInputFeedback, useInputFeedback } from "./InputFeedback";
 
 const TextAreaControl = ({
   id,
@@ -28,6 +28,7 @@ const TextAreaControl = ({
   testId?: string;
   isInvalid?: boolean;
   checkEmpty?: string;
+  checkDuplicate?: CheckDuplicate;
 }) => {
   const feedback = useInputFeedback(describedBy);
   return (
@@ -54,7 +55,12 @@ const TextAreaControl = ({
 };
 
 export const TextArea = (props: React.ComponentProps<typeof TextAreaControl>) => (
-  <StoreInputFeedback inputId={props.id} checkEmpty={props.checkEmpty}>
+  <StoreInputFeedback
+    inputId={props.id}
+    checkEmpty={props.checkEmpty}
+    checkDuplicate={props.checkDuplicate}
+    value={props.value}
+  >
     <TextAreaControl {...props} />
   </StoreInputFeedback>
 );

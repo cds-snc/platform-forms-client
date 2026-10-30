@@ -2,7 +2,7 @@
 import React, { FocusEventHandler } from "react";
 
 import { cn } from "@lib/utils";
-import { StoreInputFeedback, useInputFeedback } from "./InputFeedback";
+import { type CheckDuplicate, StoreInputFeedback, useInputFeedback } from "./InputFeedback";
 
 interface Props {
   id: string;
@@ -21,6 +21,7 @@ interface Props {
   lang?: string;
   onBlur?: FocusEventHandler;
   checkEmpty?: string;
+  checkDuplicate?: CheckDuplicate;
 }
 
 type Ref = HTMLTextAreaElement;
@@ -81,7 +82,12 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
 ExpandingInput.displayName = "ExpandingInput";
 
 const FeedbackExpandingInput = React.forwardRef<Ref, Props>((props, ref) => (
-  <StoreInputFeedback inputId={props.id} checkEmpty={props.checkEmpty}>
+  <StoreInputFeedback
+    inputId={props.id}
+    checkEmpty={props.checkEmpty}
+    checkDuplicate={props.checkDuplicate}
+    value={props.value}
+  >
     <ExpandingInput {...props} ref={ref} />
   </StoreInputFeedback>
 ));
