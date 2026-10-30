@@ -71,7 +71,11 @@ describe("<InputFeedback />", () => {
       await expect.element(control).toHaveAttribute("aria-invalid", "true");
       await expect
         .element(control)
-        .toHaveAccessibleDescription("Use a descriptive title. Enter a title.");
+        .toHaveAccessibleDescription("Enter a title. Use a descriptive title.");
+      await expect
+        .element(control)
+        .toHaveAttribute("aria-describedby", "errorMessage-required-field required-hint");
+      await expect.element(page.getByRole("alert")).toHaveTextContent("Enter a title.");
       await expect
         .element(page.getByTestId("stored-feedback"))
         .toHaveTextContent('{"state":"error","message":"Enter a title."}');
@@ -91,7 +95,7 @@ describe("<InputFeedback />", () => {
       await userEvent.click(blur);
       await expect
         .element(control)
-        .toHaveAccessibleDescription("Use a descriptive title. Review this title.");
+        .toHaveAccessibleDescription("Review this title. Use a descriptive title.");
 
       const optional = page.getByRole("textbox", { name: "Optional field", exact: true });
       await userEvent.click(optional);
@@ -123,12 +127,20 @@ describe("<InputFeedback />", () => {
     const before = button.element().getBoundingClientRect();
     await expect.element(control).not.toHaveAttribute("aria-describedby");
     await expect.element(page.getByText("Enter a question title.")).not.toBeVisible();
+    const alert = page.getByRole("alert");
+    await expect.element(alert).toBeInTheDocument();
+    expect(alert.element().textContent).toBe("Enter a question title.");
+    expect(alert.element().querySelector("[aria-hidden=true]")).not.toBeNull();
     await userEvent.click(control);
     await userEvent.click(button);
     expect(onBlur).toHaveBeenCalledOnce();
     expect(onClick).toHaveBeenCalledOnce();
     expect(button.element().getBoundingClientRect().top).toBe(before.top);
     await expect.element(control).toHaveAccessibleDescription("Enter a question title.");
+    // The live region is the same element, so screen readers announce the new text.
+    expect(page.getByRole("alert").element()).toBe(alert.element());
+    expect(alert.element().querySelector("[aria-hidden=true]")).toBeNull();
+    await expect.element(alert).toHaveTextContent("Enter a question title.");
   });
 
   it("maps migration problems to the affected choices and clears them after correction", async () => {
@@ -338,7 +350,7 @@ describe("<InputFeedback />", () => {
       await userEvent.click(page.getByRole("button", { name: "Show conflict", exact: true }));
       await expect
         .element(control)
-        .toHaveAccessibleDescription("Use a distinct name. Duplicate choice label.");
+        .toHaveAccessibleDescription("Duplicate choice label. Use a distinct name.");
       await expect.element(control).toHaveAttribute("aria-invalid", "true");
       await expect
         .element(page.getByRole("textbox", { name: "Unaffected", exact: true }))
@@ -346,7 +358,7 @@ describe("<InputFeedback />", () => {
       await userEvent.click(page.getByRole("button", { name: "Show error", exact: true }));
       await expect
         .element(control)
-        .toHaveAccessibleDescription("Use a distinct name. Enter a choice.");
+        .toHaveAccessibleDescription("Enter a choice. Use a distinct name.");
       await userEvent.fill(control, "Express delivery");
       await expect.element(control).toHaveFocus();
       await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
@@ -381,7 +393,7 @@ describe("<InputFeedback />", () => {
       await expect.element(control).toHaveAttribute("aria-invalid", "true");
       await expect
         .element(control)
-        .toHaveAccessibleDescription("Use a distinct name. Duplicate choice label.");
+        .toHaveAccessibleDescription("Duplicate choice label. Use a distinct name.");
       await expect.element(page.getByText("Duplicate choice label.")).toBeVisible();
       await expect
         .element(page.getByText("Duplicate choice label."))

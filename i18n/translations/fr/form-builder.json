@@ -956,6 +956,7 @@
   },
   "question": "Question",
   "questionRequired": "Saisissez un titre de question.",
+  "formTitleRequired": "Saisissez un titre de formulaire.",
   "questions": "Questions",
   "questionSet": {
     "addAnother": {
