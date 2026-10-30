@@ -22,7 +22,10 @@ test.describe("Form without groups submission", { tag: "@published-form" }, () =
   });
 
   test("fills the required message and submits without a review page", async ({ page }) => {
-    await page.goto(publishedFormPath);
+    const response = await page.goto(publishedFormPath);
+    expect(response?.headers()["content-security-policy"]).toContain(
+      "font-src 'self' https://cdn.design-system.canada.ca"
+    );
 
     await expect(page.getByText("introduction.", { exact: true })).toBeVisible();
     await expect(page.getByText("privacy policy.", { exact: true })).toBeVisible();
