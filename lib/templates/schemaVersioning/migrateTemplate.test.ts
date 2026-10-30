@@ -29,7 +29,7 @@ describe("migrateTemplate", () => {
   it("migrates a template with no version to the current version via the real migration chain", () => {
     const migrated = migrateTemplate(baseTemplate);
     expect(migrated.schemaVersion).toBe(CURRENT_TEMPLATE_VERSION);
-    expect(migrated.schemaVersion).toBe(1);
+    expect(migrated.schemaVersion).toBe(2);
   });
 
   it("is a no-op (aside from stamping) when already at the target version", () => {
@@ -96,6 +96,33 @@ describe("migrateTemplate", () => {
     expect(logError).toHaveBeenCalledWith(
       expect.stringContaining(
         "Migration from schema version 1 to 2 failed; keeping version 1: migration failed"
+      )
+    );
+  });
+
+  it("falls back to schema version 1 when strict element migration fails", () => {
+    const logWarning = vi.spyOn(logMessage, "warn").mockImplementation(() => {});
+    const template: FormProperties = {
+      ...baseTemplate,
+      elements: [
+        {
+          id: 31,
+          type: "dropdown",
+          properties: {
+            titleEn: "Other ",
+            titleFr: "Autre ",
+            validation: { required: false },
+          },
+        },
+      ],
+    };
+    const migrated = migrateTemplate(template);
+
+    expect(migrated.schemaVersion).toBe(1);
+    expect(migrated.elements).toEqual(template.elements);
+    expect(logWarning).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Cannot migrate template elements to schema version 2: elements[0].properties: requires property "choices"'
       )
     );
   });
