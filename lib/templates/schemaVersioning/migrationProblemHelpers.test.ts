@@ -31,13 +31,18 @@ describe("migrationProblemHelpers", () => {
   it("returns undefined for paths outside elements", () => {
     expect(getProblemElement(elements, "titleEn")).toBeUndefined();
     expect(getProblemElement(elements, "elements[5].properties")).toBeUndefined();
+    expect(getProblemElement(elements, undefined)).toBeUndefined();
   });
 
   it("reads the missing property for required problems and the last segment otherwise", () => {
+    const problemWithoutPath = problem("");
+    Reflect.set(problemWithoutPath, "path", undefined);
     expect(
       getProblemField(problem("elements[0].properties", "required", 'requires property "titleEn"'))
     ).toBe("titleEn");
     expect(getProblemField(problem("elements[0].properties.choices"))).toBe("choices");
+    expect(getProblemField(problemWithoutPath)).toBeUndefined();
+    expect(isDuplicateChoicesProblem(problemWithoutPath)).toBe(false);
   });
 
   it("detects duplicate choice problems and the duplicated indexes", () => {

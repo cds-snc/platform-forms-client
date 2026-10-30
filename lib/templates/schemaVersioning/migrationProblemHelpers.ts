@@ -15,8 +15,9 @@ type Localized = { en?: unknown; fr?: unknown };
 /** Resolves the (sub)element a problem path such as `elements[0].properties.subElements.1` points to. */
 export const getProblemElement = <T extends ProblemElement>(
   elements: readonly T[],
-  path: string
+  path?: string
 ): T | undefined => {
+  if (typeof path !== "string") return undefined;
   const index = path.match(/^elements(?:\[(\d+)\]|\.(\d+))/);
   if (!index) return undefined;
   let element: ProblemElement | undefined = elements[Number(index[1] ?? index[2])];
@@ -30,10 +31,12 @@ export const getProblemElement = <T extends ProblemElement>(
 export const getProblemField = (problem: TemplateMigrationProblem): string | undefined =>
   (problem.name === "required"
     ? problem.message.match(/requires property ["']([^"']+)["']/)?.[1]
-    : undefined) ?? problem.path.split(".").at(-1);
+    : undefined) ?? (typeof problem.path === "string" ? problem.path.split(".").at(-1) : undefined);
 
 export const isDuplicateChoicesProblem = (problem: TemplateMigrationProblem) =>
-  problem.name === "uniqueItems" && problem.path.endsWith(".choices");
+  problem.name === "uniqueItems" &&
+  typeof problem.path === "string" &&
+  problem.path.endsWith(".choices");
 
 /** Indexes of every choice that is deep-equal to at least one other choice. */
 export const getDuplicateChoiceIndexes = (choices: unknown[] | undefined): number[] =>
