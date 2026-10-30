@@ -9,7 +9,7 @@ import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { cn } from "@lib/utils";
-import { getOtherChoiceValues } from "./getOtherChoiceValues";
+import { getChoiceValuesExcludingIndex } from "./getChoiceValuesExcludingIndex";
 
 type RenderIcon = ((index: number) => ReactElement | string) | undefined;
 
@@ -131,7 +131,7 @@ export const Option = ({
         }
         onKeyDown={handleKeyDown}
         checkDuplicate={{
-          values: getOtherChoiceValues(choices, index, translationLanguagePriority),
+          values: getChoiceValuesExcludingIndex(choices, index, translationLanguagePriority),
           message: t("duplicateChoice"),
         }}
         className={cn("!my-0 max-h-9 w-full", icon && "ml-5")}
