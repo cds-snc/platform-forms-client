@@ -274,7 +274,7 @@ describe("Announce", () => {
     const host = renderReadyHost();
     const oldRegion = screen.getByTestId("gc-announce-polite");
     act(() => {
-      announce("First");
+      announce("First", Priority.LOW, { lang: "fr" });
       announce("Stale");
     });
     host.unmount();
@@ -284,7 +284,8 @@ describe("Announce", () => {
     renderReadyHost();
     act(() => vi.runAllTimers());
     expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
-    expect(oldRegion).toHaveTextContent("First");
+    expect(oldRegion).toBeEmptyDOMElement();
+    expect(oldRegion).not.toHaveAttribute("lang");
     act(() => announce("Fresh"));
     expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Fresh");
   });

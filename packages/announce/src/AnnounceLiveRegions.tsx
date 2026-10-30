@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import { registerHost } from "./coordinator";
 
 const visuallyHiddenStyle: CSSProperties = {
@@ -45,7 +45,8 @@ export const Announce = ({
   const alternateLowRef = useRef<HTMLDivElement>(null);
   const alternateHighRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  // Register before useEffect callbacks so mount announcements aren't lost on remount.
+  useLayoutEffect(() => {
     if (!active) return;
 
     const updateLiveRegion = (message: string, priority: Priority, lang?: string) => {

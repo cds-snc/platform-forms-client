@@ -49,6 +49,11 @@ announce("Your session is about to expire.", Priority.HIGH); // Assertive
 announce("5 results available.", Priority.LOW, { allowDuplicates: true });
 ```
 
+Hosts register before `useEffect` callbacks, so mount-effect announcements work
+on remount and reactivation as well as initial mounting. Keep a root host mounted
+for continuous delivery: after all hosts leave, pending work is discarded and new
+requests are ignored until a host registers again.
+
 In Next.js, call `announce()` from client components. The announcer includes its
 own inline visually hidden styles; no stylesheet is needed.
 
