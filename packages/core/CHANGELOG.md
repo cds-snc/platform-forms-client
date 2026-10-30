@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.6] - 2026-10-30
+
+- Treat Notice elements as content-only during response validation
+
 ## [3.0.5] - 2026-10-26
 
 - Fixes discrepancy in rule matching precedence when checkboxes are used for conditional logic
