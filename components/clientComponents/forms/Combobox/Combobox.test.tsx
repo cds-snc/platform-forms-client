@@ -2,12 +2,13 @@
  * @vitest-environment jsdom
  */
 import React from "react";
-import { cleanup, render, screen, within, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, afterEach, vi } from "vitest";
+import { describe, it, expect, afterEach, beforeEach, vi } from "vitest";
 import { GenerateElement } from "@lib/formBuilder";
 import { Combobox } from "./Combobox";
-import { useField } from "formik";
+import { Formik, useField } from "formik";
+import { Announce, announce, Priority } from "@gcforms/announce";
 import type { FormElement } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 
@@ -287,4 +288,160 @@ describe("Combobox validation accessibility", () => {
     expect(error).toHaveAttribute("id", "errorMessage-province");
     expect(error).toHaveTextContent("Choose a province");
   });
+});
+
+describe("Combobox shared announcements", () => {
+  const defaultUseFieldImplementation = vi.mocked(useField).getMockImplementation();
+  const view = (show = true) => (
+    <>
+      <Formik initialValues={{ province: "" }} onSubmit={() => {}}>
+        {show ? (
+          <Combobox id="province" name="province" choices={["Alberta", "Ontario", "Quebec"]} />
+        ) : (
+          <p>Removed</p>
+        )}
+      </Formik>
+      <Announce />
+    </>
+  );
+
+  const change = async (value: string) => {
+    await act(async () => {
+      fireEvent.change(screen.getByRole("combobox"), { target: { value } });
+    });
+  };
+
+  const open = async () => {
+    await act(async () => {
+      fireEvent.click(screen.getByRole("combobox"));
+    });
+  };
+
+  const advance = (ms: number) => act(() => vi.advanceTimersByTime(ms));
+  const politeText = () =>
+    screen
+      .getAllByRole("status")
+      .map((region) => region.textContent)
+      .join("");
+
+  beforeEach(async () => {
+    const formik = await vi.importActual<typeof import("formik")>("formik");
+    vi.mocked(useField).mockImplementation(formik.useField);
+    vi.useFakeTimers();
+  });
+  afterEach(async () => {
+    cleanup();
+    await Promise.resolve();
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.mocked(useField).mockReset();
+    if (defaultUseFieldImplementation) {
+      vi.mocked(useField).mockImplementation(defaultUseFieldImplementation);
+    }
+  });
+
+  it("preserves the combobox language when announcing outside its subtree", async () => {
+    render(
+      <div lang="en">
+        <Formik initialValues={{ province: "" }} onSubmit={() => {}}>
+          <Combobox
+            id="province"
+            name="province"
+            choices={["Alberta", "Ontario", "Quebec"]}
+            lang="fr"
+          />
+        </Formik>
+        <Announce />
+      </div>
+    );
+    advance(100);
+    await open();
+    await change("a");
+    advance(400);
+    const region = screen.getByTestId("gc-announce-polite");
+    expect(region.textContent).not.toBe("");
+    expect(region.closest("[lang]")).toHaveAttribute("lang", "fr");
+  });
+
+  it("suppresses initial-open feedback and retains the existing debounce delays", async () => {
+    render(view());
+    advance(100);
+    await open();
+    advance(1500);
+    expect(politeText()).toBe("");
+    await change("a");
+    advance(399);
+    expect(politeText()).toBe("");
+    advance(1);
+    expect(politeText()).toBe("2 options available");
+    await change("zzz");
+    advance(1399);
+    expect(politeText()).toBe("2 options available");
+    advance(1);
+    expect(politeText()).toBe("No options available");
+  });
+
+  it("restarts the debounce when typing changes without changing the result count", async () => {
+    render(view());
+    advance(100);
+    await open();
+    await change("al");
+    advance(300);
+    await change("alb");
+    advance(399);
+    expect(politeText()).toBe("");
+    advance(1);
+    expect(politeText()).toBe("1 option available");
+    await change("albe");
+    advance(1000);
+    expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
+    expect(screen.getByTestId("gc-announce-polite-alternate")).toHaveTextContent(
+      "1 option available"
+    );
+  });
+
+  it("replaces queued counts rather than delivering stale feedback behind urgent work", async () => {
+    render(view());
+    advance(100);
+    await open();
+    act(() => {
+      announce("Busy", Priority.HIGH);
+      announce("Still busy", Priority.HIGH);
+    });
+    await change("a");
+    advance(400);
+    await change("al");
+    advance(400);
+    advance(1199);
+    expect(politeText()).toBe("");
+    advance(1);
+    expect(politeText()).toBe("1 option available");
+    advance(1000);
+    expect(screen.getByTestId("gc-announce-polite-alternate")).toBeEmptyDOMElement();
+  });
+
+  it.each(["close", "unmount"])(
+    "cancels queued feedback on %s without cancelling other callers",
+    async (action) => {
+      const host = render(view());
+      advance(100);
+      await open();
+      act(() => {
+        announce("Busy", Priority.HIGH);
+        announce("Still busy", Priority.HIGH);
+      });
+      await change("a");
+      advance(400);
+      if (action === "unmount") host.rerender(view(false));
+      else
+        await act(async () => {
+          fireEvent.keyDown(screen.getByRole("combobox"), { key: "Escape" });
+        });
+      act(() => announce("Other caller"));
+      advance(1600);
+      expect(politeText()).toBe("Other caller");
+      advance(1000);
+      expect(screen.getByTestId("gc-announce-polite-alternate")).toBeEmptyDOMElement();
+    }
+  );
 });

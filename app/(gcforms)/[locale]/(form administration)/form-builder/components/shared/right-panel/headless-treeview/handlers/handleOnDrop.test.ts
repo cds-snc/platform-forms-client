@@ -448,35 +448,40 @@ describe('handleOnDrop', () => {
 
       mockIsOrderedDragTarget.mockReturnValue(true);
 
-      // Make the mock functions async with delays
-      mockRemoveItemsFromParents.mockImplementation(async (items, callback) => {
-        await new Promise(resolve => setTimeout(resolve, 10));
-        await callback(items[0] as ItemInstance<unknown>, ['child1']);
-      });
+      vi.useFakeTimers();
+      try {
+        mockRemoveItemsFromParents.mockImplementation(async (items, callback) => {
+          await new Promise(resolve => setTimeout(resolve, 10));
+          await callback(items[0] as ItemInstance<unknown>, ['child1']);
+        });
 
-      mockInsertItemsAtTarget.mockImplementation(async (itemIds, target, callback) => {
-        await new Promise(resolve => setTimeout(resolve, 10));
-        await callback(target.item as ItemInstance<unknown>, ['child1', ...itemIds]);
-      });
+        mockInsertItemsAtTarget.mockImplementation(async (itemIds, target, callback) => {
+          await new Promise(resolve => setTimeout(resolve, 10));
+          await callback(target.item as ItemInstance<unknown>, ['child1', ...itemIds]);
+        });
 
-      const startTime = Date.now();
+        const completed = vi.fn();
+        const drop = handleOnDrop(
+          items,
+          target,
+          mockGetSubElements,
+          mockSetGroupsLayout,
+          mockUpdateGroupElements,
+          mockUpdateSubElements,
+          mockAutoFlowAll
+        ).then(completed);
 
-      await handleOnDrop(
-        items,
-        target,
-        mockGetSubElements,
-        mockSetGroupsLayout,
-        mockUpdateGroupElements,
-        mockUpdateSubElements,
-        mockAutoFlowAll
-      );
+        await vi.advanceTimersByTimeAsync(19);
+        expect(completed).not.toHaveBeenCalled();
 
-      const endTime = Date.now();
-
-      // Should have waited for async operations
-      expect(endTime - startTime).toBeGreaterThanOrEqual(20);
-      expect(mockRemoveItemsFromParents).toHaveBeenCalled();
-      expect(mockInsertItemsAtTarget).toHaveBeenCalled();
+        await vi.advanceTimersByTimeAsync(1);
+        await drop;
+        expect(completed).toHaveBeenCalledTimes(1);
+        expect(mockRemoveItemsFromParents).toHaveBeenCalled();
+        expect(mockInsertItemsAtTarget).toHaveBeenCalled();
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 
