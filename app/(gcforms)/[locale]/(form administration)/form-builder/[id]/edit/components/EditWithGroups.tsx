@@ -202,6 +202,7 @@ export const EditWithGroups = ({
                   className="laptop:text-3xl font-bold placeholder:text-slate-500"
                   ref={titleInput}
                   placeholder={t("placeHolderFormTitle")}
+                  checkEmpty={t("formTitleRequired")}
                   value={value}
                   onBlur={() => {
                     const cleaned = cleanInput(value);

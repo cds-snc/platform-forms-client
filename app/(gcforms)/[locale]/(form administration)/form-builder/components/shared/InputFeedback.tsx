@@ -3,6 +3,7 @@ import React, { createContext, useContext, useId } from "react";
 import { cn } from "@lib/utils";
 import { ExclamationIcon, WarningIcon } from "@serverComponents/icons";
 import { TemplateStoreContext, useTemplateStore } from "@lib/store/useTemplateStore";
+import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
 type FeedbackState = "error" | "conflict";
 
@@ -29,6 +30,7 @@ const ConnectedInputFeedback = ({
   }));
   return (
     <InputFeedback
+      id={getErrorMessageId(inputId)}
       state={feedback?.state}
       message={feedback?.message}
       reservedMessage={checkEmpty}
@@ -81,13 +83,14 @@ export const useInputFeedback = (describedBy?: string) => {
   return {
     state,
     isInvalid: Boolean(state),
-    describedBy: [describedBy, messageId].filter(Boolean).join(" ") || undefined,
+    describedBy: getDescribedByIds(messageId, describedBy),
     controlClassName: state ? cn(state === "error" && errorControlClassName, "pr-10") : undefined,
     wrapperClassName: state === "error" ? errorControlClassName : undefined,
   };
 };
 
 export const InputFeedback = ({
+  id,
   state,
   message,
   children,
@@ -95,6 +98,8 @@ export const InputFeedback = ({
   onBlur,
   reservedMessage,
 }: {
+  /** Error message element id; defaults to a generated id. */
+  id?: string;
   state?: FeedbackState;
   message?: React.ReactNode;
   children: React.ReactNode;
@@ -103,7 +108,8 @@ export const InputFeedback = ({
   reservedMessage?: string;
 }) => {
   const inheritedFeedback = useContext(InputFeedbackContext);
-  const messageId = useId();
+  const generatedId = useId();
+  const messageId = id ?? generatedId;
   const hasMessage = Boolean(state && message);
 
   return (
@@ -129,18 +135,36 @@ export const InputFeedback = ({
             </span>
           )}
         </div>
-        {(hasMessage || reservedMessage) && (
+        {reservedMessage ? (
+          // Persistent live region: blur errors appear after focus has moved on, so they must be announced.
           <p
             id={hasMessage ? messageId : undefined}
-            aria-hidden={hasMessage ? undefined : true}
+            role="alert"
             className={cn(
               "mt-1 text-sm wrap-anywhere",
-              !hasMessage && "invisible",
               state === "error" ? "text-red-default" : "text-(--gcds-color-yellow-700)"
             )}
           >
-            {hasMessage ? message : reservedMessage}
+            {hasMessage ? (
+              message
+            ) : (
+              <span aria-hidden="true" className="invisible">
+                {reservedMessage}
+              </span>
+            )}
           </p>
+        ) : (
+          hasMessage && (
+            <p
+              id={messageId}
+              className={cn(
+                "mt-1 text-sm wrap-anywhere",
+                state === "error" ? "text-red-default" : "text-(--gcds-color-yellow-700)"
+              )}
+            >
+              {message}
+            </p>
+          )
         )}
       </div>
     </InputFeedbackContext.Provider>
