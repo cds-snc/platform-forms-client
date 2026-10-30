@@ -209,10 +209,12 @@
       "downloadAllAsZip": "Download all as ZIP (compressed) file",
       "cancel": "Cancel",
       "download": "Download",
+      "complete": "Download complete.",
       "chooseVersion": "Download responses for version",
       "chooseVersionPlaceholder": "Select a version",
       "chooseVersionRequired": "You can change the selected version if needed",
       "processingResponse": "Processing response {{response}} of {{total}}",
+      "processingResponses": "Processing responses",
       "responseProgress": "Response {{response}} of {{total}}",
       "downloadingAttachment": "Downloading attachment {{current}} of {{total}}",
       "creatingZip": "Creating ZIP: {{percent}}%"

@@ -14,20 +14,25 @@ export const DownloadSingleButton = ({
   responseId,
   version,
   setDownloadError,
+  onDownloadStart,
   onDownloadSuccess,
   ariaLabelledBy,
+  disabled = false,
 }: {
   id: string;
   formId: string;
   responseId: string;
   version?: string | number | null;
   setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
+  onDownloadStart?: () => void;
   onDownloadSuccess: () => void;
   ariaLabelledBy: string;
+  disabled?: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder-responses");
 
   const handleDownload = async () => {
+    onDownloadStart?.();
     try {
       const response = (await getSubmissionsByFormat({
         formID: formId,
@@ -65,6 +70,7 @@ export const DownloadSingleButton = ({
   return (
     <button
       id={id}
+      disabled={disabled}
       onClick={handleDownload}
       className="active:border-blue-focus rounded border-2 border-white"
       aria-labelledby={`${id} ${ariaLabelledBy}`}

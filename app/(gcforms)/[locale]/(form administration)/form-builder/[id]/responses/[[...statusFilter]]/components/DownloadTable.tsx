@@ -1,10 +1,11 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import {
-  NagwareResult,
+  NagLevel,
   StartFromExclusiveResponse,
   VaultStatus,
   VaultSubmissionOverview,
 } from "@lib/types";
+import { Nagware } from "@formBuilder/components/Nagware";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import Link from "next/link";
@@ -28,43 +29,92 @@ import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionOverview[];
+  oldestDownloadedCreatedAt?: number | null;
   formName: string;
   formId: string;
-  nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
   responsesDownloadZipMaxSizeMB: number;
   startFromExclusiveResponse: StartFromExclusiveResponse | null;
   overdueAfter: number;
+  nagwarePromptAfter: number;
+  nagwareWarnAfter: number;
+  nagwareEnabled?: boolean;
   statusFilter: StatusFilter;
 }
 
 export const DownloadTable = ({
   vaultSubmissions,
+  oldestDownloadedCreatedAt = null,
   formName,
   formId,
-  nagwareResult,
   responseDownloadLimit,
   responsesDownloadZipMaxSizeMB,
   startFromExclusiveResponse,
   overdueAfter,
+  nagwarePromptAfter,
+  nagwareWarnAfter,
+  nagwareEnabled = false,
   statusFilter,
 }: DownloadTableProps) => {
   const {
     t,
     i18n: { language },
   } = useTranslation("form-builder-responses");
+  const { t: tFormBuilder } = useTranslation("form-builder");
 
   const [downloadError, setDownloadError] = useState<boolean | string>(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
-  const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
+  const [showDownloadSuccess, setShowDownloadSuccess] = useState<
+    false | "downloadSuccess" | "downloadComplete"
+  >(false);
   const [downloadWarnings, setDownloadWarnings] = useState<DownloadWarnings | undefined>();
   const [removedRows, setRemovedRows] = useState<string[]>([]);
   const downloadWarningsRef = useRef<HTMLDivElement>(null);
   const hasDownloadWarnings =
     downloadWarnings?.sizeLimitReached || downloadWarnings?.processingFailed;
-  const accountEscalated = nagwareResult && nagwareResult.level > 2;
+  const nagwareResult = [
+    {
+      status: VaultStatus.NEW,
+      days: nagwareWarnAfter,
+      level: NagLevel.UnsavedSubmissionsOver35DaysOld,
+    },
+    {
+      status: VaultStatus.DOWNLOADED,
+      days: nagwareWarnAfter,
+      level: NagLevel.UnconfirmedSubmissionsOver35DaysOld,
+    },
+    {
+      status: VaultStatus.NEW,
+      days: nagwarePromptAfter,
+      level: NagLevel.UnsavedSubmissionsOver21DaysOld,
+    },
+    {
+      status: VaultStatus.DOWNLOADED,
+      days: nagwarePromptAfter,
+      level: NagLevel.UnconfirmedSubmissionsOver21DaysOld,
+    },
+  ]
+    .map(({ status, days, level }) => ({
+      level,
+      numberOfSubmissions: vaultSubmissions.filter((submission) => {
+        const age = getDaysPassed(submission.createdAt);
+        return submission.status === status && age > days;
+      }).length,
+    }))
+    .find((result) => result.numberOfSubmissions > 0) ?? {
+    level: NagLevel.None,
+    numberOfSubmissions: 0,
+  };
+  const hasOverdueDownloaded =
+    statusFilter === StatusFilter.NEW &&
+    oldestDownloadedCreatedAt !== null &&
+    getDaysPassed(oldestDownloadedCreatedAt) > nagwareWarnAfter;
+  const hasLoadedRestriction =
+    nagwareResult.level === NagLevel.UnsavedSubmissionsOver35DaysOld ||
+    nagwareResult.level === NagLevel.UnconfirmedSubmissionsOver35DaysOld;
+  const downloadsRestricted = nagwareEnabled && (hasLoadedRestriction || hasOverdueDownloaded);
 
   const { hasApiKeyId } = useFormBuilderConfig();
 
@@ -72,6 +122,12 @@ export const DownloadTable = ({
     reducerTableItems,
     initialTableItemsState(vaultSubmissions, overdueAfter)
   );
+
+  const handleDownloadStart = () => {
+    setShowDownloadSuccess(false);
+    setDownloadError(false);
+    setDownloadWarnings(undefined);
+  };
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
@@ -93,14 +149,9 @@ export const DownloadTable = ({
   const blockDownload = (submission: VaultSubmissionOverview) => {
     const daysPast = getDaysPassed(submission.createdAt);
 
-    if (
-      submission.status === VaultStatus.NEW &&
-      accountEscalated &&
-      daysPast < Number(overdueAfter)
-    ) {
-      return true;
-    }
-    return false;
+    return (
+      submission.status === VaultStatus.NEW && downloadsRestricted && daysPast <= nagwareWarnAfter
+    );
   };
 
   useEffect(() => {
@@ -110,14 +161,28 @@ export const DownloadTable = ({
   }, [vaultSubmissions]);
 
   useEffect(() => {
-    if (hasDownloadWarnings) {
+    if (hasDownloadWarnings && !showDownloadDialog) {
       downloadWarningsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-  }, [hasDownloadWarnings]);
+  }, [hasDownloadWarnings, showDownloadDialog]);
 
   return (
     <>
-      {hasDownloadWarnings && (
+      {nagwareEnabled &&
+        (hasOverdueDownloaded && !hasLoadedRestriction ? (
+          <Alert.Danger className="mb-4">
+            <Alert.Title>
+              {tFormBuilder("nagware.unconfirmedSubmissionsOver35DaysOld.title")}
+            </Alert.Title>
+          </Alert.Danger>
+        ) : (
+          <Nagware
+            nagwareResult={nagwareResult}
+            nagwarePromptAfter={nagwarePromptAfter}
+            nagwareWarnAfter={nagwareWarnAfter}
+          />
+        ))}
+      {hasDownloadWarnings && !showDownloadDialog && (
         <div ref={downloadWarningsRef}>
           {downloadWarnings?.sizeLimitReached && (
             <Alert.Warning className="mb-4" focussable={true}>
@@ -130,18 +195,12 @@ export const DownloadTable = ({
             </Alert.Warning>
           )}
           {downloadWarnings?.processingFailed && (
-            <Alert.Warning className="mb-4" focussable={true}>
+            <Alert.Warning className="mb-4" focussable={!downloadWarnings?.sizeLimitReached}>
               <Alert.Title>{t("downloadResponsesTable.partialDownload.title")}</Alert.Title>
               <Alert.Body>{t("downloadResponsesTable.partialDownload.body")}</Alert.Body>
             </Alert.Warning>
           )}
         </div>
-      )}
-      {showDownloadSuccess && (
-        <Alert.Success className="mb-4">
-          <Alert.Title>{t(`${showDownloadSuccess}.title`)}</Alert.Title>
-          <Alert.Body>{t(`${showDownloadSuccess}.body`)}</Alert.Body>
-        </Alert.Success>
       )}
       <section>
         {!hasApiKeyId && (
@@ -151,8 +210,21 @@ export const DownloadTable = ({
         )}
 
         <div id="notificationsTop">
-          {downloadError && (
-            <Alert.Danger>
+          {showDownloadSuccess && !showDownloadDialog && !downloadError && !hasDownloadWarnings && (
+            <Alert.Success className="mb-4" focussable={true}>
+              <Alert.Title>
+                {showDownloadSuccess === "downloadSuccess"
+                  ? t("downloadSuccess.title")
+                  : t("downloadResponsesModals.downloadDialog.complete")}
+              </Alert.Title>
+              {showDownloadSuccess === "downloadSuccess" && (
+                <Alert.Body>{t("downloadSuccess.body")}</Alert.Body>
+              )}
+            </Alert.Success>
+          )}
+          {downloadError && !showDownloadDialog && (
+            // Focus announces the error; avoid a competing live announcement by using role=note.
+            <Alert.Danger role="note" focussable={true}>
               <Alert.Title>
                 {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
               </Alert.Title>
@@ -176,6 +248,7 @@ export const DownloadTable = ({
               <th scope="col" className="py-4 text-center">
                 <CheckAll
                   tableItems={tableItems}
+                  isBlocked={blockDownload}
                   tableItemsDispatch={tableItemsDispatch}
                   noSelectedItemsError={noSelectedItemsError}
                   setNoSelectedItemsError={setNoSelectedItemsError}
@@ -305,20 +378,23 @@ export const DownloadTable = ({
                   <td className="text-center whitespace-nowrap">
                     <DownloadSingleButton
                       id={`button-${submission.name}`}
+                      disabled={isBlocked}
                       formId={submission.formID}
                       responseId={submission.name}
                       version={submission.version}
+                      onDownloadStart={handleDownloadStart}
                       onDownloadSuccess={() => {
                         setDownloadError(false);
+                        setDownloadWarnings(undefined);
                         setRemovedRows([...removedRows, submission.name]);
                         tableItemsDispatch({
                           type: TableActions.UNCHECK,
                           payload: { ids: [submission.name] },
                         });
                         // router.replace(router.asPath, undefined, { scroll: false });
-                        if (statusFilter === StatusFilter.NEW) {
-                          setShowDownloadSuccess("downloadSuccess");
-                        }
+                        setShowDownloadSuccess(
+                          statusFilter === StatusFilter.NEW ? "downloadSuccess" : "downloadComplete"
+                        );
                       }}
                       setDownloadError={setDownloadError}
                       ariaLabelledBy={submission.name}
@@ -342,7 +418,8 @@ export const DownloadTable = ({
         <div className="mt-8 flex">
           <div id="notificationsBottom" className="ml-4">
             {downloadError && (
-              <Alert.Danger icon={false}>
+              // Keep the visual duplicate accessible without another live announcement
+              <Alert.Danger role="note" icon={false}>
                 <Alert.Title headingTag="h3">
                   {t("downloadResponsesTable.errors.errorDownloadingFilesHeader")}
                 </Alert.Title>
@@ -359,10 +436,7 @@ export const DownloadTable = ({
         <ActionsPanel>
           <DownloadButton
             setShowDownloadDialog={setShowDownloadDialog}
-            onClick={() => {
-              setDownloadError(false);
-              setDownloadWarnings(undefined);
-            }}
+            onClick={handleDownloadStart}
           />
         </ActionsPanel>
       )}
@@ -388,13 +462,13 @@ export const DownloadTable = ({
             });
           }
           // router.replace(router.asPath, undefined, { scroll: false });
-          if (statusFilter === StatusFilter.NEW) {
-            setShowDownloadSuccess(
-              filteredIds.length > 0 && !warnings?.sizeLimitReached && !warnings?.processingFailed
+          setShowDownloadSuccess(
+            filteredIds.length > 0 && !warnings?.sizeLimitReached && !warnings?.processingFailed
+              ? statusFilter === StatusFilter.NEW
                 ? "downloadSuccess"
-                : false
-            );
-          }
+                : "downloadComplete"
+              : false
+          );
         }}
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}

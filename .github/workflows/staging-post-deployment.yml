@@ -16,8 +16,13 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  id-token: write
   contents: write
   security-events: write
+
+env:
+  AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
+  AWS_REGION: ca-central-1
 
 jobs:
   generate-sbom:
@@ -25,6 +30,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-post-merge-actions
+          role-session-name: StagingPostDeployment
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@5a88a04c91d5c6f97aae0d9be790e64d9b1d47b7 # v1.7.1
 
       - name: Build Form Viewer
         run: |
@@ -40,7 +56,7 @@ jobs:
       - name: Docker generate SBOM
         uses: cds-snc/security-tools/.github/actions/generate-sbom@837a88b6337d4842543184c8eac97a8adac8f302 # v4.0.3
         env:
-          TRIVY_DB_REPOSITORY: ${{ vars.TRIVY_DB_REPOSITORY }}
+          TRIVY_DB_REPOSITORY: ${{ vars.LOCAL_TRIVY_DB_REPOSITORY }}
         with:
           docker_image: "forms-client"
           dockerfile_path: "Dockerfile"
