@@ -1,31 +1,19 @@
 import { type TemplateMigrationProblem } from "@lib/templates/schemaVersioning/getTemplateMigrationProblems";
+import {
+  getDuplicateChoiceIndexes,
+  getLocalizedLabel,
+  getProblemField,
+  isDuplicateChoicesProblem,
+  type ProblemElement,
+} from "@lib/templates/schemaVersioning/migrationProblemHelpers";
 
-export type ProblemElement = {
-  properties?: {
-    titleEn?: string;
-    titleFr?: string;
-    choices?: unknown[];
-    subElements?: ProblemElement[];
-  };
-};
-
-const duplicateChoices = (choices: unknown[] | undefined, lang: string): string[] => {
-  if (!choices) return [];
-  const duplicates = new Set<string>();
-  const seen = new Set<string>();
-  for (const choice of choices) {
-    const key = JSON.stringify(choice);
-    if (seen.has(key)) {
-      const label =
-        typeof choice === "object" && choice !== null
-          ? (choice as Record<string, unknown>)[lang]
-          : choice;
-      duplicates.add(typeof label === "string" && label ? label : String(choice));
-    }
-    seen.add(key);
-  }
-  return [...duplicates];
-};
+const duplicateChoiceLabels = (choices: unknown[] | undefined, lang: string): string[] => [
+  ...new Set(
+    getDuplicateChoiceIndexes(choices).map(
+      (index) => getLocalizedLabel(choices?.[index], lang) ?? String(choices?.[index])
+    )
+  ),
+];
 
 export const describeMigrationProblem = (
   problem: TemplateMigrationProblem,
@@ -33,8 +21,8 @@ export const describeMigrationProblem = (
   lang: string,
   t: (key: string, options?: Record<string, unknown>) => string
 ) => {
-  if (problem.name === "uniqueItems" && problem.path.endsWith(".choices")) {
-    const duplicates = duplicateChoices(element?.properties?.choices, lang);
+  if (isDuplicateChoicesProblem(problem)) {
+    const duplicates = duplicateChoiceLabels(element?.properties?.choices, lang);
     if (duplicates.length) {
       return t("migrationProblems.duplicateChoices", { choices: duplicates.join(", ") });
     }
@@ -43,12 +31,7 @@ export const describeMigrationProblem = (
     return t("migrationProblems.duplicateRules");
   }
 
-  const field =
-    (problem.name === "required"
-      ? problem.message.match(/requires property ["']([^"']+)["']/)?.[1]
-      : undefined) ??
-    problem.path.split(".").at(-1) ??
-    "";
+  const field = getProblemField(problem) ?? "";
   const fieldLabel = [
     "choices",
     "conditionalRules",
