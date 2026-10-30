@@ -122,6 +122,79 @@ describe("Announce", () => {
     }
   );
 
+  it.each([Priority.LOW, Priority.HIGH])(
+    "sets %s request language on alternating regions and restores inherited language",
+    (priority) => {
+      renderReadyHost(
+        <section lang="en">
+          <Announce />
+        </section>
+      );
+      const primary = screen.getByTestId(`gc-announce-${priority}`);
+      const alternate = screen.getByTestId(`gc-announce-${priority}-alternate`);
+      act(() => announce("Menu", priority, { lang: "fr" }));
+      expect(primary).toHaveTextContent("Menu");
+      expect(primary).toHaveAttribute("lang", "fr");
+      act(() => announce("Menu", priority, { lang: "en" }));
+      act(() => vi.advanceTimersByTime(1000));
+      expect(primary).toBeEmptyDOMElement();
+      expect(primary).not.toHaveAttribute("lang");
+      expect(alternate).toHaveTextContent("Menu");
+      expect(alternate).toHaveAttribute("lang", "en");
+      act(() => announce("Menu", priority));
+      act(() => vi.advanceTimersByTime(1000));
+      expect(primary).toHaveTextContent("Menu");
+      expect(primary).not.toHaveAttribute("lang");
+      expect(primary.closest("[lang]")).toHaveAttribute("lang", "en");
+      expect(alternate).toBeEmptyDOMElement();
+      expect(alternate).not.toHaveAttribute("lang");
+    }
+  );
+
+  it("keeps polite and assertive request languages independent", () => {
+    renderReadyHost();
+    act(() => {
+      announce("Bonjour.", Priority.LOW, { lang: "fr" });
+      announce("Urgent", Priority.HIGH, { lang: "en" });
+    });
+    expect(screen.getByTestId("gc-announce-polite")).toHaveAttribute("lang", "fr");
+    expect(screen.getByTestId("gc-announce-assertive")).toHaveAttribute("lang", "en");
+    expect(screen.getByTestId("gc-announce-polite").parentElement).not.toHaveAttribute("lang");
+  });
+
+  it("preserves pending request language across a modal handoff and clears old language", () => {
+    const view = (active: boolean) => (
+      <>
+        <section data-testid="root-host" lang="en">
+          <Announce />
+        </section>
+        <section data-testid="modal-host" lang="en">
+          <Announce scope="modal" active={active} />
+        </section>
+      </>
+    );
+    const host = renderReadyHost(view(false));
+    act(() => {
+      announce("Bonjour.", Priority.LOW, { lang: "fr" });
+      announce("Au revoir.", Priority.LOW, { lang: "fr" });
+    });
+    host.rerender(view(true));
+    const root = screen.getByTestId("root-host").querySelector('[role="status"]')!;
+    const modal = screen.getByTestId("modal-host").querySelector('[role="status"]')!;
+    expect(root).toBeEmptyDOMElement();
+    expect(root).not.toHaveAttribute("lang");
+    act(() => vi.advanceTimersByTime(1000));
+    expect(modal).toHaveTextContent("Au revoir.");
+    expect(modal).toHaveAttribute("lang", "fr");
+    host.rerender(view(false));
+    expect(modal).toBeEmptyDOMElement();
+    expect(modal).not.toHaveAttribute("lang");
+    act(() => vi.advanceTimersByTime(1000));
+    act(() => announce("Back to root"));
+    expect(root).toHaveTextContent("Back to root");
+    expect(root).not.toHaveAttribute("lang");
+  });
+
   it("clears alternate regions on handoff and retains a pending allowed duplicate", () => {
     const view = (active: boolean) => (
       <>

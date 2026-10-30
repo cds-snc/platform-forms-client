@@ -6,7 +6,7 @@ const HOST_ACTIVATION_DELAY_MS = 100;
 
 interface Host {
   scope: "root" | "modal";
-  publish: (message: string, priority: Priority) => void;
+  publish: (message: string, priority: Priority, lang?: string) => void;
   clear: () => void;
 }
 
@@ -18,11 +18,11 @@ function createCoordinator() {
   let hasRegisteredHost = false;
 
   const scheduler = createScheduler(
-    (message, priority) => {
+    (...args) => {
       if (!activeHost) {
         throw new Error("[gcforms/announce] Cannot publish without an active host.");
       }
-      activeHost.publish(message, priority);
+      activeHost.publish(...args);
     },
     () => handleFailure("publication")
   );

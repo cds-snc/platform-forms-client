@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add message coordinator, scheduler and update how package is exported
 - replace old hook api with more streamlined `useAnnounce()` hook
+- Preserve request language through shared live regions with an optional `lang`
+  option, including language-aware duplicate handling and bilingual combobox feedback.
 
 ## [1.0.5] - 2026-06-11
 

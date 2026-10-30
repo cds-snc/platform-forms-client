@@ -1,3 +1,6 @@
+
+-- TODO TIDY UP THIS README
+
 # Announce
 
 Screen-reader announcements for React apps, with persistent live regions and a
@@ -49,9 +52,21 @@ announce("5 results available.", Priority.LOW, { allowDuplicates: true });
 In Next.js, call `announce()` from client components. The announcer includes its
 own inline visually hidden styles; no stylesheet is needed.
 
+Set `lang` when the announcement language differs from the host's surroundings:
+
+```ts
+announce("Bonjour.", Priority.LOW, { lang: "fr" });
+```
+
+The receiving live region gets that language before its text is updated. Omitting
+`lang` uses the host's inherited language, including after an explicitly localized
+message. This sets language metadata for assistive technology; it does not translate
+the message.
+
 By default, consecutive identical requests in each priority are suppressed while
 pending or for one second after publication. After that window, the same text can
 be requested again. The window starts when the message is published, not queued.
+Requests with different `lang` values are treated as different announcements.
 
 Set `allowDuplicates: true` on a request to bypass both duplicate checks. It still
 uses the shared queue, timing, and overflow rules.
@@ -98,7 +113,7 @@ Import `useAnnounce` from `@gcforms/announce`. By default it is active, uses pol
 priority and a zero-millisecond debounce, and does not skip activation feedback.
 `delay` must be a non-negative finite number of milliseconds; shared queue timing
 still applies after the debounce. Set `priority` to `Priority.HIGH` for assertive
-feedback.
+feedback. The hook also accepts `lang`, with the same behavior as `announce()`.
 
 `skipOnActivation` skips the first request whenever `active` becomes true,
 including an initially active mount. `resetKey` restarts the debounce even when

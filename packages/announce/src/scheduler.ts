@@ -4,10 +4,11 @@ import type { AnnounceOptions } from "./announce";
 const PUBLICATION_INTERVAL_MS = 1000;
 const MAX_PENDING_MESSAGES = 20;
 
-type Publisher = (message: string, priority: Priority) => void;
+type Publisher = (message: string, priority: Priority, lang?: string) => void;
 
 interface PendingMessage {
   message: string;
+  lang?: string;
   allowDuplicates: boolean;
   callers: Map<AbortSignal | undefined, () => void>;
   cleanup: () => void;
@@ -20,7 +21,7 @@ const reportPublicationFailure = () => {
 
 /**
  * Queues announcements and spaces them out, letting urgent messages jump ahead.
- * @param publisher Callback that updates the live region with a message and its priority.
+ * @param publisher Callback that updates the live region with a message, priority, and optional language.
  * @param onError Reports a publication failure after the scheduler has stopped.
  * @returns `enqueue` to submit messages, `pause`/`resume` to control delivery without
  * losing pending work, and `stop` to permanently cancel pending work and timers.
@@ -28,7 +29,9 @@ const reportPublicationFailure = () => {
 export const createScheduler = (publisher: Publisher, onError = reportPublicationFailure) => {
   const politeQueue: PendingMessage[] = [];
   const assertiveQueue: PendingMessage[] = [];
-  const lastPublished: Partial<Record<Priority, { message: string; publishedAt: number }>> = {};
+  const lastPublished: Partial<
+    Record<Priority, { message: string; lang?: string; publishedAt: number }>
+  > = {};
   let timer: ReturnType<typeof setTimeout> | undefined;
   let lastPriority: Priority | undefined;
   let stopped = false;
@@ -57,26 +60,29 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
     signal?.addEventListener("abort", cancel, { once: true });
   };
 
-  const _getRecentMessage = (priority: Priority): string | undefined => {
+  const _isRecentDuplicate = (message: string, priority: Priority, lang?: string): boolean => {
     const previous = lastPublished[priority];
-    if (previous && performance.now() - previous.publishedAt < PUBLICATION_INTERVAL_MS) {
-      return previous.message;
-    }
+    return (
+      previous?.message === message &&
+      previous.lang === lang &&
+      performance.now() - previous.publishedAt < PUBLICATION_INTERVAL_MS
+    );
   };
 
-  const _takeNextMessage = (): { message: string; priority: Priority } | undefined => {
+  const _takeNextMessage = ():
+    { message: string; priority: Priority; lang?: string } | undefined => {
     while (assertiveQueue.length || politeQueue.length) {
       const priority = assertiveQueue.length ? "assertive" : "polite";
       const queue = _getQueue(priority);
-      const { message, allowDuplicates, cleanup } = queue.shift()!;
+      const { message, lang, allowDuplicates, cleanup } = queue.shift()!;
       cleanup();
 
       // Dropping or cancelling a queued message can leave a repeat of something we just announced
-      if (!allowDuplicates && _getRecentMessage(priority) === message) {
+      if (!allowDuplicates && _isRecentDuplicate(message, priority, lang)) {
         continue;
       }
 
-      return { message, priority };
+      return { message, priority, lang };
     }
   };
 
@@ -84,9 +90,13 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
     const nextMessage = _takeNextMessage();
     if (!nextMessage) return;
 
-    const { message, priority } = nextMessage;
-    publisher(message, priority);
-    lastPublished[priority] = { message, publishedAt: performance.now() };
+    const { message, priority, lang } = nextMessage;
+    if (lang === undefined) {
+      publisher(message, priority);
+    } else {
+      publisher(message, priority, lang);
+    }
+    lastPublished[priority] = { message, lang, publishedAt: performance.now() };
     lastPriority = priority;
     timer = setTimeout(() => {
       timer = undefined;
@@ -113,21 +123,23 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
 
   const enqueue = (message: string, priority: Priority, options: AnnounceOptions = {}) => {
     const signal = options.signal;
+    const lang = options.lang;
     if (stopped || !message || signal?.aborted) return;
 
     const queue = _getQueue(priority);
     const lastQueued = queue.at(-1);
     if (!options.allowDuplicates) {
-      if (lastQueued?.message === message) {
+      if (lastQueued?.message === message && lastQueued.lang === lang) {
         // Share the message, but let each caller cancel just their own request.
         _addCaller(lastQueued, queue, signal);
         return;
       }
-      if (!lastQueued && _getRecentMessage(priority) === message) return;
+      if (!lastQueued && _isRecentDuplicate(message, priority, lang)) return;
     }
 
     const pending: PendingMessage = {
       message,
+      lang,
       allowDuplicates: options.allowDuplicates === true,
       callers: new Map(),
       cleanup: () => {

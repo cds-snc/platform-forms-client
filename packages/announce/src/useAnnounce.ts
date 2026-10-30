@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { Priority } from "./AnnounceLiveRegions";
 import { announce, type AnnounceOptions } from "./announce";
 
-export interface UseAnnounceOptions extends Pick<AnnounceOptions, "allowDuplicates"> {
+export interface UseAnnounceOptions extends Pick<AnnounceOptions, "allowDuplicates" | "lang"> {
   active?: boolean;
   delay?: number;
   priority?: Priority;
@@ -24,6 +24,7 @@ export function useAnnounce(
     priority = Priority.LOW,
     skipOnActivation = false,
     allowDuplicates = false,
+    lang,
     resetKey,
   }: UseAnnounceOptions = {}
 ) {
@@ -48,12 +49,12 @@ export function useAnnounce(
 
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      announce(message, priority, { allowDuplicates, signal: controller.signal });
+      announce(message, priority, { allowDuplicates, signal: controller.signal, lang });
     }, delay);
 
     return () => {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [message, active, delay, priority, skipOnActivation, allowDuplicates, resetKey]);
+  }, [message, active, delay, priority, skipOnActivation, allowDuplicates, lang, resetKey]);
 }

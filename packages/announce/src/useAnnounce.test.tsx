@@ -140,6 +140,41 @@ describe("useAnnounce", () => {
     expect(text(Priority.HIGH)).toBe("Feedback");
   });
 
+  it("forwards the requested language and restores inheritance when it is omitted", () => {
+    const initialProps: { lang?: string } = { lang: "fr" };
+    const hook = renderHook(({ lang }) => useAnnounce("Menu", { lang }), {
+      initialProps,
+      wrapper: Host,
+    });
+    advance(100);
+    expect(screen.getByTestId("gc-announce-polite")).toHaveAttribute("lang", "fr");
+    hook.rerender({ lang: undefined });
+    advance(1000);
+    const alternate = screen.getByTestId("gc-announce-polite-alternate");
+    expect(alternate).toHaveTextContent("Menu");
+    expect(alternate).not.toHaveAttribute("lang");
+  });
+
+  it("replaces queued feedback when only its language changes", () => {
+    render(<Announce />);
+    advance(100);
+    act(() => {
+      announce("Busy", Priority.HIGH);
+      announce("Still busy", Priority.HIGH);
+    });
+    const hook = renderHook(({ lang }) => useAnnounce("Menu", { lang }), {
+      initialProps: { lang: "en" },
+    });
+    advance(0);
+    hook.rerender({ lang: "fr" });
+    advance(2000);
+    const primary = screen.getByTestId("gc-announce-polite");
+    expect(primary).toHaveTextContent("Menu");
+    expect(primary).toHaveAttribute("lang", "fr");
+    advance(1000);
+    expect(screen.getByTestId("gc-announce-polite-alternate")).toBeEmptyDOMElement();
+  });
+
   it("keeps another hook's identical pending feedback when the first hook unmounts", () => {
     render(<Announce />);
     const first = renderHook(() => useAnnounce("Ready"));

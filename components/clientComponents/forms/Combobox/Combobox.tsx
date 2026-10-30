@@ -124,6 +124,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
     delay: items.length > 0 ? 400 : 1400,
     skipOnActivation: true,
     allowDuplicates: true,
+    lang,
     resetKey: filterText,
   });
 

@@ -327,6 +327,74 @@ describe("announcement scheduler", () => {
     expect(cleanup).toHaveBeenCalledExactlyOnceWith("abort", expect.any(Function));
   });
 
+  it.each(["polite", "assertive"] as const)(
+    "deduplicates pending %s requests by both text and language",
+    (priority) => {
+      const publish = vi.fn();
+      const scheduler = createScheduler(publish);
+      scheduler.pause();
+      for (const lang of ["en", "fr", undefined]) {
+        scheduler.enqueue("Menu", priority, { lang });
+        scheduler.enqueue("Menu", priority, { lang });
+      }
+      scheduler.resume();
+      vi.runAllTimers();
+      expect(publish.mock.calls).toEqual([
+        ["Menu", priority, "en"],
+        ["Menu", priority, "fr"],
+        ["Menu", priority],
+      ]);
+    }
+  );
+
+  it.each(["polite", "assertive"] as const)(
+    "only suppresses a recently published %s duplicate in the same language",
+    (priority) => {
+      const publish = vi.fn();
+      const scheduler = createScheduler(publish);
+      scheduler.enqueue("Menu", priority, { lang: "en" });
+      vi.advanceTimersByTime(999);
+      scheduler.enqueue("Menu", priority, { lang: "en" });
+      expect(publish).toHaveBeenCalledTimes(1);
+      scheduler.enqueue("Menu", priority, { lang: "fr" });
+      vi.advanceTimersByTime(1);
+      expect(publish.mock.calls).toEqual([
+        ["Menu", priority, "en"],
+        ["Menu", priority, "fr"],
+      ]);
+      scheduler.enqueue("Menu", priority, { lang: "fr" });
+      expect(vi.getTimerCount()).toBe(1);
+      vi.advanceTimersByTime(1000);
+      expect(publish).toHaveBeenCalledTimes(2);
+      scheduler.enqueue("Menu", priority, { lang: "fr" });
+      expect(publish).toHaveBeenLastCalledWith("Menu", priority, "fr");
+      expect(publish).toHaveBeenCalledTimes(3);
+    }
+  );
+
+  it("keeps different-language requests separate when one caller cancels", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    const english = new AbortController();
+    scheduler.pause();
+    scheduler.enqueue("Menu", "polite", { lang: "en", signal: english.signal });
+    scheduler.enqueue("Menu", "polite", { lang: "fr" });
+    english.abort();
+    scheduler.resume();
+    expect(publish).toHaveBeenCalledExactlyOnceWith("Menu", "polite", "fr");
+  });
+
+  it("snapshots the requested language while waiting for publication", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    const options = { lang: "fr" };
+    scheduler.pause();
+    scheduler.enqueue("Bonjour.", "polite", options);
+    options.lang = "en";
+    scheduler.resume();
+    expect(publish).toHaveBeenCalledExactlyOnceWith("Bonjour.", "polite", "fr");
+  });
+
   it("does not expire duplicate history when the wall clock changes", () => {
     const publish = vi.fn();
     const scheduler = createScheduler(publish);

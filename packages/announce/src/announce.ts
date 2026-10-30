@@ -4,6 +4,7 @@ import { enqueueAnnouncement } from "./coordinator";
 export interface AnnounceOptions {
   allowDuplicates?: boolean;
   signal?: AbortSignal;
+  lang?: string;
 }
 
 export const announce = (

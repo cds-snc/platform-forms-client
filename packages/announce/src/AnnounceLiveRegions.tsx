@@ -48,25 +48,32 @@ export const Announce = ({
   useEffect(() => {
     if (!active) return;
 
-    const updateLiveRegion = (message: string, priority: Priority) => {
+    const updateLiveRegion = (message: string, priority: Priority, lang?: string) => {
       const region = priority === Priority.HIGH ? messageHighRef.current : messageLowRef.current;
       const alternate =
         priority === Priority.HIGH ? alternateHighRef.current : alternateLowRef.current;
       if (region && alternate) {
         // Move repeated text to an already-mounted empty region to create a fresh update.
-        if (region.textContent === message) {
-          region.textContent = "";
-          alternate.textContent = message;
+        const isRepeat = region.textContent === message;
+        const target = isRepeat ? alternate : region;
+        const previous = isRepeat ? region : alternate;
+        previous.textContent = "";
+        previous.removeAttribute("lang");
+        if (lang === undefined) {
+          target.removeAttribute("lang");
         } else {
-          alternate.textContent = "";
-          region.textContent = message;
+          target.lang = lang;
         }
+        target.textContent = message;
       }
     };
 
     const clearLiveRegions = () => {
       for (const ref of [messageLowRef, messageHighRef, alternateLowRef, alternateHighRef]) {
-        if (ref.current) ref.current.textContent = "";
+        if (ref.current) {
+          ref.current.textContent = "";
+          ref.current.removeAttribute("lang");
+        }
       }
     };
 

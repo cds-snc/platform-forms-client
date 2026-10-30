@@ -340,6 +340,29 @@ describe("Combobox shared announcements", () => {
     }
   });
 
+  it("preserves the combobox language when announcing outside its subtree", async () => {
+    render(
+      <div lang="en">
+        <Formik initialValues={{ province: "" }} onSubmit={() => {}}>
+          <Combobox
+            id="province"
+            name="province"
+            choices={["Alberta", "Ontario", "Quebec"]}
+            lang="fr"
+          />
+        </Formik>
+        <Announce />
+      </div>
+    );
+    advance(100);
+    await open();
+    await change("a");
+    advance(400);
+    const region = screen.getByTestId("gc-announce-polite");
+    expect(region.textContent).not.toBe("");
+    expect(region.closest("[lang]")).toHaveAttribute("lang", "fr");
+  });
+
   it("suppresses initial-open feedback and retains the existing debounce delays", async () => {
     render(view());
     advance(100);
