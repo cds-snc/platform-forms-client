@@ -104,6 +104,133 @@ describe("<InputFeedback />", () => {
     }
   );
 
+  it("flags exact duplicate values on blur, announces them, and keeps the value", async () => {
+    const Example = () => {
+      const [value, setValue] = useState("");
+      return (
+        <>
+          <Input
+            id="option--1--2"
+            ariaLabel="Option 2"
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+            checkDuplicate={{ values: ["Yes", "No"], message: "This choice already exists." }}
+          />
+          <button type="button">Add option</button>
+        </>
+      );
+    };
+    await renderWithStore(<Example />);
+    const control = page.getByRole("textbox", { name: "Option 2", exact: true });
+    const button = page.getByRole("button", { name: "Add option", exact: true });
+    const alert = page.getByRole("alert");
+    const before = button.element().getBoundingClientRect().top;
+
+    await expect.element(alert).toBeInTheDocument();
+    expect(alert.element().getBoundingClientRect().height).toBe(0);
+    expect(button.element().getBoundingClientRect().top).toBe(before);
+
+    await userEvent.click(control);
+    await userEvent.click(button);
+    await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
+
+    await userEvent.fill(control, "yes");
+    await userEvent.click(button);
+    await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
+
+    await userEvent.fill(control, "Yes");
+    await userEvent.click(button);
+    await expect.element(control).toHaveAttribute("aria-invalid", "true");
+    await expect.element(control).toHaveValue("Yes");
+    await expect.element(control).toHaveAccessibleDescription("This choice already exists.");
+    expect(page.getByRole("alert").element()).toBe(alert.element());
+    await expect.element(alert).toHaveTextContent("This choice already exists.");
+
+    await userEvent.fill(control, "Maybe");
+    await userEvent.click(button);
+    await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
+    await expect.element(alert).toHaveTextContent("");
+  });
+
+  it("clears a duplicate error when the other values change", async () => {
+    const Example = () => {
+      const [values, setValues] = useState(["c", "b", "c"]);
+      return (
+        <>
+          {values.map((value, index) => (
+            <Input
+              key={index}
+              id={`option--1--${index + 1}`}
+              ariaLabel={`Option ${index + 1}`}
+              value={value}
+              onChange={(event) =>
+                setValues(values.map((v, i) => (i === index ? event.target.value : v)))
+              }
+              checkDuplicate={{
+                values: values.filter((v, i) => i !== index && v),
+                message: "This choice already exists.",
+              }}
+            />
+          ))}
+          <button type="button" onClick={() => setValues(values.slice(1))}>
+            Remove option 1
+          </button>
+        </>
+      );
+    };
+    await renderWithStore(<Example />);
+    const option3 = page.getByRole("textbox", { name: "Option 3", exact: true });
+
+    await userEvent.click(option3);
+    await userEvent.tab();
+    await expect.element(option3).toHaveAttribute("aria-invalid", "true");
+
+    await userEvent.click(page.getByRole("button", { name: "Remove option 1" }));
+    await expect.element(option3).not.toBeInTheDocument();
+    for (const name of ["Option 1", "Option 2"]) {
+      expect(
+        page.getByRole("textbox", { name, exact: true }).element().getAttribute("aria-invalid")
+      ).not.toBe("true");
+    }
+    expect(document.querySelectorAll('[role="alert"]:not(:empty)')).toHaveLength(0);
+  });
+
+  it("clears a duplicate error when the sibling value is edited", async () => {
+    const Example = () => {
+      const [values, setValues] = useState(["c", "c"]);
+      return (
+        <>
+          {values.map((value, index) => (
+            <Input
+              key={index}
+              id={`option--1--${index + 1}`}
+              ariaLabel={`Option ${index + 1}`}
+              value={value}
+              onChange={(event) =>
+                setValues(values.map((v, i) => (i === index ? event.target.value : v)))
+              }
+              checkDuplicate={{
+                values: values.filter((v, i) => i !== index && v),
+                message: "This choice already exists.",
+              }}
+            />
+          ))}
+        </>
+      );
+    };
+    await renderWithStore(<Example />);
+    const option1 = page.getByRole("textbox", { name: "Option 1", exact: true });
+    const option2 = page.getByRole("textbox", { name: "Option 2", exact: true });
+
+    await userEvent.click(option2);
+    await userEvent.tab();
+    await expect.element(option2).toHaveAttribute("aria-invalid", "true");
+
+    await userEvent.fill(option1, "d");
+    await expect.element(option2).not.toHaveAttribute("aria-invalid", "true");
+    await expect.element(option2).toHaveValue("c");
+  });
+
   it("preserves the expanding input blur handler when checking empty values", async () => {
     const onBlur = vi.fn();
     const onClick = vi.fn();
