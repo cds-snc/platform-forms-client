@@ -164,6 +164,8 @@ export const DownloadTable = ({
     // Reset warnings when switching between Status tabs.
     // eslint-disable-next-line react-hooks/set-state-in-effect -- clear the previous tab's warnings
     setDownloadWarnings(undefined);
+    setDownloadError(false);
+    setShowDownloadSuccess(false);
   }, [statusFilter]);
 
   useEffect(() => {
