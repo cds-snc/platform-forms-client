@@ -14,7 +14,7 @@ const resource = resourceFromAttributes({
 
 const sdk = new NodeSDK({
   resource,
-  spanProcessor: new SimpleSpanProcessor(new OTLPTraceExporter()),
+  spanProcessors: [new SimpleSpanProcessor(new OTLPTraceExporter())],
   textMapPropagator: new AWSXRayPropagator(),
   instrumentations: [new FetchInstrumentation(), new AwsInstrumentation()],
 });
