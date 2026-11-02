@@ -91,7 +91,7 @@
     "@types/mdx": "^2.0.13",
     "@vercel/otel": "^2.2.0",
     "@xyflow/react": "12.11.0",
-    "axios": "^1.18.0",
+    "axios": "^1.21.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "clsx": "^2.1.1",
@@ -110,7 +110,7 @@
     "i18next-browser-languagedetector": "^8.2.1",
     "i18next-resources-to-backend": "^1.2.1",
     "immer": "11.1.15",
-    "ioredis": "5.11.1",
+    "ioredis": "6.0.0",
     "jose": "^6.2.3",
     "jsonschema": "1.5.0",
     "jszip": "^3.10.1",
@@ -144,7 +144,7 @@
     "usehooks-ts": "3.1.1",
     "uuid": "^14.0.0",
     "valibot": "^1.4.1",
-    "zustand": "5.0.14"
+    "zustand": "5.0.16"
   },
   "@opentelemetry/api": "^1.10.0",
   "devDependencies": {
