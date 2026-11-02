@@ -718,6 +718,27 @@ describe("Download Table", () => {
     expect(
       rendered.queryByText("Could not download all responses or attachments")
     ).not.toBeInTheDocument();
+
+    rendered.rerender(
+      <DownloadTable
+        statusFilter={StatusFilter.DOWNLOADED}
+        vaultSubmissions={vaultSubmissions}
+        formId="clg17xha50008efkgfgxa8l4f"
+        formName=""
+        responseDownloadLimit={100}
+        responsesDownloadZipMaxSizeMB={125}
+        overdueAfter={0}
+        nagwarePromptAfter={21}
+        nagwareWarnAfter={35}
+        nagwareEnabled={true}
+        startFromExclusiveResponse={null}
+      />
+    );
+    expect(rendered.queryByText("Download smaller batches")).not.toBeInTheDocument();
+    expect(
+      rendered.queryByText("Could not download all responses or attachments")
+    ).not.toBeInTheDocument();
+
     HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
   });
 
