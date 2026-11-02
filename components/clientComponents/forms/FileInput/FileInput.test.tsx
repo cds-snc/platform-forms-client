@@ -2,11 +2,11 @@
  * @vitest-environment jsdom
  */
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Formik } from "formik";
 import { FileInput } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 const inputProps = {
   id: "pdf",
@@ -28,6 +28,26 @@ describe("FileInput component", () => {
       </Formik>
     );
     expect(queryByTestId("file")).toBeInTheDocument();
+  });
+
+  it("associates the question label with the file input and activates it once", () => {
+    render(
+      <Formik onSubmit={() => {}} initialValues={{ pdf: { file: "", name: "", src: "" } }}>
+        <>
+          <label htmlFor="pdf">Upload a PDF</label>
+          <FileInput {...inputProps} />
+        </>
+      </Formik>
+    );
+
+    const input = screen.getByTestId("file").querySelector('input[type="file"]');
+    const label = screen.getByText("Upload a PDF") as HTMLLabelElement;
+    expect(label.control).toBe(input);
+
+    const onClick = vi.fn();
+    input?.addEventListener("click", onClick);
+    fireEvent.click(label);
+    expect(onClick).toHaveBeenCalledOnce();
   });
 
   it("exposes required state without native required validation", () => {
