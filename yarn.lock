@@ -2940,6 +2940,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/api@npm:^1.10.0":
+  version: 1.10.0
+  resolution: "@opentelemetry/api@npm:1.10.0"
+  checksum: 10c0/c666f89d882e2e3ea3780b4e419de3ba7e00a80bf334269c3c8507a5e2b4e453e2bc8368f6230f894d789b206c14dde313ea6f51fa7bc629f0eff8480b5d356b
+  languageName: node
+  linkType: hard
+
 "@opentelemetry/configuration@npm:0.300.0":
   version: 0.300.0
   resolution: "@opentelemetry/configuration@npm:0.300.0"
@@ -9167,6 +9174,7 @@ __metadata:
     "@headless-tree/react": "npm:^1.7.0"
     "@headlessui/react": "npm:^2.2.10"
     "@next/mdx": "npm:16.4.3"
+    "@opentelemetry/api": "npm:^1.10.0"
     "@opentelemetry/exporter-jaeger": "npm:^2.12.0"
     "@opentelemetry/exporter-trace-otlp-http": "npm:^0.300.0"
     "@opentelemetry/instrumentation-aws-sdk": "npm:^0.79.0"
