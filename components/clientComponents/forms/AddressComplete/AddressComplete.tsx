@@ -290,16 +290,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   };
 
   const countryChoices = countries.all
-    ?.map((country) => country[i18n.language as Language])
+    ?.map((country) => country[lang as Language])
     .sort((firstCountry, secondCountry) =>
-      firstCountry.localeCompare(secondCountry, i18n.language as Language)
+      firstCountry.localeCompare(secondCountry, lang as Language)
     );
 
   // Determine the localized display value for the current country code or name
   const countryBaseValue = (() => {
     try {
       const stored = addressObject?.country;
-      return getCountryNameFromCode(stored, i18n.language as Language);
+      return getCountryNameFromCode(stored, lang as Language);
     } catch (e) {
       // fall through to default
     }
@@ -308,9 +308,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
   const setCountry = (countryText: string) => {
     // Get the country from the countries.all object.
-    const country = countries.all.find(
-      (country) => country[i18n.language as Language] === countryText
-    );
+    const country = countries.all.find((country) => country[lang as Language] === countryText);
     if (country) {
       // Reset the addressObject
       setAddressObject({
@@ -318,7 +316,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         city: "",
         province: "",
         postalCode: "",
-        country: country[i18n.language as Language],
+        country: country[lang as Language],
       });
       if (comboboxRef.current) {
         comboboxRef.current.changeInputValue("", false);
@@ -372,6 +370,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               baseValue={countryBaseValue}
               useFilter={true}
               data-testid="addresscomplete-input-country"
+              lang={lang}
             />
           </div>
         )}
