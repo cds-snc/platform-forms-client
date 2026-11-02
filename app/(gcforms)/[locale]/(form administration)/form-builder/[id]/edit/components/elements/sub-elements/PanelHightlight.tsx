@@ -16,18 +16,19 @@ export const PanelHightLight = ({
   const { focusWithinProps, isWithin } = useIsWithin();
   return (
     <div
+      id={`element-${id}`}
       {...focusWithinProps}
       data-id={id}
       className={cn(
         isWithin && "bg-violet-100",
-        "pl-8 panel-actions border-b-1 border-slate-500 transition-all duration-800"
+        "panel-actions border-b-1 border-slate-500 pl-8 transition-all duration-800"
       )}
     >
       <div className="mx-4">{children}</div>
       <div
         className={cn(
           "block opacity-0 transition-opacity duration-300",
-          isWithin ? "opacity-100" : "opacity-0 pointer-events-none"
+          isWithin ? "opacity-100" : "pointer-events-none opacity-0"
         )}
       >
         {conditionalChildren}
