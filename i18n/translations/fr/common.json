@@ -377,7 +377,7 @@
   "submitProgress": {
     "text": "Envoi du formulaire en cours...",
     "uploadingMultipleFiles": "Téléversement de {{totalFiles}} fichiers...",
-    "uploadingSingleFile": "Téléchargement du fichier...",
+    "uploadingSingleFile": "Téléversement du fichier...",
     "spinner": "Envoi du formulaire"
   },
   "saveFileWarning": {
