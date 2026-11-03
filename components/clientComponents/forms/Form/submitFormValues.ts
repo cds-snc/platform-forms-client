@@ -245,16 +245,11 @@ const uploadSubmissionFiles = async (
         return;
       }
 
-      const message =
-        totalFiles > 1
-          ? t("submitProgress.uploadingMultipleFiles", { totalFiles })
-          : t("submitProgress.uploadingSingleFile");
-
       document.dispatchEvent(
         new CustomEvent(EventKeys.submitProgress, {
           detail: {
             progress: totalProgress,
-            message,
+            message: t("submitProgress.uploadingFiles", { count: totalFiles, totalFiles }),
           },
         })
       );
