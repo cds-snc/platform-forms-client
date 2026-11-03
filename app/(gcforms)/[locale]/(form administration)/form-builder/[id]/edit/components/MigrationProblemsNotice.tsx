@@ -6,28 +6,55 @@ import { WarningIcon } from "@serverComponents/icons";
 import { useTemplateMigrationProblems } from "@lib/store/hooks/useTemplateMigrationProblems";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useMigrationProblemFeedback } from "@lib/store/hooks/useMigrationProblemFeedback";
+import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
+import {
+  getLocalizedLabel,
+  getProblemElement,
+} from "@lib/templates/schemaVersioning/migrationProblemHelpers";
+import { describeMigrationProblem } from "./describeMigrationProblem";
 
-export const MigrationProblemsNotice = ({ id, locale }: { id: string; locale: string }) => {
-  const { t } = useTranslation("form-builder");
+export const MigrationProblemsNotice = () => {
+  const { t, i18n } = useTranslation("form-builder");
   const problems = useTemplateMigrationProblems();
   useMigrationProblemFeedback(problems);
-  const storeId = useTemplateStore((state) => state.id);
+  const elements = useTemplateStore((state) => state.form.elements);
 
   if (problems.length === 0) return null;
 
-  const formId = storeId && storeId !== id ? storeId : id;
-
   return (
-    <div className="mb-5 flex max-w-[800px] gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3">
+    <div
+      id="problems"
+      className="mb-5 flex max-w-[800px] gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3"
+    >
       <WarningIcon className="mt-0.5 size-6 shrink-0 fill-amber-700" />
       <div>
         <p className="mb-1 font-bold">{t("migrationProblems.count", { count: problems.length })}</p>
-        <p className="mb-0">
-          {t("migrationProblems.notice")}{" "}
-          <Link href={`/${locale}/form-builder/${formId}/problems`}>
-            {t("migrationProblems.review")}
-          </Link>
-        </p>
+        <p className="mb-1">{t("migrationProblems.notice")}</p>
+        <InfoDetails
+          summary={t("migrationProblems.show")}
+          expandedSummary={t("migrationProblems.hide")}
+        >
+          <p className="mt-3">{t("migrationProblems.intro")}</p>
+          <ol className="list-decimal space-y-5 pl-6">
+            {problems.map((problem) => {
+              const element = getProblemElement(elements, problem.path);
+              const title =
+                getLocalizedLabel(
+                  { en: element?.properties?.titleEn, fr: element?.properties?.titleFr },
+                  i18n.language
+                ) || t("migrationProblems.untitled");
+              return (
+                <li key={`${problem.path}-${problem.name}-${problem.message}`}>
+                  <strong>{element ? title : t("migrationProblems.form")}</strong>
+                  <p className="mb-1">
+                    {describeMigrationProblem(problem, element, i18n.language, t)}
+                  </p>
+                  <Link href="#questions">{t("migrationProblems.edit")}</Link>
+                </li>
+              );
+            })}
+          </ol>
+        </InfoDetails>
       </div>
     </div>
   );

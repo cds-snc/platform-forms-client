@@ -117,7 +117,7 @@ export const CheckList = ({ formId, lang }: { formId: string; lang: Language }) 
       {problems.length > 0 && (
         <li className="my-4">
           <WarningIcon className="mr-2 inline-block size-9 fill-amber-700 align-middle" />
-          <CheckListLink href={`/${lang}/form-builder/${formId}/problems`}>
+          <CheckListLink href={`/${lang}/form-builder/${formId}/edit#problems`}>
             {t("migrationProblems.title")}
           </CheckListLink>
           <p className="mb-0 ml-11">{t("migrationProblems.warning")}</p>

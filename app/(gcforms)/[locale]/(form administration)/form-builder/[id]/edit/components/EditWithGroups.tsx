@@ -149,7 +149,7 @@ export const EditWithGroups = ({
           <SaveButton />
         </div>
       </div>
-      <MigrationProblemsNotice id={id} locale={locale} />
+      <MigrationProblemsNotice />
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
       <div className="flex max-w-[800px] justify-between">
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />

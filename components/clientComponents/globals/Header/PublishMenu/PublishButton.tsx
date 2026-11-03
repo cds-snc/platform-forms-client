@@ -135,7 +135,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     privacy: `/${locale}/form-builder/${formId}/edit#privacy-text`,
     confirmation: `/${locale}/form-builder/${formId}/edit#confirmation-text`,
     settings: `/${locale}/form-builder/${formId}/settings`,
-    problems: `/${locale}/form-builder/${formId}/problems`,
+    problems: `/${locale}/form-builder/${formId}/edit#problems`,
   };
 
   const publishedLinks = {
