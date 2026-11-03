@@ -1,17 +1,15 @@
-import { HeadingNode, QuoteNode } from "@lexical/rich-text";
+import { $createHeadingNode, HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { ClipboardDOMImportExtension } from "@lexical/clipboard";
 import { DOMImportExtension, defineImportRule, sel } from "@lexical/html";
 import { $convertFromMarkdownString, TRANSFORMERS } from "@lexical/markdown";
-import { $createHeadingNode } from "@lexical/rich-text";
-import { configExtension, defineExtension } from "lexical";
-import { $createTextNode } from "lexical";
+import { $createTextNode, configExtension, defineExtension } from "lexical";
 import { CollapsibleExtension } from "./plugins/CollapsibleExtension";
 import { COLLAPSIBLE } from "./transformers";
 
 const pastedH1Rule = defineImportRule({
-  $import: (ctx, element) => {
+  $import: (_ctx, element) => {
     const node = $createHeadingNode("h2");
     const textContent = element.textContent ?? "";
     node.append($createTextNode(textContent));
