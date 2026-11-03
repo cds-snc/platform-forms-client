@@ -376,7 +376,8 @@
   },
   "submitProgress": {
     "text": "Submitting form...",
-    "uploadingFiles": "Uploading {{totalFiles}} files...",
+    "uploadingMultipleFiles": "Uploading {{totalFiles}} files...",
+    "uploadingSingleFile": "Uploading file...",
     "spinner": "Submitting form"
   },
   "saveFileWarning": {
