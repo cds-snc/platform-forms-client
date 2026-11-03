@@ -2,12 +2,10 @@ import isEqual from "lodash.isequal";
 import { type TemplateMigrationProblem } from "./getTemplateMigrationProblems";
 
 export type ProblemElement = {
-  id?: number;
   properties?: {
     titleEn?: string;
     titleFr?: string;
     choices?: unknown[];
-    conditionalRules?: { choiceId?: unknown }[];
     subElements?: ProblemElement[];
   };
 };

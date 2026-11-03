@@ -62,11 +62,7 @@ export const EditWithGroups = ({
   const titleInput = useRef<HTMLTextAreaElement>(null);
   const prevTitleRef = useRef<string>(title);
   const groupId = useGroupStore((state) => state.id);
-  const setGroupId = useGroupStore((state) => state.setId);
   const getElement = useGroupStore((state) => state.getElement);
-  const groups = useTemplateStore((state) => state.form.groups);
-  const requestedGroup = searchParams?.get("group");
-  const handledLink = useRef<string | null>(null);
 
   const elements = useTemplateStore(
     (s) => (s.form.groups && s.form.groups[groupId]?.elements) || []
@@ -141,25 +137,6 @@ export const EditWithGroups = ({
   }, [focusTitle]);
 
   const hasHydrated = useRehydrate();
-
-  useEffect(() => {
-    if (!hasHydrated || !requestedGroup || !groups?.[requestedGroup]) return;
-    const link = `${requestedGroup}${window.location.hash}`;
-    if (handledLink.current === link) return;
-    if (groupId !== requestedGroup) {
-      setGroupId(requestedGroup);
-      return;
-    }
-
-    const target = document.getElementById(window.location.hash.slice(1));
-    if (target) {
-      target.scrollIntoView({ block: "center" });
-      target
-        .querySelector<HTMLElement>("textarea, input, [contenteditable='true']")
-        ?.focus({ preventScroll: true });
-    }
-    handledLink.current = link;
-  }, [hasHydrated, requestedGroup, groups, groupId, setGroupId, sortedElements]);
 
   return (
     <div>

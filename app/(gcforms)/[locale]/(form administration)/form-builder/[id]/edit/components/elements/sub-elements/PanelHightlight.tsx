@@ -16,7 +16,6 @@ export const PanelHightLight = ({
   const { focusWithinProps, isWithin } = useIsWithin();
   return (
     <div
-      id={`element-${id}`}
       {...focusWithinProps}
       data-id={id}
       className={cn(
