@@ -101,6 +101,7 @@ export const QuestionInput = ({
       {...getLocalizationAttribute()}
       ariaLabel={t(placeholder)}
       isInvalid={isInvalid}
+      checkEmpty={t("questionRequired")}
     />
   );
 };

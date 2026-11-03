@@ -10,6 +10,7 @@ import { Button } from "@clientComponents/globals";
 import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { cn } from "@lib/utils";
+import { getChoiceValuesExcludingIndex } from "./getChoiceValuesExcludingIndex";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
@@ -38,6 +39,7 @@ export const SubOption = ({
     getLocalizationAttribute,
     setChangeKey,
     getFormElementIndexes,
+    choices,
   } = useTemplateStore((s) => ({
     addSubChoice: s.addSubChoice,
     removeSubChoice: s.removeSubChoice,
@@ -48,6 +50,9 @@ export const SubOption = ({
     getLocalizationAttribute: s.getLocalizationAttribute,
     setChangeKey: s.setChangeKey,
     getFormElementIndexes: s.getFormElementIndexes,
+    choices: s.form.elements
+      .find(({ properties }) => properties.subElements?.some((sub) => sub.id === id))
+      ?.properties.subElements?.find((sub) => sub.id === id)?.properties.choices,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -119,6 +124,10 @@ export const SubOption = ({
           updateValue(Number(indexes[0]), subIndex, index, e.target.value);
         }}
         onKeyDown={handleKeyDown}
+        checkDuplicate={{
+          values: getChoiceValuesExcludingIndex(choices, index, translationLanguagePriority),
+          message: t("duplicateChoice"),
+        }}
         className={cn("!my-0 max-h-9 w-full", icon && "ml-5")}
         {...getLocalizationAttribute()}
       />

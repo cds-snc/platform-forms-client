@@ -80,6 +80,19 @@ const createTemplateStore = (
         persist(
           (set, get) => ({
             ...props,
+            inputFeedback: {},
+            // setInputFeedback("item-1", { state: "error", message: "Enter a question title." });
+            // setInputFeedback("option--1--2", { state: "conflict", message: "Review this choice label." });
+            // Pass null to clear one field, or use clearInputFeedback() to clear all fields.
+            setInputFeedback: (inputId, feedback) =>
+              set((state) => {
+                if (feedback) {
+                  state.inputFeedback[inputId] = feedback;
+                } else {
+                  delete state.inputFeedback[inputId];
+                }
+              }),
+            clearInputFeedback: () => set({ inputFeedback: {} }),
             editLock: null,
             isLockedByOther: false,
             setEditLock: (lock) => set({ editLock: lock }),
