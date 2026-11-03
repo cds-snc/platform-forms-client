@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.28.3](https://github.com/cds-snc/platform-forms-client/compare/v4.28.2...v4.28.3) (2026-11-03)
+
+
+### Bug Fixes
+
+* a11y download dialog status messages ([#8128](https://github.com/cds-snc/platform-forms-client/issues/8128)) ([264448b](https://github.com/cds-snc/platform-forms-client/commit/264448b8a126c5409b9287aab4c446e1bc174301))
+* clear download message ([#8145](https://github.com/cds-snc/platform-forms-client/issues/8145)) ([c15c299](https://github.com/cds-snc/platform-forms-client/commit/c15c2992312813ebd861ca2768d55420c06ebb27))
+* Country Field now respects Language in AddressComplete ([#8143](https://github.com/cds-snc/platform-forms-client/issues/8143)) ([c630872](https://github.com/cds-snc/platform-forms-client/commit/c63087232458801a2b3f435e1bc9a70da280a731))
+* form builder file upload header ([#8149](https://github.com/cds-snc/platform-forms-client/issues/8149)) ([beee192](https://github.com/cds-snc/platform-forms-client/commit/beee19241a94a71570c8f0eeb6a4e4783e9789ba))
+* Published Forms Open their Preview in New Tab ([#8124](https://github.com/cds-snc/platform-forms-client/issues/8124)) ([0c182f0](https://github.com/cds-snc/platform-forms-client/commit/0c182f0216ed2faef6e185788027b57ee88f2289))
+* re-adds download blocking and nagware results ([#8125](https://github.com/cds-snc/platform-forms-client/issues/8125)) ([6151d5a](https://github.com/cds-snc/platform-forms-client/commit/6151d5a63cb3e373f96d490e4c8af6b34f7743e8))
+* update file download string to plural and singular ([#8158](https://github.com/cds-snc/platform-forms-client/issues/8158)) ([6b0c275](https://github.com/cds-snc/platform-forms-client/commit/6b0c275f97c3b3b9fd1bc453d013be54d698f012))
+* update file upload label association ([#8153](https://github.com/cds-snc/platform-forms-client/issues/8153)) ([7aa7ee1](https://github.com/cds-snc/platform-forms-client/commit/7aa7ee1f782992e7c46bbffeae0225deb9985916))
+* update trivy to use cache passthrough ([#8114](https://github.com/cds-snc/platform-forms-client/issues/8114)) ([dbdc01d](https://github.com/cds-snc/platform-forms-client/commit/dbdc01d87e07d9de298dcb1b4b3877080d9bc049))
+
+
+### Miscellaneous Chores
+
+* bump aws-sdk + otel packages ([#8135](https://github.com/cds-snc/platform-forms-client/issues/8135)) ([99c9515](https://github.com/cds-snc/platform-forms-client/commit/99c9515374875abfbc5b4ad7852136abd5fb1607))
+* bump redis + axios ([#8136](https://github.com/cds-snc/platform-forms-client/issues/8136)) ([3c1a98e](https://github.com/cds-snc/platform-forms-client/commit/3c1a98ebe6e9c99944d00edd94bbdd0bbac55c0d))
+* bump yarn to 4.18.1 ([#8134](https://github.com/cds-snc/platform-forms-client/issues/8134)) ([44d1dc9](https://github.com/cds-snc/platform-forms-client/commit/44d1dc93f52ab39f5668d16e38de51e0b53e300c))
+* fix "Get a copy of your answers Download" margin ([#8146](https://github.com/cds-snc/platform-forms-client/issues/8146)) ([7db8629](https://github.com/cds-snc/platform-forms-client/commit/7db8629fec6b242c6e6ba56621da968e3c13e2e2))
+* misc package bumps ([#8141](https://github.com/cds-snc/platform-forms-client/issues/8141)) ([9ddc940](https://github.com/cds-snc/platform-forms-client/commit/9ddc94096fc183bd4d0f81f5267a083059845c67))
+* Next.js 16.4.4 ([#8151](https://github.com/cds-snc/platform-forms-client/issues/8151)) ([5d6ad8e](https://github.com/cds-snc/platform-forms-client/commit/5d6ad8e44847cc87532be93ccf6377dcd677881e))
+* update Next.js to 16.4.5 ([#8161](https://github.com/cds-snc/platform-forms-client/issues/8161)) ([21ca7ea](https://github.com/cds-snc/platform-forms-client/commit/21ca7eaca848ffcf334e982b5b833e63e0de5028))
+* use new 'platform-forms-client-post-merge-actions' for Github actions running once a commit has been pushed to the main branch ([#8118](https://github.com/cds-snc/platform-forms-client/issues/8118)) ([c1f390a](https://github.com/cds-snc/platform-forms-client/commit/c1f390a72ed68f5f1df3a5399d21c394e065d656))
+
 ## [4.28.2](https://github.com/cds-snc/platform-forms-client/compare/v4.28.1...v4.28.2) (2026-10-28)
 
 
