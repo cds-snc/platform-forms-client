@@ -3,13 +3,39 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MigrationProblemsNotice } from "./MigrationProblemsNotice";
 
-const mock = vi.hoisted(() => ({ count: 0, language: "en", setInputFeedback: vi.fn() }));
+const mock = vi.hoisted(() => ({
+  count: 0,
+  language: "en",
+  path: "elements[0].properties.choices",
+  richText: false,
+  setInputFeedback: vi.fn(),
+  setId: vi.fn(),
+  findParentGroup: vi.fn(() => ({ index: "page-2" })),
+  focus: vi.fn(),
+  scrollIntoView: vi.fn(),
+}));
+
+vi.mock("@lib/groups/useGroupStore", () => ({
+  useGroupStore: (select: (state: Record<string, unknown>) => unknown) =>
+    select({ setId: mock.setId, findParentGroup: mock.findParentGroup }),
+}));
+
+vi.mock("./RefsContext", () => ({
+  useRefsContext: () => ({
+    refs: {
+      current: {
+        1: { focus: mock.focus, scrollIntoView: mock.scrollIntoView },
+        2: { focus: mock.focus, scrollIntoView: mock.scrollIntoView },
+      },
+    },
+  }),
+}));
 
 vi.mock("@lib/store/hooks/useTemplateMigrationProblems", () => ({
   useTemplateMigrationProblems: () =>
     [
       {
-        path: "elements[0].properties.choices",
+        path: mock.path,
         name: "uniqueItems",
         message: "Duplicate choices",
         fromVersion: 1,
@@ -30,10 +56,17 @@ vi.mock("@lib/store/useTemplateStore", () => ({
         elements: [
           {
             id: 1,
-            type: "dropdown",
+            type: mock.richText ? "richText" : "dropdown",
             properties: {
               titleEn: "Province",
               titleFr: "Province en français",
+              subElements: [
+                {
+                  id: 2,
+                  type: "dropdown",
+                  properties: { titleEn: "Nested question", choices: [] },
+                },
+              ],
               choices: [
                 { en: "Ontario", fr: "Ontario" },
                 { en: "Ontario", fr: "Ontario" },
@@ -68,6 +101,10 @@ describe("MigrationProblemsNotice", () => {
     cleanup();
     mock.count = 0;
     mock.language = "en";
+    mock.path = "elements[0].properties.choices";
+    mock.richText = false;
+    vi.clearAllMocks();
+    mock.findParentGroup.mockReturnValue({ index: "page-2" });
   });
 
   it("only appears while the draft has migration problems", () => {
@@ -104,9 +141,8 @@ describe("MigrationProblemsNotice", () => {
     expect(screen.getByText("Form")).toBeVisible();
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
     expect(screen.getByText("migrationProblems.duplicateChoices")).toBeVisible();
-    screen.getAllByRole("link", { name: "Edit form" }).forEach((link) => {
-      expect(link).toHaveAttribute("href", "#questions");
-    });
+    expect(screen.getByRole("button", { name: "Province" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "Edit form" })).toHaveAttribute("href", "#questions");
 
     fireEvent.click(summary);
     await waitFor(() => expect(screen.getByText("Show problems")).toBeVisible());
@@ -121,5 +157,51 @@ describe("MigrationProblemsNotice", () => {
     render(<MigrationProblemsNotice />);
     fireEvent.click(screen.getByText("Show problems"));
     expect(screen.getByText("Province en français")).toBeVisible();
+  });
+
+  it("switches to the element's page before focusing and scrolling to it", () => {
+    mock.count = 1;
+    render(<MigrationProblemsNotice />);
+    fireEvent.click(screen.getByText("Show problems"));
+    fireEvent.click(screen.getByRole("button", { name: "Province" }));
+    expect(mock.findParentGroup).toHaveBeenCalledWith("1");
+    expect(mock.setId).toHaveBeenCalledWith("page-2");
+    expect(mock.focus).toHaveBeenCalledOnce();
+    expect(mock.setId.mock.invocationCallOrder[0]).toBeLessThan(
+      mock.focus.mock.invocationCallOrder[0]
+    );
+    expect(mock.scrollIntoView).toHaveBeenCalledWith({ block: "center" });
+    expect(screen.queryByRole("link", { name: "Edit form" })).toBeNull();
+  });
+
+  it("uses the containing element's page for a repeating-set question", () => {
+    mock.count = 1;
+    mock.path = "elements[0].properties.subElements[0].properties.choices";
+    render(<MigrationProblemsNotice />);
+    fireEvent.click(screen.getByText("Show problems"));
+    fireEvent.click(screen.getByRole("button", { name: "Nested question" }));
+    expect(mock.findParentGroup).toHaveBeenCalledWith("1");
+    expect(mock.setId).toHaveBeenCalledWith("page-2");
+    expect(mock.focus).toHaveBeenCalledOnce();
+  });
+
+  it("focuses the rich text editor when the problem refers to a text element", () => {
+    mock.count = 1;
+    mock.richText = true;
+    render(
+      <>
+        <MigrationProblemsNotice />
+        <div id="element-1">
+          <textarea id="editor-1" />
+        </div>
+      </>
+    );
+    const panel = document.getElementById("element-1")!;
+    panel.scrollIntoView = mock.scrollIntoView;
+    fireEvent.click(screen.getByText("Show problems"));
+    fireEvent.click(screen.getByRole("button", { name: "Province" }));
+    expect(document.getElementById("editor-1")).toHaveFocus();
+    expect(mock.focus).not.toHaveBeenCalled();
+    expect(mock.scrollIntoView).toHaveBeenCalledWith({ block: "center" });
   });
 });
