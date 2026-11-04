@@ -1,3 +1,4 @@
+import { type TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 import { type TemplateMigrationProblem } from "@lib/templates/schemaVersioning/getTemplateMigrationProblems";
 import {
   getDuplicateChoiceIndexes,
@@ -16,11 +17,13 @@ const duplicateChoiceLabels = (choices: unknown[] | undefined, lang: string): st
 ];
 
 export const describeMigrationProblem = (
-  problem: TemplateMigrationProblem,
+  problem: TemplateValidationProblem | TemplateMigrationProblem,
   element: ProblemElement | undefined,
   lang: string,
   t: (key: string, options?: Record<string, unknown>) => string
 ) => {
+  if (problem.name === "template") return t(problem.message);
+  if (problem.name === "schema") return t(problem.message, { property: problem.path });
   if (isDuplicateChoicesProblem(problem)) {
     const duplicates = duplicateChoiceLabels(element?.properties?.choices, lang);
     if (duplicates.length) {

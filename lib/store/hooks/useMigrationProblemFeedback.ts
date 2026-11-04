@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
-import type { TemplateMigrationProblem } from "@lib/templates/schemaVersioning/getTemplateMigrationProblems";
+import type { TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 import { useTemplateStore } from "../useTemplateStore";
 import type { InputFeedbackEntry } from "../types";
 import { mapMigrationProblemsToInputFeedback } from "../helpers/mapMigrationProblemsToInputFeedback";
 
-export const useMigrationProblemFeedback = (problems: TemplateMigrationProblem[]) => {
+export const useMigrationProblemFeedback = (problems: TemplateValidationProblem[]) => {
   const { t } = useTranslation("form-builder");
   const { form, language, setInputFeedback } = useTemplateStore((state) => ({
     form: state.form,

@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { render } from "../testUtils";
+import { render, TestWrapper } from "../testUtils";
 import { setupFonts } from "../../helpers/setupFonts";
+import { type TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 
 import "@root/styles/app.css";
 
@@ -13,6 +14,8 @@ const waitForSaveAvailability = async () => {
 };
 
 const saveDraft = vi.fn();
+const setShowValidationErrors = vi.fn();
+const validationProblems = vi.fn<() => TemplateValidationProblem[]>(() => []);
 const saveDraftIfNeeded = vi.fn(async () => ({ status: "skipped" as const }));
 const replace = vi.fn();
 let pathname = "/en/form-builder/test-form-id/translate";
@@ -37,12 +40,24 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@lib/hooks/form-builder/useTemplateContext", () => ({
-  useTemplateContext: () => ({
-    saveDraft,
-    saveDraftIfNeeded,
-    templateIsDirty: { current: true },
-    updatedAt: undefined,
-  }),
+  useTemplateContext: () => {
+    const [showValidationErrors, setShow] = useState(false);
+    return {
+      saveDraft,
+      saveDraftIfNeeded,
+      templateIsDirty: { current: true },
+      updatedAt: undefined,
+      showValidationErrors,
+      setShowValidationErrors: (show: boolean) => {
+        setShowValidationErrors(show);
+        setShow(show);
+      },
+    };
+  },
+}));
+
+vi.mock("@lib/store/hooks/useTemplateValidationProblems", () => ({
+  useTemplateValidationProblems: () => validationProblems(),
 }));
 
 const buildLock = () => ({
@@ -67,6 +82,17 @@ function SaveButtonHarness({ isLockedByOther = false }: { isLockedByOther?: bool
   return <SaveButton />;
 }
 
+function ValidationErrorsHarness() {
+  return (
+    <>
+      <SaveButtonHarness />
+      <div id="template-validation-errors" tabIndex={-1}>
+        Fix the errors before saving.
+      </div>
+    </>
+  );
+}
+
 describe("<SaveButton />", () => {
   beforeAll(() => {
     setupFonts();
@@ -74,6 +100,7 @@ describe("<SaveButton />", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    validationProblems.mockReturnValue([]);
     pathname = "/en/form-builder/test-form-id/translate";
   });
 
@@ -87,6 +114,7 @@ describe("<SaveButton />", () => {
 
     const error = page.getByText("Saving failed - Contact support");
     await expect.element(error).toBeVisible();
+    expect(setShowValidationErrors).not.toHaveBeenCalled();
   });
 
   it("shows a lock-specific message when saving fails because the form is locked", async () => {
@@ -99,6 +127,48 @@ describe("<SaveButton />", () => {
 
     const error = page.getByText("Saving blocked: Avery Smith is editing this form.");
     await expect.element(error).toBeVisible();
+  });
+
+  it("focuses validation errors without showing a support error and allows saving again", async () => {
+    validationProblems.mockReturnValue([
+      { path: "elements.0.properties.choices", name: "uniqueItems", message: "Duplicate choices" },
+    ]);
+    saveDraft.mockResolvedValueOnce({ status: "validation-error" as const });
+
+    const view = await render(<ValidationErrorsHarness />);
+    await waitForSaveAvailability();
+    expect(setShowValidationErrors).not.toHaveBeenCalled();
+    await expect
+      .element(page.getByRole("link", { name: "Not saved - Fix errors" }))
+      .not.toBeInTheDocument();
+    await page.getByRole("button", { name: "Save draft" }).click();
+
+    expect(setShowValidationErrors).toHaveBeenCalledWith(true);
+    await expect.element(page.getByText("Fix the errors before saving.")).toHaveFocus();
+    await expect.element(page.getByText("Saving failed - Contact support")).not.toBeInTheDocument();
+    await expect.element(page.getByRole("button", { name: "Save draft" })).toBeVisible();
+    const indicator = page.getByRole("link", { name: "Not saved - Fix errors" });
+    await expect.element(indicator).toBeVisible();
+    await expect.element(indicator).toHaveAttribute("href", "#template-validation-errors");
+    await indicator.click();
+    await expect.element(page.getByText("Fix the errors before saving.")).toHaveFocus();
+
+    await view.rerender(
+      <TestWrapper>
+        <ValidationErrorsHarness />
+      </TestWrapper>
+    );
+    await expect.element(indicator).toBeVisible();
+    validationProblems.mockReturnValue([]);
+    await view.rerender(
+      <TestWrapper>
+        <ValidationErrorsHarness />
+      </TestWrapper>
+    );
+    await expect.element(indicator).not.toBeInTheDocument();
+    saveDraft.mockResolvedValueOnce({ status: "saved" as const });
+    await page.getByRole("button", { name: "Save draft" }).click();
+    expect(saveDraft).toHaveBeenCalledTimes(2);
   });
 
   it("replaces 0000 in the URL after a successful save when a real form id is returned", async () => {

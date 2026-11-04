@@ -24,7 +24,7 @@ import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
-import { MigrationProblemsNotice } from "./MigrationProblemsNotice";
+import { MigrationProblemsNotice, TemplateValidationErrors } from "./MigrationProblemsNotice";
 
 export const EditWithGroups = ({
   id,
@@ -149,6 +149,7 @@ export const EditWithGroups = ({
           <SaveButton />
         </div>
       </div>
+      <TemplateValidationErrors editable />
       <MigrationProblemsNotice />
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
       <div className="flex max-w-[800px] justify-between">

@@ -9,6 +9,8 @@ import {
   useTemplateContext,
 } from "@lib/hooks/form-builder/useTemplateContext";
 import { FormProperties } from "@lib/types";
+import navigationFocus from "@root/__fixtures__/navigationFocus.json";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
 
 type OperationResult = {
   formRecord: {
@@ -293,4 +295,96 @@ describe("useTemplateContext saveDraft concurrency", () => {
     expect(savedForm.groups.review?.nextAction).toBe("end");
     expect(savedForm.groups.end?.nextAction).toBeUndefined();
   });
+
+  it("distinguishes fixable validation errors from save failures without discarding edits", async () => {
+    createOrUpdateTemplateMock.mockResolvedValue({
+      formRecord: null,
+      error: "validationError",
+    });
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <SaveTemplateProvider>{children}</SaveTemplateProvider>
+    );
+    const { result } = renderHook(() => useTemplateContext(), { wrapper });
+    result.current.templateIsDirty.current = true;
+
+    await act(async () => {
+      expect(await result.current.saveDraft()).toEqual({ status: "validation-error" });
+    });
+
+    expect(result.current.templateIsDirty.current).toBe(true);
+    expect(mockStore.setFromRecord).not.toHaveBeenCalled();
+    expect(result.current.updatedAt).toBeUndefined();
+    expect(result.current.showValidationErrors).toBe(false);
+  });
+
+  it("only shows the summary when requested and hides it after a successful save", async () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <SaveTemplateProvider>{children}</SaveTemplateProvider>
+    );
+    const { result } = renderHook(() => useTemplateContext(), { wrapper });
+    result.current.templateIsDirty.current = true;
+    createOrUpdateTemplateMock.mockResolvedValue({
+      formRecord: null,
+      error: "validationError",
+    });
+
+    await act(async () => {
+      await result.current.saveDraftIfNeeded();
+    });
+    expect(result.current.showValidationErrors).toBe(false);
+
+    act(() => result.current.setShowValidationErrors(true));
+    expect(result.current.showValidationErrors).toBe(true);
+
+    createOrUpdateTemplateMock.mockResolvedValue({
+      formRecord: { id: "form-1", updatedAt: new Date().toISOString() },
+    });
+    await act(async () => {
+      await result.current.saveDraft();
+    });
+    expect(result.current.showValidationErrors).toBe(false);
+  });
+
+  it.each([0, 1, 2])(
+    "only blocks duplicate choices when the draft uses strict validation (version %i)",
+    async (schemaVersion) => {
+      const form: FormProperties = {
+        ...structuredClone(navigationFocus),
+        schemaVersion,
+        elements: [
+          {
+            id: 1,
+            type: "dropdown",
+            properties: {
+              titleEn: "Province",
+              titleFr: "Province",
+              validation: { required: false },
+              choices: [
+                { en: "Ontario", fr: "Ontario" },
+                { en: "Ontario", fr: "Ontario" },
+              ],
+            },
+          },
+        ],
+      };
+      if (schemaVersion === 0) delete form.schemaVersion;
+      mockStore.getSchema.mockReturnValue(JSON.stringify(form));
+      createOrUpdateTemplateMock.mockImplementation(async ({ formConfig }) =>
+        validateTemplate(formConfig).valid
+          ? { formRecord: { id: "form-1", updatedAt: new Date().toISOString() } }
+          : { formRecord: null, error: "validationError" }
+      );
+      const wrapper = ({ children }: { children: React.ReactNode }) => (
+        <SaveTemplateProvider>{children}</SaveTemplateProvider>
+      );
+      const { result } = renderHook(() => useTemplateContext(), { wrapper });
+
+      await act(async () => {
+        expect((await result.current.saveDraft()).status).toBe(
+          schemaVersion === 2 ? "validation-error" : "saved"
+        );
+      });
+      expect(mockStore.setFromRecord).toHaveBeenCalledTimes(schemaVersion === 2 ? 0 : 1);
+    }
+  );
 });

@@ -28,6 +28,7 @@ import { defaultForm } from "@lib/store/defaults";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { PreviewFormWrapper } from "./PreviewFormWrapper";
 import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
+import { TemplateValidationErrors } from "../edit/components/MigrationProblemsNotice";
 
 export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
   const { status } = useSession();
@@ -107,6 +108,7 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
     <div className="max-w-4xl">
       <PreviewNavigation />
       <div className="h-12"></div>
+      <TemplateValidationErrors />
       <div
         className={`border-blue-focus mb-8 border-3 border-dashed bg-white p-4 ${
           status !== "authenticated" && ""

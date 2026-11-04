@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn } from "@lib/utils";
@@ -14,6 +15,7 @@ import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname, useRouter } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+import { useTemplateValidationProblems } from "@lib/store/hooks/useTemplateValidationProblems";
 
 type SaveState = "idle" | "error" | "locked";
 
@@ -118,7 +120,16 @@ export const SaveButton = () => {
     })
   );
 
-  const { saveDraft, saveDraftIfNeeded, templateIsDirty, updatedAt } = useTemplateContext();
+  const {
+    saveDraft,
+    saveDraftIfNeeded,
+    templateIsDirty,
+    updatedAt,
+    showValidationErrors,
+    setShowValidationErrors,
+  } = useTemplateContext();
+  const validationProblems = useTemplateValidationProblems();
+  const hasValidationErrors = showValidationErrors && validationProblems.length > 0;
   const { status } = useSession();
   const lockedByOther = lockChecksEnabled && isLockedByOther;
   const lockOwnerName =
@@ -144,6 +155,13 @@ export const SaveButton = () => {
     }
 
     const result = await saveDraft();
+
+    if (result.status === "validation-error") {
+      setSaveState("idle");
+      flushSync(() => setShowValidationErrors(true));
+      document.getElementById("template-validation-errors")?.focus();
+      return;
+    }
 
     if (result.status === "invalid") {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
@@ -171,7 +189,16 @@ export const SaveButton = () => {
     }
 
     setSaveState("idle");
-  }, [lockOwnerName, lockedByOther, pathname, router, saveDraft, status, t]);
+  }, [
+    lockOwnerName,
+    lockedByOther,
+    pathname,
+    router,
+    saveDraft,
+    setShowValidationErrors,
+    status,
+    t,
+  ]);
 
   useEffect(() => {
     isLockedByOtherRef.current = lockedByOther;
@@ -244,11 +271,21 @@ export const SaveButton = () => {
       {saveState !== "idle" ? (
         <ErrorSavingForm variant={saveState} lockOwnerName={lockOwnerName} />
       ) : (
-        <SaveDraft
-          updatedAt={updatedAt}
-          handleSave={handleSave}
-          templateIsDirty={templateIsDirty.current}
-        />
+        <>
+          <SaveDraft
+            updatedAt={updatedAt}
+            handleSave={handleSave}
+            templateIsDirty={templateIsDirty.current}
+          />
+          {hasValidationErrors && (
+            <span className="inline-flex items-center text-red-700">
+              <SavedFailIcon aria-hidden="true" className="mx-1 inline-block fill-red-700" />
+              <a href="#template-validation-errors" className="mr-2 underline hover:no-underline">
+                {t("validationProblems.saveBlocked")}
+              </a>
+            </span>
+          )}
+        </>
       )}
       {updatedAt && <DateTime updatedAt={updatedAt} />}
     </div>

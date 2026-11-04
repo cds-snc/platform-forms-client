@@ -1,5 +1,5 @@
 import type { FormElement, FormProperties } from "@lib/types";
-import type { TemplateMigrationProblem } from "@lib/templates/schemaVersioning/getTemplateMigrationProblems";
+import type { TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 import {
   getDuplicateChoiceIndexes,
   getLocalizedLabel,
@@ -11,7 +11,7 @@ import type { InputFeedbackEntry } from "../types";
 
 export const mapMigrationProblemsToInputFeedback = (
   form: FormProperties,
-  problems: TemplateMigrationProblem[],
+  problems: TemplateValidationProblem[],
   language: string,
   t: (key: string, options?: Record<string, unknown>) => string
 ): Record<string, InputFeedbackEntry> => {

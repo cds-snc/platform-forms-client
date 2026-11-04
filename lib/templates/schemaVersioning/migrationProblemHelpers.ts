@@ -1,5 +1,5 @@
 import isEqual from "lodash.isequal";
-import { type TemplateMigrationProblem } from "./getTemplateMigrationProblems";
+import { type TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 
 export type ProblemElement = {
   properties?: {
@@ -28,12 +28,12 @@ export const getProblemElement = <T extends ProblemElement>(
 };
 
 /** The property a problem refers to: the missing property for `required`, otherwise the last path segment. */
-export const getProblemField = (problem: TemplateMigrationProblem): string | undefined =>
+export const getProblemField = (problem: TemplateValidationProblem): string | undefined =>
   (problem.name === "required"
     ? problem.message.match(/requires property ["']([^"']+)["']/)?.[1]
     : undefined) ?? (typeof problem.path === "string" ? problem.path.split(".").at(-1) : undefined);
 
-export const isDuplicateChoicesProblem = (problem: TemplateMigrationProblem) =>
+export const isDuplicateChoicesProblem = (problem: TemplateValidationProblem) =>
   problem.name === "uniqueItems" &&
   typeof problem.path === "string" &&
   problem.path.endsWith(".choices");
