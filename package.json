@@ -57,7 +57,7 @@
     "@aws-sdk/s3-request-presigner": "^3.1161.0",
     "@bufbuild/protobuf": "^2.10.2",
     "@casl/ability": "6.8.0",
-    "@cdssnc/sanitize-pii": "^2.2.0",
+    "@cdssnc/sanitize-pii": "^2.3.1",
     "@gcds-core/components": "1.7.0",
     "@gcds-core/components-react": "1.7.0",
     "@gcds-core/fonts": "^1.1.1",
