@@ -29,7 +29,8 @@ import {
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { isValidGovEmail } from "@root/lib/validation/validation";
-import { GcdsAlert } from "@gcds-core/components-react";
+import { GcdsAlert, GcdsInput } from "@gcds-core/components-react";
+import { logMessage } from "@lib/logger";
 
 export const SupportForm = () => {
   const {
@@ -40,14 +41,17 @@ export const SupportForm = () => {
   const [errors, setErrors] = useState<ErrorStates>({ validationErrors: [] });
   const [submitted, setSubmitted] = useState(false);
   const [alertUpdate, setAlertUpdate] = useState(0);
+  const [name, setName] = useState("");
 
   const getError = (fieldKey: string) => {
     return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
   };
 
   const submitForm = async (formData: FormData) => {
+    formData.set("name", name);
     const formEntries = Object.fromEntries(formData.entries());
 
+    logMessage.info("~~~~~FormData:" + JSON.stringify(formEntries));
     if (!formEntries.request) {
       // Set to empty string if the request field is not set
       formEntries.request = "";
@@ -175,15 +179,15 @@ export const SupportForm = () => {
             )}
 
             <div className="gcds-input-wrapper mt-14">
-              <Label id={"label-name"} htmlFor={"name"} className="required" required>
-                {t("support.name")}
-              </Label>
-              <TextInput
-                type={"text"}
-                id={"name"}
-                name={"name"}
-                className="required w-[34rem]"
-                error={getError("name")}
+              <GcdsInput
+                type="text"
+                inputId="name"
+                name="name"
+                label={t("support.name")}
+                value={name}
+                onGcdsInput={(event) => setName(event.detail)}
+                required
+                errorMessage={getError("name")}
               />
             </div>
             <div className="gcds-input-wrapper">
