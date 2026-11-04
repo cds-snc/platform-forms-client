@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.28.4](https://github.com/cds-snc/platform-forms-client/compare/v4.28.3...v4.28.4) (2026-11-04)
+
+
+### Bug Fixes
+
+* Fix error after deleting a draft version ([#8166](https://github.com/cds-snc/platform-forms-client/issues/8166)) ([d9b7b66](https://github.com/cds-snc/platform-forms-client/commit/d9b7b66b68d6019139f77ec751e14461b19b7ae9))
+* Prevent H1 tag from pasted content ([#8155](https://github.com/cds-snc/platform-forms-client/issues/8155)) ([2ce358e](https://github.com/cds-snc/platform-forms-client/commit/2ce358e4eeacfcb98b98b99bbc733b1aec8cba4f))
+* update address complete search filtering ([#8160](https://github.com/cds-snc/platform-forms-client/issues/8160)) ([6f316f1](https://github.com/cds-snc/platform-forms-client/commit/6f316f13bbd157922fabac23ed4e5940719b21c5))
+* Update Published Form dialog to prevent showing after navigation ([#8167](https://github.com/cds-snc/platform-forms-client/issues/8167)) ([33bbd38](https://github.com/cds-snc/platform-forms-client/commit/33bbd3800101da2a00675eaadb0fea1dfb3f644b))
+
 ## [4.28.3](https://github.com/cds-snc/platform-forms-client/compare/v4.28.2...v4.28.3) (2026-11-03)
 
 
