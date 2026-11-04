@@ -923,10 +923,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cdssnc/sanitize-pii@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@cdssnc/sanitize-pii@npm:2.2.0"
-  checksum: 10c0/c524a62dce20be4bc6f546638db241a1e54db472dc3d5e644afee9756791fec96a45ab2b3b7ed2e9aef34b72eeb18f4946918412bdea274f8bdd572f7d456914
+"@cdssnc/sanitize-pii@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@cdssnc/sanitize-pii@npm:2.3.1"
+  checksum: 10c0/b555f1ad9ff48af0d73f1b7c32f8bd8dc487518858aa98f6084ecdc8965bbb5bd51aad4ad2af7d779f4aa40804b2597ab617fce2ce43b410211014b1a71b6fc9
   languageName: node
   linkType: hard
 
@@ -9166,7 +9166,7 @@ __metadata:
     "@babel/preset-typescript": "npm:^7.27.1"
     "@bufbuild/protobuf": "npm:^2.10.2"
     "@casl/ability": "npm:6.8.0"
-    "@cdssnc/sanitize-pii": "npm:^2.2.0"
+    "@cdssnc/sanitize-pii": "npm:^2.3.1"
     "@gcds-core/fonts": "npm:^1.1.1"
     "@gcds-core/tokens": "npm:1.5.0"
     "@gcforms/announce": "workspace:*"
