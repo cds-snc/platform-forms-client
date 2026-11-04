@@ -28,6 +28,7 @@ import {
 import { useState } from "react";
 import { Success } from "../../../components/client/Success";
 import { isValidGovEmail } from "@root/lib/validation/validation";
+import { GcdsAlert } from "@gcds-core/components-react";
 
 export const ContactForm = () => {
   const {
@@ -136,12 +137,12 @@ export const ContactForm = () => {
             </Link>{" "}
             {t("contactus.gcFormsTeamPart2")}
           </p>
-          <Alert.Warning title={t("contactus.needSupport")} role="note">
+          <GcdsAlert alertRole="warning" heading={t("contactus.needSupport")} hideCloseBtn={true}>
             <p>
               {t("contactus.ifYouExperience")}{" "}
               <Link href={`/${language}/support`}>{t("contactus.supportFormLink")}</Link>.
             </p>
-          </Alert.Warning>
+          </GcdsAlert>
           <form
             id="contactus"
             onSubmit={(e) => {
