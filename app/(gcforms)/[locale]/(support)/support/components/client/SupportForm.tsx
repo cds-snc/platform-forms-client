@@ -9,7 +9,7 @@ import {
 } from "@clientComponents/forms";
 import { ErrorStatus } from "@lib/constants";
 import Link from "next/link";
-import { Alert } from "@clientComponents/globals";
+import { Alert, Button } from "@clientComponents/globals";
 import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
@@ -39,6 +39,7 @@ export const SupportForm = () => {
 
   const [errors, setErrors] = useState<ErrorStates>({ validationErrors: [] });
   const [submitted, setSubmitted] = useState(false);
+  const [alertUpdate, setAlertUpdate] = useState(0);
 
   const getError = (fieldKey: string) => {
     return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
@@ -147,7 +148,15 @@ export const SupportForm = () => {
                 {t("support.ifYouWouldLike")}{" "}
                 <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
               </p>
+              <p>Update: {alertUpdate}</p>
             </GcdsAlert>
+            <Button
+              type="button"
+              className="mt-4"
+              onClick={() => setAlertUpdate((previous) => previous + 1)}
+            >
+              Update alert
+            </Button>
           </div>
           <div role="alert">This content is announced on page load</div>
 
