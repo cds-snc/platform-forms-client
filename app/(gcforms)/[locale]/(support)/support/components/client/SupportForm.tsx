@@ -149,6 +149,8 @@ export const SupportForm = () => {
               </p>
             </GcdsAlert>
           </div>
+          <div role="alert">This content is announced on page load</div>
+
           <form
             id="support"
             onSubmit={(e) => {
