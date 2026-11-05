@@ -137,7 +137,7 @@ export const ContactForm = () => {
             </Link>{" "}
             {t("contactus.gcFormsTeamPart2")}
           </p>
-          <GcdsAlert alertRole="warning" heading={t("contactus.needSupport")} hideCloseBtn={true}>
+          <GcdsAlert heading={t("contactus.needSupport")} hideCloseBtn={true}>
             <p>
               {t("contactus.ifYouExperience")}{" "}
               <Link href={`/${language}/support`}>{t("contactus.supportFormLink")}</Link>.

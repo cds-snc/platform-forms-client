@@ -138,11 +138,7 @@ export const SupportForm = () => {
             {t("support.gcFormsTeamPart2")}
           </p>
           <div className="mb-14">
-            <GcdsAlert
-              alertRole="warning"
-              heading={t("support.lookingForADemo")}
-              hideCloseBtn={true}
-            >
+            <GcdsAlert heading={t("support.lookingForADemo")} hideCloseBtn={true}>
               <p>
                 {t("support.ifYouWouldLike")}{" "}
                 <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
