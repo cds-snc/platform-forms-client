@@ -29,7 +29,7 @@ import {
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { isValidGovEmail } from "@root/lib/validation/validation";
-import { GcdsAlert } from "@gcds-core/components-react";
+import { GcdsNotice } from "@gcds-core/components-react";
 
 export const SupportForm = () => {
   const {
@@ -140,12 +140,16 @@ export const SupportForm = () => {
           </p>
 
           <div className="mb-14">
-            <GcdsAlert heading={t("support.lookingForADemo")} hideCloseBtn={true}>
+            <GcdsNotice
+              notice-title={t("support.lookingForADemo")}
+              notice-role="info"
+              notice-title-tag="h3"
+            >
               <p>
                 {t("support.ifYouWouldLike")}{" "}
                 <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
               </p>
-            </GcdsAlert>
+            </GcdsNotice>
           </div>
 
           <form

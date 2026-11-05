@@ -28,7 +28,7 @@ import {
 import { useState } from "react";
 import { Success } from "../../../components/client/Success";
 import { isValidGovEmail } from "@root/lib/validation/validation";
-import { GcdsAlert } from "@gcds-core/components-react";
+import { GcdsNotice } from "@gcds-core/components-react";
 
 export const ContactForm = () => {
   const {
@@ -139,12 +139,16 @@ export const ContactForm = () => {
             {t("contactus.gcFormsTeamPart2")}
           </p>
 
-          <GcdsAlert heading={t("contactus.needSupport")} hideCloseBtn={true}>
+          <GcdsNotice
+            notice-title={t("contactus.needSupport")}
+            notice-role="info"
+            notice-title-tag="h5"
+          >
             <p>
               {t("contactus.ifYouExperience")}{" "}
               <Link href={`/${language}/support`}>{t("contactus.supportFormLink")}</Link>.
             </p>
-          </GcdsAlert>
+          </GcdsNotice>
 
           <form
             id="contactus"
