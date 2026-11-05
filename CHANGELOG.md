@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.29.0](https://github.com/cds-snc/platform-forms-client/compare/v4.28.4...v4.29.0) (2026-11-05)
+
+
+### Features
+
+* Add more granular logging to responses-pilot ([#8176](https://github.com/cds-snc/platform-forms-client/issues/8176)) ([1f8b076](https://github.com/cds-snc/platform-forms-client/commit/1f8b07635c087c916984d44b8a9c23468d9fb694))
+
+
+### Miscellaneous Chores
+
+* update support and contact forms to use &lt;gcds-notice /&gt; ([#8169](https://github.com/cds-snc/platform-forms-client/issues/8169)) ([961fe96](https://github.com/cds-snc/platform-forms-client/commit/961fe965ba8d3de30380fd0466976f89681eb396))
+* upgrade to latest sanitize-pii release ([#8171](https://github.com/cds-snc/platform-forms-client/issues/8171)) ([60a85e9](https://github.com/cds-snc/platform-forms-client/commit/60a85e9e797d53565ba1d31ed94320f29ef8837b))
+
 ## [4.28.4](https://github.com/cds-snc/platform-forms-client/compare/v4.28.3...v4.28.4) (2026-11-04)
 
 
