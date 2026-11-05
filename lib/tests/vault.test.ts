@@ -3,9 +3,14 @@ import type { MockedFunction } from "vitest";
 import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
 import { prismaMock } from "@testUtils";
-import { DynamoDBDocumentClient, QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  QueryCommand,
+  BatchWriteCommand,
+  BatchGetCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { AccessControlError } from "@lib/auth/errors";
-import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
+import { deleteDraftFormResponses, retrieveSubmissions, unprocessedSubmissions } from "@lib/vault";
 import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
 import { TemplateAlreadyPublishedError } from "@lib/templates/internal/errors";
@@ -19,11 +24,12 @@ vi.mock("@lib/privileges");
 vi.mock("@lib/auditLogs", async () => {
   const __actual0 = await vi.importActual<any>("@lib/auditLogs");
   return {
-  __esModule: true,
-  logEvent: vi.fn(),
-  AuditLogDetails: __actual0.AuditLogDetails,
-  AuditLogEvent: __actual0.AuditLogEvent,
-  AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,};
+    __esModule: true,
+    logEvent: vi.fn(),
+    AuditLogDetails: __actual0.AuditLogDetails,
+    AuditLogEvent: __actual0.AuditLogEvent,
+    AuditLogAccessDeniedDetails: __actual0.AuditLogAccessDeniedDetails,
+  };
 });
 
 const mockedGetAppSetting = vi.mocked(getAppSetting);
@@ -139,6 +145,79 @@ describe("Vault `numberOfUnprocessedSubmissions` function", () => {
     expect(ddbMock.commandCalls(QueryCommand).length).toBe(8);
   });
 });
+
+describe("Vault submission attachment scan statuses", () => {
+  beforeEach(() => {
+    ddbMock.reset();
+    mockAuthorizationPass(userId);
+  });
+
+  it("keeps known statuses and treats unknown statuses as potentially malicious", async () => {
+    ddbMock.on(BatchGetCommand).resolves({
+      Responses: {
+        Vault: [
+          {
+            FormID: "formtestID",
+            SubmissionID: "submission-1",
+            FormSubmission: {},
+            SubmissionAttachments: JSON.stringify([
+              {
+                id: "clean",
+                name: "clean.txt",
+                path: "clean.txt",
+                scanStatus: "NO_THREATS_FOUND",
+              },
+              {
+                id: "threat",
+                name: "threat.txt",
+                path: "threat.txt",
+                scanStatus: "THREATS_FOUND",
+              },
+              {
+                id: "unknown",
+                name: "unknown.txt",
+                path: "unknown.txt",
+                scanStatus: "FUTURE_STATUS",
+              },
+            ]),
+            ConfirmationCode: "confirmation",
+            "Status#CreatedAt": "New#2024-01-01T00:00:00.000Z",
+            SecurityAttribute: "Unclassified",
+            Name: "submission-1",
+            CreatedAt: 1,
+          },
+        ],
+      },
+    });
+
+    const [submission] = await retrieveSubmissions("formtestID", ["submission-1"]);
+
+    expect(submission.fileAttachments).toEqual([
+      {
+        id: "clean",
+        name: "clean.txt",
+        path: "clean.txt",
+        scanStatus: "NO_THREATS_FOUND",
+        isPotentiallyMalicious: false,
+      },
+      {
+        id: "threat",
+        name: "threat.txt",
+        path: "threat.txt",
+        scanStatus: "THREATS_FOUND",
+        isPotentiallyMalicious: true,
+      },
+      {
+        id: "unknown",
+        name: "unknown.txt",
+        path: "unknown.txt",
+        scanStatus: "THREATS_FOUND",
+        isPotentiallyMalicious: true,
+      },
+    ]);
+  });
+});
+
 const buildPrismaResponse = (
   id: string,
   jsonConfig: object,
