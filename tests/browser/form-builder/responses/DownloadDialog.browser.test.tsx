@@ -81,7 +81,7 @@ describe("<DownloadDialog />", () => {
     ["en", "Maximum 125 MB at one time. Select smaller batches if the download fails."],
     [
       "fr",
-      "Maximum 125 Mo à la fois. Sélectionnez de plus petits lots si le téléchargement échoue.",
+      "Jusqu'à un maximum de 125 Mo à la fois. Sélectionnez de plus petits lots si le téléchargement échoue.",
     ],
   ])("shows the configured download size limit in %s", async (language, message) => {
     mockLanguage.mockReturnValue(language);
