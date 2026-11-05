@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.29.1](https://github.com/cds-snc/platform-forms-client/compare/v4.29.0...v4.29.1) (2026-11-05)
+
+
+### Bug Fixes
+
+* update account menu content to fit better ([#8182](https://github.com/cds-snc/platform-forms-client/issues/8182)) ([0d58f1c](https://github.com/cds-snc/platform-forms-client/commit/0d58f1c8a5675ce9d415696fbb34637eab6fee0d))
+
+
+### Miscellaneous Chores
+
+* add proper type for scan status ([#8179](https://github.com/cds-snc/platform-forms-client/issues/8179)) ([f4dcc4e](https://github.com/cds-snc/platform-forms-client/commit/f4dcc4eb90b0b6847a4f3f3917a6bf2101965beb))
+* Review French content for file attachment ([#8177](https://github.com/cds-snc/platform-forms-client/issues/8177)) ([859b93c](https://github.com/cds-snc/platform-forms-client/commit/859b93c90ab50e6b78a57cc6c1a1ef9551601bfc))
+
 ## [4.29.0](https://github.com/cds-snc/platform-forms-client/compare/v4.28.4...v4.29.0) (2026-11-05)
 
 
