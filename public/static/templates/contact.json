@@ -2,34 +2,13 @@
   {
     "type": "richText",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
-      "titleEn": "",
-      "titleFr": "",
-      "validation": {
-        "required": false
-      },
       "descriptionEn": "## How can we contact you?",
-      "descriptionFr": "## Comment pouvons-nous vous contacter?",
-      "placeholderEn": "",
-      "placeholderFr": ""
+      "descriptionFr": "## Comment pouvons-nous vous contacter?"
     }
   },
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "Phone number",
       "titleFr": "Numéro de téléphone",
       "validation": {
@@ -45,13 +24,6 @@
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "Email address",
       "titleFr": "Adresse courriel",
       "validation": {
@@ -68,7 +40,6 @@
   {
     "type": "radio",
     "properties": {
-      "subElements": [],
       "choices": [
         {
           "en": "English",
@@ -85,9 +56,7 @@
         "required": false
       },
       "descriptionEn": "",
-      "descriptionFr": "",
-      "placeholderEn": "",
-      "placeholderFr": ""
+      "descriptionFr": ""
     }
   }
 ]

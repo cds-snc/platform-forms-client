@@ -13,13 +13,21 @@ import { ResponseBetaLink } from "./ResponseBetaLink";
 export const ResponsesContainer = ({
   hasOverdue,
   responseDownloadLimit,
+  responsesDownloadZipMaxSizeMB,
   overdueAfter,
+  nagwarePromptAfter,
+  nagwareWarnAfter,
+  nagwareEnabled,
   statusFilter,
   isApiRetrieval,
 }: {
   hasOverdue: boolean;
   responseDownloadLimit: number;
+  responsesDownloadZipMaxSizeMB: number;
   overdueAfter: number;
+  nagwarePromptAfter: number;
+  nagwareWarnAfter: number;
+  nagwareEnabled: boolean;
   statusFilter: StatusFilter;
   isApiRetrieval: boolean;
 }) => {
@@ -51,7 +59,11 @@ export const ResponsesContainer = ({
             hasOverdue={hasOverdue}
             statusFilter={statusFilter}
             responseDownloadLimit={responseDownloadLimit}
+            responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
             overdueAfter={overdueAfter}
+            nagwarePromptAfter={nagwarePromptAfter}
+            nagwareWarnAfter={nagwareWarnAfter}
+            nagwareEnabled={nagwareEnabled}
             isApiRetrieval={true}
           />
           {/* Dialog is now provided globally in layout */}
@@ -86,7 +98,11 @@ export const ResponsesContainer = ({
           hasOverdue={hasOverdue}
           statusFilter={statusFilter}
           responseDownloadLimit={responseDownloadLimit}
+          responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
           overdueAfter={overdueAfter}
+          nagwarePromptAfter={nagwarePromptAfter}
+          nagwareWarnAfter={nagwareWarnAfter}
+          nagwareEnabled={nagwareEnabled}
         />
         <ResponsesFooter formId={id} />
       </div>

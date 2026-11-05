@@ -106,6 +106,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
     const validationResult = validateTemplate(formConfig);
 
     if (!validationResult.valid) {
+      logMessage.info(`Template validation failed: ${JSON.stringify(validationResult.errors)}`);
       return { formRecord: null, error: "validationError" };
     }
 

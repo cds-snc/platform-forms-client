@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "id": "https://forms-formulaires.alpha.canada.ca/",
+  "id": "https://forms-formulaires.alpha.canada.ca/schema/v2",
   "type": "object",
-  "title": "GC Forms Schema - Alpha",
+  "title": "GC Forms Schema - Alpha v2",
   "description": "A schema to define a Forms configuration.",
   "default": {},
   "examples": [
@@ -32,10 +32,10 @@
   ],
   "properties": {
     "schemaVersion": {
-      "description": "The template schema version this form was authored/migrated against. Absent means version 0.",
+      "description": "The template schema version this form was authored/migrated against. Absent means version 1.",
       "id": "#/properties/schemaVersion",
       "type": "integer",
-      "minimum": 0
+      "const": 2
     },
     "titleEn": {
       "description": "The displayed title of the form to the user in English",
@@ -96,7 +96,8 @@
       "description": "A list of element IDs that determines the order or elements in the form.",
       "type": "array",
       "items": {
-        "type": "number"
+        "type": "integer",
+        "minimum": 1
       },
       "uniqueItems": true,
       "examples": [[2, 3, 4, 6, 9, 5]]
@@ -132,7 +133,8 @@
       "description": "A list of group IDs that determines the order of the groups in the form.",
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "not": { "enum": ["start", "review", "end"] }
       },
       "uniqueItems": true,
       "examples": [["one", "two"]]
@@ -140,6 +142,9 @@
     "elements": {
       "description": "A list of elements contained within the form.",
       "type": "array",
+      "items": {
+        "$ref": "#/definitions/elementStrict"
+      },
       "examples": [
         [
           {
@@ -344,34 +349,18 @@
       "type": "number"
     }
   },
-  "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],
+  "required": [
+    "titleEn",
+    "titleFr",
+    "privacyPolicy",
+    "confirmation",
+    "layout",
+    "schemaVersion",
+    "groups",
+    "groupsLayout",
+    "elements"
+  ],
   "additionalProperties": false,
-  "if": {
-    "description": "Templates at schema version 2+ use per-element-type strict validation. Missing/lower schemaVersion keeps the legacy tolerant element schema.",
-    "required": ["schemaVersion"],
-    "properties": { "schemaVersion": { "minimum": 2 } }
-  },
-  "then": {
-    "required": ["groups", "groupsLayout"],
-    "properties": {
-      "layout": {
-        "items": { "type": "integer", "minimum": 1 }
-      },
-      "groupsLayout": {
-        "items": { "not": { "enum": ["start", "review", "end"] } }
-      },
-      "elements": {
-        "items": { "$ref": "#/definitions/elementStrict" }
-      }
-    }
-  },
-  "else": {
-    "properties": {
-      "elements": {
-        "items": { "$ref": "#/definitions/element" }
-      }
-    }
-  },
   "allOf": [
     {
       "if": {
@@ -436,15 +425,11 @@
         },
         "exitUrlEn": {
           "description": "English URL used when nextAction is exit.",
-          "type": "string",
-          "minLength": 1,
-          "format": "uri"
+          "type": "string"
         },
         "exitUrlFr": {
           "description": "French URL used when nextAction is exit.",
-          "type": "string",
-          "minLength": 1,
-          "format": "uri"
+          "type": "string"
         }
       },
       "required": ["name", "titleEn", "titleFr", "elements"],
@@ -458,7 +443,7 @@
                   "const": "exit"
                 }
               },
-              "required": ["nextAction", "exitUrlEn", "exitUrlFr"]
+              "required": ["nextAction"]
             },
             {
               "properties": {
@@ -873,7 +858,7 @@
       "additionalProperties": false
     },
     "elementStrict": {
-      "description": "Discriminated, per-type element schema. Only applies to templates at schema version >= 2.",
+      "description": "Discriminated, per-type element schema used by template schema version 2.",
       "oneOf": [
         {
           "type": "object",

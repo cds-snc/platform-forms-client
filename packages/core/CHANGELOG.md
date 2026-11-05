@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.6] - 2026-11-02
+
+- Updates _forms.scss class `gc-file-input` to have no bottom margin 
+
+## [3.0.5] - 2026-10-26
+
+- Fixes discrepancy in rule matching precedence when checkboxes are used for conditional logic
+
 ## [3.0.4] - 2026-10-01
 
 - Update _forms.scss hint text to be more screen magnifier friendly

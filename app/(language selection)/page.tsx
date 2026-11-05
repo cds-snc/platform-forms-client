@@ -8,8 +8,6 @@ import { SiteLogo } from "@serverComponents/icons";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { Language } from "@lib/types/form-builder-types";
 
-export const dynamic = "force-dynamic";
-
 const SiteLink = ({
   browserLanguage,
   i18nLanguage,

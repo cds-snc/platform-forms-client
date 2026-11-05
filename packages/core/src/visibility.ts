@@ -12,6 +12,7 @@ import {
  * Recursively traverses the form groups to build a list of visible groups based on values.
  * Essentially, we are reconstructing the group history (the path the
  * user took through the form) based on the current set of values.
+ * Like forward navigation, the last matching explicit rule wins; catch-all is a fallback.
  *
  * @param formRecord
  * @param valuesWithMatchedIds
@@ -74,29 +75,28 @@ export const getVisibleGroupsBasedOnValuesRecursive = (
       action.choiceId.includes("catch-all")
     );
 
-    let matchFound = false;
+    let matchingRule: (typeof relevantNextActions)[number] | undefined;
 
     for (const action of relevantNextActions) {
-      const elementId = action.choiceId.split(".")[0];
+      if (action.choiceId.includes("catch-all")) continue;
 
-      // When we find a matching action, continue to the next group
-      if (valuesWithMatchedIds[elementId] && valuesWithMatchedIds[elementId] === action.choiceId) {
-        matchFound = true;
-        return getVisibleGroupsBasedOnValuesRecursive(
-          formRecord,
-          valuesWithMatchedIds,
-          action.groupId,
-          visibleGroups
-        );
+      const elementId = action.choiceId.split(".")[0];
+      const selected = valuesWithMatchedIds[elementId];
+
+      // Match forward navigation: the last matching explicit rule wins.
+      if (
+        Array.isArray(selected) ? selected.includes(action.choiceId) : selected === action.choiceId
+      ) {
+        matchingRule = action;
       }
     }
 
-    if (!matchFound && catchAllRule) {
-      // If no match was found, but we have a catch-all rule, continue to the catch-all group
+    const nextRule = matchingRule ?? catchAllRule;
+    if (nextRule) {
       return getVisibleGroupsBasedOnValuesRecursive(
         formRecord,
         valuesWithMatchedIds,
-        catchAllRule.groupId,
+        nextRule.groupId,
         visibleGroups
       );
     }

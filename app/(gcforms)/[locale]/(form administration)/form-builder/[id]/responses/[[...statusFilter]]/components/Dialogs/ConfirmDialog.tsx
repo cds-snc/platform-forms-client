@@ -85,7 +85,7 @@ export const ConfirmDialog = ({
 
   return (
     <>
-      <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary">
+      <Button onClick={() => setShowConfirmReceiptDialog(true)} theme="secondary" className="mb-4">
         {t("responses.confirmReceipt")}
       </Button>
       {showConfirmReceiptDialog && (
@@ -203,7 +203,7 @@ export const ConfirmDialog = ({
                     setStatus={setStatus}
                   ></LineItemEntries>
 
-                  <p className="mb-2 mt-10 font-bold">
+                  <p className="mt-10 mb-2 font-bold">
                     {t("downloadResponsesModals.confirmReceiptDialog.contentHeading")}
                   </p>
                   <p>{t("downloadResponsesModals.confirmReceiptDialog.contentBody")}</p>

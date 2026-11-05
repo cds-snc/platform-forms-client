@@ -6,6 +6,11 @@ import { AcceptableUseTerms } from "./components/server/AcceptableUse";
 import { authCheckAndRedirect } from "@lib/actions";
 import Loading from "./components/server/Loading";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {

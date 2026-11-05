@@ -163,6 +163,9 @@ model Setting {
   nameFr        String
   descriptionEn String?
   descriptionFr String?
+  type          String  @default("string")
+  groupEn       String?
+  groupFr       String?
   value         String?
 }
 

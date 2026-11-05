@@ -97,6 +97,14 @@
     "download": "Télécharger",
     "delete": "Supprimer",
     "movedToDownloaded": "Déplacée vers Téléchargements",
+    "partialDownload": {
+      "title": "Impossible de télécharger toutes les réponses ou pièces jointes",
+      "body": "Réessayez de télécharger les réponses restantes."
+    },
+    "sizeLimitReached": {
+      "title": "Téléchargez en plus petits lots",
+      "body": "Ce téléchargement dépasse notre limite de {{maxSizeMB}} Mo."
+    },
     "header": {
       "tableTitle": "Tableau de réponses",
       "select": "Sélectionner",
@@ -187,6 +195,7 @@
   "downloadResponsesModals": {
     "downloadDialog": {
       "title": "Télécharger les réponses",
+      "sizeLimit": "Maximum {{maxSizeMB}} Mo à la fois. Sélectionnez de plus petits lots si le téléchargement échoue.",
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
       "downloadFormatContext1": "Vous recevrez un ",
       "downloadFormatContext2": "Reçu officiel",
@@ -200,9 +209,15 @@
       "downloadAllAsZip": "Télécharger tout sous forme de fichier ZIP (compressé)",
       "cancel": "Annuler",
       "download": "Télécharger",
+      "complete": "Téléchargement terminé.",
       "chooseVersion": "Télécharger les réponses pour la version",
       "chooseVersionPlaceholder": "Sélectionner une version",
-      "chooseVersionRequired": "Vous pouvez modifier la version sélectionnée si nécessaire"
+      "chooseVersionRequired": "Vous pouvez modifier la version sélectionnée si nécessaire",
+      "processingResponse": "Traitement de la réponse {{response}} sur {{total}}",
+      "processingResponses": "Traitement des réponses",
+      "responseProgress": "Réponse {{response}} sur {{total}}",
+      "downloadingAttachment": "Téléchargement de la pièce jointe {{current}} sur {{total}}",
+      "creatingZip": "Création du fichier ZIP : {{percent}} %"
     },
     "confirmDeleteNewDialog": {
       "confirmAndDelete": "Confirmer la suppression de nouvelles réponses",

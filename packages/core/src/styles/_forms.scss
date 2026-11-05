@@ -196,7 +196,7 @@
 }
 
 .gc-file-input {
-  @apply mt-2 mb-14 w-full py-3 pr-2 text-base text-gray-700 md:text-sm;
+  @apply mt-2 mb-0 w-full py-3 pr-2 text-base text-gray-700 md:text-sm;
 
   &:focus {
     @apply border-blue-focus shadow-input outline-none;

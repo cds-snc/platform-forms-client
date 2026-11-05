@@ -9,6 +9,11 @@ import { Legend } from "./components/flow/Legend";
 import { Language } from "@lib/types/form-builder-types";
 import { EndMarker } from "./components/flow/EndMarker";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
@@ -23,7 +28,7 @@ export async function generateMetadata(props: {
 }
 
 const Loading = () => (
-  <div className="flex h-full items-center justify-center ">
+  <div className="flex h-full items-center justify-center">
     <Loader />
   </div>
 );

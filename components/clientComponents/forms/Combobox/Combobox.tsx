@@ -8,6 +8,7 @@ import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "@gcforms/announce";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
+import deburr from "lodash/deburr";
 
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
@@ -61,9 +62,13 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   // ^ Intentional: run once on mount. Combobox will remount on language change via key prop key={`${id}-${lang}`}.
 
+  // Allow normalized search text for filtering choices e.g. États-Unis becomes etats-unis
+  const normalizeSearchText = (value: string): string => deburr(value).toLowerCase();
+  const normalizedFilterText = normalizeSearchText(filterText);
+
   // Used to get the choices when the language changes
   const items = choices.filter((choice) =>
-    filterText ? choice.toLowerCase().includes(filterText.toLowerCase()) : true
+    normalizeSearchText(choice).includes(normalizedFilterText)
   );
 
   const getMatchingChoice = (inputValue: string) => {

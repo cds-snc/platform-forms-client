@@ -1,9 +1,15 @@
 import { cn } from "@lib/utils";
+import "@gcds-core/components-react/gcds.css";
 import { Footer } from "@serverComponents/globals/Footer";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { type Language } from "@lib/types/form-builder-types";
 import { headers } from "next/headers";
+
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export default async function Layout(props: {
   children: React.ReactNode;

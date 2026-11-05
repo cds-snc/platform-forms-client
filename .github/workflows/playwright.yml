@@ -8,6 +8,10 @@ jobs:
   playwright-run:
     name: Playwright
     runs-on: ubuntu-latest
+    container:
+      # Keep the image version aligned with Playwright in yarn.lock.
+      image: mcr.microsoft.com/playwright:v1.64.1-noble@sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea
+      options: --ipc=host
     services:
       # Label used to access the service container
       postgres:
@@ -21,8 +25,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          - 5432:5432
       redis:
         # Docker Hub image
         image: redis@sha256:aa049e689e141a4358ad1d4562dc49c88a89fbab711fd8fcc33f684c80b26301
@@ -31,8 +33,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports:
-          - 6379:6379
     env:
       # Needed for Next Auth to initialize
       TOKEN_SECRET: testKey
@@ -42,8 +42,8 @@ jobs:
       HOST_URL: http://localhost:3000
       NEXT_PUBLIC_ZITADEL_URL: https://auth.forms-staging.cdssandbox.xyz
       ZITADEL_CLIENT_ID: "11111111111111111"
-      REDIS_URL: localhost
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/formsDB
+      REDIS_URL: redis
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/formsDB
       CI: true
 
     steps:
@@ -54,8 +54,8 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Yarn update to V4
-        run: corepack enable && yarn set version stable
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -74,18 +74,6 @@ jobs:
 
       - name: "Install dependencies"
         run: yarn workspaces focus gcforms
-
-      - name: Cache Playwright binaries
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v4.5.0
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
 
       - name: Run Playwright Tests
         run: yarn playwright:headless:ci

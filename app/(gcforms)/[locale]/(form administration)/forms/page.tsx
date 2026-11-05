@@ -20,6 +20,11 @@ import type { FormsTemplate, FormsTemplateWithLockInfo, FormTabStatus } from "./
 import { TAB_STATUS } from "./components/types";
 import { CreateDraftConfirmDialog } from "../form-builder/[id]/components/dialogs/CreateDraftConfirmDialog/CreateDraftConfirmDialog";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 const getStatusTitle = (status: FormTabStatus | undefined, t: (key: string) => string): string => {
   const statusTitleMap: Record<string, string> = {
     [TAB_STATUS.DRAFT]: t("nav.drafts"),

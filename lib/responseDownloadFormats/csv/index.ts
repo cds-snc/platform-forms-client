@@ -8,7 +8,10 @@ import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating
 
 const specialChars = ["=", "+", "-", "@"];
 
-export const transform = async (formResponseSubmissions: FormResponseSubmissions) => {
+export const transform = async (
+  formResponseSubmissions: FormResponseSubmissions,
+  options: { includeHeader?: boolean; includeRecords?: boolean } = {}
+) => {
   const { t: tEn } = await serverTranslation("common", { lang: "en" });
   const { t: tFr } = await serverTranslation("common", { lang: "fr" });
 
@@ -59,55 +62,62 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
     alwaysQuote: true,
   });
 
-  const records = submissions.map((response) => {
-    const answers = sortedElements.map((element) => {
-      const answer = response.answers.find((answer) => answer.questionId === element.id);
-      if (!answer) {
-        return "-";
-      }
-      if (answer.answer instanceof Array) {
-        return answer.answer
-          .map((answer) =>
-            answer
-              .map((subAnswer) => {
-                let answerText = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`;
-                if (specialChars.some((char) => answerText.startsWith(char))) {
-                  answerText = `'${answerText}`;
-                }
-                if (answerText == "") {
-                  answerText = "-";
-                }
-                return answerText;
-              })
-              .join("")
-          )
-          .join("\n");
-      }
-      let answerText = answer.answer;
+  const records =
+    options.includeRecords === false
+      ? []
+      : submissions.map((response) => {
+          const answers = sortedElements.map((element) => {
+            const answer = response.answers.find((answer) => answer.questionId === element.id);
+            if (!answer) {
+              return "-";
+            }
+            if (answer.answer instanceof Array) {
+              return answer.answer
+                .map((answer) =>
+                  answer
+                    .map((subAnswer) => {
+                      let answerText = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`;
+                      if (specialChars.some((char) => answerText.startsWith(char))) {
+                        answerText = `'${answerText}`;
+                      }
+                      if (answerText == "") {
+                        answerText = "-";
+                      }
+                      return answerText;
+                    })
+                    .join("")
+                )
+                .join("\n");
+            }
+            let answerText = answer.answer;
 
-      if (element.type === FormElementTypes.starRating) {
-        return getScoreFromStarRatingObject(answer.answer);
-      }
+            if (element.type === FormElementTypes.starRating) {
+              return getScoreFromStarRatingObject(answer.answer);
+            }
 
-      if (
-        typeof answerText === "string" &&
-        specialChars.some((char) => answerText.startsWith(char))
-      ) {
-        answerText = `'${answerText}`;
-      }
-      if (answerText == "") {
-        answerText = "-";
-      }
-      return answerText;
-    });
-    return [
-      response.id,
-      new Date(response.createdAt).toISOString(),
-      ...answers,
-      "Receipt codes are in the Official receipt and record of responses\n" +
-        "Les codes de réception sont dans le Reçu et registre officiel des réponses",
-    ];
-  });
+            if (
+              typeof answerText === "string" &&
+              specialChars.some((char) => answerText.startsWith(char))
+            ) {
+              answerText = `'${answerText}`;
+            }
+            if (answerText == "") {
+              answerText = "-";
+            }
+            return answerText;
+          });
+          return [
+            response.id,
+            new Date(response.createdAt).toISOString(),
+            ...answers,
+            "Receipt codes are in the Official receipt and record of responses\n" +
+              "Les codes de réception sont dans le Reçu et registre officiel des réponses",
+          ];
+        });
 
-  return csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records);
+  const headerString = options.includeHeader === false ? "" : csvStringifier.getHeaderString();
+  const responseRecords =
+    options.includeRecords === false ? "" : csvStringifier.stringifyRecords(records);
+
+  return headerString + responseRecords;
 };

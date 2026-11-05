@@ -13,7 +13,24 @@ const brandingRequestFormSetting: Setting = {
   nameFr: "Formulaire de demande d'image de marque",
   descriptionEn: null,
   descriptionFr: null,
+  type: "string",
+  groupEn: null,
+  groupFr: null,
   value: null,
+};
+
+const nagwareEnabled: Setting = {
+  internalId: "nagwareEnabled",
+  nameEn: "Enable nagware",
+  nameFr: "Activer les rappels de réponses en retard",
+  descriptionEn:
+    "Enable nagware banners and restrict new downloads until overdue responses are processed.",
+  descriptionFr:
+    "Activer les bannières de rappel et limiter les nouveaux téléchargements jusqu'au traitement des réponses en retard.",
+  type: "boolean",
+  groupEn: "Nagware",
+  groupFr: "Nagware",
+  value: "false",
 };
 
 const nagwarePhaseEncouraged: Setting = {
@@ -24,6 +41,9 @@ const nagwarePhaseEncouraged: Setting = {
     "After how many days should the user be encouraged to use download or confirm responses?",
   descriptionFr:
     "Au bout de combien de jours l'utilisateur doit-il être encouragé à utiliser le téléchargement ou à confirmer les réponses ?",
+  type: "number",
+  groupEn: "Nagware",
+  groupFr: "Nagware",
   value: "15",
 };
 const nagwarePhasePrompted: Setting = {
@@ -34,6 +54,9 @@ const nagwarePhasePrompted: Setting = {
     "After how many days should the user be prompted with a notification to download or confirm responses?",
   descriptionFr:
     "Au bout de combien de jours l'utilisateur doit-il recevoir une notification lui demandant de télécharger ou de confirmer les réponses ?",
+  type: "number",
+  groupEn: "Nagware",
+  groupFr: "Nagware",
   value: "21",
 };
 const nagwarePhaseWarned: Setting = {
@@ -44,6 +67,9 @@ const nagwarePhaseWarned: Setting = {
     "After how many days should the user be warned with a notification to download or confirm responses?",
   descriptionFr:
     "Au bout de combien de jours l'utilisateur doit-il être averti avec une notification pour télécharger ou confirmer les réponses ?",
+  type: "number",
+  groupEn: "Nagware",
+  groupFr: "Nagware",
   value: "35",
 };
 
@@ -54,6 +80,9 @@ const nagwarePhaseEscalated: Setting = {
   descriptionEn: "After how many days should the Forms team be notified and an incident recorded?",
   descriptionFr:
     "Au bout de combien de jours l'équipe Forms doit-elle être notifiée et un incident enregistré ?",
+  type: "number",
+  groupEn: "Nagware",
+  groupFr: "Nagware",
   value: "46",
 };
 
@@ -63,7 +92,22 @@ const responseDownloadLimit: Setting = {
   nameFr: "Limitez le nombre de réponses pouvant être téléchargées à la fois",
   descriptionEn: null,
   descriptionFr: null,
+  type: "number",
+  groupEn: null,
+  groupFr: null,
   value: "20",
+};
+
+const responsesDownloadZipMaxSizeMB: Setting = {
+  internalId: "responsesDownloadZipMaxSizeMB",
+  nameEn: "Maximum responses download ZIP size (mega bytes)",
+  nameFr: "Taille maximale du ZIP de téléchargement des réponses (en mégaoctets)",
+  descriptionEn: "Maximum total size of a responses ZIP, including file attachments.",
+  descriptionFr: "Taille totale maximale d'un ZIP de réponses, y compris les fichiers joints.",
+  type: "number",
+  groupEn: null,
+  groupFr: null,
+  value: "500",
 };
 
 const editLockRedirectIdleMs: Setting = {
@@ -73,6 +117,9 @@ const editLockRedirectIdleMs: Setting = {
   descriptionEn: "How long the form builder can stay idle before becoming inactive.",
   descriptionFr:
     "Durée pendant laquelle le générateur de formulaires peut rester inactif avant de devenir inactif.",
+  type: "number",
+  groupEn: null,
+  groupFr: null,
   value: "1800000",
 };
 
@@ -83,6 +130,9 @@ const addressCompleteRetrieveRateLimitMax: Setting = {
   descriptionEn: "The maximum number of retrieve requests before the user is rate limited.",
   descriptionFr:
     "Le nombre maximal de requêtes de récupération avant que l'utilisateur ne soit soumis à une limitation de débit.",
+  type: "number",
+  groupEn: "Address Complete",
+  groupFr: "Address Complete",
   value: "12",
 };
 
@@ -93,6 +143,9 @@ const addressCompleteRateLimitWindowSeconds: Setting = {
   descriptionEn: "The window of time that as user is rate limited.",
   descriptionFr:
     "La fenêtre temporelle durant laquelle l'utilisateur est soumis à une limitation de débit.",
+  type: "number",
+  groupEn: "Address Complete",
+  groupFr: "Address Complete",
   value: "60",
 };
 
@@ -100,10 +153,11 @@ const hCaptchaEnabledSetting: Setting = {
   internalId: "hCaptchaEnabledSetting",
   nameEn: "hCaptcha Enabled Setting",
   nameFr: "Paramètre d'activation de hCaptcha",
-  descriptionEn:
-    "Enable or disabled hCaptcha for the app. Set to `true` for ON and `false` for OFF.",
-  descriptionFr:
-    "Activez ou désactivez hCaptcha pour l'application. Réglez sur `true` pour activer et sur `false` pour désactiver.",
+  descriptionEn: "Enable or disable hCaptcha for the app.",
+  descriptionFr: "Activez ou désactivez hCaptcha pour l'application.",
+  type: "boolean",
+  groupEn: null,
+  groupFr: null,
   value: "false",
 };
 
@@ -111,20 +165,23 @@ const enableClientErrorReporting: Setting = {
   internalId: "enableClientErrorReporting",
   nameEn: "Enable Client Error Reporting",
   nameFr: "Activer le rapport d'erreurs client",
-  descriptionEn:
-    "Enable or disable client error reporting for the app. Set to ON to activate or OFF to deactivate.",
-  descriptionFr:
-    "Activez ou désactivez le rapport d'erreurs client pour l'application. Réglez sur ON pour activer et sur OFF pour désactiver.",
-  value: "OFF",
+  descriptionEn: "Enable or disable client error reporting for the app.",
+  descriptionFr: "Activez ou désactivez le rapport d'erreurs client pour l'application.",
+  type: "boolean",
+  groupEn: null,
+  groupFr: null,
+  value: "false",
 };
 
 const allSettings = [
   brandingRequestFormSetting,
+  nagwareEnabled,
   nagwarePhaseEncouraged,
   nagwarePhasePrompted,
   nagwarePhaseWarned,
   nagwarePhaseEscalated,
   responseDownloadLimit,
+  responsesDownloadZipMaxSizeMB,
   editLockRedirectIdleMs,
   addressCompleteRetrieveRateLimitMax,
   addressCompleteRateLimitWindowSeconds,

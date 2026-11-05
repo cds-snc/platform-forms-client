@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
-import { getAppSetting } from "@lib/appSettings";
+import { getAppSetting, getAppSettingAsBoolean } from "@lib/appSettings";
 import { authCheckAndThrow } from "@lib/actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { checkKeyExists } from "@lib/serviceAccount";
@@ -8,6 +8,11 @@ import { ResponsesContainer } from "./components/ResponsesContainer";
 import { redirect } from "next/navigation";
 import { StatusFilter } from "./types";
 import { getOverdueTemplateIds } from "@lib/overdue";
+
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -131,7 +136,11 @@ export default async function Page(props: {
     <ResponsesContainer
       hasOverdue={hasOverdue}
       responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
+      responsesDownloadZipMaxSizeMB={Number(await getAppSetting("responsesDownloadZipMaxSizeMB"))}
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
+      nagwarePromptAfter={Number(await getAppSetting("nagwarePhasePrompted"))}
+      nagwareWarnAfter={Number(await getAppSetting("nagwarePhaseWarned"))}
+      nagwareEnabled={await getAppSettingAsBoolean("nagwareEnabled")}
       statusFilter={statusFilter as StatusFilter}
       isApiRetrieval={isApiRetrieval}
     />

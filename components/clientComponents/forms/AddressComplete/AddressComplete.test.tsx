@@ -1,12 +1,14 @@
 /**
  * @vitest-environment jsdom
  */
-import React, { useImperativeHandle, useState } from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import React, { Activity, useImperativeHandle, useState } from "react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { Formik, useFormikContext } from "formik";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ManagedCombobox as RealManagedCombobox } from "./ManagedCombobox";
 import { AddressComplete } from "./AddressComplete";
-import type { AddressCompleteProps } from "./types";
+import type { AddressCompleteProps, AddressElements } from "./types";
 import type { ManagedComboboxProps } from "./ManagedCombobox";
 import { localizeAddressCompleteDescription } from "./utils";
 
@@ -38,6 +40,8 @@ const {
   formikState: {
     value: "",
     error: undefined as unknown,
+    useRealForm: false,
+    useRealCombobox: false,
   },
 }));
 
@@ -51,23 +55,27 @@ vi.mock("formik", async () => {
   const actual = await vi.importActual<typeof import("formik")>("formik");
   return {
     ...actual,
-    useField: vi.fn(() => [
-      {
-        name: "address",
-        value: formikState.value,
-        onChange: vi.fn(),
-        onBlur: vi.fn(),
-      },
-      {
-        touched: false,
-        error: formikState.error,
-      },
-      {
-        setValue: setValueMock,
-        setTouched: vi.fn(),
-        setError: vi.fn(),
-      },
-    ]),
+    useField: vi.fn((props: Parameters<typeof actual.useField>[0]) =>
+      formikState.useRealForm
+        ? actual.useField(props)
+        : [
+            {
+              name: "address",
+              value: formikState.value,
+              onChange: vi.fn(),
+              onBlur: vi.fn(),
+            },
+            {
+              touched: false,
+              error: formikState.error,
+            },
+            {
+              setValue: setValueMock,
+              setTouched: vi.fn(),
+              setError: vi.fn(),
+            },
+          ]
+    ),
   };
 });
 
@@ -105,7 +113,7 @@ vi.mock("./utils", async (importActual) => {
 });
 
 vi.mock("@clientComponents/forms", () => {
-  const ManagedCombobox = React.forwardRef<ManagedComboboxRef, ManagedComboboxMockProps>(
+  const MockManagedCombobox = React.forwardRef<ManagedComboboxRef, ManagedComboboxMockProps>(
     (props, ref) => {
       const [inputValue, setInputValue] = useState(props.baseValue || "");
 
@@ -155,6 +163,16 @@ vi.mock("@clientComponents/forms", () => {
     }
   );
 
+  const ManagedCombobox = React.forwardRef<ManagedComboboxRef, ManagedComboboxMockProps>(
+    (props, ref) =>
+      formikState.useRealCombobox ? (
+        <RealManagedCombobox {...props} ref={ref} />
+      ) : (
+        <MockManagedCombobox {...props} ref={ref} />
+      )
+  );
+
+  MockManagedCombobox.displayName = "MockManagedCombobox";
   ManagedCombobox.displayName = "ManagedCombobox";
 
   return {
@@ -207,7 +225,54 @@ describe("AddressComplete", () => {
     getAddressCompleteRetrieveMock.mockResolvedValue({ items: [], error: null });
     formikState.value = "";
     formikState.error = undefined;
+    formikState.useRealForm = false;
+    formikState.useRealCombobox = false;
   });
+
+  const address = {
+    streetAddress: "100 Queen St",
+    city: "Toronto",
+    province: "Ontario",
+    postalCode: "M5H 2N2",
+    country: "Canada",
+  };
+
+  const FormPages = ({ keepMounted = true }: { keepMounted?: boolean }) => {
+    const [review, setReview] = useState(false);
+    const { values } = useFormikContext<{ address: string }>();
+
+    return (
+      <>
+        {keepMounted ? (
+          <Activity mode={review ? "hidden" : "visible"}>
+            <AddressComplete
+              id="address"
+              name="address"
+              label="Address"
+              lang="en"
+              required={false}
+              canadianOnly
+            />
+          </Activity>
+        ) : (
+          !review && (
+            <AddressComplete
+              id="address"
+              name="address"
+              label="Address"
+              lang="en"
+              required={false}
+              canadianOnly
+            />
+          )
+        )}
+        <output data-testid="saved-address">{values.address}</output>
+        <button type="button" onClick={() => setReview(!review)}>
+          {review ? "Edit address" : "Review"}
+        </button>
+      </>
+    );
+  };
 
   it("renders all address fields and country selector when not canadian-only", async () => {
     renderComponent();
@@ -554,4 +619,85 @@ describe("AddressComplete", () => {
       "222 King St E, Bowmanville ON L1C P6 - 27 Adresses"
     );
   });
+
+  describe("AddressComplete review navigation: hidden by React Activity versus unmounted", () => {
+    const savedAddress = () =>
+      JSON.parse(screen.getByTestId("saved-address").textContent || "") as AddressElements;
+
+    beforeEach(() => {
+      formikState.useRealForm = true;
+      formikState.useRealCombobox = true;
+      getAddressCompleteChoicesMock.mockResolvedValue({
+        items: [{ Id: "queen", Text: "100 Queen St", Description: "Toronto", Next: "Retrieve" }],
+        error: null,
+      });
+    });
+
+    it("preserves a manually entered address through Activity", async () => {
+      const user = userEvent.setup();
+      render(
+        <Formik initialValues={{ address: "" }} onSubmit={() => {}}>
+          <FormPages />
+        </Formik>
+      );
+
+      await user.type(screen.getByTestId("combobox-input"), "100 Queen St");
+      await user.type(screen.getByTestId("addresscomplete-input-city"), "Toronto");
+      await waitFor(() => expect(savedAddress().city).toBe("Toronto"));
+      await user.click(screen.getByRole("button", { name: "Review" }));
+      expect(savedAddress().city).toBe("Toronto");
+      await user.click(screen.getByRole("button", { name: "Edit address" }));
+      expect(screen.getByTestId("addresscomplete-input-city")).toHaveValue("Toronto");
+    });
+
+    it.each([
+      ["hidden by Activity", true],
+      ["unmounted", false],
+    ])("preserves the retrieved address when %s on review", async (_description, keepMounted) => {
+      const user = userEvent.setup();
+      let completeRetrieve: (result: { address: AddressElements; error: null }) => void = () => {
+        throw new Error("Retrieve has not started");
+      };
+      getSelectedAddressMock.mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            completeRetrieve = resolve;
+          })
+      );
+
+      render(
+        <Formik initialValues={{ address: "" }} onSubmit={() => {}}>
+          <FormPages keepMounted={keepMounted} />
+        </Formik>
+      );
+
+      await user.type(screen.getByTestId("combobox-input"), "1");
+      expect(screen.getByTestId("combobox-input")).toHaveValue("1");
+      await user.type(screen.getByTestId("combobox-input"), "00 Queen");
+      expect(screen.getByTestId("combobox-input")).toHaveValue("100 Queen");
+      await screen.findByRole("option", { name: "100 Queen St, Toronto" });
+      await user.click(screen.getByRole("option", { name: "100 Queen St, Toronto" }));
+      await waitFor(() =>
+        expect(getSelectedAddressMock).toHaveBeenCalledWith("queen", "CAN", "en")
+      );
+
+      const beforeRetrieve = savedAddress();
+      await act(async () => completeRetrieve({ address, error: null }));
+      await waitFor(() => expect(savedAddress()).toEqual(address));
+      expect(screen.getByTestId("combobox-input")).toHaveValue("100 Queen St");
+
+      await user.click(screen.getByRole("button", { name: "Review" }));
+      const onReview = savedAddress();
+      await user.click(screen.getByRole("button", { name: "Edit address" }));
+      const afterReturn = savedAddress();
+
+      expect(beforeRetrieve).not.toEqual(address);
+      expect(onReview).toEqual(address);
+      expect(getSelectedAddressMock).toHaveBeenCalledTimes(1);
+      expect(screen.getByTestId("addresscomplete-input-city")).toHaveValue("Toronto");
+      expect(afterReturn).toEqual(address);
+      expect(screen.getByTestId("combobox-input")).toHaveValue("100 Queen St");
+    });
+  });
+
 });

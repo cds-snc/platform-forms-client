@@ -270,7 +270,12 @@ const CardTitle = memo(
       );
     } else if (isPublished && !linkToEdit) {
       titleElement = (
-        <Link className={classesLink} href={`/${language}/id/${id}`} prefetch={false}>
+        <Link
+          className={classesLink}
+          href={`/${language}/id/${id}`}
+          prefetch={false}
+          target="_blank"
+        >
           {content}
         </Link>
       );

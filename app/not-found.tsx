@@ -11,8 +11,6 @@ import { languages } from "@i18n/settings";
 import { cookies } from "next/headers";
 import { Language } from "@lib/types/form-builder-types";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await serverTranslation("error");
   return {

@@ -1,35 +1,17 @@
 {
   "title": "Settings",
-  "title-update": "Update setting",
-  "title-create": "Create setting",
-  "brandingRequestId": "Branding request form ID",
-  "success": "Data saved successfully",
-  "loadingError": "Sorry, something went wrong.",
   "manageSetting": "Manage",
-  "createSetting": "Create",
-  "viewSetting": "View",
-  "deleteSetting": "Delete",
+  "other": "Other",
   "cancel": "Cancel",
   "save": "Save",
-  "back": "Back",
-  "deleted": "Setting deleted",
-  "errorDeleting": "Error deleting setting",
-  "created": "Setting created",
-  "errorCreating": "Error creating setting",
-  "updated": "Setting updated",
-  "errorUpdating": "Error updating setting",
-  "settingNotFound": "Setting not found",
-  "help": "help",
+  "saving": "Saving…",
+  "on": "On",
+  "off": "Off",
+  "unset": "Not set",
   "error": {
-    "save": "Error saving data",
-    "duplicateId": "Duplicate internal ID, please select another"
+    "save": "Could not save this setting. Please try again."
   },
   "label": {
-    "internalId": "Internal identifier",
-    "nameEn": "English name",
-    "nameFr": "French name",
-    "descriptionEn": "English description",
-    "descriptionFr": "French description",
     "value": "Value for this setting"
   },
   "throttling": {

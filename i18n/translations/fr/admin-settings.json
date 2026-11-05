@@ -1,35 +1,17 @@
 {
   "title": "Paramètres",
-  "title-update": "Mettre à jour le paramètre",
-  "title-create": "Créer le paramètre",
-  "brandingRequestId": "Identifiant du formulaire de demande d'image de marque",
-  "success": "Données enregistrées avec succès",
-  "loadingError": "Désolé, il y a eu un problème.",
-  "createSetting": "Créer",
   "manageSetting": "Gérer",
-  "viewSetting": "Afficher",
-  "deleteSetting": "Supprimer",
+  "other": "Autres",
   "cancel": "Annuler",
   "save": "Enregistrer",
-  "back": "Retour",
-  "deleted": "Paramètre supprimé",
-  "errorDeleting": "Erreur lors de la suppression du paramètre",
-  "created": "Paramètre créé",
-  "errorCreating": "Erreur lors de la création du paramètre",
-  "updated": "Paramètre mis à jour",
-  "errorUpdating": "Erreur lors de la mise à jour du paramètre",
-  "settingNotFound": "Paramètre non trouvé",
-  "help": "aide",
+  "saving": "Enregistrement…",
+  "on": "Activé",
+  "off": "Désactivé",
+  "unset": "Non défini",
   "error": {
-    "save": "Erreur d'enregistrement des données",
-    "duplicateId": "Il s'agit d'un double de l'identifiant interne, veuillez en sélectionner un autre."
+    "save": "Impossible d'enregistrer ce paramètre. Veuillez réessayer."
   },
   "label": {
-    "internalId": "Identifiant interne",
-    "nameEn": "Nom en anglais",
-    "nameFr": "Nom en français",
-    "descriptionEn": "Description en anglais",
-    "descriptionFr": "Description en français",
     "value": "Valeur de ce paramètre"
   },
   "throttling": {

@@ -7,6 +7,7 @@ test.describe("Accounts Page", () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto("/en/admin/accounts");
+    await page.waitForLoadState("networkidle");
   });
 
   test.describe("Authenticated Admin User", () => {
@@ -41,10 +42,12 @@ test.describe("Accounts Page", () => {
       });
 
       test("Clicking manage forms navigates to the related page", async ({ page }) => {
-        await page.locator("#accounts-query").fill(testUserEmail);
-        await page.getByRole("button", { name: "Search" }).click();
-
-        await expect(page).toHaveURL(/query=test\.user%40cds-snc\.ca/);
+        // Retry in case the click lands before the search form has hydrated
+        await expect(async () => {
+          await page.locator("#accounts-query").fill(testUserEmail);
+          await page.getByRole("button", { name: "Search" }).click();
+          await expect(page).toHaveURL(/query=test\.user%40cds-snc\.ca/, { timeout: 2000 });
+        }).toPass({ timeout: 15000 });
         await expect(page.getByTestId(testUserEmail)).toBeVisible();
 
         await page.getByTestId(testUserEmail).getByRole("link", { name: "Manage forms" }).click();

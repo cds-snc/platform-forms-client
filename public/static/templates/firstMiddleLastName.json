@@ -2,34 +2,13 @@
   {
     "type": "richText",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
-      "titleEn": "",
-      "titleFr": "",
-      "validation": {
-        "required": false
-      },
       "descriptionEn": "## What is your name?",
-      "descriptionFr": "## Quel est votre nom?",
-      "placeholderEn": "",
-      "placeholderFr": ""
+      "descriptionFr": "## Quel est votre nom?"
     }
   },
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "First name",
       "titleFr": "Prénom",
       "validation": {
@@ -45,13 +24,6 @@
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "Middle name",
       "titleFr": "Deuxième prénom",
       "validation": {
@@ -67,13 +39,6 @@
   {
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "Last name",
       "titleFr": "Nom de famille",
       "validation": {

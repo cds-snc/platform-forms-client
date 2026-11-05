@@ -109,7 +109,8 @@ const getClientKey = (request: Request) => {
 export async function POST(request: Request) {
   try {
     const reportingSetting = await getAppSetting("enableClientErrorReporting");
-    if (reportingSetting?.toUpperCase() !== "ON") {
+    // Accept legacy ON/OFF values until every environment has been updated by an admin.
+    if (reportingSetting !== "true" && reportingSetting?.toUpperCase() !== "ON") {
       return new Response(null, { status: 404 });
     }
   } catch {

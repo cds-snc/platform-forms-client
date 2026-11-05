@@ -5,6 +5,11 @@ import { Metadata } from "next";
 import frContent from "@content/fr/sla.md";
 import enContent from "@content/en/sla.md";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
@@ -24,7 +29,7 @@ const SLA = async (props: { params: Promise<{ locale: string }> }) => {
   const { locale } = params;
 
   return (
-    <RichText className="w-full tablet:w-[90%] laptop:w-[70%]">
+    <RichText className="tablet:w-[90%] laptop:w-[70%] w-full">
       {locale === "fr" ? frContent : enContent}
     </RichText>
   );

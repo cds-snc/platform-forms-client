@@ -13,8 +13,6 @@ import {
 } from "@lib/editLockEventStreams";
 import { logMessage } from "@lib/logger";
 
-export const dynamic = "force-dynamic";
-
 import { SHOULD_DEBUG_EDIT_LOCK_SSE } from "@root/constants";
 
 const debugEditLockSse = (message: string, metadata: Record<string, unknown>) => {

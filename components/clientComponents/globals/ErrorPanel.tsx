@@ -8,9 +8,7 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { ga } from "@lib/client/clientHelpers";
-
-// Start the async call before the component renders
-const getSessionPromise = getSession();
+import { logMessage } from "@lib/logger";
 
 export const ErrorPanel = ({
   title,
@@ -27,9 +25,19 @@ export const ErrorPanel = ({
 
   const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
-    getSessionPromise.then((session) => {
-      setSession(session);
-    });
+    let mounted = true;
+
+    getSession()
+      .then((session) => {
+        if (mounted) setSession(session);
+      })
+      .catch((error: unknown) => {
+        logMessage.error(error);
+      });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {

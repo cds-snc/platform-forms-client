@@ -8,6 +8,7 @@ import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 
 export const CheckAll = ({
   tableItems,
+  isBlocked,
   tableItemsDispatch,
   noSelectedItemsError,
   setNoSelectedItemsError,
@@ -19,6 +20,7 @@ export const CheckAll = ({
     numberOfOverdueResponses: number;
   };
   tableItemsDispatch: React.Dispatch<ReducerTableItemsActions>;
+  isBlocked?: (submission: VaultSubmissionOverview) => boolean;
   noSelectedItemsError: boolean;
   setNoSelectedItemsError: (noSelectedItemsError: boolean) => void;
 }) => {
@@ -31,7 +33,8 @@ export const CheckAll = ({
   } as const;
   type allCheckedState = (typeof allCheckedState)[keyof typeof allCheckedState];
 
-  const { checkedItems, allItems } = tableItems;
+  const { checkedItems } = tableItems;
+  const allItems = tableItems.allItems.filter((submission) => !isBlocked?.(submission));
 
   const checkedItemsCount = checkedItems.size;
   const allItemsCount = allItems.length;

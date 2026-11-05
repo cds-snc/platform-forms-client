@@ -61,9 +61,6 @@ const cleanFormStructure = (form: FormProperties) => {
     group.elements.forEach((elementId) => {
       elementIdsInGroups.add(elementId);
     });
-
-    if (group.exitUrlEn === "") delete group.exitUrlEn;
-    if (group.exitUrlFr === "") delete group.exitUrlFr;
   });
 
   cleanedForm.elements = cleanedForm.elements.filter((element) => {

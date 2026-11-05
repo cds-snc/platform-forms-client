@@ -3,9 +3,11 @@ import { authorization } from "./privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { settingCheck, settingPut, settingDelete } from "@lib/cache/settingCache";
+import { settingCheck, settingPut } from "@lib/cache/settingCache";
 
-export const getAllAppSettings = async () => {
+export type AppSettingType = "string" | "boolean" | "number";
+
+export const getAllAppSettings = async (language = "en") => {
   const { user } = await authorization.canAccessSettings().catch((e) => {
     if (e instanceof AccessControlError) {
       logEvent(
@@ -26,17 +28,34 @@ export const getAllAppSettings = async () => {
         nameFr: true,
         descriptionEn: true,
         descriptionFr: true,
+        type: true,
+        groupEn: true,
+        groupFr: true,
         value: true,
       },
     })
     .catch((e) => prismaErrors(e, []));
+  const collator = new Intl.Collator(language, { numeric: true, sensitivity: "base" });
+  settings.sort((a, b) => {
+    const groupA = language === "fr" ? a.groupFr : a.groupEn;
+    const groupB = language === "fr" ? b.groupFr : b.groupEn;
+    const nameA = language === "fr" ? a.nameFr : a.nameEn;
+    const nameB = language === "fr" ? b.nameFr : b.nameEn;
+    const groupOrder =
+      groupA && groupB ? collator.compare(groupA, groupB) : groupA ? -1 : groupB ? 1 : 0;
+    return (
+      groupOrder ||
+      collator.compare(nameA, nameB) ||
+      (a.internalId < b.internalId ? -1 : a.internalId > b.internalId ? 1 : 0)
+    );
+  });
   logEvent(user.id, { type: "Setting" }, "ListAllSettings");
   return settings;
 };
 
 export const getAppSetting = async (internalId: string) => {
   const cachedSetting = await settingCheck(internalId);
-  if (cachedSetting) return cachedSetting;
+  if (cachedSetting !== null) return cachedSetting;
 
   const uncachedSetting = await prisma.setting
     .findUnique({
@@ -49,7 +68,7 @@ export const getAppSetting = async (internalId: string) => {
     })
     .catch((e) => prismaErrors(e, null));
 
-  if (uncachedSetting?.value) {
+  if (uncachedSetting?.value !== null && uncachedSetting?.value !== undefined) {
     settingPut(internalId, uncachedSetting.value);
   }
   return uncachedSetting?.value ?? null;
@@ -57,7 +76,8 @@ export const getAppSetting = async (internalId: string) => {
 
 export const getAppSettingAsBoolean = async (internalId: string) => {
   const value = await getAppSetting(internalId);
-  return value === "true";
+  // `ON` is accepted for backwards compatibility with existing runtime values.
+  return value === "true" || value?.toUpperCase() === "ON";
 };
 
 export const getFullAppSetting = async (internalId: string) => {
@@ -84,6 +104,9 @@ export const getFullAppSetting = async (internalId: string) => {
         nameFr: true,
         descriptionEn: true,
         descriptionFr: true,
+        type: true,
+        groupEn: true,
+        groupFr: true,
         value: true,
       },
     })
@@ -95,14 +118,7 @@ export const getFullAppSetting = async (internalId: string) => {
   return result;
 };
 
-interface SettingUpdateData {
-  nameEn?: string;
-  nameFr?: string;
-  descriptionEn?: string;
-  descriptionFr?: string;
-  value?: string;
-}
-export const updateAppSetting = async (internalId: string, settingData: SettingUpdateData) => {
+export const updateAppSettingValue = async (internalId: string, value: string) => {
   const { user } = await authorization.canManageSettings().catch((e) => {
     if (e instanceof AccessControlError) {
       logEvent(
@@ -115,12 +131,28 @@ export const updateAppSetting = async (internalId: string, settingData: SettingU
     throw e;
   });
 
+  const setting = await prisma.setting
+    .findUnique({ where: { internalId }, select: { type: true } })
+    .catch((e) => prismaErrors(e, null));
+  if (!setting) return null;
+
+  const settingType = setting.type as AppSettingType;
+  const validValue =
+    settingType === "boolean"
+      ? ["true", "false", "ON", "OFF"].includes(value)
+      : settingType === "number"
+        ? value.trim() !== "" && Number.isFinite(Number(value))
+        : settingType === "string";
+  if (!validValue) {
+    throw new Error(`Invalid ${setting.type} value for setting ${internalId}`);
+  }
+
   const updatedSetting = await prisma.setting
     .update({
       where: {
         internalId,
       },
-      data: settingData,
+      data: { value },
     })
     .catch((e) => {
       logMessage.warn(
@@ -136,92 +168,8 @@ export const updateAppSetting = async (internalId: string, settingData: SettingU
     { type: "Setting", id: internalId },
     "ChangeSetting",
     AuditLogDetails.UpdatedAppSetting,
-    { settingData: JSON.stringify(settingData) }
+    { settingData: JSON.stringify({ value }) }
   );
-  if (settingData.value) {
-    settingPut(internalId, settingData.value);
-  }
+  settingPut(internalId, value);
   return updatedSetting;
-};
-
-interface SettingCreateData extends SettingUpdateData {
-  internalId: string;
-  nameEn: string;
-  nameFr: string;
-}
-export const createAppSetting = async (settingData: SettingCreateData) => {
-  const { user } = await authorization.canManageSettings().catch((e) => {
-    if (e instanceof AccessControlError) {
-      logEvent(
-        e.user.id,
-        { type: "Setting" },
-        "AccessDenied",
-        AuditLogAccessDeniedDetails.AccessDenied_AttemptToCreateSetting
-      );
-    }
-    throw e;
-  });
-
-  const createdSetting = await prisma.setting
-    .create({
-      data: settingData,
-    })
-    .catch((e) => {
-      logMessage.warn(
-        `Could not create setting with name: ${settingData.nameEn} due to error: ${e.message}`
-      );
-      return prismaErrors(e, null);
-    });
-  // If there was a prisma error return early
-  if (createdSetting === null) return null;
-
-  logEvent(
-    user.id,
-    { type: "Setting", id: createdSetting.internalId },
-    "CreateSetting",
-    AuditLogDetails.CreatedAppSetting,
-    { settingData: JSON.stringify(settingData) }
-  );
-  if (settingData.value) {
-    settingPut(settingData.internalId, settingData.value);
-  }
-  return createdSetting;
-};
-
-export const deleteAppSetting = async (internalId: string) => {
-  const { user } = await authorization.canManageSettings().catch((e) => {
-    if (e instanceof AccessControlError) {
-      logEvent(
-        e.user.id,
-        { type: "Setting", id: internalId },
-        "AccessDenied",
-        AuditLogAccessDeniedDetails.AccessDenied_AttemptToDeleteSetting
-      );
-    }
-    throw e;
-  });
-
-  const deletedSetting = await prisma.setting
-    .delete({
-      where: {
-        internalId,
-      },
-    })
-    .catch((e) => {
-      logMessage.warn(
-        `Could not delete setting with internalId: ${internalId} due to error: ${e.message}`
-      );
-      return prismaErrors(e, null);
-    });
-  // return early if there was a prisma error
-  if (deletedSetting === null) return null;
-
-  logEvent(
-    user.id,
-    { type: "Setting", id: internalId },
-    "DeleteSetting",
-    AuditLogDetails.DeletedAppSetting,
-    { internalId: deletedSetting.internalId }
-  );
-  settingDelete(internalId);
 };

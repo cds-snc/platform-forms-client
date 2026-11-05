@@ -2,6 +2,11 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
@@ -24,7 +29,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const supportHref = `/${locale}/support`;
   return (
     <div>
-      <h2 className="mb-6 mt-4 p-0">{t("title")}</h2>
+      <h2 className="mt-4 mb-6 p-0">{t("title")}</h2>
       <p className="mb-10">{t("description")}</p>
       <div className="laptop:flex">
         <LinkButton.Primary href={supportHref} className="mb-2">

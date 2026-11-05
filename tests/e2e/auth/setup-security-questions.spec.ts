@@ -32,7 +32,7 @@ test.describe("Security Questions Page", () => {
     await page.fill("input[id='verificationCode']", "12345");
 
     // Submit verification
-    await page.locator("button[type='submit']").click();
+    await page.getByTestId("verify-submit").click();
 
     // Wait for security questions page
     await page.waitForURL(/\/en\/auth\/setup-security-questions/);

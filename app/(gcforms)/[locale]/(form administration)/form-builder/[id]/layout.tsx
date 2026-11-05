@@ -31,6 +31,11 @@ import { AccountMenu } from "@formBuilder/components/shared/account-menu/Account
 import { ManageFormAccessDialogContainer } from "./components/dialogs/ManageFormAccessDialog";
 import { CreateDraftConfirmDialog } from "./components/dialogs/CreateDraftConfirmDialog/CreateDraftConfirmDialog";
 
+// @next-codemod-ignore Cache Components adoption: this segment temporarily allows blocking.
+// Remove this opt-out after verifying the segment passes validation without it.
+// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
+export const instant = false;
+
 export default async function Layout(props: {
   children: React.ReactNode;
   params: Promise<{ locale: string; id: string }>;

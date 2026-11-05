@@ -2,7 +2,6 @@
   {
     "type": "checkbox",
     "properties": {
-      "subElements": [],
       "choices": [
         {
           "en": "Condition 1",
@@ -24,9 +23,7 @@
         "all": true
       },
       "descriptionEn": "",
-      "descriptionFr": "",
-      "placeholderEn": "",
-      "placeholderFr": ""
+      "descriptionFr": ""
     }
   }
 ]

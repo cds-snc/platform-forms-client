@@ -1,10 +1,11 @@
-import { ValidationError, Validator, ValidatorResult } from "jsonschema";
-import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
+import { type Schema, ValidationError, Validator, ValidatorResult } from "jsonschema";
+import { getTemplateSchema } from "@lib/templates/schemas/templates";
 import { FormProperties } from "@lib/types";
 import { cleanAngleBrackets } from "@lib/client/jsonFormatting";
 import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
 import { validateCustomRegex } from "@lib/regex/validateCustomRegex";
 import { createsNextActionCycle } from "@lib/groups/utils/validateGroups";
+import { logMessage } from "@lib/logger";
 
 export type errorMessage = { property?: string; message: string };
 
@@ -60,19 +61,19 @@ type OneOfSchema = {
   }[];
 };
 
-const getOneOfErrors = (error: ValidationError): errorMessage[] => {
+const getOneOfErrors = (error: ValidationError, templateSchema: Schema) => {
   const elementType = (error.instance as { type?: unknown } | null)?.type;
-  const schema = (error.schema as OneOfSchema).oneOf?.find(
+  const oneOfSchema = (error.schema as OneOfSchema).oneOf?.find(
     ({ properties }) => properties?.type?.const === elementType
   );
 
-  if (!schema) {
+  if (!oneOfSchema) {
     return [getErrorMessageTranslationString(error)];
   }
 
   const branchResult = new Validator().validate(error.instance, {
-    ...schema,
-    definitions: templatesSchema.definitions,
+    ...oneOfSchema,
+    definitions: templateSchema.definitions,
   });
   const branchErrors = branchResult.errors
     .filter(({ name }) => !["allOf", "anyOf"].includes(name))
@@ -101,8 +102,21 @@ export const validateTemplate = (data: FormProperties) => {
     errors.push({ message: "startErrorNavigationCycle" });
   }
 
+  let schema: Schema;
+
+  try {
+    schema = getTemplateSchema(data.schemaVersion);
+  } catch (e) {
+    logMessage.error(e);
+    errors.push({ property: "schemaVersion", message: "formInvalidProperty" });
+    return {
+      valid: false,
+      errors: deduplicatePropertyErrors(errors),
+    };
+  }
+
   const validator = new Validator();
-  const validatorResult: ValidatorResult = validator.validate(data, templatesSchema, {
+  const validatorResult: ValidatorResult = validator.validate(data, schema, {
     preValidateProperty: cleanAngleBrackets,
   });
   const validationErrors = validatorResult.errors.flatMap((error) => {
@@ -110,7 +124,7 @@ export const validateTemplate = (data: FormProperties) => {
       return [];
     }
     return error.name === "oneOf"
-      ? getOneOfErrors(error)
+      ? getOneOfErrors(error, schema)
       : [getErrorMessageTranslationString(error)];
   });
   errors.push(...deduplicatePropertyErrors(validationErrors));

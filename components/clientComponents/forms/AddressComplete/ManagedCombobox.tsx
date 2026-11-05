@@ -6,6 +6,7 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
 import { cn } from "@lib/utils";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
+import deburr from "lodash/deburr";
 
 export interface ManagedComboboxProps extends InputFieldProps {
   choices?: string[];
@@ -53,19 +54,24 @@ export const ManagedCombobox = React.forwardRef(
       setItems(choices);
     }, [choices]);
 
+    // Allow normalized search text for filtering choices e.g. États-Unis becomes etats-unis
+    const normalizeSearchText = (value: string): string => deburr(value).toLowerCase();
+
     const { getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
       useCombobox({
         inputValue,
-        onInputValueChange: ({ inputValue }) => {
-          setInputValue(inputValue || "");
-          if (props.onChange) {
-            props.onChange({
+        onInputValueChange: ({ inputValue, type }) => {
+          const normalizedFilterText = normalizeSearchText(inputValue ?? "");
+
+          if (type === useCombobox.stateChangeTypes.InputChange) {
+            setInputValue(inputValue || "");
+            props.onChange?.({
               target: { value: inputValue },
             } as React.ChangeEvent<HTMLInputElement>);
           }
           setItems(
             choices.filter((choice) =>
-              useFilter ? choice.toLowerCase().includes(inputValue?.toLowerCase() || "") : true
+              useFilter ? normalizeSearchText(choice).includes(normalizedFilterText) : true
             )
           );
           if (!useFilter) {
@@ -74,10 +80,10 @@ export const ManagedCombobox = React.forwardRef(
         },
         items,
         onSelectedItemChange: ({ selectedItem }) => {
-          setValue(selectedItem || "");
-          if (props.onSetValue) {
-            props.onSetValue(selectedItem || "");
-          }
+          const value = selectedItem ?? "";
+          setInputValue(value);
+          setValue(value);
+          props.onSetValue?.(value);
           setIsOpen(false);
         },
         onIsOpenChange: ({ isOpen }) => {

@@ -3,13 +3,6 @@
     "id": 1,
     "type": "textField",
     "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
       "titleEn": "Full name",
       "titleFr": "Nom complet",
       "validation": {
