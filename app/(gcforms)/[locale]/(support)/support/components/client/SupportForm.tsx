@@ -29,7 +29,7 @@ import {
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { isValidGovEmail } from "@root/lib/validation/validation";
-import { GcdsAlert } from "@gcds-core/components-react";
+import { GcdsAlert, GcdsContainer } from "@gcds-core/components-react";
 
 export const SupportForm = () => {
   const {
@@ -95,7 +95,7 @@ export const SupportForm = () => {
   };
 
   return (
-    <>
+    <GcdsContainer size="lg">
       {submitted ? (
         <Success lang={language} />
       ) : (
@@ -123,6 +123,7 @@ export const SupportForm = () => {
           )}
 
           <GcdsH1>{t("support.title")}</GcdsH1>
+
           <p className="mb-6">
             {t("support.experience")}
             <Link href={`https://articles.alpha.canada.ca/forms-formulaires/${language}/guidance`}>
@@ -137,6 +138,7 @@ export const SupportForm = () => {
             </Link>{" "}
             {t("support.gcFormsTeamPart2")}
           </p>
+
           <div className="mb-14">
             <GcdsAlert heading={t("support.lookingForADemo")} hideCloseBtn={true}>
               <p>
@@ -145,6 +147,7 @@ export const SupportForm = () => {
               </p>
             </GcdsAlert>
           </div>
+
           <form
             id="support"
             onSubmit={(e) => {
@@ -241,6 +244,6 @@ export const SupportForm = () => {
           </form>
         </>
       )}
-    </>
+    </GcdsContainer>
   );
 };

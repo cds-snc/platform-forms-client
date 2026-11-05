@@ -28,7 +28,7 @@ import {
 import { useState } from "react";
 import { Success } from "../../../components/client/Success";
 import { isValidGovEmail } from "@root/lib/validation/validation";
-import { GcdsAlert } from "@gcds-core/components-react";
+import { GcdsAlert, GcdsContainer } from "@gcds-core/components-react";
 
 export const ContactForm = () => {
   const {
@@ -102,7 +102,7 @@ export const ContactForm = () => {
   };
 
   return (
-    <>
+    <GcdsContainer size="lg">
       {submitted ? (
         <Success lang={language} />
       ) : (
@@ -129,6 +129,7 @@ export const ContactForm = () => {
             </ValidationMessage>
           )}
           <h1>{t("contactus.title")}</h1>
+
           <p className="mb-6">{t("contactus.useThisForm")}</p>
           <p className="mb-14">
             {t("contactus.gcFormsTeamPart1")}{" "}
@@ -137,12 +138,14 @@ export const ContactForm = () => {
             </Link>{" "}
             {t("contactus.gcFormsTeamPart2")}
           </p>
+
           <GcdsAlert heading={t("contactus.needSupport")} hideCloseBtn={true}>
             <p>
               {t("contactus.ifYouExperience")}{" "}
               <Link href={`/${language}/support`}>{t("contactus.supportFormLink")}</Link>.
             </p>
           </GcdsAlert>
+
           <form
             id="contactus"
             onSubmit={(e) => {
@@ -276,6 +279,6 @@ export const ContactForm = () => {
           </form>
         </>
       )}
-    </>
+    </GcdsContainer>
   );
 };
