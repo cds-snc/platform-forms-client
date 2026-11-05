@@ -196,6 +196,12 @@
     "downloadDialog": {
       "title": "Télécharger les réponses",
       "sizeLimit": "Jusqu'à un maximum de {{maxSizeMB}} Mo à la fois. Sélectionnez de plus petits lots si le téléchargement échoue.",
+      "attachmentWarning": {
+        "title": "Soyez prudent lorsque vous ouvrez les fichiers joints aux soumissions",
+        "separateFolder": "Toutes les pièces jointes se trouvent dans un dossier distinct des réponses.",
+        "suspiciousFolder": "Les fichiers analysés et identifiés comme « potentiellement malveillants » se trouvent dans un sous-dossier distinct.",
+        "checkFiles": "Vérifiez si les fichiers suspects comportent des attributs « malveillants » ou le symbole « ⚠️ » dans les réponses."
+      },
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
       "downloadFormatContext1": "Vous recevrez un ",
       "downloadFormatContext2": "Reçu officiel",
