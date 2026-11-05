@@ -354,7 +354,7 @@ describe("downloadResponses", () => {
         filename: "response-2.html",
         reason: "At download limit",
       },
-      { code: "Download limit", responseId: "response-3", reason: "At download limit" },
+      { code: "Limite de téléchargement", responseId: "response-3", reason: "À la limite de téléchargement" },
     ]);
     expect(onDownloadComplete).toHaveBeenCalledWith(["response-1"], {
       sizeLimitReached: true,
