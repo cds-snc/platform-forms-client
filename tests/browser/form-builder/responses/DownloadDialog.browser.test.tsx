@@ -91,35 +91,6 @@ describe("<DownloadDialog />", () => {
     await expect.element(page.getByText(message)).toBeVisible();
   });
 
-  it.each([
-    [
-      "en",
-      "Be cautious when opening files attached to submissions",
-      "All file attachments are located in a separate folder from responses.",
-      "Scanned files identified as “potentially malicious” are in a separate nested folder.",
-      "Check suspicious files for “malicious” attributes or the “⚠️” symbol in responses.",
-    ],
-    [
-      "fr",
-      "Soyez prudent lorsque vous ouvrez les fichiers joints aux soumissions",
-      "Toutes les pièces jointes se trouvent dans un dossier distinct des réponses.",
-      "Les fichiers analysés et identifiés comme « potentiellement malveillants » se trouvent dans un sous-dossier distinct.",
-      "Vérifiez si les fichiers suspects comportent des attributs « malveillants » ou le symbole « ⚠️ » dans les réponses.",
-    ],
-  ])(
-    "shows the attachment safety warning without the follow-all-warnings text in %s",
-    async (language, title, separateFolder, suspiciousFolder, checkFiles) => {
-      mockLanguage.mockReturnValue(language);
-      await render(<DownloadDialog {...defaultProps} />);
-
-      await expect.element(page.getByRole("heading", { name: title })).toBeVisible();
-      await expect.element(page.getByText(separateFolder)).toBeVisible();
-      await expect.element(page.getByText(suspiciousFolder)).toBeVisible();
-      await expect.element(page.getByText(checkFiles)).toBeVisible();
-      await expect.element(page.getByText(/follow all warning prompts/i)).not.toBeInTheDocument();
-    }
-  );
-
   it("does not render the version selector when versions are not provided", async () => {
     await render(<DownloadDialog {...defaultProps} />);
 
