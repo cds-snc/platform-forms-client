@@ -28,7 +28,7 @@ import {
 import { useState } from "react";
 import { Success } from "../../../components/client/Success";
 import { isValidGovEmail } from "@root/lib/validation/validation";
-import { GcdsAlert, GcdsContainer } from "@gcds-core/components-react";
+import { GcdsAlert } from "@gcds-core/components-react";
 
 export const ContactForm = () => {
   const {
@@ -102,7 +102,7 @@ export const ContactForm = () => {
   };
 
   return (
-    <GcdsContainer size="lg">
+    <div>
       {submitted ? (
         <Success lang={language} />
       ) : (
@@ -279,6 +279,6 @@ export const ContactForm = () => {
           </form>
         </>
       )}
-    </GcdsContainer>
+    </div>
   );
 };

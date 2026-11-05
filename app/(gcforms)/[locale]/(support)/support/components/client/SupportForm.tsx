@@ -29,7 +29,7 @@ import {
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { isValidGovEmail } from "@root/lib/validation/validation";
-import { GcdsAlert, GcdsContainer } from "@gcds-core/components-react";
+import { GcdsAlert } from "@gcds-core/components-react";
 
 export const SupportForm = () => {
   const {
@@ -95,7 +95,7 @@ export const SupportForm = () => {
   };
 
   return (
-    <GcdsContainer size="lg">
+    <div>
       {submitted ? (
         <Success lang={language} />
       ) : (
@@ -244,6 +244,6 @@ export const SupportForm = () => {
           </form>
         </>
       )}
-    </GcdsContainer>
+    </div>
   );
 };
