@@ -140,6 +140,6 @@
     "step1": "Add a file upload element to your form.",
     "step2": "Use a repeating set to collect many related files.",
     "step3": "Download responses that include files, in batches of up to 500 MB at a time.",
-    "description": "This feature is no longer API-only and can be used by."
+    "description": "This feature is no longer API-only and available for all."
   }
 }
