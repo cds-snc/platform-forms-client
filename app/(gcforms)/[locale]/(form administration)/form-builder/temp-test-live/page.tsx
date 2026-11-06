@@ -142,7 +142,12 @@ export default function TestLivePage() {
           need a longer spacing delay. Combining messages works great but may have a buffer limit on
           the size of the message at some point.{" "}
         </li>
-        <li>Native Live Regions - same behavior with VoiceOver</li>
+        <li>
+          <strong>
+            Native Live Regions - same sketchy behavior with VoiceOver. Edge/Chrome+Jawa/NVDA queue
+            without dropping messages with or without the Announce lib.
+          </strong>
+        </li>
       </ul>
       <hr className="my-8" />
       <div className="mb-6 flex flex-wrap gap-4">
@@ -207,7 +212,7 @@ export default function TestLivePage() {
           Clear log
         </button>
       </div>
-      <div ref={nativeHost} className="visually-hidden" lang="en">
+      <div ref={nativeHost} className="sr-only">
         <div
           ref={nativePolite}
           role="status"
@@ -224,7 +229,7 @@ export default function TestLivePage() {
         />
       </div>
       <hr className="my-8" />
-      <h2 className="mb-2">Live-region changes (last 200; timestamps in UTC)</h2>
+      <h2 className="mb-2">Live-region changes</h2>
       <table className="w-full text-left">
         <thead>
           <tr>
