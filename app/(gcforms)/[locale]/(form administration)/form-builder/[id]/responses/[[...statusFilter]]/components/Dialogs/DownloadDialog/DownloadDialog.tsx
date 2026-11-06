@@ -44,6 +44,7 @@ export const DownloadDialog = ({
   onSuccessfulDownload,
   responseDownloadLimit,
   responsesDownloadZipMaxSizeMB,
+  hasFileInput,
   checkedMeta = [],
 }: DownloadDialogProps) => {
   const dialogRef = useDialogRef();
@@ -131,7 +132,7 @@ export const DownloadDialog = ({
         version: selectedVersion,
         filteredIds: filteredIdsWithVersion,
         filePrefix,
-        shouldCreateZip: zipAllFiles,
+        shouldCreateZip: zipAllFiles || hasFileInput,
         responsesDownloadZipMaxSizeMB,
         setDownloadProgress,
         setIsDownloading,
@@ -296,6 +297,27 @@ export const DownloadDialog = ({
                 </label>
               </div>
             </div>
+
+            {!hasFileInput && (
+              <div className="mt-6">
+                <div className="gc-input-checkbox">
+                  <input
+                    type="checkbox"
+                    name="downloadAllAsZip"
+                    id="zipped"
+                    checked={zipAllFiles}
+                    disabled={selectedFormat === DownloadFormat.HTML_ZIPPED}
+                    className="gc-input-checkbox__input"
+                    onChange={() => setZipAllFiles(!zipAllFiles)}
+                  />
+                  <label htmlFor="zipped" className="gc-checkbox-label">
+                    <span className="block font-semibold">
+                      {t("downloadResponsesModals.downloadDialog.downloadAllAsZip")}
+                    </span>
+                  </label>
+                </div>
+              </div>
+            )}
 
             <div className="sticky bottom-0 flex flex-col gap-3 border-t-[0.5px] border-slate-500 bg-white p-4">
               {/* Avoid flooding a screen reader with messages by only announcing summary info e.g. "Processing response 1 of 3" */}

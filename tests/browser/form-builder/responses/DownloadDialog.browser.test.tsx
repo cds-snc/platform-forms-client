@@ -59,6 +59,7 @@ const defaultProps = {
   onSuccessfulDownload: vi.fn(),
   responseDownloadLimit: 50,
   responsesDownloadZipMaxSizeMB: 500,
+  hasFileInput: false,
 };
 
 describe("<DownloadDialog />", () => {
@@ -98,7 +99,7 @@ describe("<DownloadDialog />", () => {
   });
 
   it("hides the optional ZIP checkbox when file uploads are enabled", async () => {
-    await render(<DownloadDialog {...defaultProps} />);
+    await render(<DownloadDialog {...defaultProps} hasFileInput={true} />);
 
     const checkboxes = await page.getByRole("checkbox").all();
     expect(checkboxes).toHaveLength(0);
