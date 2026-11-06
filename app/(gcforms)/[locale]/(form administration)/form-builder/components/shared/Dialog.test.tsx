@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
-import { createRef, type ReactNode } from "react";
+import { createRef, useState, type ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Announce, announce } from "@gcforms/announce";
 import type { CDSHTMLDialogElement } from "@lib/types/form-builder-types";
@@ -90,6 +90,81 @@ describe("Dialog announcement host", () => {
     expect(within(screen.getByTestId("root")).getByTestId("gc-announce-polite")).toHaveTextContent(
       "After close"
     );
+  });
+
+  it.each([
+    { withAnnounce: false, stopPropagation: false },
+    { withAnnounce: false, stopPropagation: true },
+    { withAnnounce: true, stopPropagation: false },
+    { withAnnounce: true, stopPropagation: true },
+  ])(
+    "lets a nested control consume Escape first (withAnnounce: $withAnnounce, stopPropagation: $stopPropagation)",
+    ({ withAnnounce, stopPropagation }) => {
+      const ref = createRef<CDSHTMLDialogElement>();
+      const onClose = vi.fn();
+      const onControlEscape = vi.fn();
+      function PopupControl() {
+        const [expanded, setExpanded] = useState(true);
+        return (
+          <button
+            aria-expanded={expanded}
+            onKeyDown={(event) => {
+              if (event.key === "Escape" && expanded) {
+                event.preventDefault();
+                if (stopPropagation) event.stopPropagation();
+                onControlEscape();
+                setExpanded(false);
+              }
+            }}
+          >
+            Popup control
+          </button>
+        );
+      }
+      render(
+        <Dialog dialogRef={ref} handleClose={onClose} withAnnounce={withAnnounce}>
+          <PopupControl />
+        </Dialog>
+      );
+      const control = screen.getByRole("button", { name: "Popup control" });
+      fireEvent.keyDown(control, { key: "Escape" });
+      expect(onControlEscape).toHaveBeenCalledTimes(1);
+      expect(control).toHaveAttribute("aria-expanded", "false");
+      expect(ref.current?.open).toBe(true);
+      expect(onClose).not.toHaveBeenCalled();
+
+      const escape = new KeyboardEvent("keydown", {
+        key: "Escape",
+        bubbles: true,
+        cancelable: true,
+      });
+      fireEvent(control, escape);
+      expect(escape.defaultPrevented).toBe(true);
+      expect(ref.current?.open).toBe(false);
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onControlEscape).toHaveBeenCalledTimes(1);
+    }
+  );
+
+  it("leaves unrelated keys available to nested controls without closing the dialog", () => {
+    const ref = createRef<CDSHTMLDialogElement>();
+    const onClose = vi.fn();
+    const onKeyDown = vi.fn();
+    render(
+      <Dialog dialogRef={ref} handleClose={onClose}>
+        <input aria-label="Nested control" onKeyDown={onKeyDown} />
+      </Dialog>
+    );
+    const keyDown = new KeyboardEvent("keydown", {
+      key: "ArrowDown",
+      bubbles: true,
+      cancelable: true,
+    });
+    fireEvent(screen.getByRole("textbox"), keyDown);
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+    expect(keyDown.defaultPrevented).toBe(false);
+    expect(ref.current?.open).toBe(true);
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("only closes the dialog receiving Escape and calls its handler once", () => {
