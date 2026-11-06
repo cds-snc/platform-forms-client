@@ -200,10 +200,7 @@
       "title": "Téléverseur de fichier"
     },
     "fileInputDefault": {
-      "text1": "Un moyen d'ajouter de la documentation à l'appui. Chaque fichier peut avoir une taille maximale de 10 Mo. Les fichiers peuvent être au format PDF, Word, Excel, CSV, PNG, JPG ou TXT.",
-      "text1x": "⚠️ Vous devez",
-      "text2": "avoir une clé API configurée pour la récupération des données",
-      "text3": "afin d'utiliser cet élément."
+      "text1": "Un moyen d'ajouter de la documentation à l'appui. Chaque fichier peut avoir une taille maximale de 10 Mo. Les fichiers peuvent être au format PDF, Word, Excel, CSV, PNG, JPG ou TXT."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
