@@ -196,6 +196,12 @@
     "downloadDialog": {
       "title": "Download responses",
       "sizeLimit": "Maximum {{maxSizeMB}} MB at one time. Select smaller batches if the download fails.",
+      "attachmentWarning": {
+        "title": "Be cautious when opening files attached to submissions",
+        "separateFolder": "All file attachments are located in a separate folder from responses.",
+        "suspiciousFolder": "Scanned files identified as “potentially malicious” are in a separate nested folder.",
+        "checkFiles": "Check suspicious files for “malicious” attributes or the “⚠️” symbol in responses."
+      },
       "chooseDownloadFormat": "Choose the format of response files",
       "downloadFormatContext1": "You’ll get an ",
       "downloadFormatContext2": "Official receipt",
