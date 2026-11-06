@@ -96,22 +96,20 @@ export default function TestLivePage() {
   return (
     <main lang="en" id="content" className="mx-auto max-w-4xl p-8">
       <h1 className="mb-4">Live-region manual tests (temporary)</h1>
-      <p className="mb-4">
-        Each test queues three messages per selected priority. Wait until delivery finishes before
-        starting another test. Mixed priority submits polite 1 then assertive 1, followed by the
-        remaining pairs; urgent work can interrupt polite delivery.
-      </p>
-      <p className="mb-4">
-        The package still uses its normal one-second pacing. The log records DOM changes, not
-        speech. It is not a live region, so log updates should not add announcements. Messages use
-        English language metadata, and repeated clicks allow duplicate messages.
-      </p>
-      <p className="mb-4">
-        Compare short and long messages at baseline, three-second, and six-second request spacing,
-        then try all three messages combined into one update. Spaced requests do not change the
-        scheduler; check the log for actual publication timing. Run each test separately with an
-        empty queue. Cancel also stops scheduled requests, but cannot stop speech already published.
-      </p>
+      <p>Test results:</p>
+      <ul>
+        <li>Jaws/NVDA+Edge work great</li>
+        <li>
+          Only VoiceOver struggles with queued messages. E.g. of the 3 polite messages only the last
+          is announced while assertive announces the last two messages
+        </li>
+        <li>
+          Increasing the queue spacing to 3 seconds helps for short messages. Longer messages would
+          need a longer spacing delay. Combining messages works great but may have a buffer limit on
+          the size of the message at some point.{" "}
+        </li>
+      </ul>
+      <hr className="my-4" />
       <div className="mb-6 flex flex-wrap gap-4">
         <label>
           Message length
