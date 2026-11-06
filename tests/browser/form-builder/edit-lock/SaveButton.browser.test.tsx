@@ -130,6 +130,7 @@ describe("<SaveButton />", () => {
   });
 
   it("focuses validation errors without showing a support error and allows saving again", async () => {
+    pathname = "/en/form-builder/test-form-id/edit";
     validationProblems.mockReturnValue([
       { path: "elements.0.properties.choices", name: "uniqueItems", message: "Duplicate choices" },
     ]);
@@ -149,9 +150,9 @@ describe("<SaveButton />", () => {
     await expect.element(page.getByRole("button", { name: "Save draft" })).toBeVisible();
     const indicator = page.getByRole("link", { name: "Not saved - Fix errors" });
     await expect.element(indicator).toBeVisible();
-    await expect.element(indicator).toHaveAttribute("href", "#template-validation-errors");
-    await indicator.click();
-    await expect.element(page.getByText("Fix the errors before saving.")).toHaveFocus();
+    await expect
+      .element(indicator)
+      .toHaveAttribute("href", "/en/form-builder/test-form-id/edit#template-validation-errors");
 
     await view.rerender(
       <TestWrapper>
@@ -170,6 +171,35 @@ describe("<SaveButton />", () => {
     await page.getByRole("button", { name: "Save draft" }).click();
     expect(saveDraft).toHaveBeenCalledTimes(2);
   });
+
+  it.each(["edit", "edit/translate", "preview"])(
+    "links blocked saves from %s to the editor summary",
+    async (route) => {
+      pathname = `/en/form-builder/test-form-id/${route}`;
+      validationProblems.mockReturnValue([
+        {
+          path: "elements.0.properties.choices",
+          name: "uniqueItems",
+          message: "Duplicate choices",
+        },
+      ]);
+      saveDraft.mockResolvedValueOnce({ status: "validation-error" as const });
+
+      await render(<SaveButtonHarness />);
+      await waitForSaveAvailability();
+      await page.getByRole("button", { name: "Save draft" }).click();
+
+      expect(setShowValidationErrors).toHaveBeenCalledWith(true);
+      const indicator = page.getByRole("link", { name: "Not saved - Fix errors" });
+      await expect.element(indicator).toBeVisible();
+      await expect
+        .element(indicator)
+        .toHaveAttribute("href", "/en/form-builder/test-form-id/edit#template-validation-errors");
+      await expect
+        .element(page.getByText("Saving failed - Contact support"))
+        .not.toBeInTheDocument();
+    }
+  );
 
   it("replaces 0000 in the URL after a successful save when a real form id is returned", async () => {
     pathname = "/en/form-builder/0000/translate";

@@ -135,7 +135,7 @@ describe("MigrationProblemsNotice", () => {
   it("keeps the summary hidden until saving is attempted, without hiding inline feedback", () => {
     mock.validationCount = 1;
     mock.showValidationErrors = false;
-    const view = render(<TemplateValidationErrors editable />);
+    const view = render(<TemplateValidationErrors />);
     expect(screen.queryByRole("alert")).toBeNull();
     expect(mock.setInputFeedback).toHaveBeenCalledWith(
       "option--1--1",
@@ -143,7 +143,7 @@ describe("MigrationProblemsNotice", () => {
     );
 
     mock.showValidationErrors = true;
-    view.rerender(<TemplateValidationErrors editable />);
+    view.rerender(<TemplateValidationErrors />);
     expect(screen.getByRole("alert")).toBeVisible();
   });
 
@@ -247,7 +247,7 @@ describe("MigrationProblemsNotice", () => {
 
   it("uses the compatibility summary styling with blocking language and expandable errors", async () => {
     mock.validationCount = 1;
-    const view = render(<TemplateValidationErrors editable />);
+    const view = render(<TemplateValidationErrors />);
     const summary = screen.getByRole("alert");
     expect(summary).toHaveClass("rounded-lg", "border-amber-300", "bg-amber-50");
     expect(summary).not.toHaveClass("gc-alert");
@@ -272,18 +272,18 @@ describe("MigrationProblemsNotice", () => {
     );
 
     mock.validationCount = 0;
-    view.rerender(<TemplateValidationErrors editable />);
+    view.rerender(<TemplateValidationErrors />);
     expect(screen.queryByRole("alert")).toBeNull();
     expect(mock.setInputFeedback).toHaveBeenCalledWith("option--1--1", null);
   });
 
-  it("links back to the editor from translation and preview", () => {
+  it("always navigates to questions within the editor", () => {
     mock.validationCount = 1;
     render(<TemplateValidationErrors />);
     fireEvent.click(screen.getByText("Show errors"));
-    expect(screen.getByRole("link", { name: "Province" })).toHaveAttribute(
-      "href",
-      "/en/form-builder/form-1/edit#template-validation-errors"
-    );
+    fireEvent.click(screen.getByRole("button", { name: "Province" }));
+    expect(mock.setId).toHaveBeenCalledWith("page-2");
+    expect(mock.focus).toHaveBeenCalledOnce();
+    expect(screen.queryByRole("link", { name: "Province" })).toBeNull();
   });
 });

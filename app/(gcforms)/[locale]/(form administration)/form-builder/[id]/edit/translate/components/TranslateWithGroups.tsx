@@ -25,7 +25,6 @@ import { Group } from "@gcforms/types";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
 
 import { ExitUrl } from "./ExitUrl";
-import { TemplateValidationErrors } from "../../components/MigrationProblemsNotice";
 
 const GroupSection = ({
   groupId,
@@ -258,7 +257,6 @@ export const TranslateWithGroups = () => {
             <SaveButton />
           </div>
         </div>
-        <TemplateValidationErrors />
         <SkipLinkReusable anchor="#rightPanelTitle">
           {t("skipLink.translateSetup")}
         </SkipLinkReusable>

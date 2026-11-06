@@ -149,7 +149,7 @@ export const EditWithGroups = ({
           <SaveButton />
         </div>
       </div>
-      <TemplateValidationErrors editable />
+      <TemplateValidationErrors />
       <MigrationProblemsNotice />
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
       <div className="flex max-w-[800px] justify-between">

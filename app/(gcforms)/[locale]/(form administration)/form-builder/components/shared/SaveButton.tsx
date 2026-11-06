@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { useTranslation } from "@i18n/client";
@@ -107,7 +108,7 @@ const ErrorSavingForm = ({
 };
 
 export const SaveButton = () => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const router = useRouter();
   const lockChecksEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
   const { isPublished, id, isLockedByOther, editLock, currentDraftVersionId } = useTemplateStore(
@@ -280,9 +281,12 @@ export const SaveButton = () => {
           {hasValidationErrors && (
             <span className="inline-flex items-center text-red-700">
               <SavedFailIcon aria-hidden="true" className="mx-1 inline-block fill-red-700" />
-              <a href="#template-validation-errors" className="mr-2 underline hover:no-underline">
+              <Link
+                href={`/${i18n.language}/form-builder/${id || "0000"}/edit#template-validation-errors`}
+                className="mr-2 underline hover:no-underline"
+              >
                 {t("validationProblems.saveBlocked")}
-              </a>
+              </Link>
             </span>
           )}
         </>

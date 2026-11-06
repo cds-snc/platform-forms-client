@@ -20,16 +20,9 @@ import { useTemplateValidationProblems } from "@lib/store/hooks/useTemplateValid
 import { type TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 
-const TemplateProblemList = ({
-  problems,
-  editable,
-}: {
-  problems: TemplateValidationProblem[];
-  editable: boolean;
-}) => {
+const TemplateProblemList = ({ problems }: { problems: TemplateValidationProblem[] }) => {
   const { t, i18n } = useTranslation("form-builder");
   const elements = useTemplateStore((state) => state.form.elements);
-  const id = useTemplateStore((state) => state.id);
   const { setId, findParentGroup } = useGroupStore((state) => ({
     setId: state.setId,
     findParentGroup: state.findParentGroup,
@@ -51,7 +44,7 @@ const TemplateProblemList = ({
           ) || t("migrationProblems.untitled");
         return (
           <li key={`${problem.path}-${problem.name}-${problem.message}`}>
-            {editable && element && parentElement ? (
+            {element && parentElement ? (
               <Button
                 theme="link"
                 onClick={() => {
@@ -71,17 +64,11 @@ const TemplateProblemList = ({
               >
                 {title}
               </Button>
-            ) : !editable ? (
-              <Link
-                href={`/${i18n.language}/form-builder/${id || "0000"}/edit#template-validation-errors`}
-              >
-                {element ? title : t("migrationProblems.form")}
-              </Link>
             ) : (
               <strong>{t("migrationProblems.form")}</strong>
             )}
             <p className="mb-1">{describeTemplateProblem(problem, element, i18n.language, t)}</p>
-            {editable && !element && <Link href="#questions">{t("migrationProblems.edit")}</Link>}
+            {!element && <Link href="#questions">{t("migrationProblems.edit")}</Link>}
           </li>
         );
       })}
@@ -91,11 +78,9 @@ const TemplateProblemList = ({
 
 const TemplateProblemsSummary = ({
   problems,
-  editable,
   blocking = false,
 }: {
   problems: TemplateValidationProblem[];
-  editable: boolean;
   blocking?: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -117,14 +102,14 @@ const TemplateProblemsSummary = ({
           expandedSummary={t(`${translationKey}.hide`)}
         >
           <p className="mt-3">{t(`${translationKey}.intro`)}</p>
-          <TemplateProblemList problems={problems} editable={editable} />
+          <TemplateProblemList problems={problems} />
         </InfoDetails>
       </div>
     </div>
   );
 };
 
-export const TemplateValidationErrors = ({ editable = false }: { editable?: boolean }) => {
+export const TemplateValidationErrors = () => {
   const { showValidationErrors } = useTemplateContext();
   const problems = useTemplateValidationProblems();
   const migrationProblems = useTemplateMigrationProblems();
@@ -132,7 +117,7 @@ export const TemplateValidationErrors = ({ editable = false }: { editable?: bool
 
   if (!showValidationErrors || problems.length === 0) return null;
 
-  return <TemplateProblemsSummary problems={problems} editable={editable} blocking />;
+  return <TemplateProblemsSummary problems={problems} blocking />;
 };
 
 export const MigrationProblemsNotice = () => {
@@ -140,5 +125,5 @@ export const MigrationProblemsNotice = () => {
 
   if (problems.length === 0) return null;
 
-  return <TemplateProblemsSummary problems={problems} editable />;
+  return <TemplateProblemsSummary problems={problems} />;
 };
