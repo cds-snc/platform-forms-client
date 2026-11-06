@@ -11,6 +11,7 @@ import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { cn } from "@lib/utils";
 import { getChoiceValuesExcludingIndex } from "./getChoiceValuesExcludingIndex";
+import { FormElement } from "@gcforms/types";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
@@ -28,6 +29,12 @@ export const SubOption = ({
   initialValue: string;
 }) => {
   const input = useRef<HTMLInputElement>(null);
+
+  const getSubElementChoices = (elements: FormElement[]) => {
+    return elements
+      .find(({ properties }) => properties.subElements?.some((sub) => sub.id === id))
+      ?.properties.subElements?.find((sub) => sub.id === id)?.properties.choices;
+  };
 
   const {
     addSubChoice,
@@ -50,9 +57,7 @@ export const SubOption = ({
     getLocalizationAttribute: s.getLocalizationAttribute,
     setChangeKey: s.setChangeKey,
     getFormElementIndexes: s.getFormElementIndexes,
-    choices: s.form.elements
-      .find(({ properties }) => properties.subElements?.some((sub) => sub.id === id))
-      ?.properties.subElements?.find((sub) => sub.id === id)?.properties.choices,
+    choices: getSubElementChoices(s.form.elements),
   }));
 
   const icon = renderIcon && renderIcon(index);
