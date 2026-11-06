@@ -1,7 +1,7 @@
 import type { Priority } from "./AnnounceLiveRegions";
 import type { AnnounceOptions } from "./announce";
 
-const PUBLICATION_INTERVAL_MS = 1000;
+const DUPLICATE_WINDOW_MS = 1000;
 const MAX_PENDING_MESSAGES = 20;
 
 type Publisher = (message: string, priority: Priority, lang?: string) => void;
@@ -23,10 +23,15 @@ const reportPublicationFailure = () => {
  * Queues announcements and spaces them out, letting urgent messages jump ahead.
  * @param publisher Callback that updates the live region with a message, priority, and optional language.
  * @param onError Reports a publication failure after the scheduler has stopped.
+ * @param publicationIntervalMs Spaces publications; assertive work can interrupt polite pacing.
  * @returns `enqueue` to submit messages, `pause`/`resume` to control delivery without
  * losing pending work, and `stop` to permanently cancel pending work and timers.
  */
-export const createScheduler = (publisher: Publisher, onError = reportPublicationFailure) => {
+export const createScheduler = (
+  publisher: Publisher,
+  onError = reportPublicationFailure,
+  publicationIntervalMs = 1000
+) => {
   const politeQueue: PendingMessage[] = [];
   const assertiveQueue: PendingMessage[] = [];
   const lastPublished: Partial<
@@ -65,7 +70,7 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
     return (
       previous?.message === message &&
       previous.lang === lang &&
-      performance.now() - previous.publishedAt < PUBLICATION_INTERVAL_MS
+      performance.now() - previous.publishedAt < DUPLICATE_WINDOW_MS
     );
   };
 
@@ -101,7 +106,7 @@ export const createScheduler = (publisher: Publisher, onError = reportPublicatio
     timer = setTimeout(() => {
       timer = undefined;
       _schedule();
-    }, PUBLICATION_INTERVAL_MS);
+    }, publicationIntervalMs);
   };
 
   const _schedule = () => {

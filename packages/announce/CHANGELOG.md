@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.0] - 2026-10-27
 
 - Add message coordinator, scheduler and update how package is exported
+- Add startup-only app-wide publication spacing, defaulting to one second.
 
 ## [1.0.5] - 2026-06-11
 

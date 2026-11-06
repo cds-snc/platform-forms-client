@@ -19,6 +19,54 @@ describe("announcement scheduler", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  it.each(["polite", "assertive"] as const)(
+    "paces %s publications at a custom interval",
+    (priority) => {
+      const publish = vi.fn();
+      const scheduler = createScheduler(publish, vi.fn(), 3000);
+      scheduler.enqueue("First", priority);
+      scheduler.enqueue("Second", priority);
+      vi.advanceTimersByTime(2999);
+      expect(publish).toHaveBeenCalledTimes(1);
+      vi.advanceTimersByTime(1);
+      expect(publish).toHaveBeenLastCalledWith("Second", priority);
+    }
+  );
+
+  it("keeps the duplicate window at one second with custom pacing", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish, vi.fn(), 3000);
+    scheduler.enqueue("Same", "polite");
+    vi.advanceTimersByTime(999);
+    scheduler.enqueue("Same", "polite");
+    vi.advanceTimersByTime(1);
+    scheduler.enqueue("Same", "polite");
+    vi.advanceTimersByTime(1999);
+    expect(publish).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(1);
+    expect(publish).toHaveBeenCalledTimes(2);
+  });
+
+  it("preserves urgent interruption and cancellation with custom pacing", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish, vi.fn(), 3000);
+    const controller = new AbortController();
+    scheduler.enqueue("Polite", "polite");
+    vi.advanceTimersByTime(100);
+    scheduler.enqueue("Urgent", "assertive");
+    scheduler.enqueue("Cancelled", "assertive", { signal: controller.signal });
+    scheduler.enqueue("Remaining", "polite");
+    controller.abort();
+    expect(publish.mock.calls).toEqual([
+      ["Polite", "polite"],
+      ["Urgent", "assertive"],
+    ]);
+    vi.advanceTimersByTime(2999);
+    expect(publish).toHaveBeenCalledTimes(2);
+    vi.advanceTimersByTime(1);
+    expect(publish).toHaveBeenLastCalledWith("Remaining", "polite");
+  });
+
   it("cancels only the pending requests associated with an aborted signal", () => {
     const publish = vi.fn();
     const scheduler = createScheduler(publish);

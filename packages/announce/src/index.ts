@@ -3,3 +3,5 @@ export { announce } from "./announce";
 export type { AnnounceOptions } from "./announce";
 export { useAnnounce } from "./useAnnounce";
 export type { UseAnnounceOptions } from "./useAnnounce";
+export { configureAnnounce } from "./coordinator";
+export type { AnnounceConfiguration } from "./coordinator";

@@ -6,6 +6,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { announce, Priority } from "@gcforms/announce";
+import { ANNOUNCE_PUBLICATION_INTERVAL_MS } from "@lib/client/announceConfig";
 
 interface Publication {
   time: string;
@@ -19,11 +20,10 @@ const longMessages = [
   "Your documents are ready for review. Open the document list to check each attachment, remove any incorrect files, and confirm that all required information has been included.",
 ];
 
-// Temporary manual test page; do not commit.
+// Temporary manual test page; remove before merging.
 export default function TestLivePage() {
   const [publications, setPublications] = useState<Publication[]>([]);
   const [messageLength, setMessageLength] = useState("short");
-  const [spacing, setSpacing] = useState(0);
   const controllers = useRef<AbortController[]>([]);
 
   useEffect(() => {
@@ -66,27 +66,12 @@ export default function TestLivePage() {
     const controller = new AbortController();
     controllers.current.push(controller);
     for (const number of [1, 2, 3]) {
-      const submit = () => {
-        for (const priority of priorities) {
-          announce(getMessage(number, priority), priority, {
-            allowDuplicates: true,
-            lang: "en",
-            signal: controller.signal,
-          });
-        }
-      };
-      if (spacing === 0 || number === 1) {
-        submit();
-      } else {
-        const timer = setTimeout(
-          () => {
-            controller.signal.removeEventListener("abort", cancel);
-            submit();
-          },
-          (number - 1) * spacing
-        );
-        const cancel = () => clearTimeout(timer);
-        controller.signal.addEventListener("abort", cancel, { once: true });
+      for (const priority of priorities) {
+        announce(getMessage(number, priority), priority, {
+          allowDuplicates: true,
+          lang: "en",
+          signal: controller.signal,
+        });
       }
     }
   };
@@ -122,18 +107,12 @@ export default function TestLivePage() {
             <option value="long">Long</option>
           </select>
         </label>
-        <label>
-          Request spacing
-          <select
-            className="ml-2 rounded border p-2"
-            value={spacing}
-            onChange={(event) => setSpacing(Number(event.target.value))}
-          >
-            <option value={0}>Queue all now (normal one-second publication pacing)</option>
-            <option value={3000}>Three seconds</option>
-            <option value={6000}>Six seconds</option>
-          </select>
-        </label>
+        <p>
+          Scheduler interval: {ANNOUNCE_PUBLICATION_INTERVAL_MS} ms. All requests are queued
+          immediately. Change ANNOUNCE_PUBLICATION_INTERVAL_MS in lib/client/announceConfig.ts to
+          1000, 3000, or 6000 and fully reload to compare. Hot reload cannot change active scheduler
+          configuration. Assertive work may still interrupt a polite cooldown.
+        </p>
       </div>
       <div className="mb-6 flex flex-wrap gap-4">
         <button type="button" className={buttonClass} onClick={() => queue([Priority.LOW])}>
@@ -183,7 +162,7 @@ export default function TestLivePage() {
         <li>Note the screen reader, browser, versions, and speech rate.</li>
         <li>Test polite, assertive, and mixed delivery with short messages at each spacing.</li>
         <li>Repeat with long messages, then compare the combined polite announcement.</li>
-        <li>For cancellation, start a spaced test and cancel before the next request.</li>
+        <li>For cancellation, start a test and cancel before the next queued publication.</li>
         <li>
           Wait for speech to finish between runs. Compare logged text with what was heard; record
           omitted, interrupted, or repeated messages. Clear log does not cancel delivery.

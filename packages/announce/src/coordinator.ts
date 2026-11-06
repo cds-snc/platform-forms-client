@@ -24,7 +24,8 @@ function createCoordinator() {
       }
       activeHost.publish(...args);
     },
-    () => handleFailure("publication")
+    () => handleFailure("publication"),
+    publicationIntervalMs
   );
   scheduler.pause();
 
@@ -120,10 +121,30 @@ function createCoordinator() {
 
 let coordinator: ReturnType<typeof createCoordinator> | undefined;
 let hasRegisteredHost = false;
+let publicationIntervalMs = 1000;
+let configurationLocked = false;
+
+export interface AnnounceConfiguration {
+  publicationIntervalMs: number;
+}
+
+export function configureAnnounce(configuration: AnnounceConfiguration) {
+  const interval = configuration.publicationIntervalMs;
+  if (!Number.isFinite(interval) || interval < 1 || interval > 2147483647) {
+    throw new RangeError(
+      "[gcforms/announce] Publication interval must be between 1 and 2147483647 milliseconds."
+    );
+  }
+  if (configurationLocked && interval !== publicationIntervalMs) {
+    throw new Error("[gcforms/announce] Configure spacing before mounting hosts or announcing.");
+  }
+  publicationIntervalMs = interval;
+}
 
 export function registerHost(host: Host) {
   hasRegisteredHost = true;
   if (coordinator === null || coordinator === undefined) {
+    configurationLocked = true;
     coordinator = createCoordinator();
   }
   return coordinator.register(host);
@@ -136,6 +157,7 @@ export function enqueueAnnouncement(
 ) {
   if (!coordinator) {
     if (hasRegisteredHost) return;
+    configurationLocked = true;
     coordinator = createCoordinator();
   }
   coordinator.enqueue(message, priority, options);

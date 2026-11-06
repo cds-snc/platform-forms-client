@@ -49,6 +49,25 @@ announce("5 results available.", Priority.LOW, { allowDuplicates: true });
 In Next.js, call `announce()` from client components. The announcer includes its
 own visually hidden styles; no stylesheet is needed.
 
+### App-wide spacing
+
+Configure once in client setup, before mounting any host or calling `announce()`:
+
+```ts
+import { configureAnnounce } from "@gcforms/announce";
+
+configureAnnounce({ publicationIntervalMs: 3000 });
+```
+
+The default is 1000 ms, shared by root and modal hosts. Use a finite interval
+between 1 and 2147483647 ms. Invalid values or changing the interval after startup
+throw an error; repeating the same configuration is harmless. Fully reload to
+change it during development.
+
+Assertive work can still interrupt a polite cooldown; spacing does not wait for
+speech completion. Duplicate suppression remains one second. Combine related
+messages at the caller when appropriate rather than relying on timing alone.
+
 ### Request options
 
 Pass options as the third argument to `announce()`:
