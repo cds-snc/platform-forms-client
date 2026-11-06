@@ -16,7 +16,6 @@ import { CustomizeSetButton } from "../CustomizeSetButton";
 import { AddToSetButton } from "../AddToSetButton";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useRefsContext } from "../../RefsContext";
-import { useFileUploadEnabled } from "@lib/hooks/form-builder/useFileUploadEnabled";
 import { cn } from "@lib/utils";
 
 export const SubElement = ({
@@ -43,8 +42,6 @@ export const SubElement = ({
   const { refs } = useRefsContext();
 
   const subElements = item.properties.subElements;
-
-  const fileUploadEnabled = useFileUploadEnabled();
 
   const { handleAddSubElement } = useHandleAdd();
 
@@ -128,14 +125,7 @@ export const SubElement = ({
                 />
               }
             >
-              <div
-                className={cn(
-                  "pt-4",
-                  !fileUploadEnabled &&
-                    item.type === FormElementTypes.fileInput &&
-                    "bg-red-50 px-4 py-2 focus-within:bg-red-50 hover:bg-red-50"
-                )}
-              >
+              <div className={cn("pt-4")}>
                 <PanelBodySub
                   elIndex={elIndex}
                   item={item}

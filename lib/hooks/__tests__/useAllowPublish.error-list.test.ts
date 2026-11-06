@@ -37,7 +37,8 @@ vi.mock("../useFormBuilderConfig", () => ({
 }));
 
 vi.mock("../../store/useTemplateStore", () => ({
-  useTemplateStore: (selector: (state: typeof mockState.store) => unknown) => selector(mockState.store),
+  useTemplateStore: (selector: (state: typeof mockState.store) => unknown) =>
+    selector(mockState.store),
 }));
 
 const createTranslatedForm = (): MockForm => ({
@@ -139,12 +140,7 @@ describe("useAllowPublish error list coverage", () => {
 
     expect(getUncheckedItems(result.current.data)).toEqual(["translate"]);
     expect(
-      result.current.hasData([
-        "title",
-        "questions",
-        "privacyPolicy",
-        "confirmationMessage",
-      ])
+      result.current.hasData(["title", "questions", "privacyPolicy", "confirmationMessage"])
     ).toBe(true);
     expect(result.current.isPublishable()).toBe(false);
   });
@@ -168,7 +164,6 @@ describe("useAllowPublish error list coverage", () => {
 
     expect(result.current.hasFileInputElement).toBe(true);
     expect(result.current.hasApiKeyId).toBe(false);
-    expect(getUncheckedItems(result.current.data)).toEqual(["hasFileInputAndApiKey"]);
     expect(result.current.isPublishable()).toBe(false);
   });
 });

@@ -6,7 +6,6 @@ import { Description, publishRequiredFields, Title } from "../../types/form-buil
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useAccessControl } from "../useAccessControl";
 import { useFormBuilderConfig } from "../useFormBuilderConfig";
-import { useFileUploadEnabled } from "./useFileUploadEnabled";
 
 export class MissingTranslation extends Error {
   constructor(message?: string) {
@@ -98,7 +97,6 @@ export const useAllowPublish = () => {
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
   const { hasApiKeyId } = useFormBuilderConfig();
-  const fileUploadEnabled = useFileUploadEnabled();
 
   const hasFileInputElement = useMemo(() => {
     // Helper function to recursively check for file input elements
@@ -128,9 +126,8 @@ export const useAllowPublish = () => {
         !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
       purpose: !!formPurpose,
       translate: isFormTranslated(form),
-      hasFileInputAndApiKey: hasFileInputElement ? fileUploadEnabled : true,
     }),
-    [form, formPurpose, fileUploadEnabled, hasFileInputElement]
+    [form, formPurpose]
   );
 
   const hasData = useCallback(
