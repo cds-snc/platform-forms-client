@@ -13,7 +13,7 @@ import {
   getLocalizedLabel,
   getProblemElement,
 } from "@lib/templates/schemaVersioning/migrationProblemHelpers";
-import { describeMigrationProblem } from "./describeMigrationProblem";
+import { describeTemplateProblem } from "./describeTemplateProblem";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { useRefsContext } from "./RefsContext";
 import { useTemplateValidationProblems } from "@lib/store/hooks/useTemplateValidationProblems";
@@ -80,7 +80,7 @@ const TemplateProblemList = ({
             ) : (
               <strong>{t("migrationProblems.form")}</strong>
             )}
-            <p className="mb-1">{describeMigrationProblem(problem, element, i18n.language, t)}</p>
+            <p className="mb-1">{describeTemplateProblem(problem, element, i18n.language, t)}</p>
             {editable && !element && <Link href="#questions">{t("migrationProblems.edit")}</Link>}
           </li>
         );

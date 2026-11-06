@@ -16,7 +16,7 @@ const duplicateChoiceLabels = (choices: unknown[] | undefined, lang: string): st
   ),
 ];
 
-export const describeMigrationProblem = (
+export const describeTemplateProblem = (
   problem: TemplateValidationProblem | TemplateMigrationProblem,
   element: ProblemElement | undefined,
   lang: string,
