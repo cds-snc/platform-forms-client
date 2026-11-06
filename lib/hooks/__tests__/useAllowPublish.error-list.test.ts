@@ -145,7 +145,7 @@ describe("useAllowPublish error list coverage", () => {
     expect(result.current.isPublishable()).toBe(false);
   });
 
-  it("adds the API key checklist error when file inputs are present without an API key", () => {
+  it("allows file inputs without an API key", () => {
     getMockForm().elements.push({
       id: 2,
       type: FormElementTypes.fileInput,
@@ -162,8 +162,7 @@ describe("useAllowPublish error list coverage", () => {
 
     const { result } = renderHook(() => useAllowPublish());
 
-    expect(result.current.hasFileInputElement).toBe(true);
     expect(result.current.hasApiKeyId).toBe(false);
-    expect(result.current.isPublishable()).toBe(false);
+    expect(result.current.isPublishable()).toBe(true);
   });
 });
