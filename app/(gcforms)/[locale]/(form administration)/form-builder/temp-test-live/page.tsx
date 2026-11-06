@@ -138,25 +138,108 @@ export default function TestLivePage() {
   return (
     <main lang="en" id="content" className="mx-auto max-w-4xl p-8">
       <h1 className="mb-4">Live-region manual tests (temporary)</h1>
-      <p>Test results:</p>
-      <ul>
-        <li>Jaws/NVDA+Edge work great</li>
-        <li>
-          Only VoiceOver struggles with queued messages. E.g. of the 3 polite messages only the last
-          is announced while assertive announces the last two messages
-        </li>
-        <li>
-          Increasing the queue spacing to 3 seconds helps for short messages. Longer messages would
-          need a longer spacing delay. Combining messages works great but may have a buffer limit on
-          the size of the message at some point.{" "}
-        </li>
-        <li>
-          <strong>
-            Native Live Regions - same sketchy behavior with VoiceOver. Edge/Chrome+Jawa/NVDA queue
-            without dropping messages with or without the Announce lib.
-          </strong>
-        </li>
-      </ul>
+      <h2 className="mb-2">Manual test results</h2>
+      <div className="overflow-x-auto">
+        <table className="mb-4 w-full text-left">
+          <caption className="mb-2 text-left">
+            Three messages per priority, using short and long text where reported
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col" className="p-2">
+                Test
+              </th>
+              <th scope="col" className="p-2">
+                MacOS: Chrome with VoiceOver
+              </th>
+              <th scope="col" className="p-2">
+                macOS: Safari with VoiceOver
+              </th>
+              <th scope="col" className="p-2">
+                Windows: Edge/Chrome with NVDA/JAWS
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" className="p-2">
+                Plain regions: immediate flood, no delay
+              </th>
+              <td className="p-2">
+                Only the final message per polite or assertive region was heard.
+              </td>
+              <td className="p-2">
+                Only the final message per polite or assertive region was heard.
+              </td>
+              <td className="p-2">
+                Only the final message per polite or assertive region was heard.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" className="p-2">
+                Library: default one-second pacing
+              </th>
+              <td className="p-2">
+                Incomplete delivery: earlier messages were omitted or partially heard. Results
+                varied by run and priority; not all three polite messages were heard.
+              </td>
+              <td className="p-2">
+                Polite: all messages were heard. Assertive: only the final message was heard. Mixed:
+                only the final assertive message was heard.
+              </td>
+              <td className="p-2">
+                All short and long test messages were heard in polite, assertive, and mixed tests.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" className="p-2">
+                Plain regions: paced FIFO
+              </th>
+              <td className="p-2">
+                Pacing improved delivery compared with the flood, but it remained incomplete.
+              </td>
+              <td className="p-2">
+                Polite: all messages were heard. Assertive: only the final message was heard. Mixed:
+                only the final assertive message was heard.
+              </td>
+              <td className="p-2">All test messages were heard, as with the library.</td>
+            </tr>
+            <tr>
+              <th scope="row" className="p-2">
+                Greater spacing
+              </th>
+              <td className="p-2">
+                Three-second request spacing allowed all short polite messages to be heard. Longer
+                messages need further timing tests.
+              </td>
+              <td className="p-2">Not separately reported.</td>
+              <td className="p-2">Greater spacing was not needed for the tested messages.</td>
+            </tr>
+            <tr>
+              <th scope="row" className="p-2">
+                One combined polite announcement
+              </th>
+              <td className="p-2">All three combined messages were heard.</td>
+              <td className="p-2">Not separately reported.</td>
+              <td className="p-2">All three combined messages were heard.</td>
+            </tr>
+            <tr>
+              <th scope="row" className="p-2">
+                Cancel pending feedback
+              </th>
+              <td className="p-2">Worked as expected.</td>
+              <td className="p-2">Not separately reported.</td>
+              <td className="p-2">Worked as expected.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Takeaway: spacing updates reduced message loss compared with immediate overwrites. One
+        second worked for the tested NVDA/JAWS combinations. Chrome with VoiceOver benefited from
+        greater spacing or combining related messages. Safari with VoiceOver delivered all polite
+        messages with pacing, but only the final assertive message in assertive and mixed tests.
+      </p>
       <hr className="my-8" />
       <div className="mb-6 flex flex-wrap gap-4">
         <label>
