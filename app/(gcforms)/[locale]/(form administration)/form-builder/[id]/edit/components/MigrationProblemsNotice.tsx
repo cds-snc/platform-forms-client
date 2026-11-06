@@ -78,19 +78,20 @@ const TemplateProblemList = ({ problems }: { problems: TemplateValidationProblem
 
 const TemplateProblemsSummary = ({
   problems,
-  blocking = false,
+  variant,
 }: {
   problems: TemplateValidationProblem[];
-  blocking?: boolean;
+  variant: "validation" | "migration";
 }) => {
   const { t } = useTranslation("form-builder");
-  const translationKey = blocking ? "validationProblems" : "migrationProblems";
+  const isValidation = variant === "validation";
+  const translationKey = isValidation ? "validationProblems" : "migrationProblems";
 
   return (
     <div
-      id={blocking ? "template-validation-errors" : "problems"}
-      role={blocking ? "alert" : undefined}
-      tabIndex={blocking ? -1 : undefined}
+      id={isValidation ? "template-validation-errors" : "problems"}
+      role={isValidation ? "alert" : undefined}
+      tabIndex={isValidation ? -1 : undefined}
       className="mb-5 flex max-w-[800px] gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3"
     >
       <WarningIcon aria-hidden="true" className="mt-0.5 size-6 shrink-0 fill-amber-700" />
@@ -117,7 +118,7 @@ export const TemplateValidationErrors = () => {
 
   if (!showValidationErrors || problems.length === 0) return null;
 
-  return <TemplateProblemsSummary problems={problems} blocking />;
+  return <TemplateProblemsSummary problems={problems} variant="validation" />;
 };
 
 export const MigrationProblemsNotice = () => {
@@ -125,5 +126,5 @@ export const MigrationProblemsNotice = () => {
 
   if (problems.length === 0) return null;
 
-  return <TemplateProblemsSummary problems={problems} />;
+  return <TemplateProblemsSummary problems={problems} variant="migration" />;
 };
