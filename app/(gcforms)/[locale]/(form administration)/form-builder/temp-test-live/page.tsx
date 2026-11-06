@@ -99,6 +99,14 @@ export default function TestLivePage() {
   };
 
   const submit = (messages: TestMessage[]) => {
+    if (delivery === "native-immediate") {
+      for (const { message, priority } of messages) {
+        const region = priority === Priority.LOW ? nativePolite.current : nativeAssertive.current;
+        if (!region) throw new Error("Plain live region is missing.");
+        region.textContent = message;
+      }
+      return;
+    }
     if (delivery === "native") {
       nativeQueue.current.push(...messages);
       if (nativeTimer.current === undefined) publishNative();
@@ -163,6 +171,7 @@ export default function TestLivePage() {
           >
             <option value="library">Announce library</option>
             <option value="native">Plain live regions (paced FIFO)</option>
+            <option value="native-immediate">Plain live regions (immediate flood, no delay)</option>
           </select>
         </label>
         <label>
