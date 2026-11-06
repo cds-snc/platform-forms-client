@@ -115,6 +115,37 @@ describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang
   });
 });
 
+describe("Combobox accent-insensitive filtering", () => {
+  afterEach(() => cleanup());
+
+  it.each([
+    ["Etats", "États-Unis"],
+    ["ÉTATS", "États-Unis"],
+    ["Tai", "Taïwan"],
+  ])("finds %s with its original label %s", async (query, expected) => {
+    const user = userEvent.setup();
+    const actual = await vi.importActual<typeof import("formik")>("formik");
+    await vi.mocked(useField).withImplementation(actual.useField, async () => {
+      render(
+        <Formik initialValues={{ country: "" }} onSubmit={() => {}}>
+          <Combobox id="country" name="country" choices={["Canada", "États-Unis", "Taïwan"]} />
+        </Formik>
+      );
+
+      const input = screen.getByTestId("combobox-input");
+      await user.type(input, query);
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent(expected);
+
+      await user.click(options[0]);
+      expect(input).toHaveValue(expected);
+      cleanup();
+    });
+  });
+});
+
 describe("Combobox language switch", () => {
   afterEach(() => cleanup());
 

@@ -37,13 +37,6 @@ export const ConfirmDelete = ({
     }
 
     clearTemplateStorage(id);
-
-    // Remove the element from the DOM after deletion
-    // Avoids the need to refresh the page etc... for the minor change to take effect
-    const el = document?.getElementById(id);
-    if (el) {
-      el.remove();
-    }
     onDeleted(id);
   }, [id, isDraftVersion, onDeleted, t]);
 

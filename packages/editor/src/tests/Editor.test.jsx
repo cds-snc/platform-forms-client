@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import React from "react";
-import { cleanup, screen, render, act, within } from "@testing-library/react";
+import { cleanup, screen, render, act, within, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { $getRoot } from "lexical";
 // import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
@@ -80,6 +80,61 @@ describe("Lexical Editor", () => {
     expect(rendered.container.querySelector(".Collapsible__title")).toBeInTheDocument();
     expect(rendered.container.querySelector(".Collapsible__content")).toBeInTheDocument();
     expect(onChange).toHaveBeenLastCalledWith(expect.stringContaining(":::collapsible"));
+  });
+
+  it("converts pasted h1 elements to h2 elements", async () => {
+    const onChange = vi.fn();
+    const rendered = render(<Editor content="" onChange={onChange} />);
+
+    await act(async () => {
+      await promise;
+    });
+
+    const contentArea = rendered.container.querySelector('[contenteditable="true"]');
+    await userEvent.click(contentArea);
+    if (!Range.prototype.getBoundingClientRect) {
+      Range.prototype.getBoundingClientRect = () => ({
+        bottom: 0,
+        height: 0,
+        left: 0,
+        right: 0,
+        top: 0,
+        width: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+    }
+    globalThis.ClipboardEvent ??= class ClipboardEvent extends Event {
+      constructor(type, init = {}) {
+        super(type, init);
+        this.clipboardData = init.clipboardData;
+      }
+    };
+    globalThis.DragEvent ??= class DragEvent extends Event {};
+    fireEvent.paste(contentArea, {
+      clipboardData: {
+        types: ["text/html", "text/plain"],
+        files: [],
+        getData: (format) =>
+          format === "text/html"
+            ? '<h1 dir="ltr" style="line-height:1.38;background-color:#ffffff;margin-top:0pt;margin-bottom:0pt;"><span style="font-size:18pt;font-family:Lato,sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Your organization must protect personal information</span></h1>'
+            : "Your organization must protect personal information",
+      },
+    });
+
+    await act(async () => {
+      await promise;
+    });
+
+    expect(contentArea?.querySelector("h1")).not.toBeInTheDocument();
+    expect(contentArea?.querySelector("h2")).toHaveTextContent(
+      "Your organization must protect personal information"
+    );
+    expect(contentArea?.querySelector("h2 strong")).not.toBeInTheDocument();
+    expect(onChange).toHaveBeenLastCalledWith(
+      "## Your organization must protect personal information"
+    );
   });
 
   it("renders collapsible Markdown blocks", async () => {

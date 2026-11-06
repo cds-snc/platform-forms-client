@@ -249,9 +249,7 @@ const uploadSubmissionFiles = async (
         new CustomEvent(EventKeys.submitProgress, {
           detail: {
             progress: totalProgress,
-            message: t("submitProgress.uploadingFiles", {
-              totalFiles,
-            }),
+            message: t("submitProgress.uploadingFiles", { count: totalFiles, totalFiles }),
           },
         })
       );

@@ -204,6 +204,20 @@ export const DownloadDialog = ({
                 maxSizeMB: responsesDownloadZipMaxSizeMB,
               })}
             </p>
+            <div className="mb-6 bg-yellow-50 p-4">
+              <h4 className="mb-4">
+                {t("downloadResponsesModals.downloadDialog.attachmentWarning.title")}
+              </h4>
+              <ul className="list-disc space-y-2 pl-6">
+                <li>
+                  {t("downloadResponsesModals.downloadDialog.attachmentWarning.separateFolder")}
+                </li>
+                <li>
+                  {t("downloadResponsesModals.downloadDialog.attachmentWarning.suspiciousFolder")}
+                </li>
+                <li>{t("downloadResponsesModals.downloadDialog.attachmentWarning.checkFiles")}</li>
+              </ul>
+            </div>
             <h3 className="mb-4 block font-semibold">
               {t("downloadResponsesModals.downloadDialog.chooseDownloadFormat")}
             </h3>
