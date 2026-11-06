@@ -140,6 +140,6 @@
     "step1": "Ajouter un élément de téléversement de fichiers à votre formulaire.",
     "step2": "Utiliser un ensemble récurrent pour collecter plusieurs fichiers associés.",
     "step3": "Télécharger les réponses contenant des fichiers par lots d'une taille maximale de 500 Mo à la fois.",
-    "description": "Cette fonctionnalité n'est plus réservée à l'API et peut être utilisée par tous."
+    "description": "Cette fonctionnalité n'est plus réservée à l'API et est disponible pour tous."
   }
 }
