@@ -200,13 +200,7 @@
       "title": "Téléverseur de fichier"
     },
     "fileInputDefault": {
-      "text1": "Un moyen d'ajouter de la documentation à l'appui. Chaque fichier peut avoir une taille maximale de 10 Mo. Les fichiers peuvent être au format PDF, Word, Excel, CSV, PNG, JPG ou TXT.",
-      "text1x": "⚠️ Vous devez",
-      "text2": "avoir une clé API configurée pour la récupération des données",
-      "text3": "afin d'utiliser cet élément."
-    },
-    "fileInputWithApi": {
-      "description": "Un moyen d'ajouter de la documentation à l'appui. Chaque fichier peut avoir une taille maximale de 10 Mo. Les fichiers peuvent être au format PDF, Word, Excel, CSV, PNG, JPG ou TXT."
+      "text1": "Un moyen d'ajouter de la documentation à l'appui. Chaque fichier peut avoir une taille maximale de 10 Mo. Les fichiers peuvent être au format PDF, Word, Excel, CSV, PNG, JPG ou TXT."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "Quel est votre nom?",
@@ -743,8 +737,6 @@
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
   "gcFormsTranslate": "Traductions",
-  "hasFileInputAndApiDelivery": "Récupération des réponses à partir du point de terminaison API",
-  "hasFileInputAndApiDeliveryNote": "Clé API obligatoire lors de l'utilisation du téléverseur de fichiers",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -1028,7 +1020,6 @@
         "cautionTitle": "Attention :",
         "cautionText": "La suppression de cette clé API ne peut être annulée. Supprimer la clé interrompt définitivement la livraison de réponses à tous les systèmes intégrés. Vous devrez créer une nouvelle clé et l'ajouter à votre intégration pour relancer la livraison à partir de l'API.",
         "stopText": "<strong>Pour arrêter les soumissions</strong> à ce formulaire de façon temporaire, veuillez considérer",
-        "fileUploadText": "⚠️ En supprimant la clé API, vous changerez votre méthode de livraison et pourriez entraîner la perte des fichiers joints aux soumissions de formulaires.Pour récupérer tous les fichiers qui font partie des soumissions, créez une nouvelle clé API et configurez votre intégration.",
         "stopText1": "la fermeture du formulaire",
         "stopText2": " à la place.",
         "cancelButton": "Annuler",
@@ -1747,9 +1738,6 @@
   "pilot": {
     "tag": "Pilote :",
     "text": "Fonctionnalité à l'essai"
-  },
-  "fileUploadApiWarning": {
-    "text": "La méthode de livraison n'est pas configurée sur API. Générez une clé API pour permettre le téléchargement de fichiers et la récupération des données de réponse via l'API."
   },
   "publishViewEdit": {
     "title": "Mettre à jour un formulaire publié",

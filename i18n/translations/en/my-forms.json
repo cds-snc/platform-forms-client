@@ -136,10 +136,10 @@
   "archivedNotice2": "After that, forms will be permanently deleted.",
   "updatePublishedHelp": {
     "title": "New:",
-    "descriptionBold": "Update a form after publication",
-    "step1": "Beside the name of the published form, select the three vertical dots.",
-    "step2": "Choose \"Edit published form\" and follow the prompts.",
-    "step3": "Test the edited form before publishing.",
-    "description": "The live form continues collecting responses until you publish the update."
+    "descriptionBold": "Get file attachments with form submissions",
+    "step1": "Add a file upload element to your form.",
+    "step2": "Use a repeating set to collect many related files.",
+    "step3": "Download responses that include files, in batches of up to 500 MB at a time.",
+    "description": "This feature is no longer API-only and available for all."
   }
 }
