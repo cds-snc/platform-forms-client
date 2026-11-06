@@ -14,6 +14,11 @@ interface Publication {
   message: string;
 }
 
+interface TestMessage {
+  message: string;
+  priority: Priority;
+}
+
 const longMessages = [
   "Your application has been saved as a draft. You can return later to review your answers and upload the supporting documents before submitting it.",
   "Two required fields still need attention. Review your contact information and mailing address, then check that the details are correct before continuing to the next step.",
@@ -24,7 +29,13 @@ const longMessages = [
 export default function TestLivePage() {
   const [publications, setPublications] = useState<Publication[]>([]);
   const [messageLength, setMessageLength] = useState("short");
+  const [delivery, setDelivery] = useState("library");
   const controllers = useRef<AbortController[]>([]);
+  const nativeHost = useRef<HTMLDivElement>(null);
+  const nativePolite = useRef<HTMLDivElement>(null);
+  const nativeAssertive = useRef<HTMLDivElement>(null);
+  const nativeQueue = useRef<TestMessage[]>([]);
+  const nativeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     const host = document.querySelector('[data-announce-host="root"]');
@@ -51,9 +62,14 @@ export default function TestLivePage() {
       }
     });
     observer.observe(host, { childList: true, subtree: true });
+    if (!nativeHost.current) throw new Error("Plain live-region host is missing.");
+    observer.observe(nativeHost.current, { childList: true, subtree: true });
     return () => {
       observer.disconnect();
       for (const controller of controllers.current) controller.abort();
+      clearTimeout(nativeTimer.current);
+      nativeTimer.current = undefined;
+      nativeQueue.current = [];
     };
   }, []);
 
@@ -62,18 +78,51 @@ export default function TestLivePage() {
       messageLength === "long" ? ` ${longMessages[number - 1]}` : ""
     }`;
 
-  const queue = (priorities: Priority[]) => {
+  const cancelPending = () => {
+    for (const controller of controllers.current) controller.abort();
+    controllers.current = [];
+    clearTimeout(nativeTimer.current);
+    nativeTimer.current = undefined;
+    nativeQueue.current = [];
+  };
+
+  const publishNative = () => {
+    const next = nativeQueue.current.shift();
+    if (!next) return;
+    const region = next.priority === Priority.LOW ? nativePolite.current : nativeAssertive.current;
+    if (!region) throw new Error("Plain live region is missing.");
+    region.textContent = next.message;
+    nativeTimer.current = setTimeout(() => {
+      nativeTimer.current = undefined;
+      publishNative();
+    }, ANNOUNCE_PUBLICATION_INTERVAL_MS);
+  };
+
+  const submit = (messages: TestMessage[]) => {
+    if (delivery === "native") {
+      nativeQueue.current.push(...messages);
+      if (nativeTimer.current === undefined) publishNative();
+      return;
+    }
     const controller = new AbortController();
     controllers.current.push(controller);
+    for (const { message, priority } of messages) {
+      announce(message, priority, {
+        allowDuplicates: true,
+        lang: "en",
+        signal: controller.signal,
+      });
+    }
+  };
+
+  const queue = (priorities: Priority[]) => {
+    const messages: TestMessage[] = [];
     for (const number of [1, 2, 3]) {
       for (const priority of priorities) {
-        announce(getMessage(number, priority), priority, {
-          allowDuplicates: true,
-          lang: "en",
-          signal: controller.signal,
-        });
+        messages.push({ message: getMessage(number, priority), priority });
       }
     }
+    submit(messages);
   };
 
   const buttonClass = "rounded border px-4 py-2";
@@ -93,9 +142,24 @@ export default function TestLivePage() {
           need a longer spacing delay. Combining messages works great but may have a buffer limit on
           the size of the message at some point.{" "}
         </li>
+        <li>Native Live Regions - same behavior with VoiceOver</li>
       </ul>
-      <hr className="my-4" />
+      <hr className="my-8" />
       <div className="mb-6 flex flex-wrap gap-4">
+        <label>
+          Delivery
+          <select
+            className="ml-2 rounded border p-2"
+            value={delivery}
+            onChange={(event) => {
+              cancelPending();
+              setDelivery(event.target.value);
+            }}
+          >
+            <option value="library">Announce library</option>
+            <option value="native">Plain live regions (paced FIFO)</option>
+          </select>
+        </label>
         <label>
           Message length
           <select
@@ -107,12 +171,6 @@ export default function TestLivePage() {
             <option value="long">Long</option>
           </select>
         </label>
-        <p>
-          Scheduler interval: {ANNOUNCE_PUBLICATION_INTERVAL_MS} ms. All requests are queued
-          immediately. Change ANNOUNCE_PUBLICATION_INTERVAL_MS in lib/client/announceConfig.ts to
-          1000, 3000, or 6000 and fully reload to compare. Hot reload cannot change active scheduler
-          configuration. Assertive work may still interrupt a polite cooldown.
-        </p>
       </div>
       <div className="mb-6 flex flex-wrap gap-4">
         <button type="button" className={buttonClass} onClick={() => queue([Priority.LOW])}>
@@ -132,42 +190,40 @@ export default function TestLivePage() {
           type="button"
           className={buttonClass}
           onClick={() => {
-            const controller = new AbortController();
-            controllers.current.push(controller);
-            announce(
-              [1, 2, 3].map((number) => getMessage(number, Priority.LOW)).join(" "),
-              Priority.LOW,
-              { allowDuplicates: true, lang: "en", signal: controller.signal }
-            );
+            submit([
+              {
+                message: [1, 2, 3].map((number) => getMessage(number, Priority.LOW)).join(" "),
+                priority: Priority.LOW,
+              },
+            ]);
           }}
         >
           Polite: one combined announcement
         </button>
-        <button
-          type="button"
-          className={buttonClass}
-          onClick={() => {
-            for (const controller of controllers.current) controller.abort();
-            controllers.current = [];
-          }}
-        >
+        <button type="button" className={buttonClass} onClick={cancelPending}>
           Cancel pending messages
         </button>
         <button type="button" className={buttonClass} onClick={() => setPublications([])}>
           Clear log
         </button>
       </div>
-      <h2 className="mb-2">Suggested test sequence</h2>
-      <ol className="mb-6 list-decimal pl-6">
-        <li>Note the screen reader, browser, versions, and speech rate.</li>
-        <li>Test polite, assertive, and mixed delivery with short messages at each spacing.</li>
-        <li>Repeat with long messages, then compare the combined polite announcement.</li>
-        <li>For cancellation, start a test and cancel before the next queued publication.</li>
-        <li>
-          Wait for speech to finish between runs. Compare logged text with what was heard; record
-          omitted, interrupted, or repeated messages. Clear log does not cancel delivery.
-        </li>
-      </ol>
+      <div ref={nativeHost} className="visually-hidden" lang="en">
+        <div
+          ref={nativePolite}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          data-testid="plain-polite"
+        />
+        <div
+          ref={nativeAssertive}
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          data-testid="plain-assertive"
+        />
+      </div>
+      <hr className="my-8" />
       <h2 className="mb-2">Live-region changes (last 200; timestamps in UTC)</h2>
       <table className="w-full text-left">
         <thead>
