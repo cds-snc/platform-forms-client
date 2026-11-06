@@ -13,8 +13,10 @@ import { useAppUpdate } from "../useAppUpdate";
 import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
 import { resetReviewEndNextAction } from "@lib/groups/utils/resetReviewEndNextAction";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
-export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
+export type SaveDraftStatus =
+  "saved" | "skipped" | "invalid" | "validation-error" | "locked" | "error";
 
 type SaveDraftResult = {
   status: SaveDraftStatus;
@@ -25,6 +27,8 @@ interface TemplateApiType {
   templateIsDirty: React.RefObject<boolean>;
   updatedAt: number | undefined;
   setUpdatedAt: React.Dispatch<React.SetStateAction<number | undefined>>;
+  showValidationErrors: boolean;
+  setShowValidationErrors: React.Dispatch<React.SetStateAction<boolean>>;
 
   saveDraft: () => Promise<SaveDraftResult>;
   saveDraftIfNeeded: () => Promise<SaveDraftResult>;
@@ -35,6 +39,8 @@ const defaultTemplateApi: TemplateApiType = {
   templateIsDirty: { current: false },
   updatedAt: undefined,
   setUpdatedAt: () => {},
+  showValidationErrors: false,
+  setShowValidationErrors: () => {},
   saveDraft: async () => ({ status: "skipped" }),
   saveDraftIfNeeded: async () => ({ status: "skipped" }),
   resetState: () => {},
@@ -46,6 +52,7 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
 export function SaveTemplateProvider({ children }: { children: React.ReactNode }) {
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [, setDirtyTick] = useState(0);
   const { status } = useSession();
   const { updateTriggered } = useAppUpdate();
@@ -79,6 +86,7 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   const saveDraftQueue = useRef<Array<(result: SaveDraftResult) => void>>([]);
 
   const resetState = useCallback(() => {
+    setShowValidationErrors(false);
     templateIsDirty.current = false;
     savedSnapshot.current = null;
     setDirtyTick((tick) => tick + 1);
@@ -107,9 +115,12 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
     });
 
     try {
+      // Attempt to migrate to latest schema version before saving
+      const migratedFormConfig = migrateTemplate(formConfig);
+
       const operationResult = await createOrUpdateTemplate({
         id: getId(),
-        formConfig,
+        formConfig: migratedFormConfig,
         name: getName(true),
         deliveryOption: getDeliveryOption(),
         securityAttribute,
@@ -117,6 +128,9 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       });
 
       if (operationResult.formRecord === null) {
+        if (operationResult.error === "validationError") {
+          return { status: "validation-error" };
+        }
         return { status: operationResult.error === "editLocked" ? "locked" : "error" };
       }
 
@@ -250,6 +264,8 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         templateIsDirty,
         updatedAt,
         setUpdatedAt,
+        showValidationErrors,
+        setShowValidationErrors,
         saveDraft: queueSaveDraft,
         saveDraftIfNeeded,
         resetState,

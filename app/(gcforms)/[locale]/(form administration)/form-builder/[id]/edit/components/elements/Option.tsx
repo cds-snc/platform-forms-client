@@ -9,6 +9,7 @@ import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { cn } from "@lib/utils";
+import { getChoiceValuesExcludingIndex } from "./getChoiceValuesExcludingIndex";
 
 type RenderIcon = ((index: number) => ReactElement | string) | undefined;
 
@@ -43,6 +44,7 @@ export const Option = ({
     getLocalizationAttribute,
     removeChoiceFromRules,
     removeChoiceFromNextActions,
+    choices,
   } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     removeChoice: s.removeChoice,
@@ -53,6 +55,7 @@ export const Option = ({
     getLocalizationAttribute: s.getLocalizationAttribute,
     removeChoiceFromRules: s.removeChoiceFromRules,
     removeChoiceFromNextActions: s.removeChoiceFromNextActions,
+    choices: s.form.elements[parentIndex]?.properties.choices,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -127,6 +130,10 @@ export const Option = ({
           updateValue(parentIndex, e.target.value)
         }
         onKeyDown={handleKeyDown}
+        checkDuplicate={{
+          values: getChoiceValuesExcludingIndex(choices, index, translationLanguagePriority),
+          message: t("duplicateChoice"),
+        }}
         className={cn("!my-0 max-h-9 w-full", icon && "ml-5")}
         {...getLocalizationAttribute()}
         onFocus={onFocus}

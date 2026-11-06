@@ -9,7 +9,8 @@ import { FormElementTypes } from "@lib/types";
 import userEvent from "@testing-library/user-event";
 
 // Mock the hooks that Question uses
-vi.mock("@lib/store/useTemplateStore", () => ({
+vi.mock("@lib/store/useTemplateStore", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@lib/store/useTemplateStore")>()),
   useTemplateStore: (selector: (state: Record<string, unknown>) => unknown) =>
     selector({
       localizeField: (field: string) => field + "En",

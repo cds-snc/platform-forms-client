@@ -96,5 +96,82 @@ describe("validateTemplate", () => {
       property: `elements.${elementIndex}.properties.choices`,
       message: "formInvalidProperty",
     });
+    expect(result.problems).toContainEqual(
+      expect.objectContaining({
+        path: `elements.${elementIndex}.properties.choices`,
+        name: "pattern",
+      })
+    );
+  });
+
+  it("reports duplicate choices in V2 drafts with actionable paths and clears them after a fix", () => {
+    const template = structuredClone(navigationFocus) as FormProperties;
+    template.schemaVersion = 2;
+    template.elements = [
+      {
+        id: 1,
+        type: "dropdown",
+        properties: {
+          titleEn: "Province",
+          titleFr: "Province",
+          validation: { required: false },
+          choices: [
+            { en: "Ontario", fr: "Ontario" },
+            { en: "Ontario", fr: "Ontario" },
+          ],
+        },
+      },
+    ];
+    expect(validateTemplate(template).problems).toContainEqual(
+      expect.objectContaining({
+        path: "elements.0.properties.choices",
+        name: "uniqueItems",
+      })
+    );
+    template.elements[0].properties.choices!.pop();
+    expect(validateTemplate(template).problems).not.toContainEqual(
+      expect.objectContaining({ name: "uniqueItems" })
+    );
+  });
+
+  it("resolves validation failures within repeating-set questions", () => {
+    const template = structuredClone(navigationFocus) as FormProperties;
+    template.schemaVersion = 2;
+    template.elements = [
+      {
+        id: 1,
+        type: "dynamicRow",
+        properties: {
+          titleEn: "Repeating set",
+          titleFr: "Ensemble",
+          subElements: [
+            {
+              id: 2,
+              type: "dropdown",
+              properties: {
+                titleEn: "Nested question",
+                titleFr: "Question",
+                choices: [
+                  { en: "A", fr: "A" },
+                  { en: "A", fr: "A" },
+                ],
+                validation: { required: false },
+              },
+            },
+          ],
+        },
+      },
+    ];
+
+    expect(validateTemplate(template).problems).toContainEqual(
+      expect.objectContaining({
+        path: "elements.0.properties.subElements.0.properties.choices",
+        name: "uniqueItems",
+      })
+    );
+    expect(validateTemplate(template).errors).toContainEqual({
+      property: "elements.0.properties.subElements.0.properties.choices",
+      message: "formInvalidProperty",
+    });
   });
 });
