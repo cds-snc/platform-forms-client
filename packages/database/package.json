@@ -7,7 +7,7 @@
     "access": "public"
   },
   "type": "module",
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "yarn@4.18.1",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -34,16 +34,16 @@
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.1161.0",
-    "@prisma/adapter-pg": "7.8.0",
-    "@prisma/client": "7.8.0",
-    "pg": "8.20.0"
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
+    "pg": "8.23.1"
   },
   "devDependencies": {
     "@types/node": "^24.7.1",
-    "@types/pg": "8.20.0",
-    "prisma": "7.8.0",
+    "@types/pg": "8.23.1",
+    "prisma": "7.10.1",
     "ts-command-line-args": "^2.5.1",
-    "tsdown": "^0.15.7",
+    "tsdown": "^0.23.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }

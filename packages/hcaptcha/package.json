@@ -10,16 +10,16 @@
   "engines": {
     "node": ">=17.3"
   },
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "yarn@4.18.1",
   "peerDependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",
     "react": "^19.1.0"
   },
   "devDependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",
-    "@types/react": "19.2.18",
-    "react": "19.2.8",
-    "tsdown": "^0.15.6",
+    "@types/react": "19.3.0",
+    "react": "19.3.1",
+    "tsdown": "^0.23.0",
     "typescript": "^6.0.2"
   },
   "scripts": {
