@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - name: Node.JS Setup
         uses: actions/setup-node@670825a89dc0abd596e7a3abd0f5e3f6e5faf37c # v4.6.0
         with:
