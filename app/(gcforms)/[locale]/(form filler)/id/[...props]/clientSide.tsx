@@ -99,6 +99,11 @@ export const FormWrapper = ({
 
   return (
     <div id="form-filler">
+      {/* Hide "last modified date" on Captcha fail page to avoid user confution */}
+      {captchaFail && (
+        <style dangerouslySetInnerHTML={{ __html: `.gc-date-modified { display: none; }` }} />
+      )}
+
       {header}
 
       <Form
