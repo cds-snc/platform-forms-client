@@ -19,6 +19,20 @@ const brandingRequestFormSetting: Setting = {
   value: null,
 };
 
+const nagwareEnabled: Setting = {
+  internalId: "nagwareEnabled",
+  nameEn: "Enable nagware",
+  nameFr: "Activer les rappels de réponses en retard",
+  descriptionEn:
+    "Enable nagware banners and restrict new downloads until overdue responses are processed.",
+  descriptionFr:
+    "Activer les bannières de rappel et limiter les nouveaux téléchargements jusqu'au traitement des réponses en retard.",
+  type: "boolean",
+  groupEn: "Nagware",
+  groupFr: "Nagware",
+  value: "false",
+};
+
 const nagwarePhaseEncouraged: Setting = {
   internalId: "nagwarePhaseEncouraged",
   nameEn: "Nagware Encouraged Phase",
@@ -161,6 +175,7 @@ const enableClientErrorReporting: Setting = {
 
 const allSettings = [
   brandingRequestFormSetting,
+  nagwareEnabled,
   nagwarePhaseEncouraged,
   nagwarePhasePrompted,
   nagwarePhaseWarned,

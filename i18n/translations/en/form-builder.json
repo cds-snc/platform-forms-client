@@ -200,13 +200,7 @@
       "title": "File upload"
     },
     "fileInputDefault": {
-      "text1": "A way to add supporting documentation. Each file can be up to 10 MB in size. Files can be in PDF, Word, Excel, CSV, PNG, JPG, or TXT format.",
-      "text1x": "⚠️ You must",
-      "text2": "have an API key configured for data retrieval",
-      "text3": "to use this form element."
-    },
-    "fileInputWithApi": {
-      "description": "A way to add supporting documentation. Each file can be up to 10 MB in size. Files can be in PDF, Word, Excel, CSV, PNG, JPG, or TXT format."
+      "text1": "A way to add supporting documentation. Each file can be up to 10 MB in size. Files can be in PDF, Word, Excel, CSV, PNG, JPG, or TXT format."
     },
     "firstMiddleLastName": {
       "whatIsYourName": "What is your name?",
@@ -743,8 +737,6 @@
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
   "gcFormsTranslate": "Translations",
-  "hasFileInputAndApiDelivery": "Retrieving responses from API endpoint",
-  "hasFileInputAndApiDeliveryNote": "API key required when using file upload",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -1022,7 +1014,6 @@
         "cautionTitle": "Caution:",
         "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You'll need to create a new key and add it to your integration to restart API delivery.",
         "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
-        "fileUploadText": "⚠️ Deleting the API key will switch your delivery method and may result in the loss of files attached to form submissions. To retrieve all files that are part of submissions, create a new API key and set up your integration.",
         "stopText1": "closing the form",
         "stopText2": " instead.",
         "cancelButton": "Cancel",
@@ -1330,32 +1321,32 @@
   "formName": "Form name",
   "responsesNavLabel": "Responses",
   "nagware": {
-    "restrictedDownloadAfter35Days": "Downloading will be restricted if overdue responses are older than 35 days.",
+    "restrictedDownloadAfter35Days": "Downloading will be restricted if overdue responses are older than {{days}} days.",
     "unsavedSubmissionsOver21DaysOld": {
       "title": "Retrieve responses",
       "body1": "There are",
       "body2": {
-        "moreThan20Responses": "new responses older than 21 days. Download and sign off on the removal of 20 overdue new responses at a time.",
-        "lessThan20Responses": "new responses older than 21 days. Download and sign off on the removal of all overdue new responses."
+        "moreThan20Responses": "new responses older than {{days}} days. Download and sign off on the removal of 20 overdue new responses at a time.",
+        "lessThan20Responses": "new responses older than {{days}} days. Download and sign off on the removal of all overdue new responses."
       }
     },
     "unconfirmedSubmissionsOver21DaysOld": {
       "title": "Sign off on the removal of responses from GC Forms",
       "body1": "There are",
-      "body2": "downloaded responses older than 21 days. Confirm receipt of all overdue responses by signing off on their removal from GC Forms."
+      "body2": "downloaded responses older than {{days}} days. Confirm receipt of all overdue responses by signing off on their removal from GC Forms."
     },
     "unsavedSubmissionsOver35DaysOld": {
       "title": "Downloading is restricted to overdue responses until they are retrieved",
       "body1": "There are",
       "body2": {
-        "moreThan20Responses": "new responses over 35 days old. Download and sign off on 20 overdue responses at a time before continuing.",
-        "lessThan20Responses": "new responses over 35 days old. Download and sign off on all overdue responses before continuing."
+        "moreThan20Responses": "new responses over {{days}} days old. Download and sign off on 20 overdue responses at a time before continuing.",
+        "lessThan20Responses": "new responses over {{days}} days old. Download and sign off on all overdue responses before continuing."
       }
     },
     "unconfirmedSubmissionsOver35DaysOld": {
       "title": "Downloading is restricted until responses are signed off for removal",
       "body1": "There are",
-      "body2": "downloaded responses 35 days overdue. Sign off on the removal of all overdue downloaded responses before saving new ones."
+      "body2": "downloaded responses {{days}} days overdue. Sign off on the removal of all overdue downloaded responses before saving new ones."
     }
   },
   "loading": "Loading...",
@@ -1738,9 +1729,6 @@
   "pilot": {
     "tag": "Pilot:",
     "text": "Trial feature "
-  },
-  "fileUploadApiWarning": {
-    "text": "Delivery method is not set to API. Generate an API key to enable file uploads and retrieval of response data via the API."
   },
   "publishViewEdit": {
     "title": "Update a published form",

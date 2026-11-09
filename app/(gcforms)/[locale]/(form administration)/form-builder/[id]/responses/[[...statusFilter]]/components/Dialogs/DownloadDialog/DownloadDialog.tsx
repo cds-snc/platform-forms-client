@@ -11,9 +11,7 @@ import React, { useEffect } from "react";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
-import { FeatureFlags } from "@lib/cache/types";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { logMessage } from "@lib/logger";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
@@ -46,6 +44,7 @@ export const DownloadDialog = ({
   onSuccessfulDownload,
   responseDownloadLimit,
   responsesDownloadZipMaxSizeMB,
+  hasFileInput,
   checkedMeta = [],
 }: DownloadDialogProps) => {
   const dialogRef = useDialogRef();
@@ -60,9 +59,7 @@ export const DownloadDialog = ({
   );
 
   const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
-  const { getFlag } = useFeatureFlags();
   const { logClientError } = useLogClient();
-  const fileUploadEnabled = getFlag(FeatureFlags.fileUpload);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -95,6 +92,7 @@ export const DownloadDialog = ({
   };
 
   const handleDownload = async () => {
+    setDownloadProgress(null);
     setIsDownloading(true);
     setDownloadError(false);
     if (!selectedFormat || !availableDownloadFormats.includes(selectedFormat)) {
@@ -134,7 +132,7 @@ export const DownloadDialog = ({
         version: selectedVersion,
         filteredIds: filteredIdsWithVersion,
         filePrefix,
-        shouldCreateZip: zipAllFiles || fileUploadEnabled,
+        shouldCreateZip: zipAllFiles || hasFileInput,
         responsesDownloadZipMaxSizeMB,
         setDownloadProgress,
         setIsDownloading,
@@ -155,6 +153,9 @@ export const DownloadDialog = ({
 
     switch (downloadProgress.phase) {
       case "responses":
+        if (downloadProgress.response === 0) {
+          return t("downloadResponsesModals.downloadDialog.processingResponses");
+        }
         return t("downloadResponsesModals.downloadDialog.processingResponse", {
           response: downloadProgress.response,
           total: downloadProgress.total,
@@ -200,6 +201,20 @@ export const DownloadDialog = ({
                 maxSizeMB: responsesDownloadZipMaxSizeMB,
               })}
             </p>
+            <div className="mb-6 bg-yellow-50 p-4">
+              <h4 className="mb-4">
+                {t("downloadResponsesModals.downloadDialog.attachmentWarning.title")}
+              </h4>
+              <ul className="list-disc space-y-2 pl-6">
+                <li>
+                  {t("downloadResponsesModals.downloadDialog.attachmentWarning.separateFolder")}
+                </li>
+                <li>
+                  {t("downloadResponsesModals.downloadDialog.attachmentWarning.suspiciousFolder")}
+                </li>
+                <li>{t("downloadResponsesModals.downloadDialog.attachmentWarning.checkFiles")}</li>
+              </ul>
+            </div>
             <h3 className="mb-4 block font-semibold">
               {t("downloadResponsesModals.downloadDialog.chooseDownloadFormat")}
             </h3>
@@ -283,7 +298,7 @@ export const DownloadDialog = ({
               </div>
             </div>
 
-            {!fileUploadEnabled && (
+            {!hasFileInput && (
               <div className="mt-6">
                 <div className="gc-input-checkbox">
                   <input
@@ -305,18 +320,23 @@ export const DownloadDialog = ({
             )}
 
             <div className="sticky bottom-0 flex flex-col gap-3 border-t-[0.5px] border-slate-500 bg-white p-4">
+              {/* Avoid flooding a screen reader with messages by only announcing summary info e.g. "Processing response 1 of 3" */}
+              <div
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="sr-only"
+                data-testid="download-progress-indicator-hidden"
+              >
+                {isDownloading &&
+                  downloadProgress?.phase === "responses" &&
+                  getDownloadProgressMessage()}
+              </div>
               {isDownloading && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="flex items-center gap-2"
-                  data-testid="download-progress-indicator"
-                >
+                <div className="flex items-center gap-2" data-testid="download-progress-indicator">
                   <SpinnerIcon className="size-6 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
                   <span className="sr-only">{t("loading")}</span>
-                  {fileUploadEnabled && (
-                    <span className="text-sm">{getDownloadProgressMessage()}</span>
-                  )}
+                  <span className="text-sm">{getDownloadProgressMessage()}</span>
                 </div>
               )}
               <div className="flex gap-4">

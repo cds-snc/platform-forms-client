@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Nagware } from "@formBuilder/components/Nagware";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
 import { useTranslation } from "@i18n/client";
 import { ucfirst } from "@lib/client/clientHelpers";
@@ -9,28 +8,42 @@ import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { TitleAndDescription } from "./TitleAndDescription";
-import { NagLevel, StartFromExclusiveResponse, VaultSubmissionOverview } from "@lib/types";
+import { StartFromExclusiveResponse, VaultSubmissionOverview } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
 import { StatusFilter } from "../types";
 import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
 import { useFeatureDetect } from "@lib/hooks/useFeatureDetect";
 import { v4 as uuid } from "uuid";
+import { FormElement, FormElementTypes } from "@lib/types";
 
 export interface ResponsesProps {
   hasOverdue: boolean;
   responseDownloadLimit: number;
   responsesDownloadZipMaxSizeMB: number;
   overdueAfter: number;
+  nagwarePromptAfter: number;
+  nagwareWarnAfter: number;
+  nagwareEnabled: boolean;
   statusFilter: StatusFilter;
   isApiRetrieval?: boolean;
 }
+
+const hasFileInputElement = (elements?: FormElement[]): boolean =>
+  elements?.some(
+    (element) =>
+      element.type === FormElementTypes.fileInput ||
+      hasFileInputElement(element.properties?.subElements)
+  ) ?? false;
 
 export const Responses = ({
   hasOverdue,
   responseDownloadLimit,
   responsesDownloadZipMaxSizeMB,
   overdueAfter,
+  nagwarePromptAfter,
+  nagwareWarnAfter,
+  nagwareEnabled,
   statusFilter,
   isApiRetrieval = false,
 }: ResponsesProps) => {
@@ -55,8 +68,15 @@ export const Responses = ({
     loading: boolean;
     submissions: VaultSubmissionOverview[];
     startFromExclusiveResponse: StartFromExclusiveResponse | null;
+    oldestDownloadedCreatedAt: number | null;
     error: boolean;
-  }>({ loading: true, submissions: [], startFromExclusiveResponse: null, error: false });
+  }>({
+    loading: true,
+    submissions: [],
+    startFromExclusiveResponse: null,
+    oldestDownloadedCreatedAt: null,
+    error: false,
+  });
 
   useEffect(() => {
     fetchSubmissions({
@@ -64,23 +84,28 @@ export const Responses = ({
       status: statusFilter,
       lastKey,
     })
-      .then(({ submissions, startFromExclusiveResponse, error }) => {
+      .then(({ submissions, startFromExclusiveResponse, oldestDownloadedCreatedAt, error }) => {
         setState({
           loading: false,
           submissions,
           startFromExclusiveResponse: startFromExclusiveResponse ?? null,
+          oldestDownloadedCreatedAt: oldestDownloadedCreatedAt ?? null,
           error: Boolean(error),
         });
       })
       .catch(() =>
-        setState({ loading: false, submissions: [], startFromExclusiveResponse: null, error: true })
+        setState({
+          loading: false,
+          submissions: [],
+          startFromExclusiveResponse: null,
+          oldestDownloadedCreatedAt: null,
+          error: true,
+        })
       );
   }, [formId, lastKey, statusFilter, forceRefresh]);
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
-
-  // The nagware will be refactored during the database optimiztion work.
-  const nagwareResult = { level: NagLevel.None, numberOfSubmissions: 0 };
+  const hasFileInput = hasFileInputElement(initialForm.elements);
 
   if (state.loading) {
     return null;
@@ -99,13 +124,17 @@ export const Responses = ({
               <DownloadTable
                 statusFilter={statusFilter}
                 vaultSubmissions={state.submissions}
+                oldestDownloadedCreatedAt={state.oldestDownloadedCreatedAt}
                 formName={formName}
                 formId={formId}
-                nagwareResult={nagwareResult}
                 responseDownloadLimit={responseDownloadLimit}
                 responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
+                hasFileInput={hasFileInput}
                 startFromExclusiveResponse={state.startFromExclusiveResponse}
                 overdueAfter={overdueAfter}
+                nagwarePromptAfter={nagwarePromptAfter}
+                nagwareWarnAfter={nagwareWarnAfter}
+                nagwareEnabled={nagwareEnabled}
               />
             </>
           ) : (
@@ -127,7 +156,6 @@ export const Responses = ({
         />
       )}
 
-      <Nagware nagwareResult={nagwareResult} />
       <div aria-live="polite">
         <ClosedBanner id={formId} />
         {state.submissions.length > 0 ? (
@@ -135,13 +163,17 @@ export const Responses = ({
             <DownloadTable
               statusFilter={statusFilter}
               vaultSubmissions={state.submissions}
+              oldestDownloadedCreatedAt={state.oldestDownloadedCreatedAt}
               formName={formName}
               formId={formId}
-              nagwareResult={nagwareResult}
               responseDownloadLimit={responseDownloadLimit}
               responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
+              hasFileInput={hasFileInput}
               startFromExclusiveResponse={state.startFromExclusiveResponse}
               overdueAfter={overdueAfter}
+              nagwarePromptAfter={nagwarePromptAfter}
+              nagwareWarnAfter={nagwareWarnAfter}
+              nagwareEnabled={nagwareEnabled}
             />
           </>
         ) : (

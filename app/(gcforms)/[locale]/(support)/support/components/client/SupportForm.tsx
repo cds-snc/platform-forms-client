@@ -29,6 +29,7 @@ import {
 import { Success } from "../../../components/client/Success";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { isValidGovEmail } from "@root/lib/validation/validation";
+import { GcdsNotice } from "@gcds-core/components-react";
 
 export const SupportForm = () => {
   const {
@@ -94,7 +95,7 @@ export const SupportForm = () => {
   };
 
   return (
-    <>
+    <div>
       {submitted ? (
         <Success lang={language} />
       ) : (
@@ -122,6 +123,7 @@ export const SupportForm = () => {
           )}
 
           <GcdsH1>{t("support.title")}</GcdsH1>
+
           <p className="mb-6">
             {t("support.experience")}
             <Link href={`https://articles.alpha.canada.ca/forms-formulaires/${language}/guidance`}>
@@ -136,12 +138,20 @@ export const SupportForm = () => {
             </Link>{" "}
             {t("support.gcFormsTeamPart2")}
           </p>
-          <Alert.Warning title={t("support.lookingForADemo")} role="note">
-            <p>
-              {t("support.ifYouWouldLike")}{" "}
-              <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
-            </p>
-          </Alert.Warning>
+
+          <div className="mb-14">
+            <GcdsNotice
+              notice-title={t("support.lookingForADemo")}
+              notice-role="info"
+              notice-title-tag="h3"
+            >
+              <p>
+                {t("support.ifYouWouldLike")}{" "}
+                <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
+              </p>
+            </GcdsNotice>
+          </div>
+
           <form
             id="support"
             onSubmit={(e) => {
@@ -238,6 +248,6 @@ export const SupportForm = () => {
           </form>
         </>
       )}
-    </>
+    </div>
   );
 };

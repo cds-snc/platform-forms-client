@@ -2,7 +2,7 @@
 import React, { createContext, useState, useEffect, useContext, useCallback } from "react";
 
 import { useSession, signOut } from "next-auth/react";
-import { PureAbility, createMongoAbility, MongoAbility } from "@casl/ability";
+import { createMongoAbility, MongoAbility } from "@casl/ability";
 import { Abilities } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
@@ -10,12 +10,12 @@ import isEqual from "lodash.isequal";
 import { Session } from "next-auth";
 
 interface AccessControlInterface {
-  ability: PureAbility<Abilities, unknown> | null;
+  ability: MongoAbility<Abilities> | null;
 }
 const AbilityContext = createContext<AccessControlInterface>({} as AccessControlInterface);
 
 export const AccessControlProvider = ({ children }: { children: React.ReactNode }) => {
-  const [ability, setAbility] = useState<PureAbility<Abilities, unknown> | null>(null);
+  const [ability, setAbility] = useState<MongoAbility<Abilities> | null>(null);
   const { data, status } = useSession();
   const [user, setUser] = useState<Session["user"] | undefined>(data?.user);
   const {

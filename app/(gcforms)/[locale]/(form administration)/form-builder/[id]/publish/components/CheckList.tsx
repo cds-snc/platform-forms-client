@@ -45,15 +45,7 @@ export const CheckList = ({ formId, lang }: { formId: string; lang: Language }) 
   }));
 
   const {
-    data: {
-      title,
-      questions,
-      privacyPolicy,
-      translate,
-      confirmationMessage,
-      hasFileInputAndApiKey,
-    },
-    hasFileInputElement,
+    data: { title, questions, privacyPolicy, translate, confirmationMessage },
     hasApiKeyId,
   } = useAllowPublish();
 
@@ -111,18 +103,6 @@ export const CheckList = ({ formId, lang }: { formId: string; lang: Language }) 
           {t("translate")}
         </CheckListLink>
       </li>
-
-      {hasFileInputElement && (
-        <li className="my-4">
-          {hasHydrated ? <Icon checked={hasFileInputAndApiKey} /> : IconLoading}
-          <CheckListLink href={`/${lang}/form-builder/${formId}/settings`}>
-            {t("hasFileInputAndApiDelivery")}
-          </CheckListLink>
-          <ul>
-            <li>{t("hasFileInputAndApiDeliveryNote")}</li>
-          </ul>
-        </li>
-      )}
 
       <li className="my-4">
         {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}

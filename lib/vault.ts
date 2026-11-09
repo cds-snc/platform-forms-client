@@ -12,6 +12,7 @@ import {
   VaultStatus,
   VaultSubmission,
   StartFromExclusiveResponse,
+  ScanStatus,
 } from "@lib/types";
 import { AuditLogAccessDeniedDetails, AuditLogDetails, AuditLogEvent, logEvent } from "./auditLogs";
 import {
@@ -425,13 +426,15 @@ const parseSubmissionAttachments = (value: unknown): VaultFileAttachment[] | und
         return [];
       }
 
+      const scanStatus = normalizeScanStatus(attachment.scanStatus);
+
       return [
         {
           id: typeof attachment.id === "string" ? attachment.id : attachment.path,
           name: attachment.name,
           path: attachment.path,
-          scanStatus: attachment.scanStatus,
-          isPotentiallyMalicious: attachment.scanStatus !== "NO_THREATS_FOUND",
+          scanStatus,
+          isPotentiallyMalicious: scanStatus === ScanStatus.THREATS_FOUND,
         },
       ];
     });
@@ -439,6 +442,18 @@ const parseSubmissionAttachments = (value: unknown): VaultFileAttachment[] | und
     logMessage.warn("Failed to parse SubmissionAttachments from Vault response");
     return undefined;
   }
+};
+
+const normalizeScanStatus = (scanStatus: string): ScanStatus => {
+  if (scanStatus === ScanStatus.NO_THREATS_FOUND) {
+    return ScanStatus.NO_THREATS_FOUND;
+  }
+  if (scanStatus === ScanStatus.THREATS_FOUND) {
+    return ScanStatus.THREATS_FOUND;
+  }
+
+  logMessage.warn("Unrecognized Vault attachment scan status; treating as potentially malicious");
+  return ScanStatus.THREATS_FOUND;
 };
 
 /**

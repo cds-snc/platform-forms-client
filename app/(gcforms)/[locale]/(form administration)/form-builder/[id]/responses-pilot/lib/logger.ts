@@ -10,6 +10,37 @@ interface LogEntry {
   data?: unknown;
 }
 
+const serializeError = (error: unknown, depth = 0): unknown => {
+  if (error instanceof Error || error instanceof DOMException) {
+    return {
+      message: error.message,
+      name: error.name,
+      code: error instanceof DOMException ? error.code : undefined,
+      stack: error instanceof Error ? error.stack : undefined,
+      cause: "cause" in error && depth < 5 ? serializeError(error.cause, depth + 1) : undefined,
+    };
+  }
+  return error;
+};
+
+// Only failures add an entry; successful file operations must not flood the on-disk log.
+export const logDownloadOperation = async <T>(
+  logger: ResponseDownloadLogger,
+  context: { submissionId: string; operation: string; path?: string },
+  operation: () => Promise<T>
+): Promise<T> => {
+  const startedAt = Date.now();
+  try {
+    return await operation();
+  } catch (error) {
+    logger.error("Response download operation failed", error, {
+      ...context,
+      durationMs: Date.now() - startedAt,
+    });
+    throw error;
+  }
+};
+
 export class ResponseDownloadLogger {
   private directoryHandle: FileSystemDirectoryHandle | null = null;
   private sessionId: string;
@@ -24,7 +55,10 @@ export class ResponseDownloadLogger {
       return;
     }
     this.directoryHandle = handle;
-    this.log("info", "Logging session started", { sessionId: this.sessionId });
+    this.log("info", "Logging session started", {
+      sessionId: this.sessionId,
+      userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
+    });
   }
 
   private async writeToFile(entry: LogEntry): Promise<void> {
@@ -86,24 +120,10 @@ export class ResponseDownloadLogger {
     this.log("warn", message, data);
   }
 
-  error(message: string, error?: unknown) {
+  error(message: string, error?: unknown, context?: Record<string, unknown>) {
     this.log("error", message, {
-      error:
-        error instanceof Error
-          ? {
-              message: error.message,
-              stack: error.stack,
-              name: error.name,
-              cause: error.cause,
-            }
-          : error instanceof DOMException
-            ? {
-                message: error.message,
-                name: error.name,
-                code: error.code,
-                cause: error.cause,
-              }
-            : error,
+      ...context,
+      error: serializeError(error),
     });
   }
 

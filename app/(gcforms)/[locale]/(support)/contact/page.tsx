@@ -21,5 +21,9 @@ export async function generateMetadata(props: {
 }
 
 export default async function Page() {
-  return <ContactForm />;
+  return (
+    <div className="container-lg">
+      <ContactForm />
+    </div>
+  );
 }

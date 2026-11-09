@@ -592,7 +592,7 @@ describe("<Alert />", () => {
   });
 
   describe("Alert role", () => {
-    it("Renders an alert with default role", async () => {
+    it("Renders a success alert with default status role", async () => {
       await render(
         <Alert.Success>
           <Alert.Body>Test body</Alert.Body>
@@ -603,22 +603,37 @@ describe("<Alert />", () => {
 
       const alert = page.getByTestId("alert");
       await expect.element(alert).toBeVisible();
-      await expect.element(alert).toHaveAttribute("role", "alert");
+      await expect.element(alert).toHaveAttribute("role", "status");
     });
 
-    it("Renders an alert with an alternate role", async () => {
-      await render(
-        <Alert.Success role="note">
-          <Alert.Body>Test body</Alert.Body>
-          <p>And a paragraph</p>
-          This text will not render
-        </Alert.Success>
-      );
+    it.each(["Info", "Warning", "Danger"] as const)(
+      "Renders %s with the unchanged default alert role",
+      async (variant) => {
+        const Component = Alert[variant];
+        await render(<Component title="Test title" body="Test body" />);
 
-      const alert = page.getByTestId("alert");
-      await expect.element(alert).toBeVisible();
-      await expect.element(alert).toHaveAttribute("role", "note");
-    });
+        const alert = page.getByTestId("alert");
+        await expect.element(alert).toBeVisible();
+        await expect.element(alert).toHaveAttribute("role", "alert");
+      }
+    );
+
+    it.each(["alert", "note"] as const)(
+      "Renders a success alert with an explicit %s role",
+      async (role) => {
+        await render(
+          <Alert.Success role={role}>
+            <Alert.Body>Test body</Alert.Body>
+            <p>And a paragraph</p>
+            This text will not render
+          </Alert.Success>
+        );
+
+        const alert = page.getByTestId("alert");
+        await expect.element(alert).toBeVisible();
+        await expect.element(alert).toHaveAttribute("role", role);
+      }
+    );
   });
 
   describe("Alert id", () => {

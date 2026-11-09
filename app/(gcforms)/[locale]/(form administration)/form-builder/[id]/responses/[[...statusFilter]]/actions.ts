@@ -1,7 +1,7 @@
 "use server";
 
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
-import { getAppSetting } from "@lib/appSettings";
+import { getAppSetting, getAppSettingAsBoolean } from "@lib/appSettings";
 import { AuditLogEvent, AuditLogDetails, logEvent } from "@lib/auditLogs";
 import { ucfirst } from "@lib/client/clientHelpers";
 import {
@@ -40,8 +40,6 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { traceFunction } from "@lib/otel";
 import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import type { Response } from "@gcforms/types";
-import { FeatureFlags } from "@lib/cache/types";
-import { featureFlagAllowedForUser } from "@lib/userFeatureFlags";
 import { getFormSubmissionAttachmentDownloadLink } from "@lib/vault/getFormSubmissionAttachmentDownloadLink";
 import { FormElement, FormElementTypes } from "@gcforms/types";
 import { getResponseAttachmentFilenameMapping } from "@lib/responseDownloadFormats/attachments";
@@ -112,7 +110,17 @@ export const fetchSubmissions = AuthenticatedAction(
         const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
           await listAllSubmissions(formId, selectedStatus, undefined, startFromExclusiveResponse);
 
-        return { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse };
+        // The New tab must also restrict downloads when previously downloaded responses are overdue for sign-off.
+        const oldestDownloaded =
+          selectedStatus === VaultStatus.NEW && (await getAppSettingAsBoolean("nagwareEnabled"))
+            ? await listAllSubmissions(formId, VaultStatus.DOWNLOADED, 1)
+            : null;
+
+        return {
+          submissions,
+          startFromExclusiveResponse: nextStartFromExclusiveResponse,
+          oldestDownloadedCreatedAt: oldestDownloaded?.submissions[0]?.createdAt ?? null,
+        };
       } catch (e) {
         logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
         return { error: true, submissions: [] };
@@ -255,31 +263,24 @@ export const getSubmissionsByFormat = AuthenticatedAction(
           );
         }
 
-        const fileUploadEnabled = await featureFlagAllowedForUser(
-          session.user.id,
-          FeatureFlags.fileUpload
-        );
         // Mint links only for the current queue item, not for every selected response up front.
-        const attachments =
-          fileUploadEnabled && includeAttachments
-            ? (
-                await Promise.all(
-                  queryResult.map(async (item) => ({
-                    responseId: item.name,
-                    attachments: await Promise.all(
-                      (item.fileAttachments ?? []).map(async (attachment) => ({
-                        id: attachment.id,
-                        name: attachment.name,
-                        downloadLink: await getFormSubmissionAttachmentDownloadLink(
-                          attachment.path
-                        ),
-                        isPotentiallyMalicious: attachment.isPotentiallyMalicious,
-                      }))
-                    ),
-                  }))
-                )
-              ).filter((group) => group.attachments.length > 0)
-            : [];
+        const attachments = includeAttachments
+          ? (
+              await Promise.all(
+                queryResult.map(async (item) => ({
+                  responseId: item.name,
+                  attachments: await Promise.all(
+                    (item.fileAttachments ?? []).map(async (attachment) => ({
+                      id: attachment.id,
+                      name: attachment.name,
+                      downloadLink: await getFormSubmissionAttachmentDownloadLink(attachment.path),
+                      isPotentiallyMalicious: attachment.isPotentiallyMalicious,
+                    }))
+                  ),
+                }))
+              )
+            ).filter((group) => group.attachments.length > 0)
+          : [];
 
         // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
         const responses = queryResult

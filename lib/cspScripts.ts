@@ -32,7 +32,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
     script-src 'self' 'nonce-${nonce}' 'wasm-unsafe-eval' 'strict-dynamic';
     style-src 'self' 'nonce-${nonce}';
     img-src 'self' blob: data:;
-    font-src 'self';
+    font-src 'self' https://cdn.design-system.canada.ca;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
