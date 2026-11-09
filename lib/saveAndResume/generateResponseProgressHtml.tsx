@@ -5,6 +5,77 @@ import { DownloadConfirmHtml } from "@lib/saveAndResume/DownloadConfirmHtml";
 import { type HTMLProps } from "@lib/saveAndResume/types";
 import { logMessage } from "@lib/logger";
 
+export const embedBrandLogoAssets = async (html: string) => {
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const image = document.querySelector<HTMLImageElement>(".gcds-signature img");
+  if (!image) throw new Error("Brand logo is missing from downloaded HTML");
+  image.style.maxWidth = "min(400px, 100%)";
+
+  const source = image.getAttribute("src");
+  if (!source || source.startsWith("data:")) {
+    return `<!DOCTYPE html>${document.documentElement.outerHTML}`;
+  }
+
+  const logoUrl = new URL(source, window.location.origin);
+  if (logoUrl.origin !== window.location.origin) {
+    throw new Error("Brand logos must be hosted on the same origin to embed in downloaded HTML");
+  }
+
+  const response = await fetch(logoUrl);
+  if (!response.ok) {
+    throw new Error(`Failed to load brand logo (${response.status} ${response.statusText})`);
+  }
+
+  const contentType = response.headers.get("content-type")?.split(";")[0] ?? "";
+  const isSvg = contentType === "image/svg+xml" || logoUrl.pathname.toLowerCase().endsWith(".svg");
+
+  if (isSvg) {
+    const svg = await response.text();
+    if (!/<svg(?:\s|>)/i.test(svg)) {
+      throw new Error("Downloaded brand logo is not valid SVG");
+    }
+
+    const svgDocument = new DOMParser().parseFromString(svg, "image/svg+xml");
+    const svgElement = svgDocument.documentElement;
+    if (svgDocument.querySelector("parsererror") || svgElement.localName !== "svg") {
+      throw new Error("Downloaded brand logo is not valid SVG");
+    }
+
+    const viewBox = svgElement
+      .getAttribute("viewBox")
+      ?.trim()
+      .split(/[\s,]+/)
+      .map(Number);
+    if (viewBox?.length === 4 && viewBox[2] > 0 && viewBox[3] > 0) {
+      if (!svgElement.hasAttribute("width")) svgElement.setAttribute("width", String(viewBox[2]));
+      if (!svgElement.hasAttribute("height")) svgElement.setAttribute("height", String(viewBox[3]));
+    }
+
+    const normalizedSvg = new XMLSerializer().serializeToString(svgElement);
+    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(normalizedSvg)}`;
+  } else {
+    const logo = await response.blob();
+    const mimeType = logo.type || contentType;
+    if (!mimeType.startsWith("image/")) {
+      throw new Error(`Unsupported brand logo content type: ${mimeType || "unknown"}`);
+    }
+
+    const dataUrl = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") resolve(reader.result);
+        else reject(new Error("Failed to encode brand logo"));
+      };
+      reader.onerror = () => reject(reader.error ?? new Error("Failed to read brand logo"));
+      reader.readAsDataURL(logo);
+    });
+
+    image.src = dataUrl;
+  }
+
+  return `<!DOCTYPE html>${document.documentElement.outerHTML}`;
+};
+
 export const generateResponseProgressHtml = async (props: HTMLProps) => {
   try {
     const formId = props.formId;
@@ -20,7 +91,8 @@ export const generateResponseProgressHtml = async (props: HTMLProps) => {
         ? DownloadConfirmHtml({ ...props, host })
         : DownloadProgressHtml({ ...props, host });
 
-    return { data: renderToStaticMarkup(html) };
+    const markup = renderToStaticMarkup(html);
+    return { data: await embedBrandLogoAssets(markup) };
   } catch (err) {
     logMessage.warn(
       `Error generating HTML in client due to error: ${(err as Error).message} - formID: {${props?.formId}}`
