@@ -34,6 +34,7 @@ interface DownloadTableProps {
   formId: string;
   responseDownloadLimit: number;
   responsesDownloadZipMaxSizeMB: number;
+  hasFileInput?: boolean;
   startFromExclusiveResponse: StartFromExclusiveResponse | null;
   overdueAfter: number;
   nagwarePromptAfter: number;
@@ -49,6 +50,7 @@ export const DownloadTable = ({
   formId,
   responseDownloadLimit,
   responsesDownloadZipMaxSizeMB,
+  hasFileInput = false,
   startFromExclusiveResponse,
   overdueAfter,
   nagwarePromptAfter,
@@ -390,6 +392,8 @@ export const DownloadTable = ({
                       formId={submission.formID}
                       responseId={submission.name}
                       version={submission.version}
+                      hasFileInput={hasFileInput}
+                      responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
                       onDownloadStart={handleDownloadStart}
                       onDownloadSuccess={() => {
                         setDownloadError(false);
@@ -481,6 +485,7 @@ export const DownloadTable = ({
         setDownloadError={setDownloadError}
         responseDownloadLimit={responseDownloadLimit}
         responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
+        hasFileInput={hasFileInput}
         checkedMeta={tableItems.allItems.filter((item) => tableItems.checkedItems.get(item.name))}
       />
     </>

@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { Alert, Button } from "@clientComponents/globals";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
@@ -20,7 +19,6 @@ export const CreateDraftConfirmDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t, i18n } = useTranslation("form-builder");
-  const router = useRouter();
   const { getFlag } = useFeatureFlags();
   const {
     uploadInput,
@@ -86,7 +84,8 @@ export const CreateDraftConfirmDialog = () => {
       clearTemplateStore();
       // Navigate to edit page for the draft
       const lang = i18n.language || "en";
-      router.push(`/${lang}/form-builder/${res.formRecord.id}/edit`);
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- force a full page reload after creating a draft
+      window.location.href = `/${lang}/form-builder/${res.formRecord.id}/edit`;
     } catch (e) {
       toast.error(t("confirm.createDraft.errors.create"));
       setIsSubmitting(false);

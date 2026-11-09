@@ -376,7 +376,9 @@
   },
   "submitProgress": {
     "text": "Envoi du formulaire en cours...",
-    "uploadingFiles": "Téléversement de {{totalFiles}} fichiers..."
+    "uploadingFiles_one": "Téléversement du fichier...",
+    "uploadingFiles_other": "Téléversement de {{totalFiles}} fichiers...",
+    "spinner": "Envoi du formulaire"
   },
   "saveFileWarning": {
     "text": "Vous devrez téléverser à nouveau les fichiers joints lorsque vous poursuivrez le formulaire."

@@ -163,7 +163,6 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
       <div className={classes} data-testid="file">
         <div
           key={name}
-          id={name}
           role="button"
           tabIndex={0}
           onClick={() => fileInputRef.current?.click()}
@@ -183,7 +182,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
           <input
             ref={fileInputRef}
-            id={`${name}_hidden`}
+            id={name}
             tabIndex={-1}
             type="file"
             accept={allowedFileTypes}
