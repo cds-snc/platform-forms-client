@@ -22,7 +22,7 @@ export async function generateMetadata(props: {
 
 export default async function Page() {
   return (
-    <div className="gc-formview">
+    <div className="container-lg">
       <SupportForm />
     </div>
   );

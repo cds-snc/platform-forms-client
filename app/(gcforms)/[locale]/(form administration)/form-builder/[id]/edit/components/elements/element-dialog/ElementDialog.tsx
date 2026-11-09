@@ -10,8 +10,6 @@ import { ElementFilters } from "./ElementFilters";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { ListBox } from "@formBuilder/components/shared/ListBox";
 
-import { useFileUploadEnabled } from "@lib/hooks/form-builder/useFileUploadEnabled";
-
 export type SelectedGroupState = {
   group: Groups | "all";
 };
@@ -129,12 +127,6 @@ export const ElementDialog = ({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleAdd]);
 
-  const fileUploadEnabled = useFileUploadEnabled();
-
-  // Check if the file input should be disabled
-  // In this case, it should only be enabled if the form has an API key
-  const disabled = id === "fileInput" && !fileUploadEnabled;
-
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose} className="flex max-w-[800px]">
       <div className="relative flex w-full">
@@ -185,11 +177,7 @@ export const ElementDialog = ({
         </Body>
 
         <ElementDialogFooter>
-          <Button
-            disabled={disabled}
-            dataTestId="element-description-add-element"
-            onClick={handleAdd}
-          >
+          <Button dataTestId="element-description-add-element" onClick={handleAdd}>
             <>
               {id
                 ? `${t(`addElementDialog.addElement.${id}`)}`

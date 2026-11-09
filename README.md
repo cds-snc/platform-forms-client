@@ -124,6 +124,18 @@ There are several ways to connect to the database, but here's how to do it throu
 
 Once the change is made, you will need to 'Log Out' and log back in. Alternatively, if you want to avoid logging out, you can open RedisInsight and delete the key named `auth:privileges:<your_user_id>`. Then you just need to refresh the web application for the new privileges to be applied.
 
+## Troubleshooting response-pilot downloads
+
+The selected download folder contains a `source/logs-journaux/log-journal-*.txt` journal.
+It records the browser user agent, submission progress, attachment counts, and processing durations.
+On failure, look for `Response download operation failed` or `CSV file operation failed`:
+these entries identify the submission, operation, and path relative to the selected folder.
+Nested error causes are preserved, including filesystem exception names such as `InvalidStateError`.
+
+The added diagnostics do not record response answers, private keys, confirmation codes, or attachment
+download URLs. Paths can contain attachment filenames, so review journals before sharing them.
+Successful individual file operations are not logged, to avoid excessive journal writes.
+
 ## Testing
 
 See package.json scripts for vitest and playwright

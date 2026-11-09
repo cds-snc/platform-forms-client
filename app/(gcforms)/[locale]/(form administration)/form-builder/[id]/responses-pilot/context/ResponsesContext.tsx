@@ -247,7 +247,7 @@ export const ResponsesProvider = ({
       let formResponses = [...(initialSubmissions || newFormSubmissions || [])];
 
       responseLogger.info(
-        `Processing ${formResponses.length} submissions for form ID ${formId} and version ${
+        `Processing ${formResponses.length} submissions for form ID ${apiClient?.getFormId()} and version ${
           activeSelectedVersion || 1
         }`
       );
@@ -344,7 +344,12 @@ export const ResponsesProvider = ({
             // Check if this is a file write error from CSV writer by examining the cause
             const errorCause = error instanceof Error ? error.cause : null;
 
-            responseLogger.error(`Error processing submission ID ${response.name}:`, error);
+            responseLogger.error(`Error processing submission ID ${response.name}:`, error, {
+              formId,
+              version: activeSelectedVersion || 1,
+              format: selectedFormat,
+              processedSubmissions: processedSubmissionsCountRef.current,
+            });
 
             if (errorCause instanceof DOMException) {
               if (errorCause.name === "NoModificationAllowedError") {

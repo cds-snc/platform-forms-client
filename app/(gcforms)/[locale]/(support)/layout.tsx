@@ -1,4 +1,5 @@
 import { cn } from "@lib/utils";
+import "@gcds-core/components-react/gcds.css";
 import { Footer } from "@serverComponents/globals/Footer";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";

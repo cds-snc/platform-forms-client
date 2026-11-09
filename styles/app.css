@@ -479,4 +479,9 @@
     max-width: var(--gcds-container-xl);
     width: 100%;
   }
+
+  .container-lg {
+    max-width: var(--gcds-container-lg);
+    width: 100%;
+  }
 }
