@@ -10,7 +10,7 @@ import { Button } from "@clientComponents/globals";
 import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { cn } from "@lib/utils";
-import { getChoiceValuesExcludingIndex } from "./getChoiceValuesExcludingIndex";
+import { getChoiceValuesExcludingIndex } from "@lib/utils/form-builder/getChoiceValuesExcludingIndex";
 import { FormElement } from "@gcforms/types";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;

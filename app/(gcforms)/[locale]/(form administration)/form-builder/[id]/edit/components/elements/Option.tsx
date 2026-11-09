@@ -9,7 +9,7 @@ import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { cn } from "@lib/utils";
-import { getChoiceValuesExcludingIndex } from "./getChoiceValuesExcludingIndex";
+import { getChoiceValuesExcludingIndex } from "@lib/utils/form-builder/getChoiceValuesExcludingIndex";
 
 type RenderIcon = ((index: number) => ReactElement | string) | undefined;
 
