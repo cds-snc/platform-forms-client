@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.30.0](https://github.com/cds-snc/platform-forms-client/compare/v4.29.0...v4.30.0) (2026-11-09)
+
+
+### Features
+
+* 🧢 Capped attachments ([#8185](https://github.com/cds-snc/platform-forms-client/issues/8185)) ([298b7f7](https://github.com/cds-snc/platform-forms-client/commit/298b7f7ec23270b5ec42a8df3a84c92201aa8dc5))
+
+
+### Bug Fixes
+
+* update account menu content to fit better ([#8182](https://github.com/cds-snc/platform-forms-client/issues/8182)) ([0d58f1c](https://github.com/cds-snc/platform-forms-client/commit/0d58f1c8a5675ce9d415696fbb34637eab6fee0d))
+
+
+### Miscellaneous Chores
+
+* add proper type for scan status ([#8179](https://github.com/cds-snc/platform-forms-client/issues/8179)) ([f4dcc4e](https://github.com/cds-snc/platform-forms-client/commit/f4dcc4eb90b0b6847a4f3f3917a6bf2101965beb))
+* bump @casl/ability ([#8193](https://github.com/cds-snc/platform-forms-client/issues/8193)) ([d6c80eb](https://github.com/cds-snc/platform-forms-client/commit/d6c80ebee5e24642d8e5197e1d3400924719c616))
+* **deps:** update all non-major github action dependencies ([#8191](https://github.com/cds-snc/platform-forms-client/issues/8191)) ([808f319](https://github.com/cds-snc/platform-forms-client/commit/808f3198595f88c89de2ac50f08713c305c202b7))
+* package bump testing libraries ([#8192](https://github.com/cds-snc/platform-forms-client/issues/8192)) ([7a98cff](https://github.com/cds-snc/platform-forms-client/commit/7a98cffed8d043c9a0f8877a68f0a987973d5405))
+* Review French content for file attachment ([#8177](https://github.com/cds-snc/platform-forms-client/issues/8177)) ([859b93c](https://github.com/cds-snc/platform-forms-client/commit/859b93c90ab50e6b78a57cc6c1a1ef9551601bfc))
+
 ## [4.29.0](https://github.com/cds-snc/platform-forms-client/compare/v4.28.4...v4.29.0) (2026-11-05)
 
 
