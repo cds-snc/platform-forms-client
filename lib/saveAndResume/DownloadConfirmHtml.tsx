@@ -6,13 +6,14 @@ import { SubmittedBadge } from "./SubmittedBadge";
 import { KeepSafe } from "./KeepSafe";
 import { HTMLProps } from "./types";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
-import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
+import { BrandHeader } from "@serverComponents/globals/GcdsHeader/BrandHeader";
 
 export const DownloadConfirmHtml = ({
   language,
   formTitle,
   formId,
   formResponse,
+  brand,
   reviewItems,
   startSectionTitle,
   host,
@@ -55,13 +56,14 @@ export const DownloadConfirmHtml = ({
         <div>
           <main id="content">
             <div className="mt-6" />
-            <GcdsHeader
+            <BrandHeader
+              brand={brand}
               language={language}
               skipLink={false}
               showLanguageToggle={false}
               pathname=""
             />
-            <div className="gc-formview container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+            <div className="gc-formview container-xl tablet:px-[var(--gcds-spacing-600)] laptop:px-0 mx-auto px-[var(--gcds-spacing-225)]">
               <div className="mb-14">
                 <SubmittedBadge
                   submissionId={submissionId}
