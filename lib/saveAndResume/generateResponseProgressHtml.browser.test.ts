@@ -17,6 +17,7 @@ describe("embedBrandLogoAssets", () => {
     );
 
     expect(html).toContain("max-width: min(400px, 100%)");
+    expect(html).toContain("max-height: 80px");
     expect(html).toContain("data:image/svg+xml;charset=utf-8,%3Csvg");
     expect(html).not.toContain("base64");
     const embeddedSvg = decodeURIComponent(html.match(/src="data:image\/svg\+xml;charset=utf-8,([^"]+)"/)![1]);

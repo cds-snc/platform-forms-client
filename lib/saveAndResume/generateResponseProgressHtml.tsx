@@ -5,13 +5,24 @@ import { DownloadConfirmHtml } from "@lib/saveAndResume/DownloadConfirmHtml";
 import { type HTMLProps } from "@lib/saveAndResume/types";
 import { logMessage } from "@lib/logger";
 
+/**
+ * Locate the brand logo image element and embed it as a data URI to ensure it is self-contained (does not rely on external resources)
+ * @param html The HTML string containing the brand logo image element
+ * @returns The HTML string with the brand logo embedded as a data URI if applicable
+ * @throws Error if the brand logo is missing or cannot be embedded
+ *
+ */
 export const embedBrandLogoAssets = async (html: string) => {
   const document = new DOMParser().parseFromString(html, "text/html");
-  const image = document.querySelector<HTMLImageElement>(".gcds-signature img");
-  if (!image) throw new Error("Brand logo is missing from downloaded HTML");
-  image.style.maxWidth = "min(400px, 100%)";
 
-  const source = image.getAttribute("src");
+  const imageEl = document.querySelector<HTMLImageElement>(".gcds-signature img");
+
+  if (!imageEl) throw new Error("Brand logo is missing from downloaded HTML");
+  imageEl.style.maxWidth = "min(400px, 100%)";
+  imageEl.style.maxHeight = "80px";
+
+  // The incoming src will look like "/img/branding/some-dept-en.svg"
+  const source = imageEl.getAttribute("src");
   if (!source || source.startsWith("data:")) {
     return `<!DOCTYPE html>${document.documentElement.outerHTML}`;
   }
@@ -21,6 +32,7 @@ export const embedBrandLogoAssets = async (html: string) => {
     throw new Error("Brand logos must be hosted on the same origin to embed in downloaded HTML");
   }
 
+  // Fetch the brand logo from the server to embed it as a data URI
   const response = await fetch(logoUrl);
   if (!response.ok) {
     throw new Error(`Failed to load brand logo (${response.status} ${response.statusText})`);
@@ -30,6 +42,7 @@ export const embedBrandLogoAssets = async (html: string) => {
   const isSvg = contentType === "image/svg+xml" || logoUrl.pathname.toLowerCase().endsWith(".svg");
 
   if (isSvg) {
+    // Read the SVG content as text to validate and embed it
     const svg = await response.text();
     if (!/<svg(?:\s|>)/i.test(svg)) {
       throw new Error("Downloaded brand logo is not valid SVG");
@@ -52,8 +65,9 @@ export const embedBrandLogoAssets = async (html: string) => {
     }
 
     const normalizedSvg = new XMLSerializer().serializeToString(svgElement);
-    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(normalizedSvg)}`;
+    imageEl.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(normalizedSvg)}`;
   } else {
+    // For non-SVG images, read the image as a Blob and convert it to a data URI
     const logo = await response.blob();
     const mimeType = logo.type || contentType;
     if (!mimeType.startsWith("image/")) {
@@ -70,7 +84,7 @@ export const embedBrandLogoAssets = async (html: string) => {
       reader.readAsDataURL(logo);
     });
 
-    image.src = dataUrl;
+    imageEl.src = dataUrl;
   }
 
   return `<!DOCTYPE html>${document.documentElement.outerHTML}`;
