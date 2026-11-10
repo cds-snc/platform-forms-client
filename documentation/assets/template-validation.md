@@ -43,6 +43,9 @@ when both sources have the same severity. Neither source is persisted in session
 Feedback keys include the content language being edited, independently of the interface
 language. Switching languages selects that language's feedback without discarding local
 errors in the other language. DOM input and error-message IDs remain unchanged.
+Required-property diagnostics include the missing property in their paths (for example,
+`elements.0.properties.choices.0.fr`) in both validation and migration results. Inline
+feedback and summaries use those paths rather than parsing validator message text.
 
 Duplicate choice labels show one immediate red inline error using the same message
 before and after blur. The editor checks the language being edited as choices change;

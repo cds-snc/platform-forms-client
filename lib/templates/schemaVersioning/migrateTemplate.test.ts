@@ -122,7 +122,7 @@ describe("migrateTemplate", () => {
     expect(migrated.elements).toEqual(template.elements);
     expect(logWarning).toHaveBeenCalledWith(
       expect.stringContaining(
-        'Cannot migrate template elements to schema version 2: elements[0].properties: requires property "choices"'
+        'Cannot migrate template elements to schema version 2: elements[0].properties.choices: requires property "choices"'
       )
     );
   });

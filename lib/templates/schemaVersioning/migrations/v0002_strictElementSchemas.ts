@@ -2,6 +2,7 @@ import { type Schema, Validator } from "jsonschema";
 import { type FormElement } from "@gcforms/types";
 import { getTemplateSchema } from "@lib/templates/schemas/templates";
 import { type TemplateMigration } from "./types";
+import { getValidationPath } from "@lib/utils/form-builder/getValidationPath";
 
 type StrictElementBranch = {
   properties?: {
@@ -185,10 +186,11 @@ export const migrateToStrictElementSchemas: TemplateMigration = (template) => {
 
     return validationResult.errors
       .filter(({ name }) => !["allOf", "anyOf", "oneOf"].includes(name))
-      .map(({ property, name, message }) => {
-        const elementPath = `elements[${index}]`;
-        return { path: property.replace(/^instance/, elementPath), name, message };
-      });
+      .map((error) => ({
+        path: getValidationPath(error, [`elements[${index}]`]),
+        name: error.name,
+        message: error.message,
+      }));
   });
 
   if (errors.length > 0) {

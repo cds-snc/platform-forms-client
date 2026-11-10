@@ -6,6 +6,7 @@ import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds"
 import { validateCustomRegex } from "@lib/regex/validateCustomRegex";
 import { createsNextActionCycle } from "@lib/groups/utils/validateGroups";
 import { logMessage } from "@lib/logger";
+import { getValidationPath } from "./getValidationPath";
 
 export type errorMessage = { property?: string; message: string };
 
@@ -17,18 +18,6 @@ const deduplicatePropertyErrors = (errors: errorMessage[]) =>
       !error.property || errors.findIndex(({ property }) => property === error.property) === index
   );
 
-const getValidationPath = (error: ValidationError, pathPrefix: (string | number)[] = []) => {
-  const path = [...pathPrefix, ...error.path].map(String);
-  if (
-    error.name === "pattern" &&
-    error.path.at(-1) === "properties" &&
-    typeof error.instance === "string"
-  ) {
-    path.push(error.instance);
-  }
-  return path.join(".");
-};
-
 const getErrorMessageTranslationString = (
   error: ValidationError,
   pathPrefix: (string | number)[] = []
@@ -38,7 +27,6 @@ const getErrorMessageTranslationString = (
   let message = "formInvalidProperty";
 
   if (error.name === "required") {
-    property = validationPath ? `${validationPath}.${error.argument}` : error.argument;
     message = "formMissingProperty";
   } else if (
     error.name === "not" &&

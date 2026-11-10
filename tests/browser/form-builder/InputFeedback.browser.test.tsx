@@ -31,6 +31,111 @@ const controls = { Input, TextArea, ExpandingInput };
 describe("<InputFeedback />", () => {
   beforeAll(setupFonts);
 
+  it.each([
+    { schemaVersion: 1, missing: "en", nested: false },
+    { schemaVersion: 1, missing: "fr", nested: false },
+    { schemaVersion: 2, missing: "en", nested: false },
+    { schemaVersion: 2, missing: "fr", nested: false },
+    { schemaVersion: 1, missing: "fr", nested: true },
+    { schemaVersion: 2, missing: "fr", nested: true },
+  ] as const)(
+    "targets the missing $missing choice label in schema $schemaVersion (nested: $nested)",
+    async ({ schemaVersion, missing, nested }) => {
+      const Example = () => {
+        const { form, importTemplate, language, toggle, updateField } = useTemplateStore(
+          (state) => ({
+            form: state.form,
+            importTemplate: state.importTemplate,
+            language: state.translationLanguagePriority,
+            toggle: state.toggleTranslationLanguagePriority,
+            updateField: state.updateField,
+          })
+        );
+        const migrationProblems = useTemplateMigrationProblems();
+        const validationProblems = useTemplateValidationProblems();
+        useMigrationProblemFeedback([...migrationProblems, ...validationProblems]);
+        const parent = form.elements.find(({ id }) => id === 901);
+        const element = nested ? parent?.properties.subElements?.[0] : parent;
+        const propertyPath = `form.elements[0].properties.${nested ? "subElements[0].properties." : ""}choices[0].${language}`;
+        return (
+          <>
+            <button
+              onClick={() => {
+                const choice = { en: "Yes", fr: "Oui" };
+                Reflect.deleteProperty(choice, missing);
+                const choiceElement = {
+                  id: nested ? 902 : 901,
+                  type: FormElementTypes.dropdown,
+                  properties: {
+                    titleEn: "Question",
+                    titleFr: "Question",
+                    validation: { required: false },
+                    choices: [choice],
+                  },
+                };
+                const template = structuredClone(form);
+                template.schemaVersion = schemaVersion;
+                template.elements = nested
+                  ? [
+                      {
+                        id: 901,
+                        type: FormElementTypes.dynamicRow,
+                        properties: {
+                          titleEn: "Group",
+                          titleFr: "Group",
+                          subElements: [choiceElement],
+                        },
+                      },
+                    ]
+                  : [choiceElement];
+                template.layout = [901];
+                Object.values(template.groups ?? {}).forEach((group) => {
+                  group.elements = [];
+                });
+                if (template.groups) template.groups.start.elements = ["901"];
+                importTemplate(template);
+              }}
+            >
+              Load missing label
+            </button>
+            {element && (
+              <>
+                <label htmlFor={`option--${element.id}--1`}>Choice label</label>
+                <Input
+                  id={`option--${element.id}--1`}
+                  value={element.properties.choices?.[0]?.[language] ?? ""}
+                  onChange={(event) => updateField(propertyPath, event.target.value)}
+                />
+              </>
+            )}
+            <button onClick={toggle}>Switch content language</button>
+          </>
+        );
+      };
+      await renderWithStore(<Example />);
+      await page.getByRole("button", { name: "Load missing label", exact: true }).click();
+      const input = page.getByRole("textbox", { name: "Choice label", exact: true });
+      const toggle = page.getByRole("button", { name: "Switch content language", exact: true });
+      if (missing === "en") await toggle.click();
+      await expect.element(input).toHaveValue(missing === "fr" ? "Yes" : "Oui");
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await expect.element(input).not.toHaveAttribute("aria-describedby");
+      await toggle.click();
+      await expect.element(input).toHaveValue("");
+      await expect.element(input).toHaveAttribute("aria-invalid", "true");
+      await expect
+        .element(input)
+        .toHaveAccessibleDescription("A required value is missing from This question.");
+      await toggle.click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await toggle.click();
+      await userEvent.fill(input, "Repaired label");
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await toggle.click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+    }
+  );
+
   it.each(Object.keys(controls) as (keyof typeof controls)[])(
     "keeps %s blur errors in their content language when switching languages",
     async (kind) => {

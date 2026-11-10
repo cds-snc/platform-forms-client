@@ -34,6 +34,29 @@ const createStore = async () => {
 const promise = Promise.resolve();
 
 describe("TemplateStore", () => {
+  it.each([1, 2])(
+    "targets only the missing choice language for schema %s",
+    async (schemaVersion) => {
+      const result = await createStore();
+      await act(async () => {
+        await result.current.add(0, FormElementTypes.dropdown);
+      });
+      const form = structuredClone(result.current.form);
+      form.schemaVersion = schemaVersion;
+      const element = form.elements[0];
+      const choice = { en: "Yes", fr: "Oui" };
+      Reflect.deleteProperty(choice, "fr");
+      element.properties.choices = [choice];
+      const problems =
+        schemaVersion === 1 ? getTemplateMigrationProblems(form) : validateTemplate(form).problems;
+      const t = (key: string) => key;
+      expect(mapMigrationProblemsToInputFeedback(form, problems, "en", t)).toEqual({});
+      expect(mapMigrationProblemsToInputFeedback(form, problems, "fr", t)).toEqual({
+        [`fr:option--${element.id}--1`]: { state: "error", message: "migrationProblems.required" },
+      });
+    }
+  );
+
   it("maps the existing duplicate-choice migration issue to only the matching inputs", async () => {
     const result = await createStore();
     await act(async () => {

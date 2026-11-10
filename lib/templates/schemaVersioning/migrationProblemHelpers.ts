@@ -27,11 +27,9 @@ export const getProblemElement = <T extends ProblemElement>(
   return element as T | undefined;
 };
 
-/** The property a problem refers to: the missing property for `required`, otherwise the last path segment. */
+/** The property a problem refers to, including the missing property for `required`. */
 export const getProblemField = (problem: TemplateValidationProblem): string | undefined =>
-  (problem.name === "required"
-    ? problem.message.match(/requires property ["']([^"']+)["']/)?.[1]
-    : undefined) ?? (typeof problem.path === "string" ? problem.path.split(".").at(-1) : undefined);
+  typeof problem.path === "string" ? problem.path.split(".").at(-1) : undefined;
 
 export const isDuplicateChoicesProblem = (problem: TemplateValidationProblem) =>
   problem.name === "uniqueItems" &&

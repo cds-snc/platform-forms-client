@@ -17,6 +17,24 @@ const dropdown = (choices: { en: string; fr: string }[]) => ({
 });
 
 describe("getTemplateMigrationProblems", () => {
+  it.each(["en", "fr"] as const)(
+    "includes missing %s choice properties in migration paths",
+    (language) => {
+      const choice = { en: "Yes", fr: "Oui" };
+      Reflect.deleteProperty(choice, language);
+      const template = form(1, [dropdown([choice])]);
+      const original = structuredClone(template);
+      expect(getTemplateMigrationProblems(template)).toContainEqual(
+        expect.objectContaining({
+          path: `elements[0].properties.choices.0.${language}`,
+          name: "required",
+          fromVersion: 1,
+        })
+      );
+      expect(template).toEqual(original);
+    }
+  );
+
   it("reports structured validation issues without modifying the draft", () => {
     const choices = [
       { en: "Ontario", fr: "Ontario" },

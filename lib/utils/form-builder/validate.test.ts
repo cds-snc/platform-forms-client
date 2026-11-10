@@ -4,6 +4,52 @@ import { FormProperties } from "@lib/types";
 import { validateTemplate } from "./validate";
 
 describe("validateTemplate", () => {
+  it.each([
+    { language: "en", nested: false },
+    { language: "fr", nested: false },
+    { language: "en", nested: true },
+    { language: "fr", nested: true },
+  ])(
+    "includes missing $language choice properties in paths (nested: $nested)",
+    ({ language, nested }) => {
+      const template = structuredClone(navigationFocus) as FormProperties;
+      template.schemaVersion = 2;
+      const choice = { en: "Yes", fr: "Oui" };
+      Reflect.deleteProperty(choice, language);
+      const element: FormProperties["elements"][number] = {
+        id: 901,
+        type: "dropdown",
+        properties: {
+          titleEn: "Question",
+          titleFr: "Question",
+          validation: { required: false },
+          choices: [choice],
+        },
+      };
+      template.elements = nested
+        ? [
+            {
+              id: 902,
+              type: "dynamicRow",
+              properties: { titleEn: "Group", titleFr: "Group", subElements: [element] },
+            },
+          ]
+        : [element];
+      const parentPath = `elements.0.properties.${nested ? "subElements.0.properties." : ""}choices.0`;
+      const result = validateTemplate(template);
+      expect(result.problems.filter(({ name }) => name === "required")).toContainEqual(
+        expect.objectContaining({ name: "required", path: `${parentPath}.${language}` })
+      );
+      expect(result.problems).not.toContainEqual(
+        expect.objectContaining({ name: "required", path: parentPath })
+      );
+      expect(result.errors).toContainEqual({
+        property: `${parentPath}.${language}`,
+        message: "formMissingProperty",
+      });
+    }
+  );
+
   it("requires groups and groupsLayout to be provided together", () => {
     const templateWithGroupsOnly = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
     delete templateWithGroupsOnly.groupsLayout;

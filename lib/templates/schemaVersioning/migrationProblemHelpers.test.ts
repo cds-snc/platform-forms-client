@@ -38,7 +38,7 @@ describe("migrationProblemHelpers", () => {
     const problemWithoutPath = problem("");
     Reflect.set(problemWithoutPath, "path", undefined);
     expect(
-      getProblemField(problem("elements[0].properties", "required", 'requires property "titleEn"'))
+      getProblemField(problem("elements[0].properties.titleEn", "required", "Missing title"))
     ).toBe("titleEn");
     expect(getProblemField(problem("elements[0].properties.choices"))).toBe("choices");
     expect(getProblemField(problemWithoutPath)).toBeUndefined();

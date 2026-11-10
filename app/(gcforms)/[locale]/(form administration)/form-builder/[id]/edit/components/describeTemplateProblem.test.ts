@@ -118,14 +118,14 @@ describe("describeTemplateProblem", () => {
     }
   );
 
-  it.each(['requires property "titleEn"', "requires property 'titleEn'"])(
-    "uses the missing property rather than the parent JSON path: %s",
+  it.each(['requires property "titleEn"', "Missing required value"])(
+    "uses the missing property's path independently of message wording: %s",
     (message) => {
       const t = vi.fn((key: string) => key);
 
       expect(
         describeTemplateProblem(
-          { name: "required", path: "elements[0].properties", message },
+          { name: "required", path: "elements[0].properties.titleEn", message },
           undefined,
           "en",
           t
