@@ -24,6 +24,7 @@ import { Language } from "../types/form-builder-types";
 import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { initStore } from "./initStore";
+import { getInputFeedbackKey } from "./helpers/getInputFeedbackKey";
 
 import {
   add,
@@ -85,12 +86,13 @@ const createTemplateStore = (
             // setInputFeedback("item-1", { state: "error", message: "Enter a question title." });
             // setInputFeedback("option--1--2", { state: "conflict", message: "Review this choice label." });
             // Pass null to clear one field, or use clearInputFeedback() to clear all local feedback.
-            setInputFeedback: (inputId, feedback) =>
+            setInputFeedback: (inputId, feedback, language = get().translationLanguagePriority) =>
               set((state) => {
+                const key = getInputFeedbackKey(inputId, language);
                 if (feedback) {
-                  state.inputFeedback[inputId] = feedback;
+                  state.inputFeedback[key] = feedback;
                 } else {
-                  delete state.inputFeedback[inputId];
+                  delete state.inputFeedback[key];
                 }
               }),
             clearInputFeedback: () => set({ inputFeedback: {} }),

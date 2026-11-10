@@ -4,6 +4,7 @@ import { cn } from "@lib/utils";
 import { ExclamationIcon, WarningIcon } from "@serverComponents/icons";
 import { TemplateStoreContext, useTemplateStore } from "@lib/store/useTemplateStore";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
+import { getInputFeedbackKey } from "@lib/store/helpers/getInputFeedbackKey";
 
 type FeedbackState = "error" | "conflict";
 
@@ -43,11 +44,18 @@ const ConnectedInputFeedback = ({
   inputId: string;
   children: React.ReactNode;
 }) => {
-  const { localFeedback, templateFeedback, setInputFeedback } = useTemplateStore((state) => ({
-    localFeedback: state.inputFeedback[inputId],
-    templateFeedback: state.templateProblemFeedback[inputId],
-    setInputFeedback: state.setInputFeedback,
-  }));
+  const { localFeedback, templateFeedback, language, setInputFeedback } = useTemplateStore(
+    (state) => {
+      const language = state.translationLanguagePriority;
+      const key = getInputFeedbackKey(inputId, language);
+      return {
+        localFeedback: state.inputFeedback[key],
+        templateFeedback: state.templateProblemFeedback[key],
+        language,
+        setInputFeedback: state.setInputFeedback,
+      };
+    }
+  );
   const duplicateFeedback =
     checkDuplicate && value !== undefined && isDuplicate(String(value), checkDuplicate)
       ? { state: "error" as const, message: checkDuplicate.message }
@@ -76,9 +84,9 @@ const ConnectedInputFeedback = ({
           return;
         }
         if (!input.value.trim()) {
-          setInputFeedback(inputId, { state: "error", message: checkEmpty });
+          setInputFeedback(inputId, { state: "error", message: checkEmpty }, language);
         } else if (localFeedback?.state === "error" && localFeedback.message === checkEmpty) {
-          setInputFeedback(inputId, null);
+          setInputFeedback(inputId, null, language);
         }
       }}
     >

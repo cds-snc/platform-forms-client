@@ -139,7 +139,7 @@ describe("MigrationProblemsNotice", () => {
     expect(screen.queryByRole("alert")).toBeNull();
     expect(mock.setTemplateProblemFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
-        "option--1--1": expect.objectContaining({ state: "error" }),
+        "en:option--1--1": expect.objectContaining({ state: "error" }),
       })
     );
 
@@ -269,7 +269,7 @@ describe("MigrationProblemsNotice", () => {
     expect(mock.focus).toHaveBeenCalledOnce();
     expect(mock.setTemplateProblemFeedback).toHaveBeenCalledWith(
       expect.objectContaining({
-        "option--1--1": expect.objectContaining({ state: "error" }),
+        "en:option--1--1": expect.objectContaining({ state: "error" }),
       })
     );
 

@@ -52,11 +52,11 @@ describe("TemplateStore", () => {
     const t = (key: string) => key;
     const feedback = mapMigrationProblemsToInputFeedback(form, problems, "en", t);
     expect(feedback).toEqual({
-      [`option--${element.id}--1`]: {
+      [`en:option--${element.id}--1`]: {
         state: "error",
         message: "duplicateChoice",
       },
-      [`option--${element.id}--2`]: {
+      [`en:option--${element.id}--2`]: {
         state: "error",
         message: "duplicateChoice",
       },
@@ -123,11 +123,11 @@ describe("TemplateStore", () => {
         message: "Enter a question title.",
       });
       result.current!.setTemplateProblemFeedback({
-        "option-1-2": { state: "conflict", message: "Template duplicate choice." },
+        "en:option-1-2": { state: "conflict", message: "Template duplicate choice." },
       });
     });
 
-    expect(result.current!.inputFeedback["option-1-2"]).toEqual({
+    expect(result.current!.inputFeedback["en:option-1-2"]).toEqual({
       state: "conflict",
       message: "Duplicate choice label.",
     });
@@ -139,20 +139,20 @@ describe("TemplateStore", () => {
     expect(JSON.stringify(persisted)).not.toContain("Template duplicate choice.");
 
     act(() => result.current!.setInputFeedback("option-1-2", null));
-    expect(result.current!.inputFeedback).not.toHaveProperty("option-1-2");
-    expect(result.current!.inputFeedback).toHaveProperty("item-1");
+    expect(result.current!.inputFeedback).not.toHaveProperty("en:option-1-2");
+    expect(result.current!.inputFeedback).toHaveProperty("en:item-1");
 
     act(() => result.current!.clearInputFeedback());
     expect(result.current!.inputFeedback).toEqual({});
     expect(result.current!.templateProblemFeedback).toEqual({
-      "option-1-2": { state: "conflict", message: "Template duplicate choice." },
+      "en:option-1-2": { state: "conflict", message: "Template duplicate choice." },
     });
   });
 
   it("replaces only template feedback and skips unchanged diagnostics", async () => {
     const result = await createStore();
     const feedback = {
-      "option-1-2": { state: "conflict" as const, message: "Template duplicate choice." },
+      "en:option-1-2": { state: "conflict" as const, message: "Template duplicate choice." },
     };
     act(() => {
       result.current.setInputFeedback("option-1-2", {
@@ -167,11 +167,62 @@ describe("TemplateStore", () => {
 
     act(() => result.current.setTemplateProblemFeedback({}));
     expect(result.current.templateProblemFeedback).toEqual({});
-    expect(result.current.inputFeedback["option-1-2"]).toEqual({
+    expect(result.current.inputFeedback["en:option-1-2"]).toEqual({
       state: "error",
       message: "Duplicate on blur.",
     });
   });
+
+  it("writes and clears only the selected content language's local feedback", async () => {
+    const result = await createStore();
+    const english = { state: "error" as const, message: "English title error." };
+    const french = { state: "error" as const, message: "French title error." };
+    act(() => {
+      result.current.setInputFeedback("item-1", english);
+      result.current.toggleTranslationLanguagePriority();
+      result.current.setInputFeedback("item-1", french);
+    });
+    expect(result.current.lang).toBe("en");
+    expect(result.current.inputFeedback).toEqual({ "en:item-1": english, "fr:item-1": french });
+    act(() => result.current.setInputFeedback("item-1", null));
+    expect(result.current.inputFeedback).toEqual({ "en:item-1": english });
+
+    act(() => {
+      result.current.setInputFeedback("item-1", french);
+      result.current.setInputFeedback("item-1", null, "en");
+    });
+    expect(result.current.inputFeedback).toEqual({ "fr:item-1": french });
+    act(() => result.current.clearInputFeedback());
+    expect(result.current.inputFeedback).toEqual({});
+  });
+
+  it.each(["en", "fr"] as const)(
+    "keys template diagnostics by their %s content language",
+    async (language) => {
+      const result = await createStore();
+      await act(async () => {
+        await result.current.add(0, FormElementTypes.radio);
+      });
+      const form = structuredClone(result.current.form);
+      const element = form.elements[0];
+      element.properties.choices = [{ en: "Yes", fr: "Oui" }];
+      const problems = [
+        { path: "elements[0].properties.titleEn", name: "type", message: "Invalid English title." },
+        {
+          path: "elements[0].properties.choices[0].fr",
+          name: "type",
+          message: "Invalid French choice.",
+        },
+      ];
+      const t = (key: string) => key;
+      expect(mapMigrationProblemsToInputFeedback(form, problems, language, t)).toEqual({
+        [language === "en" ? `en:item-${element.id}` : `fr:option--${element.id}--1`]: {
+          state: "error",
+          message: "migrationProblems.invalid",
+        },
+      });
+    }
+  );
 
   it("creates a form that conforms to the current template schema version", async () => {
     const result = await createStore();

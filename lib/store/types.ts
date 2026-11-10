@@ -42,7 +42,11 @@ export type InputFeedbackEntry = {
 
 export interface TemplateStoreState extends TemplateStoreProps {
   inputFeedback: Record<string, InputFeedbackEntry>;
-  setInputFeedback: (inputId: string, feedback: InputFeedbackEntry | null) => void;
+  setInputFeedback: (
+    inputId: string,
+    feedback: InputFeedbackEntry | null,
+    language?: Language
+  ) => void;
   clearInputFeedback: () => void;
   templateProblemFeedback: Record<string, InputFeedbackEntry>;
   setTemplateProblemFeedback: (feedback: Record<string, InputFeedbackEntry>) => void;

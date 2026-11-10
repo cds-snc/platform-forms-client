@@ -7,11 +7,13 @@ import {
   isDuplicateChoicesProblem,
 } from "@lib/templates/schemaVersioning/migrationProblemHelpers";
 import type { InputFeedbackEntry } from "../types";
+import type { Language } from "@lib/types/form-builder-types";
+import { getInputFeedbackKey } from "./getInputFeedbackKey";
 
 export const mapMigrationProblemsToInputFeedback = (
   form: FormProperties,
   problems: TemplateValidationProblem[],
-  language: string,
+  language: Language,
   t: (key: string, options?: Record<string, unknown>) => string
 ): Record<string, InputFeedbackEntry> => {
   const feedback: Record<string, InputFeedbackEntry> = {};
@@ -22,9 +24,9 @@ export const mapMigrationProblemsToInputFeedback = (
     if (isDuplicateChoicesProblem(problem)) {
       const choices = element.properties.choices;
       getDuplicateChoiceIndexes(choices).forEach((index) => {
-        const inputId = `option--${element.id}--${index + 1}`;
-        if (feedback[inputId]?.state === "error") return;
-        feedback[inputId] = {
+        const key = getInputFeedbackKey(`option--${element.id}--${index + 1}`, language);
+        if (feedback[key]?.state === "error") return;
+        feedback[key] = {
           state: "error",
           message: t("duplicateChoice"),
         };
@@ -43,7 +45,7 @@ export const mapMigrationProblemsToInputFeedback = (
           ? `option--${element.id}--${Number(choiceIndex) + 1}`
           : undefined;
     if (!inputId) return;
-    feedback[inputId] = {
+    feedback[getInputFeedbackKey(inputId, language)] = {
       state: "error",
       message:
         problem.name === "required"

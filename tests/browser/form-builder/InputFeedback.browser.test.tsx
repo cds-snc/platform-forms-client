@@ -31,6 +31,136 @@ const controls = { Input, TextArea, ExpandingInput };
 describe("<InputFeedback />", () => {
   beforeAll(setupFonts);
 
+  it.each(Object.keys(controls) as (keyof typeof controls)[])(
+    "keeps %s blur errors in their content language when switching languages",
+    async (kind) => {
+      const Control = controls[kind];
+      const Example = () => {
+        const [values, setValues] = useState({ en: "", fr: "Question française" });
+        const { language, toggle } = useTemplateStore((state) => ({
+          language: state.translationLanguagePriority,
+          toggle: state.toggleTranslationLanguagePriority,
+        }));
+        return (
+          <>
+            <label htmlFor="item-901">Question title</label>
+            <Control
+              id="item-901"
+              value={values[language]}
+              onChange={(event) => setValues({ ...values, [language]: event.target.value })}
+              checkEmpty="Enter a question title."
+            />
+            <button onClick={toggle}>Switch content language</button>
+            <button>Blur title</button>
+          </>
+        );
+      };
+      await renderWithStore(<Example />);
+      const input = page.getByRole("textbox", { name: "Question title", exact: true });
+      const toggle = page.getByRole("button", { name: "Switch content language", exact: true });
+      const blur = page.getByRole("button", { name: "Blur title", exact: true });
+      await input.click();
+      await toggle.click();
+      await expect.element(input).toHaveValue("Question française");
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await expect.element(input).not.toHaveAttribute("aria-describedby");
+      await input.click();
+      await blur.click();
+      await toggle.click();
+      await expect.element(input).toHaveValue("");
+      await expect.element(input).toHaveAccessibleDescription("Enter a question title.");
+      await expect.element(input).toHaveAttribute("aria-invalid", "true");
+
+      await toggle.click();
+      await userEvent.fill(input, "");
+      await blur.click();
+      await expect.element(input).toHaveAttribute("aria-invalid", "true");
+      await toggle.click();
+      await userEvent.fill(input, "Corrected English title");
+      await blur.click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await toggle.click();
+      await expect.element(input).toHaveAccessibleDescription("Enter a question title.");
+      await userEvent.fill(input, "Titre corrigé");
+      await blur.click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await toggle.click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await expect.element(input).toHaveValue("Corrected English title");
+    }
+  );
+
+  it.each(["en", "fr"] as const)(
+    "only displays %s template diagnostics in that content language",
+    async (problemLanguage) => {
+      const Example = () => {
+        const { form, importTemplate, language, toggle } = useTemplateStore((state) => ({
+          form: state.form,
+          importTemplate: state.importTemplate,
+          language: state.translationLanguagePriority,
+          toggle: state.toggleTranslationLanguagePriority,
+        }));
+        useMigrationProblemFeedback([
+          {
+            path: `elements[0].properties.title${problemLanguage === "en" ? "En" : "Fr"}`,
+            name: "type",
+            message: "Title must be a string.",
+          },
+        ]);
+        const element = form.elements.find(({ id }) => id === 901);
+        return (
+          <>
+            <button
+              onClick={() =>
+                importTemplate({
+                  ...form,
+                  elements: [
+                    {
+                      id: 901,
+                      type: FormElementTypes.textField,
+                      properties: { titleEn: "English title", titleFr: "French title" },
+                    },
+                  ],
+                })
+              }
+            >
+              Load title diagnostic
+            </button>
+            {element && (
+              <>
+                <label htmlFor="item-901">Question title</label>
+                <ExpandingInput
+                  id="item-901"
+                  value={
+                    language === "en"
+                      ? (element.properties.titleEn ?? "")
+                      : (element.properties.titleFr ?? "")
+                  }
+                  onChange={vi.fn()}
+                />
+              </>
+            )}
+            <button onClick={toggle}>Switch content language</button>
+          </>
+        );
+      };
+      await renderWithStore(<Example />);
+      await page.getByRole("button", { name: "Load title diagnostic", exact: true }).click();
+      const input = page.getByRole("textbox", { name: "Question title", exact: true });
+      const toggle = page.getByRole("button", { name: "Switch content language", exact: true });
+      if (problemLanguage === "fr") await toggle.click();
+      await expect.element(input).toHaveAttribute("aria-invalid", "true");
+      const description = input.element().getAttribute("aria-describedby");
+      expect(description).toBe("errorMessage-item-901");
+      await toggle.click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await expect.element(input).not.toHaveAttribute("aria-describedby");
+      await toggle.click();
+      await expect.element(input).toHaveAttribute("aria-invalid", "true");
+      await expect.element(input).toHaveAttribute("aria-describedby", description!);
+    }
+  );
+
   it.each([
     { type: FormElementTypes.checkbox, nested: false },
     { type: FormElementTypes.checkbox, nested: true },
@@ -150,7 +280,7 @@ describe("<InputFeedback />", () => {
       const Example = () => {
         const [value, setValue] = useState("");
         const { feedback, setInputFeedback } = useTemplateStore((state) => ({
-          feedback: state.inputFeedback["required-field"],
+          feedback: state.inputFeedback["en:required-field"],
           setInputFeedback: state.setInputFeedback,
         }));
         return (
@@ -604,7 +734,7 @@ describe("<InputFeedback />", () => {
               onClick={() => {
                 setInputFeedback("priority", { state: local, message: "Local feedback." });
                 setTemplateProblemFeedback({
-                  priority: { state: template, message: "Template feedback." },
+                  "en:priority": { state: template, message: "Template feedback." },
                 });
               }}
             >

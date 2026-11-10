@@ -40,6 +40,9 @@ source clears only its own feedback; clearing a blur error reveals any remaining
 template diagnostic, and removing a template diagnostic preserves applicable blur
 errors. Errors take precedence over conflicts, with local feedback taking precedence
 when both sources have the same severity. Neither source is persisted in session storage.
+Feedback keys include the content language being edited, independently of the interface
+language. Switching languages selects that language's feedback without discarding local
+errors in the other language. DOM input and error-message IDs remain unchanged.
 
 Duplicate choice labels show one immediate red inline error using the same message
 before and after blur. The editor checks the language being edited as choices change;
