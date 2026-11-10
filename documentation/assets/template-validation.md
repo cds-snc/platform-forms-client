@@ -23,6 +23,18 @@ The required top-level fields are `titleEn`, `titleFr`, `privacyPolicy`, `confir
 
 ## Form structure
 
+### Builder save diagnostics
+
+The builder's live schema validation checks the same prepared template used for saving:
+the exported editor schema, normalized group navigation, and the result of attempting
+registered schema migrations. Preparation does not modify the editor state, and failed
+migrations retain the existing fallback behavior.
+
+When a save is rejected by validation, the server returns structured problems for the
+submitted candidate. The builder displays those problems while the editor schema is
+unchanged, then recomputes them after edits. A rejection without diagnostics is shown
+as a save failure rather than silently hiding the error.
+
 ### Type reference
 
 Use [`packages/types/src/form-types.ts`](https://github.com/cds-snc/platform-forms-client/blob/main/packages/types/src/form-types.ts) as a reference for the supported shape and property names of `FormProperties`, `FormElement`, `ElementProperties`, `Group`, `NextActionRule`, `ConditionalRule`, `PropertyChoices`, and `ValidationProperties`.
