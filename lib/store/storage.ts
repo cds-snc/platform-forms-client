@@ -25,7 +25,7 @@ export const storageOptions = {
   storage: createJSONStorage(() => storage),
   skipHydration: true,
   partialize: (state: TemplateStoreState) => {
-    const { editLock, isLockedByOther, inputFeedback, ...rest } = state;
+    const { editLock, isLockedByOther, inputFeedback, templateProblemFeedback, ...rest } = state;
     return rest;
   },
   onRehydrateStorage: () => {
@@ -46,6 +46,11 @@ export const storageOptions = {
       return current;
     }
 
-    return { ...current, ...persistedState, inputFeedback: current.inputFeedback };
+    return {
+      ...current,
+      ...persistedState,
+      inputFeedback: current.inputFeedback,
+      templateProblemFeedback: current.templateProblemFeedback,
+    };
   },
 };

@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useEffect, useId } from "react";
+import React, { createContext, useContext, useId } from "react";
 import { cn } from "@lib/utils";
 import { ExclamationIcon, WarningIcon } from "@serverComponents/icons";
 import { TemplateStoreContext, useTemplateStore } from "@lib/store/useTemplateStore";
@@ -18,7 +18,7 @@ const InputFeedbackContext = createContext<{
 export type CheckDuplicate = {
   /** Values the input must not exactly match, e.g. the other choices of the same question. */
   values: string[];
-  /** Localized error message shown on blur when the value is a duplicate. */
+  /** Localized error message shown immediately when the value is a duplicate. */
   message: string;
 };
 
@@ -26,7 +26,7 @@ type BlurChecks = {
   /** Localized error message for empty or whitespace-only values on blur. */
   checkEmpty?: string;
   checkDuplicate?: CheckDuplicate;
-  /** Current input value, used to re-run checks when the value or compared values change. */
+  /** Current input value, used to check duplicates as either choice changes. */
   value?: string | number;
 };
 
@@ -43,24 +43,21 @@ const ConnectedInputFeedback = ({
   inputId: string;
   children: React.ReactNode;
 }) => {
-  const { feedback, setInputFeedback } = useTemplateStore((state) => ({
-    feedback: state.inputFeedback[inputId],
+  const { localFeedback, templateFeedback, setInputFeedback } = useTemplateStore((state) => ({
+    localFeedback: state.inputFeedback[inputId],
+    templateFeedback: state.templateProblemFeedback[inputId],
     setInputFeedback: state.setInputFeedback,
   }));
+  const duplicateFeedback =
+    checkDuplicate && value !== undefined && isDuplicate(String(value), checkDuplicate)
+      ? { state: "error" as const, message: checkDuplicate.message }
+      : undefined;
+  const feedback =
+    duplicateFeedback ??
+    (templateFeedback?.state === "error" && localFeedback?.state !== "error"
+      ? templateFeedback
+      : (localFeedback ?? templateFeedback));
   const checks = Boolean(checkEmpty || checkDuplicate);
-  const duplicateMessage = checkDuplicate?.message;
-  const duplicateValues = JSON.stringify(checkDuplicate?.values ?? []);
-  const showsDuplicate = feedback?.state === "error" && feedback.message === duplicateMessage;
-
-  // Other fields can change (edited, removed, reordered) without this input blurring,
-  // so clear a duplicate error as soon as it no longer applies.
-  useEffect(() => {
-    if (!showsDuplicate || value === undefined) return;
-    const values = JSON.parse(duplicateValues) as string[];
-    if (!isDuplicate(String(value), { values, message: duplicateMessage ?? "" })) {
-      setInputFeedback(inputId, null);
-    }
-  }, [showsDuplicate, value, duplicateValues, duplicateMessage, inputId, setInputFeedback]);
 
   return (
     <InputFeedback
@@ -72,24 +69,15 @@ const ConnectedInputFeedback = ({
       onBlur={(event) => {
         const input = event.target;
         if (
-          !checks ||
+          !checkEmpty ||
           input.id !== inputId ||
           !(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement)
         ) {
           return;
         }
-        const error =
-          checkEmpty && !input.value.trim()
-            ? checkEmpty
-            : isDuplicate(input.value, checkDuplicate)
-              ? checkDuplicate?.message
-              : undefined;
-        if (error) {
-          setInputFeedback(inputId, { state: "error", message: error });
-        } else if (
-          feedback?.state === "error" &&
-          (feedback.message === checkEmpty || feedback.message === checkDuplicate?.message)
-        ) {
+        if (!input.value.trim()) {
+          setInputFeedback(inputId, { state: "error", message: checkEmpty });
+        } else if (localFeedback?.state === "error" && localFeedback.message === checkEmpty) {
           setInputFeedback(inputId, null);
         }
       }}

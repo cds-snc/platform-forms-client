@@ -44,6 +44,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   inputFeedback: Record<string, InputFeedbackEntry>;
   setInputFeedback: (inputId: string, feedback: InputFeedbackEntry | null) => void;
   clearInputFeedback: () => void;
+  templateProblemFeedback: Record<string, InputFeedbackEntry>;
+  setTemplateProblemFeedback: (feedback: Record<string, InputFeedbackEntry>) => void;
   focusInput: boolean;
   editLock: EditLockState | null;
   isLockedByOther: boolean;

@@ -53,12 +53,12 @@ describe("TemplateStore", () => {
     const feedback = mapMigrationProblemsToInputFeedback(form, problems, "en", t);
     expect(feedback).toEqual({
       [`option--${element.id}--1`]: {
-        state: "conflict",
-        message: "migrationProblems.duplicateChoices",
+        state: "error",
+        message: "duplicateChoice",
       },
       [`option--${element.id}--2`]: {
-        state: "conflict",
-        message: "migrationProblems.duplicateChoices",
+        state: "error",
+        message: "duplicateChoice",
       },
     });
     expect(mapMigrationProblemsToInputFeedback(form, [], "en", t)).toEqual({});
@@ -122,6 +122,9 @@ describe("TemplateStore", () => {
         state: "error",
         message: "Enter a question title.",
       });
+      result.current!.setTemplateProblemFeedback({
+        "option-1-2": { state: "conflict", message: "Template duplicate choice." },
+      });
     });
 
     expect(result.current!.inputFeedback["option-1-2"]).toEqual({
@@ -131,7 +134,9 @@ describe("TemplateStore", () => {
     expect(result.current!.form).toBe(originalForm);
     const persisted = JSON.parse(sessionStorage.getItem("form-storage")!);
     expect(persisted.state).not.toHaveProperty("inputFeedback");
+    expect(persisted.state).not.toHaveProperty("templateProblemFeedback");
     expect(JSON.stringify(persisted)).not.toContain("Duplicate choice label.");
+    expect(JSON.stringify(persisted)).not.toContain("Template duplicate choice.");
 
     act(() => result.current!.setInputFeedback("option-1-2", null));
     expect(result.current!.inputFeedback).not.toHaveProperty("option-1-2");
@@ -139,6 +144,33 @@ describe("TemplateStore", () => {
 
     act(() => result.current!.clearInputFeedback());
     expect(result.current!.inputFeedback).toEqual({});
+    expect(result.current!.templateProblemFeedback).toEqual({
+      "option-1-2": { state: "conflict", message: "Template duplicate choice." },
+    });
+  });
+
+  it("replaces only template feedback and skips unchanged diagnostics", async () => {
+    const result = await createStore();
+    const feedback = {
+      "option-1-2": { state: "conflict" as const, message: "Template duplicate choice." },
+    };
+    act(() => {
+      result.current.setInputFeedback("option-1-2", {
+        state: "error",
+        message: "Duplicate on blur.",
+      });
+      result.current.setTemplateProblemFeedback(feedback);
+    });
+    const previous = result.current;
+    act(() => result.current.setTemplateProblemFeedback(structuredClone(feedback)));
+    expect(result.current).toBe(previous);
+
+    act(() => result.current.setTemplateProblemFeedback({}));
+    expect(result.current.templateProblemFeedback).toEqual({});
+    expect(result.current.inputFeedback["option-1-2"]).toEqual({
+      state: "error",
+      message: "Duplicate on blur.",
+    });
   });
 
   it("creates a form that conforms to the current template schema version", async () => {

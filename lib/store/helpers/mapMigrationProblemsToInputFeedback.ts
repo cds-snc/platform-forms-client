@@ -2,7 +2,6 @@ import type { FormElement, FormProperties } from "@lib/types";
 import type { TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 import {
   getDuplicateChoiceIndexes,
-  getLocalizedLabel,
   getProblemElement,
   getProblemField,
   isDuplicateChoicesProblem,
@@ -26,10 +25,8 @@ export const mapMigrationProblemsToInputFeedback = (
         const inputId = `option--${element.id}--${index + 1}`;
         if (feedback[inputId]?.state === "error") return;
         feedback[inputId] = {
-          state: "conflict",
-          message: t("migrationProblems.duplicateChoices", {
-            choices: getLocalizedLabel(choices?.[index], language),
-          }),
+          state: "error",
+          message: t("duplicateChoice"),
         };
       });
       return;

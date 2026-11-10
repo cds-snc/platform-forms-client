@@ -8,20 +8,140 @@ import {
 } from "@formBuilder/components/shared/InputFeedback";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useTemplateMigrationProblems } from "@lib/store/hooks/useTemplateMigrationProblems";
+import { useTemplateValidationProblems } from "@lib/store/hooks/useTemplateValidationProblems";
 import { useMigrationProblemFeedback } from "@lib/store/hooks/useMigrationProblemFeedback";
 import { FormElementTypes } from "@lib/types";
 import { render as renderWithStore } from "./testUtils";
 import { Input } from "@formBuilder/components/shared/Input";
 import { TextArea } from "@formBuilder/components/shared/TextArea";
 import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
+import { SelectedElement } from "@formBuilder/[id]/edit/components/SelectedElement";
+import { GroupStoreProvider } from "@lib/groups/useGroupStore";
 import { setupFonts } from "../helpers/setupFonts";
 
 import "@root/styles/app.css";
+
+vi.mock("@formBuilder/actions", () => ({
+  createOrUpdateTemplate: vi.fn(),
+  updateTemplate: vi.fn(),
+}));
 
 const controls = { Input, TextArea, ExpandingInput };
 
 describe("<InputFeedback />", () => {
   beforeAll(setupFonts);
+
+  it.each([
+    { type: FormElementTypes.checkbox, nested: false },
+    { type: FormElementTypes.checkbox, nested: true },
+    { type: FormElementTypes.radio, nested: false },
+    { type: FormElementTypes.radio, nested: true },
+    { type: FormElementTypes.dropdown, nested: false },
+    { type: FormElementTypes.dropdown, nested: true },
+  ])(
+    "keeps $type choice rows aligned with stable live errors (nested: $nested)",
+    async ({ type, nested }) => {
+      const Example = () => {
+        const { form, importTemplate } = useTemplateStore((state) => ({
+          form: state.form,
+          importTemplate: state.importTemplate,
+        }));
+        useMigrationProblemFeedback(useTemplateMigrationProblems());
+        const parent = form.elements.find((element) => element.id === 901);
+        const element = nested ? parent?.properties.subElements?.[0] : parent;
+        return (
+          <div data-testid="choice-editor">
+            <button
+              onClick={() => {
+                const choiceElement = {
+                  id: nested ? 902 : 901,
+                  type,
+                  properties: {
+                    titleEn: "Question",
+                    titleFr: "Question",
+                    choices: [
+                      { en: "A", fr: "A" },
+                      { en: "B", fr: "A" },
+                    ],
+                  },
+                };
+                importTemplate({
+                  ...form,
+                  schemaVersion: nested ? 1 : 2,
+                  elements: nested
+                    ? [
+                        {
+                          id: 901,
+                          type: FormElementTypes.dynamicRow,
+                          properties: {
+                            titleEn: "Group",
+                            titleFr: "Group",
+                            subElements: [choiceElement],
+                          },
+                        },
+                      ]
+                    : [choiceElement],
+                });
+              }}
+            >
+              Load choices
+            </button>
+            {element && (
+              <SelectedElement
+                item={{ ...element, index: 0 }}
+                elIndex={nested ? 0 : -1}
+                formId="test-form-id"
+              />
+            )}
+          </div>
+        );
+      };
+      await renderWithStore(
+        <GroupStoreProvider>
+          <Example />
+        </GroupStoreProvider>
+      );
+      const load = page.getByRole("button", { name: "Load choices", exact: true });
+      await load.click();
+      const option2 = page.getByPlaceholder("Option 2", { exact: true });
+      await userEvent.fill(option2, "A");
+      const message = "This choice already exists. Enter a different choice.";
+      await expect.element(option2).toHaveFocus();
+      await expect.element(option2).toHaveAccessibleDescription(message);
+      await expect.element(option2).toHaveAttribute("aria-invalid", "true");
+      await expect
+        .element(page.getByPlaceholder("Option 1", { exact: true }))
+        .toHaveAccessibleDescription(message);
+      const errorClass = option2.element().className;
+      await userEvent.tab();
+      await expect.element(option2).toHaveAccessibleDescription(message);
+      expect(option2.element().className).toBe(errorClass);
+      expect(document.querySelectorAll('[role="alert"]:not(:empty)')).toHaveLength(2);
+      for (const width of [280, 700]) {
+        const editor = page.getByTestId("choice-editor").element() as HTMLElement;
+        editor.style.width = `${width}px`;
+        for (const index of [1, 2]) {
+          const input = page.getByPlaceholder(`Option ${index}`, { exact: true }).element();
+          const remove = document.getElementById(`remove--${nested ? 902 : 901}--${index}`)!;
+          const row = remove.parentElement!;
+          expect(row.children).toHaveLength(2);
+          expect(remove.querySelectorAll("svg")).toHaveLength(1);
+          const inputBounds = input.getBoundingClientRect();
+          const removeBounds = remove.getBoundingClientRect();
+          expect(inputBounds.width).toBeGreaterThan(0);
+          expect(removeBounds.width).toBeGreaterThanOrEqual(32);
+          expect(inputBounds.left).toBeCloseTo(row.getBoundingClientRect().left, 1);
+          expect(inputBounds.right).toBeLessThanOrEqual(removeBounds.left - 7);
+          expect(removeBounds.right).toBeLessThanOrEqual(editor.getBoundingClientRect().right);
+        }
+      }
+      await userEvent.fill(option2, "B");
+      await expect.element(option2).not.toHaveAttribute("aria-invalid", "true");
+      await expect
+        .element(page.getByPlaceholder("Option 1", { exact: true }))
+        .not.toHaveAttribute("aria-invalid", "true");
+    }
+  );
 
   it.each(Object.keys(controls) as (keyof typeof controls)[])(
     "checks empty %s values on blur through the template store",
@@ -104,7 +224,7 @@ describe("<InputFeedback />", () => {
     }
   );
 
-  it("flags exact duplicate values on blur, announces them, and keeps the value", async () => {
+  it("flags duplicates immediately with unchanged feedback on blur, and keeps the value", async () => {
     const Example = () => {
       const [value, setValue] = useState("");
       return (
@@ -139,16 +259,20 @@ describe("<InputFeedback />", () => {
     await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
 
     await userEvent.fill(control, "Yes");
-    await userEvent.click(button);
+    await expect.element(control).toHaveFocus();
     await expect.element(control).toHaveAttribute("aria-invalid", "true");
     await expect.element(control).toHaveValue("Yes");
     await expect.element(control).toHaveAccessibleDescription("This choice already exists.");
     expect(page.getByRole("alert").element()).toBe(alert.element());
     await expect.element(alert).toHaveTextContent("This choice already exists.");
+    const invalidClass = control.element().className;
+    await userEvent.click(button);
+    await expect.element(control).toHaveAccessibleDescription("This choice already exists.");
+    expect(control.element().className).toBe(invalidClass);
 
     await userEvent.fill(control, "Maybe");
-    await userEvent.click(button);
     await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
+    await expect.element(control).toHaveFocus();
     await expect.element(alert).toHaveTextContent("");
   });
 
@@ -336,14 +460,171 @@ describe("<InputFeedback />", () => {
     await expect.element(second).toHaveAttribute("aria-invalid", "true");
     await expect.element(third).not.toHaveAttribute("aria-invalid", "true");
     await expect
-      .element(
-        page.getByText("Duplicate choices: a. Remove or change the repeated choices.").first()
-      )
+      .element(page.getByText("This choice already exists. Enter a different choice.").first())
       .toBeVisible();
     await userEvent.fill(second, "b");
     await expect.element(first).not.toHaveAttribute("aria-invalid", "true");
     await expect.element(second).not.toHaveAttribute("aria-invalid", "true");
   });
+
+  it.each([1, 2])(
+    "keeps local feedback independent of template diagnostics for schema %s",
+    async (schemaVersion) => {
+      const TemplateFeedback = () => {
+        const migrationProblems = useTemplateMigrationProblems();
+        const validationProblems = useTemplateValidationProblems();
+        useMigrationProblemFeedback([...migrationProblems, ...validationProblems]);
+        return null;
+      };
+      const Example = () => {
+        const [showDiagnostics, setShowDiagnostics] = useState(true);
+        const { form, importTemplate, updateField, setInputFeedback } = useTemplateStore(
+          (state) => ({
+            form: state.form,
+            importTemplate: state.importTemplate,
+            updateField: state.updateField,
+            setInputFeedback: state.setInputFeedback,
+          })
+        );
+        const choices = form.elements[0]?.properties.choices;
+        return (
+          <>
+            {showDiagnostics && <TemplateFeedback />}
+            <button
+              onClick={() => {
+                const template = structuredClone(form);
+                template.schemaVersion = schemaVersion;
+                template.layout = [901];
+                template.elements = [
+                  {
+                    id: 901,
+                    type: FormElementTypes.dropdown,
+                    properties: {
+                      titleEn: "Question",
+                      titleFr: "Question",
+                      validation: { required: false },
+                      choices: [
+                        { en: "A", fr: "A" },
+                        { en: "A", fr: "A" },
+                      ],
+                    },
+                  },
+                ];
+                Object.values(template.groups ?? {}).forEach((group) => {
+                  group.elements = [];
+                });
+                if (template.groups) template.groups.start.elements = ["901"];
+                return importTemplate(template);
+              }}
+            >
+              Load duplicates
+            </button>
+            {choices && (
+              <Input
+                id="option--901--1"
+                ariaLabel="First English choice"
+                value={choices[0].en}
+                onChange={vi.fn()}
+              />
+            )}
+            <button onClick={() => setInputFeedback("option--901--1", null)}>
+              Clear local feedback
+            </button>
+            <button
+              onClick={() =>
+                setInputFeedback("option--901--1", {
+                  state: "error",
+                  message: "Independent local error.",
+                })
+              }
+            >
+              Show local feedback
+            </button>
+            <button onClick={() => setShowDiagnostics((show) => !show)}>
+              Toggle template diagnostics
+            </button>
+            <button onClick={() => updateField("form.elements[0].properties.choices[1].fr", "B")}>
+              Change other French label
+            </button>
+            <button onClick={() => updateField("form.elements[0].properties.choices[1].en", "B")}>
+              Change other English label
+            </button>
+          </>
+        );
+      };
+      await renderWithStore(<Example />);
+      await page.getByRole("button", { name: "Load duplicates", exact: true }).click();
+      const input = page.getByRole("textbox", { name: "First English choice", exact: true });
+      const warning = "This choice already exists. Enter a different choice.";
+      await expect.element(input).toHaveAccessibleDescription(warning);
+      await page.getByRole("button", { name: "Show local feedback", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription("Independent local error.");
+
+      await page.getByRole("button", { name: "Toggle template diagnostics", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription("Independent local error.");
+      await page.getByRole("button", { name: "Clear local feedback", exact: true }).click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+      await page.getByRole("button", { name: "Toggle template diagnostics", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription(warning);
+      await page.getByRole("button", { name: "Show local feedback", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription("Independent local error.");
+
+      await page.getByRole("button", { name: "Clear local feedback", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription(warning);
+      await page.getByRole("button", { name: "Show local feedback", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription("Independent local error.");
+
+      await page.getByRole("button", { name: "Change other French label", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription("Independent local error.");
+      await expect.element(input).toHaveAttribute("aria-invalid", "true");
+      await page.getByRole("button", { name: "Change other English label", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription("Independent local error.");
+      await page.getByRole("button", { name: "Clear local feedback", exact: true }).click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+    }
+  );
+
+  it.each([
+    { local: "error", template: "conflict", message: "Local feedback." },
+    { local: "conflict", template: "error", message: "Template feedback." },
+    { local: "error", template: "error", message: "Local feedback." },
+    { local: "conflict", template: "conflict", message: "Local feedback." },
+  ] as const)(
+    "prioritizes $local local feedback and $template template feedback",
+    async ({ local, template, message }) => {
+      const Example = () => {
+        const { setInputFeedback, setTemplateProblemFeedback } = useTemplateStore((state) => ({
+          setInputFeedback: state.setInputFeedback,
+          setTemplateProblemFeedback: state.setTemplateProblemFeedback,
+        }));
+        return (
+          <>
+            <Input id="priority" ariaLabel="Choice" value="A" onChange={vi.fn()} />
+            <button
+              onClick={() => {
+                setInputFeedback("priority", { state: local, message: "Local feedback." });
+                setTemplateProblemFeedback({
+                  priority: { state: template, message: "Template feedback." },
+                });
+              }}
+            >
+              Show both sources
+            </button>
+            <button onClick={() => setInputFeedback("priority", null)}>Clear local source</button>
+            <button onClick={() => setTemplateProblemFeedback({})}>Clear template source</button>
+          </>
+        );
+      };
+      await renderWithStore(<Example />);
+      const input = page.getByRole("textbox", { name: "Choice", exact: true });
+      await page.getByRole("button", { name: "Show both sources", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription(message);
+      await page.getByRole("button", { name: "Clear local source", exact: true }).click();
+      await expect.element(input).toHaveAccessibleDescription("Template feedback.");
+      await page.getByRole("button", { name: "Clear template source", exact: true }).click();
+      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+    }
+  );
 
   it.each([undefined, "conflict", "error"] as const)(
     "highlights panels for child errors, not conflicts: %s",

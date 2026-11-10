@@ -11,6 +11,7 @@ import { shallow } from "zustand/shallow";
 import { persist, subscribeWithSelector } from "zustand/middleware";
 import update from "lodash.set";
 import unset from "lodash.unset";
+import isEqual from "lodash.isequal";
 
 /**
  * Internal dependencies
@@ -83,7 +84,7 @@ const createTemplateStore = (
             inputFeedback: {},
             // setInputFeedback("item-1", { state: "error", message: "Enter a question title." });
             // setInputFeedback("option--1--2", { state: "conflict", message: "Review this choice label." });
-            // Pass null to clear one field, or use clearInputFeedback() to clear all fields.
+            // Pass null to clear one field, or use clearInputFeedback() to clear all local feedback.
             setInputFeedback: (inputId, feedback) =>
               set((state) => {
                 if (feedback) {
@@ -93,6 +94,12 @@ const createTemplateStore = (
                 }
               }),
             clearInputFeedback: () => set({ inputFeedback: {} }),
+            templateProblemFeedback: {},
+            setTemplateProblemFeedback: (feedback) => {
+              if (!isEqual(get().templateProblemFeedback, feedback)) {
+                set({ templateProblemFeedback: feedback });
+              }
+            },
             editLock: null,
             isLockedByOther: false,
             setEditLock: (lock) => set({ editLock: lock }),

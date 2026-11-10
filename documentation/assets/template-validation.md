@@ -35,6 +35,17 @@ submitted candidate. The builder displays those problems while the editor schema
 unchanged, then recomputes them after edits. A rejection without diagnostics is shown
 as a save failure rather than silently hiding the error.
 
+Inline template diagnostics and blur-triggered feedback are kept separately. Each
+source clears only its own feedback; clearing a blur error reveals any remaining
+template diagnostic, and removing a template diagnostic preserves applicable blur
+errors. Errors take precedence over conflicts, with local feedback taking precedence
+when both sources have the same severity. Neither source is persisted in session storage.
+
+Duplicate choice labels show one immediate red inline error using the same message
+before and after blur. The editor checks the language being edited as choices change;
+this feedback does not change schema validation or migration fallback rules. Choice
+label rows have no decorative checkbox, radio, or numbering prefix.
+
 ### Type reference
 
 Use [`packages/types/src/form-types.ts`](https://github.com/cds-snc/platform-forms-client/blob/main/packages/types/src/form-types.ts) as a reference for the supported shape and property names of `FormProperties`, `FormElement`, `ElementProperties`, `Group`, `NextActionRule`, `ConditionalRule`, `PropertyChoices`, and `ValidationProperties`.

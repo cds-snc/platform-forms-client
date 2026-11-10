@@ -3,7 +3,7 @@ import React from "react";
 import { FormElementTypes, ValidationInputType } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 
-import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
+import { CheckIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder/useElementOptions";
@@ -110,7 +110,7 @@ export const SelectedElement = ({
       break;
     case "radio":
       if (elIndex !== -1) {
-        element = <SubOptions item={item} renderIcon={() => <RadioEmptyIcon />} />;
+        element = <SubOptions item={item} />;
       } else {
         element = (
           <>
@@ -130,7 +130,7 @@ export const SelectedElement = ({
       break;
     case "checkbox":
       if (elIndex !== -1) {
-        element = <SubOptions item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+        element = <SubOptions item={item} />;
       } else {
         element = (
           <>
@@ -140,14 +140,14 @@ export const SelectedElement = ({
                 <span className="ml-2 text-lg">{t("addElementDialog.checkbox.title")}</span>
               </div>
             </ShortAnswer>
-            <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
+            <Options item={item} formId={formId} />
           </>
         );
       }
       break;
     case "dropdown":
       if (elIndex !== -1) {
-        element = <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />;
+        element = <SubOptions item={item} />;
       } else {
         const sortOrder = item.properties.sortOrder;
         const sortOptions = sortOrder ? t(`sortOptions.${sortOrder}`) : t("sortOptions.none");
@@ -158,9 +158,7 @@ export const SelectedElement = ({
               <span className="mr-2 inline-block">{t("sortOptions.label")}</span>
               {sortOptions}
             </div>
-            {!item.properties.managedChoices && (
-              <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
-            )}
+            {!item.properties.managedChoices && <Options item={item} formId={formId} />}
           </>
         );
       }
@@ -230,7 +228,7 @@ export const SelectedElement = ({
       element = <SubElement item={item} elIndex={item.index} formId={formId} />;
       break;
     case "attestation":
-      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />;
+      element = <Options item={item} formId={formId} />;
       break;
     default:
       element = null;

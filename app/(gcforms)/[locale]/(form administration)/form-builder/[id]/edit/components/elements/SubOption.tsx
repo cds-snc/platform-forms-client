@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
+import React, { useRef, useEffect, useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
@@ -9,23 +9,18 @@ import { Close } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { cn } from "@lib/utils";
 import { getChoiceValuesExcludingIndex } from "@lib/utils/form-builder/getChoiceValuesExcludingIndex";
 import { FormElement } from "@gcforms/types";
-
-type RenderIcon = (index: number) => ReactElement | string | undefined;
 
 export const SubOption = ({
   subIndex,
   index,
   id,
-  renderIcon,
   initialValue,
 }: {
   subIndex: number;
   index: number;
   id: number;
-  renderIcon?: RenderIcon;
   initialValue: string;
 }) => {
   const input = useRef<HTMLInputElement>(null);
@@ -60,7 +55,6 @@ export const SubOption = ({
     choices: getSubElementChoices(s.form.elements),
   }));
 
-  const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
 
@@ -116,9 +110,7 @@ export const SubOption = ({
   if (indexes.length < 1) return null;
 
   return (
-    <div className="mt-3 flex" data-id={id}>
-      {icon && <div className="mt-2 flex w-5 justify-end">{icon}</div>}
-
+    <div className="mt-3 flex min-w-0 gap-2" data-id={id}>
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
@@ -133,12 +125,12 @@ export const SubOption = ({
           values: getChoiceValuesExcludingIndex(choices, index, translationLanguagePriority),
           message: t("duplicateChoice"),
         }}
-        className={cn("!my-0 max-h-9 w-full", icon && "ml-5")}
+        className="!my-0 max-h-9 w-full"
         {...getLocalizationAttribute()}
       />
       <Button
         theme="icon"
-        className="group"
+        className="group shrink-0"
         id={`remove--${id}--${index + 1}`}
         icon={
           <Close className="bg-gray-selected group-focus:fill-white-default hover:bg-gray-600" />

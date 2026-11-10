@@ -10,7 +10,7 @@ const mock = vi.hoisted(() => ({
   language: "en",
   path: "elements[0].properties.choices",
   richText: false,
-  setInputFeedback: vi.fn(),
+  setTemplateProblemFeedback: vi.fn(),
   setId: vi.fn(),
   findParentGroup: vi.fn(() => ({ index: "page-2" })),
   focus: vi.fn(),
@@ -94,7 +94,7 @@ vi.mock("@lib/store/useTemplateStore", () => ({
         ],
       },
       translationLanguagePriority: "en",
-      setInputFeedback: mock.setInputFeedback,
+      setTemplateProblemFeedback: mock.setTemplateProblemFeedback,
     }),
 }));
 
@@ -137,9 +137,10 @@ describe("MigrationProblemsNotice", () => {
     mock.showValidationErrors = false;
     const view = render(<TemplateValidationErrors />);
     expect(screen.queryByRole("alert")).toBeNull();
-    expect(mock.setInputFeedback).toHaveBeenCalledWith(
-      "option--1--1",
-      expect.objectContaining({ state: "conflict" })
+    expect(mock.setTemplateProblemFeedback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        "option--1--1": expect.objectContaining({ state: "error" }),
+      })
     );
 
     mock.showValidationErrors = true;
@@ -266,15 +267,16 @@ describe("MigrationProblemsNotice", () => {
     fireEvent.click(screen.getByRole("button", { name: "Province" }));
     expect(mock.setId).toHaveBeenCalledWith("page-2");
     expect(mock.focus).toHaveBeenCalledOnce();
-    expect(mock.setInputFeedback).toHaveBeenCalledWith(
-      "option--1--1",
-      expect.objectContaining({ state: "conflict" })
+    expect(mock.setTemplateProblemFeedback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        "option--1--1": expect.objectContaining({ state: "error" }),
+      })
     );
 
     mock.validationCount = 0;
     view.rerender(<TemplateValidationErrors />);
     expect(screen.queryByRole("alert")).toBeNull();
-    expect(mock.setInputFeedback).toHaveBeenCalledWith("option--1--1", null);
+    expect(mock.setTemplateProblemFeedback).toHaveBeenCalledWith({});
   });
 
   it("always navigates to questions within the editor", () => {
