@@ -5,7 +5,7 @@ import { type Language } from "@lib/types/form-builder-types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { getReviewItems } from "@clientComponents/forms/Review/helpers";
 import { useCallback } from "react";
-import { slugify } from "@lib/client/clientHelpers";
+import { getDate, slugify } from "@lib/client/clientHelpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { type HTMLProps } from "@lib/saveAndResume/types";
 
@@ -48,7 +48,7 @@ export const useFormSubmissionData = ({
 
   const title = language === "en" ? formRecord.form.titleEn : formRecord.form.titleFr;
   const formId = formRecord.id;
-  const fileName = `${slugify(title)}-${formId}.html`;
+  const fileName = `${slugify(`${title}-${formId}-${getDate()}`)}.html`;
 
   const getOptions = useCallback(() => {
     const options: HTMLProps = {
