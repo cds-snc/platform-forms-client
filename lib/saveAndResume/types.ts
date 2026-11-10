@@ -1,5 +1,6 @@
 import { type ReviewSection } from "@clientComponents/forms/Review/helpers";
 import { type Language } from "@lib/types/form-builder-types";
+import { type BrandProperties } from "@lib/types";
 
 export interface HTMLProps {
   language: Language;
@@ -8,6 +9,7 @@ export interface HTMLProps {
   formTitle: string;
   formId: string;
   formResponse: string;
+  brand?: BrandProperties | null;
   reviewItems: ReviewSection[];
   startSectionTitle: string;
   submissionId?: string;

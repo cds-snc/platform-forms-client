@@ -55,6 +55,7 @@ export const useFormSubmissionData = ({
       formTitle: title,
       type,
       formId: String(formId),
+      brand: formRecord.form.brand,
       reviewItems,
       formResponse: Buffer.from(JSON.stringify(getProgressData()), "utf8").toString("base64"),
       language,
@@ -64,7 +65,17 @@ export const useFormSubmissionData = ({
     };
 
     return options;
-  }, [title, getProgressData, type, formId, reviewItems, language, submissionId, submissionDate]);
+  }, [
+    title,
+    getProgressData,
+    type,
+    formId,
+    formRecord.form.brand,
+    reviewItems,
+    language,
+    submissionId,
+    submissionDate,
+  ]);
 
   return { fileName, reviewItems, submissionId, submissionDate, getOptions };
 };
