@@ -36,7 +36,7 @@ export type EditLockState = {
 };
 
 export type InputFeedbackEntry = {
-  state: "error" | "conflict";
+  state: "error";
   message: string;
 };
 

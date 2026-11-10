@@ -38,8 +38,8 @@ as a save failure rather than silently hiding the error.
 Inline template diagnostics and blur-triggered feedback are kept separately. Each
 source clears only its own feedback; clearing a blur error reveals any remaining
 template diagnostic, and removing a template diagnostic preserves applicable blur
-errors. Errors take precedence over conflicts, with local feedback taking precedence
-when both sources have the same severity. Neither source is persisted in session storage.
+errors. Inline feedback uses a single error state, with local feedback taking precedence
+over template diagnostics. Neither source is persisted in session storage.
 Feedback keys include the content language being edited, independently of the interface
 language. Switching languages selects that language's feedback without discarding local
 errors in the other language. DOM input and error-message IDs remain unchanged.

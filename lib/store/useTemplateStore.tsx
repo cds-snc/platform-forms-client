@@ -84,7 +84,6 @@ const createTemplateStore = (
             ...props,
             inputFeedback: {},
             // setInputFeedback("item-1", { state: "error", message: "Enter a question title." });
-            // setInputFeedback("option--1--2", { state: "conflict", message: "Review this choice label." });
             // Pass null to clear one field, or use clearInputFeedback() to clear all local feedback.
             setInputFeedback: (inputId, feedback, language = get().translationLanguagePriority) =>
               set((state) => {

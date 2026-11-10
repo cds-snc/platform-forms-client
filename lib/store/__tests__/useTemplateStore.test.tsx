@@ -138,7 +138,7 @@ describe("TemplateStore", () => {
 
     act(() => {
       result.current!.setInputFeedback("option-1-2", {
-        state: "conflict",
+        state: "error",
         message: "Duplicate choice label.",
       });
       result.current!.setInputFeedback("item-1", {
@@ -146,12 +146,12 @@ describe("TemplateStore", () => {
         message: "Enter a question title.",
       });
       result.current!.setTemplateProblemFeedback({
-        "en:option-1-2": { state: "conflict", message: "Template duplicate choice." },
+        "en:option-1-2": { state: "error", message: "Template duplicate choice." },
       });
     });
 
     expect(result.current!.inputFeedback["en:option-1-2"]).toEqual({
-      state: "conflict",
+      state: "error",
       message: "Duplicate choice label.",
     });
     expect(result.current!.form).toBe(originalForm);
@@ -168,14 +168,14 @@ describe("TemplateStore", () => {
     act(() => result.current!.clearInputFeedback());
     expect(result.current!.inputFeedback).toEqual({});
     expect(result.current!.templateProblemFeedback).toEqual({
-      "en:option-1-2": { state: "conflict", message: "Template duplicate choice." },
+      "en:option-1-2": { state: "error", message: "Template duplicate choice." },
     });
   });
 
   it("replaces only template feedback and skips unchanged diagnostics", async () => {
     const result = await createStore();
     const feedback = {
-      "en:option-1-2": { state: "conflict" as const, message: "Template duplicate choice." },
+      "en:option-1-2": { state: "error" as const, message: "Template duplicate choice." },
     };
     act(() => {
       result.current.setInputFeedback("option-1-2", {

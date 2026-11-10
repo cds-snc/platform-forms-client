@@ -1,12 +1,12 @@
 "use client";
 import React, { createContext, useContext, useId } from "react";
 import { cn } from "@lib/utils";
-import { ExclamationIcon, WarningIcon } from "@serverComponents/icons";
+import { ExclamationIcon } from "@serverComponents/icons";
 import { TemplateStoreContext, useTemplateStore } from "@lib/store/useTemplateStore";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 import { getInputFeedbackKey } from "@lib/store/helpers/getInputFeedbackKey";
 
-type FeedbackState = "error" | "conflict";
+type FeedbackState = "error";
 
 export const inputFeedbackPanelClassName =
   "has-[[data-feedback-state=error]]:bg-gray-50 has-[[data-feedback-state=error]]:focus-within:bg-gray-50 has-[[data-feedback-state=error]]:hover:bg-gray-50";
@@ -60,11 +60,7 @@ const ConnectedInputFeedback = ({
     checkDuplicate && value !== undefined && isDuplicate(String(value), checkDuplicate)
       ? { state: "error" as const, message: checkDuplicate.message }
       : undefined;
-  const feedback =
-    duplicateFeedback ??
-    (templateFeedback?.state === "error" && localFeedback?.state !== "error"
-      ? templateFeedback
-      : (localFeedback ?? templateFeedback));
+  const feedback = duplicateFeedback ?? localFeedback ?? templateFeedback;
   const checks = Boolean(checkEmpty || checkDuplicate);
 
   return (
@@ -85,7 +81,7 @@ const ConnectedInputFeedback = ({
         }
         if (!input.value.trim()) {
           setInputFeedback(inputId, { state: "error", message: checkEmpty }, language);
-        } else if (localFeedback?.state === "error" && localFeedback.message === checkEmpty) {
+        } else if (localFeedback?.message === checkEmpty) {
           setInputFeedback(inputId, null, language);
         }
       }}
@@ -129,8 +125,8 @@ export const useInputFeedback = (describedBy?: string) => {
     state,
     isInvalid: Boolean(state),
     describedBy: getDescribedByIds(messageId, describedBy),
-    controlClassName: state ? cn(state === "error" && errorControlClassName, "pr-10") : undefined,
-    wrapperClassName: state === "error" ? errorControlClassName : undefined,
+    controlClassName: state ? cn(errorControlClassName, "pr-10") : undefined,
+    wrapperClassName: state ? errorControlClassName : undefined,
   };
 };
 
@@ -171,16 +167,9 @@ export const InputFeedback = ({
           {state && (
             <span
               aria-hidden="true"
-              className={cn(
-                "pointer-events-none absolute top-1/2 right-3 -translate-y-1/2",
-                state === "error" ? "text-red-default" : "text-(--gcds-color-yellow-700)"
-              )}
+              className="text-red-default pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
             >
-              {state === "error" ? (
-                <ExclamationIcon className="size-5" />
-              ) : (
-                <WarningIcon className="size-5 fill-current" />
-              )}
+              <ExclamationIcon className="size-5" />
             </span>
           )}
         </div>
@@ -190,9 +179,8 @@ export const InputFeedback = ({
             id={hasMessage ? messageId : undefined}
             role="alert"
             className={cn(
-              "text-sm wrap-anywhere",
-              (hasMessage || reservedMessage) && "mt-1",
-              state === "error" ? "text-red-default" : "text-(--gcds-color-yellow-700)"
+              "text-red-default text-sm wrap-anywhere",
+              (hasMessage || reservedMessage) && "mt-1"
             )}
           >
             {hasMessage
@@ -205,13 +193,7 @@ export const InputFeedback = ({
           </p>
         ) : (
           hasMessage && (
-            <p
-              id={messageId}
-              className={cn(
-                "mt-1 text-sm wrap-anywhere",
-                state === "error" ? "text-red-default" : "text-(--gcds-color-yellow-700)"
-              )}
-            >
+            <p id={messageId} className="text-red-default mt-1 text-sm wrap-anywhere">
               {message}
             </p>
           )

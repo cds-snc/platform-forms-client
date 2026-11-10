@@ -407,7 +407,7 @@ describe("<InputFeedback />", () => {
               type="button"
               onClick={() =>
                 setInputFeedback("required-field", {
-                  state: "conflict",
+                  state: "error",
                   message: "Review this title.",
                 })
               }
@@ -819,52 +819,44 @@ describe("<InputFeedback />", () => {
     }
   );
 
-  it.each([
-    { local: "error", template: "conflict", message: "Local feedback." },
-    { local: "conflict", template: "error", message: "Template feedback." },
-    { local: "error", template: "error", message: "Local feedback." },
-    { local: "conflict", template: "conflict", message: "Local feedback." },
-  ] as const)(
-    "prioritizes $local local feedback and $template template feedback",
-    async ({ local, template, message }) => {
-      const Example = () => {
-        const { setInputFeedback, setTemplateProblemFeedback } = useTemplateStore((state) => ({
-          setInputFeedback: state.setInputFeedback,
-          setTemplateProblemFeedback: state.setTemplateProblemFeedback,
-        }));
-        return (
-          <>
-            <Input id="priority" ariaLabel="Choice" value="A" onChange={vi.fn()} />
-            <button
-              onClick={() => {
-                setInputFeedback("priority", { state: local, message: "Local feedback." });
-                setTemplateProblemFeedback({
-                  "en:priority": { state: template, message: "Template feedback." },
-                });
-              }}
-            >
-              Show both sources
-            </button>
-            <button onClick={() => setInputFeedback("priority", null)}>Clear local source</button>
-            <button onClick={() => setTemplateProblemFeedback({})}>Clear template source</button>
-          </>
-        );
-      };
-      await renderWithStore(<Example />);
-      const input = page.getByRole("textbox", { name: "Choice", exact: true });
-      await page.getByRole("button", { name: "Show both sources", exact: true }).click();
-      await expect.element(input).toHaveAccessibleDescription(message);
-      await page.getByRole("button", { name: "Clear local source", exact: true }).click();
-      await expect.element(input).toHaveAccessibleDescription("Template feedback.");
-      await page.getByRole("button", { name: "Clear template source", exact: true }).click();
-      await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
-    }
-  );
+  it("prioritizes local errors and reveals template errors when cleared", async () => {
+    const Example = () => {
+      const { setInputFeedback, setTemplateProblemFeedback } = useTemplateStore((state) => ({
+        setInputFeedback: state.setInputFeedback,
+        setTemplateProblemFeedback: state.setTemplateProblemFeedback,
+      }));
+      return (
+        <>
+          <Input id="priority" ariaLabel="Choice" value="A" onChange={vi.fn()} />
+          <button
+            onClick={() => {
+              setInputFeedback("priority", { state: "error", message: "Local feedback." });
+              setTemplateProblemFeedback({
+                "en:priority": { state: "error", message: "Template feedback." },
+              });
+            }}
+          >
+            Show both sources
+          </button>
+          <button onClick={() => setInputFeedback("priority", null)}>Clear local source</button>
+          <button onClick={() => setTemplateProblemFeedback({})}>Clear template source</button>
+        </>
+      );
+    };
+    await renderWithStore(<Example />);
+    const input = page.getByRole("textbox", { name: "Choice", exact: true });
+    await page.getByRole("button", { name: "Show both sources", exact: true }).click();
+    await expect.element(input).toHaveAccessibleDescription("Local feedback.");
+    await page.getByRole("button", { name: "Clear local source", exact: true }).click();
+    await expect.element(input).toHaveAccessibleDescription("Template feedback.");
+    await page.getByRole("button", { name: "Clear template source", exact: true }).click();
+    await expect.element(input).not.toHaveAttribute("aria-invalid", "true");
+  });
 
-  it.each([undefined, "conflict", "error"] as const)(
-    "highlights panels for child errors, not conflicts: %s",
+  it.each([undefined, "error"] as const)(
+    "highlights panels only while child errors are present: %s",
     async (state) => {
-      const panel = (feedbackState?: "error" | "conflict") => (
+      const panel = (feedbackState?: "error") => (
         <>
           <div data-testid="error-background-reference" className="bg-gray-50" aria-hidden="true" />
           <div
@@ -902,10 +894,10 @@ describe("<InputFeedback />", () => {
       const options = [
         { id: "error-option", state: "error" as const, message: "Enter an option." },
         {
-          id: "conflict-option",
-          state: "conflict" as const,
+          id: "long-error-option",
+          state: "error" as const,
           message:
-            "This is a much longer conflict message that must wrap without changing the input width.",
+            "This is a much longer error message that must wrap without changing the input width.",
         },
         { id: "normal-option", state: undefined, message: undefined },
       ];
@@ -969,12 +961,12 @@ describe("<InputFeedback />", () => {
             <button
               onClick={() =>
                 setInputFeedback("stored-choice", {
-                  state: "conflict",
+                  state: "error",
                   message: "Duplicate choice label.",
                 })
               }
             >
-              Show conflict
+              Show duplicate error
             </button>
             <button
               onClick={() =>
@@ -990,7 +982,9 @@ describe("<InputFeedback />", () => {
       await renderWithStore(<Example />);
       const control = page.getByRole("textbox", { name: "Choice", exact: true });
       await expect.element(control).not.toHaveAttribute("aria-invalid", "true");
-      await userEvent.click(page.getByRole("button", { name: "Show conflict", exact: true }));
+      await userEvent.click(
+        page.getByRole("button", { name: "Show duplicate error", exact: true })
+      );
       await expect
         .element(control)
         .toHaveAccessibleDescription("Duplicate choice label. Use a distinct name.");
@@ -1013,7 +1007,7 @@ describe("<InputFeedback />", () => {
   );
 
   it.each(Object.keys(controls) as (keyof typeof controls)[])(
-    "styles and describes error/conflict states for %s without replacing existing hints",
+    "styles and describes errors for %s without replacing existing hints",
     async (kind) => {
       const Control = controls[kind];
       const onChange = vi.fn();
@@ -1021,7 +1015,7 @@ describe("<InputFeedback />", () => {
         <>
           <label htmlFor="choice">Choice</label>
           <p id="choice-hint">Use a distinct name.</p>
-          <InputFeedback state="conflict" message="Duplicate choice label.">
+          <InputFeedback state="error" message="Duplicate choice label.">
             <Control
               id="choice"
               value="Standard delivery"
@@ -1040,15 +1034,11 @@ describe("<InputFeedback />", () => {
       await expect.element(page.getByText("Duplicate choice label.")).toBeVisible();
       await expect
         .element(page.getByText("Duplicate choice label."))
-        .toHaveClass("text-(--gcds-color-yellow-700)");
-      await expect
-        .element(page.getByText("Duplicate choice label."))
-        .not.toHaveClass("bg-yellow-100");
+        .toHaveClass("text-red-default");
       const borderTarget =
         control.element().closest<HTMLDivElement>(".input-sizer") ?? control.element();
-      await expect.element(borderTarget).not.toHaveClass("border-yellow-500");
-      await expect.element(borderTarget).not.toHaveClass("bg-yellow-50");
-      await expect.element(page.getByTestId("WarningIcon")).toBeVisible();
+      await expect.element(borderTarget).toHaveClass("border-red-default");
+      await expect.element(borderTarget).toHaveClass("bg-red-50");
       await userEvent.fill(control, "Express delivery");
       expect(onChange).toHaveBeenCalled();
 
@@ -1089,7 +1079,7 @@ describe("<InputFeedback />", () => {
             <Input id="first" value={value} onChange={(event) => setValue(event.target.value)} />
           </InputFeedback>
           <label htmlFor="second">Second choice</label>
-          <InputFeedback state="conflict" message="Duplicate choice.">
+          <InputFeedback state="error" message="Duplicate choice.">
             <Input id="second" value="Standard delivery" onChange={vi.fn()} />
           </InputFeedback>
         </>
