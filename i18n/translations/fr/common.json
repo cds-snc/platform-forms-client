@@ -339,7 +339,8 @@
       "badge": {
         "text": "En cours",
         "lastSaved": "Sauvegardé : le {{day}} {{month}} {{year}}"
-      }
+      },
+      "fileStatus": "en-cours"
     }
   },
   "saveResponse": {
@@ -360,6 +361,7 @@
         "lastSaved": "le {{day}} {{month}} {{year}}",
         "submissionId": "Numéro de référence : {{submissionId}}"
       },
+      "fileStatus": "confirmation",
       "generateHtmlError": {
         "description": "Il y a eu un problème lors de l'enregistrement de vos réponses au formulaire. Le fichier n'a pas pu être téléchargé. Veuillez réessayer plus tard."
       }

@@ -339,7 +339,8 @@
       "badge": {
         "text": "In progress",
         "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
-      }
+      },
+      "fileStatus": "progress"
     }
   },
   "saveResponse": {
@@ -360,6 +361,7 @@
         "lastSaved": "{{month}} {{day}}, {{year}}",
         "submissionId": "Submission ID: {{submissionId}}"
       },
+      "fileStatus": "confirmation",
       "generateHtmlError": {
         "description": "There was a problem saving your form answers. The file could not be downloaded. Try again later."
       }
