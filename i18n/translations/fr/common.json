@@ -340,7 +340,7 @@
         "text": "En cours",
         "lastSaved": "Sauvegardé : le {{day}} {{month}} {{year}}"
       },
-      "fileStatus": "progression"
+      "fileStatus": "en-cours"
     }
   },
   "saveResponse": {
