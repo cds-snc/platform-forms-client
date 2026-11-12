@@ -128,7 +128,12 @@ export const ElementDialog = ({
   }, [handleAdd]);
 
   return (
-    <Dialog dialogRef={dialog} handleClose={handleClose} className="flex max-w-[800px]">
+    <Dialog
+      dialogRef={dialog}
+      handleClose={handleClose}
+      className="flex max-w-[800px]"
+      withAnnounce
+    >
       <div className="relative flex w-full">
         <Header>
           <h4>{t("addElement")}</h4>
