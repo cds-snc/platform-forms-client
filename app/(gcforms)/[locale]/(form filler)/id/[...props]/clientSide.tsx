@@ -116,7 +116,7 @@ export const FormWrapper = ({
           const submissionDate = new Date().toISOString();
           setSubmissionDate(submissionDate);
 
-          if (!formHasGroups(formRecord.form) || process.env.APP_ENV === "test") {
+          if (!formHasGroups(formRecord.form)) {
             if (submissionId) {
               storePendingSubmissionInfo(formID, submissionId, submissionDate);
             }
