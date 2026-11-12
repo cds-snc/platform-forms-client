@@ -379,7 +379,7 @@
     "text1": "Par défaut, la signature du gouvernement du Canada apparaît sur les formulaires publiés."
   },
   "cancel": "Annuler  ",
-  "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
+  "characterLimitDescription": "GC Forms limite les champs à 10 000 caractères. N'utilisez une limite de caractères plus basse que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
   "characterLimitWhenToUse": {
     "text1": "Des preuves que les utilisateur·rice·s sont susceptibles de saisir plus d'informations qu'ils n'en ont besoin.",
     "text2": "Une raison légale ou technique qui fait qu'une entrée ne doit pas dépasser un certain nombre de caractères.",
