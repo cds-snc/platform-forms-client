@@ -12,6 +12,7 @@ import { getSafeUrl } from "@lib/utils/getSafeUrl";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { encryptedCache } from "@root/lib/hooks/useResponseCache";
 import { takePendingSubmissionInfo } from "@lib/client/submissionInfo";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -30,7 +31,7 @@ interface PageContextProps {
   language: Language;
 }
 
-const PageContent = ({ formId, pageText, urlQuery, language }: PageContextProps) => {
+const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
   const { submissionId, setSubmissionId, submissionDate, setSubmissionDate } = useGCFormsContext();
 
@@ -63,7 +64,9 @@ const PageContent = ({ formId, pageText, urlQuery, language }: PageContextProps)
         <input type="hidden" value={submissionId ?? ""} name="submissionId" />
         <input type="hidden" value={submissionDate ?? ""} name="submissionDate" />
         <RichText className="confirmation">{pageText}</RichText>
-        <SaveResponse submissionId={submissionId || ""} language={language} />
+        {formHasGroups(formRecord.form) && (
+          <SaveResponse submissionId={submissionId || ""} language={language} />
+        )}
       </>
     );
   }

@@ -17,6 +17,7 @@ import { getLocalizedProperty, LocalizedElementProperties, Language } from "@roo
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
 import { storePendingSubmissionInfo } from "@lib/client/submissionInfo";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 export const FormWrapper = ({
   formRecord,
@@ -115,11 +116,12 @@ export const FormWrapper = ({
           const submissionDate = new Date().toISOString();
           setSubmissionDate(submissionDate);
 
-          if (!saveAndResume || process.env.APP_ENV === "test") {
+          if (!formHasGroups(formRecord.form) || process.env.APP_ENV === "test") {
             if (submissionId) {
               storePendingSubmissionInfo(formID, submissionId, submissionDate);
             }
-            // Redirect to confirmation page if save and resume is not enabled
+            // For legacy forms without groups, redirect to the confirmation page
+            // We don't have a review page for legacy forms without groups, so we redirect directly to confirmation
             router.push(`/${language}/id/${formID}/confirmation`);
           }
         }}
