@@ -8,37 +8,48 @@ import { SubmitButton as DownloadConfirm } from "@clientComponents/globals/Butto
 import { ConfirmDownloadDialog } from "./ConfirmDownloadDialog";
 import { DownloadSubmissionIcon } from "@serverComponents/icons/DownloadSubmissionIcon";
 
-export const SaveResponse = ({ language }: { language: Language }) => {
+export const SaveResponse = ({
+  submissionId,
+  language,
+}: {
+  submissionId: string;
+  language: Language;
+}) => {
   const { t } = useTranslation(["review", "common"]);
   const [confirm, setConfirm] = useState(false);
 
   return (
-    <div className="bg-gcds-green-100 mr-4 inline-block max-w-fit rounded-lg px-4 pt-2 pb-4">
-      <div className="mr-4 mb-4 inline-block font-bold">
-        {t("saveResponse.saveBtnDescription", { lng: language })}
+    <>
+      <div className="bg-gcds-green-100 mr-4 mb-4 inline-block max-w-fit rounded-lg px-4 pt-2 pb-4">
+        <div className="mr-4 mb-4 inline-block font-bold">
+          {t("saveResponse.saveBtnDescription", { lng: language })}
+        </div>
+        <DownloadConfirm
+          className="group inline-flex w-full items-center justify-center rounded-full px-4 py-2 text-sm font-medium"
+          type="button"
+          loading={confirm}
+          theme="primary"
+          onClick={() => setConfirm(true)}
+        >
+          <>
+            <span className="mr-2 inline-block text-xl">
+              {t("saveResponse.saveBtn", { lng: language })}
+            </span>
+            <DownloadSubmissionIcon className="fill-white" />
+          </>
+        </DownloadConfirm>
+        {confirm && (
+          <ConfirmDownloadDialog
+            type="confirm"
+            language={language}
+            open={confirm}
+            handleClose={() => setConfirm(false)}
+          />
+        )}
       </div>
-      <DownloadConfirm
-        className="group inline-flex w-full items-center justify-center rounded-full px-4 py-2 text-sm font-medium"
-        type="button"
-        loading={confirm}
-        theme="primary"
-        onClick={() => setConfirm(true)}
-      >
-        <>
-          <span className="mr-2 inline-block text-xl">
-            {t("saveResponse.saveBtn", { lng: language })}
-          </span>
-          <DownloadSubmissionIcon className="fill-white" />
-        </>
-      </DownloadConfirm>
-      {confirm && (
-        <ConfirmDownloadDialog
-          type="confirm"
-          language={language}
-          open={confirm}
-          handleClose={() => setConfirm(false)}
-        />
-      )}
-    </div>
+      <p className="mb-4">
+        {t("saveResponse.downloadHtml.badge.submissionId", { submissionId: submissionId })}
+      </p>
+    </>
   );
 };
