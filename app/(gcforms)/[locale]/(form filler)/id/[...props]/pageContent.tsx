@@ -49,7 +49,7 @@ export const PageContent = ({
   if (step === "confirmation") {
     return (
       <div className={classes}>
-        <TextPage formId={formId} formRecord={formRecord} />
+        <TextPage formRecord={formRecord} />
       </div>
     );
   }
