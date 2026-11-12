@@ -40,6 +40,9 @@ same path, validation rule, and message, preserving first-occurrence order. Brac
 dot array-index paths are equivalent for this comparison. Distinct rules, messages,
 fields, and languages remain separate; combined inline diagnostics use the same rule.
 
+For problems without an element target, the summary's "Edit form" link returns to the
+existing "Edit page" heading and moves keyboard focus there.
+
 Inline template diagnostics and blur-triggered feedback are kept separately. Each
 source clears only its own feedback; clearing a blur error reveals any remaining
 template diagnostic, and removing a template diagnostic preserves applicable blur

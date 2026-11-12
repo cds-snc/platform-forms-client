@@ -68,7 +68,14 @@ const TemplateProblemList = ({ problems }: { problems: TemplateValidationProblem
               <strong>{t("migrationProblems.form")}</strong>
             )}
             <p className="mb-1">{describeTemplateProblem(problem, element, i18n.language, t)}</p>
-            {!element && <Link href="#questions">{t("migrationProblems.edit")}</Link>}
+            {!element && (
+              <Link
+                href="#editPagesHeading"
+                onClick={() => document.getElementById("editPagesHeading")?.focus()}
+              >
+                {t("migrationProblems.edit")}
+              </Link>
+            )}
           </li>
         );
       })}

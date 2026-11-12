@@ -183,7 +183,10 @@ describe("MigrationProblemsNotice", () => {
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
     expect(screen.getByText("migrationProblems.duplicateChoices")).toBeVisible();
     expect(screen.getByRole("button", { name: "Province" })).toBeVisible();
-    expect(screen.getByRole("link", { name: "Edit form" })).toHaveAttribute("href", "#questions");
+    expect(screen.getByRole("link", { name: "Edit form" })).toHaveAttribute(
+      "href",
+      "#editPagesHeading"
+    );
 
     fireEvent.click(summary);
     await waitFor(() => expect(screen.getByText("Show problems")).toBeVisible());
@@ -199,6 +202,30 @@ describe("MigrationProblemsNotice", () => {
     fireEvent.click(screen.getByText("Show problems"));
     expect(screen.getByText("Province en français")).toBeVisible();
   });
+
+  it.each(["migration", "validation"])(
+    "focuses the editor heading for %s problems without an element target",
+    (variant) => {
+      mock.path = "schemaVersion";
+      if (variant === "migration") mock.count = 1;
+      else mock.validationCount = 1;
+      render(
+        <>
+          <h2 id="editPagesHeading" tabIndex={-1}>
+            Edit page
+          </h2>
+          {variant === "migration" ? <MigrationProblemsNotice /> : <TemplateValidationErrors />}
+        </>
+      );
+      fireEvent.click(screen.getByText(variant === "migration" ? "Show problems" : "Show errors"));
+      const link = screen.getByRole("link", { name: "Edit form" });
+      expect(link).toHaveAttribute("href", "#editPagesHeading");
+      link.focus();
+      fireEvent.click(link);
+      expect(screen.getByRole("heading", { name: "Edit page" })).toHaveFocus();
+      expect(mock.setId).not.toHaveBeenCalled();
+    }
+  );
 
   it("switches to the element's page before focusing and scrolling to it", () => {
     mock.count = 1;

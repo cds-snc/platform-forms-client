@@ -78,7 +78,13 @@ const Editor = () => {
   }));
   return (
     <>
+      <h2 id="editPagesHeading" tabIndex={-1}>
+        Edit page
+      </h2>
       <button onClick={() => importTemplate(legacyForm())}>Load legacy draft</button>
+      <button onClick={() => importTemplate({ ...legacyForm(), schemaVersion: 999 })}>
+        Load unsupported schema draft
+      </button>
       <button onClick={() => updateField("form.elements[0].properties.choices[1].en", "B")}>
         Fix top-level duplicate
       </button>
@@ -137,4 +143,23 @@ it("deduplicates and focuses returned save errors, then clears them when the leg
   await expect
     .element(page.getByRole("link", { name: "Not saved - Fix errors" }))
     .not.toBeInTheDocument();
+});
+
+it("returns keyboard focus to the editor heading for a form-level save error", async () => {
+  await render(
+    <SaveTemplateProvider>
+      <GroupStoreProvider>
+        <Editor />
+      </GroupStoreProvider>
+    </SaveTemplateProvider>
+  );
+  await page.getByRole("button", { name: "Load unsupported schema draft" }).click();
+  await new Promise((resolve) => window.setTimeout(resolve, 2100));
+  await page.getByRole("button", { name: "Save draft" }).click();
+  await expect.element(page.getByRole("alert")).toHaveFocus();
+  await page.getByText("Show errors", { exact: true }).click();
+  const link = page.getByRole("link", { name: "Edit form", exact: true });
+  await expect.element(link).toHaveAttribute("href", "#editPagesHeading");
+  await link.click();
+  await expect.element(page.getByRole("heading", { name: "Edit page", exact: true })).toHaveFocus();
 });
