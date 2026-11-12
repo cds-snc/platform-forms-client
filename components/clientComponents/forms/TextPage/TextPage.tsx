@@ -29,11 +29,9 @@ interface PageContextProps {
   language: Language;
 }
 
-const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextProps) => {
+const PageContent = ({ pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
   const { submissionId, submissionDate } = useGCFormsContext();
-
-  const saveAndResume = formRecord?.saveAndResume;
 
   // Sanitize urlQuery to prevent security issues
   const safeUrlQuery = urlQuery ? getSafeUrl(urlQuery) : null;
@@ -52,8 +50,7 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
         <input type="hidden" value={submissionId} name="submissionId" />
         <input type="hidden" value={submissionDate} name="submissionDate" />
         <RichText className="confirmation">{pageText}</RichText>
-        {/* TODO - Can a user download a copy even if save / resume is not form enabled, current behavior is no */}
-        {saveAndResume && <SaveResponse language={language} />}
+        <SaveResponse submissionId={submissionId || ""} language={language} />
       </>
     );
   }
