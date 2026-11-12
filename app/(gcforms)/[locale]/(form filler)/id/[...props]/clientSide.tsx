@@ -16,7 +16,6 @@ import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty, LocalizedElementProperties, Language } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
-import { storePendingSubmissionInfo } from "@lib/client/submissionInfo";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 export const FormWrapper = ({
@@ -91,7 +90,7 @@ export const FormWrapper = ({
     return (
       <div className="gc-form-wrapper">
         <style dangerouslySetInnerHTML={{ __html: `.gc-date-modified { display: none; }` }} />
-        <TextPage formId={formRecord.id} formRecord={formRecord} />
+        <TextPage formRecord={formRecord} />
         {saveAndResume && (
           <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
         )}
@@ -117,9 +116,6 @@ export const FormWrapper = ({
           setSubmissionDate(submissionDate);
 
           if (!formHasGroups(formRecord.form)) {
-            if (submissionId) {
-              storePendingSubmissionInfo(formID, submissionId, submissionDate);
-            }
             // For legacy forms without groups, redirect to the confirmation page
             // We don't have a review page for legacy forms without groups, so we redirect directly to confirmation
             router.push(`/${language}/id/${formID}/confirmation`);
