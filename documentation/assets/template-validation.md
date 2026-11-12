@@ -35,6 +35,11 @@ submitted candidate. The builder displays those problems while the editor schema
 unchanged, then recomputes them after edits. A rejection without diagnostics is shown
 as a save failure rather than silently hiding the error.
 
+Validation, migration, and returned save diagnostics remove repeated problems with the
+same path, validation rule, and message, preserving first-occurrence order. Bracket and
+dot array-index paths are equivalent for this comparison. Distinct rules, messages,
+fields, and languages remain separate; combined inline diagnostics use the same rule.
+
 Inline template diagnostics and blur-triggered feedback are kept separately. Each
 source clears only its own feedback; clearing a blur error reveals any remaining
 template diagnostic, and removing a template diagnostic preserves applicable blur

@@ -7,6 +7,7 @@ import { validateCustomRegex } from "@lib/regex/validateCustomRegex";
 import { createsNextActionCycle } from "@lib/groups/utils/validateGroups";
 import { logMessage } from "@lib/logger";
 import { getValidationPath } from "./getValidationPath";
+import { deduplicateTemplateProblems } from "./deduplicateTemplateProblems";
 
 export type errorMessage = { property?: string; message: string };
 
@@ -129,7 +130,7 @@ export const validateTemplate = (data: FormProperties) => {
     return {
       valid: false,
       errors: deduplicatePropertyErrors(errors),
-      problems,
+      problems: deduplicateTemplateProblems(problems),
     };
   }
 
@@ -150,6 +151,6 @@ export const validateTemplate = (data: FormProperties) => {
   return {
     valid: errors.length === 0,
     errors: errors,
-    problems,
+    problems: deduplicateTemplateProblems(problems),
   };
 };

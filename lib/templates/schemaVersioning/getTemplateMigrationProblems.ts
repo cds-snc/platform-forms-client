@@ -2,6 +2,7 @@ import { type FormProperties } from "@gcforms/types";
 import { getTemplateSchemaVersion, migrateTemplate } from "./migrateTemplate";
 import { CURRENT_TEMPLATE_VERSION } from "./migrations";
 import { StrictElementMigrationError } from "./migrations/v0002_strictElementSchemas";
+import { deduplicateTemplateProblems } from "@lib/utils/form-builder/deduplicateTemplateProblems";
 
 export type TemplateMigrationProblem = {
   path: string;
@@ -38,5 +39,5 @@ export const getTemplateMigrationProblems = (
             ];
     },
   });
-  return problems;
+  return deduplicateTemplateProblems(problems);
 };

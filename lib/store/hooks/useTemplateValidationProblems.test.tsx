@@ -116,7 +116,7 @@ describe("useTemplateValidationProblems", () => {
       problems,
     };
     const { result, rerender } = renderHook(() => useTemplateValidationProblems());
-    expect(result.current).toBe(problems);
+    expect(result.current).toEqual(problems);
 
     form = { ...form, titleEn: "Edited title" };
     rerender();
@@ -126,5 +126,22 @@ describe("useTemplateValidationProblems", () => {
     validationFailure = null;
     rerender();
     expect(result.current).toEqual([]);
+  });
+
+  it("deduplicates server diagnostics while retaining distinct errors for the submitted schema", () => {
+    const first = {
+      path: "elements[0].properties.titleEn",
+      name: "type",
+      message: "Invalid title",
+    };
+    const second = { ...first, name: "required", message: "Missing title" };
+    validationFailure = {
+      schema: JSON.stringify(getSchemaFromState({ form }), null, 2),
+      problems: [first, { ...first, path: "elements.0.properties.titleEn" }, second, { ...second }],
+    };
+    const original = structuredClone(validationFailure);
+    const { result } = renderHook(() => useTemplateValidationProblems());
+    expect(result.current).toEqual([first, second]);
+    expect(validationFailure).toEqual(original);
   });
 });

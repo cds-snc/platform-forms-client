@@ -4,6 +4,7 @@ import { prepareTemplateForSave } from "@lib/utils/form-builder/prepareTemplateF
 import { getSchemaFromState } from "@lib/utils/form-builder";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { useTemplateStore } from "../useTemplateStore";
+import { deduplicateTemplateProblems } from "@lib/utils/form-builder/deduplicateTemplateProblems";
 
 export const useTemplateValidationProblems = () => {
   const form = useTemplateStore((state) => state.form);
@@ -11,7 +12,7 @@ export const useTemplateValidationProblems = () => {
   return useMemo(() => {
     const candidate = getSchemaFromState({ form });
     if (validationFailure?.schema === JSON.stringify(candidate, null, 2)) {
-      return validationFailure.problems;
+      return deduplicateTemplateProblems(validationFailure.problems);
     }
     return validateTemplate(prepareTemplateForSave(candidate, { logFailure: false })).problems;
   }, [form, validationFailure]);

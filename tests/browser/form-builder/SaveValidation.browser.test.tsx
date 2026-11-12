@@ -27,7 +27,7 @@ vi.mock("@formBuilder/actions", () => ({
   createOrUpdateTemplate: vi.fn(async ({ formConfig }: { formConfig: FormProperties }) => ({
     formRecord: null,
     error: "validationError",
-    problems: validateTemplate(formConfig).problems,
+    problems: validateTemplate(formConfig).problems.flatMap((problem) => [problem, { ...problem }]),
   })),
   updateTemplate: vi.fn(),
 }));
@@ -98,7 +98,7 @@ const Editor = () => {
 
 beforeAll(setupFonts);
 
-it("shows and focuses migrated save errors, then clears them when the legacy draft is corrected", async () => {
+it("deduplicates and focuses returned save errors, then clears them when the legacy draft is corrected", async () => {
   await render(
     <SaveTemplateProvider>
       <GroupStoreProvider>
@@ -117,6 +117,7 @@ it("shows and focuses migrated save errors, then clears them when the legacy dra
   const summary = page.getByRole("alert");
   await expect.element(summary).toBeVisible();
   await expect.element(summary).toHaveFocus();
+  await expect.element(page.getByText("1 validation error found", { exact: true })).toBeVisible();
   await expect
     .element(
       page.getByText("Your form was not saved. Fix these errors before saving or publishing.")
@@ -124,6 +125,7 @@ it("shows and focuses migrated save errors, then clears them when the legacy dra
     .toBeVisible();
   await expect.element(page.getByRole("link", { name: "Not saved - Fix errors" })).toBeVisible();
   await page.getByText("Show errors", { exact: true }).click();
+  expect(summary.element().querySelectorAll("li")).toHaveLength(1);
   await expect.element(page.getByRole("button", { name: "Nested question" })).toBeVisible();
   await expect
     .element(page.getByText("Duplicate choices: A. Remove or change the repeated choices."))

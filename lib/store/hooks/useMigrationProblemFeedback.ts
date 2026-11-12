@@ -4,6 +4,7 @@ import { useTranslation } from "@i18n/client";
 import type { TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 import { useTemplateStore } from "../useTemplateStore";
 import { mapMigrationProblemsToInputFeedback } from "../helpers/mapMigrationProblemsToInputFeedback";
+import { deduplicateTemplateProblems } from "@lib/utils/form-builder/deduplicateTemplateProblems";
 
 export const useMigrationProblemFeedback = (problems: TemplateValidationProblem[]) => {
   const { t } = useTranslation("form-builder");
@@ -14,7 +15,9 @@ export const useMigrationProblemFeedback = (problems: TemplateValidationProblem[
   }));
 
   useEffect(() => {
-    setTemplateProblemFeedback(mapMigrationProblemsToInputFeedback(form, problems, language, t));
+    setTemplateProblemFeedback(
+      mapMigrationProblemsToInputFeedback(form, deduplicateTemplateProblems(problems), language, t)
+    );
   }, [form, problems, language, t, setTemplateProblemFeedback]);
 
   useEffect(() => () => setTemplateProblemFeedback({}), [setTemplateProblemFeedback]);

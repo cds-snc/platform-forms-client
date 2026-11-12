@@ -4,6 +4,21 @@ import { FormProperties } from "@lib/types";
 import { validateTemplate } from "./validate";
 
 describe("validateTemplate", () => {
+  it("reports a missing property once when both the schema and a conditional require it", () => {
+    const template = structuredClone(navigationFocus) as FormProperties;
+    template.schemaVersion = 2;
+    delete template.groups;
+
+    const result = validateTemplate(template);
+    expect(result.valid).toBe(false);
+    expect(result.problems.filter(({ path }) => path === "groups")).toEqual([
+      { path: "groups", name: "required", message: 'requires property "groups"' },
+    ]);
+    expect(result.errors.filter(({ property }) => property === "groups")).toEqual([
+      { property: "groups", message: "formMissingProperty" },
+    ]);
+  });
+
   it.each([
     { language: "en", nested: false },
     { language: "fr", nested: false },
