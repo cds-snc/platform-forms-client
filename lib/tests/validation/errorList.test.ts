@@ -22,6 +22,41 @@ import { render, screen, cleanup } from "@testing-library/react";
 import { getErrorList } from "@lib/validation/validation";
 
 describe("getErrorList", () => {
+  test("passes the actual repeating-set error to the summary message", () => {
+    const message = "You've exceeded the limit by 1 character.";
+    const props = {
+      touched: true,
+      errors: { 1: [{ 0: message }] },
+      language: "en",
+      formRecord: {
+        form: {
+          layout: [1],
+          elements: [
+            {
+              id: 1,
+              type: "dynamicRow",
+              properties: {
+                subElements: [
+                  {
+                    id: 2,
+                    type: "textField",
+                    properties: { titleEn: "Name", titleFr: "Nom" },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    } as never;
+
+    render(getErrorList(props));
+
+    expect(screen.getByTestId("error-message-1.0.0")).toHaveTextContent(message);
+    expect(screen.getByRole("link", { name: message })).toHaveAttribute("href", "#1.0.0");
+    cleanup();
+  });
+
   test("Error list renders", () => {
     const props = {
       touched: true,

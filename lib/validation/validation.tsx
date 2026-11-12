@@ -88,7 +88,7 @@ export const getErrorList = (
                           language={props.language || "en"}
                           id={id}
                           elements={[]}
-                          defaultValue={""}
+                          defaultValue={String(dyanamicRowElementErrorValue)}
                           subElement={subElement}
                         />
                       </ErrorListItem>
