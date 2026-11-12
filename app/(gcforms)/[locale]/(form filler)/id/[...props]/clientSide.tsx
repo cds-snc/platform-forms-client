@@ -16,6 +16,7 @@ import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty, LocalizedElementProperties, Language } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
+import { storePendingSubmissionInfo } from "@lib/client/submissionInfo";
 
 export const FormWrapper = ({
   formRecord,
@@ -108,11 +109,16 @@ export const FormWrapper = ({
         onSuccess={(formID, submissionId) => {
           // Set submissionId in context
           // which will trigger confirmation page content to render
-          submissionId && setSubmissionId(submissionId);
+          if (submissionId) {
+            setSubmissionId(submissionId);
+          }
           const submissionDate = new Date().toISOString();
           setSubmissionDate(submissionDate);
 
           if (!saveAndResume || process.env.APP_ENV === "test") {
+            if (submissionId) {
+              storePendingSubmissionInfo(formID, submissionId, submissionDate);
+            }
             // Redirect to confirmation page if save and resume is not enabled
             router.push(`/${language}/id/${formID}/confirmation`);
           }

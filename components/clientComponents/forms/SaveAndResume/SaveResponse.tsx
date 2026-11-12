@@ -20,7 +20,7 @@ export const SaveResponse = ({
 
   return (
     <>
-      <div className="bg-gcds-green-100 mr-4 inline-block max-w-fit rounded-lg px-4 pt-2 pb-4">
+      <div className="bg-gcds-green-100 mr-4 mb-4 inline-block max-w-fit rounded-lg px-4 pt-2 pb-4">
         <div className="mr-4 mb-4 inline-block font-bold">
           {t("saveResponse.saveBtnDescription", { lng: language })}
         </div>

@@ -11,6 +11,7 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { getSafeUrl } from "@lib/utils/getSafeUrl";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { encryptedCache } from "@root/lib/hooks/useResponseCache";
+import { takePendingSubmissionInfo } from "@lib/client/submissionInfo";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -29,9 +30,9 @@ interface PageContextProps {
   language: Language;
 }
 
-const PageContent = ({ pageText, urlQuery, language }: PageContextProps) => {
+const PageContent = ({ formId, pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
-  const { submissionId, submissionDate } = useGCFormsContext();
+  const { submissionId, setSubmissionId, submissionDate, setSubmissionDate } = useGCFormsContext();
 
   // Sanitize urlQuery to prevent security issues
   const safeUrlQuery = urlQuery ? getSafeUrl(urlQuery) : null;
@@ -43,12 +44,24 @@ const PageContent = ({ pageText, urlQuery, language }: PageContextProps) => {
     encryptedCache.clearCache();
   }, []);
 
+  useEffect(() => {
+    if (submissionId && submissionDate) {
+      return;
+    }
+
+    const pendingSubmissionInfo = takePendingSubmissionInfo(formId);
+    if (pendingSubmissionInfo) {
+      setSubmissionId(pendingSubmissionInfo.submissionId);
+      setSubmissionDate(pendingSubmissionInfo.submissionDate);
+    }
+  }, [formId, setSubmissionDate, setSubmissionId, submissionDate, submissionId]);
+
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return (
       <>
-        <input type="hidden" value={submissionId} name="submissionId" />
-        <input type="hidden" value={submissionDate} name="submissionDate" />
+        <input type="hidden" value={submissionId ?? ""} name="submissionId" />
+        <input type="hidden" value={submissionDate ?? ""} name="submissionDate" />
         <RichText className="confirmation">{pageText}</RichText>
         <SaveResponse submissionId={submissionId || ""} language={language} />
       </>
