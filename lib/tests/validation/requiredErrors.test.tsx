@@ -66,7 +66,20 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
       const expected = t(`input-validation.error-list.${key}`, {
         question: language === "en" ? "Question" : "Question FR",
       });
-      expect(formatted).toEqual({ 1: expected, 2: [{ 0: expected }, { 0: expected }] });
+      const repeatedExpected = (count: number) =>
+        t(`input-validation.error-list.${key}`, {
+          question: t("input-validation.error-list.entry-question", {
+            count,
+            question: language === "en" ? "Question" : "Question FR",
+          }),
+        });
+      expect(formatted).toEqual({
+        1: expected,
+        2: [{ 0: repeatedExpected(1) }, { 0: repeatedExpected(2) }],
+      });
+      expect(formatRequiredErrors({ 2: [{ 0: required }] }, [parent], language, t)).toEqual({
+        2: [{ 0: repeatedExpected(1) }],
+      });
       expect(errors[1]).toBe(required);
 
       render(
@@ -85,12 +98,13 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
               elements={[]}
               subElement={element}
               language={language}
-              defaultValue={expected}
+              defaultValue={repeatedExpected(1)}
             />
           </div>
         </>
       );
-      expect(screen.getAllByText(expected)).toHaveLength(2);
+      expect(screen.getByText(expected)).toBeInTheDocument();
+      expect(screen.getByText(repeatedExpected(1))).toBeInTheDocument();
     }
   );
 

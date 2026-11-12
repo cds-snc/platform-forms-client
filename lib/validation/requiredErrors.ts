@@ -10,11 +10,13 @@ type Translate = (key: string, options?: Record<string, unknown>) => string;
 export const getRequiredErrorMessage = (
   element: FormElement,
   language: Language,
-  t: Translate
+  t: Translate,
+  entryNumber?: number
 ): string => {
-  const question = truncateString(
+  const title = truncateString(
     language === "fr" ? element.properties.titleFr : element.properties.titleEn
   );
+  const question = getEntryQuestion(title, language, t, entryNumber);
   let key = "default";
   if (element.properties.validation?.all === true) {
     key = "check-all";
@@ -41,30 +43,51 @@ export const getRequiredErrorMessage = (
   });
 };
 
+const getEntryQuestion = (
+  question: string,
+  language: Language,
+  t: Translate,
+  entryNumber?: number
+): string =>
+  entryNumber === undefined
+    ? question
+    : t("input-validation.error-list.entry-question", {
+        count: entryNumber,
+        question,
+        lng: language,
+        interpolation: { escapeValue: false },
+      });
+
 export const formatRequiredErrors = (
   errors: Responses,
   elements: FormElement[],
   language: Language,
   t: Translate
 ): Responses => {
-  const formatMessage = (message: string, element: FormElement) =>
+  const formatMessage = (message: string, element: FormElement, entryNumber?: number) =>
     message === t("input-validation.required", { lng: language }) ||
     message === t("input-validation.all-checkboxes-required", { lng: language })
-      ? getRequiredErrorMessage(element, language, t)
+      ? getRequiredErrorMessage(element, language, t, entryNumber)
       : message;
 
   const formatElementError = (
     error: Responses[string],
-    element: FormElement
+    element: FormElement,
+    entryNumber?: number
   ): Responses[string] => {
-    if (typeof error === "string") return formatMessage(error, element);
+    if (typeof error === "string") return formatMessage(error, element, entryNumber);
     if (isAddressValidationError(error)) {
       const fields = { ...error.fields };
       for (const fieldKey of Object.keys(fields) as Array<keyof typeof fields>) {
         const message = fields[fieldKey];
         if (message === t("input-validation.required", { lng: language })) {
           fields[fieldKey] = t("input-validation.error-list.default", {
-            question: getAddressFieldLabel(fieldKey, language),
+            question: getEntryQuestion(
+              getAddressFieldLabel(fieldKey, language),
+              language,
+              t,
+              entryNumber
+            ),
             lng: language,
             interpolation: { escapeValue: false },
           });
@@ -77,12 +100,12 @@ export const formatRequiredErrors = (
       if (!rows.every((row): row is Record<string, unknown> => !!row && typeof row === "object")) {
         return error;
       }
-      return rows.map((row) => {
+      return rows.map((row, rowIndex) => {
         const formattedRow: Record<string, unknown> = { ...row };
         element.properties.subElements?.forEach((subElement, index) => {
           const message = formattedRow[index];
           if (typeof message === "string" || isAddressValidationError(message)) {
-            formattedRow[index] = formatElementError(message, subElement);
+            formattedRow[index] = formatElementError(message, subElement, rowIndex + 1);
           }
         });
         return formattedRow;

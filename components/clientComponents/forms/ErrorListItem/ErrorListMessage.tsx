@@ -20,7 +20,12 @@ export const ErrorListMessage = ({
   const { t } = useTranslation("form-builder");
   const resolvedElement =
     subElement || elements.find((element) => String(element.id) === String(id));
-  if (resolvedElement && defaultValue === getRequiredErrorMessage(resolvedElement, language, t)) {
+  const rowIndex = subElement ? Number(String(id).split(".")[1]) : NaN;
+  const entryNumber = Number.isInteger(rowIndex) && rowIndex >= 0 ? rowIndex + 1 : undefined;
+  if (
+    resolvedElement &&
+    defaultValue === getRequiredErrorMessage(resolvedElement, language, t, entryNumber)
+  ) {
     return defaultValue;
   }
 
@@ -40,5 +45,5 @@ export const ErrorListMessage = ({
     return `${defaultValue}: ${question}`;
   }
 
-  return getRequiredErrorMessage(resolvedElement, language, t);
+  return getRequiredErrorMessage(resolvedElement, language, t, entryNumber);
 };
