@@ -124,7 +124,9 @@ export const isFieldResponseValid = (
       }
 
       if (validator.maxLength && (value as string).length > validator.maxLength) {
-        return t("input-validation.too-many-characters");
+        return t("formElements.characterCount.exceeded", {
+          count: (value as string).length - validator.maxLength,
+        });
       }
 
       break;
@@ -133,7 +135,9 @@ export const isFieldResponseValid = (
       const typedValue = String(value).trim();
       if (validator.required && !typedValue) return t("input-validation.required");
       if (validator.maxLength && (value as string).length > validator.maxLength)
-        return t("input-validation.too-many-characters");
+        return t("formElements.characterCount.exceeded", {
+          count: (value as string).length - validator.maxLength,
+        });
       break;
     }
     case FormElementTypes.checkbox: {

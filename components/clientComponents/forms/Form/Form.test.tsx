@@ -134,11 +134,14 @@ const createFormProps = (props: Partial<FormProps> = {}): FormProps => ({
   formRecord: {
     id: "form-id",
     isPublished: true,
+    securityAttribute: "Unclassified",
     form: {
       titleEn: "Test form",
       titleFr: "Formulaire test",
       introduction: {},
       privacyPolicy: {},
+      elements: [],
+      layout: [],
     },
     closedDetails: {},
   } as FormProps["formRecord"],
@@ -257,6 +260,7 @@ describe("Form", () => {
           introduction: {},
           privacyPolicy: {},
           layout: ["field"],
+          elements: [],
         },
         closedDetails: {},
       } as unknown as FormProps["formRecord"],

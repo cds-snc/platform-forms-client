@@ -229,7 +229,7 @@ const testCases: TestCase[] = [
     fieldType: "textArea",
     passConditions: [{ 1: "less than max" }],
     failConditions: [{ 1: "more characters than the max length" }],
-    expectedError: { 1: "input-validation.too-many-characters" },
+    expectedError: { 1: "formElements.characterCount.exceeded" },
     required: true,
     formElement: {
       properties: {

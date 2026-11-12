@@ -181,6 +181,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextInput
+            questionLabel={labelText}
             type={textType}
             spellCheck={spellCheck}
             id={`${id}`}
@@ -200,6 +201,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextArea
+            questionLabel={labelText}
             id={`${id}`}
             name={`${id}`}
             required={isRequired}

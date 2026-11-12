@@ -1,115 +1,12 @@
-import { useTranslation } from "@i18n/client";
-import { FormElement, FormElementTypes } from "@lib/types";
-import { truncateString } from "@lib/client/clientHelpers";
-import { getLocalizedProperty, Language, LocalizedElementProperties } from "@lib/utils";
+import { FormElement } from "@lib/types";
+import { Language } from "@lib/utils";
 
 export const ErrorListMessage = ({
-  id,
   defaultValue,
-  elements,
-  language,
-  subElement,
 }: {
   id: string | number | undefined;
   defaultValue: string | number | undefined;
   elements: FormElement[];
   language: Language;
   subElement?: FormElement;
-}) => {
-  const { t } = useTranslation("form-builder");
-
-  let question = "";
-  let elementType;
-
-  if (subElement) {
-    question = subElement.properties?.[
-      getLocalizedProperty(LocalizedElementProperties.TITLE, language)
-    ] as string;
-    elementType = subElement.type;
-  } else {
-    let element: FormElement | null = null;
-    try {
-      element = (elements && elements.find((element) => String(element.id) === String(id))) || null;
-
-      if (!element?.type || !defaultValue || !id) {
-        throw new Error("Invalid element");
-      }
-
-      question = element.properties?.[
-        getLocalizedProperty(LocalizedElementProperties.TITLE, language)
-      ] as string;
-      question = truncateString(question);
-    } catch (error) {
-      return defaultValue;
-    }
-
-    elementType = element?.type;
-
-    if (element.properties.validation?.all === true) {
-      elementType = FormElementTypes.attestation;
-    }
-  }
-
-  // Consider refactoring the below to be more robust if there are more error
-  // base/default cases beyond the current required answer.
-
-  // For non default validation errors, use a specific error message if one exists
-  if (
-    defaultValue &&
-    typeof defaultValue === "string" &&
-    !defaultValue.includes(t("input-validation.required"))
-  ) {
-    return `${defaultValue}: ${question}`;
-  }
-
-  switch (elementType) {
-    case FormElementTypes.attestation:
-      return t("input-validation.error-list.check-all", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.checkbox:
-      return t("input-validation.error-list.checkbox", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.dropdown:
-      return t("input-validation.error-list.select", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.fileInput:
-      return t("input-validation.error-list.file-input", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.formattedDate:
-      return t("input-validation.error-list.date-invalid", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    default:
-      return t("input-validation.error-list.default", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-  }
-};
+}) => defaultValue;
