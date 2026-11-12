@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 
@@ -7,10 +7,14 @@ interface UseCharacterCountOptions {
   maxLength?: number;
   id: string;
   lang?: string;
+  value: unknown;
+  error?: string;
+  setError: (error: string | undefined) => void;
 }
 
 interface UseCharacterCountReturn {
-  setRemainingCharacters: (count: number) => void;
+  updateCharacterError: (value: string) => void;
+  hasCharacterError: boolean;
   ariaDescribedByIds: (hasError: boolean, ariaDescribedBy?: string) => Record<string, string>;
   CharacterCountDisplay: React.FC;
 }
@@ -19,16 +23,41 @@ export const useCharacterCount = ({
   maxLength,
   id,
   lang,
+  value,
+  error,
+  setError,
 }: UseCharacterCountOptions): UseCharacterCountReturn => {
   const { t } = useTranslation("common", { lng: lang });
-  const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
+
+  const getExceededMessage = useCallback(
+    (count: number) => t("formElements.characterCount.exceeded", { count }),
+    [t]
+  );
+
+  const remainingCharacters = (maxLength ?? 0) - (typeof value === "string" ? value.length : 0);
+
+  const hasCharacterLimit = Boolean(maxLength);
+
+  const hasCharacterError =
+    hasCharacterLimit &&
+    remainingCharacters < 0 &&
+    error === getExceededMessage(-remainingCharacters);
+
+  const showRemaining =
+    hasCharacterLimit && remainingCharacters < (maxLength ?? 0) * 0.25 && remainingCharacters >= 0;
+
+  const showExceeded = hasCharacterLimit && remainingCharacters < 0 && !hasCharacterError;
+
+  const updateCharacterError = (nextValue: string) => {
+    if (!hasCharacterError || !maxLength) return;
+    const exceeded = nextValue.length - maxLength;
+    setError(exceeded > 0 ? getExceededMessage(exceeded) : undefined);
+  };
 
   const ariaDescribedByIds = useCallback(
     (hasError: boolean, ariaDescribedBy?: string): Record<string, string> => {
       const characterCountMessageId =
-        maxLength && (remainingCharacters < 0 || remainingCharacters < maxLength * 0.25)
-          ? `characterCountMessage${id}`
-          : undefined;
+        showRemaining || showExceeded ? `characterCountMessage${id}` : undefined;
       const describedBy = getDescribedByIds(
         hasError ? getErrorMessageId(id) : undefined,
         characterCountMessageId,
@@ -36,27 +65,24 @@ export const useCharacterCount = ({
       );
       return describedBy ? { "aria-describedby": describedBy } : {};
     },
-    [maxLength, remainingCharacters, id]
+    [showRemaining, showExceeded, id]
   );
 
   const CharacterCountDisplay = useCallback(() => {
-    if (!maxLength) return null;
-
-    const showRemaining = remainingCharacters < maxLength * 0.25 && remainingCharacters >= 0;
-    const showExceeded = remainingCharacters < 0;
+    if (!showRemaining && !showExceeded) return null;
 
     return (
       <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
         {showRemaining &&
           t("formElements.characterCount.remaining", { count: remainingCharacters })}
-        {showExceeded &&
-          t("formElements.characterCount.exceeded", { count: Math.abs(remainingCharacters) })}
+        {showExceeded && getExceededMessage(Math.abs(remainingCharacters))}
       </div>
     );
-  }, [maxLength, id, remainingCharacters, t]);
+  }, [showRemaining, showExceeded, id, remainingCharacters, t, getExceededMessage]);
 
   return {
-    setRemainingCharacters,
+    updateCharacterError,
+    hasCharacterError,
     ariaDescribedByIds,
     CharacterCountDisplay,
   };

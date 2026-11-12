@@ -30,18 +30,19 @@ export const TextInput = (
   } = props;
   const [field, meta, helpers] = useField(props);
 
-  const { setRemainingCharacters, ariaDescribedByIds, CharacterCountDisplay } = useCharacterCount({
-    maxLength,
-    id: id ?? "",
-    lang,
-  });
+  const { updateCharacterError, hasCharacterError, ariaDescribedByIds, CharacterCountDisplay } =
+    useCharacterCount({
+      maxLength,
+      id: id ?? "",
+      lang,
+      value: field.value,
+      error: meta.error,
+      setError: helpers.setError,
+    });
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     helpers.setValue(event.target.value);
-
-    if (maxLength) {
-      setRemainingCharacters(maxLength - event.target.value.length);
-    }
+    updateCharacterError(event.target.value);
   };
 
   const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
@@ -49,7 +50,9 @@ export const TextInput = (
 
   return (
     <>
-      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
+      <div aria-live={hasCharacterError ? "polite" : undefined}>
+        {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
+      </div>
       <input
         data-testid="textInput"
         className={classes}
