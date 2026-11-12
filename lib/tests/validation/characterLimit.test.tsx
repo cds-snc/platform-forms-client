@@ -7,6 +7,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 import { FormElement, FormElementTypes } from "@gcforms/types";
 import { isFieldResponseValid } from "../../../packages/core/src/validation/validation";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
+import { formatErrors } from "@lib/validation/formatErrors";
 import en from "../../../i18n/translations/en/common.json";
 import fr from "../../../i18n/translations/fr/common.json";
 
@@ -64,12 +65,18 @@ describe.each(["en", "fr"] as const)("character-limit errors (%s)", (language) =
         };
         expect(isFieldResponseValid([{ 0: value }], parent, t)).toEqual([{ 0: error }]);
 
+        const formatted = formatErrors(
+          { 1: error, 2: [{ 0: error }] },
+          [element, parent],
+          language,
+          t
+        );
         render(
           <>
             <div>
               <ErrorListMessage
                 id={1}
-                defaultValue={error}
+                defaultValue={String(formatted[1])}
                 elements={[element]}
                 language={language}
               />
@@ -77,7 +84,7 @@ describe.each(["en", "fr"] as const)("character-limit errors (%s)", (language) =
             <div>
               <ErrorListMessage
                 id="2.0.0"
-                defaultValue={error}
+                defaultValue={String(formatted[1])}
                 elements={[]}
                 subElement={element}
                 language={language}
@@ -86,7 +93,9 @@ describe.each(["en", "fr"] as const)("character-limit errors (%s)", (language) =
           </>
         );
         expect(
-          screen.getAllByText(`${expected}: ${language === "en" ? "Name" : "Nom"}`)
+          screen.getAllByText(
+            `${expected.replace(/\.$/, "")}: ${language === "en" ? "Name" : "Nom"}`
+          )
         ).toHaveLength(2);
         cleanup();
       }

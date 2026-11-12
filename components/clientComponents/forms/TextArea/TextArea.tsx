@@ -8,6 +8,7 @@ import { useCharacterCount } from "@lib/hooks/useCharacterCount";
 import { getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface TextAreaProps extends InputFieldProps {
+  questionLabel?: string;
   children?: React.ReactNode;
   placeholder?: string;
 }
@@ -15,8 +16,17 @@ export interface TextAreaProps extends InputFieldProps {
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const { id, className, ariaDescribedBy, required, children, placeholder, maxLength, lang } =
-    props;
+  const {
+    id,
+    className,
+    ariaDescribedBy,
+    required,
+    children,
+    placeholder,
+    maxLength,
+    lang,
+    questionLabel,
+  } = props;
 
   const [field, meta, helpers] = useField(props);
 
@@ -28,6 +38,7 @@ export const TextArea = (
       value: field.value,
       error: meta.error,
       setError: helpers.setError,
+      questionLabel,
     });
 
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {

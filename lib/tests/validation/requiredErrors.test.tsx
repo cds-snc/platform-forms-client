@@ -5,7 +5,7 @@ import React from "react";
 import { createInstance } from "i18next";
 import { render, screen, cleanup } from "@testing-library/react";
 import { FormElement, FormElementTypes } from "@gcforms/types";
-import { formatRequiredErrors } from "@lib/validation/requiredErrors";
+import { formatErrors } from "@lib/validation/formatErrors";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import en from "../../../i18n/translations/en/common.json";
 import fr from "../../../i18n/translations/fr/common.json";
@@ -25,6 +25,41 @@ beforeAll(async () => {
 afterEach(cleanup);
 
 describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
+  test.each(["regex", "email", "phone", "date-invalid", "file-type-invalid"])(
+    "formats %s identically for inline and summary without entry numbers",
+    async (errorKey) => {
+      await i18n.changeLanguage(language);
+      const element: FormElement = {
+        id: 1,
+        type: FormElementTypes.textField,
+        properties: { titleEn: "Question", titleFr: "Question FR" },
+      };
+      const parent: FormElement = {
+        id: 2,
+        type: FormElementTypes.dynamicRow,
+        properties: { titleEn: "People", titleFr: "Personnes", subElements: [element] },
+      };
+      const t = (key: string, options?: Record<string, unknown>) => i18n.t(key, options);
+      const message = t(`input-validation.${errorKey}`);
+      const expected = `${message.replace(/\.$/, "")}: ${language === "en" ? "Question" : "Question FR"}`;
+      const formatted = formatErrors(
+        { 1: message, 2: [{ 0: message }] },
+        [element, parent],
+        language,
+        t
+      );
+      expect(formatted).toEqual({ 1: expected, 2: [{ 0: expected }] });
+      render(
+        <ErrorListMessage
+          id={1}
+          elements={[element]}
+          language={language}
+          defaultValue={String(formatted[1])}
+        />
+      );
+      expect(screen.getByText(expected)).toBeInTheDocument();
+    }
+  );
   test.each([
     [FormElementTypes.textField, "default"],
     [FormElementTypes.textArea, "default"],
@@ -62,7 +97,7 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
           : "input-validation.required"
       );
       const errors = { 1: required, 2: [{ 0: required }, { 0: required }] };
-      const formatted = formatRequiredErrors(errors, [element, parent], language, t);
+      const formatted = formatErrors(errors, [element, parent], language, t);
       const expected = t(`input-validation.error-list.${key}`, {
         question: language === "en" ? "Question" : "Question FR",
       });
@@ -77,7 +112,7 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
         1: expected,
         2: [{ 0: repeatedExpected(1) }, { 0: repeatedExpected(2) }],
       });
-      expect(formatRequiredErrors({ 2: [{ 0: required }] }, [parent], language, t)).toEqual({
+      expect(formatErrors({ 2: [{ 0: required }] }, [parent], language, t)).toEqual({
         2: [{ 0: repeatedExpected(1) }],
       });
       expect(errors[1]).toBe(required);
@@ -117,8 +152,10 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
     };
     const t = (key: string, options?: Record<string, unknown>) => i18n.t(key, options);
     const invalid = t("input-validation.email");
-    expect(formatRequiredErrors({ 1: invalid }, [element], language, t)).toEqual({ 1: invalid });
-    const formatted = formatRequiredErrors(
+    expect(formatErrors({ 1: invalid }, [element], language, t)).toEqual({
+      1: `${invalid.replace(/\.$/, "")}: ${language === "en" ? "Address" : "Adresse"}`,
+    });
+    const formatted = formatErrors(
       {
         1: {
           fields: {

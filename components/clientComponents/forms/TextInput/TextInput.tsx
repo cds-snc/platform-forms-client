@@ -8,6 +8,7 @@ import { useCharacterCount } from "@lib/hooks/useCharacterCount";
 import { getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface TextInputProps extends InputFieldProps {
+  questionLabel?: string;
   type: Exclude<HTMLTextInputTypeAttribute, "number">;
   placeholder?: string;
   spellCheck?: boolean;
@@ -27,6 +28,7 @@ export const TextInput = (
     maxLength,
     spellCheck,
     lang,
+    questionLabel,
   } = props;
   const [field, meta, helpers] = useField(props);
 
@@ -38,6 +40,7 @@ export const TextInput = (
       value: field.value,
       error: meta.error,
       setError: helpers.setError,
+      questionLabel,
     });
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

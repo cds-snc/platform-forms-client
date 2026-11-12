@@ -28,22 +28,23 @@ describe.each(["input", "textarea"] as const)("%s character errors", (kind) => {
     "deduplicates and clears the submitted error for %s",
     async (name) => {
       const message = (count: number) => i18n.t("formElements.characterCount.exceeded", { count });
+      const fieldMessage = (count: number) => `${message(count).replace(/\.$/, "")}: Question`;
       const { container } = render(
         <Formik
           initialValues={name === "answer" ? { answer: "" } : { rows: [{ 0: "" }] }}
           validateOnChange={false}
           validateOnBlur={false}
           validate={() =>
-            name === "answer" ? { answer: message(1) } : { rows: [{ 0: message(1) }] }
+            name === "answer" ? { answer: fieldMessage(1) } : { rows: [{ 0: fieldMessage(1) }] }
           }
           onSubmit={vi.fn()}
         >
           <Form>
             <Summary name={name} />
             {kind === "input" ? (
-              <TextInput id={name} name={name} type="text" maxLength={2} />
+              <TextInput id={name} name={name} type="text" maxLength={2} questionLabel="Question" />
             ) : (
-              <TextArea id={name} name={name} maxLength={2} />
+              <TextArea id={name} name={name} maxLength={2} questionLabel="Question" />
             )}
             <button type="submit">Submit</button>
           </Form>
@@ -54,13 +55,17 @@ describe.each(["input", "textarea"] as const)("%s character errors", (kind) => {
       expect(screen.getByText(message(1))).toBeInTheDocument();
       expect(screen.queryByTestId("errorMessage")).not.toBeInTheDocument();
       fireEvent.click(screen.getByRole("button"));
-      await waitFor(() => expect(screen.getByTestId("errorMessage")).toHaveTextContent(message(1)));
+      await waitFor(() =>
+        expect(screen.getByTestId("errorMessage")).toHaveTextContent(fieldMessage(1))
+      );
       expect(container.querySelector(`[id="characterCountMessage${name}"]`)).toBeNull();
       expect(input.getAttribute("aria-describedby")).not.toContain("characterCountMessage");
 
       fireEvent.change(input, { target: { value: "abcd" } });
-      await waitFor(() => expect(screen.getByTestId("errorMessage")).toHaveTextContent(message(2)));
-      expect(screen.getByTestId("summary")).toHaveTextContent(message(2));
+      await waitFor(() =>
+        expect(screen.getByTestId("errorMessage")).toHaveTextContent(fieldMessage(2))
+      );
+      expect(screen.getByTestId("summary")).toHaveTextContent(fieldMessage(2));
       expect(container.querySelector(`[id="characterCountMessage${name}"]`)).toBeNull();
 
       fireEvent.change(input, { target: { value: "ab" } });

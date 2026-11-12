@@ -2,6 +2,7 @@
 import { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
+import { formatInvalidError } from "@lib/validation/formatInvalidError";
 
 interface UseCharacterCountOptions {
   maxLength?: number;
@@ -10,6 +11,7 @@ interface UseCharacterCountOptions {
   value: unknown;
   error?: string;
   setError: (error: string | undefined) => void;
+  questionLabel?: string;
 }
 
 interface UseCharacterCountReturn {
@@ -26,6 +28,7 @@ export const useCharacterCount = ({
   value,
   error,
   setError,
+  questionLabel,
 }: UseCharacterCountOptions): UseCharacterCountReturn => {
   const { t } = useTranslation("common", { lng: lang });
 
@@ -41,7 +44,7 @@ export const useCharacterCount = ({
   const hasCharacterError =
     hasCharacterLimit &&
     remainingCharacters < 0 &&
-    error === getExceededMessage(-remainingCharacters);
+    error === formatInvalidError(getExceededMessage(-remainingCharacters), questionLabel);
 
   const showRemaining =
     hasCharacterLimit && remainingCharacters < (maxLength ?? 0) * 0.25 && remainingCharacters >= 0;
@@ -51,7 +54,9 @@ export const useCharacterCount = ({
   const updateCharacterError = (nextValue: string) => {
     if (!hasCharacterError || !maxLength) return;
     const exceeded = nextValue.length - maxLength;
-    setError(exceeded > 0 ? getExceededMessage(exceeded) : undefined);
+    setError(
+      exceeded > 0 ? formatInvalidError(getExceededMessage(exceeded), questionLabel) : undefined
+    );
   };
 
   const ariaDescribedByIds = useCallback(

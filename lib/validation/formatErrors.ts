@@ -1,5 +1,6 @@
 import { FormElement, FormElementTypes, Language, Responses } from "@gcforms/types";
 import { truncateString } from "@lib/client/clientHelpers";
+import { formatInvalidError } from "./formatInvalidError";
 import {
   getAddressFieldLabel,
   isAddressValidationError,
@@ -58,7 +59,7 @@ const getEntryQuestion = (
         interpolation: { escapeValue: false },
       });
 
-export const formatRequiredErrors = (
+export const formatErrors = (
   errors: Responses,
   elements: FormElement[],
   language: Language,
@@ -68,7 +69,10 @@ export const formatRequiredErrors = (
     message === t("input-validation.required", { lng: language }) ||
     message === t("input-validation.all-checkboxes-required", { lng: language })
       ? getRequiredErrorMessage(element, language, t, entryNumber)
-      : message;
+      : formatInvalidError(
+          message,
+          language === "fr" ? element.properties.titleFr : element.properties.titleEn
+        );
 
   const formatElementError = (
     error: Responses[string],
@@ -91,6 +95,8 @@ export const formatRequiredErrors = (
             lng: language,
             interpolation: { escapeValue: false },
           });
+        } else if (message) {
+          fields[fieldKey] = formatInvalidError(message, getAddressFieldLabel(fieldKey, language));
         }
       }
       return { fields };
