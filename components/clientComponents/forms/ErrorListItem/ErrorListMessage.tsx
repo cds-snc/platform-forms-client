@@ -1,7 +1,8 @@
 import { useTranslation } from "@i18n/client";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement } from "@lib/types";
 import { truncateString } from "@lib/client/clientHelpers";
 import { getLocalizedProperty, Language, LocalizedElementProperties } from "@lib/utils";
+import { getRequiredErrorMessage } from "@lib/validation/requiredErrors";
 
 export const ErrorListMessage = ({
   id,
@@ -17,41 +18,18 @@ export const ErrorListMessage = ({
   subElement?: FormElement;
 }) => {
   const { t } = useTranslation("form-builder");
-
-  let question = "";
-  let elementType;
-
-  if (subElement) {
-    question = subElement.properties?.[
-      getLocalizedProperty(LocalizedElementProperties.TITLE, language)
-    ] as string;
-    elementType = subElement.type;
-  } else {
-    let element: FormElement | null = null;
-    try {
-      element = (elements && elements.find((element) => String(element.id) === String(id))) || null;
-
-      if (!element?.type || !defaultValue || !id) {
-        throw new Error("Invalid element");
-      }
-
-      question = element.properties?.[
-        getLocalizedProperty(LocalizedElementProperties.TITLE, language)
-      ] as string;
-      question = truncateString(question);
-    } catch (error) {
-      return defaultValue;
-    }
-
-    elementType = element?.type;
-
-    if (element.properties.validation?.all === true) {
-      elementType = FormElementTypes.attestation;
-    }
+  const resolvedElement =
+    subElement || elements.find((element) => String(element.id) === String(id));
+  if (resolvedElement && defaultValue === getRequiredErrorMessage(resolvedElement, language, t)) {
+    return defaultValue;
   }
 
-  // Consider refactoring the below to be more robust if there are more error
-  // base/default cases beyond the current required answer.
+  if (!resolvedElement?.type || !defaultValue || id === undefined) {
+    return defaultValue;
+  }
+  const question = truncateString(
+    resolvedElement.properties[getLocalizedProperty(LocalizedElementProperties.TITLE, language)]
+  );
 
   // For non default validation errors, use a specific error message if one exists
   if (
@@ -62,54 +40,5 @@ export const ErrorListMessage = ({
     return `${defaultValue}: ${question}`;
   }
 
-  switch (elementType) {
-    case FormElementTypes.attestation:
-      return t("input-validation.error-list.check-all", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.checkbox:
-      return t("input-validation.error-list.checkbox", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.dropdown:
-      return t("input-validation.error-list.select", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.fileInput:
-      return t("input-validation.error-list.file-input", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    case FormElementTypes.formattedDate:
-      return t("input-validation.error-list.date-invalid", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-    default:
-      return t("input-validation.error-list.default", {
-        question,
-        lng: language,
-        interpolation: {
-          escapeValue: false,
-        },
-      });
-  }
+  return getRequiredErrorMessage(resolvedElement, language, t);
 };

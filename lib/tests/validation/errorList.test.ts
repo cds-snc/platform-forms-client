@@ -188,9 +188,9 @@ describe("getErrorList", () => {
         1: {
           fields: {
             streetAddress: null,
-            city: "input-validation.required",
+            city: "Enter an answer for: City or town",
             province: null,
-            postalCode: "input-validation.required",
+            postalCode: "Enter an answer for: Postal code",
           },
         },
       },
@@ -217,8 +217,8 @@ describe("getErrorList", () => {
 
     const links = screen.getAllByRole("link");
     expect(links.map((link) => link.getAttribute("href"))).toEqual(["#1-city", "#1-postal"]);
-    expect(links[0]).toHaveTextContent("input-validation.required: City or town");
-    expect(links[1]).toHaveTextContent("input-validation.required: Postal code");
+    expect(links[0]).toHaveTextContent("Enter an answer for: City or town");
+    expect(links[1]).toHaveTextContent("Enter an answer for: Postal code");
   });
 
   test("filters errors by current group on multi-page forms", () => {

@@ -6,7 +6,6 @@ import { FormikProps } from "formik";
 import { ErrorListItem } from "@clientComponents/forms";
 import {
   addressErrorSummaryFields,
-  getAddressFieldLabel,
   isAddressValidationError,
 } from "@clientComponents/forms/AddressComplete/utils";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
@@ -110,8 +109,7 @@ export const getErrorList = (
           .filter(([fieldKey]) => Boolean(formElementErrorValue.fields[fieldKey]))
           .map(([fieldKey, config]) => {
             const fieldError = formElementErrorValue.fields[fieldKey];
-            const fieldLabel = getAddressFieldLabel(fieldKey, props.language || "en");
-            const value = `${String(fieldError)}: ${fieldLabel}`;
+            const value = String(fieldError);
 
             return (
               <ErrorListItem
