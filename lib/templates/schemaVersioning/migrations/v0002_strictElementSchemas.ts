@@ -2,6 +2,7 @@ import { type Schema, Validator } from "jsonschema";
 import { type FormElement } from "@gcforms/types";
 import { getTemplateSchema } from "@lib/templates/schemas/templates";
 import { type TemplateMigration } from "./types";
+import { getValidationPath } from "@lib/utils/form-builder/getValidationPath";
 
 type StrictElementBranch = {
   properties?: {
@@ -20,6 +21,16 @@ type StrictElementPropertiesSchema = {
 };
 
 type JsonObject = Record<string, unknown>;
+
+export type StrictElementIssue = { path: string; name: string; message: string };
+
+export class StrictElementMigrationError extends Error {
+  constructor(public readonly issues: StrictElementIssue[]) {
+    super(
+      `Cannot migrate template elements to schema version 2: ${issues.map(({ path, message }) => `${path}: ${message}`)}`
+    );
+  }
+}
 
 const defaultDynamicRowProperties = {
   rowTitleEn: "Entry",
@@ -175,14 +186,15 @@ export const migrateToStrictElementSchemas: TemplateMigration = (template) => {
 
     return validationResult.errors
       .filter(({ name }) => !["allOf", "anyOf", "oneOf"].includes(name))
-      .map(({ property, message }) => {
-        const elementPath = `elements[${index}]`;
-        return `${property.replace(/^instance/, elementPath)}: ${message}`;
-      });
+      .map((error) => ({
+        path: getValidationPath(error, [`elements[${index}]`]),
+        name: error.name,
+        message: error.message,
+      }));
   });
 
   if (errors.length > 0) {
-    throw new Error(`Cannot migrate template elements to schema version 2: ${errors}`);
+    throw new StrictElementMigrationError(errors);
   }
 
   return { ...template, schemaVersion: 2, elements };

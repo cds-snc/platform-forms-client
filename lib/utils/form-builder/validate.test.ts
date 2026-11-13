@@ -4,6 +4,67 @@ import { FormProperties } from "@lib/types";
 import { validateTemplate } from "./validate";
 
 describe("validateTemplate", () => {
+  it("reports a missing property once when both the schema and a conditional require it", () => {
+    const template = structuredClone(navigationFocus) as FormProperties;
+    template.schemaVersion = 2;
+    delete template.groups;
+
+    const result = validateTemplate(template);
+    expect(result.valid).toBe(false);
+    expect(result.problems.filter(({ path }) => path === "groups")).toEqual([
+      { path: "groups", name: "required", message: 'requires property "groups"' },
+    ]);
+    expect(result.errors.filter(({ property }) => property === "groups")).toEqual([
+      { property: "groups", message: "formMissingProperty" },
+    ]);
+  });
+
+  it.each([
+    { language: "en", nested: false },
+    { language: "fr", nested: false },
+    { language: "en", nested: true },
+    { language: "fr", nested: true },
+  ])(
+    "includes missing $language choice properties in paths (nested: $nested)",
+    ({ language, nested }) => {
+      const template = structuredClone(navigationFocus) as FormProperties;
+      template.schemaVersion = 2;
+      const choice = { en: "Yes", fr: "Oui" };
+      Reflect.deleteProperty(choice, language);
+      const element: FormProperties["elements"][number] = {
+        id: 901,
+        type: "dropdown",
+        properties: {
+          titleEn: "Question",
+          titleFr: "Question",
+          validation: { required: false },
+          choices: [choice],
+        },
+      };
+      template.elements = nested
+        ? [
+            {
+              id: 902,
+              type: "dynamicRow",
+              properties: { titleEn: "Group", titleFr: "Group", subElements: [element] },
+            },
+          ]
+        : [element];
+      const parentPath = `elements.0.properties.${nested ? "subElements.0.properties." : ""}choices.0`;
+      const result = validateTemplate(template);
+      expect(result.problems.filter(({ name }) => name === "required")).toContainEqual(
+        expect.objectContaining({ name: "required", path: `${parentPath}.${language}` })
+      );
+      expect(result.problems).not.toContainEqual(
+        expect.objectContaining({ name: "required", path: parentPath })
+      );
+      expect(result.errors).toContainEqual({
+        property: `${parentPath}.${language}`,
+        message: "formMissingProperty",
+      });
+    }
+  );
+
   it("requires groups and groupsLayout to be provided together", () => {
     const templateWithGroupsOnly = JSON.parse(JSON.stringify(navigationFocus)) as FormProperties;
     delete templateWithGroupsOnly.groupsLayout;
@@ -94,6 +155,83 @@ describe("validateTemplate", () => {
     expect(result.valid).toBe(false);
     expect(result.errors).toContainEqual({
       property: `elements.${elementIndex}.properties.choices`,
+      message: "formInvalidProperty",
+    });
+    expect(result.problems).toContainEqual(
+      expect.objectContaining({
+        path: `elements.${elementIndex}.properties.choices`,
+        name: "pattern",
+      })
+    );
+  });
+
+  it("reports duplicate choices in V2 drafts with actionable paths and clears them after a fix", () => {
+    const template = structuredClone(navigationFocus) as FormProperties;
+    template.schemaVersion = 2;
+    template.elements = [
+      {
+        id: 1,
+        type: "dropdown",
+        properties: {
+          titleEn: "Province",
+          titleFr: "Province",
+          validation: { required: false },
+          choices: [
+            { en: "Ontario", fr: "Ontario" },
+            { en: "Ontario", fr: "Ontario" },
+          ],
+        },
+      },
+    ];
+    expect(validateTemplate(template).problems).toContainEqual(
+      expect.objectContaining({
+        path: "elements.0.properties.choices",
+        name: "uniqueItems",
+      })
+    );
+    template.elements[0].properties.choices!.pop();
+    expect(validateTemplate(template).problems).not.toContainEqual(
+      expect.objectContaining({ name: "uniqueItems" })
+    );
+  });
+
+  it("resolves validation failures within repeating-set questions", () => {
+    const template = structuredClone(navigationFocus) as FormProperties;
+    template.schemaVersion = 2;
+    template.elements = [
+      {
+        id: 1,
+        type: "dynamicRow",
+        properties: {
+          titleEn: "Repeating set",
+          titleFr: "Ensemble",
+          subElements: [
+            {
+              id: 2,
+              type: "dropdown",
+              properties: {
+                titleEn: "Nested question",
+                titleFr: "Question",
+                choices: [
+                  { en: "A", fr: "A" },
+                  { en: "A", fr: "A" },
+                ],
+                validation: { required: false },
+              },
+            },
+          ],
+        },
+      },
+    ];
+
+    expect(validateTemplate(template).problems).toContainEqual(
+      expect.objectContaining({
+        path: "elements.0.properties.subElements.0.properties.choices",
+        name: "uniqueItems",
+      })
+    );
+    expect(validateTemplate(template).errors).toContainEqual({
+      property: "elements.0.properties.subElements.0.properties.choices",
       message: "formInvalidProperty",
     });
   });

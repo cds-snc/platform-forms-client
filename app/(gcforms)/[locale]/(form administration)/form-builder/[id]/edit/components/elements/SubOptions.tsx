@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactElement } from "react";
+import React from "react";
 import { useTranslation } from "@i18n/client";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -75,15 +75,7 @@ const AddOption = ({
   );
 };
 
-type RenderIcon = (index: number) => ReactElement | string | undefined;
-
-export const SubOptions = ({
-  item,
-  renderIcon,
-}: {
-  item: FormElementWithIndex;
-  renderIcon?: RenderIcon;
-}) => {
+export const SubOptions = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const {
     translationLanguagePriority,
@@ -150,7 +142,6 @@ export const SubOptions = ({
     return (
       <div key={`child-${item.id}-${choiceIndex}-${translationLanguagePriority}`}>
         <SubOption
-          renderIcon={renderIcon}
           subIndex={item.index}
           id={item.id}
           index={choiceIndex}

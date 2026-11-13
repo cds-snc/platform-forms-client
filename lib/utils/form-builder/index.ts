@@ -104,7 +104,7 @@ export const sortByGroups = ({
   return sortByLayout({ layout, elements });
 };
 
-export const getSchemaFromState = (state: TemplateStoreState) => {
+export const getSchemaFromState = (state: Pick<TemplateStoreState, "form">) => {
   const {
     form: {
       schemaVersion,

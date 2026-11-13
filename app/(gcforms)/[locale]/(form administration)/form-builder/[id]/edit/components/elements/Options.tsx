@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactElement, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -105,15 +105,12 @@ const AddOptions = ({
   );
 };
 
-type RenderIcon = ((index: number) => ReactElement | string) | undefined;
-
 interface OptionsProps {
   item: FormElementWithIndex;
-  renderIcon?: RenderIcon;
   formId: string;
 }
 
-export const Options = ({ item, renderIcon }: OptionsProps) => {
+export const Options = ({ item }: OptionsProps) => {
   const { t } = useTranslation("form-builder");
   const {
     elements,
@@ -182,7 +179,6 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
     return (
       <fieldset key={`child-${item.id}-${index}-${translationLanguagePriority}`} aria-live="polite">
         <Option
-          renderIcon={renderIcon}
           parentIndex={parentIndex}
           id={item.id}
           index={index}

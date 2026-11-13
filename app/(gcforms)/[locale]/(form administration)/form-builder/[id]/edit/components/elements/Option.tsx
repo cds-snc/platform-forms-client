@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
+import React, { useRef, useEffect, useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
@@ -8,29 +8,18 @@ import { Button } from "@clientComponents/globals";
 import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
-import { cn } from "@lib/utils";
-
-type RenderIcon = ((index: number) => ReactElement | string) | undefined;
+import { getChoiceValuesExcludingIndex } from "@lib/utils/form-builder/getChoiceValuesExcludingIndex";
 
 interface OptionProps {
   parentIndex: number;
   index: number;
-  renderIcon?: RenderIcon;
   initialValue: string;
   onFocus?: () => void;
   onBlur?: () => void;
   id: number;
 }
 
-export const Option = ({
-  parentIndex,
-  index,
-  id,
-  renderIcon,
-  initialValue,
-  onFocus,
-  onBlur,
-}: OptionProps) => {
+export const Option = ({ parentIndex, index, id, initialValue, onFocus, onBlur }: OptionProps) => {
   const input = useRef<HTMLInputElement>(null);
 
   const {
@@ -43,6 +32,7 @@ export const Option = ({
     getLocalizationAttribute,
     removeChoiceFromRules,
     removeChoiceFromNextActions,
+    choices,
   } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     removeChoice: s.removeChoice,
@@ -53,9 +43,9 @@ export const Option = ({
     getLocalizationAttribute: s.getLocalizationAttribute,
     removeChoiceFromRules: s.removeChoiceFromRules,
     removeChoiceFromNextActions: s.removeChoiceFromNextActions,
+    choices: s.form.elements[parentIndex]?.properties.choices,
   }));
 
-  const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
 
@@ -110,13 +100,9 @@ export const Option = ({
   );
 
   return (
-    <div className="mt-3 flex">
-      {icon && (
-        <div className="mt-2 flex w-5 justify-end" role="presentation">
-          {icon}
-        </div>
-      )}
+    <div className="mt-3 flex min-w-0 gap-2">
       <Input
+        checkEmpty={`${t("choiceRequired")}`}
         id={`option--${id}--${index + 1}`}
         ref={input}
         type="text"
@@ -127,13 +113,17 @@ export const Option = ({
           updateValue(parentIndex, e.target.value)
         }
         onKeyDown={handleKeyDown}
-        className={cn("!my-0 max-h-9 w-full", icon && "ml-5")}
+        checkDuplicate={{
+          values: getChoiceValuesExcludingIndex(choices, index, translationLanguagePriority),
+          message: t("duplicateChoice"),
+        }}
+        className="!my-0 max-h-9 w-full"
         {...getLocalizationAttribute()}
         onFocus={onFocus}
         onBlur={onBlur}
       />
       <Button
-        className="bg-gray-selected ml-2 flex max-h-9 max-w-9 items-center justify-center !rounded-full border-1 border-slate-800 !p-1.5 text-center hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
+        className="bg-gray-selected flex size-9 shrink-0 items-center justify-center !rounded-full border-1 border-slate-800 !p-1.5 text-center hover:[&_svg]:fill-white focus:[&_svg]:fill-white"
         id={`remove--${id}--${index + 1}`}
         icon={<Close className="ml-[12px]" />}
         aria-label={`${t("removeOption")} ${value}`}

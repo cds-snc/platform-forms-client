@@ -6,26 +6,18 @@ import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds"
 import { validateCustomRegex } from "@lib/regex/validateCustomRegex";
 import { createsNextActionCycle } from "@lib/groups/utils/validateGroups";
 import { logMessage } from "@lib/logger";
+import { getValidationPath } from "./getValidationPath";
+import { deduplicateTemplateProblems } from "./deduplicateTemplateProblems";
 
 export type errorMessage = { property?: string; message: string };
+
+export type TemplateValidationProblem = { path: string; name: string; message: string };
 
 const deduplicatePropertyErrors = (errors: errorMessage[]) =>
   errors.filter(
     (error, index) =>
       !error.property || errors.findIndex(({ property }) => property === error.property) === index
   );
-
-const getValidationPath = (error: ValidationError, pathPrefix: (string | number)[] = []) => {
-  const path = [...pathPrefix, ...error.path].map(String);
-  if (
-    error.name === "pattern" &&
-    error.path.at(-1) === "properties" &&
-    typeof error.instance === "string"
-  ) {
-    path.push(error.instance);
-  }
-  return path.join(".");
-};
 
 const getErrorMessageTranslationString = (
   error: ValidationError,
@@ -36,7 +28,6 @@ const getErrorMessageTranslationString = (
   let message = "formInvalidProperty";
 
   if (error.name === "required") {
-    property = validationPath ? `${validationPath}.${error.argument}` : error.argument;
     message = "formMissingProperty";
   } else if (
     error.name === "not" &&
@@ -61,14 +52,19 @@ type OneOfSchema = {
   }[];
 };
 
-const getOneOfErrors = (error: ValidationError, templateSchema: Schema) => {
+const getOneOfErrors = (
+  error: ValidationError,
+  templateSchema: Schema,
+  translateError: typeof getErrorMessageTranslationString,
+  pathPrefix: (string | number)[] = []
+): errorMessage[] => {
   const elementType = (error.instance as { type?: unknown } | null)?.type;
   const oneOfSchema = (error.schema as OneOfSchema).oneOf?.find(
     ({ properties }) => properties?.type?.const === elementType
   );
 
   if (!oneOfSchema) {
-    return [getErrorMessageTranslationString(error)];
+    return [translateError(error, pathPrefix)];
   }
 
   const branchResult = new Validator().validate(error.instance, {
@@ -77,9 +73,16 @@ const getOneOfErrors = (error: ValidationError, templateSchema: Schema) => {
   });
   const branchErrors = branchResult.errors
     .filter(({ name }) => !["allOf", "anyOf"].includes(name))
-    .map((branchError) => getErrorMessageTranslationString(branchError, error.path));
+    .flatMap((branchError) =>
+      branchError.name === "oneOf"
+        ? getOneOfErrors(branchError, templateSchema, translateError, [
+            ...pathPrefix,
+            ...error.path,
+          ])
+        : [translateError(branchError, [...pathPrefix, ...error.path])]
+    );
 
-  return branchErrors.length ? branchErrors : [getErrorMessageTranslationString(error)];
+  return branchErrors.length ? branchErrors : [translateError(error, pathPrefix)];
 };
 
 export const validateTemplate = (data: FormProperties) => {
@@ -102,6 +105,20 @@ export const validateTemplate = (data: FormProperties) => {
     errors.push({ message: "startErrorNavigationCycle" });
   }
 
+  const problems: TemplateValidationProblem[] = errors.map(({ message }) => ({
+    path: "",
+    name: "template",
+    message,
+  }));
+  const translateError = (error: ValidationError, pathPrefix: (string | number)[] = []) => {
+    problems.push({
+      path: getValidationPath(error, pathPrefix),
+      name: error.name,
+      message: error.message,
+    });
+    return getErrorMessageTranslationString(error, pathPrefix);
+  };
+
   let schema: Schema;
 
   try {
@@ -109,9 +126,11 @@ export const validateTemplate = (data: FormProperties) => {
   } catch (e) {
     logMessage.error(e);
     errors.push({ property: "schemaVersion", message: "formInvalidProperty" });
+    problems.push({ path: "schemaVersion", name: "schema", message: "formInvalidProperty" });
     return {
       valid: false,
       errors: deduplicatePropertyErrors(errors),
+      problems: deduplicateTemplateProblems(problems),
     };
   }
 
@@ -124,13 +143,14 @@ export const validateTemplate = (data: FormProperties) => {
       return [];
     }
     return error.name === "oneOf"
-      ? getOneOfErrors(error, schema)
-      : [getErrorMessageTranslationString(error)];
+      ? getOneOfErrors(error, schema, translateError)
+      : [translateError(error)];
   });
   errors.push(...deduplicatePropertyErrors(validationErrors));
 
   return {
     valid: errors.length === 0,
     errors: errors,
+    problems: deduplicateTemplateProblems(problems),
   };
 };
