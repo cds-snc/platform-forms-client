@@ -3,6 +3,7 @@ import React from "react";
 import { cn } from "@lib/utils";
 import Markdown, { RuleType } from "markdown-to-jsx";
 import { stripEntities } from "@lib/utils/strings";
+import { GcdsHeading } from "@gcds-core/components-react";
 
 interface RichTextProps {
   children?: string | undefined;
@@ -53,16 +54,6 @@ const splitCollapsibleBlocks = (markdown: string): MarkdownBlock[] => {
   return blocks;
 };
 
-// override the default h1 element such that to place a tabindex value of -1 to make it
-// able to be programmatically focusable
-const H1 = ({ children, ...props }: { children: React.ReactElement }) => {
-  return (
-    <h1 {...props} tabIndex={-1}>
-      {children}
-    </h1>
-  );
-};
-
 const A = ({ children, ...props }: { children: React.ReactElement }) => {
   type ObjectKey = keyof typeof props;
   const href = "href" as ObjectKey;
@@ -108,7 +99,6 @@ const markdownOptions = {
     return next(node);
   },
   overrides: {
-    h1: { component: H1 },
     a: { component: A },
     table: { component: Table },
     th: { component: TableTH },
@@ -116,10 +106,37 @@ const markdownOptions = {
   },
 };
 
+const createGcdsHeading = (tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") => {
+  const Heading = ({
+    children,
+    ...props
+  }: Omit<React.ComponentProps<typeof GcdsHeading>, "tag">) => (
+    <GcdsHeading {...props} tag={tag} tabIndex={tag === "h1" ? -1 : props.tabIndex}>
+      {children}
+    </GcdsHeading>
+  );
+
+  Heading.displayName = `Gcds${tag.toUpperCase()}`;
+  return Heading;
+};
+
+const gcdsMarkdownOptions = {
+  ...markdownOptions,
+  overrides: {
+    ...markdownOptions.overrides,
+    h1: { component: createGcdsHeading("h1") },
+    h2: { component: createGcdsHeading("h2") },
+    h3: { component: createGcdsHeading("h3") },
+    h4: { component: createGcdsHeading("h4") },
+    h5: { component: createGcdsHeading("h5") },
+    h6: { component: createGcdsHeading("h6") },
+  },
+};
+
 // Markdown adds a wrapper by default. Nested content already has a block container,
 // so use a fragment to keep its semantic block elements direct children.
 const nestedMarkdownOptions = {
-  ...markdownOptions,
+  ...gcdsMarkdownOptions,
   wrapper: React.Fragment,
 };
 
@@ -149,7 +166,7 @@ const MarkdownContent = ({
         return block.content ? (
           <Markdown
             key={`markdown-${index}`}
-            options={isNestedContent ? nestedMarkdownOptions : markdownOptions}
+            options={isNestedContent ? nestedMarkdownOptions : gcdsMarkdownOptions}
           >
             {block.content}
           </Markdown>
