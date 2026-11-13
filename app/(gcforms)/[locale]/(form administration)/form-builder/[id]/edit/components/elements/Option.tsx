@@ -102,6 +102,7 @@ export const Option = ({ parentIndex, index, id, initialValue, onFocus, onBlur }
   return (
     <div className="mt-3 flex min-w-0 gap-2">
       <Input
+        checkEmpty={`${t("choiceRequired")}`}
         id={`option--${id}--${index + 1}`}
         ref={input}
         type="text"

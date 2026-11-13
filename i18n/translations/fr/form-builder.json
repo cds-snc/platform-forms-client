@@ -958,6 +958,7 @@
   "question": "Question",
   "questionRequired": "Saisissez un titre de question.",
   "formTitleRequired": "Saisissez un titre de formulaire.",
+  "choiceRequired": "Saisissez un choix.",
   "duplicateChoice": "Ce choix existe déjà. Saisissez un choix différent.",
   "questions": "Questions",
   "questionSet": {

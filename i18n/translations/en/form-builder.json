@@ -958,6 +958,7 @@
   "question": "Question",
   "questionRequired": "Enter a question title.",
   "formTitleRequired": "Enter a form title.",
+  "choiceRequired": "Enter a choice.",
   "duplicateChoice": "This choice already exists. Enter a different choice.",
   "questions": "Questions",
   "questionSet": {
