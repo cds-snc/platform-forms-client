@@ -1,11 +1,14 @@
 import { createGcPlatformLoginHintCookie } from "../login/components/client/gcPlatformLoginHintCookie";
 
+import { getOrigin } from "@lib/origin";
+
 export const GET = async (
   request: Request,
   { params }: { params: Promise<{ locale: string }> }
 ) => {
   const { locale } = await params;
-  const loginUrl = new URL(`/${locale}/auth/login`, request.url);
+  const HOST = await getOrigin();
+  const loginUrl = new URL(`${HOST}/${locale}/auth/login`, request.url);
 
   // Set search parameter (gcPlatformLogin) in addition to setting the cookie
   // Avoid race conditions where the cookie might not be visible immediately in the browser

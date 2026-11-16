@@ -8,7 +8,7 @@ describe("SSO invite route", () => {
 
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe(
-      "https://example.com/en/auth/login?gcPlatformLogin=1"
+      "http://localhost:3000/en/auth/login?gcPlatformLogin=1"
     );
     expect(response.headers.get("set-cookie")).toContain("gc-platform-login=gc-platform");
   });
