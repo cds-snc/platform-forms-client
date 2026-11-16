@@ -59,6 +59,8 @@ export const getEntryQuestion = (
         interpolation: { escapeValue: false },
       });
 
+// Format error messages before they enter Formik's state so inline field errors and error
+// summary have consistent content.
 export const formatErrors = (
   errors: Responses,
   elements: FormElement[],
