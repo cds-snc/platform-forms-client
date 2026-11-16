@@ -73,9 +73,56 @@ export const CharacterLimitOptions = ({
             }
           }}
         />
+        <Label htmlFor={`wordCount--modal--${item.id}`}>{t("maximumWordCount")}</Label>
+        <Hint>{t("maximumWordCountDescription")}</Hint>
+        <Input
+          id={`wordCount--modal--${item.id}`}
+          type="number"
+          min="1"
+          className="w-1/4"
+          value={item.properties.validation?.maxWords || ""}
+          onKeyDown={(e) => {
+            if (["-", "+", ".", "e"].includes(e.key)) {
+              e.preventDefault();
+            }
+          }}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            // if value is "", unset the field
+            if (e.target.value === "") {
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{
+                    validation: {
+                      ...(item.properties.validation ?? { required: false }),
+                      maxWords: undefined,
+                    },
+                  },
+                },
+              });
+              return;
+            }
+
+            const value = parseInt(e.target.value);
+            if (!isNaN(value) && value >= 1) {
+              // clone the existing properties so that we don't overwrite other keys in "validation"
+              const validation = Object.assign({}, item.properties.validation, {
+                maxWords: value,
+              });
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{ validation },
+                },
+              });
+            }
+          }}
+        />
       </div>
       <InfoDetails summary={t("characterLimitWhenToUse.title")}>
-        <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
+        <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
           <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
           <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
           <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>

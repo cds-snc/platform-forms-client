@@ -131,6 +131,12 @@
       "remaining_other": "You have {{count}} characters left.",
       "exceeded_one": "You've exceeded the limit by {{count}} character.",
       "exceeded_other": "You've exceeded the limit by {{count}} characters."
+    },
+    "wordCount": {
+      "remaining_one": "You have {{count}} word left.",
+      "remaining_other": "You have {{count}} words left.",
+      "exceeded_one": "You've exceeded the limit by {{count}} word.",
+      "exceeded_other": "You've exceeded the limit by {{count}} words."
     }
   },
   "dynamicRow": {

@@ -77,6 +77,7 @@ export interface ValidationProperties {
   type?: ValidationInputType;
   regex?: string;
   maxLength?: number;
+  maxWords?: number;
   minValue?: number;
   maxValue?: number;
   minDigits?: number;

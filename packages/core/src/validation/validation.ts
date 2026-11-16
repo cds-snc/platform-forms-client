@@ -7,7 +7,7 @@ import {
   DateObject,
 } from "@gcforms/types";
 
-import { isInputTooLong, inputLengthOverLimit } from "./text";
+import { isInputTooLong, inputLengthOverLimit, isWordCountTooHigh } from "./text";
 import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
@@ -134,6 +134,8 @@ export const isFieldResponseValid = (
       if (validator.required && !typedValue) return t("input-validation.required");
       if (validator.maxLength && (value as string).length > validator.maxLength)
         return t("input-validation.too-many-characters");
+      if (validator.maxWords && isWordCountTooHigh(String(value), validator.maxWords))
+        return t("input-validation.too-many-words");
       break;
     }
     case FormElementTypes.checkbox: {

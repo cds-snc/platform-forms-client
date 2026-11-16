@@ -206,6 +206,7 @@ function _buildForm(element: FormElement, lang: Language): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             maxLength={element.properties.validation?.maxLength}
+            maxWords={element.properties.validation?.maxWords}
             lang={lang}
           />
         </div>
