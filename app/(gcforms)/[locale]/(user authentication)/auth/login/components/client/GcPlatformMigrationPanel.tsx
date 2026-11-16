@@ -67,14 +67,6 @@ export const GcPlatformMigrationPanel = ({ locale, showPanel }: GcPlatformMigrat
             components={{ strong: <strong /> }}
           />
         </p>
-        <p className="mb-6 text-base">
-          <Trans
-            ns="login"
-            i18nKey="migrationPanel.bodyDeadline"
-            defaults="<strong></strong>"
-            components={{ strong: <strong /> }}
-          />
-        </p>
         <div className="mb-4">
           <GcPlatformRegisterButton locale={language} label={t("migrationPanel.createAccount")} />
         </div>
