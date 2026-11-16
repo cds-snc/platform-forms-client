@@ -118,6 +118,20 @@ describe("login page", () => {
     expect(screen.queryByTestId("login-form")).not.toBeInTheDocument();
   });
 
+  it("starts the OIDC flow from the SSO invite redirect even before the hint cookie is visible", async () => {
+    checkOne.mockResolvedValue(true);
+
+    render(
+      await Page({
+        params: Promise.resolve({ locale: "en" }),
+        searchParams: Promise.resolve({ gcPlatformLogin: "1" }),
+      })
+    );
+
+    expect(screen.getByTestId("oidc-redirect")).toBeInTheDocument();
+    expect(screen.queryByTestId("login-form")).not.toBeInTheDocument();
+  });
+
   it("clears the platform hint cookie when requested via query param", async () => {
     checkOne.mockResolvedValue(true);
     cookies.mockResolvedValue({
