@@ -7,7 +7,7 @@ import {
   DateObject,
 } from "@gcforms/types";
 
-import { isInputTooLong } from "./text";
+import { isInputTooLong, inputLengthOverLimit } from "./text";
 import { isValidDate } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
@@ -32,7 +32,12 @@ export const isFieldResponseValid = (
   // Note that this will ignore a file upload since the value is an object. We could check the
   // file's file name length but this is probably not necessary since OS's have a filename limit.
   if (isInputTooLong(value as string)) {
-    return t("input-validation.too-many-characters");
+    const countInputLengthOverLimit = inputLengthOverLimit(value as string);
+    return (
+      t("input-validation.too-many-characters") +
+      " " +
+      t("formElements.characterCount.exceeded", { count: countInputLengthOverLimit })
+    );
   }
 
   const componentType = formElement.type;

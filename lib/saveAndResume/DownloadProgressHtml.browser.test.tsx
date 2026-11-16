@@ -28,6 +28,30 @@ describe("DownloadProgressHtml - Browser Mode", () => {
     await expect.element(badge).toBeVisible();
   });
 
+  it("should render the form's custom brand", async () => {
+    await render(
+      <DownloadProgressHtml
+        type="progress"
+        formResponse={formResponse}
+        reviewItems={reviewItems}
+        language="en"
+        host="http://localhost:3000"
+        formId="123"
+        formTitle="test"
+        startSectionTitle="start"
+        brand={{
+          logoEn: "/custom-brand-en.svg",
+          logoFr: "/custom-brand-fr.svg",
+          logoTitleEn: "Custom brand",
+          logoTitleFr: "Marque personnalisée",
+        }}
+      />
+    );
+
+    const logo = page.getByRole("img", { name: "Custom brand" });
+    await expect.element(logo).toHaveAttribute("src", "/custom-brand-en.svg");
+  });
+
   it("should render review list with applicant information", async () => {
     await render(
       <DownloadProgressHtml
