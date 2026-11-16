@@ -11,6 +11,7 @@ import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
 import { ResponseFilenameMapping } from "./processResponse";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
+import type { ResponseDownloadLogger } from "./logger";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -91,6 +92,7 @@ export const writeRow = async ({
   csvFileHandle,
   rawAnswers,
   attachments,
+  logger,
 }: {
   submissionId: string;
   createdAt: string;
@@ -98,6 +100,7 @@ export const writeRow = async ({
   csvFileHandle: FileSystemFileHandle;
   rawAnswers: Record<string, Response>;
   attachments: ResponseFilenameMapping;
+  logger?: ResponseDownloadLogger;
 }) => {
   const sortedElements = orderElements({ formTemplate });
 
@@ -126,21 +129,34 @@ export const writeRow = async ({
   // Write to file with error handling
   if (csvFileHandle) {
     let writable;
+    let operation = "create CSV writable";
     try {
       writable = await csvFileHandle.createWritable({ keepExistingData: true });
 
       // Seek to end of file
+      operation = "get CSV snapshot";
       const file = await csvFileHandle.getFile();
+      operation = "seek to end of CSV";
       await writable.seek(file.size);
+      operation = "write CSV row";
       await writable.write(rowString);
+      operation = "close CSV writable";
       await writable.close();
     } catch (error) {
+      logger?.error("CSV file operation failed", error, {
+        submissionId,
+        path: csvFileHandle.name,
+        operation,
+      });
       // Clean up writable if it was created
       if (writable) {
         try {
           await writable.abort();
-        } catch {
-          // Ignore abort errors
+        } catch (abortError) {
+          logger?.error("Failed to abort CSV writable after write failure", abortError, {
+            submissionId,
+            path: csvFileHandle.name,
+          });
         }
       }
 

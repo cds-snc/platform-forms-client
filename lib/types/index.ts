@@ -53,7 +53,7 @@ export type {
   StartFromExclusiveResponse,
 } from "./retrieval-types";
 
-export { VaultStatus } from "./retrieval-types";
+export { VaultStatus, ScanStatus } from "./retrieval-types";
 
 export type { FormOwner } from "./user-types";
 

@@ -15,7 +15,7 @@ import { writeRow } from "./csvWriter";
 import { TFunction } from "i18next";
 import { md5 } from "hash-wasm";
 import { withRetry } from "@root/lib/utils/retry";
-import { ResponseDownloadLogger } from "./logger";
+import { logDownloadOperation, ResponseDownloadLogger } from "./logger";
 
 export const processResponse = async ({
   incrementProcessedSubmissionsCount,
@@ -48,13 +48,20 @@ export const processResponse = async ({
   t: TFunction<string | string[], undefined>;
   logger: ResponseDownloadLogger;
 }) => {
-  const confirmedResponse = await downloadAndConfirmResponse({
-    workingDirectoryHandle,
-    apiClient,
-    decryptionKey,
-    responseName: responseName,
-    logger,
-  });
+  const startedAt = Date.now();
+  logger.info("Processing submission", { submissionId: responseName, format: selectedFormat });
+  const run = <T>(operation: string, path: string, action: () => Promise<T>) =>
+    logDownloadOperation(logger, { submissionId: responseName, operation, path }, action);
+
+  const confirmedResponse = await run("download and confirm submission", SOURCE_FOLDER, () =>
+    downloadAndConfirmResponse({
+      workingDirectoryHandle,
+      apiClient,
+      decryptionKey,
+      responseName: responseName,
+      logger,
+    })
+  );
 
   if (confirmedResponse.attachments && confirmedResponse.attachments.size > 0) {
     if (
@@ -63,24 +70,30 @@ export const processResponse = async ({
       setHasMaliciousAttachments(true);
     }
 
-    const attachmentsDirectory = await workingDirectoryHandle.getDirectoryHandle(
-      ATTACHMENTS_FOLDER,
-      { create: true }
+    const attachmentsDirectory = await run("get attachments directory", ATTACHMENTS_FOLDER, () =>
+      workingDirectoryHandle.getDirectoryHandle(ATTACHMENTS_FOLDER, { create: true })
     );
-    const responseAttachmentsDirectory = await attachmentsDirectory.getDirectoryHandle(
-      responseName,
-      { create: true }
+    const attachmentPath = `${ATTACHMENTS_FOLDER}/${responseName}`;
+    const responseAttachmentsDirectory = await run(
+      "get submission attachments directory",
+      attachmentPath,
+      () => attachmentsDirectory.getDirectoryHandle(responseName, { create: true })
     );
 
     // Write a mapping file for attachments
-    const mappingFileHandle = await responseAttachmentsDirectory.getFileHandle(MAPPING_FILENAME, {
-      create: true,
-    });
-    const mappingFileStream = await mappingFileHandle.createWritable({ keepExistingData: false });
-    await mappingFileStream.write(
-      JSON.stringify(Object.fromEntries(confirmedResponse.attachments), null, 2)
+    const mappingPath = `${attachmentPath}/${MAPPING_FILENAME}`;
+    const mappingFileHandle = await run("open attachment mapping file", mappingPath, () =>
+      responseAttachmentsDirectory.getFileHandle(MAPPING_FILENAME, { create: true })
     );
-    await mappingFileStream.close();
+    const mappingFileStream = await run("create attachment mapping writable", mappingPath, () =>
+      mappingFileHandle.createWritable({ keepExistingData: false })
+    );
+    await run("write attachment mapping", mappingPath, () =>
+      mappingFileStream.write(
+        JSON.stringify(Object.fromEntries(confirmedResponse.attachments), null, 2)
+      )
+    );
+    await run("close attachment mapping writable", mappingPath, () => mappingFileStream.close());
   }
 
   switch (selectedFormat) {
@@ -89,33 +102,44 @@ export const processResponse = async ({
         throw new Error("HTML directory handle is null");
       }
 
-      await writeHtml({
-        htmlDirectoryHandle,
-        formTemplate,
-        submission: confirmedResponse,
-        attachments: confirmedResponse.attachments,
-        formId,
-        versionNumber,
-        t,
-      });
+      await run("write HTML response", `${htmlDirectoryHandle.name}/${responseName}.html`, () =>
+        writeHtml({
+          htmlDirectoryHandle,
+          formTemplate,
+          submission: confirmedResponse,
+          attachments: confirmedResponse.attachments,
+          formId,
+          versionNumber,
+          t,
+        })
+      );
       break;
     default:
       if (!csvFileHandle) {
         throw new Error("CSV file handle is null");
       }
 
-      await writeRow({
-        submissionId: confirmedResponse.submissionId,
-        createdAt: confirmedResponse.createdAt,
-        formTemplate,
-        csvFileHandle,
-        rawAnswers: confirmedResponse.rawAnswers,
-        attachments: confirmedResponse.attachments,
-      });
+      await run("append CSV row", csvFileHandle.name, () =>
+        writeRow({
+          submissionId: confirmedResponse.submissionId,
+          createdAt: confirmedResponse.createdAt,
+          formTemplate,
+          csvFileHandle,
+          rawAnswers: confirmedResponse.rawAnswers,
+          attachments: confirmedResponse.attachments,
+          logger,
+        })
+      );
       break;
   }
 
   incrementProcessedSubmissionsCount();
+  logger.info("Submission processing completed", {
+    submissionId: responseName,
+    format: selectedFormat,
+    attachmentCount: confirmedResponse.attachments.size,
+    durationMs: Date.now() - startedAt,
+  });
 };
 
 export type ResponseFilenameMapping = Map<
@@ -143,12 +167,22 @@ const downloadAndConfirmResponse = async ({
   responseName: string;
   logger: ResponseDownloadLogger;
 }) => {
+  const run = <T>(operation: string, path: string, action: () => Promise<T>) =>
+    logDownloadOperation(logger, { submissionId: responseName, operation, path }, action);
+  const rawDirectoryPath = `${SOURCE_FOLDER}/${RAW_RESPONSE_FOLDER}`;
+  const rawFilePath = `${rawDirectoryPath}/${responseName}.json`;
   // Get or create source directory, then raw data directory within it
-  const sourceDirectoryHandle: FileSystemDirectoryHandle =
-    await workingDirectoryHandle.getDirectoryHandle(SOURCE_FOLDER, { create: true });
+  const sourceDirectoryHandle: FileSystemDirectoryHandle = await run(
+    "get source directory",
+    SOURCE_FOLDER,
+    () => workingDirectoryHandle.getDirectoryHandle(SOURCE_FOLDER, { create: true })
+  );
 
-  const dataDirectoryHandle: FileSystemDirectoryHandle =
-    await sourceDirectoryHandle.getDirectoryHandle(RAW_RESPONSE_FOLDER, { create: true });
+  const dataDirectoryHandle: FileSystemDirectoryHandle = await run(
+    "get raw response directory",
+    rawDirectoryPath,
+    () => sourceDirectoryHandle.getDirectoryHandle(RAW_RESPONSE_FOLDER, { create: true })
+  );
 
   // Retrieve encrypted response from API
   const encryptedSubmission = await withRetry(() => apiClient.getFormSubmission(responseName), {
@@ -174,35 +208,47 @@ const downloadAndConfirmResponse = async ({
   });
 
   // Decrypt response data
-  const decryptedData = await decryptFormSubmission(encryptedSubmission, decryptionKey);
+  const decryptedData = await run("decrypt submission", rawFilePath, () =>
+    decryptFormSubmission(encryptedSubmission, decryptionKey)
+  );
   const decryptedResponse: FormSubmission = JSON.parse(decryptedData);
-
-  // Save decrypted response to file
-  const fileHandle = await dataDirectoryHandle.getFileHandle(`${responseName}.json`, {
-    create: true,
+  logger.info("Downloaded and decrypted submission", {
+    submissionId: responseName,
+    attachmentCount: decryptedResponse.attachments?.length ?? 0,
   });
 
-  const fileStream = await fileHandle.createWritable({ keepExistingData: false });
-  await fileStream.write(decryptedData);
-  await fileStream.close();
+  // Save decrypted response to file
+  const fileHandle = await run("open raw response file", rawFilePath, () =>
+    dataDirectoryHandle.getFileHandle(`${responseName}.json`, { create: true })
+  );
+
+  const fileStream = await run("create raw response writable", rawFilePath, () =>
+    fileHandle.createWritable({ keepExistingData: false })
+  );
+  await run("write raw response", rawFilePath, () => fileStream.write(decryptedData));
+  await run("close raw response writable", rawFilePath, () => fileStream.close());
 
   const fileNameMapping: ResponseFilenameMapping = new Map();
 
   // check if there are files to download
   if (decryptedResponse.attachments && decryptedResponse.attachments.length > 0) {
-    const attachmentsDirectoryHandle = await workingDirectoryHandle.getDirectoryHandle(
+    const attachmentsDirectoryHandle = await run(
+      "get attachments directory",
       ATTACHMENTS_FOLDER,
-      {
-        create: true,
-      }
+      () =>
+        workingDirectoryHandle.getDirectoryHandle(ATTACHMENTS_FOLDER, {
+          create: true,
+        })
     );
 
     // download the files into their own folder
-    const responseAttachmentsDirectoryHandle = await attachmentsDirectoryHandle.getDirectoryHandle(
-      responseName,
-      {
-        create: true,
-      }
+    const responseAttachmentsDirectoryHandle = await run(
+      "get submission attachments directory",
+      `${ATTACHMENTS_FOLDER}/${responseName}`,
+      () =>
+        attachmentsDirectoryHandle.getDirectoryHandle(responseName, {
+          create: true,
+        })
     );
 
     const downloadResults: AttachmentDownloadResult[] = [];
@@ -210,11 +256,19 @@ const downloadAndConfirmResponse = async ({
     const responseAttachmentsWithRenameTo = deduplicateAttachmentFilenames(
       decryptedResponse.attachments
     );
-
+    logger.info("Downloading submission attachments", {
+      submissionId: responseName,
+      attachmentCount: responseAttachmentsWithRenameTo.length,
+    });
     // async download all attachments
     await Promise.all(
       responseAttachmentsWithRenameTo.map(async (attachment) => {
-        const res = await downloadAttachment(responseAttachmentsDirectoryHandle, attachment);
+        const res = await downloadAttachment(
+          responseAttachmentsDirectoryHandle,
+          attachment,
+          responseName,
+          logger
+        );
         downloadResults.push(res);
       })
     );
@@ -255,33 +309,49 @@ export const deduplicateAttachmentFilenames = (attachments: CompleteAttachment[]
 
 const downloadAttachment = async (
   responseAttachmentsDirectoryHandle: FileSystemDirectoryHandle,
-  attachment: CompleteAttachment
+  attachment: CompleteAttachment,
+  responseName: string,
+  logger: ResponseDownloadLogger
 ): Promise<AttachmentDownloadResult> => {
-  const response = await fetch(attachment.downloadLink);
+  const run = <T>(operation: string, path: string, action: () => Promise<T>) =>
+    logDownloadOperation(logger, { submissionId: responseName, operation, path }, action);
+  const directoryPath = `${ATTACHMENTS_FOLDER}/${responseName}${attachment.isPotentiallyMalicious ? `/${MALICIOUS_ATTACHMENTS_FOLDER}` : ""}`;
+  const path = `${directoryPath}/${attachment.renameTo}`;
+  const response = await run("fetch attachment", path, async () => {
+    const response = await fetch(attachment.downloadLink);
 
-  // Ensure the fetch was successful
-  if (!response.ok) {
-    throw new Error(
-      `DownloadAttachment HTTP Error status: ${response.status} ${response.statusText}`
-    );
-  }
+    // Ensure the fetch was successful
+    if (!response.ok) {
+      throw new Error(
+        `DownloadAttachment HTTP Error status: ${response.status} ${response.statusText}`
+      );
+    }
+    return response;
+  });
 
   let attachmentDirectoryHandle = responseAttachmentsDirectoryHandle;
 
   if (attachment.isPotentiallyMalicious) {
-    attachmentDirectoryHandle = await responseAttachmentsDirectoryHandle.getDirectoryHandle(
-      MALICIOUS_ATTACHMENTS_FOLDER,
-      {
-        create: true,
-      }
+    attachmentDirectoryHandle = await run(
+      "get suspicious attachments directory",
+      directoryPath,
+      () =>
+        responseAttachmentsDirectoryHandle.getDirectoryHandle(MALICIOUS_ATTACHMENTS_FOLDER, {
+          create: true,
+        })
     );
   }
 
-  const fileStream = await attachmentDirectoryHandle
-    .getFileHandle(`${attachment.renameTo}`, { create: true })
-    .then((handle) => handle.createWritable({ keepExistingData: false }));
+  const fileHandle = await run("open attachment file", path, () =>
+    attachmentDirectoryHandle.getFileHandle(`${attachment.renameTo}`, { create: true })
+  );
+  const fileStream = await run("create attachment writable", path, () =>
+    fileHandle.createWritable({ keepExistingData: false })
+  );
 
-  await response.body?.pipeTo(fileStream);
+  await run("stream and close attachment", path, async () => {
+    await response.body?.pipeTo(fileStream);
+  });
 
   return {
     id: attachment.id,
@@ -297,11 +367,16 @@ const integrityCheckAndConfirm = async (
   apiClient: GCFormsApiClient,
   logger: ResponseDownloadLogger
 ) => {
+  const path = `${SOURCE_FOLDER}/${RAW_RESPONSE_FOLDER}/${submissionName}.json`;
+  const run = <T>(operation: string, action: () => Promise<T>) =>
+    logDownloadOperation(logger, { submissionId: submissionName, operation, path }, action);
   try {
     // Load file into memory
-    const fileHandle = await dataDirectoryHandle.getFileHandle(`${submissionName}.json`);
-    const file = await fileHandle.getFile();
-    const fileContent = await file.text();
+    const fileHandle = await run("open raw response for integrity check", () =>
+      dataDirectoryHandle.getFileHandle(`${submissionName}.json`)
+    );
+    const file = await run("get raw response snapshot", () => fileHandle.getFile());
+    const fileContent = await run("read raw response for integrity check", () => file.text());
     const {
       answers,
       checksum,
@@ -339,7 +414,9 @@ const integrityCheckAndConfirm = async (
     });
   } catch (error) {
     // Delete failed file from the directory
-    await dataDirectoryHandle.removeEntry(`${submissionName}.json`);
+    await run("remove failed raw response", () =>
+      dataDirectoryHandle.removeEntry(`${submissionName}.json`)
+    );
     throw new Error(`Integrity check and confirm failed for submission ${submissionName}`, {
       cause: error,
     });

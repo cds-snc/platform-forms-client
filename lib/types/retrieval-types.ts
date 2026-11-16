@@ -25,11 +25,17 @@ export type VaultSubmission = {
   removedAt?: number;
 };
 
+export const ScanStatus = {
+  NO_THREATS_FOUND: "NO_THREATS_FOUND",
+  THREATS_FOUND: "THREATS_FOUND",
+} as const;
+export type ScanStatus = (typeof ScanStatus)[keyof typeof ScanStatus];
+
 export type VaultFileAttachment = {
   id: string;
   name: string;
   path: string;
-  scanStatus: string;
+  scanStatus: ScanStatus;
   isPotentiallyMalicious: boolean;
 };
 

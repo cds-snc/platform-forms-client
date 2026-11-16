@@ -18,6 +18,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@formBuilder/[id]/responses/[[...statusFilter]]/actions", () => ({
   getSubmissionsByFormat: vi.fn(),
+  getTemplateHasFileInput: vi.fn(),
   getSubmissionRemovalDate: vi.fn().mockResolvedValue(Date.now() + 30 * 86400000),
 }));
 

@@ -103,5 +103,6 @@ export type DownloadDialogProps = {
   onSuccessfulDownload: (filteredIds: string[], warnings?: DownloadWarnings) => void;
   responseDownloadLimit: number;
   responsesDownloadZipMaxSizeMB: number;
+  hasFileInput: boolean;
   checkedMeta?: { id?: string; name?: string; version?: string | number | null }[];
 };

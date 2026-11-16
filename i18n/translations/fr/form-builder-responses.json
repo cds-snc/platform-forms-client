@@ -98,12 +98,12 @@
     "delete": "Supprimer",
     "movedToDownloaded": "Déplacée vers Téléchargements",
     "partialDownload": {
-      "title": "Impossible de télécharger toutes les réponses ou pièces jointes",
-      "body": "Réessayez de télécharger les réponses restantes."
+      "title": "Toutes les réponses et pièces jointes n’ont pas pu être téléchargées.",
+      "body": "Essayez de télécharger les réponses restantes à nouveau."
     },
     "sizeLimitReached": {
       "title": "Téléchargez en plus petits lots",
-      "body": "Ce téléchargement dépasse notre limite de {{maxSizeMB}} Mo."
+      "body": "Ce téléchargement dépasse notre limite maximale de {{maxSizeMB}} Mo."
     },
     "header": {
       "tableTitle": "Tableau de réponses",
@@ -195,7 +195,13 @@
   "downloadResponsesModals": {
     "downloadDialog": {
       "title": "Télécharger les réponses",
-      "sizeLimit": "Maximum {{maxSizeMB}} Mo à la fois. Sélectionnez de plus petits lots si le téléchargement échoue.",
+      "sizeLimit": "Jusqu'à un maximum de {{maxSizeMB}} Mo à la fois. Sélectionnez de plus petits lots si le téléchargement échoue.",
+      "attachmentWarning": {
+        "title": "Soyez prudent lorsque vous ouvrez les fichiers joints aux soumissions",
+        "separateFolder": "Toutes les pièces jointes se trouvent dans un dossier distinct des réponses.",
+        "suspiciousFolder": "Les fichiers analysés et identifiés comme « potentiellement malveillants » se trouvent dans un sous-dossier distinct.",
+        "checkFiles": "Vérifiez si les fichiers suspects comportent des attributs « malveillants » ou le symbole « ⚠️ » dans les réponses."
+      },
       "chooseDownloadFormat": "Choisissez le format des fichiers de réponses",
       "downloadFormatContext1": "Vous recevrez un ",
       "downloadFormatContext2": "Reçu officiel",

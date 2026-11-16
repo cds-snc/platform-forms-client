@@ -73,15 +73,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
 
   const {
     userCanPublish,
-    data: {
-      title,
-      questions,
-      privacyPolicy,
-      translate,
-      confirmationMessage,
-      purpose,
-      hasFileInputAndApiKey,
-    },
+    data: { title, questions, privacyPolicy, translate, confirmationMessage, purpose },
   } = useAllowPublish();
 
   const formId = useMemo(() => {
@@ -117,7 +109,7 @@ export const PublishButton = ({ locale }: { locale: string }) => {
     return () => popover.removeEventListener("toggle", handleToggle);
   }, []);
 
-  const settings = purpose && hasFileInputAndApiKey;
+  const settings = purpose;
   const allChecksPass =
     title && questions && privacyPolicy && confirmationMessage && translate && settings;
 
