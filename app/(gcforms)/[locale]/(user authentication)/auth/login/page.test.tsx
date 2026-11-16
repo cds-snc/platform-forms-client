@@ -12,17 +12,6 @@ const { checkOne, cookies, authCheckAndThrow, redirect } = vi.hoisted(() => ({
   redirect: vi.fn(),
 }));
 
-vi.mock("@i18n", () => ({
-  serverTranslation: vi.fn(async () => ({
-    t: (key: string, options?: { deadline?: string }) => {
-      if (key === "migrationPanel.bodyDeadline") {
-        return `deadline ${options?.deadline}`;
-      }
-      return key;
-    },
-  })),
-}));
-
 vi.mock("@lib/cache/flags", () => ({
   checkOne,
 }));
