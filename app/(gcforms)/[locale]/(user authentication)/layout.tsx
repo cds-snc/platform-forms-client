@@ -26,9 +26,9 @@ export default async function Layout(props: {
   const { children } = props;
 
   const { t } = await serverTranslation("common", { lang: locale });
-  // TEMP: Remove the development check to show the migration panel locally.
-  const hideForDev = process.env.NODE_ENV === "development";
-  const showMigrationPanel = !(await isProductionEnvironment()) && !hideForDev;
+
+  const isProd = await isProductionEnvironment();
+  const showMigrationPanel = !isProd;
 
   return (
     <div className="bg-gray-soft flex min-h-full flex-col">

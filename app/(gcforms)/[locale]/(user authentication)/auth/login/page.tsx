@@ -44,7 +44,8 @@ export default async function Page(props: {
 
   const hasGcPlatformLoginHint =
     !shouldClearGcPlatformLoginHint &&
-    cookieStore.get(GC_PLATFORM_LOGIN_HINT_COOKIE)?.value === GC_PLATFORM_LOGIN_HINT_VALUE;
+    (searchParams.gcPlatformLogin === "1" ||
+      cookieStore.get(GC_PLATFORM_LOGIN_HINT_COOKIE)?.value === GC_PLATFORM_LOGIN_HINT_VALUE);
 
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   if (session) {
