@@ -6,9 +6,8 @@ import { isVaultDelivery } from "@lib/utils/form-builder";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { Language } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useTemplateMigrationProblems } from "@lib/store/hooks/useTemplateMigrationProblems";
 
-import { CancelIcon, CircleCheckIcon, WarningIcon } from "@serverComponents/icons";
+import { CancelIcon, CircleCheckIcon } from "@serverComponents/icons";
 import { classificationOptions } from "@formBuilder/components/ClassificationSelect";
 
 import { CheckListLink } from "./CheckListLink";
@@ -38,7 +37,6 @@ const Icon = ({ checked }: { checked: boolean }) => {
 };
 
 export const CheckList = ({ formId, lang }: { formId: string; lang: Language }) => {
-  const problems = useTemplateMigrationProblems();
   const { t } = useTranslation("form-builder");
   const { formPurpose, securityAttribute, getDeliveryOption } = useTemplateStore((s) => ({
     formPurpose: s.formPurpose,
@@ -105,16 +103,6 @@ export const CheckList = ({ formId, lang }: { formId: string; lang: Language }) 
           {t("translate")}
         </CheckListLink>
       </li>
-
-      {problems.length > 0 && (
-        <li className="my-4">
-          <WarningIcon className="mr-2 inline-block size-9 fill-amber-700 align-middle" />
-          <CheckListLink href={`/${lang}/form-builder/${formId}/edit#problems`}>
-            {t("migrationProblems.title")}
-          </CheckListLink>
-          <p className="mb-0 ml-11">{t("migrationProblems.warning")}</p>
-        </li>
-      )}
 
       <li className="my-4">
         {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
