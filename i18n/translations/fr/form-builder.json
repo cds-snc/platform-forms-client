@@ -822,8 +822,8 @@
     }
   },
   "moreOptions": "Plus d'options  ",
-  "moveDown": "Déplacer vers le bas ",
-  "moveUp": "Déplacer vers le haut ",
+  "moveDown": "Descendre ",
+  "moveUp": "Monter ",
   "navLabelEditor": "Navigation de l’onglet modifier",
   "navLabelFormBuilder": "Navigation de Formulaires GC",
   "numericField": "Nombre",
