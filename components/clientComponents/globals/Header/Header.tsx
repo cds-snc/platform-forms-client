@@ -14,6 +14,8 @@ import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { SkipLink } from "../SkipLink";
 import { PublishButton } from "./PublishMenu/PublishButton";
+import { useIsAdminUser } from "@lib/hooks/form-builder/useIsAdminUser";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -23,6 +25,17 @@ type HeaderParams = {
   showAccountMenu?: boolean;
   accountMenuPublishingEnabled?: boolean;
   skipLink?: boolean;
+};
+
+const TemplateSchemaVersionBadge = () => {
+  const schemaVersion = useTemplateStore((state) => state.form.schemaVersion);
+  const { t } = useTranslation("form-builder");
+
+  return (
+    <span className="translate-y-2 rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-900">
+      {t("schemaVersionBadge", { version: schemaVersion ?? 0 })}
+    </span>
+  );
 };
 
 export const Header = ({
@@ -36,6 +49,7 @@ export const Header = ({
 }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
   const { status } = useSession();
+  const isAdminUser = useIsAdminUser();
   const {
     t,
     i18n: { language },
@@ -91,6 +105,9 @@ export const Header = ({
               </div>
             )}
             {isFormBuilder && <FileNameInput />}
+            {isFormBuilder && status === "authenticated" && isAdminUser && (
+              <TemplateSchemaVersionBadge />
+            )}
           </div>
           <div className="ml-auto rounded-xl bg-white px-4 py-2">
             <nav aria-label={t("mainNavAriaLabel", { ns: "common" })}>

@@ -23,7 +23,8 @@ import formConfiguration from "@testFixtures/cdsIntakeTestForm.json";
 // structuredClone is available starting in Node 17.
 // Until we catch up... polyfill
 import v8 from "v8";
-import { Prisma } from "@gcforms/database";
+import { Prisma, prismaErrors } from "@gcforms/database";
+import { logMessage } from "@lib/logger";
 
 import { AuditLogAccessDeniedDetails, AuditLogEvent, logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
@@ -304,6 +305,45 @@ describe("Template CRUD functions", () => {
           versionNumber: 2,
         })
       );
+    });
+
+    describe("Public template lookup failures", () => {
+      beforeEach(() => {
+        vi.spyOn(logMessage, "error").mockImplementation(() => {});
+      });
+
+      afterEach(() => {
+        vi.mocked(logMessage.error).mockRestore();
+      });
+
+      it("Logs database errors even when prismaErrors would return null", async () => {
+        const error = new Error("Database request failed");
+        prismaMock.template.findUnique.mockRejectedValue(error);
+
+        await vi.mocked(prismaErrors).withImplementation(
+          (_error, returnValue) => returnValue,
+          async () => {
+            expect(await getPublicTemplateByID("formTestID")).toBeNull();
+            expect(logMessage.error).toHaveBeenCalledExactlyOnceWith(
+              `Failed to get public template formTestID (mode: published): ${error.stack}`
+            );
+          }
+        );
+      });
+
+      it("Logs parsing failures with the form ID, mode, and stack", async () => {
+        (prismaMock.template.findUnique as MockedFunction<any>).mockResolvedValue({
+          ...buildPrismaResponse("formTestID", formConfiguration),
+          jsonConfig: "invalid JSON",
+        });
+
+        expect(await getPublicTemplateByID("formTestID", "draft")).toBeNull();
+        expect(logMessage.error).toHaveBeenCalledExactlyOnceWith(
+          expect.stringMatching(
+            /Failed to get public template formTestID \(mode: draft\): SyntaxError:.*\n\s+at /s
+          )
+        );
+      });
     });
 
     it("Get a full template", async () => {

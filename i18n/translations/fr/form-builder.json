@@ -1,4 +1,5 @@
 {
+  "schemaVersionBadge": "Schéma v{{version}}",
   "element": {
     "copy": {
       "text": "Copier l'élément",

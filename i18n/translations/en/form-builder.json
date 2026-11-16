@@ -1,4 +1,5 @@
 {
+  "schemaVersionBadge": "Schema v{{version}}",
   "element": {
     "copyButton": {
       "text": "Copy element",
