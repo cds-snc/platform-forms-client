@@ -379,7 +379,7 @@
     "text1": "Par défaut, la signature du gouvernement du Canada apparaît sur les formulaires publiés."
   },
   "cancel": "Annuler  ",
-  "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
+  "characterLimitDescription": "GC Forms limite les champs à 10 000 caractères. N'utilisez une limite de caractères plus basse que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
   "characterLimitWhenToUse": {
     "text1": "Des preuves que les utilisateur·rice·s sont susceptibles de saisir plus d'informations qu'ils n'en ont besoin.",
     "text2": "Une raison légale ou technique qui fait qu'une entrée ne doit pas dépasser un certain nombre de caractères.",
@@ -1709,7 +1709,7 @@
     "toggleOff": "Désactivé",
     "toggleDescription": {
       "text1": "Reprendre le remplissage d'un formulaire en cours",
-      "text2": "Cela permet aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent également obtenir une copie de leurs réponses une fois le formulaire soumis."
+      "text2": "Cela permet aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard."
     },
     "a11yDescription": "Sauvegarder les réponses en cours et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"

@@ -13,27 +13,27 @@ import {
 const contextClass = {
   success: {
     classes: "gc-toast gc-toast--success",
-    icon: <CircleCheckIcon className="my-2 mr-2 size-6 fill-green-800" />,
+    icon: <CircleCheckIcon className="my-2 mr-2 size-6 shrink-0 fill-green-800" />,
   },
   error: {
     classes: "gc-toast gc-toast--error",
-    icon: <WarningIcon className="my-2 mr-2 size-6 fill-red-800" />,
+    icon: <WarningIcon className="my-2 mr-2 size-6 shrink-0 fill-red-800" />,
   },
   info: {
     classes: "gc-toast gc-toast--info",
-    icon: <InfoIcon className="my-2 mr-2 size-6 fill-blue-600" />,
+    icon: <InfoIcon className="my-2 mr-2 size-6 shrink-0 fill-blue-600" />,
   },
   warn: {
     classes: "gc-toast gc-toast--warn",
-    icon: <WarningIcon className="my-2 mr-2 size-6 fill-yellow-700" />,
+    icon: <WarningIcon className="my-2 mr-2 size-6 shrink-0 fill-yellow-700" />,
   },
   warning: {
     classes: "gc-toast gc-toast--warning",
-    icon: <WarningIcon className="my-2 mr-2 size-6 fill-yellow-700" />,
+    icon: <WarningIcon className="my-2 mr-2 size-6 shrink-0 fill-yellow-700" />,
   },
   default: {
     classes: "gc-toast gc-toast--default",
-    icon: <InfoIcon className="my-2 mr-2 size-6 fill-black" />,
+    icon: <InfoIcon className="my-2 mr-2 size-6 shrink-0 fill-black" />,
   },
 };
 

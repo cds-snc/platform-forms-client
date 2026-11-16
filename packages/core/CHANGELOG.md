@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.7] - 2026-11-12
+
+- Add helper for calculaction of maximum character count.
+
 ## [3.0.6] - 2026-11-02
 
 - Updates _forms.scss class `gc-file-input` to have no bottom margin 
