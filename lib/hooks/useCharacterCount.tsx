@@ -3,6 +3,8 @@ import { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
 import { formatInvalidError } from "@lib/validation/formatInvalidError";
+import { getEntryQuestion } from "@lib/validation/formatErrors";
+import { truncateString } from "@lib/client/clientHelpers";
 
 interface UseCharacterCountOptions {
   maxLength?: number;
@@ -51,9 +53,28 @@ export const useCharacterCount = ({
 
   const showExceeded = hasCharacterLimit && remainingCharacters < 0 && !hasCharacterError;
 
+  const rowIndex = id.includes(".") ? Number(id.split(".")[1]) : NaN;
+
+  const entryNumber = Number.isInteger(rowIndex) && rowIndex >= 0 ? rowIndex + 1 : undefined;
+
+  // TODO: String comparisons are brittle but work for now. Followup with a broader validation
+  // refactor to use structured errors and codes.
+  const hasRequiredError =
+    error ===
+    t("input-validation.error-list.default", {
+      question: getEntryQuestion(
+        truncateString(questionLabel ?? ""),
+        lang === "fr" ? "fr" : "en",
+        t,
+        entryNumber
+      ),
+      interpolation: { escapeValue: false },
+    });
+
   const updateCharacterError = (nextValue: string) => {
-    if (!hasCharacterError || !maxLength) return;
+    if ((!hasCharacterError && !hasRequiredError) || !maxLength) return;
     const exceeded = nextValue.length - maxLength;
+    if (hasRequiredError && exceeded <= 0) return;
     setError(
       exceeded > 0 ? formatInvalidError(getExceededMessage(exceeded), questionLabel) : undefined
     );

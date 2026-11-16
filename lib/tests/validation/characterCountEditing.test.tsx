@@ -25,6 +25,43 @@ const Summary = ({ name }: { name: string }) => {
 
 describe.each(["input", "textarea"] as const)("%s character errors", (kind) => {
   test.each(["answer", "rows.0.0"])(
+    "replaces a submitted required error when %s exceeds its limit",
+    async (name) => {
+      const question = name === "answer" ? "Question" : "Entry 1 - Question";
+      const required = `Enter an answer for: ${question}`;
+      const exceeded = "You've exceeded the limit by 1 character: Question";
+      const { container } = render(
+        <Formik
+          initialValues={name === "answer" ? { answer: "" } : { rows: [{ 0: "" }] }}
+          validateOnChange={false}
+          validateOnBlur={false}
+          validate={() => (name === "answer" ? { answer: required } : { rows: [{ 0: required }] })}
+          onSubmit={vi.fn()}
+        >
+          <Form>
+            <Summary name={name} />
+            {kind === "input" ? (
+              <TextInput id={name} name={name} type="text" maxLength={2} questionLabel="Question" />
+            ) : (
+              <TextArea id={name} name={name} maxLength={2} questionLabel="Question" />
+            )}
+            <button type="submit">Submit</button>
+          </Form>
+        </Formik>
+      );
+      fireEvent.click(screen.getByRole("button"));
+      await waitFor(() => expect(screen.getByTestId("errorMessage")).toHaveTextContent(required));
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: "a" } });
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: "abc" } });
+      await waitFor(() => expect(screen.getByTestId("errorMessage")).toHaveTextContent(exceeded));
+      expect(screen.getByTestId("summary")).toHaveTextContent(exceeded);
+      expect(container.querySelector(`[id="characterCountMessage${name}"]`)).toBeNull();
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: "ab" } });
+      await waitFor(() => expect(screen.queryByTestId("errorMessage")).not.toBeInTheDocument());
+      expect(screen.getByTestId("summary")).toBeEmptyDOMElement();
+    }
+  );
+  test.each(["answer", "rows.0.0"])(
     "deduplicates and clears the submitted error for %s",
     async (name) => {
       const message = (count: number) => i18n.t("formElements.characterCount.exceeded", { count });

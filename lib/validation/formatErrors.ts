@@ -44,7 +44,7 @@ export const getRequiredErrorMessage = (
   });
 };
 
-const getEntryQuestion = (
+export const getEntryQuestion = (
   question: string,
   language: Language,
   t: Translate,
