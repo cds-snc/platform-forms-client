@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.0](https://github.com/cds-snc/platform-forms-client/compare/v4.30.0...v4.31.0) (2026-11-16)
+
+
+### Features
+
+* Adds info on hard character limits to form validation & max chars ([#8206](https://github.com/cds-snc/platform-forms-client/issues/8206)) ([fd841d6](https://github.com/cds-snc/platform-forms-client/commit/fd841d65f58f83f21cea7ccd23b4cbd168138b5e))
+
+
+### Bug Fixes
+
+* hide last modified on hCaptcha fail page ([#8194](https://github.com/cds-snc/platform-forms-client/issues/8194)) ([3690823](https://github.com/cds-snc/platform-forms-client/commit/3690823c4507cd43d8a51615c7dab43cd7f5604d))
+* toast icon size ([#8202](https://github.com/cds-snc/platform-forms-client/issues/8202)) ([c0684d6](https://github.com/cds-snc/platform-forms-client/commit/c0684d63b10aeec9ecb59f2df97d8053939f361b))
+
+
+### Miscellaneous Chores
+
+* embed branding for save and resume ([#8196](https://github.com/cds-snc/platform-forms-client/issues/8196)) ([0c4e02c](https://github.com/cds-snc/platform-forms-client/commit/0c4e02ca96c9457d7d96f0cc2e20efbeb2c05f80))
+* ensure invite redirect ([#8210](https://github.com/cds-snc/platform-forms-client/issues/8210)) ([e326c7a](https://github.com/cds-snc/platform-forms-client/commit/e326c7af894f1d8a975c99cf8d3c0f2184ed16ff))
+* More concise FR text in action taskbar ([#8209](https://github.com/cds-snc/platform-forms-client/issues/8209)) ([184ff5a](https://github.com/cds-snc/platform-forms-client/commit/184ff5a866d0a54838a90f49b2a153a75ce12804))
+* Provide the "submission ID" and option to download to all end users on the confirmation page   ([#8204](https://github.com/cds-snc/platform-forms-client/issues/8204)) ([37b89a1](https://github.com/cds-snc/platform-forms-client/commit/37b89a19dc9bd40568101f11469a4ba5d53dc041))
+* remove sso deadline content ([#8214](https://github.com/cds-snc/platform-forms-client/issues/8214)) ([433f764](https://github.com/cds-snc/platform-forms-client/commit/433f76415481861b1d2ae486f271bdc02a7fa924))
+* update save and resume file names ([#8200](https://github.com/cds-snc/platform-forms-client/issues/8200)) ([538b586](https://github.com/cds-snc/platform-forms-client/commit/538b5864118d59ce3bbd4f92a241e97560b46c16))
+* use getOrigin() for redirect ([#8211](https://github.com/cds-snc/platform-forms-client/issues/8211)) ([f19670f](https://github.com/cds-snc/platform-forms-client/commit/f19670fbf0501fc6fb174a219d06f3b8de550d25))
+
 ## [4.30.0](https://github.com/cds-snc/platform-forms-client/compare/v4.29.0...v4.30.0) (2026-11-09)
 
 
