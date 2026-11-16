@@ -30,6 +30,34 @@ describe("DownloadConfirmHtml - Browser Mode", () => {
     await expect.element(badge).toBeVisible();
   });
 
+  it("should render the form's custom brand", async () => {
+    await render(
+      <DownloadConfirmHtml
+        type="confirm"
+        formResponse={formResponse}
+        reviewItems={reviewItems}
+        language="en"
+        host="http://localhost:3000"
+        formId="123"
+        formTitle="test"
+        startSectionTitle="start"
+        submissionId="123"
+        submissionDate={new Date().toISOString()}
+        brand={{
+          logoEn: "/custom-brand-en.svg",
+          logoFr: "/custom-brand-fr.svg",
+          logoTitleEn: "Custom brand",
+          logoTitleFr: "Marque personnalisée",
+        }}
+      />
+    );
+
+    await expect.element(page.getByRole("img", { name: "Custom brand" })).toHaveAttribute(
+      "src",
+      "/custom-brand-en.svg"
+    );
+  });
+
   it("should render review list with applicant information", async () => {
     await render(
       <DownloadConfirmHtml

@@ -11,18 +11,17 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { getSafeUrl } from "@lib/utils/getSafeUrl";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { encryptedCache } from "@root/lib/hooks/useResponseCache";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
 */
 
 interface TextPageProps {
-  formId: string;
   formRecord: PublicFormRecord;
 }
 
 interface PageContextProps {
-  formId: string;
   formRecord: PublicFormRecord;
   pageText: string;
   urlQuery: string | null;
@@ -31,9 +30,7 @@ interface PageContextProps {
 
 const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
-  const { submissionId, submissionDate } = useGCFormsContext();
-
-  const saveAndResume = formRecord?.saveAndResume;
+  const { submissionId } = useGCFormsContext();
 
   // Sanitize urlQuery to prevent security issues
   const safeUrlQuery = urlQuery ? getSafeUrl(urlQuery) : null;
@@ -49,11 +46,10 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
   if (pageText && pageText !== undefined) {
     return (
       <>
-        <input type="hidden" value={submissionId} name="submissionId" />
-        <input type="hidden" value={submissionDate} name="submissionDate" />
         <RichText className="confirmation">{pageText}</RichText>
-        {/* TODO - Can a user download a copy even if save / resume is not form enabled, current behavior is no */}
-        {saveAndResume && <SaveResponse language={language} />}
+        {formHasGroups(formRecord.form) && (
+          <SaveResponse submissionId={submissionId || ""} language={language} />
+        )}
       </>
     );
   }
@@ -99,7 +95,6 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
     <>
       <GcdsH1 tabIndex={-1}>{t("title")}</GcdsH1>
       <PageContent
-        formId={props.formId}
         formRecord={props.formRecord}
         language={language as Language}
         pageText={pageText}
