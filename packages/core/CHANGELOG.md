@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.8] - 2026-11-16
+
+- Add helpers for word counts.
+
 ## [3.0.7] - 2026-11-12
 
 - Add helper for calculaction of maximum character count.
