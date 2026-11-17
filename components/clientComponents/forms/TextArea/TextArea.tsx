@@ -31,24 +31,40 @@ export const TextArea = (
 
   const [field, meta, helpers] = useField(props);
 
-  const { setRemainingCharacters, ariaDescribedByIds, CharacterCountDisplay } = useCharacterCount({
+  const characterCountResult = useCharacterCount({
     maxLength,
     id: id ?? "",
     lang,
   });
-  const { setRemainingWords, WordCountDisplay } = useWordCount({
+  const wordCountResult = useWordCount({
     maxWords,
     id: id ?? "",
     lang,
   });
 
+  // Merge the aria-describedby values
+  const characterCountAriaIds = characterCountResult.ariaDescribedByIds(
+    !!meta.error,
+    ariaDescribedBy
+  );
+  const wordCountAriaIds = wordCountResult.ariaDescribedByIds(!!meta.error, undefined); // Don't pass ariaDescribedBy twice
+  // Combine them
+  const mergedAriaDescribedBy = [
+    characterCountAriaIds["aria-describedby"],
+    wordCountAriaIds["aria-describedby"],
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     helpers.setValue(event.target.value);
     if (maxLength) {
-      setRemainingCharacters(maxLength - event.target.value.length);
+      characterCountResult.setRemainingCharacters(maxLength - event.target.value.length);
     }
     if (maxWords) {
-      setRemainingWords(maxWords - event.target.value.split(/\s+/).filter(Boolean).length);
+      wordCountResult.setRemainingWords(
+        maxWords - event.target.value.split(/\s+/).filter(Boolean).length
+      );
     }
   };
 
@@ -65,14 +81,14 @@ export const TextArea = (
         aria-required={required ? "true" : undefined}
         aria-invalid={meta.error ? "true" : undefined}
         placeholder={placeholder}
-        {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}
+        {...(mergedAriaDescribedBy ? { "aria-describedby": mergedAriaDescribedBy } : {})}
         {...field}
         onChange={handleTextAreaChange}
       >
         {children}
       </textarea>
-      <CharacterCountDisplay />
-      <WordCountDisplay />
+      <characterCountResult.CharacterCountDisplay />
+      <wordCountResult.WordCountDisplay />
     </>
   );
 };
