@@ -6,7 +6,7 @@ import { useDialogRef, Dialog } from "./shared/Dialog";
 import { InfoDetails } from "./shared/InfoDetails";
 import { DownloadFileButton } from "./shared/DownloadFileButton";
 import { Button } from "@clientComponents/globals";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 
 export const ShareModalUnauthenticated = ({
   handleClose,
@@ -81,7 +81,7 @@ export const ShareModalUnauthenticated = ({
           </section>
 
           <InfoDetails summary={t("share.seePreview")}>
-            <div className="mt-4 border-4 border-dashed border-blue-focus p-5">
+            <div className="border-blue-focus mt-4 border-4 border-dashed p-5">
               <h4>{t("share.someoneHasShared", { name: t("share.formUser") })}</h4>
               <div className="mt-4">
                 {t("share.toPreview")}

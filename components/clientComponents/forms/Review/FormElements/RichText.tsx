@@ -1,4 +1,4 @@
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { stripMarkdown as removeMarkdown } from "@lib/utils/strings";
 import { FormItem } from "../helpers";
 import { getLocalizedProperty, LocalizedElementProperties, type Language } from "@lib/utils";

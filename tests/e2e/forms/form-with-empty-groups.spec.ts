@@ -33,7 +33,7 @@ test.describe("Form with empty groups submission", { tag: "@published-form" }, (
       page.getByRole("heading", { name: "Please correct the errors on the page" })
     ).toBeVisible();
     await expect(page.getByRole("link", { name: "Enter an answer for: Message" })).toBeVisible();
-    await expect(page.getByText("Complete the required field to continue.").first()).toBeVisible();
+    await expect(page.getByTestId("errorMessage")).toHaveText("Enter an answer for: Message");
 
     await message.fill("Testing a form with empty groups");
     await expect(message).toHaveValue("Testing a form with empty groups");

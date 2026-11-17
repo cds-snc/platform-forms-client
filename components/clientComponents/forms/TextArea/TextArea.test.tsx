@@ -2,24 +2,39 @@
  * @vitest-environment jsdom
  */
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render as renderComponent, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, afterEach, beforeEach, vi } from "vitest";
+import { describe, it, expect, afterEach, beforeEach } from "vitest";
+import { Formik } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import type { FormElement } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
+import { TextArea } from "./TextArea";
 
-vi.mock("formik", async () => {
-  const actual = await vi.importActual<typeof import("formik")>("formik");
-  return {
-    ...actual,
-    useField: vi.fn(() => [
-      { field: { value: "" } },
-      { meta: { touched: null, error: null } },
-      { setValue: vi.fn() },
-    ]),
-  };
+it("counts the retained value after enforcing a word limit", () => {
+  const { unmount } = renderComponent(
+    <Formik initialValues={{ answer: "" }} onSubmit={() => {}}>
+      <TextArea id="answer" name="answer" maxLength={3} maxWords={2} />
+    </Formik>
+  );
+  const textbox = screen.getByRole("textbox");
+  fireEvent.change(textbox, { target: { value: "one two three" } });
+  expect(textbox).toHaveValue("one two");
+  expect(document.getElementById("characterCountMessageanswer")).toHaveTextContent(
+    "You've exceeded the limit by 4 characters."
+  );
+  expect(document.getElementById("wordCountMessageanswer")).toHaveTextContent(/0/);
+  const ids = textbox.getAttribute("aria-describedby")?.split(" ") ?? [];
+  expect(new Set(ids).size).toBe(ids.length);
+  unmount();
 });
+
+const render = (ui: React.ReactElement) =>
+  renderComponent(
+    <Formik initialValues={{ 2: "" }} onSubmit={() => {}}>
+      {ui}
+    </Formik>
+  );
 
 const textAreaData = {
   id: 2,
@@ -118,8 +133,8 @@ describe("Accessibility tests for the textarea component.", () => {
     await user.type(textInput, "This is 35 characters This is 35 ch");
 
     const textbox = localScreen.getByRole("textbox");
-  expect(textbox).toHaveAttribute("aria-required", "true");
-  expect(textbox).not.toHaveAttribute("required");
+    expect(textbox).toHaveAttribute("aria-required", "true");
+    expect(textbox).not.toHaveAttribute("required");
 
     const expectedEn = "You have 5 characters left.";
     const expectedFr = "Il vous reste 5 caractères.";
@@ -138,8 +153,8 @@ describe("Accessibility tests for the textarea component.", () => {
     await user.type(textInput, "This is 48 characters This is 48 characters This");
 
     const textbox = localScreen.getByRole("textbox");
-  expect(textbox).toHaveAttribute("aria-required", "true");
-  expect(textbox).not.toHaveAttribute("required");
+    expect(textbox).toHaveAttribute("aria-required", "true");
+    expect(textbox).not.toHaveAttribute("required");
 
     const expectedEnError = "You've exceeded the limit by 8 characters.";
     const expectedFrError = "Vous avez dépassé la limite de 8 caractères.";

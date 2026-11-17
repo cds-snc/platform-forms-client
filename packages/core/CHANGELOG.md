@@ -3,6 +3,7 @@
 ## [3.0.8] - 2026-11-16
 
 - Add helpers for word counts.
+- Updates validation content for some error cases
 
 ## [3.0.7] - 2026-11-12
 

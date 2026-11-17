@@ -9,6 +9,7 @@ import { useWordCount } from "@lib/hooks/useWordCount";
 import { getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface TextAreaProps extends InputFieldProps {
+  questionLabel?: string;
   children?: React.ReactNode;
   maxWords?: number;
   placeholder?: string;
@@ -27,6 +28,7 @@ export const TextArea = (
     maxLength,
     maxWords,
     lang,
+    questionLabel,
   } = props;
 
   const [field, meta, helpers] = useField(props);
@@ -35,6 +37,10 @@ export const TextArea = (
     maxLength,
     id: id ?? "",
     lang,
+    value: field.value,
+    error: meta.error,
+    setError: helpers.setError,
+    questionLabel,
   });
   const wordCountResult = useWordCount({
     maxWords,
@@ -50,28 +56,25 @@ export const TextArea = (
   const wordCountAriaIds = wordCountResult.ariaDescribedByIds(!!meta.error, undefined); // Don't pass ariaDescribedBy twice
   // Combine them
   const mergedAriaDescribedBy = [
-    characterCountAriaIds["aria-describedby"],
-    wordCountAriaIds["aria-describedby"],
-  ]
-    .filter(Boolean)
-    .join(" ");
+    ...new Set(
+      [characterCountAriaIds["aria-describedby"], wordCountAriaIds["aria-describedby"]]
+        .filter(Boolean)
+        .flatMap((ids) => ids.split(/\s+/))
+    ),
+  ].join(" ");
 
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    helpers.setValue(event.target.value);
-    if (maxLength) {
-      characterCountResult.setRemainingCharacters(maxLength - event.target.value.length);
-    }
+    let nextValue = event.target.value;
     if (maxWords) {
-      wordCountResult.setRemainingWords(
-        maxWords - event.target.value.split(/\s+/).filter(Boolean).length
-      );
-
       // Prevent more words than maxWords
-      const words = event.target.value.split(/\s+/).filter(Boolean);
+      const words = nextValue.split(/\s+/).filter(Boolean);
       if (words.length > maxWords) {
-        helpers.setValue(words.slice(0, maxWords).join(" "));
+        nextValue = words.slice(0, maxWords).join(" ");
       }
+      wordCountResult.setRemainingWords(maxWords - nextValue.split(/\s+/).filter(Boolean).length);
     }
+    helpers.setValue(nextValue);
+    characterCountResult.updateCharacterError(nextValue);
   };
 
   const classes = cn("gcds-textarea", className, meta.error && "gcds-error");
@@ -79,7 +82,9 @@ export const TextArea = (
 
   return (
     <>
-      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
+      <div aria-live={characterCountResult.hasCharacterError ? "polite" : undefined}>
+        {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
+      </div>
       <textarea
         data-testid="textarea"
         className={classes}

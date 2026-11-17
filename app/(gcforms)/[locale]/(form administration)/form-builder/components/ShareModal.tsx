@@ -8,14 +8,14 @@ import { InfoDetails } from "./shared/InfoDetails";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSession } from "next-auth/react";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 
 import { shareForm } from "../actions";
 import { Loader } from "@clientComponents/globals/Loader";
 import { EmailTags } from "./shared/email-tags/EmailTags";
 
 const Loading = () => (
-  <div className="flex h-full items-center justify-center ">
+  <div className="flex h-full items-center justify-center">
     <Loader />
   </div>
 );
@@ -143,7 +143,7 @@ export const ShareModal = ({
               <EmailTags tags={emails} setTags={setEmails} />
 
               <InfoDetails summary={t("share.seePreview")}>
-                <div className="mt-4 border-4 border-dashed border-blue-focus p-5">
+                <div className="border-blue-focus mt-4 border-4 border-dashed p-5">
                   <h4>{t("share.someoneHasShared", { name: data?.user.name })}</h4>
                   <div className="mt-4">
                     {t("share.toPreview")}

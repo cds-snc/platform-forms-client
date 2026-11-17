@@ -1,7 +1,7 @@
 "use client";
 import { LockIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 
 import { PublishedLinks } from "./PublishedLinks";
 import { Language } from "@lib/types/form-builder-types";
