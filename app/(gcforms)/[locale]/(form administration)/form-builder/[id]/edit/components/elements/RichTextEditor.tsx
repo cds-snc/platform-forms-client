@@ -50,7 +50,7 @@ export const RichTextEditor = ({
 
   return (
     <div
-      className="gc-formview w-full rounded bg-white"
+      className="gc-formview h-full w-full rounded bg-white"
       onBlur={() => {
         headlessTree?.current?.rebuildTree();
       }}
