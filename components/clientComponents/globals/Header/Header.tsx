@@ -9,7 +9,7 @@ import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
 import { ShareButton } from "./ShareMenu/ShareButton";
 import LanguageToggle from "./LanguageToggle";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { SkipLink } from "../SkipLink";

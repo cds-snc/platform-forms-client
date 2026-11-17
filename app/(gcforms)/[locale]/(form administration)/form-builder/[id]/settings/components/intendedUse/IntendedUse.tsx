@@ -1,4 +1,4 @@
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { useTranslation } from "@i18n/client";
 
 import { Radio } from "@formBuilder/components/shared/MultipleChoice";

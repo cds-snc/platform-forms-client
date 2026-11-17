@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { InfoCard } from "@serverComponents/globals/InfoCard/InfoCard";
 import { VaultDelivery } from "../VaultDelivery";
 import { Language } from "@lib/types/form-builder-types";
