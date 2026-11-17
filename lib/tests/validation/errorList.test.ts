@@ -1,7 +1,6 @@
 /**
  * @vitest-environment jsdom
  */
-import React from "react";
 
 vi.mock("@i18n/client", () => ({
   __esModule: true,
@@ -9,12 +8,6 @@ vi.mock("@i18n/client", () => ({
     t: (key: string) => key,
     i18n: { language: "en", changeLanguage: async () => undefined },
   }),
-}));
-
-vi.mock("@clientComponents/forms/ErrorListItem/ErrorListMessage", () => ({
-  __esModule: true,
-  ErrorListMessage: ({ defaultValue, id }: { defaultValue: string; id: string }) =>
-    React.createElement("span", { "data-testid": `error-message-${id}` }, defaultValue || id),
 }));
 
 import { render, screen, cleanup } from "@testing-library/react";
@@ -52,7 +45,6 @@ describe("getErrorList", () => {
 
     render(getErrorList(props));
 
-    expect(screen.getByTestId("error-message-1.0.0")).toHaveTextContent(message);
     expect(screen.getByRole("link", { name: message })).toHaveAttribute("href", "#1.0.0");
     cleanup();
   });

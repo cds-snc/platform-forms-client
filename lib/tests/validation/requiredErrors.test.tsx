@@ -1,12 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
-import React from "react";
 import { createInstance } from "i18next";
-import { render, screen, cleanup } from "@testing-library/react";
 import { FormElement, FormElementTypes } from "@gcforms/types";
 import { formatErrors } from "@lib/validation/formatErrors";
-import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import en from "../../../i18n/translations/en/common.json";
 import fr from "../../../i18n/translations/fr/common.json";
 
@@ -22,7 +19,6 @@ beforeAll(async () => {
     lng: "en",
   });
 });
-afterEach(cleanup);
 
 describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
   test.each(["regex", "email", "phone", "date-invalid", "file-type-invalid"])(
@@ -49,15 +45,6 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
         t
       );
       expect(formatted).toEqual({ 1: expected, 2: [{ 0: expected }] });
-      render(
-        <ErrorListMessage
-          id={1}
-          elements={[element]}
-          language={language}
-          defaultValue={String(formatted[1])}
-        />
-      );
-      expect(screen.getByText(expected)).toBeInTheDocument();
     }
   );
   test.each([
@@ -117,29 +104,6 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
       });
       expect(errors[1]).toBe(required);
 
-      render(
-        <>
-          <div>
-            <ErrorListMessage
-              id={1}
-              elements={[element]}
-              language={language}
-              defaultValue={String(formatted[1])}
-            />
-          </div>
-          <div>
-            <ErrorListMessage
-              id="2.0.0"
-              elements={[]}
-              subElement={element}
-              language={language}
-              defaultValue={repeatedExpected(1)}
-            />
-          </div>
-        </>
-      );
-      expect(screen.getByText(expected)).toBeInTheDocument();
-      expect(screen.getByText(repeatedExpected(1))).toBeInTheDocument();
     }
   );
 

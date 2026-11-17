@@ -1,12 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
-import React from "react";
 import { createInstance } from "i18next";
-import { render, screen, cleanup } from "@testing-library/react";
 import { FormElement, FormElementTypes } from "@gcforms/types";
 import { isFieldResponseValid } from "../../../packages/core/src/validation/validation";
-import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import { formatErrors } from "@lib/validation/formatErrors";
 import en from "../../../i18n/translations/en/common.json";
 import fr from "../../../i18n/translations/fr/common.json";
@@ -25,7 +22,6 @@ beforeAll(async () => {
   });
 });
 
-afterEach(cleanup);
 
 describe.each(["en", "fr"] as const)("character-limit errors (%s)", (language) => {
   test.each([FormElementTypes.textField, FormElementTypes.textArea])(
@@ -71,33 +67,8 @@ describe.each(["en", "fr"] as const)("character-limit errors (%s)", (language) =
           language,
           t
         );
-        render(
-          <>
-            <div>
-              <ErrorListMessage
-                id={1}
-                defaultValue={String(formatted[1])}
-                elements={[element]}
-                language={language}
-              />
-            </div>
-            <div>
-              <ErrorListMessage
-                id="2.0.0"
-                defaultValue={String(formatted[1])}
-                elements={[]}
-                subElement={element}
-                language={language}
-              />
-            </div>
-          </>
-        );
-        expect(
-          screen.getAllByText(
-            `${expected.replace(/\.$/, "")}: ${language === "en" ? "Name" : "Nom"}`
-          )
-        ).toHaveLength(2);
-        cleanup();
+        const message = `${expected.replace(/\.$/, "")}: ${language === "en" ? "Name" : "Nom"}`;
+        expect(formatted).toEqual({ 1: message, 2: [{ 0: message }] });
       }
     }
   );

@@ -11,11 +11,6 @@ vi.mock("@i18n/client", () => ({
   }),
 }));
 
-vi.mock("@clientComponents/forms/ErrorListItem/ErrorListMessage", () => ({
-  __esModule: true,
-  ErrorListMessage: ({ defaultValue }: { defaultValue: string }) => defaultValue,
-}));
-
 import {
   setFocusOnErrorMessage,
   isValidGovEmail,
