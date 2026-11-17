@@ -48,7 +48,9 @@ test.describe("Testing a basic frontend form", { tag: "@published-form" }, () =>
       ).toBeVisible();
       await expect(shortAnswerErrorLink).toBeVisible();
       await expect(
-        page.getByText("Complete the required field to continue.").first()
+        page
+          .getByTestId("errorMessage")
+          .filter({ hasText: "Enter an answer for: A Required Short Answer" })
       ).toBeVisible();
     });
 
