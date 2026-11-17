@@ -73,6 +73,14 @@ export const CharacterLimitOptions = ({
             }
           }}
         />
+        <InfoDetails summary={t("characterLimitWhenToUse.title")}>
+          <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
+            <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
+            <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
+            <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>
+          </div>
+        </InfoDetails>
+
         <Label htmlFor={`wordCount--modal--${item.id}`}>{t("maximumWordCount")}</Label>
         <Hint>{t("maximumWordCountDescription")}</Hint>
         <Input
@@ -121,13 +129,6 @@ export const CharacterLimitOptions = ({
           }}
         />
       </div>
-      <InfoDetails summary={t("characterLimitWhenToUse.title")}>
-        <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
-          <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
-          <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
-          <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>
-        </div>
-      </InfoDetails>
     </section>
   );
 };
