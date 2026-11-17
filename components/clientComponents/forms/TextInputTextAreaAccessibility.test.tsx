@@ -49,7 +49,7 @@ describe("TextInput and TextArea error associations", () => {
     const textarea = screen.getByTestId("textarea");
 
     expect(textarea).toHaveAttribute("aria-invalid", "true");
-    expect(textarea).toHaveAttribute("aria-describedby", "errorMessage-description");
+    expect(textarea).toHaveAttribute("aria-describedby", "errorMessage-description errorMessage-description");
     expect(screen.getByTestId("errorMessage")).toHaveAttribute(
       "id",
       "errorMessage-description errorMessage-description" // charCount vs wordCount
