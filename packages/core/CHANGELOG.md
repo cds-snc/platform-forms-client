@@ -1,8 +1,11 @@
 # Changelog
 
-## [3.0.8] - 2026-11-16
+## [3.0.9] - 2026-11-17
 
 - Add helpers for word counts.
+
+## [3.0.8] - 2026-11-16
+
 - Updates validation content for some error cases
 
 ## [3.0.7] - 2026-11-12
