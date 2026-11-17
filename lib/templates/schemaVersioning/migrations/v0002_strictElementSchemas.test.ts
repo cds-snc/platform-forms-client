@@ -219,19 +219,6 @@ describe("migrateToStrictElementSchemas", () => {
     ).toBe(true);
   });
 
-  it("defaults missing attestation validation to requiring all checkboxes", () => {
-    const migrated = migrate([
-      {
-        id: 1,
-        type: "attestation",
-        properties: { titleEn: "Confirm", titleFr: "Confirmer" },
-      },
-    ]);
-
-    expect(migrated.schemaVersion).toBe(2);
-    expect(migrated.elements[0].properties.validation).toEqual({ all: true });
-  });
-
   it("rejects element types that are not supported by schema version 2", () => {
     expect(() =>
       migrate([

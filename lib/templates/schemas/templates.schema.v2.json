@@ -266,11 +266,18 @@
           },
           {
             "id": 11,
-            "type": "attestation",
+            "type": "checkbox",
             "properties": {
-              "titleEn": "I confirm this information is accurate.",
-              "titleFr": "Je confirme que ces renseignements sont exacts.",
-              "validation": { "all": true }
+              "titleEn": "I agree to:",
+              "titleFr": "J'accepte :",
+              "validation": { "required": true, "all": true },
+              "choices": [
+                { "en": "Condition 1", "fr": "Condition 1" },
+                { "en": "Condition 2", "fr": "Condition 2" },
+                { "en": "Condition 3", "fr": "Condition 3" }
+              ],
+              "descriptionEn": "",
+              "descriptionFr": ""
             }
           },
           {
@@ -526,7 +533,6 @@
             "fileInput",
             "dynamicRow",
             "richText",
-            "attestation",
             "combobox",
             "addressComplete",
             "formattedDate",
@@ -723,7 +729,7 @@
                   "type": "string"
                 },
                 "all": {
-                  "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
+                  "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used for attestations.",
                   "type": "boolean"
                 }
               },
@@ -830,14 +836,6 @@
         "all": { "type": "boolean" }
       },
       "required": ["required"],
-      "additionalProperties": false
-    },
-    "validationAttestation": {
-      "type": "object",
-      "properties": {
-        "all": { "type": "boolean" }
-      },
-      "required": ["all"],
       "additionalProperties": false
     },
     "validationTextInput": {
@@ -1156,30 +1154,6 @@
                   "propertyNames": {
                     "pattern": "^(?:descriptionEn|descriptionFr|conditionalRules)$"
                   }
-                }
-              ]
-            }
-          },
-          "required": ["id", "type", "properties"]
-        },
-        {
-          "type": "object",
-          "properties": {
-            "id": { "type": "integer", "minimum": 1 },
-            "uuid": { "type": "string", "format": "uuid" },
-            "type": { "const": "attestation" },
-            "properties": {
-              "allOf": [
-                { "$ref": "#/definitions/elementCommonProperties" },
-                {
-                  "type": "object",
-                  "propertyNames": {
-                    "pattern": "^(?:questionId|tags|titleEn|titleFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
-                  },
-                  "properties": {
-                    "validation": { "$ref": "#/definitions/validationAttestation" }
-                  },
-                  "required": ["validation"]
                 }
               ]
             }
