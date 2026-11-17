@@ -66,9 +66,7 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
       await expect(errorMessage).toBeVisible();
 
       // Verify error messages
-      await expect(errorMessage).toContainText(
-        "Read and check all boxes to confirm the items in this section"
-      );
+      await expect(errorMessage).toContainText("Check off all the boxes for: I agree to:");
 
       await setCheckboxValue(condition1Checkbox, true);
       await expect(condition1Checkbox).toBeChecked();
@@ -77,9 +75,7 @@ test.describe("Testing attestation fields", { tag: "@published-form" }, () => {
       await page.getByRole("button", { name: "Submit" }).click();
 
       // Verify error messages
-      await expect(errorMessage).toContainText(
-        "Read and check all boxes to confirm the items in this section"
-      );
+      await expect(errorMessage).toContainText("Check off all the boxes for: I agree to:");
     });
 
     test("Submits properly", async ({ page }) => {
