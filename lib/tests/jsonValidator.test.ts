@@ -85,7 +85,6 @@ describe("Versioned template schema validation", () => {
       },
     ],
     ["richText", { descriptionEn: "Section heading" }],
-    ["attestation", { validation: { all: false } }],
     ["addressComplete", { validation: { required: false } }],
     ["formattedDate", { validation: { required: false } }],
     ["starRating", { validation: { required: false } }],
@@ -99,6 +98,35 @@ describe("Versioned template schema validation", () => {
       expect(validateElement({ ...element, properties: {} }, 2)).toBe(false);
       expect(validateElement({ ...element, properties: { validation: {} } }, 2)).toBe(false);
     }
+  });
+
+  it.each([1, 2])("accepts attestations as required checkbox elements in v%s", (schemaVersion) => {
+    expect(
+      validateElement(
+        {
+          id: 1,
+          type: "checkbox",
+          properties: {
+            validation: { required: true, all: true },
+            choices: [{ en: "I agree", fr: "Je suis d'accord" }],
+          },
+        },
+        schemaVersion
+      )
+    ).toBe(true);
+  });
+
+  it.each([1, 2])("rejects the attestation element type in v%s", (schemaVersion) => {
+    expect(
+      validateElement(
+        {
+          id: 1,
+          type: "attestation",
+          properties: { validation: { all: true } },
+        },
+        schemaVersion
+      )
+    ).toBe(false);
   });
 
   it.each([

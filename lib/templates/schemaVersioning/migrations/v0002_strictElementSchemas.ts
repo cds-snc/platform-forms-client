@@ -106,12 +106,9 @@ const migrateElement = (value: unknown, path: string, isSubElement = false): For
   const branch = getStrictBranch(type, path);
   if (branch.properties?.properties?.allOf?.[1]?.properties?.validation) {
     // Older templates sometimes omitted validation or its required flag. Make these controls
-    // optional by default; attestations use the separate `all` flag and require every checkbox.
+    // optional by default.
     const validation = isJsonObject(properties.validation) ? { ...properties.validation } : {};
-    const requiredFlag = type === "attestation" ? "all" : "required";
-    if (validation[requiredFlag] === undefined) {
-      validation[requiredFlag] = type === "attestation";
-    }
+    if (validation.required === undefined) validation.required = false;
     properties.validation = validation;
   }
 
