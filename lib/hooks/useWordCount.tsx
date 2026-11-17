@@ -38,7 +38,7 @@ export const useWordCount = ({ maxWords, id, lang }: UseWordCountOptions): UseWo
   const WordCountDisplay = useCallback(() => {
     if (!maxWords) return null;
 
-    const showRemaining = remainingWords < maxWords * 0.25 && remainingWords >= 0;
+    const showRemaining = remainingWords < maxWords * 0.5 && remainingWords >= 0;
     const showExceeded = remainingWords < 0;
 
     return (

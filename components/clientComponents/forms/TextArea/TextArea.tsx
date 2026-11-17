@@ -65,6 +65,12 @@ export const TextArea = (
       wordCountResult.setRemainingWords(
         maxWords - event.target.value.split(/\s+/).filter(Boolean).length
       );
+
+      // Prevent more words than maxWords
+      const words = event.target.value.split(/\s+/).filter(Boolean);
+      if (words.length > maxWords) {
+        helpers.setValue(words.slice(0, maxWords).join(" "));
+      }
     }
   };
 
