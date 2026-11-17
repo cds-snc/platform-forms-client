@@ -1,7 +1,7 @@
 import { Button } from "@clientComponents/globals";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { useTranslation } from "@i18n/client";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 
 export type handleCloseType = (value: boolean) => void;
 

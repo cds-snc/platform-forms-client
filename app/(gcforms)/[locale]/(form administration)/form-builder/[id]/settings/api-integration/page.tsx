@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 
 import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
