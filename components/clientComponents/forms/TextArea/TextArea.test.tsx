@@ -23,7 +23,7 @@ it("counts the retained value after enforcing a word limit", () => {
   expect(document.getElementById("characterCountMessageanswer")).toHaveTextContent(
     "You've exceeded the limit by 4 characters."
   );
-  expect(document.getElementById("wordCountMessageanswer")).toHaveTextContent(/0/);
+  expect(document.getElementById("wordCountMessageanswer")).toHaveTextContent("0");
   const ids = textbox.getAttribute("aria-describedby")?.split(" ") ?? [];
   expect(new Set(ids).size).toBe(ids.length);
   unmount();
