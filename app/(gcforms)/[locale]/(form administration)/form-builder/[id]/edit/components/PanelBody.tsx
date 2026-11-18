@@ -13,6 +13,7 @@ import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { cn } from "@lib/utils";
 import { ManagedDataDetails } from "./ManagedDataDetails";
+import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 
 export const PanelBody = ({
   item,
@@ -55,6 +56,7 @@ export const PanelBody = ({
         <div className="my-4">
           <div className={cn(isDynamicRow && "mt-8 mb-2 px-4")}>
             <Question item={item} onQuestionChange={onQuestionChange} />
+            {isDynamicRow && <ConditionalIndicator item={item} />}
           </div>
 
           <div className={cn(isDynamicRow && "mb-2")}>
@@ -65,6 +67,7 @@ export const PanelBody = ({
               formId={formId}
             />
           </div>
+          {isRichText && <ConditionalIndicator item={item} />}
         </div>
       ) : (
         <div data-id={item.id}>
@@ -75,6 +78,7 @@ export const PanelBody = ({
                 onQuestionChange={onQuestionChange}
                 describedById={describedById}
               />
+              <ConditionalIndicator item={item} />
             </div>
           </div>
 
