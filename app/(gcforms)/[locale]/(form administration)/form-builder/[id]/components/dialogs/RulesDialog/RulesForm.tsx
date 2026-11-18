@@ -10,7 +10,7 @@ import { ConditionalElementRuleSelector } from "@root/app/(gcforms)/[locale]/(fo
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const RulesForm = ({

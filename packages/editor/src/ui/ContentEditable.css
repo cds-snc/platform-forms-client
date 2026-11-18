@@ -1,11 +1,27 @@
 .gc-contenteditable {
   padding: 20px;
   width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   background-color: #fff;
 
   &:focus {
     outline: 2px #303fc3 solid;
   }
+}
+
+.gc-editor-container:has(> .gc-toolbar-container) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gc-editor-container:has(> .gc-toolbar-container) > .gc-editor-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .gc-contenteditable-placeholder {

@@ -80,6 +80,7 @@
     "KB": "Ko",
     "bytes": "octets",
     "error-list": {
+      "entry-question": "Entrée {{count}} - {{question}}",
       "default": "Saisissez une réponse pour : {{question}}",
       "select": "Sélectionnez une option pour : {{question}}",
       "checkbox": "Sélectionnez une ou plusieurs options pour : {{question}}",
