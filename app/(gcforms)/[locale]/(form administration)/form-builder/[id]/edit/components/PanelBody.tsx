@@ -38,6 +38,7 @@ export const PanelBody = ({
 
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
+  const maxWords = properties?.validation?.maxWords;
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -95,6 +96,12 @@ export const PanelBody = ({
                 <div className="disabled pointer-events-none">
                   {t("maxCharacterLength")}
                   {maxLength}
+                </div>
+              )}
+              {maxWords && (
+                <div className="disabled pointer-events-none">
+                  {t("maxWordLength")}
+                  {maxWords}
                 </div>
               )}
               {hasCustomRegex && (
