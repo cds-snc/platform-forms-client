@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.1](https://github.com/cds-snc/platform-forms-client/compare/v4.31.0...v4.31.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* form field and summary error content ([#8205](https://github.com/cds-snc/platform-forms-client/issues/8205)) ([e7e9865](https://github.com/cds-snc/platform-forms-client/commit/e7e98655c91e9fc7c8b73ae21fe0cf58ef915f72))
+* set question ID to empty string when an element gets duplicated to avoid question ID uniqueness issues ([#8222](https://github.com/cds-snc/platform-forms-client/issues/8222)) ([e0ef7ab](https://github.com/cds-snc/platform-forms-client/commit/e0ef7abb4629b07dbea0c0175c10cf6e8f750294))
+
+
+### Miscellaneous Chores
+
+* Equalize text editor heights ([#8219](https://github.com/cds-snc/platform-forms-client/issues/8219)) ([2cb3fe0](https://github.com/cds-snc/platform-forms-client/commit/2cb3fe02e84ddf3d954e9acb5740c54c07d99ecb))
+* Improvements to  show-hide UI ([#8221](https://github.com/cds-snc/platform-forms-client/issues/8221)) ([e45e9b4](https://github.com/cds-snc/platform-forms-client/commit/e45e9b49cea9759e114066997e3d5917022911c0))
+* update markdown-to-jsx (9.10.6) ([#8216](https://github.com/cds-snc/platform-forms-client/issues/8216)) ([1642ca6](https://github.com/cds-snc/platform-forms-client/commit/1642ca69d401045fd924f2b93c2effd558e242ea))
+
 ## [4.31.0](https://github.com/cds-snc/platform-forms-client/compare/v4.30.0...v4.31.0) (2026-11-16)
 
 
