@@ -4,6 +4,7 @@ import { FormikProvider, useFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList } from "@lib/validation/validation";
 import { validateOnSubmit } from "@gcforms/core";
+import { formatErrors } from "@lib/validation/formatErrors";
 
 import { type FormProps, type FormRenderProps } from "./types";
 import { type Responses as FormikResponses } from "@lib/types";
@@ -131,7 +132,13 @@ export const Form: React.FC<FormProps> = (props) => {
     validateOnBlur: false,
     enableReinitialize: true, // needed when switching languages
     initialValues: props.initialValues ?? getFormInitialValues(props.formRecord, props.language),
-    validate: (values) => validateOnSubmit(values, props),
+    validate: (values) =>
+      formatErrors(
+        validateOnSubmit(values, props),
+        props.formRecord.form.elements,
+        props.language,
+        props.t
+      ),
     onSubmit: (values, formikBag) => submitFormValues(values, formikBag, props, captchaControls),
   });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { Button } from "./Buttons";
 import { useAppUpdate } from "@lib/hooks/useAppUpdate";
 import { toast } from "@formBuilder/components/shared/Toast";

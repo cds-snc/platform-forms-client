@@ -12,7 +12,7 @@ import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { findParentGroup } from "@lib/groups/utils/findParentGroup";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 
 export const ConditionalIndicatorOption = ({
   itemId,

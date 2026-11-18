@@ -8,6 +8,7 @@ import { useCharacterCount } from "@lib/hooks/useCharacterCount";
 import { getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface TextAreaProps extends InputFieldProps {
+  questionLabel?: string;
   children?: React.ReactNode;
   placeholder?: string;
 }
@@ -15,22 +16,34 @@ export interface TextAreaProps extends InputFieldProps {
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const { id, className, ariaDescribedBy, required, children, placeholder, maxLength, lang } =
-    props;
+  const {
+    id,
+    className,
+    ariaDescribedBy,
+    required,
+    children,
+    placeholder,
+    maxLength,
+    lang,
+    questionLabel,
+  } = props;
 
   const [field, meta, helpers] = useField(props);
 
-  const { setRemainingCharacters, ariaDescribedByIds, CharacterCountDisplay } = useCharacterCount({
-    maxLength,
-    id: id ?? "",
-    lang,
-  });
+  const { updateCharacterError, hasCharacterError, ariaDescribedByIds, CharacterCountDisplay } =
+    useCharacterCount({
+      maxLength,
+      id: id ?? "",
+      lang,
+      value: field.value,
+      error: meta.error,
+      setError: helpers.setError,
+      questionLabel,
+    });
 
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     helpers.setValue(event.target.value);
-    if (maxLength) {
-      setRemainingCharacters(maxLength - event.target.value.length);
-    }
+    updateCharacterError(event.target.value);
   };
 
   const classes = cn("gcds-textarea", className, meta.error && "gcds-error");
@@ -38,7 +51,9 @@ export const TextArea = (
 
   return (
     <>
-      {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
+      <div aria-live={hasCharacterError ? "polite" : undefined}>
+        {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
+      </div>
       <textarea
         data-testid="textarea"
         className={classes}
