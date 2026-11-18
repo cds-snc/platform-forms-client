@@ -10,13 +10,11 @@ import { ConditionalElementRuleSelector } from "@root/app/(gcforms)/[locale]/(fo
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
-import Markdown from "markdown-to-jsx/react";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const RulesForm = ({
   item,
   descriptionId,
-  tryLogicView,
   choiceRulesRef,
   mode,
   selectedOptionId,
@@ -25,7 +23,6 @@ export const RulesForm = ({
   item: FormElementWithIndex;
   setItem: (item: FormElementWithIndex) => void;
   descriptionId?: string;
-  tryLogicView: () => void;
   choiceRulesRef: React.MutableRefObject<ChoiceRule[]>;
   mode: "add" | "edit";
   selectedOptionId: string | null;
@@ -33,7 +30,6 @@ export const RulesForm = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${useId()}`;
-  const [showLogicDetails, setShowLogicDetails] = useState(false);
 
   const { elements, form } = useTemplateStore((s) => ({
     elements: s.form.elements,
@@ -89,17 +85,13 @@ export const RulesForm = ({
     setChoiceRules(rules);
   };
 
-  const learnMoreAboutLogicView = () => {
-    setShowLogicDetails(showLogicDetails ? false : true);
-  };
-
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
       id={formId}
       {...(descriptionId && { "aria-describedby": descriptionId })}
     >
-      <div className="mb-6" aria-live="polite" aria-relevant="all">
+      <div className="mb-0" aria-live="polite" aria-relevant="all">
         {choiceRules.map((rule, index) => {
           return (
             <ConditionalElementRuleSelector
@@ -123,10 +115,10 @@ export const RulesForm = ({
           );
         })}
       </div>
-      <div className="mb-6">
-        <div className="mb-4">
+      <div className="sticky bottom-[85px] z-10 -mx-5 mb-0 border-t border-slate-500 bg-white px-5 py-2">
+        <div className="m-0">
           <Button
-            className="mr-4"
+            className="mr-4 mb-2"
             onClick={() => {
               setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
               setHighlightedRuleIndex(choiceRules.length);
@@ -137,22 +129,6 @@ export const RulesForm = ({
             {t("addConditionalRules.addAnotherRule")}
           </Button>
           <AddOther item={item} onComplete={updateModalFromBase} />
-        </div>
-        <div>
-          <Button theme={"link"} onClick={learnMoreAboutLogicView}>
-            {t("logic.tryitout.button")}
-          </Button>
-          <div
-            id="viewLogicDetails"
-            className={`border-x-4 border-gray-800 px-5 ${showLogicDetails ? "" : "hidden"}`}
-          >
-            <div className="my-4">
-              <Markdown options={{ forceBlock: false }}>{t("logic.tryitout.text")}</Markdown>
-            </div>
-            <Button theme={"primary"} onClick={tryLogicView}>
-              {t("logic.tryitout.open")}
-            </Button>
-          </div>
         </div>
       </div>
     </form>
