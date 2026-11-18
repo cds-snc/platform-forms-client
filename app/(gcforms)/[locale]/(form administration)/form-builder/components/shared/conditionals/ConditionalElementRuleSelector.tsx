@@ -46,7 +46,7 @@ const ChoiceSelect = ({
         data-selected={selected}
         onChange={onChange}
         className={cn(
-          "center-right-15px form-builder-dropdown text-black-default my-0 inline-block w-[300px] border-1 border-black p-2",
+          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[600px] appearance-none truncate border-1 border-black bg-[url('/img/form-builder-arrow-down.svg')] bg-position-[center_right_5px] bg-no-repeat p-2 pr-10",
           className
         )}
         aria-labelledby={labelId}
@@ -87,7 +87,7 @@ const QuestionSelect = ({
         data-selected={selected || ""}
         onChange={onChange}
         className={cn(
-          "center-right-15px form-builder-dropdown text-black-default my-0 inline-block w-[300px] border-1 border-black p-2",
+          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[600px] appearance-none truncate border-1 border-black bg-[url('/img/form-builder-arrow-down.svg')] bg-[position:center_right_5px] bg-no-repeat p-2 pr-10",
           className
         )}
         aria-labelledby={labelId}

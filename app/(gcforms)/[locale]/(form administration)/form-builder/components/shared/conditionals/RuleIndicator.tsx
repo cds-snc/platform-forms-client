@@ -68,15 +68,15 @@ export const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
           data-child-id={String(childId + 1)}
           data-group-id={parentGroup}
           onClick={handleRuleIndicatorClick}
-          className="cursor-pointer items-start justify-start p-0 text-left underline"
+          className="group cursor-pointer items-start justify-start !p-2 text-left underline"
         >
           <>
-            <ConditionalIcon className="mr-2 mt-[-5px] inline" />
-            <span className="mr-2 inline-block max-w-[200px] truncate" title={title}>
+            <ConditionalIcon className="mr-2 inline-block align-middle" />
+            <span className="mr-2 inline-block max-w-[500px] truncate" title={title}>
               {title}
             </span>
 
-            <span data-choice-id={choiceId} className="mx-1 inline-block " title={choiceValue}>
+            <span data-choice-id={choiceId} className="mx-1 inline-block" title={choiceValue}>
               <span>{`( ${choiceValue} ) `}</span>
             </span>
           </>
