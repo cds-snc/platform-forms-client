@@ -34,7 +34,7 @@ import {
   shouldEnforceTemplateEditLockWithVerifiedUserCount,
   TemplateEditLockedError,
 } from "@lib/editLocks";
-import { validateTemplate } from "@lib/utils/form-builder/validate";
+import { validateTemplate, type TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 import { authorization } from "@lib/privileges";
 
 const assertTemplateEditLockIfEnabled = async ({
@@ -102,12 +102,13 @@ export const createOrUpdateTemplate = AuthenticatedAction(
   ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
+    problems?: TemplateValidationProblem[];
   }> => {
     const validationResult = validateTemplate(formConfig);
 
     if (!validationResult.valid) {
       logMessage.info(`Template validation failed: ${JSON.stringify(validationResult.errors)}`);
-      return { formRecord: null, error: "validationError" };
+      return { formRecord: null, error: "validationError", problems: validationResult.problems };
     }
 
     try {

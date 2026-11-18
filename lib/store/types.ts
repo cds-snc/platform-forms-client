@@ -35,7 +35,21 @@ export type EditLockState = {
   lockedByOther?: boolean;
 };
 
+export type InputFeedbackEntry = {
+  state: "error";
+  message: string;
+};
+
 export interface TemplateStoreState extends TemplateStoreProps {
+  inputFeedback: Record<string, InputFeedbackEntry>;
+  setInputFeedback: (
+    inputId: string,
+    feedback: InputFeedbackEntry | null,
+    language?: Language
+  ) => void;
+  clearInputFeedback: () => void;
+  templateProblemFeedback: Record<string, InputFeedbackEntry>;
+  setTemplateProblemFeedback: (feedback: Record<string, InputFeedbackEntry>) => void;
   focusInput: boolean;
   editLock: EditLockState | null;
   isLockedByOther: boolean;

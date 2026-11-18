@@ -13,6 +13,7 @@ import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { getTranslatedProperties } from "@formBuilder/actions";
 
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/headless-treeview/provider/TreeRefProvider";
+import { inputFeedbackPanelClassName } from "@formBuilder/components/shared/InputFeedback";
 
 export const ElementPanel = ({
   item,
@@ -74,7 +75,8 @@ export const ElementPanel = ({
         !hasSubPanel && isWithin && "focus-within:bg-violet-50 hover:bg-violet-50",
         hasRules && "border-1 border-dashed border-slate-500",
         hasSubPanel &&
-          "border border-slate-500 focus-within:outline focus-within:outline-2 focus-within:outline-offset-[-1px] focus-within:outline-indigo-700 hover:outline hover:outline-2 hover:outline-offset-[-1px] hover:outline-indigo-700"
+          "border border-slate-500 focus-within:outline focus-within:outline-2 focus-within:outline-offset-[-1px] focus-within:outline-indigo-700 hover:outline hover:outline-2 hover:outline-offset-[-1px] hover:outline-indigo-700",
+        inputFeedbackPanelClassName
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;

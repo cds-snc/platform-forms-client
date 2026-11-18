@@ -23,6 +23,43 @@ The required top-level fields are `titleEn`, `titleFr`, `privacyPolicy`, `confir
 
 ## Form structure
 
+### Builder save diagnostics
+
+The builder's live schema validation checks the same prepared template used for saving:
+the exported editor schema, normalized group navigation, and the result of attempting
+registered schema migrations. Preparation does not modify the editor state, and failed
+migrations retain the existing fallback behavior.
+
+When a save is rejected by validation, the server returns structured problems for the
+submitted candidate. The builder displays those problems while the editor schema is
+unchanged, then recomputes them after edits. A rejection without diagnostics is shown
+as a save failure rather than silently hiding the error.
+
+Validation, migration, and returned save diagnostics remove repeated problems with the
+same path, validation rule, and message, preserving first-occurrence order. Bracket and
+dot array-index paths are equivalent for this comparison. Distinct rules, messages,
+fields, and languages remain separate; combined inline diagnostics use the same rule.
+
+For problems without an element target, the summary's "Edit form" link returns to the
+existing "Edit page" heading and moves keyboard focus there.
+
+Inline template diagnostics and blur-triggered feedback are kept separately. Each
+source clears only its own feedback; clearing a blur error reveals any remaining
+template diagnostic, and removing a template diagnostic preserves applicable blur
+errors. Inline feedback uses a single error state, with local feedback taking precedence
+over template diagnostics. Neither source is persisted in session storage.
+Feedback keys include the content language being edited, independently of the interface
+language. Switching languages selects that language's feedback without discarding local
+errors in the other language. DOM input and error-message IDs remain unchanged.
+Required-property diagnostics include the missing property in their paths (for example,
+`elements.0.properties.choices.0.fr`) in both validation and migration results. Inline
+feedback and summaries use those paths rather than parsing validator message text.
+
+Duplicate choice labels show one immediate red inline error using the same message
+before and after blur. The editor checks the language being edited as choices change;
+this feedback does not change schema validation or migration fallback rules. Choice
+label rows have no decorative checkbox, radio, or numbering prefix.
+
 ### Type reference
 
 Use [`packages/types/src/form-types.ts`](https://github.com/cds-snc/platform-forms-client/blob/main/packages/types/src/form-types.ts) as a reference for the supported shape and property names of `FormProperties`, `FormElement`, `ElementProperties`, `Group`, `NextActionRule`, `ConditionalRule`, `PropertyChoices`, and `ValidationProperties`.
