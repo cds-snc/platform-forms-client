@@ -1,5 +1,5 @@
 "use client";
-import React, { useId } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
@@ -46,7 +46,7 @@ const ChoiceSelect = ({
         data-selected={selected}
         onChange={onChange}
         className={cn(
-          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[600px] appearance-none truncate border-1 border-black bg-[url('/img/form-builder-arrow-down.svg')] bg-position-[center_right_5px] bg-no-repeat p-2 pr-10",
+          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[600px] appearance-none truncate border-1 border-black bg-white bg-[url('/img/form-builder-arrow-down.svg')] bg-position-[center_right_5px] bg-no-repeat p-2 pr-10",
           className
         )}
         aria-labelledby={labelId}
@@ -87,7 +87,7 @@ const QuestionSelect = ({
         data-selected={selected || ""}
         onChange={onChange}
         className={cn(
-          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[600px] appearance-none truncate border-1 border-black bg-[url('/img/form-builder-arrow-down.svg')] bg-[position:center_right_5px] bg-no-repeat p-2 pr-10",
+          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[600px] appearance-none truncate border-1 border-black bg-white bg-[url('/img/form-builder-arrow-down.svg')] bg-[position:center_right_5px] bg-no-repeat p-2 pr-10",
           className
         )}
         aria-labelledby={labelId}
@@ -113,6 +113,7 @@ export const ConditionalElementRuleSelector = ({
   updateChoiceId,
   updateElementId,
   removeSelector,
+  isHighlighted,
 }: {
   itemId: number;
   elements: FormElement[];
@@ -122,8 +123,11 @@ export const ConditionalElementRuleSelector = ({
   updateChoiceId: (index: number, id: string) => void;
   updateElementId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
+  isHighlighted?: boolean;
 }) => {
   "use memo";
+  const selectorRef = useRef<HTMLFieldSetElement>(null);
+  const [showHighlight, setShowHighlight] = useState(Boolean(isHighlighted));
   const currentElement = elements.find((el) => el.id === itemId);
 
   const { t } = useTranslation("form-builder");
@@ -187,10 +191,68 @@ export const ConditionalElementRuleSelector = ({
     removeSelector(index);
   };
 
+  useEffect(() => {
+    if (!showHighlight) {
+      return;
+    }
+
+    // Scroll the selector into view and focus it when it is highlighted
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        selectorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        selectorRef.current?.querySelector<HTMLSelectElement>("select")?.focus({
+          preventScroll: true,
+        });
+      });
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [showHighlight]);
+
+  useEffect(() => {
+    if (!showHighlight) {
+      return;
+    }
+
+    // Hide the highlight if the user clicks outside of the selector
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!selectorRef.current?.contains(event.target as Node)) {
+        setShowHighlight(false);
+      }
+    };
+
+    // Hide the highlight if the user focuses outside of the selector
+    const handleFocusIn = (event: FocusEvent) => {
+      const selector = selectorRef.current;
+      const focusMovedOutside =
+        selector &&
+        selector.contains(event.relatedTarget as Node) &&
+        !selector.contains(event.target as Node);
+
+      if (focusMovedOutside) {
+        setShowHighlight(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("focusin", handleFocusIn);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("focusin", handleFocusIn);
+    };
+  }, [showHighlight]);
+
   return (
     <>
       {choices && (
-        <fieldset className="mb-2 border-b border-dotted border-slate-500">
+        <fieldset
+          ref={selectorRef}
+          className={cn(
+            "mb-2 border-b border-dotted border-slate-500 p-2",
+            showHighlight && "rounded bg-violet-50/50 ring-2 ring-violet-400"
+          )}
+          data-highlighted={showHighlight || undefined}
+        >
           <div className="mb-4">
             <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
           </div>

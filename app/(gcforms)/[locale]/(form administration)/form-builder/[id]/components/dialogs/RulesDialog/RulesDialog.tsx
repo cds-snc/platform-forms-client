@@ -18,6 +18,7 @@ type RulesDialogEventDetails = {
   mode: "add" | "edit";
   itemId: number;
   optionId: string;
+  targetElementId?: string;
 };
 
 export const RulesDialog = () => {
@@ -32,6 +33,7 @@ export const RulesDialog = () => {
   const [mode, setMode] = React.useState<"add" | "edit">("add");
   const [item, setItem] = React.useState<FormElementWithIndex | undefined>(undefined);
   const [selectedOptionId, setSelectedOptionId] = React.useState<string | null>(null);
+  const [selectedTargetElementId, setSelectedTargetElementId] = React.useState<string | null>(null);
 
   const choiceRulesRef = React.useRef<ChoiceRule[]>([]);
 
@@ -51,6 +53,7 @@ export const RulesDialog = () => {
         setItem(freshItem);
         setMode(detail.mode);
         setSelectedOptionId(detail.optionId);
+        setSelectedTargetElementId(detail.targetElementId ?? null);
         setIsOpen(true);
       }
     },
@@ -158,6 +161,7 @@ export const RulesDialog = () => {
               descriptionId={descriptionId}
               tryLogicView={handletryLogicView}
               choiceRulesRef={choiceRulesRef}
+              targetElementId={selectedTargetElementId}
             />
           </div>
         </Dialog>

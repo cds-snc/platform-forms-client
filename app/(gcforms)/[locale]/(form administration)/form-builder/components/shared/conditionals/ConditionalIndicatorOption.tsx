@@ -148,6 +148,7 @@ export const ConditionalIndicatorOption = ({
                     mode: "edit",
                     itemId: itemId,
                     optionId: id,
+                    targetElementId: elementId,
                   });
                 }}
               >

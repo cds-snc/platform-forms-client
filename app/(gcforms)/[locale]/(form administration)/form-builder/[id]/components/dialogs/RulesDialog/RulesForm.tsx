@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { type ChoiceRule } from "@gcforms/types";
-import { getElementsWithRuleForChoice } from "@gcforms/core";
+import { ensureChoiceId, getElementsWithRuleForChoice } from "@gcforms/core";
 import { ConditionalElementRuleSelector } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/conditionals/ConditionalElementRuleSelector";
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
@@ -20,6 +20,7 @@ export const RulesForm = ({
   choiceRulesRef,
   mode,
   selectedOptionId,
+  targetElementId,
 }: {
   item: FormElementWithIndex;
   setItem: (item: FormElementWithIndex) => void;
@@ -28,6 +29,7 @@ export const RulesForm = ({
   choiceRulesRef: React.MutableRefObject<ChoiceRule[]>;
   mode: "add" | "edit";
   selectedOptionId: string | null;
+  targetElementId: string | null;
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${useId()}`;
@@ -52,6 +54,8 @@ export const RulesForm = ({
   }
 
   const [choiceRules, setChoiceRules] = useState<ChoiceRule[]>(initialChoiceRules);
+  const [highlightedRuleIndex, setHighlightedRuleIndex] = useState<number | null>(null);
+  const highlightedChoiceId = selectedOptionId ? ensureChoiceId(selectedOptionId) : null;
 
   useEffect(() => {
     choiceRulesRef.current = choiceRules;
@@ -108,6 +112,13 @@ export const RulesForm = ({
               updateElementId={updateElementId}
               updateChoiceId={updateChoiceId}
               removeSelector={removeSelector}
+              isHighlighted={
+                highlightedRuleIndex === index ||
+                (highlightedRuleIndex === null &&
+                  mode === "edit" &&
+                  rule.choiceId === highlightedChoiceId &&
+                  rule.elementId === targetElementId)
+              }
             />
           );
         })}
@@ -118,6 +129,7 @@ export const RulesForm = ({
             className="mr-4"
             onClick={() => {
               setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
+              setHighlightedRuleIndex(choiceRules.length);
             }}
             theme={"secondary"}
             aria-controls={formId}
