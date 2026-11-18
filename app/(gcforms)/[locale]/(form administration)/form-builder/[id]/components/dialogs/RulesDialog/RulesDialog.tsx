@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useId } from "react";
+import React, { useCallback, useEffect, useId, useState } from "react";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
@@ -13,11 +13,13 @@ import { type ChoiceRule } from "@gcforms/types";
 import { choiceRulesToConditonalRules, cleanChoiceIdsFromRules } from "@gcforms/core";
 import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
+import Markdown from "markdown-to-jsx/react";
 
 type RulesDialogEventDetails = {
   mode: "add" | "edit";
   itemId: number;
   optionId: string;
+  targetElementId?: string;
 };
 
 export const RulesDialog = () => {
@@ -32,6 +34,8 @@ export const RulesDialog = () => {
   const [mode, setMode] = React.useState<"add" | "edit">("add");
   const [item, setItem] = React.useState<FormElementWithIndex | undefined>(undefined);
   const [selectedOptionId, setSelectedOptionId] = React.useState<string | null>(null);
+  const [selectedTargetElementId, setSelectedTargetElementId] = React.useState<string | null>(null);
+  const [showLogicDetails, setShowLogicDetails] = useState(false);
 
   const choiceRulesRef = React.useRef<ChoiceRule[]>([]);
 
@@ -51,6 +55,7 @@ export const RulesDialog = () => {
         setItem(freshItem);
         setMode(detail.mode);
         setSelectedOptionId(detail.optionId);
+        setSelectedTargetElementId(detail.targetElementId ?? null);
         setIsOpen(true);
       }
     },
@@ -147,6 +152,22 @@ export const RulesDialog = () => {
             <p className="mb-4" id={descriptionId}>
               {t("addConditionalRules.modalDescription")}
             </p>
+            <div className="mb-4">
+              <Button theme={"link"} onClick={() => setShowLogicDetails(!showLogicDetails)}>
+                {t("logic.tryitout.button")}
+              </Button>
+              <div
+                id="viewLogicDetails"
+                className={`border-x-4 border-gray-800 px-5 ${showLogicDetails ? "" : "hidden"}`}
+              >
+                <div className="my-4">
+                  <Markdown options={{ forceBlock: false }}>{t("logic.tryitout.text")}</Markdown>
+                </div>
+                <Button theme={"primary"} onClick={handletryLogicView}>
+                  {t("logic.tryitout.open")}
+                </Button>
+              </div>
+            </div>
             <p className="mb-4">
               <strong>{t("addConditionalRules.warning")}</strong>
             </p>
@@ -156,8 +177,8 @@ export const RulesDialog = () => {
               item={item}
               setItem={setItem}
               descriptionId={descriptionId}
-              tryLogicView={handletryLogicView}
               choiceRulesRef={choiceRulesRef}
+              targetElementId={selectedTargetElementId}
             />
           </div>
         </Dialog>
