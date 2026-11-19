@@ -183,8 +183,8 @@ const {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
     },
     debug(code, ...message) {
-      logMessage.debug(code);
-      logMessage.debug((message as string[]).join(" "));
+      logMessage.info(code);
+      logMessage.info((message as string[]).join(" "));
     },
   },
 
