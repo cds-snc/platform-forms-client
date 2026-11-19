@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.3](https://github.com/cds-snc/platform-forms-client/compare/v4.31.2...v4.31.3) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* add logging ([#8228](https://github.com/cds-snc/platform-forms-client/issues/8228)) ([4aaa25c](https://github.com/cds-snc/platform-forms-client/commit/4aaa25cb27ffa94e7b51800eff96ef3894ef409c))
+
 ## [4.31.2](https://github.com/cds-snc/platform-forms-client/compare/v4.31.1...v4.31.2) (2026-11-19)
 
 
