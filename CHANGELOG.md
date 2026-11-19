@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.2](https://github.com/cds-snc/platform-forms-client/compare/v4.31.1...v4.31.2) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* update zitadel / next auth ([#8226](https://github.com/cds-snc/platform-forms-client/issues/8226)) ([52572d8](https://github.com/cds-snc/platform-forms-client/commit/52572d86e769c922338ce8eaed47538930f27863))
+
 ## [4.31.1](https://github.com/cds-snc/platform-forms-client/compare/v4.31.0...v4.31.1) (2026-11-18)
 
 
