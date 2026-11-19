@@ -31,7 +31,7 @@ describe("structured field validation", () => {
       ...text,
       properties: {
         ...text.properties,
-        validation: { required: false, type: "custom", regex: "^(a+)+$" },
+        validation: { required: false, type: "custom", regex: "^([a-zA-Z]+)*$" },
       },
     };
     expect(isFieldResponseValid("b", custom)).toEqual({ code: "unsafe-regex" });
