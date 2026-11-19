@@ -99,9 +99,9 @@ export const SearchSelector = <T,>({
             }}
           >
             {leadingIcon}
-            <span className={!selectedItem ? "font-bold" : undefined}>
+            <div className={cn("min-w-0 flex-1", !selectedItem && "font-bold")}>
               {selectedItem && renderSelectedItem ? renderSelectedItem(selectedItem) : placeholder}
-            </span>
+            </div>
           </button>
           <input {...inputProps} className="absolute h-px w-px opacity-0" tabIndex={-1} />
         </>
@@ -146,7 +146,7 @@ export const SearchSelector = <T,>({
                   onMouseDown: (event) => event.preventDefault(),
                 })}
                 className={cn(
-                  "cursor-pointer rounded border border-transparent px-3 py-2",
+                  "cursor-pointer rounded border border-transparent px-3 py-3",
                   highlightedIndex === index && "border-gray-200 bg-gray-50",
                   isSelected && "font-semibold"
                 )}

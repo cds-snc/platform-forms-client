@@ -35,7 +35,7 @@ const renderHighlightedLabel = (label: string, searchTerm: string) => {
 
   return parts.map((part, index) =>
     part.toLocaleLowerCase() === normalizedSearchTerm.toLocaleLowerCase() ? (
-      <span className="text-black" key={`${part}-${index}`}>
+      <span className="font-bold" key={`${part}-${index}`}>
         {part}
       </span>
     ) : (
@@ -174,10 +174,14 @@ export const QuestionSelector = ({
             className="flex flex-col gap-1"
             data-element-id={"element" in result ? result.element.id : undefined}
           >
-            <span className="line-clamp-2 text-slate-500">
+            <span className="line-clamp-3 text-[18px] leading-[28px] text-slate-950">
               {renderHighlightedLabel(result.label, searchTerm)}
             </span>
-            {"element" in result && <span className="text-slate-600">{result.groupName}</span>}
+            {"element" in result && (
+              <span className="line-clamp-1 text-sm leading-[20px] text-slate-500">
+                {result.groupName}
+              </span>
+            )}
           </div>
         )}
         renderSelectedItem={(result) => (
@@ -185,8 +189,14 @@ export const QuestionSelector = ({
             className="flex flex-col gap-1"
             data-element-id={"element" in result ? result.element.id : undefined}
           >
-            <span className="line-clamp-2">{result.label}</span>
-            {"element" in result && <span className="text-slate-700">{result.groupName}</span>}
+            <span className="line-clamp-3 text-[18px] leading-[28px] text-slate-950">
+              {result.label}
+            </span>
+            {"element" in result && (
+              <span className="line-clamp-1 text-sm leading-[20px] text-slate-500">
+                {result.groupName}
+              </span>
+            )}
           </div>
         )}
         leadingIcon={<SearchIcon />}
@@ -203,7 +213,7 @@ const SearchIcon = () => (
     width="30"
     height="30"
     aria-hidden="true"
-    className="h-[30px] w-[30px]"
+    className="h-[30px] w-[30px] shrink-0"
     fill="none"
     viewBox="0 0 30 30"
   >
