@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.4](https://github.com/cds-snc/platform-forms-client/compare/v4.31.3...v4.31.4) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* revert auth debug logging ([78dc40b](https://github.com/cds-snc/platform-forms-client/commit/78dc40bd6d2df2343e25a3b4a760d6c6ea379f50))
+
 ## [4.31.3](https://github.com/cds-snc/platform-forms-client/compare/v4.31.2...v4.31.3) (2026-11-19)
 
 
