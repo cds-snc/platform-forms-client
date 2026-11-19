@@ -174,7 +174,7 @@ export const QuestionSelector = ({
             className="flex flex-col gap-1"
             data-element-id={"element" in result ? result.element.id : undefined}
           >
-            <span className="font-bold text-slate-500">
+            <span className="text-slate-500">
               {renderHighlightedLabel(result.label, searchTerm)}
             </span>
             {"element" in result && <span className="text-slate-600">{result.groupName}</span>}
@@ -185,7 +185,7 @@ export const QuestionSelector = ({
             className="flex flex-col gap-1"
             data-element-id={"element" in result ? result.element.id : undefined}
           >
-            <span className="font-bold">{result.label}</span>
+            <span>{result.label}</span>
             {"element" in result && <span className="text-slate-700">{result.groupName}</span>}
           </div>
         )}
