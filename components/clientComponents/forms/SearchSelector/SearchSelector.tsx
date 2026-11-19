@@ -147,8 +147,7 @@ export const SearchSelector = <T,>({
                 })}
                 className={cn(
                   "cursor-pointer rounded border border-transparent px-3 py-3",
-                  highlightedIndex === index && "border-gray-200 bg-gray-50",
-                  isSelected && "font-semibold"
+                  highlightedIndex === index && "border-gray-200 bg-gray-50"
                 )}
                 key={getItemKey(item)}
               >
