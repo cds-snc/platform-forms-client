@@ -376,6 +376,32 @@ describe("TemplateStore", () => {
     });
   });
 
+  it("Duplicates an element and sets its question ID to ''", async () => {
+    const result = await createStore();
+
+    act(() => {
+      result.current.add(0);
+      result.current.updateField(`form.elements[0].properties.titleEn`, "Element one");
+      result.current.updateField("form.elements[0].properties.questionId", "customQuestionId");
+    });
+
+    expect(result.current.form.elements[0].properties.questionId).toBe("customQuestionId");
+
+    act(() => {
+      result.current.duplicateElement(1, "", "copy");
+    });
+
+    expect(result.current.form.elements).toHaveLength(2);
+    expect(result.current.form.elements[0].properties.titleEn).toBe("Element one");
+    expect(result.current.form.elements[0].properties.questionId).toBe("customQuestionId");
+    expect(result.current.form.elements[1].properties.titleEn).toBe("Element one copy");
+    expect(result.current.form.elements[1].properties.questionId).toBe("");
+
+    await act(async () => {
+      await promise;
+    });
+  });
+
   it("Moves an element up", async () => {
     const result = await createStore();
     expect(result.current.form.titleEn).toBe("");
