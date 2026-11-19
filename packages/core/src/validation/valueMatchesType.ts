@@ -1,7 +1,8 @@
-import { FormElement, FormElementTypes, Responses, DateObject } from "@gcforms/types";
-import { isValidDate } from "../validation/date";
+import { FormElement, FormElementTypes, Responses } from "@gcforms/types";
+import { getDateResponseValidity } from "../validation/date";
 import { isValidEmail } from "../validation/isValidEmail";
 import { isFileExtensionValid } from "../validation/file";
+import { parseAddressResponse } from "./isValidAddress";
 import { Response } from "@gcforms/types";
 import type { ValidationError } from "./validationErrorTypes";
 
@@ -21,8 +22,18 @@ export type ElementTypeMismatch = {
 
 export type ValueMatchErrors = Record<string, SubElementTypeMismatch[] | ElementTypeMismatch>;
 
-export const valueMatchesType = (value: Response, type: string, formElement: FormElement) => {
-  const result = valueMatches(value, type, formElement);
+export const valueMatchesType = (
+  value: Response,
+  type: string,
+  formElement: FormElement
+):
+  | {
+      error: ValidationError;
+      details: SubElementTypeMismatch[] | ElementTypeMismatch;
+      malformed?: true;
+    }
+  | undefined => {
+  const result = matchValue(value, type, formElement);
   const error: ValidationError = { code: "mismatched-type" };
 
   // Return sub-element mismatches (passes back results from dynamic rows)
@@ -31,10 +42,11 @@ export const valueMatchesType = (value: Response, type: string, formElement: For
   }
 
   // Return element mismatches
-  if (result === false) {
+  if (result === false || result === "malformed") {
     return {
       error,
       details: { type: formElement.type, elementId: formElement.id, value },
+      ...(result === "malformed" ? { malformed: true } : {}),
     };
   }
 };
@@ -49,17 +61,27 @@ export const valueMatches = (
   type: string,
   formElement: FormElement
 ): boolean | SubElementTypeMismatch[] => {
+  const result = matchValue(value, type, formElement);
+  return result === "malformed" ? false : result;
+};
+
+const matchValue = (
+  value: unknown,
+  type: string,
+  formElement: FormElement
+): boolean | SubElementTypeMismatch[] | "malformed" => {
   if (!hasValue(value)) {
     // We don't have a value to validate
     throw new Error("Invalid value");
   }
 
   switch (type) {
-    case FormElementTypes.formattedDate:
-      if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
-        return true;
-      }
-      return false;
+    case FormElementTypes.addressComplete:
+      return parseAddressResponse(value) === null ? "malformed" : true;
+    case FormElementTypes.formattedDate: {
+      const validity = getDateResponseValidity(value);
+      return validity === "malformed" ? "malformed" : validity === "valid";
+    }
     case FormElementTypes.textField:
       // Email validation
       if (formElement.properties.autoComplete === "email") {
@@ -85,11 +107,11 @@ export const valueMatches = (
       if (value !== null && typeof value === "object" && "name" in value && "size" in value) {
         const fileValue = value as { name: string; size: unknown; id: unknown };
 
-        if (
-          typeof fileValue.name === "string" &&
-          fileValue.name &&
-          !isFileExtensionValid(fileValue.name)
-        ) {
+        if (typeof fileValue.name !== "string") {
+          return false;
+        }
+
+        if (fileValue.name && !isFileExtensionValid(fileValue.name)) {
           return false;
         }
 
@@ -107,12 +129,15 @@ export const valueMatches = (
     }
     case FormElementTypes.dynamicRow: {
       if (!Array.isArray(value)) {
-        return false;
+        return "malformed";
       }
 
       const rowErrors = [];
       let rowCounter = 0;
       for (const row of value as Array<Responses>) {
+        if (row === null || typeof row !== "object" || Array.isArray(row)) {
+          return "malformed";
+        }
         for (const [responseKey, responseValue] of Object.entries(row)) {
           if (
             formElement.properties.subElements &&
@@ -125,7 +150,9 @@ export const valueMatches = (
               continue;
             }
 
-            const result = valueMatches(responseValue, subElement.type, subElement);
+            const result = matchValue(responseValue, subElement.type, subElement);
+
+            if (result === "malformed") return "malformed";
 
             if (!result) {
               rowErrors.push({

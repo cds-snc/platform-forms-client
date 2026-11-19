@@ -175,7 +175,9 @@ export const formatErrors = (
         return formattedRow;
       });
     }
-    return error;
+    throw new Error(
+      `Unexpected validation error structure for element ${element.id} (${element.type})`
+    );
   };
 
   const formatted: Responses = {};

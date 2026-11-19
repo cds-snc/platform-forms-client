@@ -188,6 +188,20 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
     expect(addressError.fields.city).toEqual({ code: "required" });
   });
 
+  test("rejects repeating-set errors attached to a text field instead of returning raw objects", () => {
+    const element: FormElement = {
+      id: 1,
+      type: FormElementTypes.textField,
+      properties: { titleEn: "Question", titleFr: "Question FR" },
+    };
+    const t = vi.fn(() => "");
+
+    expect(() =>
+      formatErrors({ 1: [{ 0: { code: "required" } }] }, [element], language, t)
+    ).toThrowError("Unexpected validation error structure for element 1 (textField)");
+    expect(t).not.toHaveBeenCalled();
+  });
+
   test.each<[ValidationError, string, Record<string, unknown>?]>([
     [{ code: "invalid-alphanumeric" }, "input-validation.alphanumeric"],
     [{ code: "invalid-number" }, "input-validation.number"],

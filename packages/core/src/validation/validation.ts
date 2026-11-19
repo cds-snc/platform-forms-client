@@ -4,11 +4,10 @@ import {
   FormElementTypes,
   ValidationProperties,
   FileInputResponse,
-  DateObject,
 } from "@gcforms/types";
 
 import { isInputTooLong, inputLengthOverLimit } from "./text";
-import { isValidDate } from "./date";
+import { isValidDateResponse } from "./date";
 import { getRegexByType } from "./regex";
 import { isFileExtensionValid, isIndividualFileSizeValid, MAX_FILE_SIZE } from "./file";
 import { isSafeRegex } from "./regex";
@@ -38,8 +37,17 @@ export const isFieldResponseValid = (
   switch (componentType) {
     case FormElementTypes.textField:
     case FormElementTypes.numberInput: {
+      // Check the type first to avoid errors when converting to a string
+      if (
+        value !== null &&
+        value !== undefined &&
+        typeof value !== "string" &&
+        !(isNumberInput(formElement) && typeof value === "number")
+      ) {
+        return { code: "mismatched-type" };
+      }
       // Required check first
-      const typedValue = String(value).trim();
+      const typedValue = value === null || value === undefined ? "" : String(value).trim();
       if (validator.required && !typedValue) return { code: "required" };
 
       // Handle NumberInput validation with backwards compatibility
@@ -102,6 +110,10 @@ export const isFieldResponseValid = (
 
       const currentRegex = getRegexByType(validator.type, validator.regex);
 
+      if (currentRegex?.error.code === "unsafe-regex") {
+        return currentRegex.error;
+      }
+
       if (validator.type && currentRegex && currentRegex.regex) {
         // Check regex for safety before using it.
         if (!isSafeRegex(currentRegex.regex.source)) {
@@ -115,7 +127,7 @@ export const isFieldResponseValid = (
         }
       }
 
-      if (validator.maxLength && (value as string).length > validator.maxLength) {
+      if (validator.maxLength && typeof value === "string" && value.length > validator.maxLength) {
         return {
           code: "max-length",
           count: (value as string).length - validator.maxLength,
@@ -125,9 +137,12 @@ export const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.textArea: {
-      const typedValue = String(value).trim();
+      if (value !== null && value !== undefined && typeof value !== "string") {
+        return { code: "mismatched-type" };
+      }
+      const typedValue = (value ?? "").trim();
       if (validator.required && !typedValue) return { code: "required" };
-      if (validator.maxLength && (value as string).length > validator.maxLength)
+      if (validator.maxLength && typeof value === "string" && value.length > validator.maxLength)
         return {
           code: "max-length",
           count: (value as string).length - validator.maxLength,
@@ -154,14 +169,17 @@ export const isFieldResponseValid = (
     case FormElementTypes.radio:
     case FormElementTypes.starRating:
     case FormElementTypes.dropdown: {
-      if (validator.required && (value === undefined || value === "")) {
+      if (validator.required && (value === null || value === undefined || value === "")) {
         return { code: "required" };
       }
       break;
     }
     case FormElementTypes.combobox: {
-      const trimmedValue = String(value).trim();
-      if (validator.required && (trimmedValue === undefined || trimmedValue === "")) {
+      if (value !== null && value !== undefined && typeof value !== "string") {
+        return { code: "mismatched-type" };
+      }
+      const trimmedValue = (value ?? "").trim();
+      if (validator.required && trimmedValue === "") {
         return { code: "required" };
       }
       break;
@@ -174,6 +192,11 @@ export const isFieldResponseValid = (
         (!fileInputResponse || !fileInputResponse.name || !fileInputResponse.size)
       ) {
         return { code: "required" };
+      }
+
+      if (value === null || value === undefined || value === "") break;
+      if (typeof value !== "object" || typeof fileInputResponse.name !== "string") {
+        return { code: "mismatched-type" };
       }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
@@ -191,7 +214,7 @@ export const isFieldResponseValid = (
         return { code: "required" };
       }
 
-      if (value && !isValidDate(JSON.parse(value as string) as DateObject)) {
+      if (value && !isValidDateResponse(value)) {
         return { code: "invalid-date" };
       }
 
@@ -203,12 +226,18 @@ export const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.dynamicRow: {
+      if (!Array.isArray(value)) return { code: "mismatched-type" };
+
       // deterministic switch to return an error object or not
       // required because returning any object (including nulls) blocks the submit action
       let dynamicRowHasErrors = false;
 
       const groupErrors = (value as Array<Responses>).map((row) => {
         const rowErrors: ValidationErrors = {};
+
+        if (row === null || typeof row !== "object" || Array.isArray(row)) {
+          return rowErrors;
+        }
 
         (formElement.properties.subElements || []).forEach((subElement, index) => {
           if (subElement.properties.validation) {
@@ -226,6 +255,10 @@ export const isFieldResponseValid = (
 
       if (dynamicRowHasErrors) {
         return groupErrors;
+      }
+
+      if (value.some((row) => row === null || typeof row !== "object" || Array.isArray(row))) {
+        return { code: "mismatched-type" };
       }
 
       break;

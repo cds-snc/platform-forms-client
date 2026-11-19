@@ -47,6 +47,11 @@ export const validateOnSubmit = (
   return errors;
 };
 
+/**
+ * Checks visible answers and flags malformed dates, addresses or repeating sets separately from normal errors.
+ * Callers decide which errors should block submission.
+ * Missing answers aren't malformed, so optional fields can still be left empty.
+ */
 export const validateVisibleElements = (
   values: Responses,
   props: {
@@ -56,10 +61,12 @@ export const validateVisibleElements = (
   errors: ValidationErrors;
   visibility: Map<string, boolean>;
   valueMatchErrors: ValueMatchErrors;
+  hasMalformedPayload: boolean;
 } => {
   const errors: ValidationErrors = {};
   const visibilityMap = new Map<string, boolean>();
   const valueMatchErrors: ValueMatchErrors = {};
+  let hasMalformedPayload = false;
 
   for (const formElement of props.formRecord.form.elements) {
     const responseValue = values[formElement.id];
@@ -102,6 +109,7 @@ export const validateVisibleElements = (
     }
 
     const matched = valueMatchesType(responseValue, formElement.type, formElement);
+    if (matched?.malformed) hasMalformedPayload = true;
 
     if (matched?.error && matched.details) {
       valueMatchErrors[formElement.id] = matched.details;
@@ -131,5 +139,5 @@ export const validateVisibleElements = (
     }
   }
 
-  return { errors, visibility: visibilityMap, valueMatchErrors };
+  return { errors, visibility: visibilityMap, valueMatchErrors, hasMalformedPayload };
 };

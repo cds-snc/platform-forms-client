@@ -380,6 +380,63 @@ describe("Form", () => {
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 
+  it("formats malformed date errors and blocks submission using core validation", async () => {
+    const { validateOnSubmit } = await import("@root/packages/core/src/process");
+    mocks.validateOnSubmit.mockImplementation(validateOnSubmit);
+    const props = createFormProps();
+    props.formRecord.form.elements = [
+      {
+        ...fieldElement,
+        type: FormElementTypes.formattedDate,
+        properties: { ...fieldElement.properties, validation: { required: true } },
+      },
+    ];
+    props.initialValues = { 1: "{" };
+
+    render(<Form {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => {
+      expect(mocks.getErrorList).toHaveBeenCalledWith(
+        expect.objectContaining({
+          errors: { 1: expect.stringContaining("input-validation.date-invalid") },
+        })
+      );
+    });
+    expect(mocks.executeCaptcha).not.toHaveBeenCalled();
+    expect(mocks.submitForm).not.toHaveBeenCalled();
+    expect(mocks.onSuccess).not.toHaveBeenCalled();
+  });
+
+  it.each([true, false])(
+    "blocks malformed addresses using core validation (required: %s)",
+    async (required) => {
+      const { validateOnSubmit } = await import("@root/packages/core/src/process");
+      mocks.validateOnSubmit.mockImplementation(validateOnSubmit);
+      const props = createFormProps();
+      props.formRecord.form.elements = [
+        {
+          ...fieldElement,
+          type: FormElementTypes.addressComplete,
+          properties: { ...fieldElement.properties, validation: { required } },
+        },
+      ];
+      props.initialValues = { 1: '{"city":{"toString":null}}' };
+
+      render(<Form {...props} />);
+      fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+      await waitFor(() => {
+        expect(mocks.getErrorList).toHaveBeenCalledWith(
+          expect.objectContaining({ errors: { 1: expect.any(String) } })
+        );
+      });
+      expect(mocks.executeCaptcha).not.toHaveBeenCalled();
+      expect(mocks.submitForm).not.toHaveBeenCalled();
+      expect(mocks.onSuccess).not.toHaveBeenCalled();
+    }
+  );
+
   it("does not refocus the validation summary on a later render", async () => {
     mocks.validateOnSubmit.mockReturnValue({ 1: { code: "required" } });
     mocks.getErrorList.mockReturnValue(<div>Required</div>);

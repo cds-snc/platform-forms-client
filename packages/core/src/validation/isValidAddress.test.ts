@@ -1,12 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import type { ValidationProperties } from "@gcforms/types";
 import { isValidAddress } from "./isValidAddress";
 
 describe("isValidAddress", () => {
-  it("returns required error when value is missing and required is true", () => {
-    const validator: ValidationProperties = { required: true };
-    const result = isValidAddress(undefined, validator);
-    expect(result).toEqual({ code: "required" });
+  it.each([undefined, null, ""])("handles missing value %s before parsing", (value) => {
+    expect(isValidAddress(value, { required: true })).toEqual({ code: "required" });
+    expect(isValidAddress(value, { required: false })).toBeNull();
   });
 
   it("returns per-field errors when any address subfield is empty", () => {
@@ -52,10 +51,54 @@ describe("isValidAddress", () => {
     expect(result).toBeNull();
   });
 
-  it("tolerates invalid JSON by treating non-empty raw value as present", () => {
-    const validator: ValidationProperties = { required: true };
-    const value = "not a json string";
-    const result = isValidAddress(value, validator);
-    expect(result).toBeNull();
+  it.each<unknown>([
+    "not a json string",
+    "null",
+    "[]",
+    "123",
+    "true",
+    '"address"',
+    false,
+    0,
+    {},
+    {
+      toString: () => {
+        throw new Error("must not coerce");
+      },
+    },
+    '{"streetAddress":123}',
+    '{"city":null}',
+    '{"province":false}',
+    '{"postalCode":[]}',
+    '{"country":123}',
+    '{"city":{"toString":null}}',
+  ])("rejects malformed value %j for required and optional addresses", (value) => {
+    expect(isValidAddress(value, { required: true })).toEqual({ code: "mismatched-type" });
+    expect(isValidAddress(value, { required: false })).toEqual({ code: "mismatched-type" });
+  });
+
+  it("keeps missing and whitespace-only fields as ordinary incomplete answers", () => {
+    const value = '{"streetAddress":"  ","city":"Ottawa"}';
+    expect(isValidAddress(value, { required: true })).toEqual({
+      fields: {
+        streetAddress: { code: "required" },
+        city: null,
+        province: { code: "required" },
+        postalCode: { code: "required" },
+      },
+    });
+    expect(isValidAddress(value, { required: false })).toBeNull();
+  });
+
+  it("does not suppress unexpected parser failures", () => {
+    const error = new Error("unexpected parser failure");
+    const parse = vi.spyOn(JSON, "parse").mockImplementation(() => {
+      throw error;
+    });
+    try {
+      expect(() => isValidAddress("{}", { required: true })).toThrow(error);
+    } finally {
+      parse.mockRestore();
+    }
   });
 });

@@ -65,6 +65,12 @@ export const getRegexByType = (type: string | undefined, regex?: string) => {
     },
   };
   if (type === "custom") {
+    if (regex && !isValidRegex(regex)) {
+      return {
+        regex: null,
+        error: { code: "unsafe-regex" } satisfies ValidationError,
+      };
+    }
     return {
       regex: regex ? new RegExp(regex) : null,
       error: { code: "pattern-mismatch" } satisfies ValidationError,

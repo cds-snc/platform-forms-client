@@ -151,6 +151,12 @@ export async function submitForm(
         // throw new MissingFormDataError("Form data validation failed");
       }
 
+      // Reject malformed structures before normalization can discard or coerce them.
+      // Ordinary validation errors above intentionally remain passive.
+      if (validateOnSubmitResult.hasMalformedPayload) {
+        throw new MissingFormDataError("Form data validation failed due to malformed payload");
+      }
+
       // ⚠️ Specifically catch file input errors
       if (validateOnSubmitResult.valueMatchErrors) {
         const hasFileInputErrors = valuesMatchErrorContainsElementType(
