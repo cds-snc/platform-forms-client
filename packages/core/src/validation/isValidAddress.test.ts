@@ -2,13 +2,11 @@ import { describe, it, expect } from "vitest";
 import type { ValidationProperties } from "@gcforms/types";
 import { isValidAddress } from "./isValidAddress";
 
-const t = (k: string) => k;
-
 describe("isValidAddress", () => {
   it("returns required error when value is missing and required is true", () => {
     const validator: ValidationProperties = { required: true };
-    const result = isValidAddress(undefined, validator, t);
-    expect(result).toBe("input-validation.required");
+    const result = isValidAddress(undefined, validator);
+    expect(result).toEqual({ code: "required" });
   });
 
   it("returns per-field errors when any address subfield is empty", () => {
@@ -19,10 +17,10 @@ describe("isValidAddress", () => {
       province: "ON",
       postalCode: "K1A0B1",
     });
-    const result = isValidAddress(value, validator, t);
+    const result = isValidAddress(value, validator);
     expect(result).toEqual({
       fields: {
-        streetAddress: "input-validation.required",
+        streetAddress: { code: "required" },
         city: null,
         province: null,
         postalCode: null,
@@ -38,7 +36,7 @@ describe("isValidAddress", () => {
       province: "ON",
       postalCode: "K1A0B1",
     });
-    const result = isValidAddress(value, validator, t);
+    const result = isValidAddress(value, validator);
     expect(result).toBeNull();
   });
 
@@ -50,14 +48,14 @@ describe("isValidAddress", () => {
       province: "",
       postalCode: "",
     });
-    const result = isValidAddress(value, validator, t);
+    const result = isValidAddress(value, validator);
     expect(result).toBeNull();
   });
 
   it("tolerates invalid JSON by treating non-empty raw value as present", () => {
     const validator: ValidationProperties = { required: true };
     const value = "not a json string";
-    const result = isValidAddress(value, validator, t);
+    const result = isValidAddress(value, validator);
     expect(result).toBeNull();
   });
 });

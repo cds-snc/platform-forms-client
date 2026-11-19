@@ -134,7 +134,7 @@ export const Form: React.FC<FormProps> = (props) => {
     initialValues: props.initialValues ?? getFormInitialValues(props.formRecord, props.language),
     validate: (values) =>
       formatErrors(
-        validateOnSubmit(values, props),
+        validateOnSubmit(values, { formRecord: props.formRecord }),
         props.formRecord.form.elements,
         props.language,
         props.t

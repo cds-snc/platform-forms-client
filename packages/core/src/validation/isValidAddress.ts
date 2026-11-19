@@ -1,23 +1,13 @@
 import { ValidationProperties } from "@gcforms/types";
 
-export type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
-
-export type AddressValidationError = {
-  fields: {
-    streetAddress: string | null;
-    city: string | null;
-    province: string | null;
-    postalCode: string | null;
-  };
-};
+import type { AddressValidationError, ValidationError } from "./types";
 
 export const isValidAddress = (
   value: unknown,
-  validator: ValidationProperties,
-  t: TranslateFn
-): string | AddressValidationError | null => {
+  validator: ValidationProperties
+): ValidationError | AddressValidationError | null => {
   if (validator.required) {
-    if (!value) return t("input-validation.required");
+    if (!value) return { code: "required" };
 
     try {
       const parsed: unknown = JSON.parse(String(value));
@@ -28,11 +18,11 @@ export const isValidAddress = (
         const province = String(record.province ?? "").trim();
         const postal = String(record.postalCode ?? "").trim();
 
-        const fields = {
-          streetAddress: street ? null : t("input-validation.required"),
-          city: city ? null : t("input-validation.required"),
-          province: province ? null : t("input-validation.required"),
-          postalCode: postal ? null : t("input-validation.required"),
+        const fields: AddressValidationError["fields"] = {
+          streetAddress: street ? null : { code: "required" },
+          city: city ? null : { code: "required" },
+          province: province ? null : { code: "required" },
+          postalCode: postal ? null : { code: "required" },
         };
 
         const missingKeys = Object.keys(fields).filter(
@@ -53,6 +43,7 @@ export const isValidAddress = (
   return null;
 };
 
+// These UI helpers use the string errors produced by the application's formatter
 export const isValidAddressSubFieldInvalid = (error: unknown, fieldKey: string): boolean => {
   if (!error) return false;
   if (typeof error === "string") return true;
@@ -61,7 +52,7 @@ export const isValidAddressSubFieldInvalid = (error: unknown, fieldKey: string):
     error !== null &&
     "fields" in (error as Record<string, unknown>)
   ) {
-    const obj = error as AddressValidationError;
+    const obj = error as { fields: Record<string, string | null> };
     if (!obj.fields || typeof obj.fields !== "object" || obj.fields === null) return false;
     const fields = obj.fields as Record<string, string | null>;
     return Boolean(fields[fieldKey]);
@@ -77,7 +68,7 @@ export const getAddressSubFieldError = (error: unknown, fieldKey: string): strin
     error !== null &&
     "fields" in (error as Record<string, unknown>)
   ) {
-    const obj = error as AddressValidationError;
+    const obj = error as { fields: Record<string, string | null> };
     if (!obj.fields || typeof obj.fields !== "object" || obj.fields === null) return null;
     const fields = obj.fields as Record<string, string | null>;
     return fields[fieldKey] || null;

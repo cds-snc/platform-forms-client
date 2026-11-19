@@ -3,6 +3,7 @@ import { isValidDate } from "../validation/date";
 import { isValidEmail } from "../validation/isValidEmail";
 import { isFileExtensionValid } from "../validation/file";
 import { Response } from "@gcforms/types";
+import type { ValidationError } from "./types";
 
 export type SubElementTypeMismatch = {
   rowIndex: number;
@@ -20,24 +21,19 @@ export type ElementTypeMismatch = {
 
 export type ValueMatchErrors = Record<string, SubElementTypeMismatch[] | ElementTypeMismatch>;
 
-export const valueMatchesType = (
-  value: Response,
-  type: string,
-  formElement: FormElement,
-  t: (str: string) => string
-) => {
+export const valueMatchesType = (value: Response, type: string, formElement: FormElement) => {
   const result = valueMatches(value, type, formElement);
-  const errorMessage = t("input-validation.mismatched-type");
+  const error: ValidationError = { code: "mismatched-type" };
 
   // Return sub-element mismatches (passes back results from dynamic rows)
   if (Array.isArray(result) && result.length > 0) {
-    return { error: errorMessage, details: result };
+    return { error, details: result };
   }
 
   // Return element mismatches
   if (result === false) {
     return {
-      error: errorMessage,
+      error,
       details: { type: formElement.type, elementId: formElement.id, value },
     };
   }

@@ -10,7 +10,6 @@ import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements } from "@gcforms/core";
-import { serverTranslation } from "@root/i18n";
 import {
   getFormNotificationInterval,
   prepareFormSubmissionEmail,
@@ -133,14 +132,11 @@ export async function submitForm(
         }
       }
 
-      const { t } = await serverTranslation();
-
       /**
        * This validation runs the client-side validation on the server.
        */
       const validateOnSubmitResult = validateVisibleElements(values, {
         formRecord: template,
-        t: t,
       });
 
       if (Object.keys(validateOnSubmitResult.errors).length !== 0) {

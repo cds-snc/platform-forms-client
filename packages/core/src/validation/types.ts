@@ -1,3 +1,4 @@
+// Add new errors to the list
 export type ValidationError =
   | { code: "required" }
   | { code: "all-checkboxes-required" }
@@ -23,7 +24,7 @@ export type ValidationError =
 
 export type AddressField = "streetAddress" | "city" | "province" | "postalCode";
 
-export type StructuredAddressValidationError = {
+export type AddressValidationError = {
   fields: Record<AddressField, ValidationError | null>;
 };
 
@@ -31,7 +32,7 @@ export type StructuredAddressValidationError = {
 export type RepeatingSetValidationErrors = ValidationErrors[];
 
 export type FieldValidationError =
-  ValidationError | StructuredAddressValidationError | RepeatingSetValidationErrors;
+  ValidationError | AddressValidationError | RepeatingSetValidationErrors;
 
 export type FieldValidationResult = FieldValidationError | null;
 

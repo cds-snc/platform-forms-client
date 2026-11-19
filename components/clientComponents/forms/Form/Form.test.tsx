@@ -4,7 +4,7 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Field } from "formik";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FormStatus } from "@gcforms/types";
+import { FormElementTypes, FormStatus } from "@gcforms/types";
 
 import { Form } from "./Form";
 import { type FormProps } from "./types";
@@ -128,7 +128,14 @@ vi.mock("@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fil
 
 vi.mock("@lib/client/clientHelpers", () => ({
   ga: vi.fn(),
+  truncateString: (value: string) => value,
 }));
+
+const fieldElement = {
+  id: 1,
+  type: FormElementTypes.textField,
+  properties: { titleEn: "Question", titleFr: "Question FR" },
+};
 
 const createFormProps = (props: Partial<FormProps> = {}): FormProps => ({
   formRecord: {
@@ -140,8 +147,8 @@ const createFormProps = (props: Partial<FormProps> = {}): FormProps => ({
       titleFr: "Formulaire test",
       introduction: {},
       privacyPolicy: {},
-      elements: [],
-      layout: [],
+      elements: [fieldElement],
+      layout: [1],
     },
     closedDetails: {},
   } as FormProps["formRecord"],
@@ -248,7 +255,7 @@ describe("Form", () => {
       "@lib/validation/validation"
     );
     mocks.getErrorList.mockImplementation(validation.getErrorList);
-    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+    mocks.validateOnSubmit.mockReturnValue({ 1: { code: "required" } });
 
     const formProps = createFormProps({
       formRecord: {
@@ -259,8 +266,8 @@ describe("Form", () => {
           titleFr: "Formulaire test",
           introduction: {},
           privacyPolicy: {},
-          layout: ["field"],
-          elements: [],
+          layout: [1],
+          elements: [fieldElement],
         },
         closedDetails: {},
       } as unknown as FormProps["formRecord"],
@@ -360,7 +367,7 @@ describe("Form", () => {
   });
 
   it("does not execute hCaptcha or submit when client validation fails", async () => {
-    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+    mocks.validateOnSubmit.mockReturnValue({ 1: { code: "required" } });
     mocks.getErrorList.mockReturnValue(<div>Required</div>);
 
     renderForm();
@@ -374,7 +381,7 @@ describe("Form", () => {
   });
 
   it("does not refocus the validation summary on a later render", async () => {
-    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+    mocks.validateOnSubmit.mockReturnValue({ 1: { code: "required" } });
     mocks.getErrorList.mockReturnValue(<div>Required</div>);
 
     const formProps = createFormProps();

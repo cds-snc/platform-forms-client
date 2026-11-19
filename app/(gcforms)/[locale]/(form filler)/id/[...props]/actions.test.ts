@@ -33,10 +33,6 @@ vi.mock("@gcforms/core", async () => {
   };
 });
 
-vi.mock("@root/i18n", () => ({
-  serverTranslation: vi.fn(),
-}));
-
 vi.mock("@lib/formEmailOrchestration", () => ({
   getFormNotificationInterval: vi.fn(),
   updateNotificationMarker: vi.fn(),
@@ -61,7 +57,6 @@ import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
 import { getAppSettingAsBoolean } from "@lib/appSettings";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
-import { serverTranslation } from "@root/i18n";
 import {
   getFormNotificationInterval,
   prepareFormSubmissionEmail,
@@ -101,7 +96,6 @@ describe("submitForm", () => {
     (verifyHCaptchaToken as Mock).mockResolvedValue({ verified: true, score: 0.2 });
     (getAppSettingAsBoolean as Mock).mockResolvedValue(true);
     (dateHasPast as Mock).mockReturnValue(false);
-    (serverTranslation as Mock).mockResolvedValue({ t: vi.fn() });
     (validateVisibleElements as Mock).mockReturnValue({ errors: {} });
     (valuesMatchErrorContainsElementType as Mock).mockReturnValue(false);
     (normalizeFormResponses as Mock).mockReturnValue(mockValues);
@@ -176,7 +170,6 @@ describe("submitForm", () => {
     expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId, "published");
     expect(validateVisibleElements).toHaveBeenCalledWith(mockValues, {
       formRecord: mockTemplate,
-      t: expect.any(Function),
     });
     expect(normalizeFormResponses).toHaveBeenCalledWith(mockTemplate, mockValues);
     expect(processFormData).toHaveBeenCalledWith({
@@ -332,11 +325,6 @@ describe("submitForm", () => {
       actualCore.valuesMatchErrorContainsElementType
     );
 
-    // Mock the translation function with a real implementation
-    (serverTranslation as Mock).mockResolvedValue({
-      t: (key: string) => key, // Simple passthrough translation
-    });
-
     const result = await submitForm(valuesWithExeFile, mockLanguage, mockFormId, false);
 
     // The real validation should detect the .exe file as invalid and trigger the error
@@ -354,7 +342,6 @@ describe("submitForm", () => {
     // Verify that real validation was called with our form data
     expect(validateVisibleElements).toHaveBeenCalledWith(valuesWithExeFile, {
       formRecord: templateWithFileInput,
-      t: expect.any(Function),
     });
   });
 

@@ -1,5 +1,6 @@
 import { Responses, PublicFormRecord, GroupsType, FormValues } from "@gcforms/types";
-import { isFieldResponseValid, TranslateFn } from "./validation/validation";
+import { isFieldResponseValid } from "./validation/validation";
+import type { ValidationErrors } from "./validation/types";
 import { inGroup } from "./helpers";
 import { checkVisibilityRecursive } from "./visibility";
 import {
@@ -24,17 +25,15 @@ export const validate = ({
 }) => {
   values.currentGroup = currentGroup;
 
-  const identityT = ((key: string) => key) as unknown as TranslateFn;
-
   const errors = validateOnSubmit(values, {
     formRecord,
-    t: identityT,
   });
   return errors;
 };
 
 /**
- * validateOnSubmit is called for form submission validation
+ * validateOnSubmit returns structured errors for form submission validation.
+ * Translate these at the presentation boundary before storing them in UI state.
  * @param values
  * @param props
  */
@@ -42,9 +41,8 @@ export const validateOnSubmit = (
   values: Responses,
   props: {
     formRecord: PublicFormRecord;
-    t: TranslateFn;
   }
-): Responses => {
+): ValidationErrors => {
   const { errors } = validateVisibleElements(values, props);
   return errors;
 };
@@ -53,14 +51,13 @@ export const validateVisibleElements = (
   values: Responses,
   props: {
     formRecord: PublicFormRecord;
-    t: TranslateFn;
   }
 ): {
-  errors: Responses;
+  errors: ValidationErrors;
   visibility: Map<string, boolean>;
   valueMatchErrors: ValueMatchErrors;
 } => {
-  const errors: Responses = {};
+  const errors: ValidationErrors = {};
   const visibilityMap = new Map<string, boolean>();
   const valueMatchErrors: ValueMatchErrors = {};
 
@@ -90,7 +87,7 @@ export const validateVisibleElements = (
     visibilityMap.set(String(formElement.id), isVisible);
 
     if (formElement.properties.validation) {
-      const result = isFieldResponseValid(responseValue, formElement, props.t);
+      const result = isFieldResponseValid(responseValue, formElement);
 
       if (result) {
         errors[formElement.id] = result;
@@ -104,7 +101,7 @@ export const validateVisibleElements = (
       continue;
     }
 
-    const matched = valueMatchesType(responseValue, formElement.type, formElement, props.t);
+    const matched = valueMatchesType(responseValue, formElement.type, formElement);
 
     if (matched?.error && matched.details) {
       valueMatchErrors[formElement.id] = matched.details;
@@ -113,7 +110,7 @@ export const validateVisibleElements = (
       if (!errors[formElement.id]) {
         if (Array.isArray(matched.details)) {
           // Build errors UI display for dynamic rows
-          const groupErrors: Record<string, string>[] = [];
+          const groupErrors: ValidationErrors[] = [];
           const detailsArray = matched.details as SubElementTypeMismatch[];
           detailsArray.forEach((detail) => {
             if (!groupErrors[detail.rowIndex]) {
@@ -126,7 +123,7 @@ export const validateVisibleElements = (
             };
           });
 
-          errors[formElement.id] = groupErrors as unknown as Responses[string];
+          errors[formElement.id] = groupErrors;
         } else {
           errors[formElement.id] = matched.error;
         }
