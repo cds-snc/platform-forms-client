@@ -1,4 +1,5 @@
-// Add new errors to the list
+// 👉 Define error codes and parameters here. The application owns presentation.
+// When adding a code, update its presentation handling in lib/validation/formatErrors.ts.
 export type ValidationError =
   | { code: "required" }
   | { code: "all-checkboxes-required" }

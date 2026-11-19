@@ -11,56 +11,45 @@ import { getAddressFieldLabel } from "@clientComponents/forms/AddressComplete/ut
 
 type Translate = (key: string, options?: Record<string, unknown>) => string;
 
+type ContextualErrorCode = "input-too-long" | "file-too-large";
+
+// 👉 The application owns presentation (code-to-translation mapping). Core owns error codes.
+// See packages/core/src/validation/validationErrorTypes.ts for code definitions.
+const errorTranslationKeys = {
+  required: "input-validation.required",
+  "all-checkboxes-required": "input-validation.all-checkboxes-required",
+  "max-length": "formElements.characterCount.exceeded",
+  "min-value": "input-validation.too-small",
+  "max-value": "input-validation.too-large",
+  "min-digits": "input-validation.too-few-digits",
+  "max-digits": "input-validation.too-many-digits",
+  "invalid-email": "input-validation.email",
+  "invalid-alphanumeric": "input-validation.alphanumeric",
+  "invalid-number": "input-validation.number",
+  "invalid-date-format": "input-validation.date",
+  "invalid-date": "input-validation.date-invalid",
+  "invalid-phone": "input-validation.phone",
+  "invalid-choice": "input-validation.combobox-strict",
+  "pattern-mismatch": "input-validation.regex",
+  "unsafe-regex": "input-validation.invalidRegex",
+  "mismatched-type": "input-validation.mismatched-type",
+  "invalid-file-type": "input-validation.file-type-invalid",
+  "invalid-file-content": "input-validation.file-upload.mime.message",
+} satisfies Record<Exclude<ValidationError["code"], ContextualErrorCode>, string>;
+
 const translateError = (error: ValidationError, language: Language, t: Translate): string => {
   const options = { lng: language };
   switch (error.code) {
-    case "required":
-      return t("input-validation.required", options);
-    case "all-checkboxes-required":
-      return t("input-validation.all-checkboxes-required", options);
     case "input-too-long":
       return (
         t("input-validation.too-many-characters", options) +
         " " +
         t("formElements.characterCount.exceeded", { ...options, count: error.count })
       );
-    case "max-length":
-      return t("formElements.characterCount.exceeded", { ...options, count: error.count });
     case "min-value":
-      return t("input-validation.too-small", { ...options, min: String(error.min) });
+      return t(errorTranslationKeys[error.code], { ...options, min: String(error.min) });
     case "max-value":
-      return t("input-validation.too-large", { ...options, max: String(error.max) });
-    case "min-digits":
-      return t("input-validation.too-few-digits", options);
-    case "max-digits":
-      return t("input-validation.too-many-digits", options);
-    case "invalid-email":
-      return t("input-validation.email", options);
-    case "invalid-alphanumeric":
-      return t("input-validation.alphanumeric", options);
-    case "invalid-number":
-      return t("input-validation.number", options);
-    case "invalid-date-format":
-      return t("input-validation.date", options);
-    case "invalid-date":
-      return t("input-validation.date-invalid", options);
-    case "invalid-phone":
-      return t("input-validation.phone", options);
-    case "invalid-choice":
-      return t("input-validation.combobox-strict", options);
-    case "pattern-mismatch":
-      return t("input-validation.regex", options);
-    case "unsafe-regex":
-      return t("input-validation.invalidRegex", options);
-    case "mismatched-type":
-      return t("input-validation.mismatched-type", options);
-    case "invalid-file-type":
-      return t("input-validation.file-type-invalid", options);
-    case "invalid-file-content":
-      return t("input-validation.file-upload.mime.message", {
-        ...options,
-        fileName: error.fileName,
-      });
+      return t(errorTranslationKeys[error.code], { ...options, max: String(error.max) });
     case "file-too-large":
       return t(
         error.fileName
@@ -68,6 +57,10 @@ const translateError = (error: ValidationError, language: Language, t: Translate
           : "input-validation.file-size-too-large",
         { ...options, maxSizeInMb: error.maxSizeInMb, fileName: error.fileName }
       );
+    default: {
+      const { code, ...params } = error;
+      return t(errorTranslationKeys[code], { ...options, ...params });
+    }
   }
 };
 

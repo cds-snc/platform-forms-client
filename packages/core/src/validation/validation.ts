@@ -14,7 +14,7 @@ import { isFileExtensionValid, isIndividualFileSizeValid, MAX_FILE_SIZE } from "
 import { isSafeRegex } from "./regex";
 import { isNumberInput } from "../utils/isNumberInput";
 import { isValidAddress } from "./isValidAddress";
-import type { FieldValidationResult, ValidationErrors } from "./types";
+import type { FieldValidationResult, ValidationErrors } from "./validationErrorTypes";
 
 // Number.MAX_SAFE_INTEGER (9,007,199,254,740,991) has 16 digits — the largest integer JS
 // can represent exactly. This hard cap (independent of any form-configured maxDigits) keeps

@@ -2,7 +2,7 @@ import { FormElement, FormElementTypes, PublicFormRecord } from "@gcforms/types"
 import contactFormRecord from "../__fixtures__/contactformRecord.json";
 
 import { validate, validateVisibleElements } from "./process";
-import type { ValidationErrors } from "./validation/types";
+import type { ValidationErrors } from "./validation/validationErrorTypes";
 
 // https://forms-staging.cdssandbox.xyz/en/id/cmeaj61dl0001xf01aja6mnpf
 

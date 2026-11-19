@@ -1,6 +1,6 @@
 import { Responses, PublicFormRecord, GroupsType, FormValues } from "@gcforms/types";
 import { isFieldResponseValid } from "./validation/validation";
-import type { ValidationErrors } from "./validation/types";
+import type { ValidationErrors } from "./validation/validationErrorTypes";
 import { inGroup } from "./helpers";
 import { checkVisibilityRecursive } from "./visibility";
 import {

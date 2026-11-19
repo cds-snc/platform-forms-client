@@ -68,7 +68,7 @@ export type {
   FieldValidationError,
   FieldValidationResult,
   ValidationErrors,
-} from "./validation/types";
+} from "./validation/validationErrorTypes";
 export {
   isValidAddressSubFieldInvalid,
   getAddressSubFieldError,

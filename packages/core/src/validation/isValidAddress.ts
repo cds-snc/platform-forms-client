@@ -1,6 +1,6 @@
 import { ValidationProperties } from "@gcforms/types";
 
-import type { AddressValidationError, ValidationError } from "./types";
+import type { AddressValidationError, ValidationError } from "./validationErrorTypes";
 
 export const isValidAddress = (
   value: unknown,

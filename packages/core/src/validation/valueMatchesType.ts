@@ -3,7 +3,7 @@ import { isValidDate } from "../validation/date";
 import { isValidEmail } from "../validation/isValidEmail";
 import { isFileExtensionValid } from "../validation/file";
 import { Response } from "@gcforms/types";
-import type { ValidationError } from "./types";
+import type { ValidationError } from "./validationErrorTypes";
 
 export type SubElementTypeMismatch = {
   rowIndex: number;

@@ -1,5 +1,5 @@
 import { checkSync } from "recheck";
-import type { ValidationError } from "./types";
+import type { ValidationError } from "./validationErrorTypes";
 
 export const isSafeRegex = (pattern: string): boolean => {
   if (!pattern) return true;
