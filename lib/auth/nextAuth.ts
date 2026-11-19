@@ -21,6 +21,7 @@ import {
 import { applyIdentityClaimsToToken } from "@lib/auth/oidcIdentityClaims";
 
 import { filterZitadelUrl } from "@lib/utils/filterZitadelUrl";
+import { isProductionEnvironment } from "@lib/origin";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -62,6 +63,13 @@ const adapter = {
   },
 };
 
+const isProd = await isProductionEnvironment();
+
+// @todo swap this to a env var during a cleanup sprint
+const issuer = isProd
+  ? "https://session.canada.ca"
+  : filterZitadelUrl(process.env.NEXT_PUBLIC_ZITADEL_URL);
+
 const {
   handlers: { GET, POST },
   auth,
@@ -73,7 +81,7 @@ const {
       id: "gcForms", // signIn("my-provider") and will be part of the callback URL
       name: "GC Forms", // optional, used on the default login page as the button text.
       type: "oidc",
-      issuer: filterZitadelUrl(process.env.NEXT_PUBLIC_ZITADEL_URL),
+      issuer: issuer,
       clientId: process.env.ZITADEL_CLIENT_ID,
       checks: ["pkce", "state"],
       client: { token_endpoint_auth_method: "none" },
