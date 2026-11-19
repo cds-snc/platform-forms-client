@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.9] - 2026-11-19
+
+- Updates validation to use structured error codes
+
 ## [3.0.8] - 2026-11-12
 
 - Updates validation content for some error cases
