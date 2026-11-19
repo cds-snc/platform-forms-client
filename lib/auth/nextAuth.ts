@@ -21,7 +21,7 @@ import {
 import { applyIdentityClaimsToToken } from "@lib/auth/oidcIdentityClaims";
 
 import { filterZitadelUrl } from "@lib/utils/filterZitadelUrl";
-import { isProductionEnvironment } from "@lib/origin";
+import { isProductionOrigin } from "@lib/origin";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -63,7 +63,7 @@ const adapter = {
   },
 };
 
-const isProd = await isProductionEnvironment();
+const isProd = isProductionOrigin(process.env.HOST_URL || process.env.NEXTAUTH_URL);
 
 // @todo swap this to a env var during a cleanup sprint
 const issuer = isProd
