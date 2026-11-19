@@ -189,6 +189,8 @@ export const ConditionalElementRuleSelector = ({
               excludeIds={[
                 itemId,
                 ...currentRules
+                  // Prevent creating circular logic by filtering out questions
+                  // that already have rules pointing to the current element.
                   .filter((rule) => rule.choiceId.split(".")[0] !== elementId)
                   .map((rule) => Number(rule.choiceId.split(".")[0])),
               ]}
