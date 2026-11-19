@@ -184,6 +184,7 @@ const {
     },
     debug(code, ...message) {
       logMessage.info(code);
+      // TODO.. switch back to debug
       logMessage.info((message as string[]).join(" "));
     },
   },
