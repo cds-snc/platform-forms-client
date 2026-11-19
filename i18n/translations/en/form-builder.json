@@ -825,6 +825,11 @@
   "pagePreview": "Preview",
   "pageSettings": "Settings",
   "pageText": "Page text",
+  "questionSearch": {
+    "label": "Find a question",
+    "placeholder": "Search questions",
+    "noResults": "No questions found"
+  },
   "paragraph": "Long answer",
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
