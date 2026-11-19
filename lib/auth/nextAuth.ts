@@ -171,6 +171,7 @@ const {
   },
   // Elastic Load Balancer safely sets the host header and ignores the incoming request headers
   trustHost: true,
+  debug: true,
   logger: {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
