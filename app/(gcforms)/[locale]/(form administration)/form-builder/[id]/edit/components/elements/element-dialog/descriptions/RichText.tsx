@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { useTranslation } from "@i18n/client";
 export const RichText = () => {

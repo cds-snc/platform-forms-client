@@ -15,6 +15,7 @@ import { StatusFilter } from "../types";
 import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
 import { useFeatureDetect } from "@lib/hooks/useFeatureDetect";
 import { v4 as uuid } from "uuid";
+import { FormElement, FormElementTypes } from "@lib/types";
 
 export interface ResponsesProps {
   hasOverdue: boolean;
@@ -27,6 +28,13 @@ export interface ResponsesProps {
   statusFilter: StatusFilter;
   isApiRetrieval?: boolean;
 }
+
+const hasFileInputElement = (elements?: FormElement[]): boolean =>
+  elements?.some(
+    (element) =>
+      element.type === FormElementTypes.fileInput ||
+      hasFileInputElement(element.properties?.subElements)
+  ) ?? false;
 
 export const Responses = ({
   hasOverdue,
@@ -97,6 +105,7 @@ export const Responses = ({
   }, [formId, lastKey, statusFilter, forceRefresh]);
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
+  const hasFileInput = hasFileInputElement(initialForm.elements);
 
   if (state.loading) {
     return null;
@@ -120,6 +129,7 @@ export const Responses = ({
                 formId={formId}
                 responseDownloadLimit={responseDownloadLimit}
                 responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
+                hasFileInput={hasFileInput}
                 startFromExclusiveResponse={state.startFromExclusiveResponse}
                 overdueAfter={overdueAfter}
                 nagwarePromptAfter={nagwarePromptAfter}
@@ -158,6 +168,7 @@ export const Responses = ({
               formId={formId}
               responseDownloadLimit={responseDownloadLimit}
               responsesDownloadZipMaxSizeMB={responsesDownloadZipMaxSizeMB}
+              hasFileInput={hasFileInput}
               startFromExclusiveResponse={state.startFromExclusiveResponse}
               overdueAfter={overdueAfter}
               nagwarePromptAfter={nagwarePromptAfter}

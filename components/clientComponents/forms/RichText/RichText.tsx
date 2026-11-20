@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { cn } from "@lib/utils";
-import Markdown, { RuleType } from "markdown-to-jsx";
+import Markdown, { MarkdownToJSX, RuleType } from "markdown-to-jsx/react";
 import { stripEntities } from "@lib/utils/strings";
 
 interface RichTextProps {
@@ -101,11 +101,11 @@ const TableTD = ({ children, ...props }: { children: React.ReactElement }) => {
 const markdownOptions = {
   forceBlock: true,
   disableParsingRawHTML: true,
-  renderRule(next: (node: unknown) => React.ReactNode, node: { type: string; text?: string }) {
+  renderRule(next: () => React.ReactNode, node: MarkdownToJSX.ASTNode) {
     if (node.type === RuleType.text) {
-      return stripEntities(node.text || "");
+      return stripEntities(node.text);
     }
-    return next(node);
+    return next();
   },
   overrides: {
     h1: { component: H1 },

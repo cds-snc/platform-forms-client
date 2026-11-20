@@ -11,9 +11,7 @@ import React, { useEffect } from "react";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
-import { FeatureFlags } from "@lib/cache/types";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { logMessage } from "@lib/logger";
 import { DownloadFormat } from "@lib/responseDownloadFormats/types";
@@ -46,6 +44,7 @@ export const DownloadDialog = ({
   onSuccessfulDownload,
   responseDownloadLimit,
   responsesDownloadZipMaxSizeMB,
+  hasFileInput,
   checkedMeta = [],
 }: DownloadDialogProps) => {
   const dialogRef = useDialogRef();
@@ -60,9 +59,7 @@ export const DownloadDialog = ({
   );
 
   const { dialogVersions, getFilteredIds } = useTemplateVersioning(checkedItems, checkedMeta);
-  const { getFlag } = useFeatureFlags();
   const { logClientError } = useLogClient();
-  const fileUploadEnabled = getFlag(FeatureFlags.fileUpload);
 
   useEffect(() => {
     if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
@@ -135,7 +132,7 @@ export const DownloadDialog = ({
         version: selectedVersion,
         filteredIds: filteredIdsWithVersion,
         filePrefix,
-        shouldCreateZip: zipAllFiles || fileUploadEnabled,
+        shouldCreateZip: zipAllFiles || hasFileInput,
         responsesDownloadZipMaxSizeMB,
         setDownloadProgress,
         setIsDownloading,
@@ -301,7 +298,7 @@ export const DownloadDialog = ({
               </div>
             </div>
 
-            {!fileUploadEnabled && (
+            {!hasFileInput && (
               <div className="mt-6">
                 <div className="gc-input-checkbox">
                   <input
@@ -339,9 +336,7 @@ export const DownloadDialog = ({
                 <div className="flex items-center gap-2" data-testid="download-progress-indicator">
                   <SpinnerIcon className="size-6 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
                   <span className="sr-only">{t("loading")}</span>
-                  {fileUploadEnabled && (
-                    <span className="text-sm">{getDownloadProgressMessage()}</span>
-                  )}
+                  <span className="text-sm">{getDownloadProgressMessage()}</span>
                 </div>
               )}
               <div className="flex gap-4">

@@ -6,10 +6,8 @@ import { FormikProps } from "formik";
 import { ErrorListItem } from "@clientComponents/forms";
 import {
   addressErrorSummaryFields,
-  getAddressFieldLabel,
   isAddressValidationError,
 } from "@clientComponents/forms/AddressComplete/utils";
-import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
@@ -66,32 +64,13 @@ export const getErrorList = (
             ? Object.entries(dynamicRowErrors).map(
                 ([dynamicRowElementKey, dyanamicRowElementErrorValue]) => {
                   const id = `${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`;
-                  const parentElement = props.formRecord.form.elements.find(
-                    (el) => el.id === formElementKey
-                  );
-
-                  let subElement;
-
-                  if (dyanamicRowElementErrorValue) {
-                    const subElements = parentElement?.properties.subElements;
-                    subElement = subElements && subElements[Number(dynamicRowElementKey)];
-                  }
-
                   return (
                     dyanamicRowElementErrorValue && (
                       <ErrorListItem
-                        key={`error-${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
-                        errorKey={`${formElementKey}.${dynamicRowIndex}.${dynamicRowElementKey}`}
-                        value={`${dyanamicRowElementErrorValue as string}`}
-                      >
-                        <ErrorListMessage
-                          language={props.language || "en"}
-                          id={id}
-                          elements={[]}
-                          defaultValue={""}
-                          subElement={subElement}
-                        />
-                      </ErrorListItem>
+                        key={`error-${id}`}
+                        errorKey={id}
+                        value={String(dyanamicRowElementErrorValue)}
+                      />
                     )
                   );
                 }
@@ -110,8 +89,7 @@ export const getErrorList = (
           .filter(([fieldKey]) => Boolean(formElementErrorValue.fields[fieldKey]))
           .map(([fieldKey, config]) => {
             const fieldError = formElementErrorValue.fields[fieldKey];
-            const fieldLabel = getAddressFieldLabel(fieldKey, props.language || "en");
-            const value = `${String(fieldError)}: ${fieldLabel}`;
+            const value = String(fieldError);
 
             return (
               <ErrorListItem
@@ -129,14 +107,7 @@ export const getErrorList = (
             key={`error-${formElementKey}`}
             errorKey={String(formElementKey)}
             value={String(formElementErrorValue)}
-          >
-            <ErrorListMessage
-              language={props.language || "en"}
-              id={formElementKey}
-              elements={props.formRecord.form.elements}
-              defaultValue={String(formElementErrorValue)}
-            />
-          </ErrorListItem>
+          />
         );
       }
     });

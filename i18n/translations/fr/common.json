@@ -80,6 +80,7 @@
     "KB": "Ko",
     "bytes": "octets",
     "error-list": {
+      "entry-question": "Entrée {{count}} - {{question}}",
       "default": "Saisissez une réponse pour : {{question}}",
       "select": "Sélectionnez une option pour : {{question}}",
       "checkbox": "Sélectionnez une ou plusieurs options pour : {{question}}",
@@ -339,7 +340,8 @@
       "badge": {
         "text": "En cours",
         "lastSaved": "Sauvegardé : le {{day}} {{month}} {{year}}"
-      }
+      },
+      "fileStatus": "en-cours"
     }
   },
   "saveResponse": {
@@ -360,6 +362,7 @@
         "lastSaved": "le {{day}} {{month}} {{year}}",
         "submissionId": "Numéro de référence : {{submissionId}}"
       },
+      "fileStatus": "confirmation",
       "generateHtmlError": {
         "description": "Il y a eu un problème lors de l'enregistrement de vos réponses au formulaire. Le fichier n'a pas pu être téléchargé. Veuillez réessayer plus tard."
       }

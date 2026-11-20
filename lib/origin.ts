@@ -23,7 +23,11 @@ export async function getOrigin(): Promise<string> {
 
 export async function isProductionEnvironment(): Promise<boolean> {
   const host = await getOrigin();
-  return host.includes("forms-formulaires") && host.includes("canada.ca");
+  return isProductionOrigin(host);
+}
+
+export function isProductionOrigin(origin: string | undefined): boolean {
+  return Boolean(origin?.includes("forms-formulaires") && origin.includes("canada.ca"));
 }
 
 // Strip trailing slashes from HOST_URL to avoid issues with CORS and other origin checks.

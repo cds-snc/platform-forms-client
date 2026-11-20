@@ -7,6 +7,7 @@ import { getSubmissionsByFormat } from "../actions";
 import { DownloadFormat, HtmlResponse } from "@lib/responseDownloadFormats/types";
 import { Language, ServerActionError } from "@lib/types/form-builder-types";
 import { FormBuilderError } from "../exceptions";
+import { downloadResponses } from "./Dialogs/DownloadDialog/downloadResponses";
 
 export const DownloadSingleButton = ({
   id,
@@ -17,6 +18,8 @@ export const DownloadSingleButton = ({
   onDownloadStart,
   onDownloadSuccess,
   ariaLabelledBy,
+  hasFileInput,
+  responsesDownloadZipMaxSizeMB,
   disabled = false,
 }: {
   id: string;
@@ -27,6 +30,8 @@ export const DownloadSingleButton = ({
   onDownloadStart?: () => void;
   onDownloadSuccess: () => void;
   ariaLabelledBy: string;
+  hasFileInput: boolean;
+  responsesDownloadZipMaxSizeMB: number;
   disabled?: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder-responses");
@@ -34,6 +39,24 @@ export const DownloadSingleButton = ({
   const handleDownload = async () => {
     onDownloadStart?.();
     try {
+      if (hasFileInput) {
+        await downloadResponses({
+          formId,
+          format: DownloadFormat.HTML_ZIPPED,
+          language: i18n.language as Language,
+          version: version == null ? null : String(version),
+          filteredIds: [responseId],
+          filePrefix: `${responseId}-`,
+          shouldCreateZip: true,
+          responsesDownloadZipMaxSizeMB,
+          setDownloadProgress: () => undefined,
+          setIsDownloading: () => undefined,
+          onDownloadComplete: () => onDownloadSuccess(),
+          onClose: () => undefined,
+        });
+        return;
+      }
+
       const response = (await getSubmissionsByFormat({
         formID: formId,
         ids: [responseId],

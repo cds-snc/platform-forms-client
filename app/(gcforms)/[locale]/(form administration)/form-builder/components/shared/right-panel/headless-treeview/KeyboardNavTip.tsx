@@ -1,6 +1,6 @@
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { useTranslation } from "@i18n/client";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { HelpIcon } from "@serverComponents/icons";
 
 export const KeyboardNavTip = () => {

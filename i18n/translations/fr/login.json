@@ -5,7 +5,6 @@
   "migrationPanel": {
     "title": "Migration vers la nouvelle connexion via Platforme GC",
     "bodyLead": "<strong>Utilisez la même adresse courriel que celle de votre compte Formulaires GC.</strong> afin de conserver vos formulaires et réponses existants.",
-    "bodyDeadline": "<strong>Créez un compte Platforme GC d’ici le 30 octobre 2026 pour continuer à utiliser Formulaires GC.</strong>",
     "createAccount": "Créer un compte Platforme GC",
     "signInWithGcPlatform": "Se connecter avec le compte Platforme GC"
   },

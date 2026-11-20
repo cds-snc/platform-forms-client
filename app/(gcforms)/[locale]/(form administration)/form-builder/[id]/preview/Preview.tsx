@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { FormProperties, PublicFormRecord } from "@lib/types";

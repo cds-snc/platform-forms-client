@@ -136,10 +136,10 @@
   "archivedNotice2": "Passé ce délai, les formulaires seront définitivement supprimés.",
   "updatePublishedHelp": {
     "title": "Nouveauté :",
-    "descriptionBold": "Mettre à jour un formulaire après la publication",
-    "step1": "À côté du nom du formulaire publié, sélectionnez les trois points verticaux.",
-    "step2": "Choisissez « Modifier un formulaire publié » et suivez les invites.",
-    "step3": "Testez le formulaire modifié avant de le publier.",
-    "description": "La version actuelle du formulaire continue de recueillir des réponses jusqu’à ce que vous publiez la mise à jour."
+    "descriptionBold": "Recevez des pièces jointes avec les formulaires soumis",
+    "step1": "Ajouter un élément de téléversement de fichiers à votre formulaire.",
+    "step2": "Utiliser un ensemble récurrent pour collecter plusieurs fichiers associés.",
+    "step3": "Télécharger les réponses contenant des fichiers par lots d'une taille maximale de 500 Mo à la fois.",
+    "description": "Cette fonctionnalité n'est plus réservée à l'API et est disponible pour tous."
   }
 }

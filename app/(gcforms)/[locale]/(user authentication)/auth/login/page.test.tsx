@@ -12,17 +12,6 @@ const { checkOne, cookies, authCheckAndThrow, redirect } = vi.hoisted(() => ({
   redirect: vi.fn(),
 }));
 
-vi.mock("@i18n", () => ({
-  serverTranslation: vi.fn(async () => ({
-    t: (key: string, options?: { deadline?: string }) => {
-      if (key === "migrationPanel.bodyDeadline") {
-        return `deadline ${options?.deadline}`;
-      }
-      return key;
-    },
-  })),
-}));
-
 vi.mock("@lib/cache/flags", () => ({
   checkOne,
 }));
@@ -111,6 +100,20 @@ describe("login page", () => {
       await Page({
         params: Promise.resolve({ locale: "en" }),
         searchParams: Promise.resolve({}),
+      })
+    );
+
+    expect(screen.getByTestId("oidc-redirect")).toBeInTheDocument();
+    expect(screen.queryByTestId("login-form")).not.toBeInTheDocument();
+  });
+
+  it("starts the OIDC flow from the SSO invite redirect even before the hint cookie is visible", async () => {
+    checkOne.mockResolvedValue(true);
+
+    render(
+      await Page({
+        params: Promise.resolve({ locale: "en" }),
+        searchParams: Promise.resolve({ gcPlatformLogin: "1" }),
       })
     );
 

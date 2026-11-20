@@ -13,7 +13,7 @@ import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { cn } from "@lib/utils";
 import { ManagedDataDetails } from "./ManagedDataDetails";
-import { useFileUploadEnabled } from "@lib/hooks/form-builder/useFileUploadEnabled";
+import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 
 export const PanelBody = ({
   item,
@@ -33,11 +33,8 @@ export const PanelBody = ({
   const isDynamicRow = item.type === "dynamicRow";
 
   const isAddressComplete = item.type === "addressComplete";
-  const isFileUpload = item.type === "fileInput";
   const hasCustomRegex =
     item.properties.validation?.type === "custom" && item.properties.validation.regex;
-
-  const fileUploadEnabled = useFileUploadEnabled();
 
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
@@ -53,14 +50,13 @@ export const PanelBody = ({
   const describedById = description ? `item${item.id}-describedby` : undefined;
   const isCanadianOnly = item.properties.addressComponents?.canadianOnly ?? true;
 
-  const isInvalid = isFileUpload && !fileUploadEnabled;
-
   return (
     <>
       {isRichText || isDynamicRow ? (
         <div className="my-4">
           <div className={cn(isDynamicRow && "mt-8 mb-2 px-4")}>
-            <Question item={item} onQuestionChange={onQuestionChange} isInvalid={isInvalid} />
+            <Question item={item} onQuestionChange={onQuestionChange} />
+            {isDynamicRow && <ConditionalIndicator item={item} />}
           </div>
 
           <div className={cn(isDynamicRow && "mb-2")}>
@@ -71,6 +67,7 @@ export const PanelBody = ({
               formId={formId}
             />
           </div>
+          {isRichText && <ConditionalIndicator item={item} />}
         </div>
       ) : (
         <div data-id={item.id}>
@@ -80,8 +77,8 @@ export const PanelBody = ({
                 item={item}
                 onQuestionChange={onQuestionChange}
                 describedById={describedById}
-                isInvalid={isInvalid}
               />
+              <ConditionalIndicator item={item} />
             </div>
           </div>
 
@@ -148,16 +145,6 @@ export const PanelBody = ({
               />
             </div>
           </div>
-
-          {isFileUpload && (
-            <div className="mt-4 border-t border-dotted border-slate-800 pt-4">
-              {!fileUploadEnabled && (
-                <strong className="ml-2 inline-block text-sm font-bold text-red-700">
-                  {t("fileUploadApiWarning.text")}
-                </strong>
-              )}
-            </div>
-          )}
         </div>
       )}
     </>

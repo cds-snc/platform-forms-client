@@ -5,6 +5,87 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.4](https://github.com/cds-snc/platform-forms-client/compare/v4.31.3...v4.31.4) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* revert auth debug logging ([78dc40b](https://github.com/cds-snc/platform-forms-client/commit/78dc40bd6d2df2343e25a3b4a760d6c6ea379f50))
+
+## [4.31.3](https://github.com/cds-snc/platform-forms-client/compare/v4.31.2...v4.31.3) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* add logging ([#8228](https://github.com/cds-snc/platform-forms-client/issues/8228)) ([4aaa25c](https://github.com/cds-snc/platform-forms-client/commit/4aaa25cb27ffa94e7b51800eff96ef3894ef409c))
+
+## [4.31.2](https://github.com/cds-snc/platform-forms-client/compare/v4.31.1...v4.31.2) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* update zitadel / next auth ([#8226](https://github.com/cds-snc/platform-forms-client/issues/8226)) ([52572d8](https://github.com/cds-snc/platform-forms-client/commit/52572d86e769c922338ce8eaed47538930f27863))
+
+## [4.31.1](https://github.com/cds-snc/platform-forms-client/compare/v4.31.0...v4.31.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* form field and summary error content ([#8205](https://github.com/cds-snc/platform-forms-client/issues/8205)) ([e7e9865](https://github.com/cds-snc/platform-forms-client/commit/e7e98655c91e9fc7c8b73ae21fe0cf58ef915f72))
+* set question ID to empty string when an element gets duplicated to avoid question ID uniqueness issues ([#8222](https://github.com/cds-snc/platform-forms-client/issues/8222)) ([e0ef7ab](https://github.com/cds-snc/platform-forms-client/commit/e0ef7abb4629b07dbea0c0175c10cf6e8f750294))
+
+
+### Miscellaneous Chores
+
+* Equalize text editor heights ([#8219](https://github.com/cds-snc/platform-forms-client/issues/8219)) ([2cb3fe0](https://github.com/cds-snc/platform-forms-client/commit/2cb3fe02e84ddf3d954e9acb5740c54c07d99ecb))
+* Improvements to  show-hide UI ([#8221](https://github.com/cds-snc/platform-forms-client/issues/8221)) ([e45e9b4](https://github.com/cds-snc/platform-forms-client/commit/e45e9b49cea9759e114066997e3d5917022911c0))
+* update markdown-to-jsx (9.10.6) ([#8216](https://github.com/cds-snc/platform-forms-client/issues/8216)) ([1642ca6](https://github.com/cds-snc/platform-forms-client/commit/1642ca69d401045fd924f2b93c2effd558e242ea))
+
+## [4.31.0](https://github.com/cds-snc/platform-forms-client/compare/v4.30.0...v4.31.0) (2026-11-16)
+
+
+### Features
+
+* Adds info on hard character limits to form validation & max chars ([#8206](https://github.com/cds-snc/platform-forms-client/issues/8206)) ([fd841d6](https://github.com/cds-snc/platform-forms-client/commit/fd841d65f58f83f21cea7ccd23b4cbd168138b5e))
+
+
+### Bug Fixes
+
+* hide last modified on hCaptcha fail page ([#8194](https://github.com/cds-snc/platform-forms-client/issues/8194)) ([3690823](https://github.com/cds-snc/platform-forms-client/commit/3690823c4507cd43d8a51615c7dab43cd7f5604d))
+* toast icon size ([#8202](https://github.com/cds-snc/platform-forms-client/issues/8202)) ([c0684d6](https://github.com/cds-snc/platform-forms-client/commit/c0684d63b10aeec9ecb59f2df97d8053939f361b))
+
+
+### Miscellaneous Chores
+
+* embed branding for save and resume ([#8196](https://github.com/cds-snc/platform-forms-client/issues/8196)) ([0c4e02c](https://github.com/cds-snc/platform-forms-client/commit/0c4e02ca96c9457d7d96f0cc2e20efbeb2c05f80))
+* ensure invite redirect ([#8210](https://github.com/cds-snc/platform-forms-client/issues/8210)) ([e326c7a](https://github.com/cds-snc/platform-forms-client/commit/e326c7af894f1d8a975c99cf8d3c0f2184ed16ff))
+* More concise FR text in action taskbar ([#8209](https://github.com/cds-snc/platform-forms-client/issues/8209)) ([184ff5a](https://github.com/cds-snc/platform-forms-client/commit/184ff5a866d0a54838a90f49b2a153a75ce12804))
+* Provide the "submission ID" and option to download to all end users on the confirmation page   ([#8204](https://github.com/cds-snc/platform-forms-client/issues/8204)) ([37b89a1](https://github.com/cds-snc/platform-forms-client/commit/37b89a19dc9bd40568101f11469a4ba5d53dc041))
+* remove sso deadline content ([#8214](https://github.com/cds-snc/platform-forms-client/issues/8214)) ([433f764](https://github.com/cds-snc/platform-forms-client/commit/433f76415481861b1d2ae486f271bdc02a7fa924))
+* update save and resume file names ([#8200](https://github.com/cds-snc/platform-forms-client/issues/8200)) ([538b586](https://github.com/cds-snc/platform-forms-client/commit/538b5864118d59ce3bbd4f92a241e97560b46c16))
+* use getOrigin() for redirect ([#8211](https://github.com/cds-snc/platform-forms-client/issues/8211)) ([f19670f](https://github.com/cds-snc/platform-forms-client/commit/f19670fbf0501fc6fb174a219d06f3b8de550d25))
+
+## [4.30.0](https://github.com/cds-snc/platform-forms-client/compare/v4.29.0...v4.30.0) (2026-11-09)
+
+
+### Features
+
+* 🧢 Capped attachments ([#8185](https://github.com/cds-snc/platform-forms-client/issues/8185)) ([298b7f7](https://github.com/cds-snc/platform-forms-client/commit/298b7f7ec23270b5ec42a8df3a84c92201aa8dc5))
+
+
+### Bug Fixes
+
+* update account menu content to fit better ([#8182](https://github.com/cds-snc/platform-forms-client/issues/8182)) ([0d58f1c](https://github.com/cds-snc/platform-forms-client/commit/0d58f1c8a5675ce9d415696fbb34637eab6fee0d))
+
+
+### Miscellaneous Chores
+
+* add proper type for scan status ([#8179](https://github.com/cds-snc/platform-forms-client/issues/8179)) ([f4dcc4e](https://github.com/cds-snc/platform-forms-client/commit/f4dcc4eb90b0b6847a4f3f3917a6bf2101965beb))
+* bump @casl/ability ([#8193](https://github.com/cds-snc/platform-forms-client/issues/8193)) ([d6c80eb](https://github.com/cds-snc/platform-forms-client/commit/d6c80ebee5e24642d8e5197e1d3400924719c616))
+* **deps:** update all non-major github action dependencies ([#8191](https://github.com/cds-snc/platform-forms-client/issues/8191)) ([808f319](https://github.com/cds-snc/platform-forms-client/commit/808f3198595f88c89de2ac50f08713c305c202b7))
+* package bump testing libraries ([#8192](https://github.com/cds-snc/platform-forms-client/issues/8192)) ([7a98cff](https://github.com/cds-snc/platform-forms-client/commit/7a98cffed8d043c9a0f8877a68f0a987973d5405))
+* Review French content for file attachment ([#8177](https://github.com/cds-snc/platform-forms-client/issues/8177)) ([859b93c](https://github.com/cds-snc/platform-forms-client/commit/859b93c90ab50e6b78a57cc6c1a1ef9551601bfc))
+
 ## [4.29.0](https://github.com/cds-snc/platform-forms-client/compare/v4.28.4...v4.29.0) (2026-11-05)
 
 

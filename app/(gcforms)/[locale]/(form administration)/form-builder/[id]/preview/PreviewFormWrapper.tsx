@@ -4,7 +4,7 @@ import { Form } from "@clientComponents/forms/Form/Form";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { BackButton } from "./BackButton";
 import { Button } from "@clientComponents/globals";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";

@@ -7,7 +7,6 @@ import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder/useElementOptions";
-import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 import { StarRatingSelector } from "./elements/StarRatingSelector";
 import { DateElement } from "./elements/DateElement";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
@@ -236,9 +235,5 @@ export const SelectedElement = ({
       element = null;
   }
 
-  return (
-    <>
-      {element} <ConditionalIndicator item={item} />
-    </>
-  );
+  return <>{element}</>;
 };

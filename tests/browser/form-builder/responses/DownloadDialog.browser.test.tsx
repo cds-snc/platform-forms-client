@@ -11,14 +11,9 @@ import type {
 
 import "@root/styles/app.css";
 
-const { mockFileUploadEnabled, mockDownloadResponses, mockLanguage } = vi.hoisted(() => ({
-  mockFileUploadEnabled: vi.fn(() => false),
+const { mockDownloadResponses, mockLanguage } = vi.hoisted(() => ({
   mockDownloadResponses: vi.fn(),
   mockLanguage: vi.fn(() => "en"),
-}));
-
-vi.mock("@lib/hooks/useFeatureFlags", () => ({
-  useFeatureFlags: () => ({ getFlag: mockFileUploadEnabled }),
 }));
 
 vi.mock(
@@ -64,6 +59,7 @@ const defaultProps = {
   onSuccessfulDownload: vi.fn(),
   responseDownloadLimit: 50,
   responsesDownloadZipMaxSizeMB: 500,
+  hasFileInput: false,
 };
 
 describe("<DownloadDialog />", () => {
@@ -72,7 +68,6 @@ describe("<DownloadDialog />", () => {
   });
 
   beforeEach(() => {
-    mockFileUploadEnabled.mockReturnValue(false);
     mockDownloadResponses.mockReset();
     mockLanguage.mockReturnValue("en");
   });
@@ -85,7 +80,6 @@ describe("<DownloadDialog />", () => {
     ],
   ])("shows the configured download size limit in %s", async (language, message) => {
     mockLanguage.mockReturnValue(language);
-    mockFileUploadEnabled.mockReturnValue(true);
     await render(<DownloadDialog {...defaultProps} responsesDownloadZipMaxSizeMB={125} />);
 
     await expect.element(page.getByText(message)).toBeVisible();
@@ -105,8 +99,7 @@ describe("<DownloadDialog />", () => {
   });
 
   it("hides the optional ZIP checkbox when file uploads are enabled", async () => {
-    mockFileUploadEnabled.mockReturnValue(true);
-    await render(<DownloadDialog {...defaultProps} />);
+    await render(<DownloadDialog {...defaultProps} hasFileInput={true} />);
 
     const checkboxes = await page.getByRole("checkbox").all();
     expect(checkboxes).toHaveLength(0);
@@ -148,7 +141,6 @@ describe("<DownloadDialog />", () => {
     "uses generic initial progress instead of response zero in %s",
     async (language, download, initialMessage, numberedMessage) => {
       mockLanguage.mockReturnValue(language);
-      mockFileUploadEnabled.mockReturnValue(true);
       let updateProgress: DownloadResponsesOptions["setDownloadProgress"] | undefined;
       mockDownloadResponses.mockImplementationOnce(async (options: DownloadResponsesOptions) => {
         updateProgress = options.setDownloadProgress;
@@ -180,7 +172,6 @@ describe("<DownloadDialog />", () => {
   );
 
   it("keeps detailed progress outside the mounted live region", async () => {
-    mockFileUploadEnabled.mockReturnValue(true);
     let updateProgress: ((progress: DownloadProgress) => void) | undefined;
     mockDownloadResponses.mockImplementationOnce(
       async (options: { setDownloadProgress: (progress: DownloadProgress) => void }) => {

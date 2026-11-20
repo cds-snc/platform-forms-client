@@ -12,7 +12,7 @@ import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
 import { useGroupStore } from "@lib/groups/useGroupStore";
 import { findParentGroup } from "@lib/groups/utils/findParentGroup";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import Markdown from "markdown-to-jsx";
+import Markdown from "markdown-to-jsx/react";
 
 export const ConditionalIndicatorOption = ({
   itemId,
@@ -61,7 +61,7 @@ export const ConditionalIndicatorOption = ({
             <ConditionalIcon className="mr-2 inline-block" />
             <Button
               theme="link"
-              className="cursor-pointer underline"
+              className="cursor-pointer text-left underline"
               id={rulesTitleId}
               onClick={() => {
                 Event.fire(EventKeys.openRulesDialog, {
@@ -118,7 +118,7 @@ export const ConditionalIndicatorOption = ({
                         side="right"
                         tooltipClassName="max-w-xl"
                         trigger={
-                          <Button theme="link" onClick={goToElement}>
+                          <Button theme="link" className="text-left" onClick={goToElement}>
                             {text}
                           </Button>
                         }
@@ -132,7 +132,7 @@ export const ConditionalIndicatorOption = ({
 
                 return (
                   <>
-                    <Button theme="link" onClick={goToElement}>
+                    <Button theme="link" className="text-left" onClick={goToElement}>
                       {text}
                     </Button>
                     {" • "}
@@ -142,11 +142,13 @@ export const ConditionalIndicatorOption = ({
 
               <Button
                 theme="link"
+                className="text-left"
                 onClick={() => {
                   Event.fire(EventKeys.openRulesDialog, {
                     mode: "edit",
                     itemId: itemId,
                     optionId: id,
+                    targetElementId: elementId,
                   });
                 }}
               >
