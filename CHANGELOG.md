@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.6](https://github.com/cds-snc/platform-forms-client/compare/v4.31.5...v4.31.6) (2026-11-20)
+
+
+### Miscellaneous Chores
+
+* Serialize nextAuth log details ([#8235](https://github.com/cds-snc/platform-forms-client/issues/8235)) ([216ff1e](https://github.com/cds-snc/platform-forms-client/commit/216ff1ea01a971441045e6395e65b82e5ee664e6))
+
 ## [4.31.5](https://github.com/cds-snc/platform-forms-client/compare/v4.31.4...v4.31.5) (2026-11-20)
 
 
