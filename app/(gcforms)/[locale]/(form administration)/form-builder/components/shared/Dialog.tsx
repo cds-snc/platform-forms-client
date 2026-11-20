@@ -49,19 +49,13 @@ export const Dialog = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  // Close modal if "ESC" key is pressed
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        handleClose && handleClose();
-        close();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [close, handleClose]);
+  // Let nested controls consume Escape before closing this dialog.
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDialogElement>) => {
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    event.preventDefault();
+    event.stopPropagation();
+    close();
+  };
 
   const modalId = `modal-title-${useId()}`;
 
@@ -71,6 +65,7 @@ export const Dialog = ({
       {...(title ? { "aria-labelledby": modalId } : {})}
       ref={dialogRef}
       data-testid="dialog"
+      onKeyDown={handleKeyDown}
       onClose={(event) => {
         if (event.target === event.currentTarget && !event.currentTarget.open) {
           changeOpen(false);

@@ -106,6 +106,8 @@ the host, so components don't need to know whether they're inside a modal.
 Each message goes to one host. Published messages aren't replayed when hosts change.
 
 In GC Forms, pass `withAnnounce` to the shared `Dialog` to enable its modal host.
+Nested controls can handle Escape first. An unhandled Escape closes only their
+dialog.
 
 ## What about rapid updates?
 
