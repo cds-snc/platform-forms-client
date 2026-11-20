@@ -1,7 +1,11 @@
 # Announce
 
 Screen-reader announcements for React apps, with persistent live regions and a
-priority queue that spaces out updates.
+shared FIFO queue that spaces out updates.
+
+Messages are published in submission order. `Priority` selects polite or assertive
+live-region semantics; it does not reorder requests or bypass spacing. Screen readers
+may still interrupt speech for assertive updates.
 
 > **Note:** The scheduler can't tell when a screen reader has finished speaking.
 > The delay simply spaces out live-region updates to reduce rapid overwrites; it
@@ -64,9 +68,14 @@ between 1 and 2147483647 ms. Invalid values or changing the interval after start
 throw an error; repeating the same configuration is harmless. Fully reload to
 change it during development.
 
-Assertive work can still interrupt a polite cooldown; spacing does not wait for
+Spacing applies to both priorities and does not wait for
 speech completion. Duplicate suppression remains one second. Combine related
 messages at the caller when appropriate rather than relying on timing alone.
+
+The queue holds at most 20 pending messages. On overflow, the oldest pending polite
+message is discarded first, or the oldest assertive message if none are polite.
+Consecutive identical pending requests within each priority share ownership;
+cancelling one caller does not cancel another caller's request.
 
 ### Request options
 

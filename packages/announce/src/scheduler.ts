@@ -8,6 +8,7 @@ type Publisher = (message: string, priority: Priority, lang?: string) => void;
 
 interface PendingMessage {
   message: string;
+  priority: Priority;
   lang?: string;
   allowDuplicates: boolean;
   callers: Map<AbortSignal | undefined, () => void>;
@@ -20,10 +21,10 @@ const reportPublicationFailure = () => {
 };
 
 /**
- * Queues announcements and spaces them out, letting urgent messages jump ahead.
+ * Publishes announcements in submission order, spacing out live-region updates.
  * @param publisher Callback that updates the live region with a message, priority, and optional language.
  * @param onError Reports a publication failure after the scheduler has stopped.
- * @param publicationIntervalMs Spaces publications; assertive work can interrupt polite pacing.
+ * @param publicationIntervalMs Spaces publications of both priorities.
  * @returns `enqueue` to submit messages, `pause`/`resume` to control delivery without
  * losing pending work, and `stop` to permanently cancel pending work and timers.
  */
@@ -32,24 +33,15 @@ export const createScheduler = (
   onError = reportPublicationFailure,
   publicationIntervalMs = 1000
 ) => {
-  const politeQueue: PendingMessage[] = [];
-  const assertiveQueue: PendingMessage[] = [];
+  const queue: PendingMessage[] = [];
   const lastPublished: Partial<
     Record<Priority, { message: string; lang?: string; publishedAt: number }>
   > = {};
   let timer: ReturnType<typeof setTimeout> | undefined;
-  let lastPriority: Priority | undefined;
   let stopped = false;
   let paused = false;
 
-  const _getQueue = (priority: Priority): PendingMessage[] =>
-    priority === "assertive" ? assertiveQueue : politeQueue;
-
-  const _addCaller = (
-    pending: PendingMessage,
-    queue: PendingMessage[],
-    signal: AbortSignal | undefined
-  ) => {
+  const _addCaller = (pending: PendingMessage, signal: AbortSignal | undefined) => {
     if (pending.callers.has(signal)) return;
 
     const cancel = () => {
@@ -76,10 +68,8 @@ export const createScheduler = (
 
   const _takeNextMessage = ():
     { message: string; priority: Priority; lang?: string } | undefined => {
-    while (assertiveQueue.length || politeQueue.length) {
-      const priority = assertiveQueue.length ? "assertive" : "polite";
-      const queue = _getQueue(priority);
-      const { message, lang, allowDuplicates, cleanup } = queue.shift()!;
+    while (queue.length) {
+      const { message, priority, lang, allowDuplicates, cleanup } = queue.shift()!;
       cleanup();
 
       // Dropping or cancelling a queued message can leave a repeat of something we just announced
@@ -102,7 +92,6 @@ export const createScheduler = (
       publisher(message, priority, lang);
     }
     lastPublished[priority] = { message, lang, publishedAt: performance.now() };
-    lastPriority = priority;
     timer = setTimeout(() => {
       timer = undefined;
       _schedule();
@@ -110,13 +99,7 @@ export const createScheduler = (
   };
 
   const _schedule = () => {
-    if (stopped || paused) return;
-
-    if (timer !== undefined) {
-      if (lastPriority !== "polite" || assertiveQueue.length === 0) return;
-      clearTimeout(timer);
-      timer = undefined;
-    }
+    if (stopped || paused || timer !== undefined) return;
 
     try {
       _publish();
@@ -131,12 +114,11 @@ export const createScheduler = (
     const lang = options.lang;
     if (stopped || !message || signal?.aborted) return;
 
-    const queue = _getQueue(priority);
-    const lastQueued = queue.at(-1);
+    const lastQueued = queue.findLast((pending) => pending.priority === priority);
     if (!options.allowDuplicates) {
       if (lastQueued?.message === message && lastQueued.lang === lang) {
         // Share the message, but let each caller cancel just their own request.
-        _addCaller(lastQueued, queue, signal);
+        _addCaller(lastQueued, signal);
         return;
       }
       if (!lastQueued && _isRecentDuplicate(message, priority, lang)) return;
@@ -144,6 +126,7 @@ export const createScheduler = (
 
     const pending: PendingMessage = {
       message,
+      priority,
       lang,
       allowDuplicates: options.allowDuplicates === true,
       callers: new Map(),
@@ -155,17 +138,17 @@ export const createScheduler = (
       },
     };
 
-    _addCaller(pending, queue, signal);
+    _addCaller(pending, signal);
     queue.push(pending);
 
-    if (politeQueue.length + assertiveQueue.length > MAX_PENDING_MESSAGES) {
-      const droppedPriority = politeQueue.length ? "polite" : "assertive";
-      const droppedQueue = _getQueue(droppedPriority);
-      droppedQueue.shift()?.cleanup();
+    if (queue.length > MAX_PENDING_MESSAGES) {
+      const oldestPolite = queue.findIndex((pending) => pending.priority === "polite");
+      const [dropped] = queue.splice(oldestPolite === -1 ? 0 : oldestPolite, 1);
+      dropped.cleanup();
 
       // eslint-disable-next-line no-console
       console.warn(
-        `[gcforms/announce] Pending message limit reached; discarded the oldest ${droppedPriority} message.`
+        `[gcforms/announce] Pending message limit reached; discarded the oldest ${dropped.priority} message.`
       );
     }
 
@@ -186,12 +169,11 @@ export const createScheduler = (
     clearTimeout(timer);
     timer = undefined;
 
-    for (const pending of [...politeQueue, ...assertiveQueue]) {
+    for (const pending of queue) {
       pending.cleanup();
     }
 
-    politeQueue.length = 0;
-    assertiveQueue.length = 0;
+    queue.length = 0;
   };
 
   return { enqueue, pause, resume, stop };

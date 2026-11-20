@@ -157,6 +157,7 @@ describe("Announce", () => {
       announce("Bonjour.", Priority.LOW, { lang: "fr" });
       announce("Urgent", Priority.HIGH, { lang: "en" });
     });
+    act(() => vi.advanceTimersByTime(1000));
     expect(screen.getByTestId("gc-announce-polite")).toHaveAttribute("lang", "fr");
     expect(screen.getByTestId("gc-announce-assertive")).toHaveAttribute("lang", "en");
     expect(screen.getByTestId("gc-announce-polite").parentElement).not.toHaveAttribute("lang");
@@ -249,11 +250,14 @@ describe("Announce", () => {
       announce("Urgent second", Priority.HIGH);
     });
     expect(polite).toHaveTextContent("Second");
+    expect(assertive).toBeEmptyDOMElement();
+    act(() => vi.advanceTimersByTime(1000));
+    expect(polite).toHaveTextContent("Third");
+    expect(assertive).toBeEmptyDOMElement();
+    act(() => vi.advanceTimersByTime(1000));
     expect(assertive).toHaveTextContent("Urgent");
     act(() => vi.advanceTimersByTime(1000));
     expect(assertive).toHaveTextContent("Urgent second");
-    act(() => vi.advanceTimersByTime(1000));
-    expect(polite).toHaveTextContent("Third");
     expect(screen.getByTestId("gc-announce-polite")).toBe(polite);
     expect(screen.getByTestId("gc-announce-assertive")).toBe(assertive);
   });

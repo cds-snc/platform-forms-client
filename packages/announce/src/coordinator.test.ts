@@ -81,6 +81,10 @@ describe("announcement host coordinator", () => {
     expect(modal.publish).not.toHaveBeenCalled();
     expect(root.publish).toHaveBeenCalledTimes(1);
     vi.advanceTimersByTime(1);
+    expect(modal.publish).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(899);
+    expect(modal.publish).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(1);
     expect(modal.publish).toHaveBeenCalledExactlyOnceWith("Urgent", "assertive");
   });
 

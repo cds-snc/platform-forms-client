@@ -47,7 +47,7 @@ describe("announcement scheduler", () => {
     expect(publish).toHaveBeenCalledTimes(2);
   });
 
-  it("preserves urgent interruption and cancellation with custom pacing", () => {
+  it("preserves FIFO pacing and cancellation across priorities with custom spacing", () => {
     const publish = vi.fn();
     const scheduler = createScheduler(publish, vi.fn(), 3000);
     const controller = new AbortController();
@@ -57,13 +57,12 @@ describe("announcement scheduler", () => {
     scheduler.enqueue("Cancelled", "assertive", { signal: controller.signal });
     scheduler.enqueue("Remaining", "polite");
     controller.abort();
-    expect(publish.mock.calls).toEqual([
-      ["Polite", "polite"],
-      ["Urgent", "assertive"],
-    ]);
-    vi.advanceTimersByTime(2999);
-    expect(publish).toHaveBeenCalledTimes(2);
+    expect(publish.mock.calls).toEqual([["Polite", "polite"]]);
+    vi.advanceTimersByTime(2899);
+    expect(publish).toHaveBeenCalledTimes(1);
     vi.advanceTimersByTime(1);
+    expect(publish).toHaveBeenLastCalledWith("Urgent", "assertive");
+    vi.advanceTimersByTime(3000);
     expect(publish).toHaveBeenLastCalledWith("Remaining", "polite");
   });
 
@@ -75,12 +74,10 @@ describe("announcement scheduler", () => {
     scheduler.enqueue("Stale", "polite", { signal: controller.signal });
     scheduler.enqueue("Other caller", "polite");
     scheduler.enqueue("Stale urgent", "assertive", { signal: controller.signal });
-    // The assertive request has already published, so aborting cannot undo it.
     controller.abort();
     vi.runAllTimers();
     expect(publish.mock.calls).toEqual([
       ["First", "polite"],
-      ["Stale urgent", "assertive"],
       ["Other caller", "polite"],
     ]);
   });
@@ -236,7 +233,7 @@ describe("announcement scheduler", () => {
     expect(publish).toHaveBeenLastCalledWith("After idle", "polite");
   });
 
-  it("interrupts a polite cooldown once, paces assertive messages, then resumes polite work", () => {
+  it("paces mixed priorities in submission order without interrupting cooldowns", () => {
     const publish = vi.fn();
     const scheduler = createScheduler(publish);
     scheduler.enqueue("Polite first", "polite");
@@ -246,17 +243,16 @@ describe("announcement scheduler", () => {
     vi.advanceTimersByTime(200);
     scheduler.enqueue("Urgent second", "assertive");
 
-    expect(publish.mock.calls).toEqual([
-      ["Polite first", "polite"],
-      ["Urgent first", "assertive"],
-    ]);
+    expect(publish.mock.calls).toEqual([["Polite first", "polite"]]);
     expect(vi.getTimerCount()).toBe(1);
-    vi.advanceTimersByTime(799);
-    expect(publish).toHaveBeenCalledTimes(2);
+    vi.advanceTimersByTime(599);
+    expect(publish).toHaveBeenCalledTimes(1);
     vi.advanceTimersByTime(1);
-    expect(publish).toHaveBeenLastCalledWith("Urgent second", "assertive");
-    vi.advanceTimersByTime(1000);
     expect(publish).toHaveBeenLastCalledWith("Polite second", "polite");
+    vi.advanceTimersByTime(1000);
+    expect(publish).toHaveBeenLastCalledWith("Urgent first", "assertive");
+    vi.advanceTimersByTime(1000);
+    expect(publish).toHaveBeenLastCalledWith("Urgent second", "assertive");
     expect(publish).toHaveBeenCalledTimes(4);
   });
 
@@ -285,9 +281,9 @@ describe("announcement scheduler", () => {
 
     expect(publish.mock.calls).toEqual([
       ["Same", "polite"],
-      ["Same", "assertive"],
       ["Different", "polite"],
       ["Same", "polite"],
+      ["Same", "assertive"],
     ]);
     scheduler.enqueue("Same", "polite");
     expect(publish).toHaveBeenCalledTimes(5);
@@ -315,7 +311,7 @@ describe("announcement scheduler", () => {
     }
   );
 
-  it("keeps duplicate windows independent when assertive work interrupts a polite cooldown", () => {
+  it("keeps duplicate windows independent across paced priorities", () => {
     const publish = vi.fn();
     const scheduler = createScheduler(publish);
     scheduler.enqueue("Same", "polite");
@@ -323,14 +319,15 @@ describe("announcement scheduler", () => {
     scheduler.enqueue("Same", "assertive");
     vi.advanceTimersByTime(599);
     scheduler.enqueue("Same", "polite");
-    expect(publish).toHaveBeenCalledTimes(2);
+    expect(publish).toHaveBeenCalledTimes(1);
     vi.advanceTimersByTime(1);
     scheduler.enqueue("Same", "polite");
-    vi.advanceTimersByTime(399);
+    vi.advanceTimersByTime(999);
     scheduler.enqueue("Same", "assertive");
     expect(publish).toHaveBeenCalledTimes(2);
     vi.advanceTimersByTime(1);
     scheduler.enqueue("Same", "assertive");
+    vi.runAllTimers();
     expect(publish.mock.calls).toEqual([
       ["Same", "polite"],
       ["Same", "assertive"],
@@ -503,7 +500,7 @@ describe("announcement scheduler", () => {
     scheduler.enqueue("Urgent", "assertive");
     scheduler.enqueue("Intervening", "polite");
     scheduler.enqueue("Same", "polite", { allowDuplicates: true });
-    for (let i = 0; i < 19; i++) scheduler.enqueue(`Urgent ${i}`, "assertive");
+    for (let i = 0; i < 18; i++) scheduler.enqueue(`Urgent ${i}`, "assertive");
     vi.runAllTimers();
     expect(publish.mock.calls.filter(([, priority]) => priority === "polite")).toEqual([
       ["Same", "polite"],
@@ -569,8 +566,9 @@ describe("announcement scheduler", () => {
 
     expect(publish).toHaveBeenCalledTimes(21);
     expect(publish).not.toHaveBeenCalledWith("Routine 0", "polite");
-    expect(publish.mock.calls[11]).toEqual(["Extra urgent", "assertive"]);
-    expect(publish.mock.calls[12]).toEqual(["Routine 1", "polite"]);
+    expect(publish.mock.calls[1]).toEqual(["Urgent 0", "assertive"]);
+    expect(publish.mock.calls[2]).toEqual(["Routine 1", "polite"]);
+    expect(publish).toHaveBeenLastCalledWith("Extra urgent", "assertive");
   });
 
   it("publishes duplicates exposed by overflow after their suppression window expires", () => {
@@ -581,7 +579,7 @@ describe("announcement scheduler", () => {
     scheduler.enqueue("Urgent", "assertive");
     scheduler.enqueue("Intervening", "polite");
     scheduler.enqueue("Same", "polite");
-    for (let i = 0; i < 19; i++) scheduler.enqueue(`Urgent ${i}`, "assertive");
+    for (let i = 0; i < 18; i++) scheduler.enqueue(`Urgent ${i}`, "assertive");
     vi.runAllTimers();
 
     expect(publish.mock.calls.filter(([, priority]) => priority === "polite")).toEqual([
@@ -622,9 +620,29 @@ describe("announcement scheduler", () => {
     vi.advanceTimersByTime(2000);
     expect(publish).not.toHaveBeenCalled();
     scheduler.resume();
-    expect(publish.mock.calls).toEqual([["Urgent", "assertive"]]);
+    expect(publish.mock.calls).toEqual([["Routine", "polite"]]);
     vi.advanceTimersByTime(1000);
-    expect(publish).toHaveBeenLastCalledWith("Routine", "polite");
+    expect(publish).toHaveBeenLastCalledWith("Urgent", "assertive");
+  });
+
+  it("shares duplicate ownership across interleaved priorities without changing FIFO order", () => {
+    const publish = vi.fn();
+    const scheduler = createScheduler(publish);
+    const first = new AbortController();
+    const second = new AbortController();
+    scheduler.pause();
+    scheduler.enqueue("Saved", "polite", { signal: first.signal });
+    scheduler.enqueue("Urgent", "assertive");
+    scheduler.enqueue("Saved", "polite", { signal: second.signal });
+    first.abort();
+    scheduler.resume();
+    vi.advanceTimersByTime(999);
+    expect(publish.mock.calls).toEqual([["Saved", "polite"]]);
+    vi.advanceTimersByTime(1);
+    expect(publish.mock.calls).toEqual([
+      ["Saved", "polite"],
+      ["Urgent", "assertive"],
+    ]);
   });
 
   it("preserves the remaining cooldown when resumed", () => {
@@ -685,7 +703,7 @@ describe("announcement scheduler", () => {
   });
 
   it.each([false, true])(
-    "interrupts a polite cooldown on resume while urgent work remains (one caller cancelled: %s)",
+    "preserves FIFO and cooldown on resume with shared assertive work (one caller cancelled: %s)",
     (cancelFirstCaller) => {
       const publish = vi.fn();
       const scheduler = createScheduler(publish);
@@ -702,16 +720,15 @@ describe("announcement scheduler", () => {
       vi.advanceTimersByTime(100);
       expect(publish).toHaveBeenCalledTimes(1);
       scheduler.resume();
-      expect(publish.mock.calls).toEqual([
-        ["First", "polite"],
-        ["Urgent", "assertive"],
-      ]);
-      vi.advanceTimersByTime(999);
-      expect(publish).toHaveBeenCalledTimes(2);
+      expect(publish.mock.calls).toEqual([["First", "polite"]]);
+      vi.advanceTimersByTime(699);
+      expect(publish).toHaveBeenCalledTimes(1);
       vi.advanceTimersByTime(1);
-      expect(publish).toHaveBeenLastCalledWith("Next urgent", "assertive");
-      vi.advanceTimersByTime(1000);
       expect(publish).toHaveBeenLastCalledWith("Second", "polite");
+      vi.advanceTimersByTime(1000);
+      expect(publish).toHaveBeenLastCalledWith("Urgent", "assertive");
+      vi.advanceTimersByTime(1000);
+      expect(publish).toHaveBeenLastCalledWith("Next urgent", "assertive");
       expect(publish).toHaveBeenCalledTimes(4);
     }
   );

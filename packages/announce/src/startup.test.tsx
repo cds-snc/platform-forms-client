@@ -123,7 +123,7 @@ describe("announcement startup", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
-  it("bounds and prioritizes startup requests using the existing scheduler", async () => {
+  it("bounds startup requests and publishes retained messages in FIFO order", async () => {
     const { Announce, announce, Priority } = await import("./index");
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     for (let i = 0; i < 21; i++) announce(`Message ${i}`);
@@ -132,12 +132,13 @@ describe("announcement startup", () => {
     expect(vi.getTimerCount()).toBe(0);
     render(<Announce />);
     act(() => vi.advanceTimersByTime(100));
-    expect(screen.getByTestId("gc-announce-assertive")).toHaveTextContent("Urgent");
-    expect(screen.getByTestId("gc-announce-polite")).toBeEmptyDOMElement();
-    act(() => vi.advanceTimersByTime(1000));
+    expect(screen.getByTestId("gc-announce-assertive")).toBeEmptyDOMElement();
     expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Message 2");
+    act(() => vi.advanceTimersByTime(1000));
+    expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Message 3");
     act(() => vi.runAllTimers());
     expect(screen.getByTestId("gc-announce-polite")).toHaveTextContent("Message 20");
+    expect(screen.getByTestId("gc-announce-assertive")).toHaveTextContent("Urgent");
   });
 
   it("cancels a startup request before its first host is ready", async () => {

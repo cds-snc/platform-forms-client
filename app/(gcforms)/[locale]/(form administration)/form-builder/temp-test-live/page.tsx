@@ -139,6 +139,13 @@ export default function TestLivePage() {
     <main lang="en" id="content" className="mx-auto max-w-4xl p-8">
       <h1 className="mb-4">Live-region manual tests (temporary)</h1>
       <h2 className="mb-2">Manual test results</h2>
+      <p className="mb-4">
+        These results were recorded before the FIFO simplification and need to be retested. The
+        library now publishes in submission order with no priority reordering or cooldown
+        interruption. Mixed tests should log polite 1, assertive 1, polite 2, assertive 2, polite 3,
+        assertive 3, each spaced by the configured interval. Assertive semantics can still cause the
+        screen reader to interrupt speech.
+      </p>
       <div className="overflow-x-auto">
         <table className="mb-4 w-full text-left">
           <caption className="mb-2 text-left">
