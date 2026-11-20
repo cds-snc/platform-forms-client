@@ -1,6 +1,7 @@
 "use client";
 import React, { use, useCallback, useEffect, useId, useRef, useState } from "react";
 import { browser } from "react-dom";
+import { AnnounceLiveRegion } from "@gcforms/announce";
 import { CDSHTMLDialogElement } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
@@ -19,6 +20,7 @@ export const Dialog = ({
   actions,
   className,
   handleClose,
+  withAnnounce,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement | null>;
   children: React.ReactElement;
@@ -26,6 +28,7 @@ export const Dialog = ({
   actions?: React.ReactElement;
   className?: string;
   handleClose?: () => void;
+  withAnnounce?: boolean;
 }) => {
   use(browser("This component requires browser APIs."));
   const { t } = useTranslation("form-builder");
@@ -68,6 +71,11 @@ export const Dialog = ({
       {...(title ? { "aria-labelledby": modalId } : {})}
       ref={dialogRef}
       data-testid="dialog"
+      onClose={(event) => {
+        if (event.target === event.currentTarget && !event.currentTarget.open) {
+          changeOpen(false);
+        }
+      }}
     >
       <div
         className={cn(
@@ -105,6 +113,7 @@ export const Dialog = ({
           </span>
         </Button>
       </div>
+      {withAnnounce && <AnnounceLiveRegion scope="modal" active={isOpen} />}
     </dialog>
   );
 };

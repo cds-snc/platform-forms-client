@@ -1,3 +1,3 @@
-export { Announce, Priority } from "./Announce";
-export { announce } from "../utils/announce";
-export { useAllowDuplicateAnnouncer, AllowDuplicateAnnouncer } from "./useAllowDuplicateAnnouncer";
+export { AnnounceLiveRegion, Priority } from "./AnnounceLiveRegion";
+export { announce } from "./announce";
+export { useAnnounce } from "./useAnnounce";
