@@ -1,5 +1,5 @@
 import { FormElement, FormElementTypes } from "@lib/types";
-import type { AddressValidationError } from "@gcforms/core";
+import type { AddressField } from "@gcforms/core";
 import enReview from "@i18n/translations/en/review.json";
 import frReview from "@i18n/translations/fr/review.json";
 import enResponses from "@i18n/translations/en/form-builder-responses.json";
@@ -9,7 +9,8 @@ import { Language } from "@lib/types/form-builder-types";
 import { AddressElements } from "./types";
 import { normalizeString, truncateField } from "@gcforms/core";
 
-type AddressFieldKey = keyof AddressValidationError["fields"];
+type AddressFieldKey = AddressField;
+type FormattedAddressValidationError = { fields: Record<AddressField, string | null> };
 
 const getNestedTranslation = (source: unknown, path: string): string | undefined => {
   const value = path.split(".").reduce<unknown>((currentValue, segment) => {
@@ -53,12 +54,14 @@ const addressErrorSummaryLabels = Object.fromEntries(
   ])
 ) as Record<AddressFieldKey, { en: string; fr: string }>;
 
-export const isAddressValidationError = (value: unknown): value is AddressValidationError => {
+export const isAddressValidationError = (
+  value: unknown
+): value is FormattedAddressValidationError => {
   return Boolean(
     value &&
     typeof value === "object" &&
     "fields" in (value as Record<string, unknown>) &&
-    (value as AddressValidationError).fields
+    (value as FormattedAddressValidationError).fields
   );
 };
 

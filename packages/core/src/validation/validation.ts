@@ -4,20 +4,16 @@ import {
   FormElementTypes,
   ValidationProperties,
   FileInputResponse,
-  DateObject,
 } from "@gcforms/types";
 
 import { isInputTooLong, inputLengthOverLimit } from "./text";
-import { isValidDate } from "./date";
+import { isValidDateResponse } from "./date";
 import { getRegexByType } from "./regex";
-import { isFileExtensionValid, isIndividualFileSizeValid } from "./file";
+import { isFileExtensionValid, isIndividualFileSizeValid, MAX_FILE_SIZE } from "./file";
 import { isSafeRegex } from "./regex";
 import { isNumberInput } from "../utils/isNumberInput";
 import { isValidAddress } from "./isValidAddress";
-import type { AddressValidationError } from "./isValidAddress";
-
-// Minimal translation function type to avoid i18next dependency
-export type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
+import type { FieldValidationResult, ValidationErrors } from "./validationErrorTypes";
 
 // Number.MAX_SAFE_INTEGER (9,007,199,254,740,991) has 16 digits — the largest integer JS
 // can represent exactly. This hard cap (independent of any form-configured maxDigits) keeps
@@ -26,18 +22,13 @@ export const MAX_NUMBER_INPUT_DIGITS = 15;
 
 export const isFieldResponseValid = (
   value: unknown,
-  formElement: FormElement,
-  t: TranslateFn
-): string | null | Record<string, unknown>[] | AddressValidationError => {
+  formElement: FormElement
+): FieldValidationResult => {
   // Note that this will ignore a file upload since the value is an object. We could check the
   // file's file name length but this is probably not necessary since OS's have a filename limit.
   if (isInputTooLong(value as string)) {
     const countInputLengthOverLimit = inputLengthOverLimit(value as string);
-    return (
-      t("input-validation.too-many-characters") +
-      " " +
-      t("formElements.characterCount.exceeded", { count: countInputLengthOverLimit })
-    );
+    return { code: "input-too-long", count: countInputLengthOverLimit };
   }
 
   const componentType = formElement.type;
@@ -46,20 +37,29 @@ export const isFieldResponseValid = (
   switch (componentType) {
     case FormElementTypes.textField:
     case FormElementTypes.numberInput: {
+      // Check the type first to avoid errors when converting to a string
+      if (
+        value !== null &&
+        value !== undefined &&
+        typeof value !== "string" &&
+        !(isNumberInput(formElement) && typeof value === "number")
+      ) {
+        return { code: "mismatched-type" };
+      }
       // Required check first
-      const typedValue = String(value).trim();
-      if (validator.required && !typedValue) return t("input-validation.required");
+      const typedValue = value === null || value === undefined ? "" : String(value).trim();
+      if (validator.required && !typedValue) return { code: "required" };
 
       // Handle NumberInput validation with backwards compatibility
       // for legacy number inputs that were stored as text fields
       // with validation.type "number"
       if (isNumberInput(formElement)) {
         // Number validation
-        let currentRegex = getRegexByType("number", t);
+        let currentRegex = getRegexByType("number");
 
         // Check if negative numbers are allowed.
         if (formElement.properties.allowNegativeNumbers) {
-          currentRegex = getRegexByType("canBeNegativeNumber", t);
+          currentRegex = getRegexByType("canBeNegativeNumber");
         }
 
         // Apply number validation
@@ -77,43 +77,47 @@ export const isFieldResponseValid = (
           // Treat any non-empty value that fails to parse as a number as invalid so it cannot
           // bypass the min/max checks below.
           if (Number.isNaN(numericValue)) {
-            return currentRegex ? currentRegex.error : t("input-validation.number");
+            return currentRegex ? currentRegex.error : { code: "invalid-number" };
           }
 
           // MinValue and Max Value validation
           if (validator.minValue != null && numericValue < validator.minValue) {
-            return t("input-validation.too-small", { min: String(validator.minValue) });
+            return { code: "min-value", min: validator.minValue };
           }
 
           if (validator.maxValue != null && numericValue > validator.maxValue) {
-            return t("input-validation.too-large", { max: String(validator.maxValue) });
+            return { code: "max-value", max: validator.maxValue };
           }
 
           // minDigits and maxDigits validation
           const digitCount = typedValue.replace(/[^\d]/g, "").length;
           if (validator.minDigits && digitCount < validator.minDigits) {
-            return t("input-validation.too-few-digits");
+            return { code: "min-digits" };
           }
 
           if (validator.maxDigits && digitCount > validator.maxDigits) {
-            return t("input-validation.too-many-digits");
+            return { code: "max-digits" };
           }
 
           // Hard cap, independent of any form-configured maxDigits
           if (digitCount > MAX_NUMBER_INPUT_DIGITS) {
-            return t("input-validation.too-many-digits");
+            return { code: "max-digits" };
           }
         }
 
         break;
       }
 
-      const currentRegex = getRegexByType(validator.type, t, validator.regex);
+      const currentRegex = getRegexByType(validator.type, validator.regex);
+
+      if (currentRegex?.error.code === "unsafe-regex") {
+        return currentRegex.error;
+      }
 
       if (validator.type && currentRegex && currentRegex.regex) {
         // Check regex for safety before using it.
         if (!isSafeRegex(currentRegex.regex.source)) {
-          return t("input-validation.invalidRegex");
+          return { code: "unsafe-regex" };
         }
 
         // Check for different types of fields, email, date, custom etc
@@ -123,21 +127,26 @@ export const isFieldResponseValid = (
         }
       }
 
-      if (validator.maxLength && (value as string).length > validator.maxLength) {
-        return t("formElements.characterCount.exceeded", {
+      if (validator.maxLength && typeof value === "string" && value.length > validator.maxLength) {
+        return {
+          code: "max-length",
           count: (value as string).length - validator.maxLength,
-        });
+        };
       }
 
       break;
     }
     case FormElementTypes.textArea: {
-      const typedValue = String(value).trim();
-      if (validator.required && !typedValue) return t("input-validation.required");
-      if (validator.maxLength && (value as string).length > validator.maxLength)
-        return t("formElements.characterCount.exceeded", {
+      if (value !== null && value !== undefined && typeof value !== "string") {
+        return { code: "mismatched-type" };
+      }
+      const typedValue = (value ?? "").trim();
+      if (validator.required && !typedValue) return { code: "required" };
+      if (validator.maxLength && typeof value === "string" && value.length > validator.maxLength)
+        return {
+          code: "max-length",
           count: (value as string).length - validator.maxLength,
-        });
+        };
       break;
     }
     case FormElementTypes.checkbox: {
@@ -148,10 +157,10 @@ export const isFieldResponseValid = (
             !Array.isArray(value) ||
             (value as Array<string>).length != formElement.properties.choices?.length)
         ) {
-          return t("input-validation.all-checkboxes-required");
+          return { code: "all-checkboxes-required" };
         } else {
           if (value === undefined || !Array.isArray(value) || !(value as Array<string>).length) {
-            return t("input-validation.required");
+            return { code: "required" };
           }
         }
       }
@@ -160,15 +169,18 @@ export const isFieldResponseValid = (
     case FormElementTypes.radio:
     case FormElementTypes.starRating:
     case FormElementTypes.dropdown: {
-      if (validator.required && (value === undefined || value === "")) {
-        return t("input-validation.required");
+      if (validator.required && (value === null || value === undefined || value === "")) {
+        return { code: "required" };
       }
       break;
     }
     case FormElementTypes.combobox: {
-      const trimmedValue = String(value).trim();
-      if (validator.required && (trimmedValue === undefined || trimmedValue === "")) {
-        return t("input-validation.required");
+      if (value !== null && value !== undefined && typeof value !== "string") {
+        return { code: "mismatched-type" };
+      }
+      const trimmedValue = (value ?? "").trim();
+      if (validator.required && trimmedValue === "") {
+        return { code: "required" };
       }
       break;
     }
@@ -179,46 +191,57 @@ export const isFieldResponseValid = (
         validator.required &&
         (!fileInputResponse || !fileInputResponse.name || !fileInputResponse.size)
       ) {
-        return t("input-validation.required");
+        return { code: "required" };
+      }
+
+      if (value === null || value === undefined || value === "") break;
+      if (typeof value !== "object" || typeof fileInputResponse.name !== "string") {
+        return { code: "mismatched-type" };
       }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
-        return t("input-validation.file-type-invalid");
+        return { code: "invalid-file-type" };
 
       // Check file size client-side
       if (fileInputResponse.size && !isIndividualFileSizeValid(fileInputResponse.size)) {
-        return t("input-validation.file-size-too-large");
+        return { code: "file-too-large", maxSizeInMb: MAX_FILE_SIZE / 1024 / 1024 };
       }
 
       break;
     }
     case FormElementTypes.formattedDate: {
       if (validator.required && !value) {
-        return t("input-validation.required");
+        return { code: "required" };
       }
 
-      if (value && !isValidDate(JSON.parse(value as string) as DateObject)) {
-        return t("input-validation.date-invalid");
+      if (value && !isValidDateResponse(value)) {
+        return { code: "invalid-date" };
       }
 
       break;
     }
     case FormElementTypes.addressComplete: {
-      const error = isValidAddress(value, validator, t);
+      const error = isValidAddress(value, validator);
       if (error) return error;
       break;
     }
     case FormElementTypes.dynamicRow: {
+      if (!Array.isArray(value)) return { code: "mismatched-type" };
+
       // deterministic switch to return an error object or not
       // required because returning any object (including nulls) blocks the submit action
       let dynamicRowHasErrors = false;
 
       const groupErrors = (value as Array<Responses>).map((row) => {
-        const rowErrors: Record<string, unknown> = {};
+        const rowErrors: ValidationErrors = {};
+
+        if (row === null || typeof row !== "object" || Array.isArray(row)) {
+          return rowErrors;
+        }
 
         (formElement.properties.subElements || []).forEach((subElement, index) => {
           if (subElement.properties.validation) {
-            const validationError = isFieldResponseValid(row[index], subElement, t);
+            const validationError = isFieldResponseValid(row[index], subElement);
 
             if (validationError !== null) {
               rowErrors[index] = validationError;
@@ -232,6 +255,10 @@ export const isFieldResponseValid = (
 
       if (dynamicRowHasErrors) {
         return groupErrors;
+      }
+
+      if (value.some((row) => row === null || typeof row !== "object" || Array.isArray(row))) {
+        return { code: "mismatched-type" };
       }
 
       break;

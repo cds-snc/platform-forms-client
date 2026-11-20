@@ -1,4 +1,5 @@
 import { checkSync } from "recheck";
+import type { ValidationError } from "./validationErrorTypes";
 
 export const isSafeRegex = (pattern: string): boolean => {
   if (!pattern) return true;
@@ -19,58 +20,60 @@ export const isValidRegex = (pattern: string): boolean => {
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
- * Also, defines the regex for validation, with a matching bilingual error message
+ * Also defines the regex for validation, with a matching error code.
  */
-export const getRegexByType = (
-  type: string | undefined,
-  t: (str: string) => string,
-  regex?: string
-) => {
+export const getRegexByType = (type: string | undefined, regex?: string) => {
   interface RegexProps {
     [key: string]: {
       regex: RegExp | null;
-      error: string;
+      error: ValidationError;
     };
   }
 
   const REGEX_CONFIG: RegexProps = {
     email: {
       regex: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.([a-zA-Z0-9-]{2,}))+$/,
-      error: t("input-validation.email"),
+      error: { code: "invalid-email" },
     },
     alphanumeric: {
       regex: /^[A-Za-z0-9\s]+$/,
-      error: t("input-validation.alphanumeric") /* message needs a translation */,
+      error: { code: "invalid-alphanumeric" },
     },
     text: {
       regex: /[^\n]/,
-      error: t("input-validation.regex") /* TODO update */,
+      error: { code: "pattern-mismatch" },
     },
     name: {
       regex: null,
-      error: t("input-validation.regex"), // No error message needed for regex
+      error: { code: "pattern-mismatch" },
     },
     number: {
       regex: /^[\d., ]+$/,
-      error: t("input-validation.number"),
+      error: { code: "invalid-number" },
     },
     canBeNegativeNumber: {
       regex: /^-?[\d., ]+$/,
-      error: t("input-validation.number"),
+      error: { code: "invalid-number" },
     },
     date: {
       regex: /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/, //mm/dd/yyyy
-      error: t("input-validation.date"),
+      error: { code: "invalid-date-format" },
     },
     phone: {
       regex: /^(\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?$/, // +125468464178
-      error: t("input-validation.phone"),
+      error: { code: "invalid-phone" },
     },
   };
   if (type === "custom") {
+    if (regex && !isValidRegex(regex)) {
+      return {
+        regex: null,
+        error: { code: "unsafe-regex" } satisfies ValidationError,
+      };
+    }
     return {
       regex: regex ? new RegExp(regex) : null,
-      error: t("input-validation.regex"),
+      error: { code: "pattern-mismatch" } satisfies ValidationError,
     };
   }
   return type ? REGEX_CONFIG[type] : null;

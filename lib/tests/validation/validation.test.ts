@@ -76,7 +76,6 @@ function getFormMetaData(
         ],
       },
     },
-    t: (key: string) => key,
   } as unknown as ValidationProps;
 }
 
@@ -87,7 +86,7 @@ function getFormMetaData(
   subType: for components like textField that have a type property
   passConditions: [],
   failConditions: [].
-  expectedError: {1: "error string"}
+  expectedError: {1: { code: "required" }}
   required: bool (optional),
 }
 */
@@ -98,7 +97,7 @@ const testCases: TestCase[] = [
     subType: "",
     passConditions: [{ 1: "test value" }],
     failConditions: [{ 1: "" }],
-    expectedError: { 1: "input-validation.required" },
+    expectedError: { 1: { code: "required" } },
     required: true,
   },
   {
@@ -106,28 +105,28 @@ const testCases: TestCase[] = [
     subType: "alphanumeric",
     passConditions: [{ 1: "Joe Pine" }, { 1: "JoePine" }],
     failConditions: [{ 1: "Joe % Pine" }, { 1: "Joe&Pine" }],
-    expectedError: { 1: "input-validation.alphanumeric" },
+    expectedError: { 1: { code: "invalid-alphanumeric" } },
   },
   {
     fieldType: "textField",
     subType: "email",
     passConditions: [{ 1: "joe.pine@cedar.com" }],
     failConditions: [{ 1: "joe.pine.com" }],
-    expectedError: { 1: "input-validation.email" },
+    expectedError: { 1: { code: "invalid-email" } },
   },
   {
     fieldType: "numberInput",
     subType: "number",
     passConditions: [{ 1: "1" }, { 1: "4" }],
     failConditions: [{ 1: "two" }, { 1: "four" }, { 1: "-1" }],
-    expectedError: { 1: "input-validation.number" },
+    expectedError: { 1: { code: "invalid-number" } },
   },
   {
     fieldType: "numberInput",
     subType: "number",
     passConditions: [{ 1: "-1" }, { 1: "-42" }],
     failConditions: [{ 1: "two" }],
-    expectedError: { 1: "input-validation.number" },
+    expectedError: { 1: { code: "invalid-number" } },
     formElement: {
       properties: {
         allowNegativeNumbers: true,
@@ -139,7 +138,7 @@ const testCases: TestCase[] = [
     subType: "number",
     passConditions: [{ 1: "5" }, { 1: "6" }],
     failConditions: [{ 1: "4" }],
-    expectedError: { 1: "input-validation.too-small" },
+    expectedError: { 1: { code: "min-value", min: 5 } },
     formElement: {
       properties: {
         validation: {
@@ -153,7 +152,7 @@ const testCases: TestCase[] = [
     subType: "number",
     passConditions: [{ 1: "5" }, { 1: "4" }],
     failConditions: [{ 1: "6" }],
-    expectedError: { 1: "input-validation.too-large" },
+    expectedError: { 1: { code: "max-value", max: 5 } },
     formElement: {
       properties: {
         validation: {
@@ -167,7 +166,7 @@ const testCases: TestCase[] = [
     subType: "number",
     passConditions: [{ 1: "123" }, { 1: "1234" }],
     failConditions: [{ 1: "12" }],
-    expectedError: { 1: "input-validation.too-few-digits" },
+    expectedError: { 1: { code: "min-digits" } },
     formElement: {
       properties: {
         validation: {
@@ -181,7 +180,7 @@ const testCases: TestCase[] = [
     subType: "number",
     passConditions: [{ 1: "12" }, { 1: "123" }],
     failConditions: [{ 1: "1234" }],
-    expectedError: { 1: "input-validation.too-many-digits" },
+    expectedError: { 1: { code: "max-digits" } },
     formElement: {
       properties: {
         validation: {
@@ -196,35 +195,35 @@ const testCases: TestCase[] = [
     subType: "number",
     passConditions: [{ 1: "123456789012345" }],
     failConditions: [{ 1: "1234567890123456" }],
-    expectedError: { 1: "input-validation.too-many-digits" },
+    expectedError: { 1: { code: "max-digits" } },
   },
   {
     fieldType: "textField",
     subType: "date",
     passConditions: [{ 1: "06/05/1950" }],
     failConditions: [{ 1: "25/05/1950" }, { 1: "notADate" }],
-    expectedError: { 1: "input-validation.date" },
+    expectedError: { 1: { code: "invalid-date-format" } },
   },
   {
     fieldType: "textField",
     subType: "phone",
     passConditions: [{ 1: "1-819-555-7777" }, { 1: "1234567890" }],
     failConditions: [{ 1: "888-8989" }, { 1: "notAPhoneNumber" }, { 1: "123456789" }],
-    expectedError: { 1: "input-validation.phone" },
+    expectedError: { 1: { code: "invalid-phone" } },
   },
   // required validation for other components
   {
     fieldType: "textArea",
     passConditions: [{ 1: "text area value" }],
     failConditions: [{ 1: "" }],
-    expectedError: { 1: "input-validation.required" },
+    expectedError: { 1: { code: "required" } },
     required: true,
   },
   {
     fieldType: "textArea",
     passConditions: [{ 1: "less than max" }],
     failConditions: [{ 1: "more characters than the max length" }],
-    expectedError: { 1: "formElements.characterCount.exceeded" },
+    expectedError: { 1: { code: "max-length", count: 20 } },
     required: true,
     formElement: {
       properties: {
@@ -238,28 +237,28 @@ const testCases: TestCase[] = [
     fieldType: "dropdown",
     passConditions: [{ 1: "myChoice" }],
     failConditions: [{ 1: undefined }],
-    expectedError: { 1: "input-validation.required" },
+    expectedError: { 1: { code: "required" } },
     required: true,
   },
   {
     fieldType: "radio",
     passConditions: [{ 1: "myChoice" }],
     failConditions: [{ 1: undefined }],
-    expectedError: { 1: "input-validation.required" },
+    expectedError: { 1: { code: "required" } },
     required: true,
   },
   {
     fieldType: "checkbox",
     passConditions: [{ 1: ["myChoice1", "myChoice2"] }],
     failConditions: [{ 1: undefined }, { 1: [] }],
-    expectedError: { 1: "input-validation.required" },
+    expectedError: { 1: { code: "required" } },
     required: true,
   },
   {
     fieldType: "checkbox",
     passConditions: [{ 1: ["myChoice", "myChoice2"] }],
     failConditions: [{ 1: ["myChoice1"] }],
-    expectedError: { 1: "input-validation.all-checkboxes-required" },
+    expectedError: { 1: { code: "all-checkboxes-required" } },
     required: true,
     formElement: {
       properties: {
@@ -292,7 +291,7 @@ const testCases: TestCase[] = [
       },
     ],
     failConditions: [{ 1: { name: null, size: null, content: null } }],
-    expectedError: { 1: "input-validation.required" },
+    expectedError: { 1: { code: "required" } },
     required: true,
   },
   {
@@ -315,7 +314,7 @@ const testCases: TestCase[] = [
         },
       },
     ],
-    expectedError: { 1: "input-validation.file-type-invalid" },
+    expectedError: { 1: { code: "invalid-file-type" } },
     required: true,
   },
 ];
@@ -437,15 +436,15 @@ describe("Test input validation", () => {
             { 1: "", 3: "" },
           ],
         },
-        toValidationProps({ formRecord, t: (key: string) => key })
+        toValidationProps({ formRecord })
       );
       expect(errors).toEqual({
         0: [
           {
-            1: "input-validation.required",
+            1: { code: "required" },
           },
           {
-            1: "input-validation.required",
+            1: { code: "required" },
           },
         ],
       });
@@ -458,7 +457,7 @@ describe("Test input validation", () => {
             { 1: "test", 3: "" },
           ],
         },
-        toValidationProps({ formRecord, t: (key: string) => key })
+        toValidationProps({ formRecord })
       );
       expect(errors).toEqual({});
     });
@@ -540,8 +539,8 @@ describe("Gov Email domain validator", () => {
     ["test@ct-tc.gc.ca", false],
     ["test@fpslreb-crtespf.gc.ca", false],
     ["test@sct-trp.gc.ca", false],
-    ["test@eptc-tpec.gc.ca", false],   
-    ["test@njc-cnm.gc.ca", false],   
+    ["test@eptc-tpec.gc.ca", false],
+    ["test@njc-cnm.gc.ca", false],
   ])(`Should return true if email is valid (testing "%s")`, async (email, isValid) => {
     expect(isValidGovEmail(email)).toBe(isValid);
   });

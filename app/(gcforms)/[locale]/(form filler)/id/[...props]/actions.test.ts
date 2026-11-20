@@ -33,10 +33,6 @@ vi.mock("@gcforms/core", async () => {
   };
 });
 
-vi.mock("@root/i18n", () => ({
-  serverTranslation: vi.fn(),
-}));
-
 vi.mock("@lib/formEmailOrchestration", () => ({
   getFormNotificationInterval: vi.fn(),
   updateNotificationMarker: vi.fn(),
@@ -61,7 +57,6 @@ import { verifyHCaptchaToken } from "@gcforms/hcaptcha/server";
 import { getAppSettingAsBoolean } from "@lib/appSettings";
 import { dateHasPast } from "@lib/utils";
 import { validateVisibleElements, valuesMatchErrorContainsElementType } from "@gcforms/core";
-import { serverTranslation } from "@root/i18n";
 import {
   getFormNotificationInterval,
   prepareFormSubmissionEmail,
@@ -101,7 +96,6 @@ describe("submitForm", () => {
     (verifyHCaptchaToken as Mock).mockResolvedValue({ verified: true, score: 0.2 });
     (getAppSettingAsBoolean as Mock).mockResolvedValue(true);
     (dateHasPast as Mock).mockReturnValue(false);
-    (serverTranslation as Mock).mockResolvedValue({ t: vi.fn() });
     (validateVisibleElements as Mock).mockReturnValue({ errors: {} });
     (valuesMatchErrorContainsElementType as Mock).mockReturnValue(false);
     (normalizeFormResponses as Mock).mockReturnValue(mockValues);
@@ -117,6 +111,164 @@ describe("submitForm", () => {
 
   afterEach(() => {
     vi.unstubAllEnvs();
+  });
+
+  describe("submission validation policy using real core validation", () => {
+    const date = {
+      id: 1,
+      type: FormElementTypes.formattedDate,
+      properties: { titleEn: "Date", titleFr: "Date", validation: { required: true } },
+    };
+    const repeating = {
+      id: 2,
+      type: FormElementTypes.dynamicRow,
+      properties: {
+        titleEn: "Rows",
+        titleFr: "Lignes",
+        validation: { required: false },
+        subElements: [date],
+      },
+    };
+    const file = {
+      id: 3,
+      type: FormElementTypes.fileInput,
+      properties: { titleEn: "File", titleFr: "Fichier", validation: { required: false } },
+    };
+    const address = {
+      id: 4,
+      type: FormElementTypes.addressComplete,
+      properties: { titleEn: "Address", titleFr: "Adresse", validation: { required: true } },
+    };
+    const optionalAddress = {
+      ...address,
+      id: 5,
+      properties: { ...address.properties, validation: { required: false } },
+    };
+
+    beforeEach(async () => {
+      const core = await vi.importActual<typeof import("@gcforms/core")>("@gcforms/core");
+      vi.mocked(validateVisibleElements).mockImplementation(core.validateVisibleElements);
+      vi.mocked(valuesMatchErrorContainsElementType).mockImplementation(
+        core.valuesMatchErrorContainsElementType
+      );
+      vi.mocked(getPublicTemplateByID).mockResolvedValue({
+        ...mockTemplate,
+        form: {
+          ...mockTemplate.form,
+          elements: [
+            date,
+            {
+              ...repeating,
+              properties: { ...repeating.properties, subElements: [date, optionalAddress] },
+            },
+            file,
+            address,
+            optionalAddress,
+          ],
+          layout: [1, 2, 3, 4, 5],
+        },
+      });
+      vi.stubEnv("HCAPTCHA_SITE_VERIFY_KEY", "test-secret");
+    });
+
+    it.each([
+      { 1: "{" },
+      { 1: "null" },
+      { 1: "[]" },
+      { 1: "123" },
+      { 1: { YYYY: 2026, MM: 2, DD: 3 } },
+      { 2: {} },
+      { 2: "not rows" },
+      { 2: [null] },
+      { 2: [123] },
+      { 2: [[]] },
+      { 2: [{ 0: "" }, null] },
+      { 2: [{ 0: "{" }] },
+      { 4: "{" },
+      { 4: "null" },
+      { 4: "[]" },
+      { 4: "123" },
+      { 4: { city: "Ottawa" } },
+      { 4: '{"city":null}' },
+      { 4: '{"province":123}' },
+      { 4: '{"streetAddress":{"toString":null}}' },
+      { 5: "{" },
+      { 5: '{"postalCode":[]}' },
+      { 2: [{ 1: '{"city":false}' }] },
+    ])("rejects malformed payload %j before normalization or processing", async (values) => {
+      const result = await submitForm(
+        values as unknown as Responses,
+        mockLanguage,
+        mockFormId,
+        false
+      );
+
+      expect(result.error).toEqual({
+        name: "MissingFormDataError",
+        message: "Form data validation failed due to malformed payload",
+      });
+      expect(normalizeFormResponses).not.toHaveBeenCalled();
+      expect(getFormNotificationInterval).not.toHaveBeenCalled();
+      expect(processFormData).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      { 1: '{"YYYY":2026,"MM":2,"DD":30}' },
+      { 1: '{"MM":2}' },
+      { 1: '{"YYYY":null,"MM":2,"DD":3}' },
+      { 1: "" },
+      {},
+      { 1: null, 2: "", 3: null },
+      { 2: [{ 0: '{"YYYY":2026,"MM":2,"DD":30}' }] },
+      { 2: [{ 0: "" }] },
+      { 4: "{}" },
+      { 4: '{"streetAddress":"","city":"","province":"","postalCode":"","country":"Canada"}' },
+      { 4: '{"city":"Ottawa"}' },
+      { 4: null, 5: "" },
+      { 5: '{"city":"Ottawa"}' },
+      { 2: [{ 1: '{"city":"Ottawa"}' }] },
+    ])("keeps ordinary validation errors and empty inputs passive (%j)", async (values) => {
+      const result = await submitForm(values as Responses, mockLanguage, mockFormId, false);
+
+      expect(vi.mocked(validateVisibleElements).mock.results[0].value.errors).not.toEqual({});
+      expect(result.error).toBeUndefined();
+      expect(result.submissionId).toBe("test-submission-id");
+      expect(normalizeFormResponses).toHaveBeenCalled();
+      expect(processFormData).toHaveBeenCalledOnce();
+    });
+
+    it.each([
+      { 3: { name: "bad.exe", size: 10, id: "file" } },
+      { 3: { name: 123, size: 10, id: "file" } },
+      { 3: "not a file" },
+      { 2: [{ 0: "", 1: { name: "bad.exe", size: 10, id: "file" } }] },
+    ])("preserves file mismatch rejection (%j)", async (values) => {
+      vi.mocked(getPublicTemplateByID).mockResolvedValue({
+        ...mockTemplate,
+        form: {
+          ...mockTemplate.form,
+          elements: [
+            date,
+            { ...repeating, properties: { ...repeating.properties, subElements: [date, file] } },
+            file,
+          ],
+          layout: [1, 2, 3],
+        },
+      });
+      const result = await submitForm(
+        values as unknown as Responses,
+        mockLanguage,
+        mockFormId,
+        false
+      );
+
+      expect(result.error).toEqual({
+        name: "MissingFormDataError",
+        message: "Form data validation failed due to file input errors",
+      });
+      expect(normalizeFormResponses).not.toHaveBeenCalled();
+      expect(processFormData).not.toHaveBeenCalled();
+    });
   });
 
   it("should reject CAPTCHA verification when the site verify key is missing", async () => {
@@ -176,7 +328,6 @@ describe("submitForm", () => {
     expect(getPublicTemplateByID).toHaveBeenCalledWith(mockFormId, "published");
     expect(validateVisibleElements).toHaveBeenCalledWith(mockValues, {
       formRecord: mockTemplate,
-      t: expect.any(Function),
     });
     expect(normalizeFormResponses).toHaveBeenCalledWith(mockTemplate, mockValues);
     expect(processFormData).toHaveBeenCalledWith({
@@ -332,11 +483,6 @@ describe("submitForm", () => {
       actualCore.valuesMatchErrorContainsElementType
     );
 
-    // Mock the translation function with a real implementation
-    (serverTranslation as Mock).mockResolvedValue({
-      t: (key: string) => key, // Simple passthrough translation
-    });
-
     const result = await submitForm(valuesWithExeFile, mockLanguage, mockFormId, false);
 
     // The real validation should detect the .exe file as invalid and trigger the error
@@ -354,7 +500,6 @@ describe("submitForm", () => {
     // Verify that real validation was called with our form data
     expect(validateVisibleElements).toHaveBeenCalledWith(valuesWithExeFile, {
       formRecord: templateWithFileInput,
-      t: expect.any(Function),
     });
   });
 
