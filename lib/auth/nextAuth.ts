@@ -18,6 +18,7 @@ import {
   sanitizeAdapterCreateUser,
   sanitizeAdapterUpdateUser,
 } from "@lib/auth/adapterUserSanitizers";
+import { formatAuthError, logNextAuthError } from "@lib/auth/authLogging";
 import { applyIdentityClaimsToToken } from "@lib/auth/oidcIdentityClaims";
 
 import { filterZitadelUrl } from "@lib/utils/filterZitadelUrl";
@@ -175,17 +176,13 @@ const {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
         // Not a CredentialsSignin error which is for invalid 2FA credentials
-        logMessage.error(`NextAuth error: ${JSON.stringify(error)}.`);
+        logMessage.error(formatAuthError(error));
       }
     },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
     },
-    debug(code, ...message) {
-      // TODO.. switch back to debug
-      logMessage.info(code);
-      logMessage.debug((message as string[]).join(" "));
-    },
+    debug: logNextAuthError,
   },
 
   adapter,
