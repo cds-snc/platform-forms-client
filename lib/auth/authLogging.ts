@@ -23,6 +23,6 @@ export function logNextAuthError(code: string, ...message: unknown[]) {
     .join(" ");
 
   if (details) {
-    logMessage.info(`NextAuth debug details for ${code}: ${details}`);
+    logMessage.info(`NextAuth debug details for ${code}: ${JSON.stringify(details)}`);
   }
 }
