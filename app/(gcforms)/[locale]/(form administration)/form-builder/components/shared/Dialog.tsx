@@ -1,6 +1,7 @@
 "use client";
 import React, { use, useCallback, useEffect, useId, useRef, useState } from "react";
 import { browser } from "react-dom";
+import { AnnounceLiveRegion } from "@gcforms/announce";
 import { CDSHTMLDialogElement } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
@@ -19,6 +20,7 @@ export const Dialog = ({
   actions,
   className,
   handleClose,
+  withAnnounce,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement | null>;
   children: React.ReactElement;
@@ -26,6 +28,7 @@ export const Dialog = ({
   actions?: React.ReactElement;
   className?: string;
   handleClose?: () => void;
+  withAnnounce?: boolean;
 }) => {
   use(browser("This component requires browser APIs."));
   const { t } = useTranslation("form-builder");
@@ -46,19 +49,13 @@ export const Dialog = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  // Close modal if "ESC" key is pressed
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        handleClose && handleClose();
-        close();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [close, handleClose]);
+  // Let nested controls consume Escape before closing this dialog.
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDialogElement>) => {
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    event.preventDefault();
+    event.stopPropagation();
+    close();
+  };
 
   const modalId = `modal-title-${useId()}`;
 
@@ -68,6 +65,12 @@ export const Dialog = ({
       {...(title ? { "aria-labelledby": modalId } : {})}
       ref={dialogRef}
       data-testid="dialog"
+      onKeyDown={handleKeyDown}
+      onClose={(event) => {
+        if (event.target === event.currentTarget && !event.currentTarget.open) {
+          changeOpen(false);
+        }
+      }}
     >
       <div
         className={cn(
@@ -105,6 +108,7 @@ export const Dialog = ({
           </span>
         </Button>
       </div>
+      {withAnnounce && <AnnounceLiveRegion scope="modal" active={isOpen} />}
     </dialog>
   );
 };

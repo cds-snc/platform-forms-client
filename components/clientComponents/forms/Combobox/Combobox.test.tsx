@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import React from "react";
-import { cleanup, render, screen, within, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { GenerateElement } from "@lib/formBuilder";
@@ -10,6 +10,7 @@ import { Combobox } from "./Combobox";
 import { Formik, useField } from "formik";
 import type { FormElement } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
+import { AnnounceLiveRegion } from "@gcforms/announce";
 
 vi.mock("formik", async () => {
   const actual = await vi.importActual<typeof import("formik")>("formik");
@@ -51,7 +52,7 @@ const comboboxData = {
   },
 } as const as FormElement;
 
-const renderCombobox = (options: { required?: boolean; error?: string } = {}) => {
+const renderCombobox = (options: { required?: boolean; error?: string; lang?: Language } = {}) => {
   vi.mocked(useField).mockReturnValueOnce([
     { value: "", name: "province", onBlur: vi.fn() },
     { touched: Boolean(options.error), error: options.error },
@@ -65,9 +66,51 @@ const renderCombobox = (options: { required?: boolean; error?: string } = {}) =>
       choices={["Alberta", "Ontario"]}
       required={options.required}
       ariaDescribedBy="description-province"
+      lang={options.lang}
     />
   );
 };
+
+describe("Combobox shared announcements", () => {
+  afterEach(() => {
+    cleanup();
+    vi.clearAllTimers();
+    vi.useRealTimers();
+  });
+
+  it("skips opening feedback and publishes localized results after 400 ms", () => {
+    vi.useFakeTimers();
+    render(<AnnounceLiveRegion />);
+    renderCombobox({ lang: "fr" });
+    const region = screen.getByTestId("gc-announce-polite");
+    const input = screen.getByRole("combobox");
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    act(() => vi.advanceTimersByTime(1400));
+    expect(region).toBeEmptyDOMElement();
+    fireEvent.change(input, { target: { value: "On" } });
+    act(() => vi.advanceTimersByTime(399));
+    expect(region).toBeEmptyDOMElement();
+    act(() => vi.advanceTimersByTime(1));
+    expect(region).toHaveTextContent("1 option disponible");
+    expect(region).toHaveAttribute("lang", "fr");
+    expect(document.querySelector('[id$="-live-a"]')).toBeNull();
+  });
+
+  it("cancels no-results feedback when the combobox closes before 1400 ms", () => {
+    vi.useFakeTimers();
+    render(<AnnounceLiveRegion />);
+    renderCombobox();
+    const region = screen.getByTestId("gc-announce-polite");
+    const input = screen.getByRole("combobox");
+    fireEvent.keyDown(input, { key: "ArrowDown" });
+    fireEvent.change(input, { target: { value: "zzz" } });
+    act(() => vi.advanceTimersByTime(1399));
+    expect(region).toBeEmptyDOMElement();
+    fireEvent.keyDown(input, { key: "Escape" });
+    act(() => vi.advanceTimersByTime(1));
+    expect(region).toBeEmptyDOMElement();
+  });
+});
 
 describe.each([["en"], ["fr"]] as Array<[Language]>)("Combobox component", (lang: Language) => {
   afterEach(() => cleanup());

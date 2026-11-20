@@ -4,7 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { AccessControlProvider } from "@lib/hooks/useAccessControl";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
-import { Announce } from "@gcforms/announce";
+import { AnnounceLiveRegion } from "@gcforms/announce";
 import { AppUpdateProvider } from "@lib/hooks/useAppUpdate";
 
 export const ClientContexts: React.FC<{
@@ -25,7 +25,7 @@ export const ClientContexts: React.FC<{
           <RefsProvider>{children}</RefsProvider>
         </AccessControlProvider>
       </SessionProvider>
-      <Announce />
+      <AnnounceLiveRegion />
     </AppUpdateProvider>
   );
 };
