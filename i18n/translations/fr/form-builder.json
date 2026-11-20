@@ -756,7 +756,10 @@
     "includeProvincialTerritorial": "Inclure les provinces et les territoires"
   },
   "maxCharacterLength": "Longueur maximale des caractères :",
+  "maxWordLength": "Longueur maximale des mots :",
   "maximumCharacterLength": "Longueur maximale des caractères",
+  "maximumWordCount": "Nombre maximum de mots",
+  "maximumWordCountDescription": "Définissez le nombre maximum de mots que vos utilisateur·rice·s peuvent saisir pour cette question.",
   "maxNumberOfRows": {
     "description": "Définissez la limite supérieure du nombre d'entrées que vos utilisateur·rice·s peuvent fournir pour cette question.",
     "label": "Nombre maximum de réponses"

@@ -10,7 +10,7 @@ const inputLimit = 10000;
  * value type is not a string. e.g. file input value is an object.
  */
 export const isInputTooLong = (inputField: string, maxCharacters = inputLimit): boolean => {
-  return inputField?.length > maxCharacters;
+  return inputLengthOverLimit(inputField, maxCharacters) > 0;
 };
 
 /**
@@ -21,4 +21,26 @@ export const isInputTooLong = (inputField: string, maxCharacters = inputLimit): 
  */
 export const inputLengthOverLimit = (inputField: string, maxCharacters = inputLimit): number => {
   return Math.max(0, inputField?.length - maxCharacters);
+};
+
+/**
+ * Used to calculate the number of words a form input field has.
+ * @param inputField form input field. e.g. input, textarea, checkbox, radio, etc.
+ * @returns number of words in the input field. Returns 0 if the input is empty or not a string.  
+ */
+export const wordCount = (inputField: string): number => {
+  if (typeof inputField !== "string" || !inputField.trim()) {
+    return 0;
+  }
+  return inputField.trim().split(/\s+/).length;
+};
+
+/**
+ * Used to evaluate if a form input field exceeds the specified word limit.
+ * @param inputField form input field. e.g. input, textarea, checkbox, radio, etc.
+ * @param maxWords word limit.
+ * @returns true if the input field exceeds the word limit, false otherwise.
+ */
+export const isWordCountTooHigh = (inputField: string, maxWords: number): boolean => {
+  return wordCount(inputField) > maxWords;
 };
