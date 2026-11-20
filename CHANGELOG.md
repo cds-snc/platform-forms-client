@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.7](https://github.com/cds-snc/platform-forms-client/compare/v4.31.6...v4.31.7) (2026-11-20)
+
+
+### Miscellaneous Chores
+
+* Serialize raw error entry ([#8237](https://github.com/cds-snc/platform-forms-client/issues/8237)) ([44323a8](https://github.com/cds-snc/platform-forms-client/commit/44323a83fde6e7eb136c169a23de8943f095ab1a))
+
 ## [4.31.6](https://github.com/cds-snc/platform-forms-client/compare/v4.31.5...v4.31.6) (2026-11-20)
 
 
