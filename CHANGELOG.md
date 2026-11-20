@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.5](https://github.com/cds-snc/platform-forms-client/compare/v4.31.4...v4.31.5) (2026-11-20)
+
+
+### Miscellaneous Chores
+
+* update next auth log ([#8232](https://github.com/cds-snc/platform-forms-client/issues/8232)) ([3c1397f](https://github.com/cds-snc/platform-forms-client/commit/3c1397f74e5b78504ec67e6189b1319f88d72cda))
+* Upgrade log level so they appear in CloudWatch ([#8234](https://github.com/cds-snc/platform-forms-client/issues/8234)) ([713734d](https://github.com/cds-snc/platform-forms-client/commit/713734d7fd87f77c58ac7c81f265b77ccb567bf3))
+
 ## [4.31.4](https://github.com/cds-snc/platform-forms-client/compare/v4.31.3...v4.31.4) (2026-11-19)
 
 
