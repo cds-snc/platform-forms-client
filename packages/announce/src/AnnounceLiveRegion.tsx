@@ -24,9 +24,9 @@ export type Priority = (typeof Priority)[keyof typeof Priority];
 /**
  * Example:
  * In a top level component near the layout add:
- * import { Announce } from "@gcforms/announce";
+ * import { AnnounceLiveRegion } from "@gcforms/announce";
  * ...
- * <Announce />
+ * <AnnounceLiveRegion />
  *
  * Then in any component you can use:
  * import { announce } from "@gcforms/announce";
@@ -45,9 +45,8 @@ export const AnnounceLiveRegion = ({
   const messageLowRef = useRef<HTMLDivElement>(null);
   const messageHighRef = useRef<HTMLDivElement>(null);
 
-  // Note: Routing (announce() → coordinator → active host) used over Events.
-  // An event can be dispatched before the listener is registered, causing missed announcements.
-  // An event makes coordinating between root and modal hosts more complex and error-prone.
+  // Route each message to one active host instead of broadcasting to every host.
+  // Requests made before a host registers are still dropped. There's no startup buffer.
 
   useLayoutEffect(() => {
     if (!active) return;
