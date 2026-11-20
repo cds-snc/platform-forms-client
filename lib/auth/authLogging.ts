@@ -16,13 +16,13 @@ export function formatAuthError(error: Error): string {
 }
 
 export function logNextAuthError(code: string, ...message: unknown[]) {
-  logMessage.info(code);
-
   const details = message
-    .map((entry) => (entry instanceof Error ? `${entry.name}: ${entry.message}` : String(entry)))
+    .map((entry) =>
+      entry instanceof Error ? `${entry.name}: ${entry.message}` : JSON.stringify(entry)
+    )
     .join(" ");
 
   if (details) {
-    logMessage.info(`NextAuth debug details for ${code}: ${JSON.stringify(details)}`);
+    logMessage.info(`NextAuth debug details for ${code}: ${details}`);
   }
 }
