@@ -18,9 +18,11 @@ import {
   sanitizeAdapterCreateUser,
   sanitizeAdapterUpdateUser,
 } from "@lib/auth/adapterUserSanitizers";
+import { formatAuthError, logNextAuthError } from "@lib/auth/authLogging";
 import { applyIdentityClaimsToToken } from "@lib/auth/oidcIdentityClaims";
 
 import { filterZitadelUrl } from "@lib/utils/filterZitadelUrl";
+import { isProductionOrigin } from "@lib/origin";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -62,6 +64,13 @@ const adapter = {
   },
 };
 
+const isProd = isProductionOrigin(process.env.HOST_URL || process.env.NEXTAUTH_URL);
+
+// @todo swap this to a env var during a cleanup sprint
+const issuer = isProd
+  ? "https://session.canada.ca"
+  : filterZitadelUrl(process.env.NEXT_PUBLIC_ZITADEL_URL);
+
 const {
   handlers: { GET, POST },
   auth,
@@ -73,7 +82,7 @@ const {
       id: "gcForms", // signIn("my-provider") and will be part of the callback URL
       name: "GC Forms", // optional, used on the default login page as the button text.
       type: "oidc",
-      issuer: filterZitadelUrl(process.env.NEXT_PUBLIC_ZITADEL_URL),
+      issuer: issuer,
       clientId: process.env.ZITADEL_CLIENT_ID,
       checks: ["pkce", "state"],
       client: { token_endpoint_auth_method: "none" },
@@ -167,17 +176,13 @@ const {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
         // Not a CredentialsSignin error which is for invalid 2FA credentials
-        logMessage.error(`NextAuth error: ${JSON.stringify(error)}.`);
+        logMessage.error(formatAuthError(error));
       }
     },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
     },
-    debug(code, ...message) {
-      // TODO.. switch back to debug
-      logMessage.info(code);
-      logMessage.debug((message as string[]).join(" "));
-    },
+    debug: logNextAuthError,
   },
 
   adapter,

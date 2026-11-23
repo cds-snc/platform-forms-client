@@ -22,6 +22,10 @@ export const duplicateElement: TemplateStore<"duplicateElement"> =
         element.properties["titleFr"] = `${element.properties["titleFr"]} ${copyFr}`;
       }
 
+      if (element.properties["questionId"]) {
+        element.properties["questionId"] = "";
+      }
+
       // Renumber sub elements so they match the new parentId
       if (element.type === "dynamicRow") {
         const subElementId = Number(element.id.toString() + "01");
