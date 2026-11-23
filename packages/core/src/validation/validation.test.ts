@@ -97,6 +97,7 @@ describe("structured field validation", () => {
       ...text,
       properties: {
         ...text.properties,
+        // Intentionally unsafe fixture: validation must reject it before attempting a match.
         validation: { required: false, type: "custom", regex: "^(a+)+$" },
       },
     };
