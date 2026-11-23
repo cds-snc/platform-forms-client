@@ -4,7 +4,6 @@ import { FormikProvider, useFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList } from "@lib/validation/validation";
 import { validateOnSubmit } from "@gcforms/core";
-import { formatErrors } from "@lib/validation/formatErrors";
 
 import { type FormProps, type FormRenderProps } from "./types";
 import { type Responses as FormikResponses } from "@lib/types";
@@ -26,6 +25,7 @@ import { submitFormValues } from "./submitFormValues";
 import { useFormErrorFocus } from "./useFormErrorFocus";
 import { useIsHydrated } from "./useIsHydrated";
 import { useFormHCaptcha } from "./useFormHCaptcha";
+import { StructuredErrorsContext, useFormattedFormik } from "./StructuredErrors";
 
 /**
  * The main content of the form, handling rendering of status alerts, form body, and submission states.
@@ -50,7 +50,7 @@ const FormContent: React.FC<FormRenderProps> = (props) => {
   useEffect(() => {
     props.setErrors({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentGroup]);
+  }, [currentGroup, language]);
 
   // Used to set any values we'd like available during Formik submission.
   useSyncVisibleElementIds();
@@ -127,20 +127,20 @@ export const Form: React.FC<FormProps> = (props) => {
     },
   });
 
-  const formik = useFormik<FormikResponses>({
+  const rawFormik = useFormik<FormikResponses>({
     validateOnChange: false,
     validateOnBlur: false,
     enableReinitialize: true, // needed when switching languages
     initialValues: props.initialValues ?? getFormInitialValues(props.formRecord, props.language),
-    validate: (values) =>
-      formatErrors(
-        validateOnSubmit(values, { formRecord: props.formRecord }),
-        props.formRecord.form.elements,
-        props.language,
-        props.t
-      ),
+    validate: (values) => validateOnSubmit(values, { formRecord: props.formRecord }),
     onSubmit: (values, formikBag) => submitFormValues(values, formikBag, props, captchaControls),
   });
+  const { formik, structuredErrors } = useFormattedFormik(
+    rawFormik,
+    props.formRecord.form.elements,
+    props.language,
+    props.t
+  );
 
   useEffect(() => {
     // Return focus to the submit button if the captcha challenge was cancelled
@@ -151,16 +151,18 @@ export const Form: React.FC<FormProps> = (props) => {
   }, [formik.isSubmitting]);
 
   return (
-    <FormikProvider value={formik}>
-      <FormContent
-        {...props}
-        {...formik}
-        captcha={captcha}
-        captchaEnabled={captchaEnabled}
-        submitButtonRef={(element) => {
-          submitButtonRef.current = element;
-        }}
-      />
-    </FormikProvider>
+    <StructuredErrorsContext.Provider value={structuredErrors}>
+      <FormikProvider value={formik}>
+        <FormContent
+          {...props}
+          {...formik}
+          captcha={captcha}
+          captchaEnabled={captchaEnabled}
+          submitButtonRef={(element) => {
+            submitButtonRef.current = element;
+          }}
+        />
+      </FormikProvider>
+    </StructuredErrorsContext.Provider>
   );
 };

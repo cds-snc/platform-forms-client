@@ -16,17 +16,8 @@ export interface TextAreaProps extends InputFieldProps {
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const {
-    id,
-    className,
-    ariaDescribedBy,
-    required,
-    children,
-    placeholder,
-    maxLength,
-    lang,
-    questionLabel,
-  } = props;
+  const { id, className, ariaDescribedBy, required, children, placeholder, maxLength, lang } =
+    props;
 
   const [field, meta, helpers] = useField(props);
 
@@ -34,11 +25,9 @@ export const TextArea = (
     useCharacterCount({
       maxLength,
       id: id ?? "",
+      name: field.name,
       lang,
       value: field.value,
-      error: meta.error,
-      setError: helpers.setError,
-      questionLabel,
     });
 
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -9,6 +9,7 @@ import { FormElementTypes, FormStatus } from "@gcforms/types";
 import { Form } from "./Form";
 import { type FormProps } from "./types";
 import { EventKeys } from "@lib/hooks/useCustomEvent";
+import { TextInput } from "@clientComponents/forms/TextInput/TextInput";
 
 const mocks = vi.hoisted(() => ({
   executeCaptcha: vi.fn(),
@@ -72,7 +73,8 @@ vi.mock("@gcforms/hcaptcha/client", () => ({
   }),
 }));
 
-vi.mock("@gcforms/core", () => ({
+vi.mock("@gcforms/core", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@gcforms/core")>()),
   validateOnSubmit: mocks.validateOnSubmit,
 }));
 
@@ -343,11 +345,13 @@ describe("Form", () => {
   });
 
   it("passes Formik validateForm and fallback to custom submit renderers", async () => {
+    mocks.validateOnSubmit.mockReturnValue({ 1: { code: "max-length", count: 1 } });
+    const validated = vi.fn();
     const renderSubmit = vi.fn(({ validateForm, fallBack }) => (
       <button
         type="button"
         onClick={async () => {
-          await validateForm();
+          validated(await validateForm());
           fallBack?.();
         }}
       >
@@ -360,11 +364,43 @@ describe("Form", () => {
     fireEvent.click(screen.getByRole("button", { name: "Custom submit" }));
 
     await waitFor(() => expect(mocks.validateOnSubmit).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(validated).toHaveBeenCalledWith({
+        1: "formElements.characterCount.exceeded: Question",
+      })
+    );
     expect(renderSubmit).toHaveBeenCalledWith({
       validateForm: expect.any(Function),
       fallBack: expect.any(Function),
     });
   });
+
+  it.each(["page", "language"])(
+    "clears structured character errors on %s changes",
+    async (change) => {
+      mocks.validateOnSubmit.mockReturnValue({ 1: { code: "max-length", count: 1 } });
+      const formProps = createFormProps({
+        initialValues: { 1: "abc" },
+        children: [<TextInput key="1" id="1" name="1" type="text" maxLength={2} />],
+      });
+      formProps.formRecord.form.elements = [
+        {
+          ...fieldElement,
+          properties: { ...fieldElement.properties, validation: { required: true, maxLength: 2 } },
+        },
+      ];
+      const { rerender } = render(<Form {...formProps} />);
+      fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+      await waitFor(() => expect(screen.getByTestId("errorMessage")).toBeInTheDocument());
+      if (change === "page") mocks.gcFormsContext.currentGroup = "next-page";
+      else formProps.language = "fr";
+      rerender(<Form {...formProps} />);
+      await waitFor(() => expect(screen.queryByTestId("errorMessage")).not.toBeInTheDocument());
+      expect(screen.getByRole("textbox")).toHaveValue("abc");
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: "abcd" } });
+      expect(screen.queryByTestId("errorMessage")).not.toBeInTheDocument();
+    }
+  );
 
   it("does not execute hCaptcha or submit when client validation fails", async () => {
     mocks.validateOnSubmit.mockReturnValue({ 1: { code: "required" } });

@@ -1,15 +1,21 @@
 import { FormElement, FormElementTypes, Language, Responses } from "@gcforms/types";
-import type {
-  AddressField,
-  FieldValidationError,
-  ValidationError,
-  ValidationErrors,
-} from "@gcforms/core";
+import type { AddressField, ValidationError } from "@gcforms/core";
 import { truncateString } from "@lib/client/clientHelpers";
 import { formatInvalidError } from "./formatInvalidError";
 import { getAddressFieldLabel } from "@clientComponents/forms/AddressComplete/utils";
 
 type Translate = (key: string, options?: Record<string, unknown>) => string;
+
+// Core validation returns error code objects.
+// Components can also set string messages directly via Formik's setError().
+export type FormErrors = {
+  [key: string]:
+    | ValidationError
+    | { fields: Record<AddressField, ValidationError | string | null> }
+    | FormErrors[]
+    | string
+    | undefined;
+};
 
 type ContextualErrorCode = "input-too-long" | "file-too-large";
 
@@ -115,10 +121,9 @@ export const getEntryQuestion = (
         interpolation: { escapeValue: false },
       });
 
-// Translate structured core errors before they enter Formik's string-based error state,
-// keeping inline field errors and the error summary consistent.
+// Project core errors for string-based consumers, preserving application-provided errors.
 export const formatErrors = (
-  errors: ValidationErrors,
+  errors: FormErrors,
   elements: FormElement[],
   language: Language,
   t: Translate
@@ -132,16 +137,19 @@ export const formatErrors = (
         );
 
   const formatElementError = (
-    error: FieldValidationError,
+    error: NonNullable<FormErrors[string]>,
     element: FormElement,
     entryNumber?: number
   ): Responses[string] => {
+    if (typeof error === "string") return error;
     if ("code" in error) return formatMessage(error, element, entryNumber);
     if ("fields" in error) {
       const fields = {} as Record<AddressField, string | null>;
       for (const fieldKey of Object.keys(error.fields) as AddressField[]) {
         const fieldError = error.fields[fieldKey];
-        if (fieldError?.code === "required") {
+        if (typeof fieldError === "string") {
+          fields[fieldKey] = fieldError;
+        } else if (fieldError?.code === "required") {
           fields[fieldKey] = t("input-validation.error-list.default", {
             question: getEntryQuestion(
               getAddressFieldLabel(fieldKey, language),
@@ -181,9 +189,13 @@ export const formatErrors = (
   };
 
   const formatted: Responses = {};
+  for (const [key, error] of Object.entries(errors)) {
+    if (error !== undefined) formatted[key] = error;
+  }
   for (const element of elements) {
-    if (element.id in errors) {
-      formatted[element.id] = formatElementError(errors[element.id], element);
+    const error = errors[element.id];
+    if (error !== undefined) {
+      formatted[element.id] = formatElementError(error, element);
     }
   }
   return formatted;

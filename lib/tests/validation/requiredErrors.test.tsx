@@ -164,6 +164,12 @@ describe.each(["en", "fr"] as const)("required errors (%s)", (language) => {
         postalCode: null,
       },
     };
+    const externalErrors = {
+      1: { fields: { ...addressError.fields, city: "External address error" } },
+      2: [{ 0: "External row error" }],
+      server: "External form error",
+    };
+    expect(formatErrors(externalErrors, [element, parent], language, t)).toEqual(externalErrors);
     expect(formatErrors({ 2: [{}, { 0: addressError }, {}] }, [parent], language, t)).toEqual({
       2: [
         {},

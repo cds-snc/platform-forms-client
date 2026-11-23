@@ -2,18 +2,14 @@
 import { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { getDescribedByIds, getErrorMessageId } from "@lib/a11yHelpers";
-import { formatInvalidError } from "@lib/validation/formatInvalidError";
-import { getEntryQuestion } from "@lib/validation/formatErrors";
-import { truncateString } from "@lib/client/clientHelpers";
+import { useStructuredErrors } from "@clientComponents/forms/Form/StructuredErrors";
 
 interface UseCharacterCountOptions {
   maxLength?: number;
   id: string;
+  name: string;
   lang?: string;
   value: unknown;
-  error?: string;
-  setError: (error: string | undefined) => void;
-  questionLabel?: string;
 }
 
 interface UseCharacterCountReturn {
@@ -26,13 +22,13 @@ interface UseCharacterCountReturn {
 export const useCharacterCount = ({
   maxLength,
   id,
+  name,
   lang,
   value,
-  error,
-  setError,
-  questionLabel,
 }: UseCharacterCountOptions): UseCharacterCountReturn => {
   const { t } = useTranslation("common", { lng: lang });
+  // If we don’t have error codes, show the counter without trying to manage errors
+  const structuredErrors = useStructuredErrors();
 
   const getExceededMessage = useCallback(
     (count: number) => t("formElements.characterCount.exceeded", { count }),
@@ -46,38 +42,15 @@ export const useCharacterCount = ({
   const hasCharacterError =
     hasCharacterLimit &&
     remainingCharacters < 0 &&
-    error === formatInvalidError(getExceededMessage(-remainingCharacters), questionLabel);
+    structuredErrors?.getErrorCode(name) === "max-length";
 
   const showRemaining =
     hasCharacterLimit && remainingCharacters < (maxLength ?? 0) * 0.25 && remainingCharacters >= 0;
 
   const showExceeded = hasCharacterLimit && remainingCharacters < 0 && !hasCharacterError;
 
-  const rowIndex = id.includes(".") ? Number(id.split(".")[1]) : NaN;
-
-  const entryNumber = Number.isInteger(rowIndex) && rowIndex >= 0 ? rowIndex + 1 : undefined;
-
-  // TODO: String comparisons are brittle but work for now. Followup with a broader validation
-  // refactor to use structured errors and codes.
-  const hasRequiredError =
-    error ===
-    t("input-validation.error-list.default", {
-      question: getEntryQuestion(
-        truncateString(questionLabel ?? ""),
-        lang === "fr" ? "fr" : "en",
-        t,
-        entryNumber
-      ),
-      interpolation: { escapeValue: false },
-    });
-
   const updateCharacterError = (nextValue: string) => {
-    if ((!hasCharacterError && !hasRequiredError) || !maxLength) return;
-    const exceeded = nextValue.length - maxLength;
-    if (hasRequiredError && exceeded <= 0) return;
-    setError(
-      exceeded > 0 ? formatInvalidError(getExceededMessage(exceeded), questionLabel) : undefined
-    );
+    if (maxLength) structuredErrors?.updateCharacterError(name, nextValue, maxLength);
   };
 
   const ariaDescribedByIds = useCallback(

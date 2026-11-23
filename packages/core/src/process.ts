@@ -33,7 +33,7 @@ export const validate = ({
 
 /**
  * validateOnSubmit returns structured errors for form submission validation.
- * Translate these at the presentation boundary before storing them in UI state.
+ * Translate these at the presentation boundary for display.
  * @param values
  * @param props
  */
