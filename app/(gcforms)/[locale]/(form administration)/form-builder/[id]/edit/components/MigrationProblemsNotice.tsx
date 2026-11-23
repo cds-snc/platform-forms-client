@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { flushSync } from "react-dom";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
@@ -30,7 +29,7 @@ const TemplateProblemList = ({ problems }: { problems: TemplateValidationProblem
   const { refs } = useRefsContext();
 
   return (
-    <ol className="list-decimal space-y-5 pl-6">
+    <ol className="mt-4 list-decimal space-y-5 pl-6">
       {problems.map((problem) => {
         const element = getProblemElement(elements, problem.path);
         const parentElement = getProblemElement(
@@ -44,7 +43,7 @@ const TemplateProblemList = ({ problems }: { problems: TemplateValidationProblem
           ) || t("migrationProblems.untitled");
         return (
           <li key={`${problem.path}-${problem.name}-${problem.message}`}>
-            {element && parentElement ? (
+            {element && parentElement && (
               <Button
                 theme="link"
                 onClick={() => {
@@ -64,18 +63,8 @@ const TemplateProblemList = ({ problems }: { problems: TemplateValidationProblem
               >
                 {title}
               </Button>
-            ) : (
-              <strong>{t("migrationProblems.form")}</strong>
             )}
-            <p className="mb-1">{describeTemplateProblem(problem, element, i18n.language, t)}</p>
-            {!element && (
-              <Link
-                href="#editPagesHeading"
-                onClick={() => document.getElementById("editPagesHeading")?.focus()}
-              >
-                {t("migrationProblems.edit")}
-              </Link>
-            )}
+            <p className="mb-1">{describeTemplateProblem(problem, element, t)}</p>
           </li>
         );
       })}
@@ -103,13 +92,12 @@ const TemplateProblemsSummary = ({
     >
       <WarningIcon aria-hidden="true" className="mt-0.5 size-6 shrink-0 fill-amber-700" />
       <div>
-        <p className="mb-1 font-bold">{t(`${translationKey}.count`, { count: problems.length })}</p>
+        <p className="mb-1 font-bold">{t(`${translationKey}.title`)}</p>
         <p className="mb-1">{t(`${translationKey}.notice`)}</p>
         <InfoDetails
           summary={t(`${translationKey}.show`)}
           expandedSummary={t(`${translationKey}.hide`)}
         >
-          <p className="mt-3">{t(`${translationKey}.intro`)}</p>
           <TemplateProblemList problems={problems} />
         </InfoDetails>
       </div>

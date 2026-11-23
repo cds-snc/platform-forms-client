@@ -101,19 +101,15 @@ vi.mock("@lib/store/useTemplateStore", () => ({
 vi.mock("@i18n/client", () => ({
   useTranslation: () => ({
     i18n: { language: mock.language },
-    t: (key: string, options?: { count: number }) => {
-      if (key === "migrationProblems.count")
-        return `${options?.count} compatibility problem${options?.count === 1 ? "" : "s"} found`;
+    t: (key: string) => {
+      if (key === "migrationProblems.title") return "We continuously update GC Forms";
       if (key === "migrationProblems.notice") return "You can still save and publish it.";
-      if (key === "migrationProblems.show") return "Show problems";
-      if (key === "migrationProblems.hide") return "Hide problems";
-      if (key === "validationProblems.count") return `${options?.count} validation error found`;
-      if (key === "validationProblems.notice")
-        return "Your form was not saved. Fix these errors before saving or publishing.";
-      if (key === "validationProblems.show") return "Show errors";
-      if (key === "validationProblems.hide") return "Hide errors";
-      if (key === "migrationProblems.form") return "Form";
-      if (key === "migrationProblems.edit") return "Edit form";
+      if (key === "migrationProblems.show") return "Show";
+      if (key === "migrationProblems.hide") return "Hide";
+      if (key === "validationProblems.title") return "Edit before saving or publishing";
+      if (key === "validationProblems.notice") return "Adjust these form elements:";
+      if (key === "validationProblems.show") return "Show";
+      if (key === "validationProblems.hide") return "Hide";
       return key;
     },
   }),
@@ -150,47 +146,43 @@ describe("MigrationProblemsNotice", () => {
 
   it("only appears while the draft has migration problems", () => {
     const view = render(<MigrationProblemsNotice />);
-    expect(screen.queryByText("Show problems")).toBeNull();
+    expect(screen.queryByText("Show")).toBeNull();
 
     mock.count = 2;
     view.rerender(<MigrationProblemsNotice />);
-    expect(screen.getByText("2 compatibility problems found")).toBeInTheDocument();
+    expect(screen.getByText("We continuously update GC Forms")).toBeInTheDocument();
     expect(screen.getByText("You can still save and publish it.")).toBeInTheDocument();
-    expect(screen.getByText("Show problems")).toBeInTheDocument();
+    expect(screen.getByText("Show")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Review problems" })).toBeNull();
 
     mock.count = 0;
     view.rerender(<MigrationProblemsNotice />);
-    expect(screen.queryByText("Show problems")).toBeNull();
+    expect(screen.queryByText("Show")).toBeNull();
   });
 
   it("shows the problem list inline and updates the label when toggled", async () => {
     mock.count = 2;
     render(<MigrationProblemsNotice />);
-    const summary = screen.getByText("Show problems");
+    const summary = screen.getByText("Show");
     const details = summary.closest("details");
     expect(details).not.toHaveAttribute("open");
-    expect(screen.getByText("2 compatibility problems found")).toBeVisible();
+    expect(screen.getByText("We continuously update GC Forms")).toBeVisible();
     expect(screen.getByText("You can still save and publish it.")).toBeVisible();
     expect(screen.getByText("Province")).not.toBeVisible();
 
     fireEvent.click(summary);
-    await waitFor(() => expect(screen.getByText("Hide problems")).toBeVisible());
-    expect(screen.queryByText("Show problems")).toBeNull();
+    await waitFor(() => expect(screen.getByText("Hide")).toBeVisible());
+    expect(screen.queryByText("Show")).toBeNull();
     expect(details).toHaveAttribute("open");
     expect(screen.getByText("Province")).toBeVisible();
-    expect(screen.getByText("Form")).toBeVisible();
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
     expect(screen.getByText("migrationProblems.duplicateChoices")).toBeVisible();
     expect(screen.getByRole("button", { name: "Province" })).toBeVisible();
-    expect(screen.getByRole("link", { name: "Edit form" })).toHaveAttribute(
-      "href",
-      "#editPagesHeading"
-    );
+    expect(screen.queryByRole("link")).toBeNull();
 
     fireEvent.click(summary);
-    await waitFor(() => expect(screen.getByText("Show problems")).toBeVisible());
-    expect(screen.queryByText("Hide problems")).toBeNull();
+    await waitFor(() => expect(screen.getByText("Show")).toBeVisible());
+    expect(screen.queryByText("Hide")).toBeNull();
     expect(details).not.toHaveAttribute("open");
     expect(screen.getByText("Province")).not.toBeVisible();
   });
@@ -199,30 +191,21 @@ describe("MigrationProblemsNotice", () => {
     mock.count = 1;
     mock.language = "fr";
     render(<MigrationProblemsNotice />);
-    fireEvent.click(screen.getByText("Show problems"));
+    fireEvent.click(screen.getByText("Show"));
     expect(screen.getByText("Province en français")).toBeVisible();
   });
 
   it.each(["migration", "validation"])(
-    "focuses the editor heading for %s problems without an element target",
+    "lists %s problems without an element target without a link or button",
     (variant) => {
       mock.path = "schemaVersion";
       if (variant === "migration") mock.count = 1;
       else mock.validationCount = 1;
-      render(
-        <>
-          <h2 id="editPagesHeading" tabIndex={-1}>
-            Edit page
-          </h2>
-          {variant === "migration" ? <MigrationProblemsNotice /> : <TemplateValidationErrors />}
-        </>
-      );
-      fireEvent.click(screen.getByText(variant === "migration" ? "Show problems" : "Show errors"));
-      const link = screen.getByRole("link", { name: "Edit form" });
-      expect(link).toHaveAttribute("href", "#editPagesHeading");
-      link.focus();
-      fireEvent.click(link);
-      expect(screen.getByRole("heading", { name: "Edit page" })).toHaveFocus();
+      render(variant === "migration" ? <MigrationProblemsNotice /> : <TemplateValidationErrors />);
+      fireEvent.click(screen.getByText("Show"));
+      expect(screen.getAllByRole("listitem")).toHaveLength(1);
+      expect(screen.queryByRole("link")).toBeNull();
+      expect(screen.queryByRole("button", { name: "Province" })).toBeNull();
       expect(mock.setId).not.toHaveBeenCalled();
     }
   );
@@ -230,7 +213,7 @@ describe("MigrationProblemsNotice", () => {
   it("switches to the element's page before focusing and scrolling to it", () => {
     mock.count = 1;
     render(<MigrationProblemsNotice />);
-    fireEvent.click(screen.getByText("Show problems"));
+    fireEvent.click(screen.getByText("Show"));
     fireEvent.click(screen.getByRole("button", { name: "Province" }));
     expect(mock.findParentGroup).toHaveBeenCalledWith("1");
     expect(mock.setId).toHaveBeenCalledWith("page-2");
@@ -239,14 +222,14 @@ describe("MigrationProblemsNotice", () => {
       mock.focus.mock.invocationCallOrder[0]
     );
     expect(mock.scrollIntoView).toHaveBeenCalledWith({ block: "center" });
-    expect(screen.queryByRole("link", { name: "Edit form" })).toBeNull();
+    expect(screen.queryByRole("link")).toBeNull();
   });
 
   it("uses the containing element's page for a repeating-set question", () => {
     mock.count = 1;
     mock.path = "elements[0].properties.subElements[0].properties.choices";
     render(<MigrationProblemsNotice />);
-    fireEvent.click(screen.getByText("Show problems"));
+    fireEvent.click(screen.getByText("Show"));
     fireEvent.click(screen.getByRole("button", { name: "Nested question" }));
     expect(mock.findParentGroup).toHaveBeenCalledWith("1");
     expect(mock.setId).toHaveBeenCalledWith("page-2");
@@ -266,7 +249,7 @@ describe("MigrationProblemsNotice", () => {
     );
     const panel = document.getElementById("element-1")!;
     panel.scrollIntoView = mock.scrollIntoView;
-    fireEvent.click(screen.getByText("Show problems"));
+    fireEvent.click(screen.getByText("Show"));
     fireEvent.click(screen.getByRole("button", { name: "Province" }));
     expect(document.getElementById("editor-1")).toHaveFocus();
     expect(mock.focus).not.toHaveBeenCalled();
@@ -280,16 +263,14 @@ describe("MigrationProblemsNotice", () => {
     expect(summary).toHaveClass("rounded-lg", "border-amber-300", "bg-amber-50");
     expect(summary).not.toHaveClass("gc-alert");
     expect(summary).toHaveAttribute("tabindex", "-1");
-    expect(screen.getByText("1 validation error found")).toBeVisible();
-    expect(
-      screen.getByText("Your form was not saved. Fix these errors before saving or publishing.")
-    ).toBeVisible();
+    expect(screen.getByText("Edit before saving or publishing")).toBeVisible();
+    expect(screen.getByText("Adjust these form elements:")).toBeVisible();
     expect(screen.queryByText("You can still save and publish it.")).toBeNull();
-    const details = screen.getByText("Show errors").closest("details");
+    const details = screen.getByText("Show").closest("details");
     expect(details).not.toHaveAttribute("open");
     expect(screen.getByText("Province")).not.toBeVisible();
-    fireEvent.click(screen.getByText("Show errors"));
-    await waitFor(() => expect(screen.getByText("Hide errors")).toBeVisible());
+    fireEvent.click(screen.getByText("Show"));
+    await waitFor(() => expect(screen.getByText("Hide")).toBeVisible());
     expect(details).toHaveAttribute("open");
     fireEvent.click(screen.getByRole("button", { name: "Province" }));
     expect(mock.setId).toHaveBeenCalledWith("page-2");
@@ -309,7 +290,7 @@ describe("MigrationProblemsNotice", () => {
   it("always navigates to questions within the editor", () => {
     mock.validationCount = 1;
     render(<TemplateValidationErrors />);
-    fireEvent.click(screen.getByText("Show errors"));
+    fireEvent.click(screen.getByText("Show"));
     fireEvent.click(screen.getByRole("button", { name: "Province" }));
     expect(mock.setId).toHaveBeenCalledWith("page-2");
     expect(mock.focus).toHaveBeenCalledOnce();

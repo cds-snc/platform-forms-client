@@ -22,30 +22,11 @@ describe("describeTemplateProblem", () => {
     },
   };
 
-  it.each([
-    ["en", "Quebec, Alberta"],
-    ["fr", "Québec, Alberta"],
-  ])("lists only duplicate labels once in %s", (language, choices) => {
+  it("describes duplicate choices", () => {
     const t = vi.fn((key: string) => key);
 
-    expect(describeTemplateProblem(issue, element, language, t)).toBe(
-      "migrationProblems.duplicateChoices"
-    );
-    expect(t.mock.calls).toEqual([["migrationProblems.duplicateChoices", { choices }]]);
-  });
-
-  it.each([
-    { language: "en", choices: [{ fr: "Québec" }, { fr: "Québec" }], label: "Québec" },
-    { language: "fr", choices: [{ en: "Quebec" }, { en: "Quebec" }], label: "Quebec" },
-    { language: "en", choices: ["Quebec", "Quebec"], label: "Quebec" },
-    { language: "en", choices: [7, 7], label: "7" },
-  ])("handles duplicate label fallback: $language / $label", ({ language, choices, label }) => {
-    const t = vi.fn((key: string) => key);
-
-    expect(describeTemplateProblem(issue, { properties: { choices } }, language, t)).toBe(
-      "migrationProblems.duplicateChoices"
-    );
-    expect(t).toHaveBeenLastCalledWith("migrationProblems.duplicateChoices", { choices: label });
+    expect(describeTemplateProblem(issue, element, t)).toBe("migrationProblems.duplicateChoices");
+    expect(t.mock.calls).toEqual([["migrationProblems.duplicateChoices"]]);
   });
 
   it.each<ProblemElement | undefined>([
@@ -56,17 +37,8 @@ describe("describeTemplateProblem", () => {
   ])("falls back to a generic error when duplicate choices cannot be identified (%j)", (item) => {
     const t = vi.fn((key: string) => key);
 
-    expect(describeTemplateProblem(issue, item, "en", t)).toBe("migrationProblems.invalid");
-    expect(t.mock.calls).toEqual([
-      ["migrationProblems.fields.choices"],
-      [
-        "migrationProblems.invalid",
-        {
-          field: "migrationProblems.fields.choices",
-          detail: issue.message,
-        },
-      ],
-    ]);
+    expect(describeTemplateProblem(issue, item, t)).toBe("migrationProblems.invalid");
+    expect(t.mock.calls).toEqual([["migrationProblems.invalid", { detail: issue.message }]]);
   });
 
   it("describes duplicate conditional rules without inspecting choices", () => {
@@ -76,7 +48,6 @@ describe("describeTemplateProblem", () => {
       describeTemplateProblem(
         { ...issue, path: "elements[0].properties.conditionalRules" },
         element,
-        "en",
         t
       )
     ).toBe("migrationProblems.duplicateRules");
@@ -90,36 +61,14 @@ describe("describeTemplateProblem", () => {
   ])("selects the message for %s", (name, messageKey) => {
     const t = vi.fn((key: string) => key);
 
-    expect(describeTemplateProblem({ ...issue, name }, undefined, "en", t)).toBe(
+    expect(describeTemplateProblem({ ...issue, name }, undefined, t)).toBe(
       `migrationProblems.${messageKey}`
     );
-    expect(t.mock.calls).toEqual([
-      ["migrationProblems.fields.choices"],
-      [`migrationProblems.${messageKey}`, { field: "migrationProblems.fields.choices" }],
-    ]);
+    expect(t.mock.calls).toEqual([[`migrationProblems.${messageKey}`]]);
   });
 
-  it.each(["choices", "conditionalRules", "titleEn", "titleFr", "validation", "subElements"])(
-    "translates the field label for %s",
-    (field) => {
-      const t = vi.fn((key: string) => key);
-
-      expect(
-        describeTemplateProblem(
-          { ...issue, name: "pattern", path: `elements[0].properties.${field}` },
-          undefined,
-          "en",
-          t
-        )
-      ).toBe("migrationProblems.invalidFormat");
-      expect(t).toHaveBeenLastCalledWith("migrationProblems.invalidFormat", {
-        field: `migrationProblems.fields.${field}`,
-      });
-    }
-  );
-
   it.each(['requires property "titleEn"', "Missing required value"])(
-    "uses the missing property's path independently of message wording: %s",
+    "ignores message wording: %s",
     (message) => {
       const t = vi.fn((key: string) => key);
 
@@ -127,45 +76,29 @@ describe("describeTemplateProblem", () => {
         describeTemplateProblem(
           { name: "required", path: "elements[0].properties.titleEn", message },
           undefined,
-          "en",
           t
         )
       ).toBe("migrationProblems.required");
-      expect(t.mock.calls).toEqual([
-        ["migrationProblems.fields.titleEn"],
-        ["migrationProblems.required", { field: "migrationProblems.fields.titleEn" }],
-      ]);
+      expect(t.mock.calls).toEqual([["migrationProblems.required"]]);
     }
   );
 
-  it.each([
-    { name: "required", path: "", key: "required", field: "migrationProblems.field" },
-    { name: "type", path: "", key: "invalid", field: "migrationProblems.field" },
-    {
-      name: "type",
-      path: "elements[0].properties.customField",
-      key: "invalid",
-      field: "customField",
-    },
-  ])("handles a missing or unknown field for $name / $field", ({ name, path, key, field }) => {
-    const t = vi.fn((translationKey: string) => translationKey);
+  it("includes the problem detail for other problem types", () => {
+    const t = vi.fn((key: string) => key);
 
-    expect(describeTemplateProblem({ ...issue, name, path }, undefined, "en", t)).toBe(
-      `migrationProblems.${key}`
+    expect(describeTemplateProblem({ ...issue, name: "type" }, undefined, t)).toBe(
+      "migrationProblems.invalid"
     );
-    expect(t).toHaveBeenLastCalledWith(`migrationProblems.${key}`, {
-      field,
-      ...(key === "invalid" ? { detail: issue.message } : {}),
-    });
+    expect(t.mock.calls).toEqual([["migrationProblems.invalid", { detail: issue.message }]]);
   });
 
   it("passes template-level translation keys through unchanged", () => {
     const t = vi.fn((key: string) => key);
     const message = "validationProblems.invalidTemplate";
 
-    expect(
-      describeTemplateProblem({ name: "template", path: "", message }, undefined, "en", t)
-    ).toBe(message);
+    expect(describeTemplateProblem({ name: "template", path: "", message }, undefined, t)).toBe(
+      message
+    );
     expect(t.mock.calls).toEqual([[message]]);
   });
 
@@ -174,7 +107,7 @@ describe("describeTemplateProblem", () => {
     const message = "validationProblems.unsupportedVersion";
 
     expect(
-      describeTemplateProblem({ name: "schema", path: "version", message }, undefined, "en", t)
+      describeTemplateProblem({ name: "schema", path: "version", message }, undefined, t)
     ).toBe(message);
     expect(t.mock.calls).toEqual([[message, { property: "version" }]]);
   });
@@ -183,17 +116,17 @@ describe("describeTemplateProblem", () => {
     const t = vi.fn((key: string) => key);
 
     expect(
-      describeTemplateProblem({ ...issue, name: "migration", fromVersion: 1 }, undefined, "en", t)
+      describeTemplateProblem({ ...issue, name: "migration", fromVersion: 1 }, undefined, t)
     ).toBe("migrationProblems.cannotUpgrade");
     expect(t).toHaveBeenLastCalledWith("migrationProblems.cannotUpgrade");
   });
 
   it.each([
-    ["en", "Duplicate choices: Quebec, Alberta. Remove or change the repeated choices."],
-    ["fr", "Choix en double : Québec, Alberta. Supprimez ou modifiez les choix répétés."],
+    ["en", "Remove or change duplicate options."],
+    ["fr", "Supprimez ou modifiez les options en double."],
   ])("renders the complete translated message in %s", (language, expected) => {
     const { t } = createTranslationMocks().useTranslation("form-builder", { lng: language });
 
-    expect(describeTemplateProblem(issue, element, language, t)).toBe(expected);
+    expect(describeTemplateProblem(issue, element, t)).toBe(expected);
   });
 });

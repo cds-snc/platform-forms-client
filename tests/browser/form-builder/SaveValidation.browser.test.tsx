@@ -123,29 +123,25 @@ it("deduplicates and focuses returned save errors, then clears them when the leg
   const summary = page.getByRole("alert");
   await expect.element(summary).toBeVisible();
   await expect.element(summary).toHaveFocus();
-  await expect.element(page.getByText("1 validation error found", { exact: true })).toBeVisible();
   await expect
-    .element(
-      page.getByText("Your form was not saved. Fix these errors before saving or publishing.")
-    )
+    .element(page.getByText("Edit before saving or publishing", { exact: true }))
     .toBeVisible();
-  await expect.element(page.getByRole("link", { name: "Not saved - Fix errors" })).toBeVisible();
-  await page.getByText("Show errors", { exact: true }).click();
+  await expect
+    .element(page.getByText("Adjust these form elements:", { exact: true }))
+    .toBeVisible();
+  await expect.element(page.getByRole("link", { name: "Not saved" })).toBeVisible();
+  await page.getByText("Show", { exact: true }).click();
   expect(summary.element().querySelectorAll("li")).toHaveLength(1);
   await expect.element(page.getByRole("button", { name: "Nested question" })).toBeVisible();
-  await expect
-    .element(page.getByText("Duplicate choices: A. Remove or change the repeated choices."))
-    .toBeVisible();
+  await expect.element(page.getByText("Remove or change duplicate options.")).toBeVisible();
   await expect.element(page.getByTestId("schema-version")).toHaveTextContent("1");
 
   await page.getByRole("button", { name: "Fix nested duplicate" }).click();
   await expect.element(summary).not.toBeInTheDocument();
-  await expect
-    .element(page.getByRole("link", { name: "Not saved - Fix errors" }))
-    .not.toBeInTheDocument();
+  await expect.element(page.getByRole("link", { name: "Not saved" })).not.toBeInTheDocument();
 });
 
-it("returns keyboard focus to the editor heading for a form-level save error", async () => {
+it("lists a form-level save error without an element link", async () => {
   await render(
     <SaveTemplateProvider>
       <GroupStoreProvider>
@@ -157,9 +153,7 @@ it("returns keyboard focus to the editor heading for a form-level save error", a
   await new Promise((resolve) => window.setTimeout(resolve, 2100));
   await page.getByRole("button", { name: "Save draft" }).click();
   await expect.element(page.getByRole("alert")).toHaveFocus();
-  await page.getByText("Show errors", { exact: true }).click();
-  const link = page.getByRole("link", { name: "Edit form", exact: true });
-  await expect.element(link).toHaveAttribute("href", "#editPagesHeading");
-  await link.click();
-  await expect.element(page.getByRole("heading", { name: "Edit page", exact: true })).toHaveFocus();
+  await page.getByText("Show", { exact: true }).click();
+  expect(page.getByRole("alert").element().querySelectorAll("li")).toHaveLength(1);
+  await expect.element(page.getByRole("alert").getByRole("link")).not.toBeInTheDocument();
 });

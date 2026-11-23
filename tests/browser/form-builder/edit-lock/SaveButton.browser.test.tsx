@@ -140,7 +140,7 @@ describe("<SaveButton />", () => {
     await waitForSaveAvailability();
     expect(setShowValidationErrors).not.toHaveBeenCalled();
     await expect
-      .element(page.getByRole("link", { name: "Not saved - Fix errors" }))
+      .element(page.getByRole("link", { name: "Not saved" }))
       .not.toBeInTheDocument();
     await page.getByRole("button", { name: "Save draft" }).click();
 
@@ -148,7 +148,7 @@ describe("<SaveButton />", () => {
     await expect.element(page.getByText("Fix the errors before saving.")).toHaveFocus();
     await expect.element(page.getByText("Saving failed - Contact support")).not.toBeInTheDocument();
     await expect.element(page.getByRole("button", { name: "Save draft" })).toBeVisible();
-    const indicator = page.getByRole("link", { name: "Not saved - Fix errors" });
+    const indicator = page.getByRole("link", { name: "Not saved" });
     await expect.element(indicator).toBeVisible();
     await expect
       .element(indicator)
@@ -190,7 +190,7 @@ describe("<SaveButton />", () => {
       await page.getByRole("button", { name: "Save draft" }).click();
 
       expect(setShowValidationErrors).toHaveBeenCalledWith(true);
-      const indicator = page.getByRole("link", { name: "Not saved - Fix errors" });
+      const indicator = page.getByRole("link", { name: "Not saved" });
       await expect.element(indicator).toBeVisible();
       await expect
         .element(indicator)

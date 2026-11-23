@@ -49,11 +49,8 @@ export const mapMigrationProblemsToInputFeedback = (
       state: "error",
       message:
         problem.name === "required"
-          ? t("migrationProblems.required", { field: t("migrationProblems.field") })
-          : t("migrationProblems.invalid", {
-              field: t("migrationProblems.field"),
-              detail: problem.message,
-            }),
+          ? t("migrationProblems.required")
+          : t("migrationProblems.invalid", { detail: problem.message }),
     };
   });
   return feedback;
