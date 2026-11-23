@@ -11,6 +11,7 @@ import { shallow } from "zustand/shallow";
 import { persist, subscribeWithSelector } from "zustand/middleware";
 import update from "lodash.set";
 import unset from "lodash.unset";
+import isEqual from "lodash.isequal";
 
 /**
  * Internal dependencies
@@ -23,6 +24,7 @@ import { Language } from "../types/form-builder-types";
 import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { initStore } from "./initStore";
+import { getInputFeedbackKey } from "./helpers/getInputFeedbackKey";
 
 import {
   add,
@@ -80,6 +82,25 @@ const createTemplateStore = (
         persist(
           (set, get) => ({
             ...props,
+            inputFeedback: {},
+            // setInputFeedback("item-1", { state: "error", message: "Enter a question title." });
+            // Pass null to clear one field, or use clearInputFeedback() to clear all local feedback.
+            setInputFeedback: (inputId, feedback, language = get().translationLanguagePriority) =>
+              set((state) => {
+                const key = getInputFeedbackKey(inputId, language);
+                if (feedback) {
+                  state.inputFeedback[key] = feedback;
+                } else {
+                  delete state.inputFeedback[key];
+                }
+              }),
+            clearInputFeedback: () => set({ inputFeedback: {} }),
+            templateProblemFeedback: {},
+            setTemplateProblemFeedback: (feedback) => {
+              if (!isEqual(get().templateProblemFeedback, feedback)) {
+                set({ templateProblemFeedback: feedback });
+              }
+            },
             editLock: null,
             isLockedByOther: false,
             setEditLock: (lock) => set({ editLock: lock }),

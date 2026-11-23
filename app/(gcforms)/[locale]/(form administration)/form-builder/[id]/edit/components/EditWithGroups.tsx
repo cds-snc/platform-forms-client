@@ -24,6 +24,7 @@ import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
+import { MigrationProblemsNotice, TemplateValidationErrors } from "./MigrationProblemsNotice";
 
 export const EditWithGroups = ({
   id,
@@ -148,6 +149,8 @@ export const EditWithGroups = ({
           <SaveButton />
         </div>
       </div>
+      <TemplateValidationErrors />
+      <MigrationProblemsNotice />
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
       <div className="flex max-w-[800px] justify-between">
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
@@ -177,6 +180,7 @@ export const EditWithGroups = ({
                   className="laptop:text-3xl font-bold placeholder:text-slate-500"
                   ref={titleInput}
                   placeholder={t("placeHolderFormTitle")}
+                  checkEmpty={t("formTitleRequired")}
                   value={value}
                   onBlur={() => {
                     const cleaned = cleanInput(value);

@@ -1,4 +1,5 @@
 {
+  "schemaVersionBadge": "Schéma v{{version}}",
   "element": {
     "copy": {
       "text": "Copier l'élément",
@@ -851,6 +852,28 @@
   "publishingRemovesTestResponses": "La publication supprime les réponses test.",
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
+  "validationProblems": {
+    "title": "Modifier avant d'enregistrer ou de publier",
+    "notice": "Ajustez ces éléments du formulaire :",
+    "show": "Afficher",
+    "hide": "Masquer",
+    "saveBlocked": "Non enregistré"
+  },
+  "migrationProblems": {
+    "title": "Nous mettons continuellement à jour Formulaires GC",
+    "notice": "Votre formulaire peut être mis à jour automatiquement vers la dernière version si vous modifiez les éléments suivants :",
+    "show": "Afficher",
+    "hide": "Masquer",
+    "untitled": "Question vide",
+    "duplicateChoices": "Supprimez ou modifiez les options en double.",
+    "duplicateRules": "Supprimez ou modifiez les règles en double.",
+    "emptyList": "Ajoutez au moins une entrée.",
+    "tooMany": "Supprimez quelques options.",
+    "invalidFormat": "Vérifiez ou modifiez l'élément du formulaire.",
+    "required": "Saisissez toutes les parties de cette question",
+    "invalid": "Ajustez la question : {{detail}}.",
+    "cannotUpgrade": "Problème inconnu : supprimez cette question et saisissez-la de nouveau."
+  },
   "publishYourFormInstructions": {
     "settings": "Paramètres",
     "classification": "Classification des données ",
@@ -917,6 +940,10 @@
     }
   },
   "question": "Question",
+  "questionRequired": "Saisissez une question.",
+  "formTitleRequired": "Saisissez un titre de formulaire.",
+  "choiceRequired": "Saisissez un choix.",
+  "duplicateChoice": "Doublon d'une autre option. Supprimez ou modifiez.",
   "questions": "Questions",
   "questionSet": {
     "addAnother": {

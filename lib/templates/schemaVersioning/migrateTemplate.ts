@@ -17,6 +17,8 @@ export const migrateTemplate = (
   options: {
     migrations?: Record<number, TemplateMigration>;
     targetVersion?: number;
+    onFailure?: (error: unknown, fromVersion: number) => void;
+    logFailure?: boolean;
   } = {}
 ): FormProperties => {
   const { migrations = defaultMigrations, targetVersion = CURRENT_TEMPLATE_VERSION } = options;
@@ -46,11 +48,14 @@ export const migrateTemplate = (
       version = nextVersion;
     } catch (error) {
       const reason = error instanceof Error ? error.message : String(error);
-      logMessage.warn(
-        `[templates][migrateTemplate] Migration from schema version ${version} to ${
-          version + 1
-        } failed; keeping version ${version}: ${reason}`
-      );
+      if (options.logFailure !== false) {
+        logMessage.warn(
+          `[templates][migrateTemplate] Migration from schema version ${version} to ${
+            version + 1
+          } failed; keeping version ${version}: ${reason}`
+        );
+      }
+      options.onFailure?.(error, version);
       return previousVersionTemplate;
     }
   }

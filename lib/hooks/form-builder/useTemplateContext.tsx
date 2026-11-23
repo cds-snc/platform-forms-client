@@ -10,21 +10,29 @@ import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTempla
 import { UpdateTemplateAction } from "@root/lib/templates/types";
 import { FormProperties } from "@lib/types";
 import { useAppUpdate } from "../useAppUpdate";
-import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
-import { resetReviewEndNextAction } from "@lib/groups/utils/resetReviewEndNextAction";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { prepareTemplateForSave } from "@lib/utils/form-builder/prepareTemplateForSave";
+import { type TemplateValidationProblem } from "@lib/utils/form-builder/validate";
 
-export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
+export type SaveDraftStatus =
+  "saved" | "skipped" | "invalid" | "validation-error" | "locked" | "error";
 
 type SaveDraftResult = {
   status: SaveDraftStatus;
   formId?: string;
 };
 
+type ValidationFailure = {
+  schema: string;
+  problems: TemplateValidationProblem[];
+};
+
 interface TemplateApiType {
   templateIsDirty: React.RefObject<boolean>;
   updatedAt: number | undefined;
   setUpdatedAt: React.Dispatch<React.SetStateAction<number | undefined>>;
+  showValidationErrors: boolean;
+  setShowValidationErrors: React.Dispatch<React.SetStateAction<boolean>>;
+  validationFailure: ValidationFailure | null;
 
   saveDraft: () => Promise<SaveDraftResult>;
   saveDraftIfNeeded: () => Promise<SaveDraftResult>;
@@ -35,6 +43,9 @@ const defaultTemplateApi: TemplateApiType = {
   templateIsDirty: { current: false },
   updatedAt: undefined,
   setUpdatedAt: () => {},
+  showValidationErrors: false,
+  setShowValidationErrors: () => {},
+  validationFailure: null,
   saveDraft: async () => ({ status: "skipped" }),
   saveDraftIfNeeded: async () => ({ status: "skipped" }),
   resetState: () => {},
@@ -46,6 +57,8 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
 export function SaveTemplateProvider({ children }: { children: React.ReactNode }) {
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
+  const [validationFailure, setValidationFailure] = useState<ValidationFailure | null>(null);
   const [, setDirtyTick] = useState(0);
   const { status } = useSession();
   const { updateTriggered } = useAppUpdate();
@@ -79,6 +92,8 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
   const saveDraftQueue = useRef<Array<(result: SaveDraftResult) => void>>([]);
 
   const resetState = useCallback(() => {
+    setShowValidationErrors(false);
+    setValidationFailure(null);
     templateIsDirty.current = false;
     savedSnapshot.current = null;
     setDirtyTick((tick) => tick + 1);
@@ -93,23 +108,19 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       return { status: "locked" };
     }
 
-    const parsedFormConfig = safeJSONParse<FormProperties>(getSchema());
+    const schema = getSchema();
+    const parsedFormConfig = safeJSONParse<FormProperties>(schema);
 
     if (!parsedFormConfig) {
       return { status: "invalid" };
     }
 
-    const formConfig = autoFlowFormIfPossible({
-      ...parsedFormConfig,
-      ...(formHasGroups(parsedFormConfig)
-        ? { groups: resetReviewEndNextAction(parsedFormConfig.groups!) }
-        : {}),
-    });
-
     try {
+      const migratedFormConfig = prepareTemplateForSave(parsedFormConfig);
+
       const operationResult = await createOrUpdateTemplate({
         id: getId(),
-        formConfig,
+        formConfig: migratedFormConfig,
         name: getName(true),
         deliveryOption: getDeliveryOption(),
         securityAttribute,
@@ -117,6 +128,14 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
       });
 
       if (operationResult.formRecord === null) {
+        if (operationResult.error === "validationError") {
+          if (!operationResult.problems?.length) {
+            logMessage.error("Template validation failed without diagnostics");
+            return { status: "error" };
+          }
+          setValidationFailure({ schema, problems: operationResult.problems });
+          return { status: "validation-error" };
+        }
         return { status: operationResult.error === "editLocked" ? "locked" : "error" };
       }
 
@@ -250,6 +269,9 @@ export function SaveTemplateProvider({ children }: { children: React.ReactNode }
         templateIsDirty,
         updatedAt,
         setUpdatedAt,
+        showValidationErrors,
+        setShowValidationErrors,
+        validationFailure,
         saveDraft: queueSaveDraft,
         saveDraftIfNeeded,
         resetState,
