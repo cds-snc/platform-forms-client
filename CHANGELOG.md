@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.8](https://github.com/cds-snc/platform-forms-client/compare/v4.31.7...v4.31.8) (2026-11-23)
+
+
+### Bug Fixes
+
+* add cookie check for sign-in ([#8243](https://github.com/cds-snc/platform-forms-client/issues/8243)) ([ab64125](https://github.com/cds-snc/platform-forms-client/commit/ab64125c3cb6f3f388cca6d0239112f7a14fb020))
+
 ## [4.31.7](https://github.com/cds-snc/platform-forms-client/compare/v4.31.6...v4.31.7) (2026-11-20)
 
 
