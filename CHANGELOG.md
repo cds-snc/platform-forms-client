@@ -5,6 +5,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.7](https://github.com/cds-snc/platform-forms-client/compare/v4.31.6...v4.31.7) (2026-11-20)
+
+
+### Miscellaneous Chores
+
+* Serialize raw error entry ([#8237](https://github.com/cds-snc/platform-forms-client/issues/8237)) ([44323a8](https://github.com/cds-snc/platform-forms-client/commit/44323a83fde6e7eb136c169a23de8943f095ab1a))
+
+## [4.31.6](https://github.com/cds-snc/platform-forms-client/compare/v4.31.5...v4.31.6) (2026-11-20)
+
+
+### Miscellaneous Chores
+
+* Serialize nextAuth log details ([#8235](https://github.com/cds-snc/platform-forms-client/issues/8235)) ([216ff1e](https://github.com/cds-snc/platform-forms-client/commit/216ff1ea01a971441045e6395e65b82e5ee664e6))
+
+## [4.31.5](https://github.com/cds-snc/platform-forms-client/compare/v4.31.4...v4.31.5) (2026-11-20)
+
+
+### Miscellaneous Chores
+
+* update next auth log ([#8232](https://github.com/cds-snc/platform-forms-client/issues/8232)) ([3c1397f](https://github.com/cds-snc/platform-forms-client/commit/3c1397f74e5b78504ec67e6189b1319f88d72cda))
+* Upgrade log level so they appear in CloudWatch ([#8234](https://github.com/cds-snc/platform-forms-client/issues/8234)) ([713734d](https://github.com/cds-snc/platform-forms-client/commit/713734d7fd87f77c58ac7c81f265b77ccb567bf3))
+
+## [4.31.4](https://github.com/cds-snc/platform-forms-client/compare/v4.31.3...v4.31.4) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* revert auth debug logging ([78dc40b](https://github.com/cds-snc/platform-forms-client/commit/78dc40bd6d2df2343e25a3b4a760d6c6ea379f50))
+
+## [4.31.3](https://github.com/cds-snc/platform-forms-client/compare/v4.31.2...v4.31.3) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* add logging ([#8228](https://github.com/cds-snc/platform-forms-client/issues/8228)) ([4aaa25c](https://github.com/cds-snc/platform-forms-client/commit/4aaa25cb27ffa94e7b51800eff96ef3894ef409c))
+
+## [4.31.2](https://github.com/cds-snc/platform-forms-client/compare/v4.31.1...v4.31.2) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* update zitadel / next auth ([#8226](https://github.com/cds-snc/platform-forms-client/issues/8226)) ([52572d8](https://github.com/cds-snc/platform-forms-client/commit/52572d86e769c922338ce8eaed47538930f27863))
+
 ## [4.31.1](https://github.com/cds-snc/platform-forms-client/compare/v4.31.0...v4.31.1) (2026-11-18)
 
 
