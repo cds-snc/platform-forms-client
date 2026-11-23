@@ -92,12 +92,12 @@ describe("structured field validation", () => {
     }
   );
 
-  it("distinguishes unsafe custom patterns from pattern mismatches", () => {
+  it("distinguishes unsafe custom patterns from pattern mismatches (verifying the an unsafe-regex is returned)", () => {
     const custom: FormElement = {
       ...text,
       properties: {
         ...text.properties,
-        // Intentionally unsafe fixture: validation must reject it before attempting a match.
+        // Intentionally unsafe regex to test that validation rejects it before attempting to match
         validation: { required: false, type: "custom", regex: "^(a+)+$" },
       },
     };
