@@ -156,6 +156,8 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
     <>
       <ReactFlow
         className="h-full w-full"
+        forceColorMode="light"
+        style={{ backgroundColor: "#fff" }}
         disableKeyboardA11y={true}
         nodesFocusable={false}
         edgesFocusable={false}
