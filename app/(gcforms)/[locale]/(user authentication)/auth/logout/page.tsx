@@ -1,7 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
+import { GC_PLATFORM_LOGIN_HINT_COOKIE, GC_PLATFORM_LOGIN_HINT_VALUE } from "@root/constants";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 import { LocalTime } from "./components/LocalTime";
 import { SignInButton } from "./components/SignInButton";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
@@ -28,7 +30,11 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const params = await props.params;
 
   const { locale } = params;
-  const isOidc = process.env.APP_ENV !== "test" && (await checkOne(FeatureFlags.zitadelLogin));
+  const isOidcEnabled =
+    process.env.APP_ENV !== "test" && (await checkOne(FeatureFlags.zitadelLogin));
+  const hasGcPlatformLoginHint =
+    isOidcEnabled &&
+    (await cookies()).get(GC_PLATFORM_LOGIN_HINT_COOKIE)?.value === GC_PLATFORM_LOGIN_HINT_VALUE;
 
   const { t } = await serverTranslation("logout", { lang: locale });
 
@@ -37,7 +43,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
       <h1 className="mt-6 mb-12 border-b-0">{t("messageContent")}</h1>
       <LocalTime locale={locale} />
       <div>
-        {isOidc ? (
+        {isOidcEnabled && hasGcPlatformLoginHint ? (
           <SignInButton locale={locale} label={t("goToSignInLabel")} />
         ) : (
           <LinkButton.Primary href={`/${locale}/auth/login`}>
