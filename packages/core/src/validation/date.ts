@@ -40,6 +40,26 @@ export const isValidDate = (dateObject: DateObject): boolean => {
   return date.getFullYear() === YYYY && date.getMonth() + 1 === MM && date.getDate() === DD;
 };
 
+export const getDateResponseValidity = (value: unknown): "valid" | "invalid" | "malformed" => {
+  if (typeof value !== "string") return "malformed";
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(value);
+  } catch (error) {
+    if (error instanceof SyntaxError) return "malformed";
+    throw error;
+  }
+
+  if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) return "malformed";
+
+  // Partial objects (including null parts serialized from NaN input) are ordinary invalid answers.
+  return isValidDateObject(parsed) && isValidDate(parsed) ? "valid" : "invalid";
+};
+
+export const isValidDateResponse = (value: unknown): boolean =>
+  getDateResponseValidity(value) === "valid";
+
 /**
  * Check that a date format is valid
  *

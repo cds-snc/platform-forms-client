@@ -105,6 +105,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     const newValue = [...fieldValue];
     newValue.push(createInitialRowValue()); // Push an object with proper field defaults
     helpers.setValue(newValue);
+    helpers.setError(undefined);
     // Add the new row to the rows state
     setRows([...rows, rowElements]);
     // Add a new ref to the rowRefs state
@@ -120,6 +121,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     const newValues = [...fieldValue];
     newValues.splice(index, 1);
     helpers.setValue(newValues);
+    helpers.setError(undefined);
     // Remove the row from the rows state
     setRows((prevState) => {
       const newState = [...prevState];

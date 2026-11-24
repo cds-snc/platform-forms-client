@@ -4,11 +4,12 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Field } from "formik";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FormStatus } from "@gcforms/types";
+import { FormElementTypes, FormStatus } from "@gcforms/types";
 
 import { Form } from "./Form";
 import { type FormProps } from "./types";
 import { EventKeys } from "@lib/hooks/useCustomEvent";
+import { TextInput } from "@clientComponents/forms/TextInput/TextInput";
 
 const mocks = vi.hoisted(() => ({
   executeCaptcha: vi.fn(),
@@ -72,7 +73,8 @@ vi.mock("@gcforms/hcaptcha/client", () => ({
   }),
 }));
 
-vi.mock("@gcforms/core", () => ({
+vi.mock("@gcforms/core", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@gcforms/core")>()),
   validateOnSubmit: mocks.validateOnSubmit,
 }));
 
@@ -128,7 +130,14 @@ vi.mock("@root/app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/client/fil
 
 vi.mock("@lib/client/clientHelpers", () => ({
   ga: vi.fn(),
+  truncateString: (value: string) => value,
 }));
+
+const fieldElement = {
+  id: 1,
+  type: FormElementTypes.textField,
+  properties: { titleEn: "Question", titleFr: "Question FR" },
+};
 
 const createFormProps = (props: Partial<FormProps> = {}): FormProps => ({
   formRecord: {
@@ -140,8 +149,8 @@ const createFormProps = (props: Partial<FormProps> = {}): FormProps => ({
       titleFr: "Formulaire test",
       introduction: {},
       privacyPolicy: {},
-      elements: [],
-      layout: [],
+      elements: [fieldElement],
+      layout: [1],
     },
     closedDetails: {},
   } as FormProps["formRecord"],
@@ -248,7 +257,7 @@ describe("Form", () => {
       "@lib/validation/validation"
     );
     mocks.getErrorList.mockImplementation(validation.getErrorList);
-    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+    mocks.validateOnSubmit.mockReturnValue({ 1: { code: "required" } });
 
     const formProps = createFormProps({
       formRecord: {
@@ -259,8 +268,8 @@ describe("Form", () => {
           titleFr: "Formulaire test",
           introduction: {},
           privacyPolicy: {},
-          layout: ["field"],
-          elements: [],
+          layout: [1],
+          elements: [fieldElement],
         },
         closedDetails: {},
       } as unknown as FormProps["formRecord"],
@@ -336,11 +345,13 @@ describe("Form", () => {
   });
 
   it("passes Formik validateForm and fallback to custom submit renderers", async () => {
+    mocks.validateOnSubmit.mockReturnValue({ 1: { code: "max-length", count: 1 } });
+    const validated = vi.fn();
     const renderSubmit = vi.fn(({ validateForm, fallBack }) => (
       <button
         type="button"
         onClick={async () => {
-          await validateForm();
+          validated(await validateForm());
           fallBack?.();
         }}
       >
@@ -353,14 +364,46 @@ describe("Form", () => {
     fireEvent.click(screen.getByRole("button", { name: "Custom submit" }));
 
     await waitFor(() => expect(mocks.validateOnSubmit).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(validated).toHaveBeenCalledWith({
+        1: "formElements.characterCount.exceeded: Question",
+      })
+    );
     expect(renderSubmit).toHaveBeenCalledWith({
       validateForm: expect.any(Function),
       fallBack: expect.any(Function),
     });
   });
 
+  it.each(["page", "language"])(
+    "clears structured character errors on %s changes",
+    async (change) => {
+      mocks.validateOnSubmit.mockReturnValue({ 1: { code: "max-length", count: 1 } });
+      const formProps = createFormProps({
+        initialValues: { 1: "abc" },
+        children: [<TextInput key="1" id="1" name="1" type="text" maxLength={2} />],
+      });
+      formProps.formRecord.form.elements = [
+        {
+          ...fieldElement,
+          properties: { ...fieldElement.properties, validation: { required: true, maxLength: 2 } },
+        },
+      ];
+      const { rerender } = render(<Form {...formProps} />);
+      fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+      await waitFor(() => expect(screen.getByTestId("errorMessage")).toBeInTheDocument());
+      if (change === "page") mocks.gcFormsContext.currentGroup = "next-page";
+      else formProps.language = "fr";
+      rerender(<Form {...formProps} />);
+      await waitFor(() => expect(screen.queryByTestId("errorMessage")).not.toBeInTheDocument());
+      expect(screen.getByRole("textbox")).toHaveValue("abc");
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: "abcd" } });
+      expect(screen.queryByTestId("errorMessage")).not.toBeInTheDocument();
+    }
+  );
+
   it("does not execute hCaptcha or submit when client validation fails", async () => {
-    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+    mocks.validateOnSubmit.mockReturnValue({ 1: { code: "required" } });
     mocks.getErrorList.mockReturnValue(<div>Required</div>);
 
     renderForm();
@@ -373,8 +416,65 @@ describe("Form", () => {
     expect(mocks.submitForm).not.toHaveBeenCalled();
   });
 
+  it("formats malformed date errors and blocks submission using core validation", async () => {
+    const { validateOnSubmit } = await import("@root/packages/core/src/process");
+    mocks.validateOnSubmit.mockImplementation(validateOnSubmit);
+    const props = createFormProps();
+    props.formRecord.form.elements = [
+      {
+        ...fieldElement,
+        type: FormElementTypes.formattedDate,
+        properties: { ...fieldElement.properties, validation: { required: true } },
+      },
+    ];
+    props.initialValues = { 1: "{" };
+
+    render(<Form {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => {
+      expect(mocks.getErrorList).toHaveBeenCalledWith(
+        expect.objectContaining({
+          errors: { 1: expect.stringContaining("input-validation.date-invalid") },
+        })
+      );
+    });
+    expect(mocks.executeCaptcha).not.toHaveBeenCalled();
+    expect(mocks.submitForm).not.toHaveBeenCalled();
+    expect(mocks.onSuccess).not.toHaveBeenCalled();
+  });
+
+  it.each([true, false])(
+    "blocks malformed addresses using core validation (required: %s)",
+    async (required) => {
+      const { validateOnSubmit } = await import("@root/packages/core/src/process");
+      mocks.validateOnSubmit.mockImplementation(validateOnSubmit);
+      const props = createFormProps();
+      props.formRecord.form.elements = [
+        {
+          ...fieldElement,
+          type: FormElementTypes.addressComplete,
+          properties: { ...fieldElement.properties, validation: { required } },
+        },
+      ];
+      props.initialValues = { 1: '{"city":{"toString":null}}' };
+
+      render(<Form {...props} />);
+      fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+      await waitFor(() => {
+        expect(mocks.getErrorList).toHaveBeenCalledWith(
+          expect.objectContaining({ errors: { 1: expect.any(String) } })
+        );
+      });
+      expect(mocks.executeCaptcha).not.toHaveBeenCalled();
+      expect(mocks.submitForm).not.toHaveBeenCalled();
+      expect(mocks.onSuccess).not.toHaveBeenCalled();
+    }
+  );
+
   it("does not refocus the validation summary on a later render", async () => {
-    mocks.validateOnSubmit.mockReturnValue({ field: "Required" });
+    mocks.validateOnSubmit.mockReturnValue({ 1: { code: "required" } });
     mocks.getErrorList.mockReturnValue(<div>Required</div>);
 
     const formProps = createFormProps();

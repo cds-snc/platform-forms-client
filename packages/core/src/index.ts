@@ -9,7 +9,7 @@ export {
 
 export { isValidEmail } from "./validation/isValidEmail";
 
-export { MAX_NUMBER_INPUT_DIGITS } from "./validation/validation";
+export { MAX_NUMBER_INPUT_DIGITS, isFieldResponseValid } from "./validation/validation";
 
 export {
   type SubElementTypeMismatch,
@@ -60,7 +60,15 @@ export {
 export { isSafeRegex } from "./validation/regex";
 export { isValidRegex } from "./validation/regex";
 export { isNumberInput } from "./utils/isNumberInput";
-export type { AddressValidationError } from "./validation/isValidAddress";
+export type {
+  ValidationError,
+  AddressField,
+  AddressValidationError,
+  RepeatingSetValidationErrors,
+  FieldValidationError,
+  FieldValidationResult,
+  ValidationErrors,
+} from "./validation/validationErrorTypes";
 export {
   isValidAddressSubFieldInvalid,
   getAddressSubFieldError,

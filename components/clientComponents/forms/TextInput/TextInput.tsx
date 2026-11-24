@@ -28,7 +28,6 @@ export const TextInput = (
     maxLength,
     spellCheck,
     lang,
-    questionLabel,
   } = props;
   const [field, meta, helpers] = useField(props);
 
@@ -36,11 +35,9 @@ export const TextInput = (
     useCharacterCount({
       maxLength,
       id: id ?? "",
+      name: field.name,
       lang,
       value: field.value,
-      error: meta.error,
-      setError: helpers.setError,
-      questionLabel,
     });
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

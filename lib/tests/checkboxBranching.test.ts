@@ -104,7 +104,7 @@ describe("checkbox branching consistency", () => {
       expect(checkPageVisibility(record, record.form.elements[1], values)).toBe(visitsPilot);
       expect(
         validate({ formRecord: record, values: { ...values }, currentGroup: "pilot" })
-      ).toEqual(visitsPilot ? { "2": "input-validation.required" } : {});
+      ).toEqual(visitsPilot ? { "2": { code: "required" } } : {});
 
       // Review and downloadable summaries share this section builder.
       const sections = getReviewItems({
