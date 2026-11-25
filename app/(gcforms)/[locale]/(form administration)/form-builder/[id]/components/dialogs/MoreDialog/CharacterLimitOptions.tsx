@@ -80,7 +80,9 @@ export const CharacterLimitOptions = ({
             <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
             <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
             <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text3")}</p>
-            <p className="text-sm">{t("characterLimitWhenToUse.text4")}</p>
+            {item.type === FormElementTypes.textArea && (
+              <p className="text-sm">{t("characterLimitWhenToUse.text4")}</p>
+            )}
           </div>
         </InfoDetails>
 
