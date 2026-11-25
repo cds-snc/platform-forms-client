@@ -99,7 +99,7 @@ export const TextArea = (
         {children}
       </textarea>
       <characterCountResult.CharacterCountDisplay />
-      <wordCountResult.WordCountDisplay />
+      <wordCountResult.wordCountDisplay />
     </>
   );
 };
