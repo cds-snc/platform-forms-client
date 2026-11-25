@@ -12,7 +12,7 @@ interface UseWordCountOptions {
 interface UseWordCountReturn {
   setRemainingWords: (count: number) => void;
   ariaDescribedByIds: (hasError: boolean, ariaDescribedBy?: string) => Record<string, string>;
-  WordCountDisplay: React.FC;
+  wordCountDisplay: React.FC;
 }
 
 export const useWordCount = ({ maxWords, id, lang }: UseWordCountOptions): UseWordCountReturn => {
