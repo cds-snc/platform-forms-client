@@ -60,8 +60,10 @@ export const CharacterLimitOptions = ({
             const value = parseInt(e.target.value);
             if (!isNaN(value) && value >= 1) {
               // clone the existing properties so that we don't overwrite other keys in "validation"
+              // setting maxLength clears maxWords to enforce mutually exclusive constraint
               const validation = Object.assign({}, item.properties.validation, {
                 maxLength: value,
+                maxWords: undefined,
               });
               setItem({
                 ...item,
@@ -115,8 +117,10 @@ export const CharacterLimitOptions = ({
             const value = parseInt(e.target.value);
             if (!isNaN(value) && value >= 1) {
               // clone the existing properties so that we don't overwrite other keys in "validation"
+              // setting maxWords clears maxLength to enforce mutually exclusive constraint
               const validation = Object.assign({}, item.properties.validation, {
                 maxWords: value,
+                maxLength: undefined,
               });
               setItem({
                 ...item,
