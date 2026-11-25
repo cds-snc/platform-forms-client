@@ -830,6 +830,17 @@
       "required": ["all"],
       "additionalProperties": false
     },
+    "validationTextAreaInput": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "maxLength": { "type": "integer", "minimum": 1 },
+        "maxWords": { "type": "integer", "minimum": 1 },
+        "regex": { "type": "string" }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
     "validationTextInput": {
       "type": "object",
       "properties": {
@@ -899,7 +910,9 @@
                   "propertyNames": {
                     "pattern": "^(?:questionId|tags|titleEn|titleFr|placeholderEn|placeholderFr|descriptionEn|descriptionFr|conditionalRules|validation)$"
                   },
-                  "properties": { "validation": { "$ref": "#/definitions/validationTextInput" } },
+                  "properties": {
+                    "validation": { "$ref": "#/definitions/validationTextAreaInput" }
+                  },
                   "required": ["validation"]
                 }
               ]
