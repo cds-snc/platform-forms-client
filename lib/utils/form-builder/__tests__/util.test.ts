@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import {
-  sortByLayout,
   swapElement,
   moveElementUp,
   moveElementDown,
@@ -9,6 +8,7 @@ import {
   incrementSubElementId,
   removeGroupElement,
 } from "../index";
+import { sortByLayout } from "@gcforms/core";
 import type { FormElement } from "@lib/types";
 import type { GroupsType } from "@gcforms/types";
 

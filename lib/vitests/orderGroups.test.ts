@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import { type GroupsType } from "@gcforms/types";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { orderGroups } from "@gcforms/core";
 
 describe("orderGroups function", () => {
   it("Returns empty object", () => {

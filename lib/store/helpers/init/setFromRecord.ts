@@ -1,5 +1,5 @@
 import { NotificationsIntervalDefault } from "@gcforms/types";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { orderGroups } from "@gcforms/core";
 import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
 
 import { defaultForm } from "../../defaults";
