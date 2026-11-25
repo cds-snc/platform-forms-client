@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.9] - 2026-11-25
+
+- Export common template group and layout utilities from `@gcforms/core`
+
 ## [3.0.8] - 2026-11-12
 
 - Updates validation content for some error cases
