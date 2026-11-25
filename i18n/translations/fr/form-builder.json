@@ -384,7 +384,15 @@
     "text1": "Des preuves que les utilisateur·rice·s sont susceptibles de saisir plus d'informations qu'ils n'en ont besoin.",
     "text2": "Une raison légale ou technique qui fait qu'une entrée ne doit pas dépasser un certain nombre de caractères.",
     "text3": "Si vos utilisateur·rice·s atteignent constamment à la limite de caractères imposée par le backend de votre service, essayez d'augmenter la limite plutôt que d'utiliser un nombre de caractères.",
+    "text4": "Vous ne pouvez utiliser qu’une limite de caractères ou une limite de mots, pas les deux.",
     "title": "Raisons pour la limite de caractères"
+  },
+  "wordLimitWhenToUse": {
+    "text1": "Des preuves que les utilisateur·rice·s sont susceptibles de saisir plus d'informations qu'ils n'en ont besoin.",
+    "text2": "Une raison légale ou technique qui fait qu'une entrée ne doit pas dépasser un certain nombre de mots.",
+    "text3": "Si vos utilisateur·rice·s atteignent constamment la limite de mots imposée par le backend de votre service, essayez d'augmenter la limite plutôt que d'utiliser un nombre de mots.",
+    "text4": "Vous ne pouvez utiliser qu’une limite de caractères ou une limite de mots, pas les deux.",
+    "title": "Raisons pour la limite de mots"
   },
   "checkboxes": "Cases à cocher",
   "close": "Fermer",

@@ -79,7 +79,8 @@ export const CharacterLimitOptions = ({
           <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
             <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
             <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
-            <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>
+            <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text3")}</p>
+            <p className="text-sm">{t("characterLimitWhenToUse.text4")}</p>
           </div>
         </InfoDetails>
 
@@ -132,6 +133,15 @@ export const CharacterLimitOptions = ({
             }
           }}
         />
+
+        <InfoDetails summary={t("wordLimitWhenToUse.title")}>
+          <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
+            <p className="mb-4 text-sm">{t("wordLimitWhenToUse.text1")}</p>
+            <p className="mb-4 text-sm">{t("wordLimitWhenToUse.text2")}</p>
+            <p className="mb-4 text-sm">{t("wordLimitWhenToUse.text3")}</p>
+            <p className="text-sm">{t("wordLimitWhenToUse.text4")}</p>
+          </div>
+        </InfoDetails>
       </div>
     </section>
   );
