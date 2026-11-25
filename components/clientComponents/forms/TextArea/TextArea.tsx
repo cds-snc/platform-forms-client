@@ -44,8 +44,12 @@ export const TextArea = (
   });
   const wordCountResult = useWordCount({
     maxWords,
+    value: field.value,
+    error: meta.error,
+    setError: helpers.setError,
     id: id ?? "",
     lang,
+    questionLabel,
   });
 
   // Merge the aria-describedby values
@@ -64,17 +68,21 @@ export const TextArea = (
   ].join(" ");
 
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    let nextValue = event.target.value;
+    const nextValue = event.target.value;
     if (maxWords) {
       // Prevent more words than maxWords
       const words = nextValue.split(/\s+/).filter(Boolean);
       if (words.length > maxWords) {
-        nextValue = words.slice(0, maxWords).join(" ");
+        const truncatedValue = words.slice(0, maxWords).join(" ");
+        helpers.setValue(truncatedValue);
+        characterCountResult.updateCharacterError(truncatedValue);
+        wordCountResult.updateWordError(truncatedValue);
+        return;
       }
-      wordCountResult.setRemainingWords(maxWords - nextValue.split(/\s+/).filter(Boolean).length);
     }
     helpers.setValue(nextValue);
     characterCountResult.updateCharacterError(nextValue);
+    wordCountResult.updateWordError(nextValue);
   };
 
   const classes = cn("gcds-textarea", className, meta.error && "gcds-error");
@@ -82,7 +90,13 @@ export const TextArea = (
 
   return (
     <>
-      <div aria-live={characterCountResult.hasCharacterError ? "polite" : undefined}>
+      <div
+        aria-live={
+          characterCountResult.hasCharacterError || wordCountResult.hasWordError
+            ? "polite"
+            : undefined
+        }
+      >
         {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       </div>
       <textarea
@@ -99,7 +113,7 @@ export const TextArea = (
         {children}
       </textarea>
       <characterCountResult.CharacterCountDisplay />
-      <wordCountResult.wordCountDisplay />
+      <wordCountResult.WordCountDisplay />
     </>
   );
 };
