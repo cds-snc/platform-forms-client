@@ -3,8 +3,8 @@ import templatesSchemaV1 from "./templates.schema.v1.json";
 import templatesSchemaV2 from "./templates.schema.v2.json";
 
 const templatesSchemas: Record<number, Schema> = {
-  1: templatesSchemaV1,
-  2: templatesSchemaV2,
+  1: templatesSchemaV1 as unknown as Schema,
+  2: templatesSchemaV2 as unknown as Schema,
 };
 
 /**

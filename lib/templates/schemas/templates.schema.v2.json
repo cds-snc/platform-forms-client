@@ -839,7 +839,19 @@
         "regex": { "type": "string" }
       },
       "required": ["required"],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": ["required"],
+          "not": { "required": ["maxWords"] }
+        },
+        {
+          "required": ["required", "maxLength"]
+        },
+        {
+          "required": ["required", "maxWords"]
+        }
+      ]
     },
     "validationTextInput": {
       "type": "object",
