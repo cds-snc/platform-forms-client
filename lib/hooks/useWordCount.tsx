@@ -35,7 +35,7 @@ export const useWordCount = ({ maxWords, id, lang }: UseWordCountOptions): UseWo
     [maxWords, remainingWords, id]
   );
 
-  const WordCountDisplay = useCallback(() => {
+  const wordCountDisplay = useCallback(() => {
     if (!maxWords) return null;
 
     const showRemaining = remainingWords < maxWords * 0.5 && remainingWords >= 0;
@@ -52,6 +52,6 @@ export const useWordCount = ({ maxWords, id, lang }: UseWordCountOptions): UseWo
   return {
     setRemainingWords,
     ariaDescribedByIds,
-    WordCountDisplay,
+    wordCountDisplay,
   };
 };
