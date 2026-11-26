@@ -15,7 +15,7 @@ import { ga, focusHeadingBySelector } from "@lib/client/clientHelpers";
 import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 import { isFormClosed } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useRouter } from "next/navigation";
-import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
+import { formHasGroups } from "@gcforms/core";
 import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";

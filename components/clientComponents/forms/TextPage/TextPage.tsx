@@ -11,7 +11,7 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { getSafeUrl } from "@lib/utils/getSafeUrl";
 import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { encryptedCache } from "@root/lib/hooks/useResponseCache";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { formHasGroups } from "@gcforms/core";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)

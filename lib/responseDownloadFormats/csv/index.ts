@@ -2,7 +2,7 @@ import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { serverTranslation } from "@i18n";
-import { sortByLayout } from "@lib/utils/form-builder";
+import { sortByLayout } from "@gcforms/core";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
 

@@ -1,5 +1,5 @@
 import { FormProperties } from "@lib/types";
-import { formHasGroups } from "./formHasGroups";
+import { formHasGroups } from "@gcforms/core";
 
 export function showReviewPage(form: FormProperties) {
   if (!formHasGroups(form)) return false;

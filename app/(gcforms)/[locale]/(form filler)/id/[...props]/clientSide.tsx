@@ -16,7 +16,7 @@ import { useUpdateHeadTitle } from "@root/lib/hooks/useUpdateHeadTitle";
 import { getLocalizedProperty, LocalizedElementProperties, Language } from "@root/lib/utils";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { useResponsesCache } from "@root/lib/hooks/useResponseCache";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { formHasGroups } from "@gcforms/core";
 
 export const FormWrapper = ({
   formRecord,

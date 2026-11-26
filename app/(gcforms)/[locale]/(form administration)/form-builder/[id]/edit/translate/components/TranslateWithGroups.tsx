@@ -20,7 +20,7 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement, FormElementTypes } from "@lib/types";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
-import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
+import { sortGroup } from "@gcforms/core";
 import { Group } from "@gcforms/types";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
 
