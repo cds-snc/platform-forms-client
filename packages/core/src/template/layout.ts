@@ -15,16 +15,18 @@ const getFormElementCollection = (form: FormProperties): FormElementHash => {
   return elementCollection;
 };
 
+const getElementsByIds = (
+  elementCollection: FormElementHash,
+  elementIds?: Group["elements"]
+): FormElement[] => {
+  if (!elementIds) return [];
+
+  return elementIds.map((elementId) => elementCollection[elementId]);
+};
+
 export const sortGroup = ({ form, group }: { form: FormProperties; group: Group }) => {
   const elementCollection = getFormElementCollection(form);
-  const sortedElements: FormElement[] = [];
-
-  if (!group.elements) return sortedElements;
-
-  const groupElements = group.elements.map((elementId) => elementCollection[elementId]);
-  sortedElements.push(...groupElements);
-
-  return sortedElements;
+  return getElementsByIds(elementCollection, group.elements);
 };
 
 export const getLayoutFromGroups = (form: FormProperties, groups: GroupsType): number[] => {
@@ -35,9 +37,7 @@ export const getLayoutFromGroups = (form: FormProperties, groups: GroupsType): n
     if (Object.prototype.hasOwnProperty.call(groups, key)) {
       const group = groups[key];
       if (group.elements === undefined) return [];
-      group.elements.forEach((elementId) => {
-        layout.push(elementCollection[elementId].id);
-      });
+      layout.push(...getElementsByIds(elementCollection, group.elements).map(({ id }) => id));
     }
   }
 
