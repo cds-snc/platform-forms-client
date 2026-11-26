@@ -827,21 +827,7 @@
         "regex": { "type": "string" }
       },
       "required": ["required"],
-      "additionalProperties": false,
-      "oneOf": [
-        {
-          "properties": { "required": {}, "maxLength": {}, "regex": {} },
-          "not": { "required": ["maxWords"] }
-        },
-        {
-          "properties": { "required": {}, "maxWords": {}, "regex": {} },
-          "not": { "required": ["maxLength"] }
-        },
-        {
-          "properties": { "required": {}, "regex": {} },
-          "not": { "anyOf": [{ "required": ["maxLength"] }, { "required": ["maxWords"] }] }
-        }
-      ]
+      "additionalProperties": false
     },
     "validationTextInput": {
       "type": "object",

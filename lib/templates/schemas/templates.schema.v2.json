@@ -918,21 +918,7 @@
               ]
             }
           },
-          "required": ["id", "type", "properties"],
-          "oneOf": [
-            {
-              "properties": { "required": {}, "maxLength": {}, "regex": {} },
-              "not": { "required": ["maxWords"] }
-            },
-            {
-              "properties": { "required": {}, "maxWords": {}, "regex": {} },
-              "not": { "required": ["maxLength"] }
-            },
-            {
-              "properties": { "required": {}, "regex": {} },
-              "not": { "anyOf": [{ "required": ["maxLength"] }, { "required": ["maxWords"] }] }
-            }
-          ]
+          "required": ["id", "type", "properties"]
         },
         {
           "type": "object",
