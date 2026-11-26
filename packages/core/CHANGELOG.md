@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.11] - 2026-11-26
+
+- Export response answer ordering utilities from `@gcforms/core`
+
 ## [3.0.10] - 2026-11-26
 
 - Move response answer mapping and formatting utilities into `@gcforms/core`
