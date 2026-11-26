@@ -68,6 +68,20 @@ export {
   sortByLayout,
   sortGroup,
 } from "./template";
+export {
+  createAnswerObject,
+  createFallbackMappedAnswer,
+  getAnswerAsString,
+  getElementMap,
+  mapAnswers,
+} from "./responses";
+export type {
+  AnswerFormatter,
+  MapAnswersParams,
+  MappedAnswer,
+  RawAnswers,
+  ResponseFilenameMapping,
+} from "./responses";
 export type { AddressValidationError } from "./validation/isValidAddress";
 export {
   isValidAddressSubFieldInvalid,

@@ -4,11 +4,13 @@ import { type Response, type FormProperties } from "@gcforms/types";
 import { FormElementTypes, type FormElement } from "@lib/types";
 
 import { createArrayCsvStringifier as createCsvStringifier } from "@lib/responses/csv-writer";
-import { sortByLayout } from "@gcforms/core";
+import {
+  mapAnswers,
+  sortByLayout,
+  type MappedAnswer,
+  type ResponseFilenameMapping,
+} from "@gcforms/core";
 import { customTranslate } from "@lib/i18nHelpers";
-import { MappedAnswer } from "@lib/responses/mapper/types";
-import { mapAnswers } from "@lib/responses/mapper/mapAnswers";
-import { ResponseFilenameMapping } from "./processResponse";
 import { starRatingDefaultElementProperties } from "@clientComponents/forms/StarRating/defaults";
 import { getScoreFromStarRatingObject } from "@clientComponents/forms/StarRating/utils";
 import type { ResponseDownloadLogger } from "./logger";

@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { mapAnswers } from "./mapAnswers";
 import { type MappedAnswer } from "./types";
-import kitchen from "../__fixtures__/kitchen-sink-form-application-2025-10-10.json";
-import answersFixture from "../__fixtures__/answers.json";
-import suspiciousResponseFixture from "../__fixtures__/responses-attachments-suspicious.json";
+import kitchen from "./__fixtures__/kitchen-sink-form-application-2025-10-10.json";
+import answersFixture from "./__fixtures__/answers.json";
+import suspiciousResponseFixture from "./__fixtures__/responses-attachments-suspicious.json";
 import type { PublicFormRecord, Response } from "@gcforms/types";
 import { FormProperties } from "@gcforms/types";
 
