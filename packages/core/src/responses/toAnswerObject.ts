@@ -1,6 +1,5 @@
-import { FormElement, FormElementTypes } from "@gcforms/types";
-import type { MappedAnswer } from "../types";
-import { Response } from "@gcforms/types";
+import { FormElement, FormElementTypes, Response } from "@gcforms/types";
+import type { MappedAnswer } from "./types";
 
 export const createAnswerObject = ({
   question,
@@ -21,11 +20,6 @@ export const createAnswerObject = ({
   };
 };
 
-/**
- * Create a fallback MappedAnswer used when a question definition is not
- * available or when the answer cannot be mapped. The fallback contains
- * placeholder titles and the JSON-stringified raw answer.
- */
 export const createFallbackMappedAnswer = ({
   questionId = 0,
   rawAnswer,
