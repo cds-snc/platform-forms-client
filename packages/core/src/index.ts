@@ -74,6 +74,7 @@ export {
   getAnswerAsString,
   getElementMap,
   mapAnswers,
+  orderAnswersByTemplate,
 } from "./responses";
 export type {
   AnswerFormatter,
