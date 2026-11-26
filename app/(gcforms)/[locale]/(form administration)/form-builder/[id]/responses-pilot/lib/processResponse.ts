@@ -16,6 +16,7 @@ import { TFunction } from "i18next";
 import { md5 } from "hash-wasm";
 import { withRetry } from "@root/lib/utils/retry";
 import { logDownloadOperation, ResponseDownloadLogger } from "./logger";
+import type { ResponseFilenameMapping } from "@gcforms/core";
 
 export const processResponse = async ({
   incrementProcessedSubmissionsCount,
@@ -141,11 +142,6 @@ export const processResponse = async ({
     durationMs: Date.now() - startedAt,
   });
 };
-
-export type ResponseFilenameMapping = Map<
-  string,
-  { originalName: string; actualName: string; isPotentiallyMalicious: boolean }
->;
 
 export type AttachmentDownloadResult = {
   id: string;

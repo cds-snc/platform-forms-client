@@ -1,11 +1,15 @@
 import { ResponseHtml } from "@root/lib/responseDownloadFormats/html/components/ResponseHtml";
 import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
-import { mapAnswers } from "@root/lib/responses/mapper/mapAnswers";
 import { FormProperties, FormRecord, SecurityAttribute, Response } from "@root/lib/types";
 import { TFunction } from "i18next";
 import { Submission } from "@root/lib/responseDownloadFormats/types";
-import { ResponseFilenameMapping } from "./processResponse";
-import { formHasGroups, sortByGroups, sortByLayout } from "@gcforms/core";
+import {
+  formHasGroups,
+  sortByGroups,
+  sortByLayout,
+  mapAnswers,
+  type ResponseFilenameMapping,
+} from "@gcforms/core";
 
 const orderAnswersByTemplate = (
   mappedAnswers: ReturnType<typeof mapAnswers>,
