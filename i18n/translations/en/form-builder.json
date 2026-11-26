@@ -384,7 +384,15 @@
     "text1": "Evidence that users are likely to enter more information than they need to.",
     "text2": "A legal or technical reason that means an entry must be no more than a certain number of characters.",
     "text3": "If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
+    "text4": "You can only use a character limit or word limit, not both.",
     "title": "Reasons for using a character limit"
+  },
+  "wordLimitWhenToUse": {
+    "text1": "Evidence that users are likely to enter more information than they need to.",
+    "text2": "A legal or technical reason that means an entry must be no more than a certain number of words.",
+    "text3": "If your users keep hitting the word limit imposed by the backend of your service then try to increase the limit rather than use a word count.",
+    "text4": "You can only use a character limit or word limit, not both.",
+    "title": "Reasons for using a word limit"
   },
   "checkboxes": "Checkboxes",
   "close": "Close",
@@ -756,7 +764,10 @@
     "includeProvincialTerritorial": "Include provinces and territories"
   },
   "maxCharacterLength": "Max character length: ",
+  "maxWordLength": "Max word length: ",
   "maximumCharacterLength": "Maximum character length",
+  "maximumWordCount": "Maximum word count",
+  "maximumWordCountDescription": "Set the maximum number of words your users can enter for this question.",
   "maxNumberOfRows": {
     "description": "Set the upper limit for the number of entries your users can provide for this question.",
     "label": "Maximum number of answers"

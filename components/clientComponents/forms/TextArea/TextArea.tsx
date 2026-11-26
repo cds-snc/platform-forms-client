@@ -5,11 +5,13 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
 import { useCharacterCount } from "@lib/hooks/useCharacterCount";
+import { useWordCount } from "@lib/hooks/useWordCount";
 import { getErrorMessageId } from "@lib/a11yHelpers";
 
 export interface TextAreaProps extends InputFieldProps {
   questionLabel?: string;
   children?: React.ReactNode;
+  maxWords?: number;
   placeholder?: string;
 }
 
@@ -24,26 +26,63 @@ export const TextArea = (
     children,
     placeholder,
     maxLength,
+    maxWords,
     lang,
     questionLabel,
   } = props;
 
   const [field, meta, helpers] = useField(props);
 
-  const { updateCharacterError, hasCharacterError, ariaDescribedByIds, CharacterCountDisplay } =
-    useCharacterCount({
-      maxLength,
-      id: id ?? "",
-      lang,
-      value: field.value,
-      error: meta.error,
-      setError: helpers.setError,
-      questionLabel,
-    });
+  const characterCountResult = useCharacterCount({
+    maxLength,
+    id: id ?? "",
+    lang,
+    value: field.value,
+    error: meta.error,
+    setError: helpers.setError,
+    questionLabel,
+  });
+  const wordCountResult = useWordCount({
+    maxWords,
+    value: field.value,
+    error: meta.error,
+    setError: helpers.setError,
+    id: id ?? "",
+    lang,
+    questionLabel,
+  });
+
+  // Merge the aria-describedby values
+  const characterCountAriaIds = characterCountResult.ariaDescribedByIds(
+    !!meta.error,
+    ariaDescribedBy
+  );
+  const wordCountAriaIds = wordCountResult.ariaDescribedByIds(!!meta.error, undefined); // Don't pass ariaDescribedBy twice
+  // Combine them
+  const mergedAriaDescribedBy = [
+    ...new Set(
+      [characterCountAriaIds["aria-describedby"], wordCountAriaIds["aria-describedby"]]
+        .filter(Boolean)
+        .flatMap((ids) => ids.split(/\s+/))
+    ),
+  ].join(" ");
 
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    helpers.setValue(event.target.value);
-    updateCharacterError(event.target.value);
+    const nextValue = event.target.value;
+    if (maxWords) {
+      // Prevent more words than maxWords
+      const words = nextValue.split(/\s+/).filter(Boolean);
+      if (words.length > maxWords) {
+        const truncatedValue = words.slice(0, maxWords).join(" ");
+        helpers.setValue(truncatedValue);
+        characterCountResult.updateCharacterError(truncatedValue);
+        wordCountResult.updateWordError(truncatedValue);
+        return;
+      }
+    }
+    helpers.setValue(nextValue);
+    characterCountResult.updateCharacterError(nextValue);
+    wordCountResult.updateWordError(nextValue);
   };
 
   const classes = cn("gcds-textarea", className, meta.error && "gcds-error");
@@ -51,7 +90,13 @@ export const TextArea = (
 
   return (
     <>
-      <div aria-live={hasCharacterError ? "polite" : undefined}>
+      <div
+        aria-live={
+          characterCountResult.hasCharacterError || wordCountResult.hasWordError
+            ? "polite"
+            : undefined
+        }
+      >
         {meta.error && <ErrorMessage id={errorMessageId}>{meta.error}</ErrorMessage>}
       </div>
       <textarea
@@ -61,13 +106,14 @@ export const TextArea = (
         aria-required={required ? "true" : undefined}
         aria-invalid={meta.error ? "true" : undefined}
         placeholder={placeholder}
-        {...ariaDescribedByIds(!!meta.error, ariaDescribedBy)}
+        {...(mergedAriaDescribedBy ? { "aria-describedby": mergedAriaDescribedBy } : {})}
         {...field}
         onChange={handleTextAreaChange}
       >
         {children}
       </textarea>
-      <CharacterCountDisplay />
+      <characterCountResult.CharacterCountDisplay />
+      <wordCountResult.WordCountDisplay />
     </>
   );
 };

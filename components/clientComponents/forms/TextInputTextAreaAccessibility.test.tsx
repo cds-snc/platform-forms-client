@@ -50,9 +50,6 @@ describe("TextInput and TextArea error associations", () => {
 
     expect(textarea).toHaveAttribute("aria-invalid", "true");
     expect(textarea).toHaveAttribute("aria-describedby", "errorMessage-description");
-    expect(screen.getByTestId("errorMessage")).toHaveAttribute(
-      "id",
-      "errorMessage-description"
-    );
+    expect(screen.getByTestId("errorMessage")).toHaveAttribute("id", "errorMessage-description");
   });
 });

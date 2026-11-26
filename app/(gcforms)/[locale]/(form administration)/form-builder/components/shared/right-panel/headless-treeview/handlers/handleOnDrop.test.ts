@@ -448,20 +448,32 @@ describe('handleOnDrop', () => {
 
       mockIsOrderedDragTarget.mockReturnValue(true);
 
-      // Make the mock functions async with delays
+      let finishRemoval!: () => void;
+      const removalPending = new Promise<void>((resolve) => {
+        finishRemoval = resolve;
+      });
+      let finishInsertion!: () => void;
+      const insertionPending = new Promise<void>((resolve) => {
+        finishInsertion = resolve;
+      });
+      let signalInsertionStarted!: () => void;
+      const insertionStarted = new Promise<void>((resolve) => {
+        signalInsertionStarted = resolve;
+      });
+
       mockRemoveItemsFromParents.mockImplementation(async (items, callback) => {
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await removalPending;
         await callback(items[0] as ItemInstance<unknown>, ['child1']);
       });
 
       mockInsertItemsAtTarget.mockImplementation(async (itemIds, target, callback) => {
-        await new Promise(resolve => setTimeout(resolve, 10));
+        signalInsertionStarted();
+        await insertionPending;
         await callback(target.item as ItemInstance<unknown>, ['child1', ...itemIds]);
       });
 
-      const startTime = Date.now();
-
-      await handleOnDrop(
+      const onComplete = vi.fn();
+      const dropPending = handleOnDrop(
         items,
         target,
         mockGetSubElements,
@@ -469,14 +481,23 @@ describe('handleOnDrop', () => {
         mockUpdateGroupElements,
         mockUpdateSubElements,
         mockAutoFlowAll
-      );
+      ).then(onComplete);
 
-      const endTime = Date.now();
-
-      // Should have waited for async operations
-      expect(endTime - startTime).toBeGreaterThanOrEqual(20);
       expect(mockRemoveItemsFromParents).toHaveBeenCalled();
+      expect(mockInsertItemsAtTarget).not.toHaveBeenCalled();
+      expect(onComplete).not.toHaveBeenCalled();
+
+      finishRemoval();
+      await insertionStarted;
+      await Promise.resolve();
       expect(mockInsertItemsAtTarget).toHaveBeenCalled();
+      expect(onComplete).not.toHaveBeenCalled();
+      expect(mockAutoFlowAll).not.toHaveBeenCalled();
+
+      finishInsertion();
+      await dropPending;
+      expect(mockAutoFlowAll).toHaveBeenCalledOnce();
+      expect(onComplete).toHaveBeenCalledOnce();
     });
   });
 

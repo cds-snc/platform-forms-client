@@ -2,13 +2,32 @@
  * @vitest-environment jsdom
  */
 import React from "react";
-import { cleanup, render as renderComponent, screen } from "@testing-library/react";
+import { cleanup, render as renderComponent, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, afterEach, beforeEach } from "vitest";
 import { Formik } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import type { FormElement } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
+import { TextArea } from "./TextArea";
+
+it("counts the retained value after enforcing a word limit", () => {
+  const { unmount } = renderComponent(
+    <Formik initialValues={{ answer: "" }} onSubmit={() => {}}>
+      <TextArea id="answer" name="answer" maxLength={3} maxWords={2} />
+    </Formik>
+  );
+  const textbox = screen.getByRole("textbox");
+  fireEvent.change(textbox, { target: { value: "one two three" } });
+  expect(textbox).toHaveValue("one two");
+  expect(document.getElementById("characterCountMessageanswer")).toHaveTextContent(
+    "You've exceeded the limit by 4 characters."
+  );
+  expect(document.getElementById("wordCountMessageanswer")).toHaveTextContent("0");
+  const ids = textbox.getAttribute("aria-describedby")?.split(" ") ?? [];
+  expect(new Set(ids).size).toBe(ids.length);
+  unmount();
+});
 
 const render = (ui: React.ReactElement) =>
   renderComponent(

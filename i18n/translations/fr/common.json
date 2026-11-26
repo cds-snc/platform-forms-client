@@ -132,6 +132,12 @@
       "remaining_other": "Il vous reste {{count}} caractères.",
       "exceeded_one": "Vous avez dépassé la limite de {{count}} caractère.",
       "exceeded_other": "Vous avez dépassé la limite de {{count}} caractères."
+    },
+    "wordCount": {
+      "remaining_one": "Il vous reste {{count}} mot.",
+      "remaining_other": "Il vous reste {{count}} mots.",
+      "exceeded_one": "Vous avez dépassé la limite de {{count}} mot.",
+      "exceeded_other": "Vous avez dépassé la limite de {{count}} mots."
     }
   },
   "dynamicRow": {
