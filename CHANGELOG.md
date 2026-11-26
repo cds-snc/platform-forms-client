@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.31.10](https://github.com/cds-snc/platform-forms-client/compare/v4.31.9...v4.31.10) (2026-11-26)
+
+
+### Miscellaneous Chores
+
+* move common template functions into core ([#8248](https://github.com/cds-snc/platform-forms-client/issues/8248)) ([43585de](https://github.com/cds-snc/platform-forms-client/commit/43585de6682993068917f3fb1800d823595406b5))
+* move orderAnswersByTemplate to core package ([#8251](https://github.com/cds-snc/platform-forms-client/issues/8251)) ([ef4ce90](https://github.com/cds-snc/platform-forms-client/commit/ef4ce906d4c341f0b50f4d704a8b0f6587fa9dfa))
+* move response mapper to core package ([#8250](https://github.com/cds-snc/platform-forms-client/issues/8250)) ([e1f3a6b](https://github.com/cds-snc/platform-forms-client/commit/e1f3a6b55ace30c750ac90a6f30a71e1b8b984dd))
+
 ## [4.31.9](https://github.com/cds-snc/platform-forms-client/compare/v4.31.8...v4.31.9) (2026-11-24)
 
 
