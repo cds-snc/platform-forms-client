@@ -830,14 +830,16 @@
       "additionalProperties": false,
       "oneOf": [
         {
-          "required": ["required"],
+          "properties": { "required": {}, "maxLength": {}, "regex": {} },
           "not": { "required": ["maxWords"] }
         },
         {
-          "required": ["required", "maxLength"]
+          "properties": { "required": {}, "maxWords": {}, "regex": {} },
+          "not": { "required": ["maxLength"] }
         },
         {
-          "required": ["required", "maxWords"]
+          "properties": { "required": {}, "regex": {} },
+          "not": { "anyOf": [{ "required": ["maxLength"] }, { "required": ["maxWords"] }] }
         }
       ]
     },
