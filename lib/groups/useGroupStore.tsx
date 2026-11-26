@@ -17,7 +17,7 @@ import { autoFlowAllNextActions } from "./utils/setNextAction";
 import { setGroupNextAction } from "./utils/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
 import { FormElement } from "@lib/types";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { orderGroups } from "@gcforms/core";
 import { lockedGroups } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 import { v4 as uuid } from "uuid";
 import { TreeItemIndex } from "@formBuilder/components/shared/right-panel/headless-treeview/types";

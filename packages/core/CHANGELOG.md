@@ -1,8 +1,12 @@
 # Changelog
 
-## [3.0.9] - 2026-11-17
+## [3.0.10] - 2026-11-26
 
 - Add helpers for word counts.
+- 
+## [3.0.9] - 2026-11-25
+
+- Export common template group and layout utilities from `@gcforms/core`
 
 ## [3.0.8] - 2026-11-12
 

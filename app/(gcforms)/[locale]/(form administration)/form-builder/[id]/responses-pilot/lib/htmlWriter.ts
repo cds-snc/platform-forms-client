@@ -5,8 +5,7 @@ import { FormProperties, FormRecord, SecurityAttribute, Response } from "@root/l
 import { TFunction } from "i18next";
 import { Submission } from "@root/lib/responseDownloadFormats/types";
 import { ResponseFilenameMapping } from "./processResponse";
-import { sortByGroups, sortByLayout } from "@root/lib/utils/form-builder";
-import { formHasGroups } from "@root/lib/utils/form-builder/formHasGroups";
+import { formHasGroups, sortByGroups, sortByLayout } from "@gcforms/core";
 
 const orderAnswersByTemplate = (
   mappedAnswers: ReturnType<typeof mapAnswers>,

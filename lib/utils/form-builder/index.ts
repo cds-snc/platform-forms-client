@@ -1,8 +1,7 @@
 import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
 import { TemplateStoreState } from "../../store/types";
 import { type GroupsType } from "@gcforms/types";
-import { getLayoutFromGroups } from "./groupedFormHelpers";
-import { formHasGroups } from "./formHasGroups";
+import { formHasGroups, getLayoutFromGroups } from "@gcforms/core";
 
 export const completeEmailAddressRegex =
   /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@([a-zA-Z0-9-.]+)\.([a-zA-Z0-9]{2,})+$/;
@@ -75,33 +74,6 @@ export const incrementSubElementId = (subElements: FormElement[], elId: number) 
   const ids = subElements.map((element) => element.id).sort((a, b) => a - b);
 
   return ids[ids.length - 1] + 1;
-};
-
-export const sortByLayout = ({
-  layout,
-  elements,
-}: {
-  layout: number[];
-  elements: FormElement[];
-}) => {
-  return [...elements].sort((a, b) => {
-    return layout.indexOf(a.id) - layout.indexOf(b.id);
-  });
-};
-
-export const sortByGroups = ({
-  form,
-  elements,
-}: {
-  form: FormProperties;
-  elements: FormElement[];
-}) => {
-  if (!form.groups) {
-    return sortByLayout({ layout: form.layout, elements: elements });
-  }
-
-  const layout = getLayoutFromGroups(form, form.groups);
-  return sortByLayout({ layout, elements });
 };
 
 export const getSchemaFromState = (state: TemplateStoreState) => {

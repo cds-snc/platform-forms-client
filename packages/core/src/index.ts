@@ -60,6 +60,14 @@ export {
 export { isSafeRegex } from "./validation/regex";
 export { isValidRegex } from "./validation/regex";
 export { isNumberInput } from "./utils/isNumberInput";
+export {
+  formHasGroups,
+  getLayoutFromGroups,
+  orderGroups,
+  sortByGroups,
+  sortByLayout,
+  sortGroup,
+} from "./template";
 export type { AddressValidationError } from "./validation/isValidAddress";
 export {
   isValidAddressSubFieldInvalid,
