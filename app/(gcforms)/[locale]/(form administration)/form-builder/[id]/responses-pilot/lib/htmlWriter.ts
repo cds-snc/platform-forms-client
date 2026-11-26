@@ -3,38 +3,7 @@ import type { FileSystemDirectoryHandle } from "native-file-system-adapter";
 import { FormProperties, FormRecord, SecurityAttribute, Response } from "@root/lib/types";
 import { TFunction } from "i18next";
 import { Submission } from "@root/lib/responseDownloadFormats/types";
-import {
-  formHasGroups,
-  sortByGroups,
-  sortByLayout,
-  mapAnswers,
-  type ResponseFilenameMapping,
-} from "@gcforms/core";
-
-const orderAnswersByTemplate = (
-  mappedAnswers: ReturnType<typeof mapAnswers>,
-  formTemplate: FormProperties
-) => {
-  const elements = Array.isArray(formTemplate.elements) ? formTemplate.elements : [];
-  const sortedElements = formHasGroups(formTemplate)
-    ? sortByGroups({ form: formTemplate, elements })
-    : sortByLayout({
-        layout: Array.isArray(formTemplate.layout) ? formTemplate.layout : [],
-        elements,
-      });
-  const answersByQuestionId = new Map(
-    mappedAnswers
-      .filter((answer) => answer.type !== "-")
-      .map((answer) => [answer.questionId, answer])
-  );
-  const orderedAnswers = sortedElements.flatMap((element) => {
-    const answer = answersByQuestionId.get(element.id);
-    return answer ? [answer] : [];
-  });
-  const orderedAnswerSet = new Set(orderedAnswers);
-
-  return [...orderedAnswers, ...mappedAnswers.filter((answer) => !orderedAnswerSet.has(answer))];
-};
+import { mapAnswers, orderAnswersByTemplate, type ResponseFilenameMapping } from "@gcforms/core";
 
 const getSecurityAttribute = (formTemplate: FormProperties): SecurityAttribute => {
   const securityAttribute = (formTemplate as { securityAttribute?: unknown }).securityAttribute;

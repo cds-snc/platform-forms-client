@@ -1,8 +1,9 @@
 # Changelog
 
-## [3.0.11] - 2026-11-26
+## [3.0.12] - 2026-11-26
 
 -Add helpers for word counts.
+- Export response answer ordering utilities from `@gcforms/core`
 
 ## [3.0.10] - 2026-11-26
 
