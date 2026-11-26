@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import {
-  sortByLayout,
   swapElement,
   moveElementUp,
   moveElementDown,
@@ -19,32 +18,6 @@ const el = (id: number): FormElement =>
   ({ id, type: FormElementTypes.textField }) as unknown as FormElement;
 
 describe("Util", () => {
-  it("sorts using layout array", () => {
-    const sorted1 = sortByLayout({
-      layout: [4, 3, 2, 1],
-      elements: [el(1), el(2), el(3), el(4)],
-    });
-    expect(sorted1.map((e) => e.id)).toEqual([4, 3, 2, 1]);
-
-    const sorted2 = sortByLayout({
-      layout: [3, 4, 1, 2],
-      elements: [el(1), el(3), el(2), el(4)],
-    });
-    expect(sorted2.map((e) => e.id)).toEqual([3, 4, 1, 2]);
-
-    const sorted3 = sortByLayout({
-      layout: [1, 2, 3, 4],
-      elements: [el(1), el(3), el(2), el(4)],
-    });
-    expect(sorted3.map((e) => e.id)).toEqual([1, 2, 3, 4]);
-
-    const sorted4 = sortByLayout({
-      layout: [1, 2, 3, 4],
-      elements: [el(1), el(2), el(3), el(4)],
-    });
-    expect(sorted4.map((e) => e.id)).toEqual([1, 2, 3, 4]);
-  });
-
   it("increments subElement id", () => {
     expect(incrementSubElementId([], 4)).toBe(401);
     expect(incrementSubElementId([], 5)).toBe(501);

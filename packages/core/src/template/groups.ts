@@ -1,4 +1,9 @@
-import { type GroupsType } from "@gcforms/types";
+import { type FormProperties, type GroupsType } from "@gcforms/types";
+
+export function formHasGroups(form: FormProperties) {
+  if (!form || !form.groups) return false;
+  return form.groups && Object.keys(form.groups).length > 0;
+}
 
 export const orderGroups = (groups?: GroupsType, groupsLayout?: string[]) => {
   if (!groupsLayout || groupsLayout.length <= 0 || !groups) {
@@ -11,9 +16,8 @@ export const orderGroups = (groups?: GroupsType, groupsLayout?: string[]) => {
     groupsWithLayout.start = groups.start;
   }
 
-  // Set group properties in the order of the groupsLayout
   groupsLayout.forEach((groupId) => {
-    if (groups && groups[groupId]) {
+    if (groups[groupId]) {
       groupsWithLayout[groupId] = groups[groupId];
     }
   });

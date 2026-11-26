@@ -29,7 +29,7 @@ describe("processResponse (html)", () => {
     dir = env.dir;
   });
 
-  it("writes an HTML file from a submission", async () => {
+  it("writes an HTML file with answers in template order", async () => {
     const { formTemplate, mockApiClient } = env as {
       formTemplate: FormProperties;
       mockApiClient: Partial<GCFormsApiClient>;
@@ -42,6 +42,7 @@ describe("processResponse (html)", () => {
     const htmlDir = await dir.getDirectoryHandle("html", { create: true });
     const versionedFormTemplate = {
       ...formTemplate,
+      layout: [...formTemplate.layout].reverse(),
       versionNumber: 3,
     } as FormProperties;
 
@@ -77,6 +78,15 @@ describe("processResponse (html)", () => {
     expect(text).toContain("111-222-3333");
     expect(text).toContain("name@cds-snc.ca");
     expect(text).toContain("When will you release the GC Form Response pilot?");
+    const answerPositions = [
+      "When will you release the GC Form Response pilot?",
+      "Ask a question",
+      "name@cds-snc.ca",
+      "111-222-3333",
+      "Sarah Elyse",
+    ].map((answer) => text.indexOf(answer));
+    expect(answerPositions.every((position) => position >= 0)).toBe(true);
+    expect(answerPositions).toEqual([...answerPositions].sort((a, b) => a - b));
     // The translation may be resolved in tests or left as the i18n key.
     // Check for either the translated label or the untranslated key followed by the numeric version.
     expect(text).toMatch(/(?:Version|responseTemplate\.versionNumber)\s*3/);
