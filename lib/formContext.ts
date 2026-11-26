@@ -10,7 +10,7 @@ import {
 
 import { ensureChoiceId, checkVisibilityRecursive } from "@gcforms/core";
 import { inGroup } from "@gcforms/core";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { formHasGroups } from "@gcforms/core";
 import { LOCKED_GROUPS } from "@formBuilder/components/shared/right-panel/headless-treeview/constants";
 
 /**

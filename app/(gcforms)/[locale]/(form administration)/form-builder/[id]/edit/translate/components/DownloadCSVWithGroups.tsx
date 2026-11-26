@@ -5,7 +5,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Button } from "@clientComponents/globals";
 import { FormElement } from "@lib/types";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
+import { sortGroup } from "@gcforms/core";
 
 const formatText = (str: string) => `"${str}"`;
 

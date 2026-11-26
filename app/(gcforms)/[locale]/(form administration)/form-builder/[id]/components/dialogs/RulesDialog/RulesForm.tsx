@@ -7,7 +7,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { type ChoiceRule } from "@gcforms/types";
 import { ensureChoiceId, getElementsWithRuleForChoice } from "@gcforms/core";
 import { ConditionalElementRuleSelector } from "@root/app/(gcforms)/[locale]/(form administration)/form-builder/components/shared/conditionals/ConditionalElementRuleSelector";
-import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
+import { sortByGroups, sortByLayout } from "@gcforms/core";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
 import { FormElementWithIndex } from "@lib/types/form-builder-types";

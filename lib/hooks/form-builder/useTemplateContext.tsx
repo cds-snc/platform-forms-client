@@ -12,7 +12,7 @@ import { FormProperties } from "@lib/types";
 import { useAppUpdate } from "../useAppUpdate";
 import { autoFlowFormIfPossible } from "@lib/utils/form-builder/autoFlowFormIfPossible";
 import { resetReviewEndNextAction } from "@lib/groups/utils/resetReviewEndNextAction";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { formHasGroups } from "@gcforms/core";
 
 export type SaveDraftStatus = "saved" | "skipped" | "invalid" | "locked" | "error";
 

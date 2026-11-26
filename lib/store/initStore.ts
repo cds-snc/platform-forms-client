@@ -2,7 +2,7 @@ import { TemplateStoreProps, InitialTemplateStoreProps } from "./types";
 import { Language } from "../types/form-builder-types";
 import { defaultForm } from "./defaults";
 import { initializeGroups } from "@root/lib/groups/utils/initializeGroups";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { orderGroups } from "@gcforms/core";
 import { NotificationsIntervalDefault } from "@gcforms/types";
 import { migrateTemplate } from "@lib/templates/schemaVersioning/migrateTemplate";
 
