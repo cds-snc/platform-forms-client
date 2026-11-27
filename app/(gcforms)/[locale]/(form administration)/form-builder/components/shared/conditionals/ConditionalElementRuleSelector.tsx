@@ -5,15 +5,9 @@ import { cn } from "@lib/utils";
 import { FormElement } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { LocalizedFormProperties, LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { toPlainText } from "@lib/utils/strings";
+import { QuestionSelector, type SelectorResult } from "../QuestionSelector";
 
 type Choice = {
-  label: string;
-  value: string;
-};
-
-type Question = {
   label: string;
   value: string;
 };
@@ -38,7 +32,7 @@ const ChoiceSelect = ({
 
   return (
     <div className="my-2 mr-4 flex flex-col">
-      <label className="mb-2 inline-block text-sm" id={labelId}>
+      <label className="mb-2 inline-block text-sm font-bold" id={labelId}>
         {t("addConditionalRules.optionTitle")}
       </label>
       <select
@@ -46,7 +40,7 @@ const ChoiceSelect = ({
         data-selected={selected}
         onChange={onChange}
         className={cn(
-          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[600px] appearance-none truncate border-1 border-black bg-white bg-[url('/img/form-builder-arrow-down.svg')] bg-position-[center_right_5px] bg-no-repeat p-2 pr-10",
+          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[800px] appearance-none truncate rounded border-2 border-indigo-700 bg-white bg-[url('/img/form-builder-arrow-down.svg')] bg-position-[center_right_5px] bg-no-repeat p-2 pr-10",
           className
         )}
         aria-labelledby={labelId}
@@ -55,47 +49,6 @@ const ChoiceSelect = ({
           return (
             <option key={value} value={value}>
               {label}
-            </option>
-          );
-        })}
-      </select>
-    </div>
-  );
-};
-
-const QuestionSelect = ({
-  selected,
-  questions,
-  onChange,
-  className,
-}: {
-  selected: string | null;
-  questions: Question[];
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  className?: string;
-}) => {
-  const { t } = useTranslation("form-builder");
-  const labelId = `question-select-${useId()}`;
-
-  return (
-    <div className="mb-4">
-      <h4 className="mb-2" id={labelId}>
-        {t("addConditionalRules.questionTitle")}
-      </h4>
-      <select
-        value={selected || ""}
-        data-selected={selected || ""}
-        onChange={onChange}
-        className={cn(
-          "form-builder-dropdown text-black-default my-0 inline-block w-full max-w-[600px] appearance-none truncate border-1 border-black bg-white bg-[url('/img/form-builder-arrow-down.svg')] bg-[position:center_right_5px] bg-no-repeat p-2 pr-10",
-          className
-        )}
-        aria-labelledby={labelId}
-      >
-        {questions.map(({ label, value }) => {
-          return (
-            <option key={value} value={value}>
-              {toPlainText(label)}
             </option>
           );
         })}
@@ -132,41 +85,13 @@ export const ConditionalElementRuleSelector = ({
 
   const { t } = useTranslation("form-builder");
 
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
+  const { translationLanguagePriority } = useTemplateStore((s) => ({
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
   const language = translationLanguagePriority;
 
   const currentRules = currentElement?.properties.conditionalRules || [];
-
-  const questions = elements
-    .filter((item) => {
-      return (
-        item.id !== itemId &&
-        // Prevent creating circular logic by filtering out questions
-        // that already have rules pointing to the current element.
-        !currentRules.some((rule) => rule.choiceId.split(".")[0] === String(item.id))
-      );
-    })
-    .map((question) => {
-      const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
-      const descKey = localizeField(LocalizedElementProperties.DESCRIPTION, language);
-
-      let label = "";
-      if (question.properties[titleKey]) {
-        label = question.properties[titleKey] || "";
-      }
-
-      if (label === "" && question.properties[descKey]) {
-        label = question.properties[descKey] || "";
-      }
-
-      return { label, value: `${question.id}` };
-    });
-
-  questions.unshift({ label: t("addConditionalRules.selectQuestion"), value: "" });
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
@@ -177,9 +102,10 @@ export const ConditionalElementRuleSelector = ({
     return { label: choice[language], value: `${choiceParentQuestion}.${index}` };
   });
 
-  const handleQuestionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    updateElementId(index, value);
+  const handleQuestionResult = (result: SelectorResult) => {
+    if ("element" in result) {
+      updateElementId(index, String(result.element.id));
+    }
   };
 
   const handleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -257,10 +183,19 @@ export const ConditionalElementRuleSelector = ({
             <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
           </div>
           <div className="mb-4">
-            <QuestionSelect
-              selected={elementId}
-              questions={questions}
-              onChange={handleQuestionChange}
+            <QuestionSelector
+              initialValue={elementId}
+              onResult={handleQuestionResult}
+              excludeIds={[
+                itemId,
+                ...currentRules
+                  // Prevent creating circular logic by filtering out questions
+                  // that already have rules pointing to the current element.
+                  .filter((rule) => rule.choiceId.split(".")[0] !== elementId)
+                  .map((rule) => Number(rule.choiceId.split(".")[0])),
+              ]}
+              label={t("addConditionalRules.questionTitle")}
+              className="my-2 mr-4"
             />
           </div>
           <Button className="mb-8 inline-block text-sm" theme="link" onClick={handleRemove}>

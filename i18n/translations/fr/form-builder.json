@@ -825,6 +825,11 @@
   "pagePreview": "Prévisualiser",
   "pageSettings": "Paramètres",
   "pageText": "Texte de page",
+  "questionSearch": {
+    "label": "Trouver une question",
+    "placeholder": "Rechercher des questions",
+    "noResults": "Aucune question trouvée"
+  },
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
