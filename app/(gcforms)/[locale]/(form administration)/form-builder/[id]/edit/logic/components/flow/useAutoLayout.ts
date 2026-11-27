@@ -1,5 +1,13 @@
-import { useEffect, useCallback } from "react";
-import { type Node, type Edge, useReactFlow, useNodesInitialized, useStore } from "@xyflow/react";
+import { useEffect, useCallback, useMemo } from "react";
+import {
+  type Node,
+  type Edge,
+  useReactFlow,
+  useNodesInitialized,
+  useNodesStore,
+  useEdgesStore,
+  useEqualSelector,
+} from "@xyflow/react";
 
 import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 import layoutAlgorithms, { type LayoutAlgorithmOptions } from "./algorithms";
@@ -11,20 +19,9 @@ export type LayoutOptions = {
 function useAutoLayout(options: LayoutOptions) {
   const { setNodes, setEdges } = useReactFlow();
   const nodesInitialized = useNodesInitialized();
-  // Here we are storing a map of the nodes and edges in the flow. By using a
-  // custom equality function as the second argument to `useStore`, we can make
-  // sure the layout algorithm only runs when something has changed that should
-  // actually trigger a layout change.
-  const elements = useStore(
-    (state) => ({
-      nodes: state.nodes,
-      edges: state.edges,
-    }),
-    // The compare elements function will only update `elements` if something has
-    // changed that should trigger a layout. This includes changes to a node's
-    // dimensions, the number of nodes, or changes to edge sources/targets.
-    compareElements
-  );
+  const nodes = useNodesStore(useEqualSelector((state) => state.nodes, compareNodes));
+  const edges = useEdgesStore(useEqualSelector((state) => state.edges, compareEdges));
+  const elements = useMemo(() => ({ nodes, edges }), [nodes, edges]);
 
   const runLayout = useCallback(async () => {
     if (!elements.nodes.length) return;
@@ -65,15 +62,6 @@ function useAutoLayout(options: LayoutOptions) {
 }
 
 export default useAutoLayout;
-
-type Elements = {
-  nodes: Array<Node>;
-  edges: Array<Edge>;
-};
-
-function compareElements(xs: Elements, ys: Elements) {
-  return compareNodes(xs.nodes, ys.nodes) && compareEdges(xs.edges, ys.edges);
-}
 
 function compareNodes(xs: Array<Node>, ys: Array<Node>) {
   // the number of nodes changed, so we already know that the nodes are not equal

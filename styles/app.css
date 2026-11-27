@@ -1,3 +1,5 @@
+@layer theme, base, xyflow, components, utilities;
+
 @import "tailwindcss";
 
 /* ===== GCDS Tokens ===== */
